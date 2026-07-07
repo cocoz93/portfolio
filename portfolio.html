@@ -1,0 +1,724 @@
+<title>주우진 · Game Server Engineer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face{
+  font-family:'Pretendard';
+  src:url("data:font/woff2;base64,__PRETENDARD_WOFF2_BASE64__") format("woff2");
+  font-weight:100 900; font-style:normal; font-display:swap;
+}
+:root{
+  --bg:#0d1220; --bg2:#111726; --surface:#151d2e; --surface2:#1b2436;
+  --line:#26304a; --line2:#33405f;
+  --ink:#eef1f8; --ink2:#b3bcd0; --muted:#7b869f; --faint:#525d78;
+  --hot:#46b1ff; --hot-soft:#79c7ff; --hot-deep:#2b86e0;
+  --good:#34d399; --sig:#f5b13d; --rej:#f5879c;
+  --hot-glow:rgba(70,177,255,.55);
+  --mono:"Cascadia Code","JetBrains Mono","SF Mono","D2Coding",ui-monospace,Menlo,Consolas,monospace;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  --maxw:1160px; --pad:clamp(20px,5vw,40px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); line-height:1.65; word-break:keep-all;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  font-variant-numeric:tabular-nums; overflow-x:hidden;
+}
+a{color:inherit; text-decoration:none}
+:focus-visible{outline:2px solid var(--hot); outline-offset:3px; border-radius:4px}
+img{max-width:100%}
+.wrap{max-width:var(--maxw); margin:0 auto; padding-inline:var(--pad)}
+section{scroll-margin-top:76px}
+
+.eyebrow{font-family:var(--mono); font-size:.79rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--muted); display:inline-flex; align-items:center; gap:.6em}
+.eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--hot); box-shadow:0 0 0 4px rgba(62,166,255,.15)}
+.sec-head{margin-bottom:clamp(28px,4vw,46px)}
+.sec-head h2{margin:.55em 0 0; font-size:clamp(1.55rem,2.9vw,2.1rem); font-weight:800; letter-spacing:-.025em;
+  line-height:1.15; text-wrap:balance}
+.sec-head p{margin:.7em 0 0; color:var(--ink2); font-size:1.02rem; max-width:64ch; line-height:1.7}
+.hot{color:var(--hot)}
+.mono{font-family:var(--mono)}
+
+.prog{position:fixed; top:0; left:0; height:2px; width:0; z-index:60;
+  background:linear-gradient(90deg,var(--hot-deep),var(--hot)); box-shadow:0 0 10px var(--hot-glow)}
+.nav{position:sticky; top:0; z-index:50; backdrop-filter:blur(12px);
+  background:rgba(13,18,32,.72); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; justify-content:space-between; height:60px}
+.brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:-.01em; font-size:1rem}
+.brand .mk{width:27px; height:27px; border-radius:8px; display:grid; place-items:center;
+  background:linear-gradient(135deg,var(--hot),var(--hot-deep)); color:#fff; font-size:.8rem; font-weight:800;
+  box-shadow:0 4px 14px -4px var(--hot-glow)}
+.brand small{color:var(--muted); font-weight:600; font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; margin-left:2px}
+.navlinks{display:flex; gap:6px; align-items:center}
+.navlinks a{font-size:.9rem; color:var(--ink2); padding:8px 12px; border-radius:8px; font-weight:600;
+  transition:color .2s,background .2s}
+.navlinks a:hover{color:var(--ink); background:var(--surface)}
+.navlinks a.act{color:var(--hot)}
+.nav .cta{font-family:var(--mono); font-size:.82rem; padding:8px 15px; border:1px solid var(--line2);
+  border-radius:9px; color:var(--ink); transition:border-color .2s,background .2s}
+.nav .cta:hover{border-color:var(--hot); background:rgba(62,166,255,.08)}
+@media(max-width:760px){ .navlinks{display:none} }
+
+.hero{position:relative; overflow:hidden; padding:clamp(52px,8vw,96px) 0 clamp(40px,6vw,68px)}
+.hero::before{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(72% 58% at 84% -10%, rgba(70,177,255,.2), transparent 60%),
+    linear-gradient(180deg, transparent, var(--bg));
+}
+.hero::after{content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:46px 46px; mask-image:radial-gradient(120% 80% at 78% 0%,#000,transparent 62%)}
+.hero .wrap{position:relative; z-index:1; display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(28px,4vw,52px); align-items:center}
+.hero h1{margin:.5em 0 0; font-size:clamp(2.1rem,4.6vw,3.35rem); font-weight:800; letter-spacing:-.03em;
+  line-height:1.1; text-wrap:balance}
+.hero h1 .l2{display:block}
+.hero .lede{margin:1.3em 0 0; color:var(--ink2); font-size:clamp(1rem,1.3vw,1.1rem); max-width:52ch; line-height:1.75}
+.hero .lede b{color:var(--ink); font-weight:700}
+.hero .actions{margin-top:1.8em; display:flex; flex-wrap:wrap; gap:12px}
+.btn{display:inline-flex; align-items:center; gap:9px; padding:12px 20px; border-radius:11px; font-weight:700;
+  font-size:.95rem; border:1px solid transparent; transition:transform .18s,box-shadow .25s,background .2s,border-color .2s}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:linear-gradient(135deg,var(--hot),var(--hot-deep)); color:#fff;
+  box-shadow:0 12px 30px -12px var(--hot-glow)}
+.btn.primary:hover{box-shadow:0 16px 40px -12px var(--hot-glow); transform:translateY(-2px)}
+.btn.ghost{border-color:var(--line2); color:var(--ink)}
+.btn.ghost:hover{border-color:var(--hot); background:rgba(62,166,255,.07)}
+.hero .quick{margin-top:1.9em; display:flex; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem;
+  color:var(--muted); letter-spacing:.01em}
+.hero .quick b{color:var(--ink2); font-weight:700}
+.hero .quick i{color:var(--faint); font-style:normal}
+.hero h1 .hot{text-shadow:0 0 26px rgba(70,177,255,.34)}
+@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
+.anim{opacity:0; animation:rise .85s cubic-bezier(.2,.7,.2,1) forwards}
+.d1{animation-delay:.04s}.d2{animation-delay:.12s}.d3{animation-delay:.2s}.d4{animation-delay:.28s}.d5{animation-delay:.36s}.d6{animation-delay:.46s}
+
+.monitor{background:linear-gradient(180deg,var(--surface2),var(--surface));
+  border:1px solid var(--line2); border-radius:18px; padding:20px 20px 18px;
+  box-shadow:0 40px 80px -40px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02) inset;
+  position:relative; overflow:hidden}
+.monitor::before{content:""; position:absolute; top:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,var(--hot),transparent); opacity:.55}
+.mon-top{display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:.76rem;
+  color:var(--muted); letter-spacing:.05em}
+.mon-top .live{display:inline-flex; align-items:center; gap:7px; color:var(--good)}
+.mon-top .live .b{width:7px; height:7px; border-radius:50%; background:var(--good); box-shadow:0 0 0 0 rgba(52,211,153,.6);
+  animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+.mon-stat{display:flex; align-items:baseline; gap:12px; margin-top:14px}
+.mon-stat .big{font-size:2.4rem; font-weight:800; letter-spacing:-.04em; line-height:1}
+.mon-stat .unit{font-size:1.02rem; color:var(--ink2); font-weight:700; margin-left:-6px}
+.mon-stat .delta{font-family:var(--mono); font-size:.82rem; color:var(--good); font-weight:700;
+  background:rgba(52,211,153,.1); border:1px solid rgba(52,211,153,.25); padding:3px 9px; border-radius:999px}
+.mon-label{font-family:var(--mono); font-size:.72rem; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; margin-top:2px}
+canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
+.mon-foot{display:flex; justify-content:space-between; gap:8px; font-family:var(--mono); font-size:.76rem;
+  color:var(--muted); border-top:1px solid var(--line); padding-top:12px; margin-top:6px}
+.mon-foot b{color:var(--ink2); font-weight:700; display:block; font-size:.96rem; letter-spacing:-.01em; margin-top:2px}
+
+@media(max-width:860px){
+  .hero .wrap{grid-template-columns:1fr}
+  .monitor{max-width:420px}
+}
+
+#metrics{padding:clamp(20px,4vw,38px) 0}
+.stats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+.stat{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 22px 20px;
+  transition:transform .25s, border-color .25s, background .25s}
+.stat:hover{transform:translateY(-3px); border-color:var(--line2); background:var(--surface2)}
+.stat-k{font-family:var(--mono); font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.stat-v{margin-top:10px; font-size:clamp(1.65rem,2.7vw,2.2rem); font-weight:800; letter-spacing:-.03em; line-height:1;
+  display:flex; align-items:baseline; gap:.28em; flex-wrap:wrap}
+.stat-v .now{color:var(--ink)}
+.stat-v .was{color:var(--faint); font-size:.52em; font-weight:700}
+.stat-v .arw{color:var(--muted); font-size:.52em; font-weight:700}
+.stat-s{margin-top:12px; color:var(--ink2); font-size:.92rem; font-weight:600; line-height:1.5}
+@media(max-width:760px){ .stats{grid-template-columns:1fr 1fr} }
+@media(max-width:460px){ .stats{grid-template-columns:1fr} }
+
+.block{padding:clamp(60px,8vw,110px) 0}
+.block.alt{background:linear-gradient(180deg,var(--bg2),var(--bg))}
+
+.tl{position:relative; margin-top:8px}
+.tl::before{content:""; position:absolute; left:9px; top:6px; bottom:6px; width:2px;
+  background:linear-gradient(180deg,var(--hot),var(--line2) 40%,var(--line))}
+.job{position:relative; padding-left:44px; padding-bottom:clamp(30px,4vw,46px)}
+.job:last-child{padding-bottom:0}
+.job .node{position:absolute; left:1px; top:6px; width:18px; height:18px; border-radius:50%;
+  background:var(--bg); border:2px solid var(--line2)}
+.job.cur .node{border-color:var(--hot); box-shadow:0 0 0 4px rgba(62,166,255,.14)}
+.job.cur .node::after{content:""; position:absolute; inset:3px; border-radius:50%; background:var(--hot)}
+.job-h{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.job-h h3{margin:0; font-size:1.2rem; font-weight:800; letter-spacing:-.02em}
+.job-h h3 span{color:var(--muted); font-weight:600; font-size:.88rem; margin-left:8px}
+.job .when{font-family:var(--mono); font-size:.82rem; color:var(--muted); white-space:nowrap}
+.job .tagnote{margin-top:6px; font-size:.85rem; color:var(--faint); font-family:var(--mono)}
+.job ul{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px}
+.job li{position:relative; padding-left:18px; color:var(--ink2); font-size:.98rem; line-height:1.6}
+.job li::before{content:""; position:absolute; left:1px; top:.6em; width:6px; height:6px; border-radius:2px;
+  background:var(--hot); transform:rotate(45deg); opacity:.85}
+.job li b{color:var(--ink); font-weight:700}
+.chips{margin-top:16px; display:flex; flex-wrap:wrap; gap:7px}
+.chip{font-family:var(--mono); font-size:.8rem; color:var(--ink2); background:var(--surface);
+  border:1px solid var(--line); padding:5px 11px; border-radius:8px}
+.job.cur .chip{border-color:var(--line2)}
+
+#rnd{position:relative}
+.rnd-flow{display:flex; align-items:stretch; gap:0; margin-top:8px; overflow-x:auto; padding-bottom:6px;
+  scrollbar-width:thin}
+.stage{flex:1 1 0; min-width:190px; background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  padding:20px 18px; position:relative; display:flex; flex-direction:column}
+.stage.next{background:linear-gradient(180deg,rgba(245,177,61,.08),var(--surface)); border:1px dashed var(--sig)}
+.stage .sx{font-family:var(--mono); font-size:.74rem; color:var(--faint); letter-spacing:.08em}
+.stage .cc{font-family:var(--mono); font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-top:12px}
+.stage .cnum{font-size:1.85rem; font-weight:800; letter-spacing:-.04em; line-height:1; margin-top:3px}
+.stage.next .cnum{color:var(--sig)}
+.stage .load{height:7px; border-radius:4px; background:var(--line); overflow:hidden; margin-top:14px}
+.stage .load i{display:block; height:100%; width:0; border-radius:4px;
+  background:linear-gradient(90deg,var(--hot-deep),var(--hot)); transition:width 1.1s cubic-bezier(.2,.7,.2,1)}
+.stage.next .load i{background:linear-gradient(90deg,var(--sig),#f8cd83)}
+.stage.in .load i{width:var(--w)}
+.stage .bn{margin-top:16px; font-size:.92rem; font-weight:700; color:var(--sig); line-height:1.35}
+.stage .fix{margin-top:12px; align-self:flex-start; font-family:var(--mono); font-size:.8rem; font-weight:700;
+  color:var(--ink); background:rgba(255,255,255,.04); border:1px solid var(--line2); padding:6px 11px; border-radius:8px}
+.stage .res{margin-top:auto; padding-top:14px; display:flex; flex-direction:column; gap:5px;
+  font-size:.9rem; color:var(--ink2); font-weight:600}
+.stage .res b{color:var(--hot); font-weight:800}
+.arrowc{flex:0 0 26px; display:flex; align-items:center; justify-content:center; color:var(--faint)}
+.arrowc svg{width:16px; height:16px}
+.negband{margin-top:26px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+.neg{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px;
+  display:flex; flex-direction:column; gap:6px}
+.neg .t{font-family:var(--mono); font-size:.74rem; font-weight:800; letter-spacing:.06em; padding:3px 9px; border-radius:999px;
+  align-self:flex-start}
+.neg .t.rj{background:rgba(245,177,61,.12); color:var(--sig); border:1px solid rgba(245,177,61,.3)}
+.neg .t.fd{background:rgba(62,166,255,.12); color:var(--hot); border:1px solid rgba(62,166,255,.28)}
+.neg p{margin:0; font-size:.95rem; color:var(--ink2); font-weight:600; line-height:1.55}
+.neg p b{color:var(--ink); font-weight:800}
+.rnd-note{margin-top:20px; font-family:var(--mono); font-size:.82rem; color:var(--muted);
+  display:flex; gap:8px; align-items:center; line-height:1.6}
+@media(max-width:840px){
+  .rnd-flow{flex-direction:column; overflow:visible}
+  .stage{min-width:0}
+  .arrowc{height:24px; transform:rotate(90deg)}
+  .negband{grid-template-columns:1fr}
+}
+
+.cases{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:8px}
+.case{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 18px;
+  display:flex; flex-direction:column; transition:transform .25s,border-color .25s}
+.case:hover{transform:translateY(-3px); border-color:var(--line2)}
+.case .tag{font-family:var(--mono); font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--hot);
+  align-self:flex-start; padding:4px 9px; border-radius:7px; background:rgba(62,166,255,.1); border:1px solid rgba(62,166,255,.22)}
+.case h4{margin:14px 0 0; font-size:1.1rem; font-weight:800; letter-spacing:-.02em; line-height:1.25}
+.case p{margin:9px 0 0; color:var(--ink2); font-size:.92rem; line-height:1.55}
+.case .r{margin-top:14px; padding-top:12px; border-top:1px solid var(--line); font-size:.88rem; font-weight:700; color:var(--hot)}
+@media(max-width:900px){ .cases{grid-template-columns:1fr 1fr} }
+@media(max-width:520px){ .cases{grid-template-columns:1fr} }
+
+.skills{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px}
+.skgrp{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px}
+.skgrp h4{margin:0 0 14px; font-family:var(--mono); font-size:.79rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted); display:flex; align-items:center; gap:8px}
+.skgrp h4::before{content:""; width:8px; height:8px; border-radius:2px; background:var(--hot); transform:rotate(45deg)}
+.skgrp .row{display:flex; flex-wrap:wrap; gap:8px}
+.sk{font-family:var(--mono); font-size:.85rem; color:var(--ink); background:var(--surface2);
+  border:1px solid var(--line2); padding:7px 13px; border-radius:9px; transition:border-color .2s,color .2s}
+.sk:hover{border-color:var(--hot); color:var(--hot-soft)}
+@media(max-width:680px){ .skills{grid-template-columns:1fr} }
+
+.about{display:grid; grid-template-columns:auto 1fr; gap:clamp(24px,4vw,46px); align-items:start}
+.about .mono-side{font-family:var(--mono); font-size:.8rem; color:var(--muted); letter-spacing:.04em; line-height:2;
+  border-left:2px solid var(--hot); padding-left:16px; white-space:nowrap}
+.about p{margin:0 0 1.1em; color:var(--ink2); font-size:1.05rem; line-height:1.8; max-width:60ch}
+.about p:last-child{margin-bottom:0}
+.about p b{color:var(--ink); font-weight:700}
+@media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{border-left:0; border-top:2px solid var(--hot); padding-left:0; padding-top:12px; white-space:normal} }
+
+#contact{border-top:1px solid var(--line); background:linear-gradient(180deg,var(--bg2),var(--bg));
+  padding:clamp(58px,7vw,92px) 0 46px; position:relative; overflow:hidden}
+#contact::before{content:""; position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(60% 60% at 50% 0%,rgba(62,166,255,.1),transparent 60%)}
+#contact .wrap{position:relative}
+.contact-h{font-size:clamp(1.55rem,3vw,2.25rem); font-weight:800; letter-spacing:-.025em; text-wrap:balance; margin:.45em 0 0; line-height:1.2}
+.clinks{margin-top:28px; display:flex; flex-wrap:wrap; gap:12px}
+.clink{display:inline-flex; align-items:center; gap:11px; padding:15px 20px; border-radius:13px;
+  background:var(--surface); border:1px solid var(--line); transition:transform .2s,border-color .2s,background .2s; min-width:200px}
+.clink:hover{transform:translateY(-2px); border-color:var(--hot); background:var(--surface2)}
+.clink .ic{width:36px; height:36px; border-radius:10px; display:grid; place-items:center; flex:0 0 auto;
+  background:rgba(62,166,255,.1); border:1px solid rgba(62,166,255,.2)}
+.clink .ic svg{width:18px; height:18px; stroke:var(--hot-soft)}
+.clink .k{font-family:var(--mono); font-size:.72rem; color:var(--muted); letter-spacing:.08em; text-transform:uppercase}
+.clink .v{font-weight:700; font-size:.97rem; margin-left:10px}
+.foot{margin-top:42px; padding-top:22px; border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:center;
+  font-family:var(--mono); font-size:.78rem; color:var(--muted)}
+.foot a.top{color:var(--ink2)} .foot a.top:hover{color:var(--hot)}
+
+[data-reveal]{opacity:0; transform:translateY(16px);
+  transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+  transition-delay:calc(var(--d,0)*70ms)}
+[data-reveal].in{opacity:1; transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .anim{animation:none; opacity:1}
+  [data-reveal]{opacity:1; transform:none; transition:none}
+  .mon-top .live .b{animation:none}
+}
+</style>
+
+<div class="prog" id="prog"></div>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#hero" aria-label="맨 위로">
+      <span class="mk">WJ</span>
+      <span>주우진<small>GAME&nbsp;SERVER</small></span>
+    </a>
+    <div class="navlinks">
+      <a href="#metrics" data-spy>성과</a>
+      <a href="#career" data-spy>경력</a>
+      <a href="#rnd" data-spy>R&amp;D</a>
+      <a href="#skills" data-spy>기술</a>
+      <a href="#about" data-spy>소개</a>
+    </div>
+    <a class="cta" href="#contact">연락하기</a>
+  </div>
+</nav>
+
+<header id="hero" class="hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow anim d1"><span class="dot"></span>주우진 · C++ Game Server Engineer</span>
+      <h1 class="anim d2">대형 라이브 경험과 저수준 성능,<span class="l2">추측이 아닌 <span class="hot">실측</span>으로</span></h1>
+      <p class="lede anim d3">경력 <b>3.2년</b> — 그라비티 라그나로크, 네오플 던전앤파이터, 보이저 신규 MMO. 지금은 <b>IOCP 기반 MMO 서버</b>를 직접 설계·구현하며 실측 데이터로 병목을 추적하고 제거합니다.</p>
+      <div class="actions anim d4">
+        <a class="btn primary" href="#rnd">R&amp;D 성과 보기</a>
+        <a class="btn ghost" href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+      <div class="quick anim d5">
+        <span><b>3.2년</b> 실무</span><i>·</i>
+        <span>라이브 <b>3종</b></span><i>·</i>
+        <span>개인 R&amp;D 동접 <b>4,000</b></span><i>·</i>
+        <span>측정 <b>Prometheus/Grafana</b></span>
+      </div>
+    </div>
+
+    <aside class="monitor anim d6" aria-hidden="true">
+      <div class="mon-top">
+        <span>map_01 · tick monitor</span>
+        <span class="live"><span class="b"></span>LIVE</span>
+      </div>
+      <div class="mon-stat">
+        <span class="big">9</span><span class="unit">ms</span>
+        <span class="delta">▼ 65ms → 9ms</span>
+      </div>
+      <div class="mon-label">tick p99 latency</div>
+      <canvas id="spark"></canvas>
+      <div class="mon-foot">
+        <span>동접<b>4,000</b></span>
+        <span>처리량<b>61k/s</b></span>
+        <span>syscall<b>−94%</b></span>
+      </div>
+    </aside>
+  </div>
+</header>
+
+<main>
+  <section id="metrics">
+    <div class="wrap">
+      <div data-reveal style="margin-bottom:22px"><span class="eyebrow"><span class="dot"></span>검증된 실무 성과 · Career Impact</span></div>
+      <div class="stats">
+        <div class="stat" data-reveal style="--d:0">
+          <div class="stat-k">cross-branch merge</div>
+          <div class="stat-v"><span class="was">10회</span><span class="arw">→</span><span class="now">1회</span></div>
+          <div class="stat-s">10개국 브랜치 → Master 단일화</div>
+        </div>
+        <div class="stat" data-reveal style="--d:1">
+          <div class="stat-k">하드코딩</div>
+          <div class="stat-v"><span class="was">50곳</span><span class="arw">→</span><span class="now">2곳</span></div>
+          <div class="stat-s">공성전 핵심 객체 리팩토링</div>
+        </div>
+        <div class="stat" data-reveal style="--d:2">
+          <div class="stat-k">DB 이관</div>
+          <div class="stat-v"><span class="now" data-to="100" data-suffix="만 건">0만 건</span></div>
+          <div class="stat-s">라이브 데이터 무중단 이관</div>
+        </div>
+        <div class="stat" data-reveal style="--d:0">
+          <div class="stat-k">이벤트 순회</div>
+          <div class="stat-v"><span class="was">O(N)</span><span class="arw">→</span><span class="now">O(1)</span></div>
+          <div class="stat-s">던파 중국 이벤트 병목 개선안 채택</div>
+        </div>
+        <div class="stat" data-reveal style="--d:1">
+          <div class="stat-k">신규 스킬 추가</div>
+          <div class="stat-v"><span class="now">코드 0</span></div>
+          <div class="stat-s">데이터 드리븐 스킬 체인 — 행 추가만</div>
+        </div>
+        <div class="stat" data-reveal style="--d:2">
+          <div class="stat-k">라이브 경험</div>
+          <div class="stat-v"><span class="now">3.2년</span></div>
+          <div class="stat-s">그라비티 · 네오플 · 보이저</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="career" class="block">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow"><span class="dot"></span>Career · 3.2 years</span>
+        <h2>라이브 서비스에서 저수준 설계까지, <span class="hot">3년의 실무</span></h2>
+        <p>대형 라이브 운영·이슈 대응부터 신규 프로젝트의 초기 아키텍처 설계까지 경험했습니다.</p>
+      </div>
+
+      <div class="tl">
+        <article class="job cur" data-reveal>
+          <span class="node"></span>
+          <div class="job-h">
+            <h3>보이저게임즈 <span>· PROJECT R 서버팀</span></h3>
+            <span class="when">2026.02 – 2026.04</span>
+          </div>
+          <div class="tagnote">신규 MMO · Linux 기반 초기 설계 (프로젝트 전사 중단)</div>
+          <ul>
+            <li><b>데이터 드리븐 스킬 체인</b> 설계·구현 — 투창→착탄→토템→폭발 4단계, 신규 스킬은 테이블 행 추가만으로 (코드 변경 0)</li>
+            <li>AoE 3모드(Normal·Tracking·Sequential)로 확장, 기존 로직 <b>변경 없이</b></li>
+            <li>투사체 착탄 처리 <b>대안 3안 비교</b> 기반 아키텍처 의사결정</li>
+          </ul>
+          <div class="chips"><span class="chip">C++17</span><span class="chip">io_uring</span><span class="chip">FlatBuffers</span><span class="chip">MySQL</span><span class="chip">Linux</span><span class="chip">Unity</span><span class="chip">git</span></div>
+        </article>
+
+        <article class="job" data-reveal>
+          <span class="node"></span>
+          <div class="job-h">
+            <h3>네오플 <span>· 던전앤파이터 중국서버팀</span></h3>
+            <span class="when">2025.01 – 2025.07</span>
+          </div>
+          <div class="tagnote">넥토리얼 4기 · 중국 라이브 서비스</div>
+          <ul>
+            <li>이벤트 시스템 <b>O(N) 전체순회 병목</b> 식별 → <b>O(1)</b> 구조 개선안 제안·채택</li>
+            <li>중국 서버 라이브 이슈 대응 및 신규 이벤트 개발</li>
+          </ul>
+          <div class="chips"><span class="chip">C++</span><span class="chip">epoll</span><span class="chip">MySQL</span><span class="chip">Linux</span><span class="chip">svn</span></div>
+        </article>
+
+        <article class="job" data-reveal>
+          <span class="node"></span>
+          <div class="job-h">
+            <h3>그라비티 <span>· 라그나로크 서버팀</span></h3>
+            <span class="when">2022.08 – 2025.01</span>
+          </div>
+          <div class="tagnote">2년 6개월 · 한국·해외 라이브 운영</div>
+          <ul>
+            <li><b>10개국 브랜치 → Master 통합</b> — 수정 1건당 10회 반복되던 cross-branch merge를 1회로</li>
+            <li>한국·해외 라이브 서버 운영 및 신규 컨텐츠 개발 (<b>DB 100만 건 이관</b>)</li>
+            <li>공성전 핵심 객체 리팩토링 (<b>하드코딩 50곳 → 2곳</b>)</li>
+            <li>zone 간 비동기 타이밍 <b>레이스 컨디션</b> 등 핵심 이슈 해결</li>
+          </ul>
+          <div class="chips"><span class="chip">C/C++</span><span class="chip">MFC</span><span class="chip">IOCP</span><span class="chip">MSSQL</span><span class="chip">Windows</span><span class="chip">git</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="rnd" class="block alt">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow"><span class="dot"></span>Personal R&amp;D · IOCP MMO Server</span>
+        <h2>맵당 동접 <span class="hot">200 → 4,000</span>, 병목 추적의 기록</h2>
+        <p>병목을 잡으면 다음 병목이 나타납니다. 5단계 모두 <b style="color:var(--ink)">추측이 아닌 실측(A/B 토글)</b>으로 원인을 규명하고 처방했습니다.</p>
+      </div>
+
+      <div class="rnd-flow" data-reveal>
+        <div class="stage" style="--w:5%">
+          <span class="sx">STEP 01</span>
+          <span class="cc">동접</span><span class="cnum">200</span>
+          <div class="load"><i></i></div>
+          <div class="bn">send syscall — 틱 76%</div>
+          <span class="fix">Send Coalescing</span>
+          <div class="res"><span>syscall <b>−94%</b></span><span>tick p99 <b>65 → 9ms</b></span></div>
+        </div>
+        <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+
+        <div class="stage" style="--w:25%">
+          <span class="sx">STEP 02</span>
+          <span class="cc">동접</span><span class="cnum">1,000</span>
+          <div class="load"><i></i></div>
+          <div class="bn">송신 루프 — 틱 74%</div>
+          <span class="fix">SendThread 분리</span>
+          <div class="res"><span>tick p99 <b>39 → 17ms</b></span><span>전체 CPU 증가 <b>0</b></span></div>
+        </div>
+        <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+
+        <div class="stage" style="--w:50%">
+          <span class="sx">STEP 03</span>
+          <span class="cc">동접</span><span class="cnum">2,000</span>
+          <div class="load"><i></i></div>
+          <div class="bn">수신자별 복사 — 틱 71%</div>
+          <span class="fix">섹터 묶음 패킷</span>
+          <div class="res"><span>복사 <b>−81%</b></span><span>tick p99 <b>57 → 10ms</b></span></div>
+        </div>
+        <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+
+        <div class="stage" style="--w:62%">
+          <span class="sx">STEP 04</span>
+          <span class="cc">동접</span><span class="cnum">2,500</span>
+          <div class="load"><i></i></div>
+          <div class="bn">송신 CPU 1.00 포화</div>
+          <span class="fix">SendWorker Pool K=2</span>
+          <div class="res"><span>처리량 천장 해소</span><span><b>55k → 61k/s</b></span></div>
+        </div>
+        <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+
+        <div class="stage next" style="--w:100%">
+          <span class="sx">STEP 05 · 현재 프론티어</span>
+          <span class="cc">동접 — 천장 실측</span><span class="cnum">4,000</span>
+          <div class="load"><i></i></div>
+          <div class="bn">게임 스레드 — 단일 코어</div>
+          <span class="fix">스케일 아웃 (맵 N개)</span>
+          <div class="res"><span>단일 맵 처리 한계 도달</span><span>다음 축: <b>멀티프로세스</b></span></div>
+        </div>
+      </div>
+
+      <div class="negband">
+        <div class="neg" data-reveal style="--d:0">
+          <span class="t rj">기각</span>
+          <p><b>LockFree 전환</b> — SendQ를 락프리로 바꿨더니 오히려 <b>−10% 회귀</b>. 실측으로 되돌림.</p>
+        </div>
+        <div class="neg" data-reveal style="--d:1">
+          <span class="t rj">기각</span>
+          <p><b>SO_SNDBUF=0</b> — 커널 복사 제거 기대했으나 시스템 <b>CPU +75%</b>. 비용이 워커로 전가됨.</p>
+        </div>
+        <div class="neg" data-reveal style="--d:2">
+          <span class="t fd">규명</span>
+          <p>동접 1,500 붕괴는 서버가 아니라 <b>회선 상한 474Mbps</b>였음. 원인을 잘못 짚지 않도록 격리 측정.</p>
+        </div>
+      </div>
+
+      <div class="rnd-note" data-reveal>▚ 계측: Prometheus + Grafana · 모든 실험은 A/B 토글로 켜고 끄며 실측 — 개선도, 기각도 데이터로 판단</div>
+    </div>
+  </section>
+
+  <section id="design" class="block">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow"><span class="dot"></span>Case Study · Voyager Combat System</span>
+        <h2>하드코딩 대신 <span class="hot">데이터로</span> — 전투 스킬 시스템 설계</h2>
+        <p>다단계 스킬·AoE·넉백을 테이블 설정으로 다루도록 구조화. 설계 판단이 필요했던 네 가지.</p>
+      </div>
+      <div class="cases">
+        <article class="case" data-reveal style="--d:0">
+          <span class="tag">데이터 드리븐</span>
+          <h4>스킬 체인 시스템</h4>
+          <p>OnDestroy 훅으로 파괴 시점에 후속 스킬 발동. 체인을 테이블 값으로 정의.</p>
+          <div class="r">신규 스킬 = 행 추가만, 코드 0</div>
+        </article>
+        <article class="case" data-reveal style="--d:1">
+          <span class="tag">시스템 확장</span>
+          <h4>AoE 3모드</h4>
+          <p>Normal·Tracking·Sequential. HitCount 컬럼을 시스템별로 재정의.</p>
+          <div class="r">기존 호환 유지 · 로직 변경 0</div>
+        </article>
+        <article class="case" data-reveal style="--d:2">
+          <span class="tag">아키텍처 결정</span>
+          <h4>착탄 처리 3안 비교</h4>
+          <p>유지 / 토템 대체 / 전용 분리를 확장성·역할분리 기준으로 평가.</p>
+          <div class="r">A 채택 · C 전환로 확보</div>
+        </article>
+        <article class="case" data-reveal style="--d:3">
+          <span class="tag">리팩터링</span>
+          <h4>넉백 이원화 통합</h4>
+          <p>직접호출+버프 2경로를 TargetShape 기반 방향 규칙으로 통일.</p>
+          <div class="r">스킬별 하드코딩 0</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="block alt">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow"><span class="dot"></span>Skills</span>
+        <h2>저수준 <span class="hot">동시성·네트워크</span> 중심 스택</h2>
+      </div>
+      <div class="skills">
+        <div class="skgrp" data-reveal style="--d:0">
+          <h4>언어</h4>
+          <div class="row"><span class="sk">C / C++</span><span class="sk">C++17</span><span class="sk">STL</span></div>
+        </div>
+        <div class="skgrp" data-reveal style="--d:1">
+          <h4>비동기 I/O</h4>
+          <div class="row"><span class="sk">IOCP</span><span class="sk">epoll</span><span class="sk">io_uring</span><span class="sk">Winsock</span></div>
+        </div>
+        <div class="skgrp" data-reveal style="--d:0">
+          <h4>동시성</h4>
+          <div class="row"><span class="sk">Lock-Free</span><span class="sk">Multithreading</span><span class="sk">Async I/O</span><span class="sk">Concurrency</span></div>
+        </div>
+        <div class="skgrp" data-reveal style="--d:1">
+          <h4>데이터베이스</h4>
+          <div class="row"><span class="sk">MSSQL</span><span class="sk">MySQL</span></div>
+        </div>
+        <div class="skgrp" data-reveal style="--d:0">
+          <h4>계측 · 도구</h4>
+          <div class="row"><span class="sk">Prometheus</span><span class="sk">Grafana</span><span class="sk">FlatBuffers</span><span class="sk">git</span><span class="sk">svn</span></div>
+        </div>
+        <div class="skgrp" data-reveal style="--d:1">
+          <h4>플랫폼</h4>
+          <div class="row"><span class="sk">Windows</span><span class="sk">Linux</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="block">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow"><span class="dot"></span>About</span>
+        <h2>늦게 출발했지만, <span class="hot">끝까지 파고드는</span> 개발자</h2>
+      </div>
+      <div class="about" data-reveal>
+        <div class="mono-side">// 음악 → 독학<br>// → 게임 서버<br>// 3.2년, 그리고<br>// 계속 파는 중</div>
+        <div>
+          <p>음악을 직업으로 삼았다가 <b>독학으로 게임 서버 개발에 입문</b>했습니다. 남들보다 늦은 출발이었지만, 대형 라이브 서비스에서 보낸 지난 3년으로 방향에 대한 확신은 더 단단해졌습니다.</p>
+          <p>주어진 업무 범위에 머물지 않고 <b>구조적 비효율을 먼저 찾아</b> 해결하려는 방식으로 일해왔습니다. O(N) 병목을 O(1)로, 반복되는 merge를 한 번으로, 하드코딩을 데이터로.</p>
+          <p>지금은 개인 프로젝트로 IOCP MMO 서버를 만들며, <b>실측 데이터로 병목을 검증해 개선과 기각을 스스로 판단하는 훈련</b>을 이어가고 있습니다. 도구가 낸 결과를 스스로 검증할 수 있는 기초 역량에 균형 있게 투자합니다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>Contact</span>
+    <h3 class="contact-h">함께 성장하며 <span class="hot">오래 기여</span>할 수 있는 팀을 찾고 있습니다.</h3>
+    <div class="clinks">
+      <a class="clink" href="mailto:wndnwls7@gmail.com">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+        <span><span class="k">Email</span><span class="v">wndnwls7@gmail.com</span></span>
+      </a>
+      <a class="clink" href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 6-1.5 6-6.6a5 5 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.1-.3-3.5 1.3a12 12 0 0 0-6 0C6.6 1.6 5.5 1.9 5.5 1.9a4.7 4.7 0 0 0-.1 3.5A5 5 0 0 0 4 8.9c0 5 3 6.3 6 6.6a3.4 3.4 0 0 0-1 2.6V22"/></svg></span>
+        <span><span class="k">GitHub</span><span class="v">cocoz93/MMOServer</span></span>
+      </a>
+      <a class="clink" href="https://app.notion.com/p/2db16a0b9f598196a471d53775ab4223" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span>
+        <span><span class="k">Tech Blog</span><span class="v">Notion 기술 정리</span></span>
+      </a>
+    </div>
+    <div class="foot">
+      <span>© 2026 주우진 · Game Server Engineer</span>
+      <a class="top" href="#hero">↑ 맨 위로</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var prog = document.getElementById('prog');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    prog.style.width = (max>0 ? (h.scrollTop/max*100) : 0) + '%';
+  }
+  window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  var revEls = document.querySelectorAll('[data-reveal]');
+  if('IntersectionObserver' in window && !reduce){
+    var ro = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
+    }, {threshold:.14, rootMargin:'0px 0px -6% 0px'});
+    revEls.forEach(function(el){ ro.observe(el); });
+  } else { revEls.forEach(function(el){ el.classList.add('in'); }); }
+
+  var stages = document.querySelectorAll('.stage');
+  if('IntersectionObserver' in window){
+    var so2 = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); so2.unobserve(e.target); } });
+    }, {threshold:.3});
+    stages.forEach(function(el){ so2.observe(el); });
+  } else { stages.forEach(function(el){ el.classList.add('in'); }); }
+
+  function fmt(n){ return n.toLocaleString('en-US'); }
+  function countUp(el){
+    var to = parseFloat(el.getAttribute('data-to'));
+    var dur = parseFloat(el.getAttribute('data-dur')||'1200');
+    var pre = el.getAttribute('data-prefix')||'';
+    var suf = el.getAttribute('data-suffix')||'';
+    if(reduce){ el.textContent = pre+fmt(to)+suf; return; }
+    var start=null;
+    requestAnimationFrame(function step(t){
+      if(start===null) start=t;
+      var p=Math.min((t-start)/dur,1), e=1-Math.pow(1-p,3);
+      el.textContent = pre+fmt(Math.round(to*e))+suf;
+      if(p<1) requestAnimationFrame(step); else el.textContent = pre+fmt(to)+suf;
+    });
+  }
+  var doneSet = new WeakSet();
+  var nums = document.querySelectorAll('[data-to]');
+  if('IntersectionObserver' in window){
+    var co = new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting && !doneSet.has(e.target)){ doneSet.add(e.target); countUp(e.target); co.unobserve(e.target); } });
+    }, {threshold:.6});
+    nums.forEach(function(el){ co.observe(el); });
+  } else { nums.forEach(countUp); }
+
+  var links = {};
+  document.querySelectorAll('.navlinks a[data-spy]').forEach(function(a){ links[a.getAttribute('href').slice(1)] = a; });
+  var spySecs = document.querySelectorAll('#metrics,#career,#rnd,#skills,#about');
+  if('IntersectionObserver' in window){
+    var spy = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){
+          for(var k in links){ links[k].classList.remove('act'); }
+          if(links[e.target.id]) links[e.target.id].classList.add('act');
+        }
+      });
+    }, {rootMargin:'-46% 0px -50% 0px'});
+    spySecs.forEach(function(s){ spy.observe(s); });
+  }
+
+  var cv = document.getElementById('spark');
+  if(cv && cv.getContext){
+    var ctx = cv.getContext('2d'), dpr = Math.min(window.devicePixelRatio||1, 2), W=0, H=0;
+    function size(){ var r=cv.getBoundingClientRect(); W=r.width; H=r.height; cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    size(); window.addEventListener('resize', size);
+    var N=60, data=[], t=0;
+    for(var i=0;i<N;i++) data.push(.2 + .05*Math.sin(i*.5));
+    function nextVal(){
+      t++;
+      var base=.22, wob=(Math.sin(t*.13)+Math.sin(t*.31+1))*.028;
+      var spike=(Math.random()<.05)? Math.random()*.26 : 0;
+      return Math.max(.06, Math.min(.92, base+wob+spike));
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.strokeStyle='rgba(255,255,255,.05)'; ctx.lineWidth=1;
+      for(var g=.25; g<1; g+=.25){ ctx.beginPath(); ctx.moveTo(0,H*g); ctx.lineTo(W,H*g); ctx.stroke(); }
+      var sx=W/(N-1), i, x, y;
+      var grad=ctx.createLinearGradient(0,0,0,H);
+      grad.addColorStop(0,'rgba(62,166,255,.26)'); grad.addColorStop(1,'rgba(62,166,255,0)');
+      ctx.beginPath();
+      for(i=0;i<N;i++){ x=i*sx; y=H-data[i]*H; if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+      ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath(); ctx.fillStyle=grad; ctx.fill();
+      ctx.beginPath();
+      for(i=0;i<N;i++){ x=i*sx; y=H-data[i]*H; if(i===0)ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+      ctx.strokeStyle='rgba(80,175,255,.95)'; ctx.lineWidth=2; ctx.lineJoin='round';
+      ctx.shadowColor='rgba(62,166,255,.55)'; ctx.shadowBlur=8; ctx.stroke(); ctx.shadowBlur=0;
+      var ex=(N-1)*sx, ey=H-data[N-1]*H;
+      ctx.beginPath(); ctx.arc(ex,ey,3,0,Math.PI*2); ctx.fillStyle='#63b8ff'; ctx.fill();
+    }
+    if(reduce){ draw(); }
+    else {
+      var last=0;
+      requestAnimationFrame(function loop(ts){
+        if(ts-last>95){ last=ts; data.push(nextVal()); data.shift(); draw(); }
+        requestAnimationFrame(loop);
+      });
+    }
+  }
+})();
+</script>
