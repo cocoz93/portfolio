@@ -6,6 +6,11 @@
   src:url("data:font/woff2;base64,__PRETENDARD_WOFF2_BASE64__") format("woff2");
   font-weight:100 900; font-style:normal; font-display:swap;
 }
+@font-face{
+  font-family:'JetBrains Mono';
+  src:url("data:font/woff2;base64,__JBMONO_WOFF2_BASE64__") format("woff2");
+  font-weight:100 800; font-style:normal; font-display:swap;
+}
 :root{
   --bg:#0d1220; --bg2:#111726; --surface:#151d2e; --surface2:#1b2436;
   --line:#26304a; --line2:#33405f;
@@ -13,7 +18,7 @@
   --hot:#46b1ff; --hot-soft:#79c7ff; --hot-deep:#2b86e0;
   --good:#34d399; --sig:#f5b13d; --rej:#f5879c;
   --hot-glow:rgba(70,177,255,.55);
-  --mono:"Cascadia Code","JetBrains Mono","SF Mono","D2Coding",ui-monospace,Menlo,Consolas,monospace;
+  --mono:'JetBrains Mono','Pretendard',ui-monospace,Consolas,monospace;
   --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
   --maxw:1160px; --pad:clamp(20px,5vw,40px);
 }
@@ -50,7 +55,7 @@ section{scroll-margin-top:76px}
 .brand .mk{width:27px; height:27px; border-radius:8px; display:grid; place-items:center;
   background:linear-gradient(135deg,var(--hot),var(--hot-deep)); color:#fff; font-size:.8rem; font-weight:800;
   box-shadow:0 4px 14px -4px var(--hot-glow)}
-.brand small{color:var(--muted); font-weight:600; font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; margin-left:2px}
+.brand small{color:var(--muted); font-weight:600; font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; margin-left:9px}
 .navlinks{display:flex; gap:6px; align-items:center}
 .navlinks a{font-size:.9rem; color:var(--ink2); padding:8px 12px; border-radius:8px; font-weight:600;
   transition:color .2s,background .2s}
@@ -142,19 +147,19 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .block{padding:clamp(60px,8vw,110px) 0}
 .block.alt{background:linear-gradient(180deg,var(--bg2),var(--bg))}
 
-.tl{position:relative; margin-top:8px}
-.tl::before{content:""; position:absolute; left:9px; top:6px; bottom:6px; width:2px;
-  background:linear-gradient(180deg,var(--hot),var(--line2) 40%,var(--line))}
-.job{position:relative; padding-left:44px; padding-bottom:clamp(30px,4vw,46px)}
-.job:last-child{padding-bottom:0}
-.job .node{position:absolute; left:1px; top:6px; width:18px; height:18px; border-radius:50%;
-  background:var(--bg); border:2px solid var(--line2)}
-.job.cur .node{border-color:var(--hot); box-shadow:0 0 0 4px rgba(62,166,255,.14)}
-.job.cur .node::after{content:""; position:absolute; inset:3px; border-radius:50%; background:var(--hot)}
-.job-h{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.tl{margin-top:8px; display:flex; flex-direction:column; gap:14px}
+.job{position:relative; z-index:0; overflow:hidden; background:var(--surface); border:1px solid var(--line);
+  border-radius:16px; padding:20px 56px 20px 22px}
+.job.cur{border-color:var(--line2); background:linear-gradient(180deg,rgba(70,177,255,.05),var(--surface))}
+.job-h{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
 .job-h h3{margin:0; font-size:1.2rem; font-weight:800; letter-spacing:-.02em}
 .job-h h3 span{color:var(--muted); font-weight:600; font-size:.88rem; margin-left:8px}
-.job .when{font-family:var(--mono); font-size:.82rem; color:var(--muted); white-space:nowrap}
+.job .jart{position:absolute; right:0; top:0; bottom:0; width:54%; z-index:-1; pointer-events:none;
+  background-size:cover; background-position:center; background-repeat:no-repeat}
+.job .jart::after{content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg,var(--surface),rgba(21,29,46,.78) 42%,rgba(21,29,46,.5))}
+.job .when{font-family:var(--mono); font-size:.78rem; color:var(--ink); white-space:nowrap; font-weight:700;
+  background:rgba(13,18,32,.58); border:1px solid var(--line2); padding:4px 9px; border-radius:8px}
 .job .tagnote{margin-top:6px; font-size:.85rem; color:var(--faint); font-family:var(--mono)}
 .job ul{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px}
 .job li{position:relative; padding-left:18px; color:var(--ink2); font-size:.98rem; line-height:1.6}
@@ -162,9 +167,8 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
   background:var(--hot); transform:rotate(45deg); opacity:.85}
 .job li b{color:var(--ink); font-weight:700}
 .chips{margin-top:16px; display:flex; flex-wrap:wrap; gap:7px}
-.chip{font-family:var(--mono); font-size:.8rem; color:var(--ink2); background:var(--surface);
-  border:1px solid var(--line); padding:5px 11px; border-radius:8px}
-.job.cur .chip{border-color:var(--line2)}
+.chip{font-family:var(--mono); font-size:.8rem; color:var(--ink2); background:var(--surface2);
+  border:1px solid var(--line2); padding:5px 11px; border-radius:8px}
 
 #rnd{position:relative}
 .rnd-flow{display:flex; align-items:stretch; gap:0; margin-top:8px; overflow-x:auto; padding-bottom:6px;
@@ -231,17 +235,24 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 @media(max-width:680px){ .skills{grid-template-columns:1fr} }
 
 .about{display:grid; grid-template-columns:auto 1fr; gap:clamp(24px,4vw,46px); align-items:start}
-.about .mono-side{font-family:var(--mono); font-size:.8rem; color:var(--muted); letter-spacing:.04em; line-height:2;
-  border-left:2px solid var(--hot); padding-left:16px; white-space:nowrap}
-.about p{margin:0 0 1.1em; color:var(--ink2); font-size:1.05rem; line-height:1.8; max-width:60ch}
+.about .mono-side{font-family:var(--mono); font-size:.82rem; color:var(--muted); letter-spacing:.04em;
+  position:relative; display:flex; flex-direction:column; gap:16px; padding-left:22px; white-space:nowrap}
+.about .mono-side::before{content:""; position:absolute; left:4px; top:6px; bottom:6px; width:2px;
+  background:linear-gradient(180deg,var(--line2),var(--hot))}
+.about .mono-side .st{position:relative}
+.about .mono-side .st::before{content:""; position:absolute; left:-22px; top:.28em; width:9px; height:9px; border-radius:50%;
+  background:var(--surface); border:2px solid var(--line2)}
+.about .mono-side .st.now{color:var(--hot-soft)}
+.about .mono-side .st.now::before{background:var(--hot); border-color:var(--hot); box-shadow:0 0 0 4px rgba(70,177,255,.16)}
+.about p{margin:0 0 1.1em; color:var(--ink2); font-size:1.05rem; line-height:1.8; max-width:74ch}
 .about p:last-child{margin-bottom:0}
 .about p b{color:var(--ink); font-weight:700}
-@media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{border-left:0; border-top:2px solid var(--hot); padding-left:0; padding-top:12px; white-space:normal} }
+@media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{white-space:normal} }
 
-#contact{border-top:1px solid var(--line); background:linear-gradient(180deg,var(--bg2),var(--bg));
-  padding:clamp(58px,7vw,92px) 0 46px; position:relative; overflow:hidden}
-#contact::before{content:""; position:absolute; inset:0; pointer-events:none;
-  background:radial-gradient(60% 60% at 50% 0%,rgba(62,166,255,.1),transparent 60%)}
+#about{background:var(--bg); transition:filter .85s ease}
+#contact{border-top:1px solid var(--line); background:var(--bg);
+  padding:clamp(58px,7vw,92px) 0 46px; position:relative; overflow:hidden; transition:filter .85s ease}
+body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 #contact .wrap{position:relative}
 .contact-h{font-size:clamp(1.55rem,3vw,2.25rem); font-weight:800; letter-spacing:-.025em; text-wrap:balance; margin:.45em 0 0; line-height:1.2}
 .clinks{margin-top:28px; display:flex; flex-wrap:wrap; gap:12px}
@@ -251,7 +262,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .clink .ic{width:36px; height:36px; border-radius:10px; display:grid; place-items:center; flex:0 0 auto;
   background:rgba(62,166,255,.1); border:1px solid rgba(62,166,255,.2)}
 .clink .ic svg{width:18px; height:18px; stroke:var(--hot-soft)}
-.clink .k{font-family:var(--mono); font-size:.72rem; color:var(--muted); letter-spacing:.08em; text-transform:uppercase}
+.clink .k{font-family:var(--mono); font-size:.72rem; color:var(--ink2); font-weight:600; letter-spacing:.08em; text-transform:uppercase}
 .clink .v{font-weight:700; font-size:.97rem; margin-left:10px}
 .foot{margin-top:42px; padding-top:22px; border-top:1px solid var(--line);
   display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:center;
@@ -268,6 +279,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
   .anim{animation:none; opacity:1}
   [data-reveal]{opacity:1; transform:none; transition:none}
   .mon-top .live .b{animation:none}
+  #about,#contact{transition:none}
 }
 </style>
 
@@ -286,7 +298,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
       <a href="#skills" data-spy>기술</a>
       <a href="#about" data-spy>소개</a>
     </div>
-    <a class="cta" href="#contact">연락하기</a>
+    <a class="cta" href="#contact">CONTACT</a>
   </div>
 </nav>
 
@@ -378,9 +390,9 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 
       <div class="tl">
         <article class="job cur" data-reveal>
-          <span class="node"></span>
+          <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_PROJECTR__); background-position:63% 50%"></span>
           <div class="job-h">
-            <h3>보이저게임즈 <span>· PROJECT R 서버팀</span></h3>
+            <h3>보이저 <span>· PROJECT R 서버팀</span></h3>
             <span class="when">2026.02 – 2026.04</span>
           </div>
           <div class="tagnote">신규 MMO · Linux 기반 초기 설계 (프로젝트 전사 중단)</div>
@@ -393,7 +405,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
         </article>
 
         <article class="job" data-reveal>
-          <span class="node"></span>
+          <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_DNF__); background-position:16% 82%; opacity:.8"></span>
           <div class="job-h">
             <h3>네오플 <span>· 던전앤파이터 중국서버팀</span></h3>
             <span class="when">2025.01 – 2025.07</span>
@@ -407,7 +419,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
         </article>
 
         <article class="job" data-reveal>
-          <span class="node"></span>
+          <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_RAG__); background-position:center 45%; opacity:.8"></span>
           <div class="job-h">
             <h3>그라비티 <span>· 라그나로크 서버팀</span></h3>
             <span class="when">2022.08 – 2025.01</span>
@@ -487,15 +499,15 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
       <div class="negband">
         <div class="neg" data-reveal style="--d:0">
           <span class="t rj">기각</span>
-          <p><b>LockFree 전환</b> — SendQ를 락프리로 바꿨더니 오히려 <b>−10% 회귀</b>. 실측으로 되돌림.</p>
+          <p><b>LockFree 전환</b> — SendQ(링버퍼)를 락프리로 전환 시 성능 <b>−10% 회귀</b>.</p>
         </div>
         <div class="neg" data-reveal style="--d:1">
           <span class="t rj">기각</span>
-          <p><b>SO_SNDBUF=0</b> — 커널 복사 제거 기대했으나 시스템 <b>CPU +75%</b>. 비용이 워커로 전가됨.</p>
+          <p><b>SO_SNDBUF=0</b> — 커널 복사 제거 기대했으나 시스템 <b>CPU +75%</b>, 비용이 워커로 전가.</p>
         </div>
         <div class="neg" data-reveal style="--d:2">
           <span class="t fd">규명</span>
-          <p>동접 1,500 붕괴는 서버가 아니라 <b>회선 상한 474Mbps</b>였음. 원인을 잘못 짚지 않도록 격리 측정.</p>
+          <p>동접 1,500에서 <b>회선 상한(474Mbps)</b>으로 동접 한계 경험.</p>
         </div>
       </div>
 
@@ -578,14 +590,13 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <span class="eyebrow"><span class="dot"></span>About</span>
-        <h2>늦게 출발했지만, <span class="hot">끝까지 파고드는</span> 개발자</h2>
+        <h2><span style="white-space:nowrap">음악에서 <span class="hot">게임 서버</span>로,</span> <span style="white-space:nowrap">끝까지 파고드는 개발자</span></h2>
       </div>
       <div class="about" data-reveal>
-        <div class="mono-side">// 음악 → 독학<br>// → 게임 서버<br>// 3년, 그리고<br>// 계속 파는 중</div>
+        <div class="mono-side"><span class="st">음악</span><span class="st">독학</span><span class="st">게임 회사</span><span class="st now">R&amp;D</span></div>
         <div>
-          <p>음악을 직업으로 삼았다가 <b>독학으로 게임 서버 개발에 입문</b>했습니다. 남들보다 늦은 출발이었지만, 대형 라이브 서비스에서 보낸 지난 3년으로 방향에 대한 확신은 더 단단해졌습니다.</p>
-          <p>주어진 업무 범위에 머물지 않고 <b>구조적 비효율을 먼저 찾아</b> 해결하려는 방식으로 일해왔습니다. O(N) 병목을 O(1)로, 반복되는 merge를 한 번으로, 하드코딩을 데이터로.</p>
-          <p>지금은 개인 프로젝트로 IOCP MMO 서버를 만들며, <b>실측 데이터로 병목을 검증해 개선과 기각을 스스로 판단하는 훈련</b>을 이어가고 있습니다. 도구가 낸 결과를 스스로 검증할 수 있는 기초 역량에 균형 있게 투자합니다.</p>
+          <p>홍대와 다양한 공연 무대에서 음악을 업으로 삼다가, 독학으로 게임 서버 개발자로 전향했습니다.<br>늦은 출발이었지만, 여러 대형 라이브 서비스에서 성과를 거두며 성장해왔습니다.</p>
+          <p>주어진 업무에 그치지 않고 주도적으로 문제를 해결하려 움직입니다. 개인 R&amp;D로 컴퓨터 공학의 근간을 꾸준히 다지는 한편, 급변하는 AI 트렌드에 관심을 가지고 AI가 낸 결과를 검증할 수 있는 역량을 키우고 있습니다.</p>
         </div>
       </div>
     </div>
@@ -595,7 +606,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 <footer id="contact">
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span>Contact</span>
-    <h3 class="contact-h">함께 성장하며 <span class="hot">오래 기여</span>할 수 있는 팀을 찾고 있습니다.</h3>
+    <h3 class="contact-h">신뢰받는 구성원임을 증명하고, 팀에 <span class="hot">오래 기여</span>하고 싶습니다.</h3>
     <div class="clinks">
       <a class="clink" href="mailto:wndnwls7@gmail.com">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
@@ -722,6 +733,16 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
         requestAnimationFrame(loop);
       });
     }
+  }
+
+  var aboutSec = document.getElementById('about');
+  if(aboutSec){
+    var updInv = function(){
+      document.body.classList.toggle('inv', aboutSec.getBoundingClientRect().top <= window.innerHeight * 0.6);
+    };
+    window.addEventListener('scroll', updInv, {passive:true});
+    window.addEventListener('resize', updInv);
+    updInv();
   }
 })();
 </script>
