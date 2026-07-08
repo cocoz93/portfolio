@@ -45,6 +45,7 @@ section{scroll-margin-top:76px}
 .sec-head p{margin:.7em 0 0; color:var(--ink2); font-size:1.02rem; max-width:64ch; line-height:1.7}
 .hot{color:var(--hot)}
 .mono{font-family:var(--mono)}
+.nb{white-space:nowrap}
 
 .prog{position:fixed; top:0; left:0; height:2px; width:0; z-index:60;
   background:linear-gradient(90deg,var(--hot-deep),var(--hot)); box-shadow:0 0 10px var(--hot-glow)}
@@ -95,9 +96,7 @@ section{scroll-margin-top:76px}
 .hero .quick{margin-top:1.9em; display:flex; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem;
   color:var(--muted); letter-spacing:.01em}
 .hero .quick b{color:var(--ink2); font-weight:700}
-.hero .quick i{color:var(--faint); font-style:normal}
-.hero h1 .hot{text-shadow:0 0 26px rgba(70,177,255,.34)}
-@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
+.hero .quick i{color:var(--faint); font-style:normal}@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
 .anim{opacity:0; animation:rise .85s cubic-bezier(.2,.7,.2,1) forwards}
 .d1{animation-delay:.04s}.d2{animation-delay:.12s}.d3{animation-delay:.2s}.d4{animation-delay:.28s}.d5{animation-delay:.36s}.d6{animation-delay:.46s}
 
@@ -153,7 +152,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .job.cur{border-color:var(--line2); background:linear-gradient(180deg,rgba(70,177,255,.05),var(--surface))}
 .job-h{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
 .job-h h3{margin:0; font-size:1.2rem; font-weight:800; letter-spacing:-.02em}
-.job-h h3 span{color:var(--muted); font-weight:600; font-size:.88rem; margin-left:8px}
+.job-h h3 span{color:var(--ink2); font-weight:600; font-size:.9rem; margin-left:12px; padding-left:13px; border-left:1px solid var(--line2)}
 .job .jart{position:absolute; right:0; top:0; bottom:0; width:54%; z-index:-1; pointer-events:none;
   background-size:cover; background-position:center; background-repeat:no-repeat}
 .job .jart::after{content:""; position:absolute; inset:0;
@@ -211,17 +210,105 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
   .negband{grid-template-columns:1fr}
 }
 
-.cases{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:8px}
-.case{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 18px;
-  display:flex; flex-direction:column; transition:transform .25s,border-color .25s}
-.case:hover{transform:translateY(-3px); border-color:var(--line2)}
-.case .tag{font-family:var(--mono); font-size:.74rem; letter-spacing:.06em; text-transform:uppercase; color:var(--hot);
-  align-self:flex-start; padding:4px 9px; border-radius:7px; background:rgba(62,166,255,.1); border:1px solid rgba(62,166,255,.22)}
-.case h4{margin:14px 0 0; font-size:1.1rem; font-weight:800; letter-spacing:-.02em; line-height:1.25}
-.case p{margin:9px 0 0; color:var(--ink2); font-size:.92rem; line-height:1.55}
-.case .r{margin-top:14px; padding-top:12px; border-top:1px solid var(--line); font-size:.88rem; font-weight:700; color:var(--hot)}
-@media(max-width:900px){ .cases{grid-template-columns:1fr 1fr} }
-@media(max-width:520px){ .cases{grid-template-columns:1fr} }
+.plabel{margin:64px 0 30px}
+.plabel .pl-n{display:block; font-family:var(--mono); font-size:3.6rem; font-weight:800; color:var(--faint); opacity:.55; line-height:.8; letter-spacing:-.04em}
+.plabel .pl-t{display:block; font-size:1.32rem; font-weight:800; letter-spacing:-.02em; color:var(--ink); margin-top:-16px; position:relative}
+.plabel i{display:block; margin-top:6px; font-style:normal; color:var(--muted); font-weight:600; font-size:.92rem}
+.sec-head + .plabel{margin-top:8px}
+
+.faults{display:flex; flex-direction:column}
+.fault{display:grid; grid-template-columns:1fr 1.04fr; gap:clamp(22px,3.6vw,46px); align-items:center; padding:34px 0}
+.fault + .fault{border-top:1px solid var(--line)}
+.fault-txt .tag{display:inline-block; font-family:var(--mono); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--hot); padding:4px 11px; border-radius:999px; background:rgba(70,177,255,.09); border:1px solid rgba(70,177,255,.24)}
+.fault-txt .tag.crit{color:var(--rej); background:rgba(245,135,156,.09); border-color:rgba(245,135,156,.3)}
+.fault-txt h4{margin:15px 0 2px; font-size:1.24rem; font-weight:800; letter-spacing:-.025em; line-height:1.22}
+.fault-fig{display:flex; justify-content:center}
+
+.pm{margin:12px 0 0; display:flex; flex-direction:column; gap:7px}
+.pm > div{display:block}
+.pm dt{display:inline; font-family:var(--mono); font-size:.7rem; font-weight:800; color:var(--hot); margin-right:10px; letter-spacing:.03em}
+.pm dd{display:inline; margin:0; font-size:.92rem; color:var(--ink2); line-height:1.5}
+.pm dd b{color:var(--ink); font-weight:700}
+
+/* premium telemetry panel — echoes hero .monitor */
+.fig-panel{width:100%; max-width:462px; position:relative; overflow:hidden;
+  background:linear-gradient(180deg,var(--surface2),var(--surface));
+  border:1px solid var(--line2); border-radius:15px;
+  box-shadow:0 34px 66px -38px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.02) inset}
+.fig-panel::before{content:""; position:absolute; top:0; left:0; right:0; height:1px; z-index:3;
+  background:linear-gradient(90deg,transparent,var(--pc,var(--hot)),transparent); opacity:.65}
+.fig-head{display:flex; align-items:center; justify-content:space-between; padding:13px 15px;
+  border-bottom:1px solid var(--line); font-family:var(--mono); font-size:.75rem; letter-spacing:.02em}
+.fig-head .id{display:inline-flex; align-items:center; gap:8px; color:var(--ink2)}
+.fig-head .id .d{width:7px; height:7px; border-radius:50%; background:var(--pc,var(--hot))}
+.fig-head .id .d.live{animation:figpulse 2s infinite}@keyframes figpulse{0%{box-shadow:0 0 0 0 rgba(245,135,156,.5)}70%{box-shadow:0 0 0 6px rgba(245,135,156,0)}100%{box-shadow:0 0 0 0 rgba(245,135,156,0)}}
+.fig-pill{font-family:var(--mono); font-size:.66rem; font-weight:800; letter-spacing:.07em; padding:3px 9px; border-radius:999px}
+.fig-pill.crit{color:var(--rej); background:rgba(245,135,156,.1); border:1px solid rgba(245,135,156,.3)}
+.fig-pill.ok{color:var(--good); background:rgba(52,211,153,.1); border:1px solid rgba(52,211,153,.28)}
+.fig-body{padding:16px 17px 17px}
+.fig-read{display:flex; align-items:flex-start; justify-content:space-between; gap:14px}
+.fig-big{font-size:2.6rem; font-weight:800; letter-spacing:-.045em; line-height:.9; color:var(--ink); font-variant-numeric:tabular-nums}
+.fig-big i{font-style:normal; font-size:.36em; color:var(--rej); font-weight:800; vertical-align:super; margin-left:2px}
+.fig-sub{text-align:right; font-size:.82rem; font-weight:600; color:var(--ink2); line-height:1.5; padding-top:5px}
+.fig-sub b{color:var(--ink); font-weight:800}
+
+/* cpu chart */
+.chart-wrap{position:relative; margin-top:15px; height:118px}
+.cpu-chart{display:block; width:100%; height:118px}
+.cpu-chart .grid{stroke:rgba(255,255,255,.055); stroke-width:1}
+.cpu-chart .thr{stroke:rgba(245,135,156,.5); stroke-width:1.4; stroke-dasharray:5 5}
+.cpu-chart .area{fill:url(#cpuFill)}
+.cpu-chart .line{fill:none; stroke:var(--rej); stroke-width:2.3; stroke-linejoin:round; stroke-linecap:round}
+.fault.in .cpu-chart .line{animation:cpudraw 1.7s cubic-bezier(.2,.7,.2,1) .2s both}
+@keyframes cpudraw{from{stroke-dasharray:660; stroke-dashoffset:660}to{stroke-dasharray:660; stroke-dashoffset:0}}
+.down-dot{position:absolute; left:62.5%; top:13.5%; width:11px; height:11px; margin:-6px 0 0 -6px;
+  border-radius:50%; background:var(--rej)}
+.fault.in .down-dot{animation:downpop .4s cubic-bezier(.2,.7,.2,1) .3s backwards, figpulse 2s infinite 2s}
+@keyframes downpop{from{opacity:0; transform:scale(.2)}to{opacity:1; transform:scale(1)}}
+.down-flag{position:absolute; left:62.5%; top:13.5%; transform:translate(12px,-155%); white-space:nowrap;
+  font-family:var(--mono); font-size:.66rem; font-weight:800; color:var(--rej); letter-spacing:.05em}
+.cpu-axis{display:flex; justify-content:space-between; margin-top:10px; font-family:var(--mono); font-size:.66rem; color:var(--faint)}
+
+/* overlapped-pool before/after */
+.pool{display:grid; grid-template-columns:1fr 24px 1fr; align-items:stretch; gap:11px}
+.pool-side{display:flex; flex-direction:column}
+.pool-cap{display:block; text-align:center; font-family:var(--mono); font-size:.62rem; letter-spacing:.06em;
+  color:var(--faint); margin-bottom:11px; white-space:nowrap}
+.pool-cap.ok{color:var(--good)}
+.pool-box{background:var(--bg2); border:1px solid var(--line2); border-radius:10px; padding:11px 10px}
+.pool-box.bad{border-color:rgba(245,135,156,.4)}
+.pool-th{display:flex; justify-content:center; gap:7px; margin-bottom:10px}
+.pool-th span{font-family:var(--mono); font-size:.64rem; font-weight:700; color:var(--ink2);
+  background:var(--surface2); border:1px solid var(--line2); border-radius:6px; padding:2px 8px}
+.pool-slots{display:flex; flex-direction:column; gap:6px}
+.pool-slots i{height:11px; border-radius:3px; background:var(--line)}
+.pool-slots i.hit{background:rgba(245,135,156,.22); box-shadow:inset 0 0 0 1.4px var(--rej)}
+.pool-two{display:flex; flex-direction:column; gap:8px}
+.pool-mini{display:flex; align-items:center; gap:9px; background:var(--bg2); border:1px solid rgba(52,211,153,.32);
+  border-radius:9px; padding:9px 11px}
+.pool-mini b{font-family:var(--mono); font-size:.66rem; font-weight:800; color:var(--good); min-width:32px}
+.pool-mini .s{flex:1; height:9px; border-radius:3px; background:var(--line)}
+.pool-mid{display:grid; place-items:center; align-self:center; width:24px; height:24px;
+  border-radius:50%; background:var(--surface2); border:1px solid var(--line2); color:var(--muted); font-size:.82rem}
+.pool-note{display:block; text-align:center; margin-top:auto; padding-top:12px; font-size:.68rem; font-weight:700}
+.pool-note.bad{color:var(--rej)}
+.pool-note.ok{color:var(--good)}
+
+.mades{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+.made{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 22px 20px;
+  transition:transform .25s,border-color .25s}
+.made:hover{transform:translateY(-3px); border-color:var(--line2)}
+.made-k{display:block; font-size:.84rem; font-weight:700; color:var(--muted)}
+.made-v{display:block; margin-top:12px; font-size:clamp(1.9rem,2.9vw,2.35rem); font-weight:800; letter-spacing:-.035em; line-height:1; color:var(--ink)}
+.made-v i{font-style:normal; font-size:.5em; color:var(--hot); margin-left:1px}
+.made p{margin:13px 0 0; font-size:.92rem; font-weight:600; color:var(--ink2); line-height:1.55}
+.made p b{color:var(--ink); font-weight:700}
+@media(max-width:900px){
+  .fault{grid-template-columns:1fr; gap:22px}
+  .fig-panel{max-width:520px}
+  .mades{grid-template-columns:1fr}
+}
 
 .skills{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px}
 .skgrp{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px}
@@ -369,7 +456,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <div class="stat" data-reveal style="--d:1">
           <div class="stat-k">신규 스킬 추가</div>
           <div class="stat-v"><span class="now">코드 0</span></div>
-          <div class="stat-s">데이터 드리븐 스킬 체인 — 행 추가만</div>
+          <div class="stat-s">데이터 드리븐 스킬 체인 — <span class="nb">행 추가만</span></div>
         </div>
         <div class="stat" data-reveal style="--d:2">
           <div class="stat-k">라이브 경험</div>
@@ -392,12 +479,12 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <article class="job cur" data-reveal>
           <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_PROJECTR__); background-position:63% 50%"></span>
           <div class="job-h">
-            <h3>보이저 <span>· PROJECT R 서버팀</span></h3>
+            <h3>보이저 <span>PROJECT R 서버팀</span></h3>
             <span class="when">2026.02 – 2026.04</span>
           </div>
           <div class="tagnote">신규 MMO · Linux 기반 초기 설계 (프로젝트 전사 중단)</div>
           <ul>
-            <li><b>데이터 드리븐 스킬 체인</b> 설계·구현 — 투창→착탄→토템→폭발 4단계, 신규 스킬은 테이블 행 추가만으로 (코드 변경 0)</li>
+            <li><b>데이터 드리븐 스킬 체인</b> 설계·구현 — 코드 변경 없이 테이블 행만 추가</li>
             <li>AoE 3모드(Normal·Tracking·Sequential)로 확장, 기존 로직 <b>변경 없이</b></li>
             <li>투사체 착탄 처리 <b>대안 3안 비교</b> 기반 아키텍처 의사결정</li>
           </ul>
@@ -407,7 +494,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <article class="job" data-reveal>
           <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_DNF__); background-position:16% 82%; opacity:.8"></span>
           <div class="job-h">
-            <h3>네오플 <span>· 던전앤파이터 중국서버팀</span></h3>
+            <h3>네오플 <span>던전앤파이터 중국서버팀</span></h3>
             <span class="when">2025.01 – 2025.07</span>
           </div>
           <div class="tagnote">넥토리얼 4기 · 중국 라이브 서비스</div>
@@ -421,7 +508,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <article class="job" data-reveal>
           <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_RAG__); background-position:center 45%; opacity:.8"></span>
           <div class="job-h">
-            <h3>그라비티 <span>· 라그나로크 서버팀</span></h3>
+            <h3>그라비티 <span>라그나로크 서버팀</span></h3>
             <span class="when">2022.08 – 2025.01</span>
           </div>
           <div class="tagnote">2년 6개월 · 한국·해외 라이브 운영</div>
@@ -437,11 +524,126 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     </div>
   </section>
 
-  <section id="rnd" class="block alt">
+  <section id="incident" class="block alt">
+    <div class="wrap">
+      <div class="sec-head" data-reveal>
+        <span class="eyebrow"><span class="dot"></span>Live Service · 그라비티 라그나로크</span>
+        <h2>장애는 <span class="hot">원인</span>까지, 컨텐츠는 <span class="hot">라이브</span>까지</h2>
+        <p>2년 6개월의 라이브 운영. 장애는 재현 조건과 원인까지 추적해 규명하고,<br>신규 컨텐츠는 <span class="nb">기획·클라이언트와</span> 직접 소통하며 설계부터 라이브 안착까지 완주했습니다.</p>
+      </div>
+      <div class="plabel" data-reveal><span class="pl-n">01</span><span class="pl-t">장애 추적</span><i>재현 조건부터 원인 규명까지</i></div>
+      <div class="faults">
+        <article class="fault" data-reveal>
+          <div class="fault-txt">
+            <span class="tag crit">Critical · Live Down</span>
+            <h4>zone 간 비동기 레이스 컨디션</h4>
+            <dl class="pm">
+              <div><dt>증상</dt><dd>저장 실패 무한 재시도 → <b>CPU 100% · ZONE 다운</b></dd></div>
+              <div><dt>원인</dt><dd>비동기 저장 중 맵 이동 — 두 zone이 <b>각자 판단</b>해 재요청, <span class="nb">PK 충돌</span></dd></div>
+              <div><dt>조치</dt><dd>ms 단위 로그 <b>역추적 규명</b> → 전수 조사</dd></div>
+            </dl>
+          </div>
+          <div class="fault-fig">
+            <div class="fig-panel" style="--pc:var(--rej)">
+              <div class="fig-head">
+                <span class="id"><span class="d live"></span>cpu.load · zone-proc</span>
+                <span class="fig-pill crit">● LIVE DOWN</span>
+              </div>
+              <div class="fig-body">
+                <div class="fig-read">
+                  <span class="fig-big">100<i>%</i></span>
+                  <span class="fig-sub"><b>무한 재시도 루프</b><br>→ CPU 고정 · ZONE 다운</span>
+                </div>
+                <div class="chart-wrap">
+                  <svg class="cpu-chart" viewBox="0 0 400 116" preserveAspectRatio="none" aria-hidden="true">
+                    <defs>
+                      <linearGradient id="cpuFill" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#f5879c" stop-opacity=".32"/>
+                        <stop offset="1" stop-color="#f5879c" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <line class="grid" x1="0" y1="58" x2="400" y2="58"/>
+                    <line class="grid" x1="0" y1="100" x2="400" y2="100"/>
+                    <path class="area" d="M0,84 L26,86 L52,80 L78,85 L104,81 L130,86 L156,82 L178,83 L192,77 L206,63 L220,45 L234,26 L246,18 L250,16 L400,16 L400,116 L0,116 Z"/>
+                    <path class="line" vector-effect="non-scaling-stroke" d="M0,84 L26,86 L52,80 L78,85 L104,81 L130,86 L156,82 L178,83 L192,77 L206,63 L220,45 L234,26 L246,18 L250,16 L400,16"/>
+                    <line class="thr" vector-effect="non-scaling-stroke" x1="0" y1="16" x2="400" y2="16"/>
+                  </svg>
+                  <span class="down-flag">ZONE DOWN</span>
+                  <span class="down-dot"></span>
+                </div>
+                <div class="cpu-axis"><span>idle · 정상</span><span>load pinned 100%</span></div>
+              </div>
+            </div>
+          </div>
+        </article>
+        <article class="fault" data-reveal style="--d:1">
+          <div class="fault-txt">
+            <span class="tag">동시성 버그</span>
+            <h4>Overlapped 풀 스레드 안전</h4>
+            <dl class="pm">
+              <div><dt>증상</dt><dd>같은 Overlapped <b>중복 사용</b> — 간헐 경합</dd></div>
+              <div><dt>원인</dt><dd>Alloc/Release를 Interlocked 카운트로만 관리 — 대여·반납 <b><span class="nb">thread-unsafe</span></b></dd></div>
+              <div><dt>조치</dt><dd>풀을 <b>클래스별로 분리</b>해 경합 제거</dd></div>
+            </dl>
+          </div>
+          <div class="fault-fig">
+            <div class="fig-panel" style="--pc:var(--good)">
+              <div class="fig-head">
+                <span class="id"><span class="d"></span>overlapped.pool</span>
+                <span class="fig-pill ok">✓ RESOLVED</span>
+              </div>
+              <div class="fig-body">
+                <div class="pool">
+                  <div class="pool-side">
+                    <span class="pool-cap">BEFORE · 단일 공유 풀</span>
+                    <div class="pool-box bad">
+                      <div class="pool-th"><span>T1</span><span>T2</span></div>
+                      <div class="pool-slots"><i></i><i class="hit"></i><i></i></div>
+                    </div>
+                    <span class="pool-note bad">같은 슬롯 중복 대여</span>
+                  </div>
+                  <div class="pool-mid">›</div>
+                  <div class="pool-side">
+                    <span class="pool-cap ok">AFTER · 클래스별 분리</span>
+                    <div class="pool-two">
+                      <div class="pool-mini"><b>Send</b><span class="s"></span></div>
+                      <div class="pool-mini"><b>Recv</b><span class="s"></span></div>
+                    </div>
+                    <span class="pool-note ok">전용 풀 · 경합 제거</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="plabel" data-reveal><span class="pl-n">02</span><span class="pl-t">신규 컨텐츠</span><i>설계부터 라이브 안착까지 단독 완주</i></div>
+      <div class="mades">
+        <div class="made" data-reveal>
+          <span class="made-k">만렙 확장 신규 스킬</span>
+          <span class="made-v">29<i>종</i></span>
+          <p>8종 개발 + <b>전체 A/S 도맡아 처리</b></p>
+        </div>
+        <div class="made" data-reveal style="--d:1">
+          <span class="made-k">신규 MD 보스 스킬</span>
+          <span class="made-v">9<i>종</i></span>
+          <p>기획·클라 직접 소통하며 <b>A–Z 단독 개발</b></p>
+        </div>
+        <div class="made" data-reveal style="--d:2">
+          <span class="made-k">동맹 채팅 · 신규 시스템</span>
+          <span class="made-v">단독</span>
+          <p>여러 길드를 잇는 <b>브로드캐스트 채널</b> — <span class="nb">최악 트래픽까지</span> 고려해 설계·안착</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="rnd" class="block">
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <span class="eyebrow"><span class="dot"></span>Personal R&amp;D · IOCP MMO Server</span>
-        <h2>맵당 동접 <span class="hot">200 → 4,000</span>, 병목 추적의 기록</h2>
+        <h2>맵당 동접 <span class="hot">200 → 4,000</span>, 병목 개선 R&amp;D</h2>
         <p>추측 없이 <b style="color:var(--ink)">실측으로</b> 병목을 하나씩 제거하며 <b style="color:var(--ink)">서버 성능을 향상</b>시켰습니다. 모든 단계는 A/B 토글로 정확한 원인을 규명합니다.</p>
       </div>
 
@@ -450,7 +652,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="sx">STEP 01</span>
           <span class="cc">동접</span><span class="cnum">200</span>
           <div class="load"><i></i></div>
-          <div class="bn">send syscall — 틱 76%</div>
+          <div class="bn">send syscall — <span class="nb">틱 76%</span></div>
           <span class="fix">Send Coalescing</span>
           <div class="res"><span>syscall <b>−94%</b></span><span>tick p99 <b>65 → 9ms</b></span></div>
         </div>
@@ -460,7 +662,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="sx">STEP 02</span>
           <span class="cc">동접</span><span class="cnum">1,000</span>
           <div class="load"><i></i></div>
-          <div class="bn">송신 루프 — 틱 74%</div>
+          <div class="bn">송신 루프 — <span class="nb">틱 74%</span></div>
           <span class="fix">SendThread 분리</span>
           <div class="res"><span>tick p99 <b>39 → 17ms</b></span><span>전체 CPU 증가 <b>0</b></span></div>
         </div>
@@ -470,7 +672,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="sx">STEP 03</span>
           <span class="cc">동접</span><span class="cnum">2,000</span>
           <div class="load"><i></i></div>
-          <div class="bn">수신자별 복사 — 틱 71%</div>
+          <div class="bn">수신자별 복사 — <span class="nb">틱 71%</span></div>
           <span class="fix">섹터 묶음 패킷</span>
           <div class="res"><span>복사 <b>−81%</b></span><span>tick p99 <b>57 → 10ms</b></span></div>
         </div>
@@ -481,7 +683,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="cc">동접</span><span class="cnum">2,500</span>
           <div class="load"><i></i></div>
           <div class="bn">송신 CPU 1.00 포화</div>
-          <span class="fix">SendWorker Pool K=2</span>
+          <span class="fix">SendWorker ×2</span>
           <div class="res"><span>처리량 천장 해소</span><span><b>55k → 61k/s</b></span></div>
         </div>
         <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
@@ -491,8 +693,8 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="cc">동접 — 천장 실측</span><span class="cnum">4,000</span>
           <div class="load"><i></i></div>
           <div class="bn">게임 스레드 — 단일 코어</div>
-          <span class="fix">스케일 아웃 (맵 N개)</span>
-          <div class="res"><span>단일 맵 처리 한계 도달</span><span>다음 축: <b>멀티프로세스</b></span></div>
+          <span class="fix">맵별 스레드 (N개)</span>
+          <div class="res"><span>단일 맵 처리 한계 도달</span><span>다음 축: <b>멀티 스레드</b></span></div>
         </div>
       </div>
 
@@ -507,7 +709,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         </div>
         <div class="neg" data-reveal style="--d:2">
           <span class="t fd">규명</span>
-          <p>동접 1,500에서 <b>회선 상한(474Mbps)</b>으로 동접 한계 경험.</p>
+          <p>동접 1,500에서 <b>회선 상한(474Mbps)</b>에 걸려 한계 경험.</p>
         </div>
       </div>
 
@@ -515,47 +717,11 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     </div>
   </section>
 
-  <section id="design" class="block">
-    <div class="wrap">
-      <div class="sec-head" data-reveal>
-        <span class="eyebrow"><span class="dot"></span>Case Study · Voyager Combat System</span>
-        <h2>하드코딩 대신 <span class="hot">데이터로</span> — 전투 스킬 시스템 설계</h2>
-        <p>다단계 스킬·AoE·넉백을 테이블 설정으로 다루도록 구조화. 설계 판단이 필요했던 네 가지.</p>
-      </div>
-      <div class="cases">
-        <article class="case" data-reveal style="--d:0">
-          <span class="tag">데이터 드리븐</span>
-          <h4>스킬 체인 시스템</h4>
-          <p>OnDestroy 훅으로 파괴 시점에 후속 스킬 발동. 체인을 테이블 값으로 정의.</p>
-          <div class="r">신규 스킬 = 행 추가만, 코드 0</div>
-        </article>
-        <article class="case" data-reveal style="--d:1">
-          <span class="tag">시스템 확장</span>
-          <h4>AoE 3모드</h4>
-          <p>Normal·Tracking·Sequential. HitCount 컬럼을 시스템별로 재정의.</p>
-          <div class="r">기존 호환 유지 · 로직 변경 0</div>
-        </article>
-        <article class="case" data-reveal style="--d:2">
-          <span class="tag">아키텍처 결정</span>
-          <h4>착탄 처리 3안 비교</h4>
-          <p>유지 / 토템 대체 / 전용 분리를 확장성·역할분리 기준으로 평가.</p>
-          <div class="r">A 채택 · C 전환로 확보</div>
-        </article>
-        <article class="case" data-reveal style="--d:3">
-          <span class="tag">리팩터링</span>
-          <h4>넉백 이원화 통합</h4>
-          <p>직접호출+버프 2경로를 TargetShape 기반 방향 규칙으로 통일.</p>
-          <div class="r">스킬별 하드코딩 0</div>
-        </article>
-      </div>
-    </div>
-  </section>
-
   <section id="skills" class="block alt">
     <div class="wrap">
       <div class="sec-head" data-reveal>
         <span class="eyebrow"><span class="dot"></span>Skills</span>
-        <h2>저수준 <span class="hot">동시성·네트워크</span> 중심 스택</h2>
+        <h2>저수준에 강한, <span class="hot">확장 가능한</span> 서버 스택</h2>
       </div>
       <div class="skills">
         <div class="skgrp" data-reveal style="--d:0">
@@ -593,7 +759,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <h2><span style="white-space:nowrap">음악에서 <span class="hot">게임 서버</span>로,</span> <span style="white-space:nowrap">끝까지 파고드는 개발자</span></h2>
       </div>
       <div class="about" data-reveal>
-        <div class="mono-side"><span class="st">음악</span><span class="st">독학</span><span class="st">게임 회사</span><span class="st now">R&amp;D</span></div>
+        <div class="mono-side"><span class="st">음악</span><span class="st">독학</span><span class="st">게임회사</span><span class="st now">R&amp;D</span></div>
         <div>
           <p>홍대와 다양한 공연 무대에서 음악을 업으로 삼다가, 독학으로 게임 서버 개발자로 전향했습니다.<br>늦은 출발이었지만, 여러 대형 라이브 서비스에서 성과를 거두며 성장해왔습니다.</p>
           <p>주어진 업무에 그치지 않고 주도적으로 문제를 해결하려 움직입니다. 개인 R&amp;D로 컴퓨터 공학의 근간을 꾸준히 다지는 한편, 급변하는 AI 트렌드에 관심을 가지고 AI가 낸 결과를 검증할 수 있는 역량을 키우고 있습니다.</p>
@@ -606,7 +772,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 <footer id="contact">
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span>Contact</span>
-    <h3 class="contact-h">신뢰받는 구성원임을 증명하고, 팀에 <span class="hot">오래 기여</span>하고 싶습니다.</h3>
+    <h3 class="contact-h">신뢰받는 구성원임을 증명하고,<br><span class="hot">오래 기여</span>할 팀을 찾습니다.</h3>
     <div class="clinks">
       <a class="clink" href="mailto:wndnwls7@gmail.com">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
