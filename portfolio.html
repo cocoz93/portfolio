@@ -80,8 +80,9 @@ section{scroll-margin-top:76px}
 .hero h1{margin:.5em 0 0; font-size:clamp(2.1rem,4.6vw,3.35rem); font-weight:800; letter-spacing:-.03em;
   line-height:1.1; text-wrap:balance}
 .hero h1 .l2{display:block}
-.hero .lede{margin:1.3em 0 0; color:var(--ink2); font-size:clamp(1rem,1.3vw,1.1rem); max-width:52ch; line-height:1.75}
-.hero .lede b{color:var(--ink); font-weight:700}
+.hero .lede{margin:1.3em 0 0; color:var(--ink); font-family:var(--mono); font-size:.95rem; letter-spacing:-.02em; line-height:1.7; display:flex; flex-wrap:wrap; align-items:center; gap:.42em}
+.hero .lede b{color:var(--ink); font-weight:800}
+.hero .lede i{width:5px; height:5px; border-radius:1px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}
 .hero .actions{margin-top:1.8em; display:flex; flex-wrap:wrap; gap:12px}
 .btn{display:inline-flex; align-items:center; gap:9px; padding:12px 20px; border-radius:11px; font-weight:700;
   font-size:.95rem; border:1px solid transparent; transition:transform .18s,box-shadow .25s,background .2s,border-color .2s}
@@ -93,10 +94,10 @@ section{scroll-margin-top:76px}
 .btn.ghost:hover{border-color:var(--hot); background:rgba(62,166,255,.07)}
 .btn.grn{border-color:rgba(52,211,153,.5); color:var(--good)}
 .btn.grn:hover{border-color:var(--good); background:rgba(52,211,153,.1)}
-.hero .quick{margin-top:1.9em; display:flex; gap:20px; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem;
+.hero .quick{margin-top:.4em; display:flex; gap:1.3em; flex-wrap:wrap; font-family:var(--mono); font-size:.82rem;
   color:var(--muted); letter-spacing:.01em}
 .hero .quick b{color:var(--ink2); font-weight:700}
-.hero .quick i{color:var(--faint); font-style:normal}@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
+.hero .quick i{width:5px; height:5px; border-radius:1px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}@keyframes rise{from{opacity:0; transform:translateY(18px)} to{opacity:1; transform:none}}
 .anim{opacity:0; animation:rise .85s cubic-bezier(.2,.7,.2,1) forwards}
 .d1{animation-delay:.04s}.d2{animation-delay:.12s}.d3{animation-delay:.2s}.d4{animation-delay:.28s}.d5{animation-delay:.36s}.d6{animation-delay:.46s}
 
@@ -163,7 +164,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .job ul{margin:14px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:9px}
 .job li{position:relative; padding-left:18px; color:var(--ink2); font-size:.98rem; line-height:1.6}
 .job li::before{content:""; position:absolute; left:1px; top:.6em; width:6px; height:6px; border-radius:2px;
-  background:var(--hot); transform:rotate(45deg); opacity:.85}
+  background:var(--muted); transform:rotate(45deg); opacity:.85}
 .job li b{color:var(--ink); font-weight:700}
 .chips{margin-top:16px; display:flex; flex-wrap:wrap; gap:7px}
 .chip{font-family:var(--mono); font-size:.8rem; color:var(--ink2); background:var(--surface2);
@@ -270,51 +271,53 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
   font-family:var(--mono); font-size:.66rem; font-weight:800; color:var(--rej); letter-spacing:.05em}
 .cpu-axis{display:flex; justify-content:space-between; margin-top:10px; font-family:var(--mono); font-size:.66rem; color:var(--faint)}
 
-/* overlapped-pool before/after */
-.pool{display:grid; grid-template-columns:1fr 24px 1fr; align-items:stretch; gap:11px}
-.pool-side{display:flex; flex-direction:column}
-.pool-cap{display:block; text-align:center; font-family:var(--mono); font-size:.62rem; letter-spacing:.06em;
-  color:var(--faint); margin-bottom:11px; white-space:nowrap}
-.pool-cap.ok{color:var(--good)}
-.pool-box{background:var(--bg2); border:1px solid var(--line2); border-radius:10px; padding:11px 10px}
-.pool-box.bad{border-color:rgba(245,135,156,.4)}
-.pool-th{display:flex; justify-content:center; gap:7px; margin-bottom:10px}
-.pool-th span{font-family:var(--mono); font-size:.64rem; font-weight:700; color:var(--ink2);
-  background:var(--surface2); border:1px solid var(--line2); border-radius:6px; padding:2px 8px}
-.pool-slots{display:flex; flex-direction:column; gap:6px}
-.pool-slots i{height:11px; border-radius:3px; background:var(--line)}
-.pool-slots i.hit{background:rgba(245,135,156,.22); box-shadow:inset 0 0 0 1.4px var(--rej)}
-.pool-two{display:flex; flex-direction:column; gap:8px}
-.pool-mini{display:flex; align-items:center; gap:9px; background:var(--bg2); border:1px solid rgba(52,211,153,.32);
-  border-radius:9px; padding:9px 11px}
-.pool-mini b{font-family:var(--mono); font-size:.66rem; font-weight:800; color:var(--good); min-width:32px}
-.pool-mini .s{flex:1; height:9px; border-radius:3px; background:var(--line)}
-.pool-mid{display:grid; place-items:center; align-self:center; width:24px; height:24px;
-  border-radius:50%; background:var(--surface2); border:1px solid var(--line2); color:var(--muted); font-size:.82rem}
-.pool-note{display:block; text-align:center; margin-top:auto; padding-top:12px; font-size:.68rem; font-weight:700}
-.pool-note.bad{color:var(--rej)}
-.pool-note.ok{color:var(--good)}
-
-.mades{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
-.made{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:22px 22px 20px;
-  transition:transform .25s,border-color .25s}
-.made:hover{transform:translateY(-3px); border-color:var(--line2)}
-.made-k{display:block; font-size:.84rem; font-weight:700; color:var(--muted)}
-.made-v{display:block; margin-top:12px; font-size:clamp(1.9rem,2.9vw,2.35rem); font-weight:800; letter-spacing:-.035em; line-height:1; color:var(--ink)}
-.made-v i{font-style:normal; font-size:.5em; color:var(--hot); margin-left:1px}
-.made p{margin:13px 0 0; font-size:.92rem; font-weight:600; color:var(--ink2); line-height:1.55}
-.made p b{color:var(--ink); font-weight:700}
-@media(max-width:900px){
-  .fault{grid-template-columns:1fr; gap:22px}
-  .fig-panel{max-width:520px}
-  .mades{grid-template-columns:1fr}
+/* ── STEP 01 · 에디토리얼 케이스 (장애) ── */
+.cases{border-top:1px solid var(--line2)}
+.case{display:grid; grid-template-columns:118px 1fr 188px; gap:clamp(18px,3vw,32px); align-items:start;
+  padding:28px 2px; border-bottom:1px solid var(--line)}
+.case-idx{display:flex; flex-direction:column; gap:10px}
+.cn{font-size:2.5rem; font-weight:800; line-height:.8; letter-spacing:-.05em;
+  color:transparent; -webkit-text-stroke:1.4px var(--line2)}
+.cv{font-family:var(--mono); font-size:.63rem; font-weight:800; letter-spacing:.05em; color:var(--muted)}
+.cv.crit{color:var(--rej)}
+.case-body h3{font-size:1.2rem; font-weight:800; letter-spacing:-.025em; line-height:1.24; margin:2px 0 9px}
+.case-body p{color:var(--ink2); font-size:.95rem; line-height:1.62}
+.case-body p b{color:var(--ink); font-weight:700}
+.case-out{text-align:right; padding-top:4px}
+.case-out .ol{display:block; font-family:var(--mono); font-size:.62rem; font-weight:800; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--good); margin-bottom:7px}
+.case-out .big{font-size:1.6rem; font-weight:800; letter-spacing:-.03em; color:var(--ink); line-height:1}
+.case-out em{display:block; margin-top:6px; font-style:normal; font-size:.9rem; font-weight:800; color:var(--good)}
+@media(max-width:640px){
+  .case{grid-template-columns:1fr; gap:12px; padding:22px 0}
+  .case-idx{flex-direction:row; align-items:baseline; gap:12px}
+  .cn{font-size:1.9rem}
+  .case-out{text-align:left}
+  .case-out em{display:inline; margin-left:8px}
 }
+
+/* ── STEP 02 · 성과 카드 (신규 컨텐츠) ── */
+.wins{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+.win{position:relative; overflow:hidden; background:linear-gradient(180deg,var(--surface2),var(--surface));
+  border:1px solid var(--line2); border-radius:16px; padding:24px 22px 22px;
+  transition:transform .25s,border-color .25s}
+.win:hover{transform:translateY(-3px); border-color:var(--muted)}
+.win::before{content:""; position:absolute; top:0; left:22px; right:22px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--hot),transparent); opacity:.5}
+.win-k{display:flex; align-items:center; gap:8px; font-size:.85rem; font-weight:700; color:var(--muted)}
+.win-k::before{content:""; width:6px; height:6px; border-radius:1px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}
+.win-v{margin-top:18px; font-size:clamp(2.2rem,3.5vw,2.8rem); font-weight:800; letter-spacing:-.04em; line-height:.95; color:var(--ink)}
+.win-v i{font-style:normal; font-size:.34em; color:var(--hot); margin-left:2px; font-weight:800; vertical-align:super}
+.win-v.word{font-size:clamp(1.7rem,2.6vw,2.1rem); color:var(--hot-soft)}
+.win-d{margin-top:15px; padding-top:14px; border-top:1px solid var(--line); font-size:.9rem; color:var(--ink2); line-height:1.5}
+.win-d b{color:var(--ink); font-weight:700}
+@media(max-width:760px){ .wins{grid-template-columns:1fr} }
 
 .skills{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px}
 .skgrp{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px}
 .skgrp h4{margin:0 0 14px; font-family:var(--mono); font-size:.79rem; letter-spacing:.1em; text-transform:uppercase;
   color:var(--muted); display:flex; align-items:center; gap:8px}
-.skgrp h4::before{content:""; width:8px; height:8px; border-radius:2px; background:var(--hot); transform:rotate(45deg)}
+.skgrp h4::before{content:""; width:8px; height:8px; border-radius:2px; background:var(--muted); transform:rotate(45deg)}
 .skgrp .row{display:flex; flex-wrap:wrap; gap:8px}
 .sk{font-family:var(--mono); font-size:.85rem; color:var(--ink); background:var(--surface2);
   border:1px solid var(--line2); padding:7px 13px; border-radius:9px; transition:border-color .2s,color .2s}
@@ -394,17 +397,16 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     <div class="hero-copy">
       <span class="eyebrow anim d1"><span class="dot"></span>주우진 · C++ Game Server Engineer</span>
       <h1 class="anim d2">대형 라이브 경험과 저수준 성능,<span class="l2">추측이 아닌 <span class="hot">실측</span>으로</span></h1>
-      <p class="lede anim d3">경력 <b>3년</b> — 그라비티 라그나로크, 네오플 던전앤파이터, 보이저 신규 MMO. 지금은 <b>IOCP 기반 MMO 서버</b>를 직접 설계·구현하며 실측 데이터로 병목을 추적하고 제거합니다.</p>
-      <div class="actions anim d4">
+      <p class="lede anim d3"><b>경력 3년</b><i></i><span>C/C++</span><i></i><span>STL</span><i></i><span>IOCP</span><i></i><span>Lock-Free</span><i></i><span>Concurrency</span></p>
+      <div class="quick anim d4">
+        <span><b>라이브 운영</b> + <b>신규 설계</b></span>
+        <span>개인 R&amp;D 동접 <b>4,000</b></span>
+        <span>실측 <b>A/B 검증</b></span>
+      </div>
+      <div class="actions anim d5">
         <a class="btn primary" href="#career">경력 보기</a>
         <a class="btn grn" href="#rnd">R&amp;D 성과</a>
         <a class="btn ghost" href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">GitHub ↗</a>
-      </div>
-      <div class="quick anim d5">
-        <span><b>3년</b> 실무</span><i>·</i>
-        <span>라이브 <b>3종</b></span><i>·</i>
-        <span>개인 R&amp;D 동접 <b>4,000</b></span><i>·</i>
-        <span>측정 <b>Prometheus/Grafana</b></span>
       </div>
     </div>
 
@@ -532,108 +534,41 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <p>2년 6개월의 라이브 운영. 장애는 재현 조건과 원인까지 추적해 규명하고,<br>신규 컨텐츠는 <span class="nb">기획·클라이언트와</span> 직접 소통하며 설계부터 라이브 안착까지 완주했습니다.</p>
       </div>
       <div class="plabel" data-reveal><span class="pl-n">01</span><span class="pl-t">장애 추적</span><i>재현 조건부터 원인 규명까지</i></div>
-      <div class="faults">
-        <article class="fault" data-reveal>
-          <div class="fault-txt">
-            <span class="tag crit">Critical · Live Down</span>
-            <h4>zone 간 비동기 레이스 컨디션</h4>
-            <dl class="pm">
-              <div><dt>증상</dt><dd>저장 실패 무한 재시도 → <b>CPU 100% · ZONE 다운</b></dd></div>
-              <div><dt>원인</dt><dd>비동기 저장 중 맵 이동 — 두 zone이 <b>각자 판단</b>해 재요청, <span class="nb">PK 충돌</span></dd></div>
-              <div><dt>조치</dt><dd>ms 단위 로그 <b>역추적 규명</b> → 전수 조사</dd></div>
-            </dl>
+      <div class="cases">
+        <article class="case" data-reveal>
+          <div class="case-idx"><span class="cn">01</span><span class="cv crit">CRITICAL · LIVE DOWN</span></div>
+          <div class="case-body">
+            <h3>zone 간 비동기 레이스 컨디션</h3>
+            <p>비동기 저장 중 맵 이동 — 두 zone이 <b>각자 판단</b>해 재요청하며 PK 충돌. 저장 실패가 무한 재시도로 번져 <b>CPU 100% · ZONE 다운</b>. ms 단위 로그를 <b>역추적</b>해 충돌 지점을 규명하고 전수 조사로 원천 차단.</p>
           </div>
-          <div class="fault-fig">
-            <div class="fig-panel" style="--pc:var(--rej)">
-              <div class="fig-head">
-                <span class="id"><span class="d live"></span>cpu.load · zone-proc</span>
-                <span class="fig-pill crit">● LIVE DOWN</span>
-              </div>
-              <div class="fig-body">
-                <div class="fig-read">
-                  <span class="fig-big">100<i>%</i></span>
-                  <span class="fig-sub"><b>무한 재시도 루프</b><br>→ CPU 고정 · ZONE 다운</span>
-                </div>
-                <div class="chart-wrap">
-                  <svg class="cpu-chart" viewBox="0 0 400 116" preserveAspectRatio="none" aria-hidden="true">
-                    <defs>
-                      <linearGradient id="cpuFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0" stop-color="#f5879c" stop-opacity=".32"/>
-                        <stop offset="1" stop-color="#f5879c" stop-opacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <line class="grid" x1="0" y1="58" x2="400" y2="58"/>
-                    <line class="grid" x1="0" y1="100" x2="400" y2="100"/>
-                    <path class="area" d="M0,84 L26,86 L52,80 L78,85 L104,81 L130,86 L156,82 L178,83 L192,77 L206,63 L220,45 L234,26 L246,18 L250,16 L400,16 L400,116 L0,116 Z"/>
-                    <path class="line" vector-effect="non-scaling-stroke" d="M0,84 L26,86 L52,80 L78,85 L104,81 L130,86 L156,82 L178,83 L192,77 L206,63 L220,45 L234,26 L246,18 L250,16 L400,16"/>
-                    <line class="thr" vector-effect="non-scaling-stroke" x1="0" y1="16" x2="400" y2="16"/>
-                  </svg>
-                  <span class="down-flag">ZONE DOWN</span>
-                  <span class="down-dot"></span>
-                </div>
-                <div class="cpu-axis"><span>idle · 정상</span><span>load pinned 100%</span></div>
-              </div>
-            </div>
-          </div>
+          <div class="case-out"><span class="ol">결과</span><span class="big">CPU 100%</span><em>→ 정상화 · ZONE 복구</em></div>
         </article>
-        <article class="fault" data-reveal style="--d:1">
-          <div class="fault-txt">
-            <span class="tag">동시성 버그</span>
-            <h4>Overlapped 풀 스레드 안전</h4>
-            <dl class="pm">
-              <div><dt>증상</dt><dd>같은 Overlapped <b>중복 사용</b> — 간헐 경합</dd></div>
-              <div><dt>원인</dt><dd>Alloc/Release를 Interlocked 카운트로만 관리 — 대여·반납 <b><span class="nb">thread-unsafe</span></b></dd></div>
-              <div><dt>조치</dt><dd>풀을 <b>클래스별로 분리</b>해 경합 제거</dd></div>
-            </dl>
+        <article class="case" data-reveal style="--d:1">
+          <div class="case-idx"><span class="cn">02</span><span class="cv">CONCURRENCY BUG</span></div>
+          <div class="case-body">
+            <h3>Overlapped 풀 스레드 안전</h3>
+            <p>같은 Overlapped를 <b>중복 사용</b>해 간헐 경합. Alloc/Release를 Interlocked 카운트로만 관리해 대여·반납이 <b><span class="nb">thread-unsafe</span></b>. 풀을 <b>클래스별로 분리</b>해 대여·반납 경로를 격리.</p>
           </div>
-          <div class="fault-fig">
-            <div class="fig-panel" style="--pc:var(--good)">
-              <div class="fig-head">
-                <span class="id"><span class="d"></span>overlapped.pool</span>
-                <span class="fig-pill ok">✓ RESOLVED</span>
-              </div>
-              <div class="fig-body">
-                <div class="pool">
-                  <div class="pool-side">
-                    <span class="pool-cap">BEFORE · 단일 공유 풀</span>
-                    <div class="pool-box bad">
-                      <div class="pool-th"><span>T1</span><span>T2</span></div>
-                      <div class="pool-slots"><i></i><i class="hit"></i><i></i></div>
-                    </div>
-                    <span class="pool-note bad">같은 슬롯 중복 대여</span>
-                  </div>
-                  <div class="pool-mid">›</div>
-                  <div class="pool-side">
-                    <span class="pool-cap ok">AFTER · 클래스별 분리</span>
-                    <div class="pool-two">
-                      <div class="pool-mini"><b>Send</b><span class="s"></span></div>
-                      <div class="pool-mini"><b>Recv</b><span class="s"></span></div>
-                    </div>
-                    <span class="pool-note ok">전용 풀 · 경합 제거</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div class="case-out"><span class="ol">결과</span><span class="big">간헐 경합</span><em>→ 0 · 경합 제거</em></div>
         </article>
       </div>
 
       <div class="plabel" data-reveal><span class="pl-n">02</span><span class="pl-t">신규 컨텐츠</span><i>설계부터 라이브 안착까지 단독 완주</i></div>
-      <div class="mades">
-        <div class="made" data-reveal>
-          <span class="made-k">만렙 확장 신규 스킬</span>
-          <span class="made-v">29<i>종</i></span>
-          <p>8종 개발 + <b>전체 A/S 도맡아 처리</b></p>
+      <div class="wins">
+        <div class="win" data-reveal>
+          <span class="win-k">만렙 확장 신규 스킬</span>
+          <div class="win-v">29<i>종</i></div>
+          <p class="win-d">8종 개발 + <b>전체 A/S 도맡아 처리</b></p>
         </div>
-        <div class="made" data-reveal style="--d:1">
-          <span class="made-k">신규 MD 보스 스킬</span>
-          <span class="made-v">9<i>종</i></span>
-          <p>기획·클라 직접 소통하며 <b>A–Z 단독 개발</b></p>
+        <div class="win" data-reveal style="--d:1">
+          <span class="win-k">신규 MD 보스 스킬</span>
+          <div class="win-v">9<i>종</i></div>
+          <p class="win-d">기획·클라 직접 소통, <b>A–Z 단독 개발</b></p>
         </div>
-        <div class="made" data-reveal style="--d:2">
-          <span class="made-k">동맹 채팅 · 신규 시스템</span>
-          <span class="made-v">단독</span>
-          <p>여러 길드를 잇는 <b>브로드캐스트 채널</b> — <span class="nb">최악 트래픽까지</span> 고려해 설계·안착</p>
+        <div class="win" data-reveal style="--d:2">
+          <span class="win-k">동맹 채팅 · 신규 시스템</span>
+          <div class="win-v word">단독</div>
+          <p class="win-d">여러 길드 잇는 <b>브로드캐스트</b> · 최악 트래픽까지</p>
         </div>
       </div>
     </div>
