@@ -282,6 +282,16 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .about p:last-child{margin-bottom:0}
 .about p b{color:var(--ink); font-weight:700}
 @media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{white-space:normal} }
+.learn{margin-top:26px; padding-top:22px; border-top:1px solid var(--line)}
+.learn-h{font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:9px}
+.learn-h::before{content:""; width:7px; height:7px; border-radius:2px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}
+.learn-row{margin-top:14px; display:flex; flex-wrap:wrap; gap:10px}
+.lnote{display:inline-flex; flex-direction:column; gap:3px; padding:11px 15px; border-radius:11px; background:var(--surface); border:1px solid var(--line2); transition:border-color .2s,background .2s,transform .2s}
+.lnote:hover{border-color:var(--hot); background:var(--surface2); transform:translateY(-2px)}
+.lnote .lt{font-family:var(--mono); font-size:.84rem; font-weight:700; color:var(--ink); display:inline-flex; align-items:center; gap:7px}
+.lnote .lt::after{content:"↗"; color:var(--muted); font-weight:700}
+.lnote:hover .lt::after{color:var(--hot)}
+.lnote small{font-size:.76rem; color:var(--muted); font-weight:600}
 
 #about{background:var(--bg); transition:filter .85s ease}
 #contact{border-top:1px solid var(--line); background:var(--bg);
@@ -642,6 +652,14 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <div>
           <p>홍대와 다양한 공연 무대에서 음악을 업으로 삼다가, 독학으로 게임 서버 개발자로 전향했습니다.<br>늦은 출발이었지만, 여러 대형 라이브 서비스에서 성과를 거두며 성장해왔습니다.</p>
           <p>주어진 업무에 그치지 않고 주도적으로 문제를 해결하려 움직입니다. 개인 R&amp;D로 컴퓨터 공학의 근간을 꾸준히 다지는 한편, 급변하는 AI 트렌드에 관심을 가지고 AI가 낸 결과를 검증할 수 있는 역량을 키우고 있습니다.</p>
+          <div class="learn">
+            <span class="learn-h">꾸준한 학습 · 기록</span>
+            <div class="learn-row">
+              <a class="lnote" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener"><span class="lt">AI &amp; CAREER</span><small>AI·커리어 인사이트 정리</small></a>
+              <a class="lnote" href="https://app.notion.com/p/BOOKS-LECTURES-2db16a0b9f59816184cff9d601d88a3c" target="_blank" rel="noopener"><span class="lt">BOOKS &amp; LECTURES</span><small>책·강의 정리·복습</small></a>
+              <a class="lnote" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener"><span class="lt">TECH LABS</span><small>기술 공부·실험</small></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -661,7 +679,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 6-1.5 6-6.6a5 5 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.1-.3-3.5 1.3a12 12 0 0 0-6 0C6.6 1.6 5.5 1.9 5.5 1.9a4.7 4.7 0 0 0-.1 3.5A5 5 0 0 0 4 8.9c0 5 3 6.3 6 6.6a3.4 3.4 0 0 0-1 2.6V22"/></svg></span>
         <span><span class="k">GitHub</span><span class="v">cocoz93/MMOServer</span></span>
       </a>
-      <a class="clink" href="https://app.notion.com/p/2db16a0b9f598196a471d53775ab4223" target="_blank" rel="noopener">
+      <a class="clink" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span>
         <span><span class="k">Tech Blog</span><span class="v">Notion 기술 정리</span></span>
       </a>
