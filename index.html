@@ -285,13 +285,23 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .learn{margin-top:26px; padding-top:22px; border-top:1px solid var(--line)}
 .learn-h{font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:9px}
 .learn-h::before{content:""; width:7px; height:7px; border-radius:2px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}
-.learn-row{margin-top:14px; display:flex; flex-wrap:wrap; gap:10px}
-.lnote{display:inline-flex; flex-direction:column; gap:3px; padding:11px 15px; border-radius:11px; background:var(--surface); border:1px solid var(--line2); transition:border-color .2s,background .2s,transform .2s}
-.lnote:hover{border-color:var(--hot); background:var(--surface2); transform:translateY(-2px)}
-.lnote .lt{font-family:var(--mono); font-size:.84rem; font-weight:700; color:var(--ink); display:inline-flex; align-items:center; gap:7px}
-.lnote .lt::after{content:"↗"; color:var(--muted); font-weight:700}
-.lnote:hover .lt::after{color:var(--hot)}
-.lnote small{font-size:.76rem; color:var(--muted); font-weight:600}
+.learn-row{margin-top:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:11px}
+.lnote{position:relative; overflow:hidden; display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:12px;
+  background:linear-gradient(180deg,var(--surface2),var(--surface)); border:1px solid var(--line2);
+  transition:transform .22s, border-color .22s, box-shadow .22s}
+.lnote::before{content:""; position:absolute; top:0; left:14px; right:14px; height:1px;
+  background:linear-gradient(90deg,transparent,var(--hot),transparent); opacity:.45}
+.lnote:hover{transform:translateY(-2px); border-color:var(--hot); box-shadow:0 14px 26px -18px var(--hot-glow)}
+.li{width:32px; height:32px; border-radius:9px; display:grid; place-items:center; flex:0 0 auto;
+  background:rgba(70,177,255,.1); border:1px solid rgba(70,177,255,.22); color:var(--hot-soft)}
+.li svg{width:16px; height:16px}
+.ltext{min-width:0; flex:1 1 auto}
+.lt{font-family:var(--mono); font-size:.82rem; font-weight:700; color:var(--ink); letter-spacing:.01em; white-space:nowrap}
+.lnote small{display:block; margin-top:1px; font-size:.73rem; color:var(--muted); font-weight:600; line-height:1.35; white-space:nowrap}
+.lgo{flex:0 0 auto; color:var(--faint); transition:color .22s, transform .22s}
+.lgo svg{width:14px; height:14px; display:block}
+.lnote:hover .lgo{color:var(--hot); transform:translate(2px,-2px)}
+@media(max-width:560px){ .learn-row{grid-template-columns:1fr} }
 
 #about{background:var(--bg); transition:filter .85s ease}
 #contact{border-top:1px solid var(--line); background:var(--bg);
@@ -299,15 +309,14 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 #contact .wrap{position:relative}
 .contact-h{font-size:clamp(1.55rem,3vw,2.25rem); font-weight:800; letter-spacing:-.025em; text-wrap:balance; margin:.45em 0 0; line-height:1.2}
-.clinks{margin-top:28px; display:flex; flex-wrap:wrap; gap:12px}
-.clink{display:inline-flex; align-items:center; gap:11px; padding:15px 20px; border-radius:13px;
-  background:var(--surface); border:1px solid var(--line); transition:transform .2s,border-color .2s,background .2s; min-width:200px}
-.clink:hover{transform:translateY(-2px); border-color:var(--hot); background:var(--surface2)}
-.clink .ic{width:36px; height:36px; border-radius:10px; display:grid; place-items:center; flex:0 0 auto;
-  background:rgba(62,166,255,.1); border:1px solid rgba(62,166,255,.2)}
-.clink .ic svg{width:18px; height:18px; stroke:var(--hot-soft)}
-.clink .k{font-family:var(--mono); font-size:.72rem; color:var(--ink2); font-weight:600; letter-spacing:.08em; text-transform:uppercase}
-.clink .v{font-weight:700; font-size:.97rem; margin-left:10px}
+.cmail{display:inline-block; margin-top:26px; font-size:clamp(1.2rem,2.6vw,1.65rem); font-weight:800; letter-spacing:-.01em;
+  border-bottom:2px solid var(--hot); padding-bottom:3px; transition:color .2s}
+.cmail:hover{color:var(--hot)}
+.csub{margin-top:16px; font-family:var(--mono); font-size:.84rem; color:var(--muted);
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px}
+.csub a{font-weight:700; color:var(--ink2); transition:color .2s}
+.csub a:hover{color:var(--hot)}
+.csub i{width:1px; height:13px; background:var(--line2); flex:0 0 auto}
 .foot{margin-top:42px; padding-top:22px; border-top:1px solid var(--line);
   display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; align-items:center;
   font-family:var(--mono); font-size:.78rem; color:var(--muted)}
@@ -350,7 +359,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
   <div class="wrap">
     <div class="hero-copy">
       <span class="eyebrow anim d1"><span class="dot"></span>주우진 · C++ Game Server Engineer</span>
-      <h1 class="anim d2">대형 라이브 경험과 저수준 성능,<span class="l2">추측이 아닌 <span class="hot">실측</span>으로</span></h1>
+      <h1 class="anim d2">대형 라이브 경험과 저수준 성능,<span class="l2">추측 아닌 <span class="hot">실측</span>으로</span></h1>
       <p class="lede anim d3"><b>경력 3년</b><i></i><span>C/C++</span><i></i><span>STL</span><i></i><span>IOCP</span><i></i><span>Lock-Free</span><i></i><span>Concurrency</span></p>
       <div class="quick anim d4">
         <span><b>라이브 운영</b> + <b>신규 설계</b></span>
@@ -648,16 +657,28 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <h2><span style="white-space:nowrap">음악에서 <span class="hot">게임 서버</span>로,</span> <span style="white-space:nowrap">끝까지 파고드는 개발자</span></h2>
       </div>
       <div class="about" data-reveal>
-        <div class="mono-side"><span class="st">음악</span><span class="st">독학</span><span class="st">게임회사</span><span class="st now">R&amp;D</span></div>
+        <div class="mono-side"><span class="st">비트박스 &amp; 랩</span><span class="st">독학</span><span class="st">그라비티</span><span class="st">네오플</span><span class="st">보이저</span><span class="st now">R&amp;D</span></div>
         <div>
-          <p>홍대와 다양한 공연 무대에서 음악을 업으로 삼다가, 독학으로 게임 서버 개발자로 전향했습니다.<br>늦은 출발이었지만, 여러 대형 라이브 서비스에서 성과를 거두며 성장해왔습니다.</p>
-          <p>주어진 업무에 그치지 않고 주도적으로 문제를 해결하려 움직입니다. 개인 R&amp;D로 컴퓨터 공학의 근간을 꾸준히 다지는 한편, 급변하는 AI 트렌드에 관심을 가지고 AI가 낸 결과를 검증할 수 있는 역량을 키우고 있습니다.</p>
+          <p>홍대 및 다양한 공연 무대에서 음악을 업으로 삼다가, <b>독학으로 게임서버 개발자로 전향</b>했습니다.</p>
+          <p><b>문제 해결을 위해 주도적으로 움직이고</b>, 지속적인 자기개발 의지와 습관을 가지고 있으며,<br>급변하는 <b>AI 트렌드를 꾸준히 추적</b>하여 실무에 적용 가능한 관점을 넓히고 있습니다.</p>
           <div class="learn">
             <span class="learn-h">꾸준한 학습 · 기록</span>
             <div class="learn-row">
-              <a class="lnote" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener"><span class="lt">AI &amp; CAREER</span><small>AI·커리어 인사이트 정리</small></a>
-              <a class="lnote" href="https://app.notion.com/p/BOOKS-LECTURES-2db16a0b9f59816184cff9d601d88a3c" target="_blank" rel="noopener"><span class="lt">BOOKS &amp; LECTURES</span><small>책·강의 정리·복습</small></a>
-              <a class="lnote" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener"><span class="lt">TECH LABS</span><small>기술 공부·실험</small></a>
+              <a class="lnote" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener">
+                <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2a2 2 0 0 0 1.2 1.2L20 11l-5 1.8a2 2 0 0 0-1.2 1.2L12 19l-1.8-5a2 2 0 0 0-1.2-1.2L4 11l5-1.8a2 2 0 0 0 1.2-1.2z"/></svg></span>
+                <span class="ltext"><span class="lt">AI &amp; CAREER</span><small>AI·커리어 인사이트</small></span>
+                <span class="lgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+              </a>
+              <a class="lnote" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener">
+                <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10.5 3v5.2L5.6 17a1.7 1.7 0 0 0 1.5 2.5h9.8a1.7 1.7 0 0 0 1.5-2.5L13.5 8.2V3"/><path d="M8 14.5h8"/></svg></span>
+                <span class="ltext"><span class="lt">TECH LABS</span><small>기술 공부·실험</small></span>
+                <span class="lgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+              </a>
+              <a class="lnote" href="https://app.notion.com/p/BOOKS-LECTURES-2db16a0b9f59816184cff9d601d88a3c" target="_blank" rel="noopener">
+                <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-1.8-1.2-4-1.8-7-1.8v11.6c3 0 5.2.6 7 1.8 1.8-1.2 4-1.8 7-1.8V5.2c-3 0-5.2.6-7 1.8z"/><path d="M12 7v11.6"/></svg></span>
+                <span class="ltext"><span class="lt">BOOKS &amp; LECTURES</span><small>책·강의 정리·복습</small></span>
+                <span class="lgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+              </a>
             </div>
           </div>
         </div>
@@ -670,19 +691,9 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
   <div class="wrap">
     <span class="eyebrow"><span class="dot"></span>Contact</span>
     <h3 class="contact-h">신뢰받는 구성원임을 증명하고,<br><span class="hot">오래 기여</span>할 팀을 찾습니다.</h3>
-    <div class="clinks">
-      <a class="clink" href="mailto:wndnwls7@gmail.com">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
-        <span><span class="k">Email</span><span class="v">wndnwls7@gmail.com</span></span>
-      </a>
-      <a class="clink" href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-1-2.6c3-.3 6-1.5 6-6.6a5 5 0 0 0-1.4-3.5 4.7 4.7 0 0 0-.1-3.5s-1.1-.3-3.5 1.3a12 12 0 0 0-6 0C6.6 1.6 5.5 1.9 5.5 1.9a4.7 4.7 0 0 0-.1 3.5A5 5 0 0 0 4 8.9c0 5 3 6.3 6 6.6a3.4 3.4 0 0 0-1 2.6V22"/></svg></span>
-        <span><span class="k">GitHub</span><span class="v">cocoz93/MMOServer</span></span>
-      </a>
-      <a class="clink" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener">
-        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span>
-        <span><span class="k">Tech Blog</span><span class="v">Notion 기술 정리</span></span>
-      </a>
+    <a class="cmail" href="mailto:wndnwls7@gmail.com">wndnwls7@gmail.com</a>
+    <div class="csub">
+      <a href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">GitHub — cocoz93/MMOServer</a><i></i><a href="https://app.notion.com/p/23316a0b9f59809db2e5d610a23a10a5" target="_blank" rel="noopener">기술경력서 — Notion</a>
     </div>
     <div class="foot">
       <span>© 2026 주우진 · Game Server Engineer</span>
