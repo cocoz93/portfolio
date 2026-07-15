@@ -144,10 +144,17 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 @media(max-width:760px){ .stats{grid-template-columns:1fr 1fr} }
 @media(max-width:460px){ .stats{grid-template-columns:1fr} }
 
-.block{padding:clamp(60px,8vw,110px) 0}
+.block{padding:clamp(42px,6vw,72px) 0}
 .block.alt{background:linear-gradient(180deg,var(--bg2),var(--bg))}
 
-.tl{margin-top:8px; display:flex; flex-direction:column; gap:14px}
+.tl{margin-top:8px; display:flex; flex-direction:column; gap:14px; position:relative}
+.tl::before{content:""; position:absolute; left:-14px; top:8px; bottom:8px; width:2px; border-radius:2px;
+  background:var(--line2)}
+.tl::after{content:""; position:absolute; left:-14px; top:8px; width:2px; border-radius:2px;
+  height:calc((100% - 16px) * var(--tl,0));
+  background:linear-gradient(180deg,var(--hot),var(--hot-deep)); box-shadow:0 0 8px var(--hot-glow);
+  transition:height .12s linear}
+@media(max-width:520px){ .tl::before,.tl::after{left:-8px} }
 .job{position:relative; z-index:0; overflow:hidden; display:block; background:var(--surface); border:1px solid var(--line);
   border-radius:16px; padding:20px 56px 20px 22px; transition:transform .22s, border-color .22s, box-shadow .22s}
 .job:hover{transform:translateY(-2px); border-color:var(--hot); box-shadow:0 14px 26px -18px var(--hot-glow)}
@@ -176,7 +183,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
   border:1px solid var(--line2); padding:5px 11px; border-radius:8px}
 
 #rnd{position:relative}
-.rnd-flow{display:flex; align-items:stretch; gap:0; margin-top:8px; overflow-x:auto; padding-bottom:6px;
+.rnd-flow{display:flex; align-items:stretch; gap:0; margin-top:8px; overflow-x:auto; overflow-y:hidden; padding-bottom:6px;
   scrollbar-width:thin}
 .stage{flex:1 1 0; min-width:190px; background:var(--surface); border:1px solid var(--line); border-radius:16px;
   padding:20px 18px; position:relative; display:flex; flex-direction:column}
@@ -209,6 +216,11 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .neg p b{color:var(--ink); font-weight:800}
 .rnd-note{margin-top:20px; font-family:var(--mono); font-size:.82rem; color:var(--muted);
   display:flex; gap:8px; align-items:center; line-height:1.6}
+.rnd-flow .stage{opacity:0; transform:translateY(16px);
+  transition:opacity .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1)}
+.rnd-flow .stage.in{opacity:1; transform:none}
+.arrowc{opacity:0; transition:opacity .45s ease}
+.arrowc.in{opacity:1}
 @media(max-width:840px){
   .rnd-flow{flex-direction:column; overflow:visible}
   .stage{min-width:0}
@@ -233,7 +245,7 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .ivit .tt{font-size:.96rem; font-weight:800; color:var(--ink); letter-spacing:-.01em; line-height:1.3}
 .ivit .dd{margin-top:2px; font-size:.84rem; color:var(--muted); line-height:1.45}
 .ivit .dd b{color:var(--ink2); font-weight:700}
-.ivit .r{flex:0 0 auto; margin-left:auto; align-self:center; font-size:.9rem; font-weight:800; color:var(--good); white-space:nowrap}
+.ivit .r{flex:0 0 auto; margin-left:auto; align-self:center; font-size:.9rem; font-weight:800; color:var(--hot-soft); white-space:nowrap}
 .ivit .r.b{color:var(--hot-soft)}
 @media(max-width:760px){
   .ivsplit{grid-template-columns:1fr}
@@ -313,6 +325,9 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
   html{scroll-behavior:auto}
   .anim{animation:none; opacity:1}
   [data-reveal]{opacity:1; transform:none; transition:none}
+  .rnd-flow .stage{opacity:1; transform:none; transition:none}
+  .arrowc{opacity:1}
+  .tl::after{transition:none}
   .mon-top .live .b{animation:none}
   #about,#contact{transition:none}
 }
@@ -349,8 +364,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <span>실측 <b>A/B 검증</b></span>
       </div>
       <div class="actions anim d5">
-        <a class="btn primary" href="#career">경력 보기</a>
-        <a class="btn grn" href="#rnd">R&amp;D 성과</a>
+        <a class="btn primary" href="#rnd">성능 R&amp;D</a>
         <a class="btn ghost" href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
@@ -382,12 +396,12 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
       <div class="stats">
         <div class="stat" data-reveal style="--d:0">
           <div class="stat-k">cross-branch merge</div>
-          <div class="stat-v"><span class="was">10회</span><span class="arw">→</span><span class="now">1회</span></div>
+          <div class="stat-v"><span class="was">10회</span><span class="arw">→</span><span class="now" data-to="2" data-suffix="회">0회</span></div>
           <div class="stat-s">10개국 브랜치 → Master 단일화</div>
         </div>
         <div class="stat" data-reveal style="--d:1">
           <div class="stat-k">하드코딩</div>
-          <div class="stat-v"><span class="was">50곳</span><span class="arw">→</span><span class="now">2곳</span></div>
+          <div class="stat-v"><span class="was">50곳</span><span class="arw">→</span><span class="now" data-to="2" data-suffix="곳">0곳</span></div>
           <div class="stat-s">공성전 핵심 객체 리팩토링</div>
         </div>
         <div class="stat" data-reveal style="--d:2">
@@ -407,7 +421,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         </div>
         <div class="stat" data-reveal style="--d:2">
           <div class="stat-k">라이브 경험</div>
-          <div class="stat-v"><span class="now">3년</span></div>
+          <div class="stat-v"><span class="now" data-to="3" data-suffix="년">0년</span></div>
           <div class="stat-s">그라비티 · 네오플 · 보이저</div>
         </div>
       </div>
@@ -462,9 +476,9 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           </div>
           <div class="tagnote">2년 6개월 · 한국·해외 라이브 운영</div>
           <ul>
-            <li><b>10개국 브랜치 → Master 통합</b> — 수정 1건당 10회 반복되던 cross-branch merge를 1회로</li>
-            <li>한국·해외 라이브 서버 운영 및 신규 컨텐츠 개발 (<b>DB 100만 건 이관</b>)</li>
+            <li><b>10개국 브랜치 → Master 통합</b> — 수정 1건당 10회 반복되던 cross-branch merge를 2회로</li>
             <li>공성전 핵심 객체 리팩토링 (<b>하드코딩 50곳 → 2곳</b>)</li>
+            <li>한국·해외 라이브 서버 운영 및 신규 컨텐츠 개발 (<b>DB 100만 건 이관</b>)</li>
             <li>zone 간 비동기 타이밍 <b>레이스 컨디션</b> 등 핵심 이슈 해결</li>
           </ul>
           <div class="chips"><span class="chip">C/C++</span><span class="chip">MFC</span><span class="chip">IOCP</span><span class="chip">MSSQL</span><span class="chip">Windows</span><span class="chip">git</span></div>
@@ -496,8 +510,8 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
             </div>
           </div>
         </div>
-        <div class="ivhalf gd" data-reveal style="--d:1">
-          <h2 class="ivbig">컨텐츠는 <span class="ivgood">라이브까지</span></h2>
+        <div class="ivhalf" data-reveal style="--d:1">
+          <h2 class="ivbig">컨텐츠는 <span class="hot">라이브까지</span></h2>
           <p class="ivsub">기획·클라이언트와 직접 소통하며 설계부터 A/S까지 완주.</p>
           <div class="ivlist">
             <div class="ivit">
@@ -524,10 +538,10 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <p>추측 없이 <b style="color:var(--ink)">실측으로</b> 병목을 하나씩 제거하며 <b style="color:var(--ink)">서버 성능을 향상</b>시켰습니다. 모든 단계는 A/B 토글로 정확한 원인을 규명합니다.</p>
       </div>
 
-      <div class="rnd-flow" data-reveal>
+      <div class="rnd-flow">
         <div class="stage" style="--w:5%">
           <span class="sx">STEP 01</span>
-          <span class="cc">동접</span><span class="cnum">200</span>
+          <span class="cc">동접</span><span class="cnum" data-to="200">0</span>
           <div class="load"><i></i></div>
           <div class="bn">send syscall — <span class="nb">틱 76%</span></div>
           <span class="fix">Send Coalescing</span>
@@ -537,7 +551,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 
         <div class="stage" style="--w:25%">
           <span class="sx">STEP 02</span>
-          <span class="cc">동접</span><span class="cnum">1,000</span>
+          <span class="cc">동접</span><span class="cnum" data-to="1000">0</span>
           <div class="load"><i></i></div>
           <div class="bn">송신 루프 — <span class="nb">틱 74%</span></div>
           <span class="fix">SendThread 분리</span>
@@ -547,7 +561,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 
         <div class="stage" style="--w:50%">
           <span class="sx">STEP 03</span>
-          <span class="cc">동접</span><span class="cnum">2,000</span>
+          <span class="cc">동접</span><span class="cnum" data-to="2000">0</span>
           <div class="load"><i></i></div>
           <div class="bn">수신자별 복사 — <span class="nb">틱 71%</span></div>
           <span class="fix">섹터 묶음 패킷</span>
@@ -557,7 +571,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 
         <div class="stage" style="--w:62%">
           <span class="sx">STEP 04</span>
-          <span class="cc">동접</span><span class="cnum">2,500</span>
+          <span class="cc">동접</span><span class="cnum" data-to="2500">0</span>
           <div class="load"><i></i></div>
           <div class="bn">송신 CPU 1.00 포화</div>
           <span class="fix">SendWorker ×2</span>
@@ -567,7 +581,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 
         <div class="stage next" style="--w:100%">
           <span class="sx">STEP 05 · 현재 프론티어</span>
-          <span class="cc">동접 — 천장 실측</span><span class="cnum">4,000</span>
+          <span class="cc">동접 — 천장 실측</span><span class="cnum" data-to="4000">0</span>
           <div class="load"><i></i></div>
           <div class="bn">게임 스레드 — 단일 코어</div>
           <span class="fix">맵별 스레드 (N개)</span>
@@ -614,12 +628,12 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <div class="row"><span class="sk">Lock-Free</span><span class="sk">Multithreading</span><span class="sk">Async I/O</span><span class="sk">Concurrency</span></div>
         </div>
         <div class="skgrp" data-reveal style="--d:1">
-          <h4>데이터베이스</h4>
-          <div class="row"><span class="sk">MSSQL</span><span class="sk">MySQL</span></div>
-        </div>
-        <div class="skgrp" data-reveal style="--d:0">
           <h4>계측 · 도구</h4>
           <div class="row"><span class="sk">Prometheus</span><span class="sk">Grafana</span><span class="sk">FlatBuffers</span><span class="sk">git</span><span class="sk">svn</span></div>
+        </div>
+        <div class="skgrp" data-reveal style="--d:0">
+          <h4>데이터베이스</h4>
+          <div class="row"><span class="sk">MSSQL</span><span class="sk">MySQL</span><span class="sk">Redis</span></div>
         </div>
         <div class="skgrp" data-reveal style="--d:1">
           <h4>플랫폼</h4>
@@ -700,13 +714,21 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     revEls.forEach(function(el){ ro.observe(el); });
   } else { revEls.forEach(function(el){ el.classList.add('in'); }); }
 
-  var stages = document.querySelectorAll('.stage');
-  if('IntersectionObserver' in window){
-    var so2 = new IntersectionObserver(function(es){
-      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); so2.unobserve(e.target); } });
-    }, {threshold:.3});
-    stages.forEach(function(el){ so2.observe(el); });
-  } else { stages.forEach(function(el){ el.classList.add('in'); }); }
+  var flow = document.querySelector('.rnd-flow');
+  if(flow){
+    var flowItems = flow.children;
+    var flowIn = function(){
+      Array.prototype.forEach.call(flowItems, function(el, i){
+        setTimeout(function(){ el.classList.add('in'); }, reduce ? 0 : i*90);
+      });
+    };
+    if('IntersectionObserver' in window && !reduce){
+      var fo = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if(e.isIntersecting){ flowIn(); fo.disconnect(); } });
+      }, {threshold:.18});
+      fo.observe(flow);
+    } else { flowIn(); }
+  }
 
   function fmt(n){ return n.toLocaleString('en-US'); }
   function countUp(el){
@@ -795,6 +817,21 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     window.addEventListener('scroll', updInv, {passive:true});
     window.addEventListener('resize', updInv);
     updInv();
+  }
+
+  var tl = document.querySelector('.tl');
+  if(tl){
+    if(reduce){ tl.style.setProperty('--tl','1'); }
+    else {
+      var updTl = function(){
+        var r = tl.getBoundingClientRect(), vh = window.innerHeight || document.documentElement.clientHeight;
+        var filled = Math.max(0, Math.min(r.height, vh*0.5 - r.top));
+        tl.style.setProperty('--tl', r.height ? (filled/r.height).toFixed(3) : '0');
+      };
+      window.addEventListener('scroll', updTl, {passive:true});
+      window.addEventListener('resize', updTl);
+      updTl();
+    }
   }
 })();
 </script>
