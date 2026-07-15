@@ -148,9 +148,14 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .block.alt{background:linear-gradient(180deg,var(--bg2),var(--bg))}
 
 .tl{margin-top:8px; display:flex; flex-direction:column; gap:14px}
-.job{position:relative; z-index:0; overflow:hidden; background:var(--surface); border:1px solid var(--line);
-  border-radius:16px; padding:20px 56px 20px 22px}
+.job{position:relative; z-index:0; overflow:hidden; display:block; background:var(--surface); border:1px solid var(--line);
+  border-radius:16px; padding:20px 56px 20px 22px; transition:transform .22s, border-color .22s, box-shadow .22s}
+.job:hover{transform:translateY(-2px); border-color:var(--hot); box-shadow:0 14px 26px -18px var(--hot-glow)}
 .job.cur{border-color:var(--line2); background:linear-gradient(180deg,rgba(70,177,255,.05),var(--surface))}
+.jgo{position:absolute; right:16px; bottom:16px; width:30px; height:30px; border-radius:9px; display:grid; place-items:center;
+  background:rgba(13,18,32,.58); border:1px solid var(--line2); color:var(--muted); transition:color .22s, border-color .22s, transform .22s}
+.jgo svg{width:14px; height:14px; display:block}
+.job:hover .jgo{color:var(--hot); border-color:var(--hot); transform:translate(2px,-2px)}
 .job-h{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
 .job-h h3{margin:0; font-size:1.2rem; font-weight:800; letter-spacing:-.02em}
 .job-h h3 span{color:var(--ink2); font-weight:600; font-size:.9rem; margin-left:12px; padding-left:13px; border-left:1px solid var(--line2)}
@@ -211,51 +216,30 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
   .negband{grid-template-columns:1fr}
 }
 
-.plabel{margin:64px 0 30px}
-.plabel .pl-n{display:block; font-family:var(--mono); font-size:3.6rem; font-weight:800; color:var(--faint); opacity:.55; line-height:.8; letter-spacing:-.04em}
-.plabel .pl-t{display:block; font-size:1.32rem; font-weight:800; letter-spacing:-.02em; color:var(--ink); margin-top:-16px; position:relative}
-.plabel i{display:block; margin-top:6px; font-style:normal; color:var(--muted); font-weight:600; font-size:.92rem}
-.sec-head + .plabel{margin-top:8px}
-
-/* ── STEP 01 · 에디토리얼 케이스 (장애) ── */
-.cases{border-top:1px solid var(--line2)}
-.case{display:grid; grid-template-columns:118px 1fr 188px; gap:clamp(18px,3vw,32px); align-items:start;
-  padding:28px 2px; border-bottom:1px solid var(--line)}
-.case-idx{display:flex; flex-direction:column; gap:10px}
-.cv{font-family:var(--mono); font-size:.63rem; font-weight:800; letter-spacing:.05em; line-height:1.3; color:var(--muted)}
-.cv.crit{color:var(--rej)}
-.cv.warn{color:var(--sig)}
-.case-body h3{font-size:1.2rem; font-weight:800; letter-spacing:-.025em; line-height:1.24; margin:2px 0 9px}
-.case-body p{color:var(--ink2); font-size:.95rem; line-height:1.62}
-.case-body p b{color:var(--ink); font-weight:700}
-.case-out{text-align:right; padding-top:4px}
-.case-out .ol{display:block; font-family:var(--mono); font-size:.62rem; font-weight:800; letter-spacing:.1em;
-  text-transform:uppercase; color:var(--good); margin-bottom:7px}
-.case-out .big{font-size:1.6rem; font-weight:800; letter-spacing:-.03em; color:var(--ink); line-height:1}
-.case-out em{display:block; margin-top:6px; font-style:normal; font-size:.9rem; font-weight:800; color:var(--good)}
-@media(max-width:640px){
-  .case{grid-template-columns:1fr; gap:12px; padding:22px 0}
-  .case-idx{flex-direction:row; align-items:baseline; gap:12px}
-  .case-out{text-align:left}
-  .case-out em{display:inline; margin-left:8px}
+/* ── Live Service · 듀얼 패널 (장애/컨텐츠) ── */
+.ivsplit{display:grid; grid-template-columns:1fr 1fr; margin-top:8px}
+.ivhalf{padding:8px clamp(24px,4vw,52px) 4px 0}
+.ivhalf + .ivhalf{border-left:1px solid var(--line2); padding-left:clamp(24px,4vw,52px); padding-right:0}
+.ivbig{margin:0; font-size:clamp(1.7rem,3vw,2.3rem); font-weight:800; letter-spacing:-.03em; line-height:1.16; color:var(--ink)}
+.ivgood{color:var(--good)}
+.ivsub{margin:12px 0 0; font-size:.9rem; color:var(--muted); line-height:1.6}
+.ivlist{margin-top:22px}
+.ivit{display:flex; gap:13px; align-items:center; padding:13px 0; border-top:1px solid var(--line)}
+.ivit .ic{width:32px; height:32px; border-radius:9px; display:grid; place-items:center; flex:0 0 auto;
+  background:rgba(70,177,255,.09); border:1px solid rgba(70,177,255,.2); color:var(--hot-soft)}
+.ivit .ic svg{width:15px; height:15px}
+.ivhalf.gd .ivit .ic{background:rgba(52,211,153,.09); border-color:rgba(52,211,153,.22); color:var(--good)}
+.ivit .bd{flex:1 1 auto; min-width:0}
+.ivit .tt{font-size:.96rem; font-weight:800; color:var(--ink); letter-spacing:-.01em; line-height:1.3}
+.ivit .dd{margin-top:2px; font-size:.84rem; color:var(--muted); line-height:1.45}
+.ivit .dd b{color:var(--ink2); font-weight:700}
+.ivit .r{flex:0 0 auto; margin-left:auto; align-self:center; font-size:.9rem; font-weight:800; color:var(--good); white-space:nowrap}
+.ivit .r.b{color:var(--hot-soft)}
+@media(max-width:760px){
+  .ivsplit{grid-template-columns:1fr}
+  .ivhalf{padding:8px 0 4px}
+  .ivhalf + .ivhalf{border-left:0; border-top:1px solid var(--line2); margin-top:26px; padding:26px 0 4px}
 }
-
-/* ── STEP 02 · 성과 카드 (신규 컨텐츠) ── */
-.wins{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
-.win{position:relative; overflow:hidden; background:linear-gradient(180deg,var(--surface2),var(--surface));
-  border:1px solid var(--line2); border-radius:16px; padding:24px 22px 22px;
-  transition:transform .25s,border-color .25s}
-.win:hover{transform:translateY(-3px); border-color:var(--muted)}
-.win::before{content:""; position:absolute; top:0; left:22px; right:22px; height:1px;
-  background:linear-gradient(90deg,transparent,var(--hot),transparent); opacity:.5}
-.win-k{display:flex; align-items:center; gap:8px; font-size:.85rem; font-weight:700; color:var(--muted)}
-.win-k::before{content:""; width:6px; height:6px; border-radius:1px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}
-.win-v{margin-top:18px; font-size:clamp(2.2rem,3.5vw,2.8rem); font-weight:800; letter-spacing:-.04em; line-height:.95; color:var(--ink)}
-.win-v i{font-style:normal; font-size:.34em; color:var(--hot); margin-left:2px; font-weight:800; vertical-align:super}
-.win-v.word{font-size:clamp(1.7rem,2.6vw,2.1rem); color:var(--hot-soft)}
-.win-d{margin-top:15px; padding-top:14px; border-top:1px solid var(--line); font-size:.9rem; color:var(--ink2); line-height:1.5}
-.win-d b{color:var(--ink); font-weight:700}
-@media(max-width:760px){ .wins{grid-template-columns:1fr} }
 
 .skills{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-top:8px}
 .skgrp{background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:20px 22px}
@@ -269,8 +253,8 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 @media(max-width:680px){ .skills{grid-template-columns:1fr} }
 
 .about{display:grid; grid-template-columns:auto 1fr; gap:clamp(24px,4vw,46px); align-items:start}
-.about .mono-side{font-family:var(--mono); font-size:.82rem; color:var(--muted); letter-spacing:.04em;
-  position:relative; display:flex; flex-direction:column; gap:16px; padding-left:22px; white-space:nowrap}
+.about .mono-side{font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em;
+  position:relative; display:flex; flex-direction:column; gap:12px; padding-left:22px; white-space:nowrap}
 .about .mono-side::before{content:""; position:absolute; left:4px; top:6px; bottom:6px; width:2px;
   background:linear-gradient(180deg,var(--line2),var(--hot))}
 .about .mono-side .st{position:relative}
@@ -282,26 +266,24 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .about p:last-child{margin-bottom:0}
 .about p b{color:var(--ink); font-weight:700}
 @media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{white-space:normal} }
-.learn{margin-top:26px; padding-top:22px; border-top:1px solid var(--line)}
-.learn-h{font-family:var(--mono); font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:9px}
-.learn-h::before{content:""; width:7px; height:7px; border-radius:2px; background:var(--muted); transform:rotate(45deg); flex:0 0 auto}
-.learn-row{margin-top:16px; display:grid; grid-template-columns:repeat(3,1fr); gap:11px}
-.lnote{position:relative; overflow:hidden; display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:12px;
+.learn{margin-top:18px}
+.learn-row{display:flex; flex-wrap:wrap; gap:10px}
+.lnote{position:relative; overflow:hidden; display:flex; align-items:center; gap:10px; padding:10px 14px 10px 12px; border-radius:11px;
   background:linear-gradient(180deg,var(--surface2),var(--surface)); border:1px solid var(--line2);
   transition:transform .22s, border-color .22s, box-shadow .22s}
 .lnote::before{content:""; position:absolute; top:0; left:14px; right:14px; height:1px;
   background:linear-gradient(90deg,transparent,var(--hot),transparent); opacity:.45}
 .lnote:hover{transform:translateY(-2px); border-color:var(--hot); box-shadow:0 14px 26px -18px var(--hot-glow)}
-.li{width:32px; height:32px; border-radius:9px; display:grid; place-items:center; flex:0 0 auto;
+.li{width:28px; height:28px; border-radius:8px; display:grid; place-items:center; flex:0 0 auto;
   background:rgba(70,177,255,.1); border:1px solid rgba(70,177,255,.22); color:var(--hot-soft)}
-.li svg{width:16px; height:16px}
+.li svg{width:14px; height:14px}
 .ltext{min-width:0; flex:1 1 auto}
-.lt{font-family:var(--mono); font-size:.82rem; font-weight:700; color:var(--ink); letter-spacing:.01em; white-space:nowrap}
-.lnote small{display:block; margin-top:1px; font-size:.73rem; color:var(--muted); font-weight:600; line-height:1.35; white-space:nowrap}
+.lt{font-family:var(--mono); font-size:.79rem; font-weight:700; color:var(--ink); letter-spacing:.01em; white-space:nowrap}
+.lnote small{display:block; margin-top:1px; font-size:.71rem; color:var(--muted); font-weight:600; line-height:1.35; white-space:nowrap}
 .lgo{flex:0 0 auto; color:var(--faint); transition:color .22s, transform .22s}
-.lgo svg{width:14px; height:14px; display:block}
+.lgo svg{width:13px; height:13px; display:block}
 .lnote:hover .lgo{color:var(--hot); transform:translate(2px,-2px)}
-@media(max-width:560px){ .learn-row{grid-template-columns:1fr} }
+@media(max-width:560px){ .lnote{flex:1 1 100%} }
 
 #about{background:var(--bg); transition:filter .85s ease}
 #contact{border-top:1px solid var(--line); background:var(--bg);
@@ -441,7 +423,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
       </div>
 
       <div class="tl">
-        <article class="job cur" data-reveal>
+        <a class="job cur" data-reveal href="https://app.notion.com/p/33116a0b9f598001898dd8f617202594" target="_blank" rel="noopener">
           <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_PROJECTR__); background-position:63% 50%"></span>
           <div class="job-h">
             <h3>보이저 <span>PROJECT R 서버팀</span></h3>
@@ -454,9 +436,10 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
             <li>투사체 착탄 처리 <b>대안 3안 비교</b> 기반 아키텍처 의사결정</li>
           </ul>
           <div class="chips"><span class="chip">C++17</span><span class="chip">io_uring</span><span class="chip">FlatBuffers</span><span class="chip">MySQL</span><span class="chip">Linux</span><span class="chip">Unity</span><span class="chip">git</span></div>
-        </article>
+          <span class="jgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
 
-        <article class="job" data-reveal>
+        <a class="job" data-reveal href="https://app.notion.com/p/33016a0b9f5981aab551c7c10412f3b1" target="_blank" rel="noopener">
           <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_DNF__); background-position:16% 82%; opacity:.8"></span>
           <div class="job-h">
             <h3>네오플 <span>던전앤파이터 중국서버팀</span></h3>
@@ -468,9 +451,10 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
             <li>중국 서버 라이브 이슈 대응 및 신규 이벤트 개발</li>
           </ul>
           <div class="chips"><span class="chip">C++</span><span class="chip">epoll</span><span class="chip">MySQL</span><span class="chip">Linux</span><span class="chip">svn</span></div>
-        </article>
+          <span class="jgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
 
-        <article class="job" data-reveal>
+        <a class="job" data-reveal href="https://app.notion.com/p/33016a0b9f5981f09d72da2b369d767b" target="_blank" rel="noopener">
           <span class="jart" style="background-image:url(data:image/jpeg;base64,__ART_RAG__); background-position:center 45%; opacity:.8"></span>
           <div class="job-h">
             <h3>그라비티 <span>라그나로크 서버팀</span></h3>
@@ -484,54 +468,49 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
             <li>zone 간 비동기 타이밍 <b>레이스 컨디션</b> 등 핵심 이슈 해결</li>
           </ul>
           <div class="chips"><span class="chip">C/C++</span><span class="chip">MFC</span><span class="chip">IOCP</span><span class="chip">MSSQL</span><span class="chip">Windows</span><span class="chip">git</span></div>
-        </article>
+          <span class="jgo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+        </a>
       </div>
     </div>
   </section>
 
   <section id="incident" class="block alt">
     <div class="wrap">
-      <div class="sec-head" data-reveal>
-        <span class="eyebrow"><span class="dot"></span>Live Service · 그라비티 라그나로크</span>
-        <h2>장애는 <span class="hot">원인</span>까지, 컨텐츠는 <span class="hot">라이브</span>까지</h2>
-        <p>2년 6개월의 라이브 운영. 장애는 재현 조건과 원인까지 추적해 규명하고,<br>신규 컨텐츠는 <span class="nb">기획·클라이언트와</span> 직접 소통하며 설계부터 라이브 안착까지 완주했습니다.</p>
+      <div class="sec-head" data-reveal style="margin-bottom:20px">
+        <span class="eyebrow"><span class="dot"></span>Live Service · 그라비티 라그나로크 2.5y</span>
       </div>
-      <div class="plabel" data-reveal><span class="pl-n">01</span><span class="pl-t">장애 추적</span><i>재현 조건부터 원인 규명까지</i></div>
-      <div class="cases">
-        <article class="case" data-reveal>
-          <div class="case-idx"><span class="cv crit">CRITICAL<br>LIVE DOWN</span></div>
-          <div class="case-body">
-            <h3>zone 간 비동기 레이스 컨디션</h3>
-            <p>비동기 저장 중 맵 이동 — 두 zone이 <b>각자 판단</b>해 재요청하며 PK 충돌. 저장 실패가 무한 재시도로 번져 <b>CPU 100% · ZONE 다운</b>. ms 단위 로그를 <b>역추적</b>해 충돌 지점을 규명하고 전수 조사로 원천 차단.</p>
+      <div class="ivsplit">
+        <div class="ivhalf" data-reveal>
+          <h2 class="ivbig">장애는 <span class="hot">원인까지</span></h2>
+          <p class="ivsub">재현 조건부터 원인 규명까지 — 추측으로 덮지 않았습니다.</p>
+          <div class="ivlist">
+            <div class="ivit">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20.5 20.5-4.2-4.2"/></svg></span>
+              <div class="bd"><div class="tt">zone 간 비동기 레이스 컨디션</div><div class="dd">CPU 100%·존 다운 — ms 로그 <b>역추적</b>으로 원천 차단</div></div>
+              <span class="r">재발 0</span>
+            </div>
+            <div class="ivit">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></svg></span>
+              <div class="bd"><div class="tt">Overlapped 풀 스레드 경합</div><div class="dd">중복 사용 thread-unsafe — 풀 <b>클래스별 분리</b>로 격리</div></div>
+              <span class="r">경합 0</span>
+            </div>
           </div>
-          <div class="case-out"><span class="ol">결과</span><span class="big">CPU 100%</span><em>→ 정상화 · ZONE 복구</em></div>
-        </article>
-        <article class="case" data-reveal style="--d:1">
-          <div class="case-idx"><span class="cv warn">CONCURRENCY BUG</span></div>
-          <div class="case-body">
-            <h3>Overlapped 풀 스레드 안전</h3>
-            <p>같은 Overlapped를 <b>중복 사용</b>해 간헐 경합. Alloc/Release를 Interlocked 카운트로만 관리해 대여·반납이 <b><span class="nb">thread-unsafe</span></b>. 풀을 <b>클래스별로 분리</b>해 대여·반납 경로를 격리.</p>
+        </div>
+        <div class="ivhalf gd" data-reveal style="--d:1">
+          <h2 class="ivbig">컨텐츠는 <span class="ivgood">라이브까지</span></h2>
+          <p class="ivsub">기획·클라이언트와 직접 소통하며 설계부터 A/S까지 완주.</p>
+          <div class="ivlist">
+            <div class="ivit">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2a2 2 0 0 0 1.2 1.2L20 11l-5 1.8a2 2 0 0 0-1.2 1.2L12 19l-1.8-5a2 2 0 0 0-1.2-1.2L4 11l5-1.8a2 2 0 0 0 1.2-1.2z"/></svg></span>
+              <div class="bd"><div class="tt">신규 스킬 38종</div><div class="dd">만렙 확장 29종(<b>8종 개발·전체 A/S</b>) · MD 보스 9종(<b>A–Z 단독</b>)</div></div>
+              <span class="r b">라이브</span>
+            </div>
+            <div class="ivit">
+              <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 1-8 8H7l-4 3V11a8 8 0 0 1 8-8h1a8 8 0 0 1 8 8z"/></svg></span>
+              <div class="bd"><div class="tt">동맹 채팅</div><div class="dd">신규 시스템 <b>단독 설계</b> — 여러 길드 잇는 브로드캐스트</div></div>
+              <span class="r b">라이브</span>
+            </div>
           </div>
-          <div class="case-out"><span class="ol">결과</span><span class="big">간헐 경합</span><em>→ 0 · 경합 제거</em></div>
-        </article>
-      </div>
-
-      <div class="plabel" data-reveal><span class="pl-n">02</span><span class="pl-t">신규 컨텐츠</span><i>설계부터 라이브 안착까지 단독 완주</i></div>
-      <div class="wins">
-        <div class="win" data-reveal>
-          <span class="win-k">만렙 확장 신규 스킬</span>
-          <div class="win-v">29<i>종</i></div>
-          <p class="win-d">8종 개발 + <b>전체 A/S 도맡아 처리</b></p>
-        </div>
-        <div class="win" data-reveal style="--d:1">
-          <span class="win-k">신규 MD 보스 스킬</span>
-          <div class="win-v">9<i>종</i></div>
-          <p class="win-d">기획·클라 직접 소통, <b>A–Z 단독 개발</b></p>
-        </div>
-        <div class="win" data-reveal style="--d:2">
-          <span class="win-k">동맹 채팅 · 신규 시스템</span>
-          <div class="win-v word">단독</div>
-          <p class="win-d">여러 길드 잇는 <b>브로드캐스트</b> · 최악 트래픽까지</p>
         </div>
       </div>
     </div>
@@ -662,7 +641,6 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <p>홍대 및 다양한 공연 무대에서 음악을 업으로 삼다가, <b>독학으로 게임서버 개발자로 전향</b>했습니다.</p>
           <p><b>문제 해결을 위해 주도적으로 움직이고</b>, 지속적인 자기개발 의지와 습관을 가지고 있으며,<br>급변하는 <b>AI 트렌드를 꾸준히 추적</b>하여 실무에 적용 가능한 관점을 넓히고 있습니다.</p>
           <div class="learn">
-            <span class="learn-h">꾸준한 학습 · 기록</span>
             <div class="learn-row">
               <a class="lnote" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener">
                 <span class="li"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2a2 2 0 0 0 1.2 1.2L20 11l-5 1.8a2 2 0 0 0-1.2 1.2L12 19l-1.8-5a2 2 0 0 0-1.2-1.2L4 11l5-1.8a2 2 0 0 0 1.2-1.2z"/></svg></span>
