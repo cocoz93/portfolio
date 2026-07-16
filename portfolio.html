@@ -43,6 +43,9 @@ section{scroll-margin-top:76px}
 .sec-head h2{margin:.55em 0 0; font-size:clamp(1.55rem,2.9vw,2.1rem); font-weight:800; letter-spacing:-.025em;
   line-height:1.15; text-wrap:balance}
 .sec-head p{margin:.7em 0 0; color:var(--ink2); font-size:1.02rem; max-width:64ch; line-height:1.7}
+.sec-head .eyerow{display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap}
+.sec-head .period{font-family:var(--mono); font-size:.78rem; color:var(--ink); white-space:nowrap; font-weight:700;
+  background:rgba(13,18,32,.58); border:1px solid var(--line2); padding:4px 9px; border-radius:8px}
 .hot{color:var(--hot)}
 .mono{font-family:var(--mono)}
 .nb{white-space:nowrap}
@@ -412,7 +415,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <div class="stat" data-reveal style="--d:0">
           <div class="stat-k">이벤트 순회</div>
           <div class="stat-v"><span class="was">O(N)</span><span class="arw">→</span><span class="now">O(1)</span></div>
-          <div class="stat-s">던파 중국 이벤트 병목 개선안 채택</div>
+          <div class="stat-s">던파 중국 이벤트 병목 개선안 제안</div>
         </div>
         <div class="stat" data-reveal style="--d:1">
           <div class="stat-k">신규 스킬 추가</div>
@@ -459,9 +462,9 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
             <h3>네오플 <span>던전앤파이터 중국서버팀</span></h3>
             <span class="when">2025.01 – 2025.07</span>
           </div>
-          <div class="tagnote">넥토리얼 4기 · 중국 라이브 서비스</div>
+          <div class="tagnote">넥토리얼 4기 · 중국 라이브 서비스 (계약 종료)</div>
           <ul>
-            <li>이벤트 시스템 <b>O(N) 전체순회 병목</b> 식별 → <b>O(1)</b> 구조 개선안 제안·채택</li>
+            <li>이벤트 시스템 분석 중 <b>O(N) 전체순회 병목</b> 식별 → <b>O(1)</b> 구조 개선안 제안</li>
             <li>중국 서버 라이브 이슈 대응 및 신규 이벤트 개발</li>
           </ul>
           <div class="chips"><span class="chip">C++</span><span class="chip">epoll</span><span class="chip">MySQL</span><span class="chip">Linux</span><span class="chip">svn</span></div>
@@ -533,9 +536,12 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
   <section id="rnd" class="block">
     <div class="wrap">
       <div class="sec-head" data-reveal>
-        <span class="eyebrow"><span class="dot"></span>Personal R&amp;D · IOCP MMO Server</span>
+        <div class="eyerow">
+          <span class="eyebrow"><span class="dot"></span>Personal R&amp;D · IOCP MMO Server</span>
+          <span class="period">2026 – 현재</span>
+        </div>
         <h2>맵당 동접 <span class="hot">200 → 4,000</span>, 병목 개선 R&amp;D</h2>
-        <p>추측 없이 <b style="color:var(--ink)">실측으로</b> 병목을 하나씩 제거하며 <b style="color:var(--ink)">서버 성능을 향상</b>시켰습니다. 모든 단계는 A/B 토글로 정확한 원인을 규명합니다.</p>
+        <p>추측 없이 <b style="color:var(--ink)">실측</b>으로 병목을 제거<br>모든 단계는 <b style="color:var(--ink)">A/B 토글</b>로 정확한 원인 규명 후 수정</p>
       </div>
 
       <div class="rnd-flow">
@@ -633,7 +639,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         </div>
         <div class="skgrp" data-reveal style="--d:0">
           <h4>데이터베이스</h4>
-          <div class="row"><span class="sk">MSSQL</span><span class="sk">MySQL</span><span class="sk">Redis</span></div>
+          <div class="row"><span class="sk">MSSQL</span><span class="sk">MySQL</span></div>
         </div>
         <div class="skgrp" data-reveal style="--d:1">
           <h4>플랫폼</h4>
@@ -652,8 +658,8 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
       <div class="about" data-reveal>
         <div class="mono-side"><span class="st">비트박스 &amp; 랩</span><span class="st">독학</span><span class="st">그라비티</span><span class="st">네오플</span><span class="st">보이저</span><span class="st now">R&amp;D</span></div>
         <div>
-          <p>홍대 및 다양한 공연 무대에서 음악을 업으로 삼다가, <b>독학으로 게임서버 개발자로 전향</b>했습니다.</p>
-          <p><b>문제 해결을 위해 주도적으로 움직이고</b>, 지속적인 자기개발 의지와 습관을 가지고 있으며,<br>급변하는 <b>AI 트렌드를 꾸준히 추적</b>하여 실무에 적용 가능한 관점을 넓히고 있습니다.</p>
+          <p>음악을 업으로 하다 독학으로 <b>게임서버 개발자로 전향</b>했습니다.</p>
+          <p><b>맡은 업무에 머무르지 않고, 병목을 스스로 발굴·제안해 개선 범위를 넓혀 왔습니다.</b> 지속적인 자기개발을 습관으로 삼고, 추측보다 실측으로 검증합니다.</p>
           <div class="learn">
             <div class="learn-row">
               <a class="lnote" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener">
