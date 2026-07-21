@@ -213,6 +213,13 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .neg p b{color:var(--ink); font-weight:800}
 .rnd-note{margin-top:20px; font-family:var(--mono); font-size:.82rem; color:var(--muted);
   display:flex; gap:8px; align-items:center; line-height:1.6}
+.rnd-more{display:inline-flex; align-items:center; gap:7px; margin-top:14px; text-decoration:none;
+  font-family:var(--mono); font-size:.84rem; font-weight:600; color:var(--muted);
+  border-bottom:1px solid var(--line2); padding-bottom:2px;
+  transition:color .2s, border-color .2s}
+.rnd-more svg{width:13px; height:13px; display:block; transition:transform .2s}
+.rnd-more:hover{color:var(--hot-soft); border-color:var(--hot)}
+.rnd-more:hover svg{transform:translate(2px,-2px)}
 .rnd-flow .stage{opacity:0; transform:translateY(16px);
   transition:opacity .55s cubic-bezier(.2,.7,.2,1), transform .55s cubic-bezier(.2,.7,.2,1)}
 .rnd-flow .stage.in{opacity:1; transform:none}
@@ -528,7 +535,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="period">2026 – 현재</span>
         </div>
         <h2>맵당 동접 <span class="hot">200 → 4,000</span>, 병목 개선 R&amp;D</h2>
-        <p>추측 없이 <b style="color:var(--ink)">실측</b>으로 병목을 제거<br>모든 단계는 <b style="color:var(--ink)">A/B 토글</b>로 정확한 원인 규명 후 수정</p>
+        <a class="rnd-more" href="https://app.notion.com/p/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">전체 페이지 확인<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
 
       <div class="rnd-flow">
