@@ -288,18 +288,23 @@ canvas#spark{display:block; width:100%; height:96px; margin:12px 0 4px}
 .about p b{color:var(--ink); font-weight:700}
 @media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{white-space:normal} }
 .learn{margin-top:18px}
-.v-inline{display:flex; flex-direction:column}
-.ilink{display:flex; align-items:center; gap:12px; padding:13px 2px; border-top:1px solid var(--line); color:inherit}
-.ilink:first-child{border-top:0}
-.ilink .mic{width:30px; height:30px; border-radius:8px; display:grid; place-items:center; flex:0 0 auto;
+.alinks{display:flex; flex-wrap:wrap; gap:10px}
+.alink{display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:10px; position:relative; color:inherit;
+  border:1px solid var(--line); background:var(--surface);
+  transition:border-color .2s, background .2s}
+.alink::before{content:""; position:absolute; left:0; top:7px; bottom:7px; width:3px; border-radius:3px;
+  background:linear-gradient(var(--hot),var(--hot-deep)); opacity:0; transition:opacity .2s}
+.alink:hover{border-color:var(--hot)}
+.alink:hover::before{opacity:1}
+.alink .mic{width:28px; height:28px; border-radius:8px; display:grid; place-items:center; flex:0 0 auto;
   background:rgba(70,177,255,.1); border:1px solid rgba(70,177,255,.22); color:var(--hot-soft)}
-.ilink .mic svg{width:15px; height:15px}
-.ilink .il-t{font-family:var(--mono); font-weight:700; font-size:.86rem; color:var(--ink); letter-spacing:.01em}
-.ilink .il-s{color:var(--muted); font-size:.84rem}
-.ilink .il-a{margin-left:auto; color:var(--faint); transition:color .22s, transform .22s}
-.ilink .il-a svg{width:13px; height:13px; display:block}
-.ilink:hover .il-t{color:var(--hot-soft)}
-.ilink:hover .il-a{color:var(--hot); transform:translate(2px,-2px)}
+.alink .mic svg{width:15px; height:15px}
+.alink .il-t{font-family:var(--mono); font-weight:700; font-size:.84rem; color:var(--ink); letter-spacing:.01em;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.alink .il-a{margin-left:6px; color:var(--faint); flex:0 0 auto; transition:color .2s, transform .2s}
+.alink .il-a svg{width:13px; height:13px; display:block}
+.alink:hover .il-a{color:var(--hot); transform:translate(2px,-2px)}
+@media(max-width:640px){ .alinks{flex-direction:column} .alink .il-a{margin-left:auto} }
 
 #about{background:var(--bg); transition:filter .85s ease}
 #contact{border-top:1px solid var(--line); background:var(--bg);
@@ -654,20 +659,20 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <div>
           <p><b>맡은 업무에 머무르지 않고, 병목을 스스로 발굴·제안해 개선 범위를 넓혀 왔습니다.</b> 지속적인 자기개발을 습관으로 삼고, 추측보다 실측으로 검증합니다.</p>
           <div class="learn">
-            <div class="v-inline">
-              <a class="ilink" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener">
+            <div class="alinks">
+              <a class="alink" href="https://app.notion.com/p/AI-CAREER-2f316a0b9f5980fb8523dc48839a2962" target="_blank" rel="noopener">
                 <span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2a2 2 0 0 0 1.2 1.2L20 11l-5 1.8a2 2 0 0 0-1.2 1.2L12 19l-1.8-5a2 2 0 0 0-1.2-1.2L4 11l5-1.8a2 2 0 0 0 1.2-1.2z"/></svg></span>
-                <span class="il-t">AI &amp; Career</span><span class="il-s">AI·커리어 인사이트</span>
+                <span class="il-t">AI &amp; Career</span>
                 <span class="il-a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
               </a>
-              <a class="ilink" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener">
+              <a class="alink" href="https://app.notion.com/p/TECH-LABS-2db16a0b9f5980388c0cd4c6edfa95f7" target="_blank" rel="noopener">
                 <span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6"/><path d="M10.5 3v5.2L5.6 17a1.7 1.7 0 0 0 1.5 2.5h9.8a1.7 1.7 0 0 0 1.5-2.5L13.5 8.2V3"/><path d="M8 14.5h8"/></svg></span>
-                <span class="il-t">Tech Labs</span><span class="il-s">기술 공부·실험</span>
+                <span class="il-t">Tech Labs</span>
                 <span class="il-a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
               </a>
-              <a class="ilink" href="https://app.notion.com/p/BOOKS-LECTURES-2db16a0b9f59816184cff9d601d88a3c" target="_blank" rel="noopener">
+              <a class="alink" href="https://app.notion.com/p/BOOKS-LECTURES-2db16a0b9f59816184cff9d601d88a3c" target="_blank" rel="noopener">
                 <span class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-1.8-1.2-4-1.8-7-1.8v11.6c3 0 5.2.6 7 1.8 1.8-1.2 4-1.8 7-1.8V5.2c-3 0-5.2.6-7 1.8z"/><path d="M12 7v11.6"/></svg></span>
-                <span class="il-t">Books &amp; Lectures</span><span class="il-s">책·강의 정리·복습</span>
+                <span class="il-t">Books &amp; Lectures</span>
                 <span class="il-a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
               </a>
             </div>
