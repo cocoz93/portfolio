@@ -56,9 +56,6 @@ section{scroll-margin-top:76px}
   background:rgba(13,18,32,.72); border-bottom:1px solid var(--line)}
 .nav .wrap{display:flex; align-items:center; justify-content:space-between; height:60px}
 .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:-.01em; font-size:1rem}
-.brand .mk{width:27px; height:27px; border-radius:8px; display:grid; place-items:center;
-  background:linear-gradient(135deg,var(--hot),var(--hot-deep)); color:#fff; font-size:.8rem; font-weight:800;
-  box-shadow:0 4px 14px -4px var(--hot-glow)}
 .brand small{color:var(--muted); font-weight:600; font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; margin-left:9px}
 .navlinks{display:flex; gap:6px; align-items:center}
 .navlinks a{font-size:.9rem; color:var(--ink2); padding:8px 12px; border-radius:8px; font-weight:600;
@@ -68,7 +65,26 @@ section{scroll-margin-top:76px}
 .nav .cta{font-family:var(--mono); font-size:.82rem; padding:8px 15px; border:1px solid var(--line2);
   border-radius:9px; color:var(--ink); transition:border-color .2s,background .2s}
 .nav .cta:hover{border-color:var(--hot); background:rgba(62,166,255,.08)}
-@media(max-width:760px){ .navlinks{display:none} }
+.navtoggle{display:none; width:40px; height:40px; align-items:center; justify-content:center; flex:0 0 auto;
+  background:transparent; border:1px solid var(--line2); border-radius:9px; color:var(--ink); cursor:pointer;
+  transition:border-color .2s,background .2s}
+.navtoggle:hover{border-color:var(--hot); background:rgba(62,166,255,.08)}
+.navtoggle svg{width:18px; height:18px; display:block}
+.navtoggle .x{display:none}
+.navtoggle[aria-expanded="true"] .mn{display:none}
+.navtoggle[aria-expanded="true"] .x{display:block}
+@media(max-width:760px){
+  .navtoggle{display:inline-flex}
+  .brand{margin-right:auto}
+  .nav .cta{margin-right:10px}
+  .navlinks{position:absolute; top:60px; left:0; right:0; display:flex; flex-direction:column; align-items:stretch;
+    gap:2px; background:rgba(13,18,32,.97); backdrop-filter:blur(12px); border-bottom:1px solid var(--line);
+    padding:8px var(--pad) 14px; opacity:0; transform:translateY(-8px); pointer-events:none;
+    transition:opacity .2s ease,transform .2s ease}
+  .navlinks.open{opacity:1; transform:none; pointer-events:auto}
+  .navlinks a{font-size:1rem; padding:12px 12px; border-radius:9px}
+}
+@media(max-width:520px){ .brand small{display:none} }
 
 .hero{position:relative; overflow:hidden; min-height:calc(100vh - 60px); display:flex; align-items:center; padding:clamp(36px,6vw,64px) 0}
 .hero::before{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
@@ -83,25 +99,11 @@ section{scroll-margin-top:76px}
 .hero h1{margin:.5em 0 0; font-size:clamp(1.8rem,4vw,2.9rem); font-weight:800; letter-spacing:-.03em;
   line-height:1.14; text-wrap:balance}
 .hero h1 .l2{display:block}
-.hero .lede{margin:1.35em 0 0; color:var(--ink2); font-size:1.05rem; line-height:1.75; max-width:54ch}
-.hero .lede b{color:var(--ink); font-weight:700}
-.hero .lede b.hot{color:var(--hot)}
-.hero .hmeta{margin:.9em 0 0; font-family:var(--mono); font-size:.87rem; color:var(--muted);
+.hero .hmeta{margin:1.15em 0 0; font-family:var(--mono); font-size:.94rem; color:var(--ink2);
   line-height:1.6; letter-spacing:-.01em}
 .hero .hmeta b{color:var(--hot-soft); font-weight:700}
 .hero .hmeta .sep{color:var(--faint); margin:0 .3em; font-size:1.18em; vertical-align:-.02em}
 .hero .hmeta.hm2{margin-top:.1em}
-.hero .actions{margin-top:1.8em; display:flex; flex-wrap:wrap; gap:12px}
-.btn{display:inline-flex; align-items:center; gap:9px; padding:12px 20px; border-radius:11px; font-weight:700;
-  font-size:.95rem; border:1px solid transparent; transition:transform .18s,box-shadow .25s,background .2s,border-color .2s}
-.btn:active{transform:translateY(1px)}
-.btn.primary{background:linear-gradient(135deg,var(--hot),var(--hot-deep)); color:#fff;
-  box-shadow:0 12px 30px -12px var(--hot-glow)}
-.btn.primary:hover{box-shadow:0 16px 40px -12px var(--hot-glow); transform:translateY(-2px)}
-.btn.ghost{border-color:var(--line2); color:var(--ink)}
-.btn.ghost:hover{border-color:var(--hot); background:rgba(62,166,255,.07)}
-.btn.grn{border-color:rgba(52,211,153,.5); color:var(--good)}
-.btn.grn:hover{border-color:var(--good); background:rgba(52,211,153,.1)}
 .hero .cue{position:absolute; left:0; right:0; bottom:clamp(16px,3.5vh,30px); margin:0 auto; width:max-content; z-index:2; display:inline-flex; align-items:center; justify-content:center; color:var(--muted)}
 .hero .cue .m{width:22px; height:34px; border-radius:12px; border:1.6px solid var(--line2); position:relative}
 .hero .cue .m::after{content:""; position:absolute; left:50%; top:7px; width:3px; height:7px; border-radius:2px; background:var(--hot); transform:translateX(-50%); animation:cue 1.6s infinite}
@@ -266,17 +268,6 @@ section{scroll-margin-top:76px}
 .about p:last-child{margin-bottom:0}
 .about p b{color:var(--ink); font-weight:700}
 @media(max-width:720px){ .about{grid-template-columns:1fr} .about .mono-side{white-space:normal} }
-.learn{margin-top:18px}
-.alinks{display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 0; font-family:var(--mono); font-size:.88rem; line-height:1.9}
-.alink{color:inherit; margin:0 16px 0 0; padding-right:16px; position:relative}
-.alink:not(:last-child){border-right:1px solid var(--line2)}
-.alink:last-child{margin-right:0; padding-right:0}
-.alink .mic,.alink .il-a{display:none}
-.alink .il-t{font-family:var(--mono); font-weight:700; color:var(--ink2)}
-.alink:hover .il-t,.alink:hover .il-d{color:var(--hot)}
-.alink .il-d{color:var(--muted)}
-.alink .il-d::before{content:'\00a0\2014\00a0'; color:var(--faint)}
-@media(max-width:640px){ .alinks{flex-direction:column; align-items:flex-start; gap:11px} .alink{margin:0; padding:0; border-right:0} }
 
 #about{background:var(--bg); transition:filter .85s ease}
 #contact{border-top:1px solid var(--line); background:var(--bg);
@@ -324,10 +315,9 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 <nav class="nav">
   <div class="wrap">
     <a class="brand" href="#hero" aria-label="맨 위로">
-      <span class="mk">WJ</span>
-      <span>주우진<small>GAME&nbsp;SERVER</small></span>
+      <span>주우진<small>GAME&nbsp;SERVER&nbsp;ENGINEER</small></span>
     </a>
-    <div class="navlinks">
+    <div class="navlinks" id="navlinks">
       <a href="#metrics" data-spy>성과</a>
       <a href="#career" data-spy>경력</a>
       <a href="#rnd" data-spy>R&amp;D</a>
@@ -335,6 +325,10 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
       <a href="#about" data-spy>소개</a>
     </div>
     <a class="cta" href="#contact">CONTACT</a>
+    <button class="navtoggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="navlinks">
+      <svg class="mn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
   </div>
 </nav>
 
@@ -549,15 +543,15 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
       <div class="negband">
         <div class="neg" data-reveal style="--d:0">
           <span class="t rj">기각</span>
-          <p><b>LockFree 전환</b> — SendQ(링버퍼)를 락프리로 전환 시 성능 <b>−10% 회귀</b>.</p>
+          <p><b>LockFree 전환</b> — SendQ 링버퍼 락프리화, <b>−10% 회귀</b>.</p>
         </div>
         <div class="neg" data-reveal style="--d:1">
           <span class="t rj">기각</span>
-          <p><b>SO_SNDBUF=0</b> — 커널 복사 제거 기대했으나 시스템 <b>CPU +75%</b>, 비용이 워커로 전가.</p>
+          <p><b>SO_SNDBUF=0</b> — 복사↓기대, <b>CPU +75%</b> 워커로 전가.</p>
         </div>
         <div class="neg" data-reveal style="--d:2">
           <span class="t rj">기각</span>
-          <p><b>게임 스레드 코어 격리</b> — affinity로 캐시 간섭 차단 시도, 천장 <b>~5,200 불변</b>.</p>
+          <p><b>게임 스레드 코어 격리</b> — 캐시 간섭 차단, 천장 <b>~5,200 불변</b>.</p>
         </div>
         <div class="neg" data-reveal style="--d:3">
           <span class="t fd">규명</span>
@@ -721,6 +715,23 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     window.addEventListener('scroll', updInv, {passive:true});
     window.addEventListener('resize', updInv);
     updInv();
+  }
+
+  var navToggle = document.querySelector('.navtoggle');
+  var navLinksEl = document.getElementById('navlinks');
+  if(navToggle && navLinksEl){
+    navToggle.addEventListener('click', function(){
+      var open = navLinksEl.classList.toggle('open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      navToggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+    });
+    navLinksEl.querySelectorAll('a').forEach(function(a){
+      a.addEventListener('click', function(){
+        navLinksEl.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.setAttribute('aria-label', '메뉴 열기');
+      });
+    });
   }
 
 })();
