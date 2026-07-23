@@ -181,7 +181,7 @@ section{scroll-margin-top:76px}
 .stage .res b{color:var(--hot); font-weight:800}
 .arrowc{flex:0 0 26px; display:flex; align-items:center; justify-content:center; color:var(--faint)}
 .arrowc svg{width:16px; height:16px}
-.negband{margin-top:26px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+.negband{margin-top:26px; display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
 .neg{background:rgba(21,29,46,.4); border:1px solid rgba(51,64,95,.4); border-radius:14px; padding:16px 18px;
   display:flex; flex-direction:column; gap:6px}
 .neg .t{font-family:var(--mono); font-size:.74rem; font-weight:800; letter-spacing:.06em; padding:3px 9px; border-radius:999px;
@@ -343,7 +343,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     <div class="hero-copy">
       <h1 class="anim d1">대형 라이브 경험과 저수준 성능<span class="l2">추측 아닌 <span class="hot">실측</span>으로</span></h1>
       <div class="hmeta anim d3"><b>경력 3년</b><span class="sep">·</span>10개국 브랜치 통합<span class="sep">·</span>DB 100만 건 이관<span class="sep">·</span>하드코딩 50 → 2</div>
-      <div class="hmeta hm2 anim d4"><b>개인 R&amp;D</b><span class="sep">·</span>맵당 동접 4,000<span class="sep">·</span>tick p99 65 → 9ms</div>
+      <div class="hmeta hm2 anim d4"><b>개인 R&amp;D</b><span class="sep">·</span>맵당 동접 ~5,000<span class="sep">·</span>tick p99 65 → 9ms</div>
     </div>
   </div>
   <a class="cue anim d5" href="#metrics" aria-label="아래로 스크롤"><span class="m"></span></a>
@@ -491,12 +491,12 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <span class="eyebrow"><span class="dot"></span>Personal R&amp;D · IOCP MMO Server</span>
           <span class="period">2026 – 현재</span>
         </div>
-        <h2>맵당 동접 <span class="hot">200 → 4,000</span>, 병목 개선 R&amp;D</h2>
+        <h2>맵당 동접 <span class="hot">200 → ~5,000</span>, 병목 추적의 기록</h2>
         <a class="rnd-more" href="https://app.notion.com/p/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">전체 페이지 확인<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
       </div>
 
       <div class="rnd-flow">
-        <div class="stage" style="--w:5%">
+        <div class="stage" style="--w:4%">
           <span class="sx">STEP 01</span>
           <span class="cc">동접</span><span class="cnum" data-to="200">0</span>
           <div class="load"><i></i></div>
@@ -506,17 +506,17 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         </div>
         <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
 
-        <div class="stage" style="--w:25%">
+        <div class="stage" style="--w:20%">
           <span class="sx">STEP 02</span>
           <span class="cc">동접</span><span class="cnum" data-to="1000">0</span>
           <div class="load"><i></i></div>
-          <div class="bn">송신 루프 — <span class="nb">틱 74%</span></div>
+          <div class="bn">flush_send — <span class="nb">틱 74%</span></div>
           <span class="fix">SendThread 분리</span>
           <div class="res"><span>tick p99 <b>39 → 17ms</b></span><span>전체 CPU 증가 <b>0</b></span></div>
         </div>
         <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
 
-        <div class="stage" style="--w:50%">
+        <div class="stage" style="--w:40%">
           <span class="sx">STEP 03</span>
           <span class="cc">동접</span><span class="cnum" data-to="2000">0</span>
           <div class="load"><i></i></div>
@@ -526,23 +526,23 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         </div>
         <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
 
-        <div class="stage" style="--w:62%">
+        <div class="stage" style="--w:80%">
           <span class="sx">STEP 04</span>
-          <span class="cc">동접</span><span class="cnum" data-to="2500">0</span>
+          <span class="cc">동접</span><span class="cnum" data-to="4000">0</span>
           <div class="load"><i></i></div>
-          <div class="bn">송신 CPU 1.00 포화</div>
-          <span class="fix">SendWorker ×2</span>
-          <div class="res"><span>처리량 천장 해소</span><span><b>55k → 61k/s</b></span></div>
+          <div class="bn">게임 루프 팬아웃 병목</div>
+          <span class="fix">진입 / 이탈 · 수신 섹터 묶음</span>
+          <div class="res"><span>진입 / 이탈 <b>−68%</b></span><span>복사 <b>−88%</b></span></div>
         </div>
         <div class="arrowc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
 
         <div class="stage next" style="--w:100%">
           <span class="sx">STEP 05 · 현재 프론티어</span>
-          <span class="cc">동접 — 천장 실측</span><span class="cnum" data-to="4000">0</span>
+          <span class="cc">동접 — 실측 상한</span><span class="cnum" data-to="5000">0</span>
           <div class="load"><i></i></div>
-          <div class="bn">게임 스레드 — 단일 코어</div>
-          <span class="fix">맵별 스레드 (N개)</span>
-          <div class="res"><span>단일 맵 처리 한계 도달</span><span>다음 축: <b>멀티 스레드</b></span></div>
+          <div class="bn">송신 워커 포화</div>
+          <span class="fix">SendWorker ×3</span>
+          <div class="res"><span>병목 해소</span><span>천장 = <b>게임 루프</b></span></div>
         </div>
       </div>
 
@@ -556,6 +556,10 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
           <p><b>SO_SNDBUF=0</b> — 커널 복사 제거 기대했으나 시스템 <b>CPU +75%</b>, 비용이 워커로 전가.</p>
         </div>
         <div class="neg" data-reveal style="--d:2">
+          <span class="t rj">기각</span>
+          <p><b>게임 스레드 코어 격리</b> — affinity로 캐시 간섭 차단 시도, 천장 <b>~5,200 불변</b>.</p>
+        </div>
+        <div class="neg" data-reveal style="--d:3">
           <span class="t fd">규명</span>
           <p>동접 1,500에서 <b>회선 상한(474Mbps)</b>에 걸려 한계 경험.</p>
         </div>
