@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>패킷의 여정 · IOCP MMO 서버 설계</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face{
+  font-family:'Pretendard';
+  src:url("../fonts/PretendardVariable.woff2") format("woff2");
+  font-weight:100 900; font-style:normal; font-display:swap;
+}
+@font-face{
+  font-family:'JetBrains Mono';
+  src:url("../fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight:100 800; font-style:normal; font-display:swap;
+}
+:root{
+  --bg:#0d1220; --bg2:#111726; --surface:#151d2e; --surface2:#1b2436;
+  --line:#26304a; --line2:#33405f;
+  --ink:#eef1f8; --ink2:#b3bcd0; --muted:#838ea6; --faint:#525d78;
+  --hot:#46b1ff; --hot-soft:#79c7ff; --hot-deep:#2b86e0;
+  --good:#34d399; --sig:#f5b13d; --rej:#f5879c;
+  --hot-glow:rgba(70,177,255,.55);
+  --mono:'JetBrains Mono','Pretendard',ui-monospace,Consolas,monospace;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif;
+  --maxw:1180px; --pad:clamp(20px,5vw,40px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--sans); line-height:1.65; word-break:keep-all;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  font-variant-numeric:tabular-nums; overflow-x:clip;   /* clip (not hidden): prevents h-scroll without breaking position:sticky */
+}
+a{color:inherit; text-decoration:none}
+:focus-visible{outline:2px solid var(--hot); outline-offset:3px; border-radius:4px}
+.wrap{max-width:var(--maxw); margin:0 auto; padding-inline:var(--pad)}
+.mono{font-family:var(--mono)}
+.hot{color:var(--hot)}
+
+/* progress bar */
+.prog{position:fixed; top:0; left:0; height:2px; width:0; z-index:80;
+  background:linear-gradient(90deg,var(--hot-deep),var(--hot)); box-shadow:0 0 10px var(--hot-glow)}
+
+/* nav */
+.nav{position:fixed; top:0; left:0; right:0; z-index:70; height:56px;
+  display:flex; align-items:center; backdrop-filter:blur(12px);
+  background:rgba(13,18,32,.66); border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex; align-items:center; justify-content:space-between; width:100%}
+.nav .back{display:inline-flex; align-items:center; gap:9px; font-weight:700; font-size:.92rem; color:var(--ink2);
+  transition:color .2s}
+.nav .back:hover{color:var(--hot)}
+.nav .back svg{width:15px; height:15px}
+.nav .tag{font-family:var(--mono); font-size:.74rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+
+.eyebrow{font-family:var(--mono); font-size:.79rem; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--muted); display:inline-flex; align-items:center; gap:.6em}
+.eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--hot); box-shadow:0 0 0 4px rgba(62,166,255,.15)}
+
+/* ── intro ── */
+.intro{position:relative; min-height:100vh; display:flex; align-items:center; overflow:hidden;
+  padding:80px 0 40px}
+.intro::before{content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(70% 55% at 82% 8%, rgba(70,177,255,.18), transparent 60%),
+    linear-gradient(180deg, transparent, var(--bg));}
+.intro::after{content:""; position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.45;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:46px 46px; mask-image:radial-gradient(120% 80% at 76% 4%,#000,transparent 60%)}
+.intro .wrap{position:relative; z-index:1}
+.intro h1{margin:.5em 0 0; font-size:clamp(2.1rem,5vw,3.5rem); font-weight:800; letter-spacing:-.03em;
+  line-height:1.12; text-wrap:balance}
+.intro h1 .l2{display:block}
+.intro .lede{margin:1.2em 0 0; color:var(--ink2); font-size:clamp(1rem,1.6vw,1.15rem); max-width:60ch; line-height:1.75}
+.intro .lede b{color:var(--ink); font-weight:700}
+.principles{margin-top:2em; display:flex; flex-wrap:wrap; gap:12px}
+.principle{display:flex; align-items:center; gap:11px; padding:12px 16px; border-radius:12px;
+  background:var(--surface); border:1px solid var(--line2)}
+.principle .pk{font-family:var(--mono); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted)}
+.principle .pv{font-weight:800; letter-spacing:-.01em; font-size:1.02rem}
+.principle .pv .hot{color:var(--hot-soft)}
+.scrollcue{margin-top:2.6em; display:inline-flex; align-items:center; gap:10px; font-family:var(--mono);
+  font-size:.8rem; color:var(--muted); letter-spacing:.06em}
+.scrollcue .m{width:22px; height:34px; border-radius:12px; border:1.6px solid var(--line2); position:relative; flex:0 0 auto}
+.scrollcue .m::after{content:""; position:absolute; left:50%; top:7px; width:3px; height:7px; border-radius:2px;
+  background:var(--hot); transform:translateX(-50%); animation:cue 1.6s infinite}
+@keyframes cue{0%{opacity:0; transform:translate(-50%,0)}30%{opacity:1}80%{opacity:0; transform:translate(-50%,10px)}100%{opacity:0}}
+
+/* ── tour (pinned pipeline) ── */
+.tour{position:relative}
+.stage{position:sticky; top:0; height:100vh; display:flex; flex-direction:column;
+  padding:70px 0 30px; overflow:hidden}
+.stage .wrap{width:100%; display:flex; flex-direction:column; height:100%}
+
+.stagehead{display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap;
+  margin-bottom:10px}
+.stagehead .eyebrow{font-size:.72rem}
+.stagehead .counter{font-family:var(--mono); font-size:.78rem; color:var(--muted)}
+.stagehead .counter b{color:var(--hot-soft); font-weight:800; font-size:1.05rem}
+
+/* pipeline */
+.pipe{position:relative; margin:14px 0 6px; padding:8px 2px 2px}
+.pipe .rail{position:absolute; left:0; right:0; top:33px; height:2px; background:var(--line2)}
+.pipe .rail-fill{position:absolute; left:0; top:33px; height:2px; width:0;
+  background:linear-gradient(90deg,var(--hot-deep),var(--hot)); box-shadow:0 0 8px var(--hot-glow)}
+.pipe .packet{position:absolute; top:34px; left:0; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%;
+  background:var(--hot-soft); box-shadow:0 0 0 4px rgba(70,177,255,.18), 0 0 16px 3px var(--hot-glow); z-index:3;
+  transition:left .12s linear}
+.nodes{position:relative; display:flex; justify-content:space-between; z-index:2}
+.node{display:flex; flex-direction:column; align-items:center; gap:9px; width:13%; text-align:center}
+.node .ic{position:relative; width:52px; height:52px; border-radius:14px; display:grid; place-items:center; flex:0 0 auto;
+  background:var(--surface); border:1px solid var(--line2); color:var(--muted);
+  transition:transform .3s cubic-bezier(.2,.7,.2,1), border-color .3s, color .3s, box-shadow .3s}
+.node .ic svg{width:23px; height:23px}
+.node .nm{font-family:var(--mono); font-size:.74rem; color:var(--muted); letter-spacing:.02em; line-height:1.3;
+  transition:color .3s}
+.node .nm b{display:block; color:var(--ink2); font-weight:700; font-size:.82rem}
+.node.done .ic{border-color:var(--line2); color:var(--hot-soft)}
+.node.active .ic{transform:translateY(-4px) scale(1.12); border-color:var(--hot); color:var(--hot-soft);
+  background:linear-gradient(180deg,rgba(70,177,255,.14),var(--surface)); box-shadow:0 12px 26px -12px var(--hot-glow)}
+.node.active .nm b{color:var(--hot-soft)}
+.node.ndeep .ic::after{content:""; position:absolute; top:-4px; right:-4px; width:9px; height:9px; border-radius:50%;
+  background:var(--sig); border:2px solid var(--bg); box-shadow:0 0 8px rgba(245,177,61,.5)}
+
+/* timing wheel rail (cross-cutting) */
+.tw{margin-top:16px; display:flex; align-items:center; gap:12px; padding:9px 15px; border-radius:11px;
+  background:linear-gradient(90deg,rgba(245,177,61,.06),transparent); border:1px dashed var(--line2)}
+.tw .tw-ic{width:26px; height:26px; border-radius:8px; display:grid; place-items:center; flex:0 0 auto;
+  background:rgba(245,177,61,.1); border:1px solid rgba(245,177,61,.3); color:var(--sig)}
+.tw .tw-ic svg{width:15px; height:15px}
+.tw .tw-t{font-family:var(--mono); font-size:.78rem; color:var(--muted)}
+.tw .tw-t b{color:var(--ink2); font-weight:700}
+
+/* panel area */
+.panelwrap{position:relative; flex:1 1 auto; margin-top:18px; min-height:0}
+.panel{position:absolute; inset:0; opacity:0; transform:translateY(14px); pointer-events:none;
+  transition:opacity .4s ease, transform .4s ease; display:flex; flex-direction:column}
+.panel.show{opacity:1; transform:none; pointer-events:auto}
+
+/* brief panel */
+.brief{margin:auto 0; max-width:none}
+.brief .bk{font-family:var(--mono); font-size:.76rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted)}
+.brief h2{margin:.4em 0 0; font-size:clamp(1.5rem,3.2vw,2.15rem); font-weight:800; letter-spacing:-.025em; line-height:1.2; text-wrap:balance}
+.brief p{margin:.7em 0 0; color:var(--ink2); font-size:clamp(1rem,1.5vw,1.12rem); max-width:52ch; line-height:1.7}
+.brief p b{color:var(--ink); font-weight:700}
+.brief .soon{margin-top:1.2em; display:inline-flex; align-items:center; gap:8px; font-family:var(--mono);
+  font-size:.76rem; color:var(--faint); border:1px solid var(--line2); border-radius:999px; padding:5px 12px}
+
+/* deep panel */
+.deep{display:grid; grid-template-columns:.95fr 1.05fr; gap:clamp(20px,3vw,40px); align-items:start; height:100%}
+.deep .lead{align-self:center}
+.deep .dk{font-family:var(--mono); font-size:.76rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sig)}
+.deep h2{margin:.42em 0 0; font-size:clamp(1.5rem,3vw,2.15rem); font-weight:800; letter-spacing:-.028em; line-height:1.18; text-wrap:balance}
+.deep .claim{margin:.85em 0 0; color:var(--ink2); font-size:clamp(1rem,1.45vw,1.12rem); line-height:1.72; max-width:44ch}
+.deep .claim b{color:var(--ink); font-weight:700}
+.deep .tradeoff{margin-top:1.15em; padding:12px 15px; border-radius:11px; background:var(--surface);
+  border:1px solid var(--line); border-left:3px solid var(--hot); font-size:.92rem; color:var(--ink2); line-height:1.6}
+.deep .tradeoff b{color:var(--ink); font-weight:700}
+.deep .more{margin-top:1.15em; display:inline-flex; align-items:center; gap:8px; font-family:var(--mono);
+  font-size:.84rem; font-weight:600; color:var(--muted); border-bottom:1px solid var(--line2); padding-bottom:2px;
+  transition:color .2s, border-color .2s}
+.deep .more svg{width:13px; height:13px; transition:transform .2s}
+.deep .more:hover{color:var(--hot-soft); border-color:var(--hot)}
+.deep .more:hover svg{transform:translate(2px,-2px)}
+
+/* flow (problem -> solution) inside deep */
+.flow{display:flex; flex-direction:column; gap:11px; align-self:center}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:15px 17px}
+.card .ct{display:flex; align-items:center; gap:9px; font-family:var(--mono); font-size:.74rem; font-weight:800;
+  letter-spacing:.06em; text-transform:uppercase}
+.card.prob{border-color:rgba(245,135,156,.28); background:linear-gradient(180deg,rgba(245,135,156,.05),var(--surface))}
+.card.prob .ct{color:var(--rej)}
+.card.sol{border-color:rgba(52,211,153,.26); background:linear-gradient(180deg,rgba(52,211,153,.05),var(--surface))}
+.card.sol .ct{color:var(--good)}
+.card p{margin:8px 0 0; font-size:.93rem; color:var(--ink2); line-height:1.58}
+.card p b{color:var(--ink); font-weight:700}
+.card .step{display:flex; gap:10px; margin-top:9px; font-size:.9rem; color:var(--ink2); line-height:1.5}
+.card .step .n{font-family:var(--mono); font-weight:800; color:var(--hot-soft); flex:0 0 auto}
+.card .step b{color:var(--ink); font-weight:700}
+.card code{font-family:var(--mono); font-size:.82em; background:rgba(13,18,32,.6); border:1px solid var(--line2);
+  padding:1px 6px; border-radius:6px; color:var(--hot-soft); word-break:break-all}
+.arrowdn{align-self:center; color:var(--faint); margin:-4px 0}
+.arrowdn svg{width:18px; height:18px; display:block}
+
+/* ── outro ── */
+.outro{position:relative; padding:clamp(60px,9vw,110px) 0; border-top:1px solid var(--line);
+  background:linear-gradient(180deg,var(--bg2),var(--bg))}
+.outro h2{margin:.4em 0 0; font-size:clamp(1.5rem,3vw,2.1rem); font-weight:800; letter-spacing:-.025em; text-wrap:balance}
+.outro p{margin:.8em 0 0; color:var(--ink2); font-size:1.05rem; max-width:58ch; line-height:1.75}
+.outro .cta{margin-top:1.8em; display:flex; flex-wrap:wrap; gap:12px}
+.btn{display:inline-flex; align-items:center; gap:9px; padding:12px 20px; border-radius:11px; font-weight:700;
+  font-size:.95rem; border:1px solid var(--line2); color:var(--ink); transition:border-color .2s, background .2s, transform .18s}
+.btn:hover{border-color:var(--hot); background:rgba(62,166,255,.07); transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(135deg,var(--hot),var(--hot-deep)); border-color:transparent; color:#fff;
+  box-shadow:0 12px 30px -12px var(--hot-glow)}
+.foot{margin-top:44px; padding-top:22px; border-top:1px solid var(--line); font-family:var(--mono);
+  font-size:.78rem; color:var(--muted)}
+
+/* dev progress dots (right) */
+.dots{position:fixed; right:18px; top:50%; transform:translateY(-50%); z-index:60;
+  display:flex; flex-direction:column; gap:10px}
+.dots i{width:8px; height:8px; border-radius:50%; background:var(--line2); transition:background .3s, transform .3s}
+.dots i.on{background:var(--hot); transform:scale(1.35)}
+.dots i.ndeep{outline:2px solid rgba(245,177,61,.4); outline-offset:2px}
+@media(max-width:1080px){ .dots{display:none} }
+
+/* responsive: collapse pin on small screens */
+@media(max-width:860px){
+  .stage{position:static; height:auto; padding:90px 0 20px}
+  .panelwrap{position:static; margin-top:22px}
+  .panel{position:static; opacity:1; transform:none; pointer-events:auto; margin-bottom:34px}
+  .panel:not(.show){display:none}
+  .deep{grid-template-columns:1fr; gap:20px}
+  .pipe .packet{display:none}
+  .node{width:auto}
+  .nodes{flex-wrap:wrap; gap:14px; justify-content:flex-start}
+  .pipe .rail,.pipe .rail-fill{display:none}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .scrollcue .m::after{animation:none}
+  .packet{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog"></div>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="back" href="../index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      주우진 · Portfolio
+    </a>
+    <span class="tag">Network Library · Design Tour</span>
+  </div>
+</nav>
+
+<!-- INTRO -->
+<header class="intro">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>Personal R&amp;D · IOCP MMO Server</span>
+    <h1>패킷 한 개가<span class="l2"><span class="hot">서버를 통과하는</span> 여정</span></h1>
+    <p class="lede">접속부터 저장까지 — 데이터 경로 위의 <b>여덟 가지 설계 결정</b>을 따라 내려갑니다.
+      각 정거장에서 <b>무엇을</b> 택했고 <b>무엇을 버렸는지</b>, 그리고 <b>왜</b>인지.</p>
+    <div class="principles">
+      <div class="principle">
+        <div>
+          <div class="pk">관통 원칙 1</div>
+          <div class="pv">가장 큰 적은 <span class="hot">syscall</span></div>
+        </div>
+      </div>
+      <div class="principle">
+        <div>
+          <div class="pk">관통 원칙 2</div>
+          <div class="pv">메모리가 <span class="hot">진실</span>, 판단은 <span class="hot">실측</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="scrollcue"><span class="m"></span>스크롤하면 패킷이 흐릅니다</div>
+  </div>
+</header>
+
+<!-- TOUR -->
+<section class="tour" id="tour">
+  <div class="stage">
+    <div class="wrap">
+      <div class="stagehead">
+        <span class="eyebrow"><span class="dot"></span>Packet Pipeline</span>
+        <span class="counter">정거장 <b id="stepno">1</b> / 7</span>
+      </div>
+
+      <!-- pipeline -->
+      <div class="pipe">
+        <div class="rail"></div>
+        <div class="rail-fill" id="railfill"></div>
+        <div class="packet" id="packet"></div>
+        <div class="nodes" id="nodes">
+          <!-- nodes injected by JS -->
+        </div>
+      </div>
+
+      <!-- cross-cutting timer -->
+      <div class="tw">
+        <span class="tw-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+        <span class="tw-t"><b>Timing Wheel</b> · 타이머 스레드가 전 구간의 무활동 세션을 O(1)로 감시 — 단일 Writer, 락 없음</span>
+      </div>
+
+      <!-- panels -->
+      <div class="panelwrap" id="panelwrap">
+        <!-- panels injected by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTRO -->
+<footer class="outro">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>End of line</span>
+    <h2>정거장 두 곳을 깊게 봤습니다. <span class="hot">나머지 여섯 곳</span>도 같은 방식으로 이어집니다.</h2>
+    <p>이 페이지는 스크롤 서사 프로토타입입니다 — 세션 &amp; ABA, Send 동기화 두 정거장을 완성본으로 담았고,
+      나머지 정거장(Accept · Recv · SwapQ · 섹터 AOI · DB)은 요약만 표시됩니다.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://app.notion.com/p/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">전체 설계 문서 · Notion ↗</a>
+      <a class="btn" href="../index.html">포트폴리오로 돌아가기</a>
+    </div>
+    <div class="foot">© 2026 주우진 · Game Server Engineer · Scrollytelling prototype</div>
+  </div>
+</footer>
+
+<div class="dots" id="dots"></div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── station data ──────────────────────────────────────────────
+  var IC = {
+    door:'<path d="M3 21h18M6 21V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v17M13 12h.01"/>',
+    id:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="11" r="2"/><path d="M13 9h5M13 13h5M5.5 16c.5-1.4 1.5-2 3-2s2.5.6 3 2"/>',
+    recv:'<path d="M12 3v12M7 10l5 5 5-5M4 21h16"/>',
+    swap:'<path d="M7 4v13M4 7l3-3 3 3M17 20V7M14 17l3 3 3-3"/>',
+    grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+    send:'<path d="M12 21V9M7 14l5-5 5 5M4 3h16"/>',
+    db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/>'
+  };
+  var NOTION = {
+    session:'https://app.notion.com/p/34116a0b9f59805ca586d7c8c3597545',
+    send:'https://app.notion.com/p/34116a0b9f5980cca5f2e65b5122a6fe'
+  };
+  var ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+  var DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+
+  var STATIONS = [
+    { icon:'door', nm:'Accept', kind:'brief', weight:1,
+      k:'STATION 01 · 접속',
+      h:'AcceptThread는 <span class="hot">분리</span>, AcceptEx는 미채택',
+      p:'accept은 초당 수십~수백 건, 단일 호출 ~수 μs — <b>병목이 아니다.</b> AcceptEx는 아키텍처적으로 더 일관되지만 소켓 풀링 등 부수 비용 대비 <b>실익이 미미</b>해 온디맨드 accept 스레드를 유지한다. 필요 시 전환 가능.' },
+
+    { icon:'id', nm:'세션·ABA', kind:'deep', weight:2, notion:'session',
+      dk:'STATION 02 · 세션 배정 &amp; 생명주기',
+      h:'재사용이 부르는 <span class="hot">ABA</span>를 IOCount CAS로 원천 차단',
+      claim:'세션은 배열로 <b>O(1) 관리</b>한다. 그런데 index를 재사용하는 순간 ABA가 열린다 — 해제된 자리에 새 세션이 들어오면, <b>옛 sessionId를 든 스레드가 새 세션을 조작</b>할 수 있다.',
+      tradeoff:'atomic 연산은 ~20–100 cycle. 하지만 <b>syscall(~1–2k)·네트워크 대기(~10k+)</b>에 비하면 미미하다 — 빈도가 높아도 안전성을 택할 값어치가 충분.',
+      flow:[
+        {t:'prob', label:'문제 · 좀비 참조', body:'해제된 index에 새 세션 할당 → <code>_disconnecting</code> 확인과 <code>IOCount++</code> 사이의 틈으로 <b>이미 죽은 세션의 IOCount를 0→1</b>. 되돌릴 때 이중 해제.'},
+        {t:'sol', label:'해결 · 세대 + CAS', steps:[
+          ['①','SessionID = <code>[16b index][48b uniqueId]</code> — index로 접근, uniqueId로 <b>세대 구분</b>'],
+          ['②','진입 3단계: FindSession → <b>AcquireSession(CAS)</b> → sessionId 재확인'],
+          ['③','<code>CAS(&ioCount, cur+1, cur)</code> — cur==0이면 실패 → <b>0→1 원천 차단</b>'],
+          ['+','<code>closesocket</code>은 IOCount==0에서만 → <b>소켓 핸들 ABA</b>도 함께 차단']
+        ]}
+      ] },
+
+    { icon:'recv', nm:'Recv', kind:'brief', weight:1,
+      k:'STATION 03 · 수신',
+      h:'세션당 <span class="hot">1회(1-pending)</span> — 진짜 병목은 syscall',
+      p:'TCP는 스트림이라 순차 처리가 필수. WSARecv를 여러 개 걸면 여러 워커가 GQCS로 꺼내며 <b>순서가 꼬인다.</b> Overlapped를 늘려 IO를 키우는 건 가장 비싼 syscall 부담을 <b>가중</b>시킬 뿐 — 세션당 1개가 사실상 업계 표준.' },
+
+    { icon:'swap', nm:'큐·SwapQ', kind:'brief', weight:1,
+      k:'STATION 04 · 워커→게임 핸드오프',
+      h:'무한 드레인 금지 — <span class="hot">프레임 스냅샷</span>만 소비',
+      p:'게임 스레드가 큐를 <b>빌 때까지</b> 소비하면, 유입&gt;소비일 때 프레임 안에 못 끝나 <b>틱 지연·러버밴딩</b>이 누적된다. 프레임 진입 시점의 스냅샷만큼만 처리(스왑)하도록 상한을 둬 <b>매 프레임 로직 도달</b>을 보장. 락도 이벤트당 N회→1회/프레임.' },
+
+    { icon:'grid', nm:'게임·섹터', kind:'brief', weight:1,
+      k:'STATION 05 · 게임 로직 · 시야',
+      h:'주변 <span class="hot">9섹터</span>만 브로드캐스트',
+      p:'per-player viewlist는 매 틱 거리 재판정이 필요하다. 균일 그리드는 시야를 <b>“섹터 이동 이벤트”로 이산화</b> — 평소 계산 0, 경계를 넘는 순간에만 diff 1회. 섹터를 시야보다 약간 크게 잡아 <b>팝업(경계 누락)을 막고</b>, 약간의 잉여 송신은 감수한다.' },
+
+    { icon:'send', nm:'Send', kind:'deep', weight:2, notion:'send',
+      dk:'STATION 06 · 송신',
+      h:'워커 <span class="hot">직접 송신</span>, 대신 CAS로 네 레이스를 막는다',
+      claim:'Send 전용 스레드는 확장성·batching에 유리하지만, 현재 규모에선 <b>워커 직접 송신의 레이턴시·처리량 이점</b>이 큐/스레드 추가 오버헤드보다 크다. 대가는 다수 워커의 동시 Send 경합 — <b>1-pending + CAS</b>로 직렬화한다.',
+      tradeoff:'<code>volatile</code>로는 못 막는다 — 컴파일러의 레지스터 캐싱만 막을 뿐 <b>store buffer flush를 보장하지 않아</b> 같은 재배치가 그대로 난다.',
+      flow:[
+        {t:'prob', label:'문제 · store-load 재배치', body:'x86서 유일하게 허용되는 재배치. 완료통지 후 <code>_sending=FALSE</code>를 <b>일반 대입</b>하면 store가 버퍼에 갇힌 채 큐 사이즈를 먼저 읽어 → <b>큐에 데이터가 있는데 아무도 안 보냄.</b>'},
+        {t:'sol', label:'해결 · 배리어 + CAS 순서', steps:[
+          ['①','<code>InterlockedExchange</code>(full barrier)로 store buffer <b>즉시 flush</b>'],
+          ['②','<b>flag를 CAS로 먼저 획득</b> → 그 다음 큐 사이즈 체크 (순서 뒤집으면 크기 0 WSASend)'],
+          ['③','완료통지 후 큐 재확인 + CAS 재진입으로 <b>1-pending 유지</b> — 동일 소켓 2개 이상 WSASend 금지']
+        ]}
+      ] },
+
+    { icon:'db', nm:'DB', kind:'brief', weight:1,
+      k:'STATION 07 · 영속화',
+      h:'비동기 저장 · <span class="hot">메모리가 진실</span>',
+      p:'게임 루프는 25틱(40ms), DB 왕복은 fsync 탓에 수백 μs~ms. 틱은 <b>무엇을 저장할지만 push</b>하고 별도 워커가 저장한다. dirty 유저만 · <code>accountId%K</code>로 같은 유저는 같은 워커(순서 보장) · 과부하 시 <b>잡만 드롭</b>(위치라 허용). DB가 죽어도 서버는 안 멈춘다.' }
+  ];
+
+  var N = STATIONS.length;
+
+  // ── build nodes ──
+  var nodesEl = document.getElementById('nodes');
+  var nodeEls = [];
+  STATIONS.forEach(function(s, i){
+    var n = document.createElement('div');
+    n.className = 'node' + (s.kind==='deep' ? ' ndeep' : '');
+    n.innerHTML =
+      '<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+IC[s.icon]+'</svg></div>'+
+      '<div class="nm"><b>'+(i+1)+'</b>'+s.nm+'</div>';
+    nodesEl.appendChild(n);
+    nodeEls.push(n);
+  });
+
+  // ── build panels ──
+  var panelwrap = document.getElementById('panelwrap');
+  var panelEls = [];
+  STATIONS.forEach(function(s, i){
+    var el = document.createElement('div');
+    el.className = 'panel';
+    if(s.kind === 'brief'){
+      el.innerHTML =
+        '<div class="brief">'+
+          '<div class="bk">'+s.k+'</div>'+
+          '<h2>'+s.h+'</h2>'+
+          '<p>'+s.p+'</p>'+
+          '<span class="soon">이 정거장은 요약 · 완성본 예정</span>'+
+        '</div>';
+    } else {
+      var flowHtml = s.flow.map(function(c, idx){
+        var inner = '<div class="ct">'+(c.t==='prob'?'✕ ':'✓ ')+c.label+'</div>';
+        if(c.body) inner += '<p>'+c.body+'</p>';
+        if(c.steps) inner += c.steps.map(function(st){
+          return '<div class="step"><span class="n">'+st[0]+'</span><span>'+st[1]+'</span></div>';
+        }).join('');
+        var card = '<div class="card '+c.t+'">'+inner+'</div>';
+        if(idx < s.flow.length-1) card += '<div class="arrowdn">'+DOWN+'</div>';
+        return card;
+      }).join('');
+      el.innerHTML =
+        '<div class="deep">'+
+          '<div class="lead">'+
+            '<div class="dk">'+s.dk+'</div>'+
+            '<h2>'+s.h+'</h2>'+
+            '<p class="claim">'+s.claim+'</p>'+
+            '<div class="tradeoff">'+s.tradeoff+'</div>'+
+            '<a class="more" href="'+NOTION[s.notion]+'" target="_blank" rel="noopener">자세히 · Notion 원문 '+ARROW+'</a>'+
+          '</div>'+
+          '<div class="flow">'+flowHtml+'</div>'+
+        '</div>';
+    }
+    panelwrap.appendChild(el);
+    panelEls.push(el);
+  });
+
+  // ── dev dots ──
+  var dotsEl = document.getElementById('dots');
+  var dotEls = [];
+  STATIONS.forEach(function(s){
+    var d = document.createElement('i');
+    if(s.kind==='deep') d.className = 'ndeep';
+    dotsEl.appendChild(d); dotEls.push(d);
+  });
+
+  // ── weighted segments over [0,1] ──
+  var totalW = STATIONS.reduce(function(a,s){return a+s.weight;},0);
+  var bounds = [];               // cumulative start fraction per station
+  var acc = 0;
+  STATIONS.forEach(function(s){ bounds.push(acc/totalW); acc += s.weight; });
+  bounds.push(1);
+  // scroll-progress at which each station is "centered" (packet sits on its node there)
+  var stationCenters = STATIONS.map(function(s,i){ return (bounds[i]+bounds[i+1])/2; });
+
+  var prog = document.getElementById('prog');
+  var rail = document.querySelector('.rail');
+  var railfill = document.getElementById('railfill');
+  var packet = document.getElementById('packet');
+  var stepno = document.getElementById('stepno');
+  var tourEl = document.getElementById('tour');
+  var pipeEl = document.querySelector('.pipe');
+  var current = -1;
+  var FLAT = false;
+  var nodeCenters = [];   // each node icon's center as a fraction (0..1) of pipe width
+
+  // measure actual node-icon centers (flex space-between => not evenly 0..1)
+  function measureNodes(){
+    var pr = pipeEl.getBoundingClientRect();
+    if(!pr.width) return;
+    nodeCenters = nodeEls.map(function(n){
+      var r = n.querySelector('.ic').getBoundingClientRect();
+      return (r.left + r.width/2 - pr.left) / pr.width;
+    });
+    var c0 = nodeCenters[0], cL = nodeCenters[N-1];
+    rail.style.left = (c0*100)+'%'; rail.style.right='auto'; rail.style.width = ((cL-c0)*100)+'%';
+    railfill.style.left = (c0*100)+'%';
+  }
+
+  function render(p){
+    p = Math.max(0, Math.min(1, p));
+    // find active station by weighted bounds
+    var step = 0;
+    for(var i=0;i<N;i++){ if(p >= bounds[i] && p < bounds[i+1]){ step = i; break; } if(i===N-1) step = N-1; }
+    // packet position: piecewise so it sits exactly ON node[i] when station i is centered
+    if(!nodeCenters.length) measureNodes();
+    var px;
+    if(p <= stationCenters[0]) px = nodeCenters[0];
+    else if(p >= stationCenters[N-1]) px = nodeCenters[N-1];
+    else {
+      for(var k=0;k<N-1;k++){
+        if(p >= stationCenters[k] && p <= stationCenters[k+1]){
+          var t = (p-stationCenters[k])/(stationCenters[k+1]-stationCenters[k]);
+          px = nodeCenters[k] + (nodeCenters[k+1]-nodeCenters[k])*t;
+          break;
+        }
+      }
+    }
+    packet.style.left = (px*100) + '%';
+    railfill.style.width = ((px - nodeCenters[0])*100) + '%';
+
+    // nodes state
+    for(var j=0;j<N;j++){
+      nodeEls[j].classList.toggle('active', j===step);
+      nodeEls[j].classList.toggle('done', j<step);
+      dotEls[j].classList.toggle('on', j===step);
+    }
+
+    // panel swap
+    if(step !== current){
+      if(current>=0) panelEls[current].classList.remove('show');
+      panelEls[step].classList.add('show');
+      stepno.textContent = (step+1);
+      current = step;
+    }
+  }
+
+  function onScroll(){
+    if(FLAT) return;                      // flat preview: don't let stray resize/scroll reset the pipeline
+    // overall page progress bar
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    prog.style.width = (max>0 ? (h.scrollTop/max*100) : 0) + '%';
+
+    // tour progress: scroll within the pinned range
+    var top = tourEl.offsetTop;
+    var scrollable = tourEl.offsetHeight - window.innerHeight;
+    var p = scrollable>0 ? (window.scrollY - top)/scrollable : 0;
+    render(p);
+  }
+
+  // size the tour so each weight unit ~= UNIT vh of scroll
+  var UNIT = 0.9; // * viewport height per weight unit
+  function sizeTour(){
+    tourEl.style.height = (totalW*UNIT*100 + 100) + 'vh';
+    measureNodes();
+    onScroll();
+  }
+  sizeTour();
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', sizeTour);
+  render(0);
+
+  // ── dev hook: ?flat=N  renders station N inline at top (headless verify, no scroll) ──
+  var params = new URLSearchParams(location.search);
+  if(params.has('flat')){
+    var fi = Math.max(0, Math.min(N-1, parseInt(params.get('flat'),10)||0));
+    document.querySelector('.intro').style.display = 'none';
+    tourEl.style.height = 'auto';
+    var st = document.querySelector('.stage');
+    st.style.position = 'static'; st.style.height = 'auto';
+    panelwrap.style.position = 'static'; panelwrap.style.minHeight = '460px';
+    measureNodes();
+    FLAT = true;                          // block stray onScroll from resetting the pipeline
+    render((bounds[fi] + bounds[fi+1]) / 2);
+    panelEls.forEach(function(el, i){
+      if(i === fi){ el.style.position='static'; el.style.opacity='1'; el.style.transform='none'; el.style.pointerEvents='auto'; }
+      else { el.style.display='none'; }
+    });
+    return;
+  }
+  // ── dev hook: ?p=0.xx  jumps scroll to that tour progress (headless verify) ──
+  if(params.has('p') || params.has('step')){
+    var pp;
+    if(params.has('step')){
+      var si = Math.max(0, Math.min(N-1, parseInt(params.get('step'),10)));
+      pp = (bounds[si] + bounds[si+1]) / 2;       // middle of that station
+    } else {
+      pp = parseFloat(params.get('p'));
+    }
+    var top = tourEl.offsetTop;
+    var scrollable = tourEl.offsetHeight - window.innerHeight;
+    var prev = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior = 'auto';   // headless: jump, don't animate
+    window.scrollTo(0, Math.round(top + pp*scrollable));
+    document.documentElement.style.scrollBehavior = prev;
+    onScroll();
+  }
+})();
+</script>
+</body>
+</html>

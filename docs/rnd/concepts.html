@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>시각 언어 후보 · R&D 스크롤리텔링</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face{font-family:'Pretendard';src:url("../fonts/PretendardVariable.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url("../fonts/JetBrainsMono.woff2") format("woff2");font-weight:100 800;font-display:swap}
+:root{
+  --bg:#0d1220; --bg2:#111726; --surface:#151d2e; --surface2:#1b2436;
+  --line:#26304a; --line2:#33405f;
+  --ink:#eef1f8; --ink2:#b3bcd0; --muted:#838ea6; --faint:#525d78;
+  --hot:#46b1ff; --hot-soft:#79c7ff; --hot-deep:#2b86e0;
+  --good:#34d399; --sig:#f5b13d; --rej:#f5879c;
+  --hot-glow:rgba(70,177,255,.55);
+  --mono:'JetBrains Mono','Pretendard',ui-monospace,Consolas,monospace;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Noto Sans KR",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;
+  word-break:keep-all;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;overflow-x:clip}
+.mono{font-family:var(--mono)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,36px)}
+
+.top{padding:48px 0 8px}
+.top .eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  display:inline-flex;align-items:center;gap:.6em}
+.top .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--hot);box-shadow:0 0 0 4px rgba(62,166,255,.15)}
+.top h1{margin:.5em 0 0;font-size:clamp(1.7rem,3.4vw,2.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.15}
+.top p{margin:.7em 0 0;color:var(--ink2);max-width:64ch;font-size:1.02rem}
+.top p b{color:var(--ink);font-weight:700}
+
+/* concept card */
+.concept{padding:38px 0;border-top:1px solid var(--line)}
+.chead{display:flex;gap:16px;align-items:flex-start;margin-bottom:22px}
+.cnum{flex:0 0 auto;width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-family:var(--mono);
+  font-weight:800;font-size:1.05rem;color:var(--hot-soft);background:var(--surface);border:1px solid var(--line2)}
+.chead h3{margin:0;font-size:1.28rem;font-weight:800;letter-spacing:-.02em}
+.chead .meta{margin:5px 0 0;font-family:var(--mono);font-size:.8rem;color:var(--muted);line-height:1.55}
+.chead .meta b{color:var(--good);font-weight:700}
+.chead .meta .txt{color:var(--sig)}
+.cstage{background:linear-gradient(180deg,var(--surface2),var(--surface));border:1px solid var(--line2);border-radius:18px;
+  padding:26px clamp(18px,3vw,34px);position:relative;overflow:hidden}
+.cstage::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--hot),transparent);opacity:.4}
+
+.cap{margin-top:16px;font-family:var(--mono);font-size:.82rem;color:var(--muted);display:flex;gap:8px;align-items:baseline}
+.cap b{color:var(--ink2);font-weight:700}
+.tag{font-family:var(--mono);font-size:.7rem;font-weight:700;letter-spacing:.04em;padding:3px 9px;border-radius:999px;
+  border:1px solid var(--line2);color:var(--muted)}
+.tag.viz{color:var(--hot-soft);border-color:rgba(70,177,255,.35)}
+
+/* ===== A. sequence race ===== */
+.seq{display:grid;grid-template-columns:1fr 44px 1fr;gap:0;align-items:start}
+.lane-h{font-family:var(--mono);font-size:.82rem;font-weight:800;color:var(--ink);padding-bottom:12px;text-align:center}
+.lane-h.a{color:var(--hot-soft)} .lane-h.b{color:var(--sig)}
+.tick{grid-column:2;text-align:center;font-family:var(--mono);font-size:.74rem;color:var(--faint);padding-top:11px}
+.ev{background:var(--surface);border:1px solid var(--line2);border-radius:10px;padding:9px 12px;margin:5px 0;
+  font-size:.86rem;color:var(--ink2);line-height:1.4}
+.ev .k{font-family:var(--mono);font-size:.8rem;color:var(--hot-soft)}
+.ev.a{border-left:3px solid var(--hot)} .ev.b{border-left:3px solid var(--sig)}
+.ev.bad{border-color:rgba(245,135,156,.5);background:linear-gradient(180deg,rgba(245,135,156,.09),var(--surface))}
+.ev.bad .k{color:var(--rej)}
+.reorder{grid-column:1/2;justify-self:end;margin:2px 8px;font-family:var(--mono);font-size:.72rem;color:var(--rej);
+  display:flex;align-items:center;gap:6px}
+.seqfoot{grid-column:1/-1;margin-top:16px;display:flex;align-items:center;gap:12px;
+  background:rgba(245,135,156,.08);border:1px solid rgba(245,135,156,.3);border-radius:12px;padding:12px 16px}
+.seqfoot .x{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;background:rgba(245,135,156,.15);
+  color:var(--rej);font-weight:800;flex:0 0 auto}
+.seqfoot .t{font-weight:700;color:var(--ink)}
+.fixchip{grid-column:1/-1;margin-top:10px;align-self:start;justify-self:start;display:inline-flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:.82rem;font-weight:700;color:var(--good);background:rgba(52,211,153,.08);
+  border:1px solid rgba(52,211,153,.3);border-radius:999px;padding:6px 13px}
+
+/* ===== B. CAS gate ===== */
+.gate{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:center}
+.iotoken{width:150px;text-align:center}
+.iotoken .ring{width:110px;height:110px;margin:0 auto;border-radius:50%;display:grid;place-items:center;
+  border:3px solid var(--line2);position:relative;background:radial-gradient(circle,var(--surface2),var(--surface))}
+.iotoken .ring .n{font-size:2.4rem;font-weight:800;letter-spacing:-.04em;line-height:1}
+.iotoken .lbl{margin-top:12px;font-family:var(--mono);font-size:.76rem;color:var(--muted);letter-spacing:.08em}
+.iotoken .cas{margin-top:6px;font-family:var(--mono);font-size:.78rem;color:var(--hot-soft)}
+.branches{display:flex;flex-direction:column;gap:14px}
+.branch{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:13px;border:1px solid var(--line)}
+.branch .cond{font-family:var(--mono);font-size:.9rem;font-weight:800;flex:0 0 118px}
+.branch .arw{color:var(--faint);flex:0 0 auto}
+.branch .out{font-size:.96rem;font-weight:700}
+.branch.block{background:linear-gradient(90deg,rgba(245,135,156,.08),transparent);border-color:rgba(245,135,156,.3)}
+.branch.block .cond{color:var(--rej)} .branch.block .out{color:var(--rej)}
+.branch.pass{background:linear-gradient(90deg,rgba(52,211,153,.08),transparent);border-color:rgba(52,211,153,.3)}
+.branch.pass .cond{color:var(--good)} .branch.pass .out{color:var(--good)}
+.branch .out small{display:block;color:var(--muted);font-weight:500;font-size:.8rem;margin-top:2px}
+
+/* ===== C. timing wheel ===== */
+.wheelrow{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center}
+.wheel svg{display:block}
+.wnote{display:flex;flex-direction:column;gap:12px}
+.wnote .it{display:flex;gap:11px;align-items:flex-start;font-size:.92rem;color:var(--ink2)}
+.wnote .it .d{width:11px;height:11px;border-radius:50%;flex:0 0 auto;margin-top:5px}
+.wnote .it b{color:var(--ink);font-weight:700}
+
+/* ===== D. sector grid ===== */
+.sectorrow{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(6,46px);grid-template-rows:repeat(6,46px);gap:5px}
+.cell{border-radius:7px;background:var(--surface);border:1px solid var(--line)}
+.cell.aoi{background:linear-gradient(180deg,rgba(70,177,255,.16),rgba(70,177,255,.05));border-color:rgba(70,177,255,.4)}
+.cell.me{position:relative;background:linear-gradient(180deg,rgba(70,177,255,.28),rgba(70,177,255,.1));border-color:var(--hot)}
+.cell.me::after{content:"";position:absolute;inset:0;margin:auto;width:12px;height:12px;border-radius:50%;
+  background:var(--hot-soft);box-shadow:0 0 12px 3px var(--hot-glow)}
+.snote{display:flex;flex-direction:column;gap:13px}
+.snote .big{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.snote .big .hot{color:var(--hot-soft)}
+.snote .sub{color:var(--ink2);font-size:.95rem;line-height:1.6}
+.snote .sub b{color:var(--ink);font-weight:700}
+
+/* ===== E. before / after ===== */
+.ba{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:stretch}
+.bapanel{padding:6px 4px}
+.bapanel .h{font-family:var(--mono);font-size:.78rem;font-weight:800;letter-spacing:.04em;margin-bottom:12px;
+  display:inline-flex;align-items:center;gap:7px;padding:4px 11px;border-radius:999px}
+.bapanel.bad .h{color:var(--rej);background:rgba(245,135,156,.1);border:1px solid rgba(245,135,156,.3)}
+.bapanel.good .h{color:var(--good);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3)}
+.qbox{display:flex;gap:5px;margin:12px 0}
+.qbox i{width:26px;height:26px;border-radius:6px;background:var(--surface2);border:1px solid var(--line2);display:grid;place-items:center;
+  font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.qbox i.full{background:rgba(70,177,255,.14);border-color:var(--hot);color:var(--hot-soft)}
+.flagline{font-family:var(--mono);font-size:.84rem;margin:10px 0;color:var(--ink2)}
+.sendarw{display:flex;align-items:center;gap:8px;font-weight:700;margin-top:10px}
+.sendarw.no{color:var(--rej)} .sendarw.yes{color:var(--good)}
+.badiv{width:1px;background:var(--line2);margin:0 clamp(18px,3vw,34px)}
+
+/* ===== F. cost bars ===== */
+.bars{display:flex;flex-direction:column;gap:18px}
+.bar{display:grid;grid-template-columns:130px 1fr auto;gap:16px;align-items:center}
+.bar .name{font-family:var(--mono);font-size:.86rem;color:var(--ink2)}
+.bar .track{height:26px;border-radius:8px;background:var(--surface);overflow:hidden;border:1px solid var(--line)}
+.bar .fill{height:100%;border-radius:7px}
+.bar .val{font-family:var(--mono);font-weight:800;font-size:1.05rem;white-space:nowrap}
+.bar.b1 .fill{width:6%;background:linear-gradient(90deg,var(--hot-deep),var(--hot))} .bar.b1 .val{color:var(--hot-soft)}
+.bar.b2 .fill{width:24%;background:linear-gradient(90deg,var(--sig),#f8cd83)} .bar.b2 .val{color:var(--sig)}
+.bar.b3 .fill{width:100%;background:linear-gradient(90deg,var(--rej),#f7a9b7)} .bar.b3 .val{color:var(--rej)}
+.barsfoot{margin-top:18px;font-size:1.05rem;font-weight:700;color:var(--ink);text-align:center}
+.barsfoot .hot{color:var(--hot-soft)}
+
+@media(max-width:720px){
+  .gate,.wheelrow,.sectorrow{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:none}
+  .cell{aspect-ratio:1}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <span class="eyebrow"><span class="dot"></span>Visual Language · 후보 6종</span>
+    <h1>정거장을 그림으로 — 시각 언어 후보</h1>
+    <p>같은 설계 내용을 <b>글 대신 그림</b>으로 보여주는 방식들입니다. 각 카드가 하나의 시각 언어예요.
+      스크롤 페이지에선 정지 그림이 아니라 <b>스크롤에 맞춰 하나씩 그려지며</b> 움직입니다(아래는 정지 미리보기).
+      마음에 드는 결을 고르시면 8정거장 전체에 적용합니다.</p>
+  </div>
+</header>
+
+<main class="wrap" id="main">
+
+  <!-- A. sequence race -->
+  <section class="concept" data-c="0">
+    <div class="chead">
+      <span class="cnum">A</span>
+      <div>
+        <h3>시퀀스 레이스 다이어그램</h3>
+        <p class="meta">적합: 동기화 정거장(Send·세션 ABA) · <span class="txt">글 최소</span> · 스크롤 시 이벤트가 한 줄씩 떨어짐</p>
+      </div>
+    </div>
+    <div class="cstage">
+      <div class="seq">
+        <div class="lane-h a">Thread A · 완료통지</div>
+        <div></div>
+        <div class="lane-h b">Thread B · 새 Send</div>
+
+        <div class="ev a"><span class="k">_sending = FALSE</span><br>store 버퍼에 대기</div>
+        <div class="tick">1</div>
+        <div></div>
+
+        <div class="ev a bad"><span class="k">GetDataSize() → 0</span><br>store보다 먼저 읽음</div>
+        <div class="tick">2</div>
+        <div class="reorder">◀ store-load 재배치</div>
+
+        <div></div>
+        <div class="tick">3</div>
+        <div class="ev b">큐에 <span class="k">Enqueue</span></div>
+
+        <div></div>
+        <div class="tick">4</div>
+        <div class="ev b bad"><span class="k">_sending → TRUE</span><br>A의 store 아직 안 보임</div>
+
+        <div></div>
+        <div class="tick">5</div>
+        <div class="ev b">“전송중” 판단 → 안 보냄</div>
+
+        <div class="seqfoot"><span class="x">✕</span><span class="t">큐에 데이터가 있는데 아무도 안 보냄</span></div>
+        <div class="fixchip">✓ 해결 &nbsp;InterlockedExchange = full barrier</div>
+      </div>
+      <div class="cap"><span class="tag viz">다이어그램</span><b>글자 최소</b> · 두 스레드가 어긋나는 순간을 눈으로 추적</div>
+    </div>
+  </section>
+
+  <!-- B. CAS gate -->
+  <section class="concept" data-c="1">
+    <div class="chead">
+      <span class="cnum">B</span>
+      <div>
+        <h3>게이트 / 상태 관문</h3>
+        <p class="meta">적합: CAS·플래그 정거장(세션 ABA) · <span class="txt">글 최소</span> · 스크롤 시 스레드가 관문을 통과/차단</p>
+      </div>
+    </div>
+    <div class="cstage">
+      <div class="gate">
+        <div class="iotoken">
+          <div class="ring"><span class="n">0</span></div>
+          <div class="lbl">IOCount</div>
+          <div class="cas mono">CAS(&io, +1)</div>
+        </div>
+        <div class="branches">
+          <div class="branch block">
+            <span class="cond">== 0</span>
+            <span class="arw">→</span>
+            <span class="out">차단 <small>이미 해제된 세션 · 좀비 참조 원천 봉쇄</small></span>
+          </div>
+          <div class="branch pass">
+            <span class="cond">≥ 1</span>
+            <span class="arw">→</span>
+            <span class="out">통과 <small>pin 획득 · 안전하게 세션 사용</small></span>
+          </div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag viz">스키매틱</span><b>“확인과 증가 사이 틈”</b>을 관문 하나로 시각화</div>
+    </div>
+  </section>
+
+  <!-- C. timing wheel -->
+  <section class="concept" data-c="2">
+    <div class="chead">
+      <span class="cnum">C</span>
+      <div>
+        <h3>자료구조 시각화 — 타이밍 휠</h3>
+        <p class="meta">적합: Timing Wheel·세션 배열 정거장 · <span class="txt">글 거의 없음</span> · 커서가 시계처럼 회전</p>
+      </div>
+    </div>
+    <div class="cstage">
+      <div class="wheelrow">
+        <div class="wheel">
+          <svg width="220" height="220" viewBox="0 0 220 220">
+            <circle cx="110" cy="110" r="86" fill="none" stroke="#26304a" stroke-width="2"/>
+            <!-- slot ticks (13) -->
+            <g id="ticks"></g>
+            <!-- session node on slot 6 -->
+            <circle id="snode" r="9" fill="#79c7ff"/>
+            <!-- cursor -->
+            <g id="cursor"></g>
+            <text x="110" y="106" text-anchor="middle" fill="#838ea6" font-family="JetBrains Mono,monospace" font-size="11">cursor</text>
+            <text x="110" y="122" text-anchor="middle" fill="#eef1f8" font-family="JetBrains Mono,monospace" font-size="13" font-weight="700">tick 5s</text>
+          </svg>
+        </div>
+        <div class="wnote">
+          <div class="it"><span class="d" style="background:#79c7ff"></span><span><b>세션 노드</b>가 슬롯에 매달림 — 한 바퀴 돌면 타임아웃(60s)</span></div>
+          <div class="it"><span class="d" style="background:#f5b13d"></span><span><b>Refresh</b>가 오면 노드를 현재 커서 슬롯으로 이동 → 만료 리셋</span></div>
+          <div class="it"><span class="d" style="background:#34d399"></span><span>tick당 O(1) · 세션 수 100만이어도 비용 안 늘어남</span></div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag viz">라이브 구조</span><b>움직임이 곧 설명</b> · 회전만 봐도 원리가 읽힘</div>
+    </div>
+  </section>
+
+  <!-- D. sector grid -->
+  <section class="concept" data-c="3">
+    <div class="chead">
+      <span class="cnum">D</span>
+      <div>
+        <h3>자료구조 시각화 — 섹터 그리드 AOI</h3>
+        <p class="meta">적합: 섹터/시야 정거장 · <span class="txt">글 거의 없음</span> · 플레이어 이동 시 9섹터가 따라 빛남</p>
+      </div>
+    </div>
+    <div class="cstage">
+      <div class="sectorrow">
+        <div class="grid" id="grid"></div>
+        <div class="snote">
+          <div class="big">브로드캐스트 대상 = <span class="hot">주변 9섹터</span></div>
+          <div class="sub">전체 존이 아니라 <b>내 칸 + 이웃 8칸</b>에게만 송신.
+            시야는 “섹터 이동 이벤트”로 <b>이산화</b> — 평소 계산 0, 경계 넘을 때만 diff 1회.</div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag viz">라이브 구조</span><b>공간 개념</b>을 격자로 직접 보여줌</div>
+    </div>
+  </section>
+
+  <!-- E. before / after -->
+  <section class="concept" data-c="4">
+    <div class="chead">
+      <span class="cnum">E</span>
+      <div>
+        <h3>Before / After 대비</h3>
+        <p class="meta">적합: 모든 “문제→해결” 정거장 · <span class="txt">글 최소</span> · 스크롤 시 오른쪽으로 뒤집힘</p>
+      </div>
+    </div>
+    <div class="cstage">
+      <div class="ba">
+        <div class="bapanel bad">
+          <span class="h">✕ 문제</span>
+          <div class="qbox"><i class="full">P</i><i class="full">P</i><i>·</i><i>·</i></div>
+          <div class="flagline">sending = <span style="color:var(--muted)">false</span></div>
+          <div class="sendarw no">✕ &nbsp;아무도 WSASend 안 함</div>
+        </div>
+        <div class="badiv"></div>
+        <div class="bapanel good">
+          <span class="h">✓ 해결</span>
+          <div class="qbox"><i class="full">P</i><i class="full">P</i><i>·</i><i>·</i></div>
+          <div class="flagline">CAS(false→true) <span style="color:var(--good)">성공</span></div>
+          <div class="sendarw yes">→ &nbsp;WSASend 재진입 (1-pending)</div>
+        </div>
+      </div>
+      <div class="cap"><span class="tag viz">대비</span><b>같은 상태, 다른 결말</b> · 좌우로 문제/해결을 나란히</div>
+    </div>
+  </section>
+
+  <!-- F. cost bars -->
+  <section class="concept" data-c="5">
+    <div class="chead">
+      <span class="cnum">F</span>
+      <div>
+        <h3>비용 비교 바 / 거대 숫자</h3>
+        <p class="meta">적합: 트레이드오프·수치 정거장 · <span class="txt">글 최소</span> · 스크롤 시 바가 차오름</p>
+      </div>
+    </div>
+    <div class="cstage">
+      <div class="bars">
+        <div class="bar b1"><span class="name">atomic 연산</span><div class="track"><div class="fill"></div></div><span class="val">~20–100 cyc</span></div>
+        <div class="bar b2"><span class="name">syscall</span><div class="track"><div class="fill"></div></div><span class="val">~1–2k cyc</span></div>
+        <div class="bar b3"><span class="name">네트워크 대기</span><div class="track"><div class="fill"></div></div><span class="val">~10k+ cyc</span></div>
+      </div>
+      <div class="barsfoot">그래서 atomic은 <span class="hot">안전을 살 값어치</span>가 있다</div>
+      <div class="cap"><span class="tag viz">데이터-viz</span><b>“얼마나 싼가”</b>를 한눈에 · 근거가 숫자로 남음</div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+(function(){
+  var NS='http://www.w3.org/2000/svg';
+  // timing wheel geometry
+  var cx=110, cy=110, R=86, slots=13, cur=3, sessionSlot=6;
+  var ticks=document.getElementById('ticks');
+  if(ticks){
+    for(var i=0;i<slots;i++){
+      var a=(i/slots)*Math.PI*2 - Math.PI/2;
+      var x=cx+Math.cos(a)*R, y=cy+Math.sin(a)*R;
+      var c=document.createElementNS(NS,'circle');
+      c.setAttribute('cx',x); c.setAttribute('cy',y); c.setAttribute('r', i===sessionSlot?0:4);
+      c.setAttribute('fill', i===cur? '#f5b13d' : '#33405f');
+      ticks.appendChild(c);
+    }
+    // session node
+    var sa=(sessionSlot/slots)*Math.PI*2 - Math.PI/2;
+    var sn=document.getElementById('snode');
+    sn.setAttribute('cx', cx+Math.cos(sa)*R); sn.setAttribute('cy', cy+Math.sin(sa)*R);
+    // cursor hand -> current slot
+    var ca=(cur/slots)*Math.PI*2 - Math.PI/2;
+    var g=document.getElementById('cursor');
+    var line=document.createElementNS(NS,'line');
+    line.setAttribute('x1',cx); line.setAttribute('y1',cy);
+    line.setAttribute('x2', cx+Math.cos(ca)*(R-14)); line.setAttribute('y2', cy+Math.sin(ca)*(R-14));
+    line.setAttribute('stroke','#f5b13d'); line.setAttribute('stroke-width','2.5'); line.setAttribute('stroke-linecap','round');
+    g.appendChild(line);
+    // refresh arc arrow (slot0 -> slot6) hint
+    var a0=(0/slots)*Math.PI*2-Math.PI/2;
+    var d0x=cx+Math.cos(a0)*(R+16), d0y=cy+Math.sin(a0)*(R+16);
+    var t=document.createElementNS(NS,'text');
+    t.setAttribute('x', cx+Math.cos(sa)*(R+20)); t.setAttribute('y', cy+Math.sin(sa)*(R+20)+4);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('fill','#79c7ff');
+    t.setAttribute('font-family','JetBrains Mono,monospace'); t.setAttribute('font-size','10'); t.textContent='세션';
+    ticks.parentNode.appendChild(t);
+  }
+
+  // sector grid 6x6, center player + 9-sector AOI
+  var grid=document.getElementById('grid');
+  if(grid){
+    var me={x:2,y:3};
+    for(var yy=0;yy<6;yy++)for(var xx=0;xx<6;xx++){
+      var d=document.createElement('div'); d.className='cell';
+      if(xx===me.x&&yy===me.y) d.className='cell me';
+      else if(Math.abs(xx-me.x)<=1&&Math.abs(yy-me.y)<=1) d.className='cell aoi';
+      grid.appendChild(d);
+    }
+  }
+
+  // ?only=N : isolate one concept at top (headless preview)
+  var only=new URLSearchParams(location.search).get('only');
+  if(only!==null){
+    document.querySelectorAll('.concept').forEach(function(s){
+      if(s.getAttribute('data-c')!==String(only)) s.style.display='none';
+    });
+    document.querySelector('.top').style.display='none';
+  }
+})();
+</script>
+</body>
+</html>

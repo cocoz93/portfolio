@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MMO 서버 R&D · 주우진 — 병목 개선</title>
+<meta name="description" content="IOCP 기반 MMO 서버 R&D. 맵당 동접 4,000, 실측(Prometheus/Grafana)으로 채택·기각한 병목 개선. 설계·구현, 병목 개선, 더미 구현.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="MMO 서버 R&D · 주우진">
+<meta property="og:description" content="IOCP MMO 서버, 동접 4,000. 실측 기반 병목 개선 R&D.">
+<meta property="og:url" content="https://cocoz93.github.io/mmo/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8F%AD%3C/text%3E%3C/svg%3E">
+<style>
+@font-face{font-family:'Pretendard'; font-style:normal; font-weight:45 920; font-display:swap;
+  src:url("data:font/woff2;base64,__PRETENDARD_WOFF2_BASE64__") format("woff2")}
+@font-face{font-family:'JetBrains Mono'; font-style:normal; font-weight:400 700; font-display:swap;
+  src:url("data:font/woff2;base64,__JBMONO_WOFF2_BASE64__") format("woff2")}
+:root{
+  --bg:#0d1220; --ink:#eef2fb; --mut:#8496b3; --dim:#5d6c85;
+  --panel:#131a26; --line:#28324a;
+  --net:#6cc7ff; --game:#ffb648; --store:#57d694;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Consolas,"D2Coding",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6;
+  -webkit-font-smoothing:antialiased; word-break:keep-all; font-variant-numeric:tabular-nums;
+  background-image:radial-gradient(rgba(108,199,255,.05) 1px, transparent 1px); background-size:26px 26px}
+.wrap{max-width:1280px; margin:0 auto; padding:26px 24px 40px}
+
+/* ── 헤더 ── */
+.head .eb{font-family:var(--mono); font-size:.72rem; letter-spacing:.22em; color:var(--net); text-transform:uppercase}
+.head h1{margin:8px 0 0; font-size:2rem; font-weight:800; letter-spacing:-.03em; text-wrap:balance}
+.head h1 .g{color:var(--game)}
+
+/* ── 범례 ── */
+.legend{display:flex; flex-wrap:wrap; gap:8px 18px; margin:18px 0 4px; font-size:.8rem; color:var(--mut)}
+.legend .lg{display:inline-flex; align-items:center; gap:7px}
+.legend .lg i{width:22px; height:7px; border-radius:4px}
+.legend .lg.recv i{background:var(--net)} .legend .lg.send i{background:var(--game)} .legend .lg.store i{background:var(--store)}
+.legend .lg.hub i{width:13px; height:13px; border-radius:50%; border:2.5px solid #cfe0f2; background:var(--bg)}
+.legend .tip{margin-left:auto; font-family:var(--mono); font-size:.72rem; color:var(--dim)}
+
+/* ── 무대 ── */
+.stage{position:relative; margin-top:12px; border:1px solid var(--line); border-radius:18px; overflow:hidden;
+  background:linear-gradient(180deg,#0c1120,#0a0e1a);
+  box-shadow:0 40px 80px -50px rgba(0,0,0,.8), inset 0 1px 0 rgba(255,255,255,.03)}
+#scene{display:block; width:100%; height:auto}
+#scene .top{transition:filter .15s}
+#scene .bld{cursor:pointer}
+#scene .bld:hover .top{filter:brightness(1.12)}
+#scene .bld:focus-visible{outline:none}
+#scene .bld:focus-visible .fx{opacity:1}
+.fx{opacity:0}
+
+/* ── 정보 카드 (빈 우하단으로) ── */
+.card{position:absolute; right:16px; bottom:16px; width:322px; max-height:calc(100% - 32px); overflow-y:auto; z-index:6;
+  background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; color:#dbe4f2;
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.7); display:none}
+.card.on{display:block}
+.card .x{position:absolute; top:11px; right:11px; width:27px; height:27px; border:1px solid #33405a; border-radius:8px;
+  color:#9fb0cc; display:grid; place-items:center; font-size:.85rem; background:#1a2333; cursor:pointer}
+.card .x:hover{border-color:var(--net)}
+.card .k{font-family:var(--mono); font-size:.62rem; letter-spacing:.11em; color:var(--mut); text-transform:uppercase}
+.card h3{margin:7px 0 0; font-size:1.1rem; font-weight:800}
+.card h3 span{color:var(--mut); font-weight:700; font-size:.9rem; margin-left:5px}
+.card .lead{margin:9px 0 0; font-size:.82rem; color:#b7c4da; line-height:1.62}
+.card .lb{font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; color:var(--mut); margin:13px 0 4px; text-transform:uppercase}
+.card .it{border-top:1px solid #232e42; padding:6px 1px; font-size:.79rem; font-weight:600; display:flex; gap:8px; align-items:baseline}
+.card .rs{font-family:var(--mono); font-size:.57rem; font-weight:800; padding:1px 6px; border-radius:999px; border:1.4px solid; flex:0 0 auto}
+.card .rs.ok{color:var(--store); border-color:#2e7d54}
+.card .rs.rj{color:#ff9a8d; border-color:#8d4a42}
+.card .none{font-size:.8rem; color:var(--dim)}
+
+.hint{position:absolute; left:16px; top:14px; z-index:4; font-family:var(--mono); font-size:.7rem; color:var(--dim)}
+
+.foot{margin-top:16px; display:flex; gap:14px 26px; flex-wrap:wrap; font-size:.83rem}
+.foot .pf{color:#a7b6cf} .foot .pf b{color:var(--store); font-weight:800}
+.foot .cf{color:var(--mut)} .foot .cf b{color:var(--game); font-weight:800}
+
+/* ── 탭 네비 ── */
+.tabs{display:flex; gap:2px; margin:22px 0 0; border-bottom:1px solid var(--line); flex-wrap:wrap}
+.tab{padding:11px 18px; font-size:.94rem; font-weight:700; color:var(--mut); background:none; border:none;
+  border-bottom:2px solid transparent; margin-bottom:-1px; cursor:pointer; transition:color .15s, border-color .15s}
+.tab:hover{color:var(--ink)}
+.tab.act{color:var(--ink); border-bottom-color:var(--net)}
+.tab:focus-visible{outline:2px solid var(--net); outline-offset:-2px; border-radius:6px}
+.panel{margin-top:18px}
+.panel[hidden]{display:none}
+.panel .lead{color:var(--mut); font-size:.95rem; max-width:74ch; margin:0 0 14px}
+.panel .lead b{color:var(--ink); font-weight:700}
+
+/* ── 병목 개선 카드 ── */
+.exp-h{margin:6px 0 10px; font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mut)}
+.exp-h .cnt{color:var(--ink); margin-left:4px}
+.exp-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:12px; margin-bottom:22px}
+.exp{border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#0f1626}
+.exp .top{display:flex; align-items:center; gap:8px}
+.exp .rs{font-family:var(--mono); font-size:.57rem; font-weight:800; padding:2px 7px; border-radius:999px; border:1.4px solid; flex:0 0 auto}
+.exp .rs.ok{color:var(--store); border-color:#2e7d54}
+.exp .rs.rj{color:#ff9a8d; border-color:#8d4a42}
+.exp .nm{font-weight:800; font-size:.98rem}
+.exp .r{font-size:1.5rem; font-weight:800; letter-spacing:-.02em; margin:9px 0 3px; color:var(--store)}
+.exp.rj .r{color:#ff9a8d; font-size:1.05rem}
+.exp .m{font-size:.82rem; color:#b7c4da; line-height:1.55}
+.exp .ex{margin-top:8px; font-family:var(--mono); font-size:.68rem; color:var(--mut)}
+
+/* ── 더미·기타 리스트 ── */
+.note-list{display:grid; gap:10px; max-width:82ch}
+.note{border:1px solid var(--line); border-radius:12px; padding:13px 15px; background:#0f1626}
+.note .h{font-weight:800; font-size:.95rem; margin-bottom:4px; color:var(--ink)}
+.note .d{font-size:.84rem; color:#b7c4da; line-height:1.62}
+.note .d b{color:var(--ink)}
+.links{display:flex; flex-wrap:wrap; gap:10px; margin-top:14px}
+.links a{font-family:var(--mono); font-size:.82rem; color:var(--net); border:1px solid var(--line); border-radius:10px; padding:9px 14px; text-decoration:none; transition:border-color .15s}
+.links a:hover{border-color:var(--net)}
+
+@media(max-width:680px){ .card{width:calc(100% - 32px); right:16px; left:16px} .head h1{font-size:1.6rem} }
+@media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="head">
+    <div class="eb">Personal R&D · IOCP MMO Server</div>
+    <h1>맵당 동접 <span class="g">4,000</span>, 병목 개선 R&D</h1>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="섹션">
+    <button class="tab act" data-tab="build" role="tab" aria-selected="true">설계 및 구현</button>
+    <button class="tab" data-tab="bneck" role="tab" aria-selected="false">병목 개선</button>
+    <button class="tab" data-tab="dummy" role="tab" aria-selected="false">더미 구현</button>
+    <button class="tab" data-tab="misc" role="tab" aria-selected="false">기타 참고</button>
+  </nav>
+
+  <section class="panel act" id="p-build" role="tabpanel">
+    <p class="lead"><b>패킷이 흐르는 공장</b> — 서버 구조를 위에서 내려다봅니다. 왼쪽 아래(접속)에서 오른쪽 위(저장)로 흐르고, 건물을 누르면 그 부분의 설계·구현 상세가 열립니다.</p>
+
+  <div class="legend">
+    <span class="lg recv"><i></i>수신 recv</span>
+    <span class="lg send"><i></i>응답 send</span>
+    <span class="lg store"><i></i>저장 DB</span>
+    <span class="lg hub"><i></i>환승 = 스레드 경계 (큐 인계)</span>
+    <span class="tip">▸ 건물 클릭 · 화물 흐르는 중</span>
+  </div>
+
+  <div class="stage" id="stage">
+    <svg id="scene" viewBox="82 12 792 420" role="img" aria-label="아이소메트릭 서버 구조도"></svg>
+    <div class="card" id="card"><button class="x" data-close aria-label="닫기">✕</button><div id="cardbd"></div></div>
+    <div class="hint">시간 흐름 = 왼쪽 아래 → 오른쪽 위</div>
+  </div>
+
+  <div class="foot">
+    <span class="pf"><b>읽는 법</b> 왼쪽 아래(접속) → 중앙(게임 루프 단일 코어) → 오른쪽 위(저장). 응답은 앞 레인으로 접속 군중에게 되돌아갑니다.</span>
+    <span class="cf"><b>한 줄</b> 단일 스레드가 섬처럼 홀로 서고, 네트워크·저장 워커가 그 코어의 시간을 지키기 위해 주변을 돕니다.</span>
+  </div>
+  </section>
+
+  <section class="panel" id="p-bneck" role="tabpanel" hidden>
+    <p class="lead">가설을 세우고 <b>실측으로 채택/기각</b>한 병목 개선 실험입니다. 수치는 전부 Prometheus/Grafana 실측값 — 실측 없이는 병목이라 단정하지 않았습니다.</p>
+    <div id="bneck-body"></div>
+  </section>
+
+  <section class="panel" id="p-dummy" role="tabpanel" hidden>
+    <p class="lead">동접 4,000을 만드는 <b>부하 테스트 더미 클라이언트</b>와 측정 방법. "주장 대신 실측"의 실측이 여기서 나옵니다.</p>
+    <div class="note-list">
+      <div class="note"><div class="h">open-loop 부하 주입</div><div class="d">응답을 기다리지 않고 요청을 계속 밀어넣습니다. RTT가 올라가도 부하는 유지되므로 <b>RTT는 은폐지표가 아니라</b> 서버 송신 포화의 신호로 읽습니다.</div></div>
+      <div class="note"><div class="h">코어 격리 (affinity)</div><div class="d">서버는 물리코어 0–5, 더미 클라는 물리코어 6–9에 고정해 한 PC 안에서 crosstalk를 차단합니다. 반드시 <b>물리코어 단위</b>로 마스크를 잡습니다(논리코어 오독 금지).</div></div>
+      <div class="note"><div class="h">건강 판정 4종</div><div class="d"><b>loop_p99 &lt; 40ms · buffer_full = 0 · session = 목표치 · flush_backlog 선형</b> — 이 넷이 유지되는 선까지가 건강한 동접(물리코어당 ~1,375).</div></div>
+      <div class="note"><div class="h">무인 스윕 자동화</div><div class="d">WT×K 교차 스윕 · ClientCount 천장 스윕 · A/B 무인 툴(OFF/ON 리빌드 → 수집 → 비교)로 사람 개입 없이 실측 CSV를 뽑습니다.</div></div>
+    </div>
+  </section>
+
+  <section class="panel" id="p-misc" role="tabpanel" hidden>
+    <p class="lead">스택과 링크.</p>
+    <div class="note-list">
+      <div class="note"><div class="h">스택 · 계측</div><div class="d">C++17 · Windows IOCP · MySQL(비동기 저장) · Prometheus + Grafana 상시 계측(tick · CPU · 송신 지표).</div></div>
+      <div class="note"><div class="h">천장</div><div class="d">단일 게임스레드가 병목. 실측 천장 <b>동접 5,000–5,500</b> — 그 위는 멀티프로세스 스케일아웃으로.</div></div>
+    </div>
+    <div class="links">
+      <a href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">GitHub — cocoz93/MMOServer</a>
+      <a href="https://cocoz93.github.io/portfolio/" target="_blank" rel="noopener">포트폴리오</a>
+      <a href="https://app.notion.com/p/23316a0b9f59809db2e5d610a23a10a5" target="_blank" rel="noopener">기술경력서 — Notion</a>
+    </div>
+  </section>
+</div>
+
+<script>
+"use strict";
+(function(){
+const NS="http://www.w3.org/2000/svg";
+const $=s=>document.querySelector(s);
+const svg=$("#scene");
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function el(t,a,txt){const e=document.createElementNS(NS,t);if(a)for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+
+/* ─────────── 설계·실험 데이터 (실측 반영) ─────────── */
+const ND={
+  client:{nm:"클라이언트", x:"×4,000", zone:"네트워크", impl:"세션은 인덱스 슬롯으로 관리합니다. 슬롯 재사용 시 sessionId 검사로 옛 세션(ABA)을 차단합니다.",
+    docs:["세션 관리 방식과 세션 ABA 문제 해결"], bns:[]},
+  accept:{nm:"Accept", x:"×1", zone:"네트워크", impl:"수락 전담 스레드 1개. AcceptEx 대신 blocking accept를 택한 근거를 문서로 정리했습니다.",
+    docs:["AcceptThread 분리 (AcceptEx 미사용)"], bns:[]},
+  iocp:{nm:"IOCP 워커", x:"×N", zone:"네트워크", impl:"완료 통지 처리와 패킷 파싱. 워커는 파싱한 이벤트를 공유 큐에 쌓고, 게임 루프는 틱마다 std::queue::swap 한 번으로 큐를 통째로 로컬에 넘겨받아(락 1회·무복사) 락 없이 소비합니다. 세션당 I/O 1회 제한·Timing Wheel 타임아웃도 여기서 얽힙니다.",
+    docs:["세션당 Recv/Send 1회 제한","Timing Wheel (타임아웃)","Worker→Game SwapQ"], bns:[]},
+  send:{nm:"Send 워커", x:"×K", zone:"네트워크", impl:"송신 제출을 게임 틱에서 떼어 K개 워커로 분산합니다. uniqueId%K 고정 배분(sessionId 상위 인덱스 비트 누수 방지).",
+    docs:["SendThread 분리 유무와 이슈"], bns:[["ok","Send Coalescing — syscall −94%"],["ok","SendThread 분리 — p99 −56%"],["rj","SendQ LockFree — 기각"],["rj","SO_SNDBUF=0 — 기각"],["ok","WT×K 스윕 — WT4·K2"]]},
+  loop:{nm:"게임 루프", x:"×1", zone:"게임", impl:"모든 게임 로직이 도는 단일 코어. 섹터 격자 관심영역, per-player viewlist 미채택 근거가 핵심입니다.",
+    docs:["섹터/맵 크기 · viewlist 미채택 이유"], bns:[["ok","섹터 묶음 패킷 — tick p99 −83%"],["ok","멤버십 팬아웃 dedup+묶음 — −68%"],["ok","수신섹터 묶음 — 복사 −88%·게임루프 0.57→0.21코어"]]},
+  dbw:{nm:"DB 워커", x:"×1", zone:"저장", impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). accountId%K 풀로 확장 가능하며 현재 1개 운영.",
+    docs:["dirty 선별·주기 batch 저장","DB Thread 분리 및 저장 설계"], bns:[]},
+  mysql:{nm:"MySQL", x:"", zone:"저장", impl:"주기적 스냅샷 UPSERT로 영속화합니다.",
+    docs:[], bns:[]},
+  monitor:{nm:"Monitor", x:"×1", zone:"관측", impl:"각 스레드가 Interlocked로 갱신하는 카운터를 별도 HTTP 스레드가 /metrics로 노출합니다. Prometheus가 수집하고 Grafana로 상시 관측 — '주장 대신 실측'의 출처입니다. 패킷 경로 밖 사이드카라 흐름과 분리돼 있습니다.",
+    docs:["Prometheus /metrics 익스포터","tick·CPU·송신 지표 상시 계측"], bns:[]},
+};
+
+/* ─────────── 아이소메트릭 투영 (fan-up: 아래→위 상승) ─────────── */
+const KX=0.86, KY=0.46, OX=178, OY=430;
+const px=(u,v)=>OX+(u-v)*KX;           /* 가로: u 오른쪽 / v 왼쪽 (이전과 동일) */
+const py=(u,v,z)=>OY-(u+v)*KY-z;       /* 세로: u+v 커질수록 위로 상승, z 위 */
+const P=(u,v,z)=>px(u,v).toFixed(1)+","+py(u,v,z).toFixed(1);
+function poly(pts,fill,extra){return el("polygon",Object.assign({points:pts.map(p=>P(p[0],p[1],p[2]||0)).join(" "),fill},extra||{}));}
+/* 카메라 근접면(윗면 + u면 + v면)을 그린다 */
+function prism(g,u,v,w,d,z0,h,c){
+  const t=z0+h;
+  g.appendChild(poly([[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],c[2]));                 /* v면(오른쪽 아래 향) */
+  g.appendChild(poly([[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],c[1]));                 /* u면(왼쪽 아래 향) */
+  g.appendChild(poly([[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],c[0],
+    {class:"top",stroke:"rgba(255,255,255,.16)","stroke-width":1,"stroke-linejoin":"round"}));   /* 윗면 + 림라이트 */
+}
+
+/* 레이어 그룹 (뒤→앞) */
+const gPlat=el("g"),gShad=el("g"),gBelt=el("g"),gChipBack=el("g"),gBuild=el("g"),gFront=el("g"),gLbl=el("g"),gChip=el("g");
+[gPlat,gShad,gBelt,gChipBack,gBuild,gFront,gLbl,gChip].forEach(g=>svg.appendChild(g));   /* gChipBack: 건물 뒤 수신 칩(건물이 가림) */
+/* 애니에서 갱신하는 참조 — 타이밍휠(바늘·맥박·슬롯·신호) · SwapQ 스왑 */
+let twCursor=null, twPulse=null, twSlots=null, twSignals=null, TW=null;
+let SWAP=null;
+let dirtyCountTxt=null;
+let AOI=null;   /* 섹터 AOI 팬아웃 애니 참조 (중심 맥박 + 8방향 브로드캐스트 칩) */
+function shadow(u,v,w,d){ gShad.appendChild(el("ellipse",{cx:px(u+w/2,v+d/2),cy:py(u+w/2,v+d/2,0)+5,
+  rx:(w+d)*.38, ry:(w+d)*.12, fill:"#04060c", opacity:.55})); }
+
+/* ─────────── 색 팔레트 ─────────── */
+const NET  =["#63afe6","#1b4870","#2b6597"];   /* 윗면↑·옆면↓ 명암대비만 소폭 강화(색상 유지) — 3D 볼륨감 */
+const GAME =["#f4c862","#7d5a1c","#b3842a"];
+const STORE=["#57c492","#1b573c","#2b8156"];
+const CROWD=["#4f7cb4","#1e3a54","#2d5276"];
+const MON  =["#8b93a6","#3a3f4c","#4c5263"];   /* 관측 사이드카 — 중립 슬레이트(데이터 경로 밖) */
+const IOCPQ=["#243c5e","#0f1d31","#172a44"];   /* IOCP 완료 큐 바(트레이색) */
+const BELT =["#2a3446","#161d29","#1e2636"];
+const RRAIL=BELT[0], SRAIL=BELT[0], GRAIL=BELT[0];   /* 레일 단일색 통일(데이터색과 무관) */
+
+/* ─────────── 구역 바닥 (그룹화) — 뒤(저장)부터 ─────────── */
+function platform(u,v,w,d,top,side1,side2,tint){
+  prism(gPlat,u,v,w,d,0,9,[top,side1,side2]);
+  gPlat.appendChild(el("line",{x1:px(u+w,v),y1:py(u+w,v,9),x2:px(u+w,v+d),y2:py(u+w,v+d,9),
+    stroke:tint,"stroke-width":2,opacity:.5}));
+}
+platform(530,6,210,92,"#0f1b17","#070d0b","#0a1210","#57d694");    /* 저장 (뒤) */
+platform(406,70,66,68,"#1b1710","#0d0a05","#131009","#ffb648");    /* 게임 (섬) */
+platform(4,6,272,188,"#111a2b","#080d16","#0b111d","#6cc7ff");     /* 네트워크 (앞) */
+
+/* ─────────── 컨베이어 벨트 ─────────── */
+/* 축 방향 컨베이어(어두운 트랙 + 길 이음선). axis 'u'=가로·'v'=세로. dir·tint는 방향 셰브론 제거로 미사용(호출부 시그니처 유지) */
+function belt(axis,a0,a1,fix,dir,tint,w){
+  const SEAM=20, W=w||8, H=W/2-1, Z=9;   /* 평평한 띠(z=9, top면만) — 폭을 칩 크기에 맞춰 좁힘(12→8) */
+  const pts = axis==='u' ? [[a0,fix-W/2,Z],[a1,fix-W/2,Z],[a1,fix+W/2,Z],[a0,fix+W/2,Z]]
+                         : [[fix-W/2,a0,Z],[fix+W/2,a0,Z],[fix+W/2,a1,Z],[fix-W/2,a1,Z]];
+  gBelt.appendChild(poly(pts,tint||BELT[0]));   /* 흐름 색으로 은은하게 tint */
+  for(let c=a0+SEAM;c<a1;c+=SEAM){
+    const p1=axis==='u'?[c,fix-H]:[fix-H,c], p2=axis==='u'?[c,fix+H]:[fix+H,c];
+    gBelt.appendChild(el("line",{x1:px(p1[0],p1[1]),y1:py(p1[0],p1[1],Z+.3),x2:px(p2[0],p2[1]),y2:py(p2[0],p2[1],Z+.3),stroke:"#3a4864","stroke-width":1.3,opacity:.5}));
+  }
+}
+/* 수신(파랑) [C안]: 클라→Accept→완료 큐(가로 레일 관통)→각 워커 병렬 진입(pull)→뒤 합류 레일→공유큐 / 로컬큐→게임 드레인 */
+belt('u',86,217,44,+1,RRAIL);                                    /* 클라→Accept */
+belt('v',18,44,217,+1,RRAIL);                                    /* Accept→완료 큐 레벨로 하강 */
+belt('u',217,341,18,+1,RRAIL);                                   /* 완료 큐 관통(워커 u까지) */
+[264,286,308,330].forEach(u=>belt('v',18,37,u,+1,RRAIL,5));      /* 완료 큐 → 각 워커 병렬 진입(pull) */
+belt('u',259,341,46,+1,RRAIL);                                   /* 워커 뒤 합류(출력) 레일 */
+belt('v',46,62,341,+1,RRAIL);                                    /* 합류 → 공유큐 상승 */
+belt('u',341,383,62,+1,RRAIL);                                   /* → 공유큐(뒤·위 v=62) */
+belt('u',365,425,44,+1,RRAIL); belt('v',44,84,425,+1,RRAIL);     /* 로컬큐(앞·아래 v=44) → 게임 드레인(게임 왼쪽-앞으로) */
+/* 응답(주황): 게임 앞 변에서 나와 2 레인으로 분기(v=132·158)→각 Send 박스 유입→앞 레인 합류→접속 군중(클라 닿으면 페이드) */
+belt('v',126,158,440,+1,SRAIL);                                    /* 게임 앞 변에서 두 레인으로 분기(둘 다 게임에 접함) */
+belt('u',234,440,132,+1,SRAIL); belt('u',234,440,158,+1,SRAIL);   /* 게임→각 Send 박스 2 레인 */
+belt('v',132,166,234,+1,SRAIL); belt('u',85,234,166,+1,SRAIL); belt('v',100,166,85,+1,SRAIL);   /* Send 박스0 → 크라우드(레인0, 개별 도달) */
+belt('v',158,184,234,+1,SRAIL); belt('u',72,234,184,+1,SRAIL); belt('v',116,184,72,+1,SRAIL);   /* Send 박스1 → 크라우드(레인1, 개별 도달) */
+/* 저장(초록): 게임 뒤-오른쪽 변 →(가로)→ 코너(516,96) →(세로)→ dirty →(가로)→ DB·MySQL. 배치 정사각형 이동용으로 레일 확대(w=20) */
+belt('u',462,526,96,+1,GRAIL,8); belt('v',44,96,526,-1,GRAIL,8); belt('u',526,670,44,+1,GRAIL,20);   /* 게임→dirty=낱개 칩(8) / dirty→DB·MySQL=배치 크레이트(20) */
+/* ㄱ자 코너 채움 — 가로·세로 레일이 직각으로 만나는 바깥 모서리 노치를 레일 색 정사각 타일로 메움 */
+function beltCorner(u,v,W,c){ gBelt.appendChild(poly([[u-W/2,v-W/2,9],[u+W/2,v-W/2,9],[u+W/2,v+W/2,9],[u-W/2,v+W/2,9]],c||BELT[0])); }
+beltCorner(425,44,8,RRAIL); beltCorner(217,44,8,RRAIL); beltCorner(217,18,8,RRAIL); beltCorner(341,46,8,RRAIL); beltCorner(341,62,8,RRAIL); beltCorner(234,166,8,SRAIL); beltCorner(85,166,8,SRAIL); beltCorner(234,184,8,SRAIL); beltCorner(72,184,8,SRAIL); beltCorner(526,96,8,GRAIL); beltCorner(526,44,20,GRAIL);
+/* SwapQ — 워커(네트워크 스레드)가 '공유 큐'에 이벤트를 건건이 쌓고, 게임 틱마다 std::queue::swap
+   한 번으로 쌓인 큐를 통째로 '로컬 큐'에 넘긴다(락 1회·무복사). 게임은 로컬 큐를 락 없이 소비. */
+function swapGate(uS,v){
+  const gv=18;                                        /* 세로 스택. 위치 스왑: 공유(뒤·위 v+gv, 유입) → 로컬(앞·아래 v, 게임 드레인) */
+  const RW=15, RD=6;                                  /* 트레이 반변(u축 길게·v축 짧게) */
+  const TRAY=["#243c5e","#0f1d31","#172a44"];
+  function tray(u,vv,lab,ldy){
+    prism(gFront,u-RW,vv-RD,2*RW,2*RD,9,1.6,TRAY);    /* 얕은 트레이(큐 슬롯) */
+    gFront.appendChild(el("polygon",{points:[[u-RW,vv-RD],[u+RW,vv-RD],[u+RW,vv+RD],[u-RW,vv+RD]].map(p=>P(p[0],p[1],11)).join(" "),
+      fill:"none",stroke:"#41669c","stroke-width":1,"stroke-dasharray":"3 3",opacity:.55}));
+    gFront.appendChild(el("text",{x:px(u,vv),y:py(u,vv,11)+ldy,"text-anchor":"middle","font-size":"8.5","font-weight":"700",fill:"#93a9cd"},lab));
+  }
+  tray(uS,v+gv,"공유 큐",-15); tray(uS,v,"로컬 큐",26);   /* 세로 스택 + 위치 스왑: 공유 뒤·위 / 로컬 앞·아래 */
+  /* 스레드 경계(점선): 공유 ↔ 로컬 사이 */
+  gFront.appendChild(el("line",{x1:px(uS-RW-2,v+gv/2),y1:py(uS-RW-2,v+gv/2,10),x2:px(uS+RW+2,v+gv/2),y2:py(uS+RW+2,v+gv/2,10),
+    stroke:"#5a708f","stroke-width":1,"stroke-dasharray":"2 3",opacity:.7}));
+  /* 타이틀 + 캡션 */
+  const lx=px(uS+RW+6,v+gv), ly=py(uS+RW+6,v+gv,16);
+  gFront.appendChild(el("text",{x:lx+8,y:ly-5,"font-size":"10.5","font-weight":"800",fill:"#cfe0f2","font-family":"var(--mono)"},"SwapQ"));
+  gFront.appendChild(el("text",{x:lx+8,y:ly+6,"font-size":"8.5",fill:"#93a9cd"},"통째 스왑 · 락 1회"));
+  SWAP={uS:uS,v:v,gv:gv};
+}
+/* dirty 수집함 — 변경분(dirty)만 담고, 작은 사각형이 4×4 격자를 채워 정사각형 → 주기마다 통째 flush */
+function dirtyTank(u,v){
+  const H=18, TZ=14;   /* 수집함 반변(4×4·BC=8 격자 대응) + 윗면 높이 z=14 — 더 큼직·3D 두께(높이5)로 옆 도형들과 통일 */
+  prism(gFront,u-H,v-H,2*H,2*H,9,TZ-9,["#153525","#081a10","#0d2417"]);   /* 수집 받침(3D 두께) */
+  gFront.appendChild(el("polygon",{points:[[u-H,v-H],[u+H,v-H],[u+H,v+H],[u-H,v+H]].map(p=>P(p[0],p[1],TZ+.5)).join(" "),
+    fill:"none",stroke:"#2e7d54","stroke-width":1,"stroke-dasharray":"3 3",opacity:.55}));   /* 채울 목표 정사각형(윗면) */
+  const gx=px(u+H,v), gy=py(u+H,v,TZ+.5);
+  gFront.appendChild(el("text",{x:gx+8,y:gy-2,"font-size":"10.5","font-weight":"800",fill:"#57d694","font-family":"var(--mono)"},"dirty 수집함"));
+  gFront.appendChild(el("text",{x:gx+8,y:gy+9,"font-size":"8.5",fill:"#8496b3"},"모아 batch flush"));
+  /* 누적 개수 카운터 — 채운 셀 수를 격자 바로 위에. 프레임 루프에서 batchN으로 갱신 */
+  dirtyCountTxt=el("text",{x:px(u,v),y:py(u,v,TZ+9),"text-anchor":"middle","font-size":"10.5","font-weight":"800",fill:"#8fe3b6","font-family":"var(--mono)"},"");
+  gChip.appendChild(dirtyCountTxt);
+}
+swapGate(365,44);
+dirtyTank(526,44);
+
+/* ─────────── 건물(노드) ─────────── */
+function makeBld(k){ const g=el("g",{class:"bld",tabindex:"0",role:"button","aria-label":ND[k].nm});
+  g.addEventListener("click",()=>open(k));
+  g.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){e.preventDefault();open(k);} });
+  gBuild.appendChild(g); return g; }
+function focusHalo(g,u,v,w,d){ g.appendChild(el("polygon",{class:"fx",
+  points:[[u,v],[u+w,v],[u+w,v+d],[u,v+d]].map(p=>P(p[0],p[1],9)).join(" "),
+  fill:"none",stroke:"#cfe0f2","stroke-width":2,"stroke-dasharray":"4 4"})); }
+/* 노드: 프리즘들을 뒤→앞(u+v 내림, 동률 z 오름)으로 그린다 */
+function node(k,prisms,halo){ const g=makeBld(k);
+  prisms.slice().sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]) || a[4]-b[4])
+    .forEach(p=>prism(g,p[0],p[1],p[2],p[3],p[4],p[5],p[6]));
+  if(halo) focusHalo(g,halo[0],halo[1],halo[2],halo[3]); return g; }
+
+/* 그림자 먼저 */
+[[14,14,90,104],[140,33,24,22],[255,28,18,15],[277,28,18,15],[299,28,18,15],[321,28,18,15],[208,126,50,40],[414,78,50,50],[578,33,24,22],[665,22,52,42]]
+  .forEach(s=>shadow(s[0],s[1],s[2],s[3]));
+
+/* 뒤→앞(u+v 내림) 순서: mysql → dbw → loop → send → iocp → accept → client */
+node("mysql",[[665,22,52,42,9,9,STORE],[665,22,52,42,20,9,STORE],[665,22,52,42,31,9,STORE]],[665,22,52,42]);   /* 폭·높이 축소 — 게임 루프가 앵커가 되도록 비율만 조정(디스크 스택 은유 유지) */
+/* DB 워커 1개 — 저장 레일(v=44)이 관통 */
+node("dbw",[[578,33,24,22,9,22,STORE]],[578,33,24,22]);
+/* 게임 루프 — 단독 섬, 슬림 타워 + 비콘 */
+let beacon=null;
+(function(){ const g=makeBld("loop");
+  prism(g,414,78,50,50,9,56,GAME);
+  const tx=px(439,103), ty=py(439,103,65);
+  g.appendChild(el("line",{x1:tx,y1:ty,x2:tx,y2:ty-18,stroke:"#ffb648","stroke-width":2}));
+  beacon=el("circle",{cx:tx,cy:ty-22,r:4.5,fill:"#ffd88a"}); g.appendChild(beacon);
+  focusHalo(g,414,78,50,50); })();
+/* Monitor 노드 제거 — 관측 사이드카는 패킷 경로 밖이라 지도에서 생략(실측 스토리는 병목 개선·더미 구현 탭이 담당) */
+/* Send 워커 — 세로 2개(K) + 받침 플랫폼으로 묶음(풀). 게임루프 쪽 왼쪽 위로 이동(파란 플랫폼 내) */
+prism(gBelt,210,114,46,64,2,4,["#20304e","#101a2c","#16233b"]);
+node("send",[[222,122,24,20,9,22,NET],[222,148,24,20,9,22,NET]],[220,120,28,52]);
+/* IOCP 워커 [C안] — 넓은 완료 큐 바 + 납작한 4워커 한 줄(병렬). 완료 큐에서 각 워커가 당겨감. 오른쪽-아래로 빼서 배치 */
+node("iocp",[[251,12,84,11,9,4,IOCPQ],[255,28,18,15,9,13,NET],[277,28,18,15,9,13,NET],[299,28,18,15,9,13,NET],[321,28,18,15,9,13,NET]],[249,10,92,38]);
+gLbl.appendChild(el("text",{x:px(285,6),y:py(285,6,9),"text-anchor":"middle","font-size":"8.5",fill:"#8fa3c4","font-family":"var(--mono)"},"완료 큐"));
+node("accept",[[140,33,24,22,9,22,NET]],[140,33,24,22]);   /* 높이 22로 블록 3형제 통일 (클라 군중과 간격 확보 위치는 유지) */
+/* 클라이언트 군중 ×4,000 */
+(function(){ const g=makeBld("client"); const cubes=[];
+  for(let r=0;r<7;r++)for(let c=0;c<6;c++){ cubes.push([14+c*15,14+r*15,13]); }  /* 균일 높이·격자(도형 간 여유 gap) */
+  cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
+  cubes.forEach(p=>prism(g,p[0],p[1],12,12,9,p[2],CROWD)); })();
+
+/* ─── 타이밍휠 — 별도 타이머 스레드(평면 다이얼, 예전 버전). IOCP가 Recv마다 lock-free 큐로 REFRESH만 던짐 ─── */
+(function(){
+  const wu=356, wv=270;                             /* 드럼 껍데기 제거 — 바닥에 놓인 평면 시계 다이얼 */
+  const cx=px(wu,wv), cyTop=py(wu,wv,0), cyBot=cyTop;
+  const rx=39, ry=21, rix=rx-7, riy=ry-3.8;
+  const g=el("g");
+  gShad.appendChild(el("ellipse",{cx,cy:cyBot+4,rx:rx+3,ry:ry+2,fill:"#05070d",opacity:.42}));
+  /* 다이얼 면 */
+  g.appendChild(el("ellipse",{cx,cy:cyTop,rx,ry,fill:"#0b111d",stroke:"#4a5a78","stroke-width":2}));
+  g.appendChild(el("ellipse",{cx,cy:cyTop,rx:rix,ry:riy,fill:"none",stroke:"#28324a","stroke-width":1}));
+  /* 슬롯 눈금 + 생존 점(각 슬롯의 세션 무리) */
+  twSlots=[];
+  for(let i=0;i<12;i++){ const a=i/12*Math.PI*2;
+    g.appendChild(el("line",{x1:cx+Math.cos(a)*rx,y1:cyTop+Math.sin(a)*ry,x2:cx+Math.cos(a)*rix,y2:cyTop+Math.sin(a)*riy,stroke:"#374460","stroke-width":1.2}));
+    const dot=el("circle",{cx:cx+Math.cos(a)*rix*0.82,cy:cyTop+Math.sin(a)*riy*0.82,r:1.7,fill:"#4a6b8f"});
+    g.appendChild(dot); twSlots.push({a,dot}); }
+  /* 커서 = 뾰족한 시계바늘 (polygon — 끝점은 애니에서 갱신) */
+  twCursor=el("polygon",{points:cx+","+cyTop,fill:"#6cc7ff"});
+  g.appendChild(twCursor);
+  /* 하트비트 맥박(중심) */
+  twPulse=el("circle",{cx,cy:cyTop,r:3,fill:"#8fd0ff"});
+  g.appendChild(twPulse);
+  gBuild.appendChild(g);
+  /* 생존 신호 입자 — 드럼 하단에서 중심으로 빨려 유입(워커가 REFRESH 보고) */
+  twSignals=[];
+  for(let k=0;k<3;k++){ const s=el("circle",{cx,cy:cyTop,r:2,fill:"#8fd0ff"}); gBelt.appendChild(s); twSignals.push({s,off:k/3,dx:(k-1)*10}); }
+  gBelt.appendChild(el("rect",{x:cx-34,y:cyBot+ry+15-11,width:68,height:15,rx:5,fill:"#0b0f1a",opacity:.82}));   /* 캡션 배경 플레이트 — 아래 벨트 밴드에서 분리 */
+  gBelt.appendChild(el("text",{x:cx,y:cyBot+ry+15,"text-anchor":"middle","font-size":"8.5",fill:"#6b7c99","font-family":"var(--mono)"},"REFRESH ↑"));
+  gLbl.appendChild(el("line",{x1:cx,y1:cyTop-ry,x2:cx,y2:cyTop-ry-7,stroke:"#41506e","stroke-width":1}));
+  gLbl.appendChild(el("circle",{cx:cx,cy:cyTop-ry,r:1.6,fill:"#5a6d92"}));
+  gLbl.appendChild(el("text",{x:cx,y:cyTop-ry-23,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:"#eef2fb"},"Timing Wheel ×1"));
+  gLbl.appendChild(el("text",{x:cx,y:cyTop-ry-10,"text-anchor":"middle","font-size":"10",fill:"#8496b3"},"하트비트 · 세션 타임아웃"));
+  TW={cx,cy:cyTop,rx,ry};
+})();
+
+
+/* ─────────── 노드 라벨 (통일 규칙: 노드 상단 중심 위 · 수직 리더 + 앵커점 · 동일 타이포) ─────────── */
+function label(txt,sub,u,v,zTop){
+  const ax=px(u,v), ay=py(u,v,zTop), GAP=10;
+  const subY=sub?ay-GAP:null, titleY=sub?subY-13:ay-GAP, botY=sub?subY:titleY;
+  gLbl.appendChild(el("line",{x1:ax,y1:ay,x2:ax,y2:botY+3,stroke:"#41506e","stroke-width":1}));
+  gLbl.appendChild(el("circle",{cx:ax,cy:ay,r:1.6,fill:"#5a6d92"}));
+  gLbl.appendChild(el("text",{x:ax,y:titleY,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:"#eef2fb"},txt));
+  if(sub) gLbl.appendChild(el("text",{x:ax,y:subY,"text-anchor":"middle","font-size":"10",fill:"#8496b3"},sub));
+}
+label("클라이언트 ×4,000","접속 군중", 89,89,22);
+label("Accept ×1",null, 152,44,31);
+label("IOCP 워커 ×4",null, 283,33,22);
+label("Send 워커 ×K","WSASend 응답", 234,145,31);
+label("게임 루프 ×1","단독 섬 · 25fps 틱", 439,103,88);
+label("DB 워커 ×1","비동기 저장", 590,44,31);
+label("MySQL","주기 UPSERT", 691,43,48);
+/* Monitor 라벨 제거(관측 사이드카는 지도에서 생략) */
+
+/* ═══════════ 게임 루프 내부 = 섹터 AOI(9칸) + 1→N 팬아웃 ═══════════ */
+(function(){
+  const cu=214,cv=-44,S=19,Z=5;
+  const dirs=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+  prism(gBuild,cu-1.65*S,cv-1.65*S,3.3*S,3.3*S,0,4,["#141d16","#0a110c","#0d1610"]);
+  for(let r=-1;r<=1;r++)for(let c=-1;c<=1;c++){ const u=cu+c*S,v=cv+r*S,center=(r===0&&c===0);
+    gBuild.appendChild(poly([[u-S*0.42,v-S*0.42,Z],[u+S*0.42,v-S*0.42,Z],[u+S*0.42,v+S*0.42,Z],[u-S*0.42,v+S*0.42,Z]],center?"#f4c862":"#33496d",
+      {stroke:center?"#ffd88a":"#4a6193","stroke-width":center?1.4:1})); }
+  /* 8방향 팬아웃 화살표(정적 구조 — 이웃 방향 표시) */
+  function fanArrow(u1,v1){ const x0=px(cu,cv),y0=py(cu,cv,Z+2),x1=px(u1,v1),y1=py(u1,v1,Z+2);
+    gChip.appendChild(el("line",{x1:x0,y1:y0,x2:x1,y2:y1,stroke:"#8a6b30","stroke-width":1.2,opacity:.55}));
+    const a=Math.atan2(y1-y0,x1-x0),h=4.2,ax=x1-Math.cos(a)*h,ay=y1-Math.sin(a)*h,nx=-Math.sin(a)*h*0.6,ny=Math.cos(a)*h*0.6;
+    gChip.appendChild(el("polygon",{points:x1.toFixed(1)+","+y1.toFixed(1)+" "+(ax+nx).toFixed(1)+","+(ay+ny).toFixed(1)+" "+(ax-nx).toFixed(1)+","+(ay-ny).toFixed(1),fill:"#8a6b30",opacity:.55})); }
+  dirs.forEach(d=>fanArrow(cu+d[0]*S*0.9,cv+d[1]*S*0.9));
+  /* 게임 루프로 잇는 리더선("이건 루프 내부" 힌트) */
+  gLbl.appendChild(el("line",{x1:px(cu,cv+1.7*S),y1:py(cu,cv+1.7*S,6),x2:px(430,90),y2:py(430,90,9),stroke:"#6a5a34","stroke-width":1.2,"stroke-dasharray":"3 3",opacity:.8}));
+  const lx=px(cu,cv-1.95*S),ly=py(cu,cv-1.95*S,6);
+  gLbl.appendChild(el("text",{x:lx,y:ly,"text-anchor":"middle","font-size":"13","font-weight":"800",fill:"#eef2fb"},"게임 루프 내부 · 섹터 AOI 9칸"));
+  gLbl.appendChild(el("text",{x:lx,y:ly+14,"text-anchor":"middle","font-size":"10",fill:"#8496b3"},"이동 1건 → 이웃 섹터 주민 N명 (1→N 팬아웃)"));
+  /* 애니용: 중심 mover 맥박 + 8방향 브로드캐스트 칩(초기 숨김) */
+  const pulse=el("circle",{cx:px(cu,cv),cy:py(cu,cv,Z+2),r:3.4,fill:"#ffd88a",stroke:"#7d5a1c","stroke-width":1}); gChip.appendChild(pulse);
+  const chips=dirs.map(()=>{ const e=el("polygon",{points:"0,0",fill:"#ffb648",opacity:"0"}); gChip.appendChild(e); return e; });
+  AOI={cu,cv,S,Z,dirs,chips,pulse};
+})();
+
+/* ─────────── 정보 카드 ─────────── */
+const card=$("#card"), bd=$("#cardbd");
+function open(k){
+  const n=ND[k];
+  let h=`<span class="k">공장 부지 · ${n.zone} 구역</span><h3>${n.nm}<span>${n.x||""}</span></h3><p class="lead">${n.impl}</p>`;
+  if(n.docs.length) h+=`<div class="lb">설계 문서 ${n.docs.length}</div>`+n.docs.map(d=>`<div class="it"><span>${d}</span></div>`).join("");
+  if(n.bns.length) h+=`<div class="lb">병목 실험 ${n.bns.length}</div>`+n.bns.map(x=>`<div class="it"><span class="rs ${x[0]}">${x[0]==="ok"?"채택":"기각"}</span><span>${x[1]}</span></div>`).join("");
+  if(!n.docs.length&&!n.bns.length) h+=`<div class="lb">연결 문서</div><div class="none">본편에선 구현 노트가 이 자리에 옵니다.</div>`;
+  bd.innerHTML=h; card.classList.add("on");
+}
+card.addEventListener("click",e=>{ if(e.target.closest("[data-close]")) card.classList.remove("on"); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") card.classList.remove("on"); });
+
+/* ─────────── 화물 흐름 애니메이션 ─────────── */
+if(!RM){
+  function seg(wp){ const s=[]; let tot=0;
+    for(let i=1;i<wp.length;i++){ const l=Math.hypot(wp[i][0]-wp[i-1][0],wp[i][1]-wp[i-1][1]);
+      s.push({a:wp[i-1],b:wp[i],l,acc:tot}); tot+=l; } return {s,tot}; }
+  function at(R,d){ d=((d%R.tot)+R.tot)%R.tot;
+    const g=R.s.find(x=>d<=x.acc+x.l)||R.s[R.s.length-1], t=(d-g.acc)/g.l;
+    return [g.a[0]+(g.b[0]-g.a[0])*t, g.a[1]+(g.b[1]-g.a[1])*t]; }
+  /* 수신 피더 — 각 워커로 개별 4레일. lane0=맨 위 워커(1번)…lane3=맨 아래(4번) → 위(1)부터 차례로 유입 */
+  const FEED=[264,286,308,330].map(uc=>seg([[86,44],[217,44],[217,18],[uc,18],[uc,35.5],[uc,46],[341,46],[341,62],[371,62]]));
+  /* 응답 2 경로: 각 Send 박스(v=132·158)로 나눠 들어감 → 앞 레인 합류 → 크라우드 앞(75,108)에서 페이드 */
+  const SEND0=seg([[420,126],[420,132],[234,132],[234,166],[85,166],[85,100]]);   /* 게임→Send 박스0→크라우드(레인0 개별 도달) */
+  const SEND1=seg([[420,126],[420,158],[234,158],[234,184],[72,184],[72,116]]);   /* 게임→Send 박스1→크라우드(레인1 개별 도달) */
+  const STORE=seg([[462,96],[526,96],[526,44],[582,44],[688,42]]);   /* 게임→코너→dirty 탱크→DB 관통→MySQL */
+  const STORE_GATE=STORE.s[1].acc+STORE.s[1].l;   /* [516,44] dirty 탱크 = 배치 게이트 */
+  const TANK_U=526, TANK_V=44;   /* dirty 탱크 위치 */
+  const chips=[];
+  function mk(R,color,off,batch){ const e=el("polygon",{points:"0,0",fill:color}); gChipBack.appendChild(e);   /* 응답·저장 칩도 건물 뒤로 */
+    const c={e,R,d:off||0,color,batch:!!batch,state:"in",slot:-1,swapb:false,gate:-1}; chips.push(c); return c; }
+  /* SwapQ = 모아서 통째로 넘김. 파랑을 3역할로 분리: 유입 피더(클라→워커→공유 큐)·공유 큐 파일(카운터 적재)·유출 드레인(로컬 큐→게임).
+     루프칩 1개가 틱당 1개만 게이트를 지나 '쌓임'이 안 보이던 문제 → 파일을 카운터로 구동, 매 틱 공유 큐에 무리가 쌓였다가 통째로 스왑 */
+  const feeders=[]; for(let i=0;i<18;i++){ const e=el("polygon",{points:"0,0",fill:"#6cc7ff"}); gChipBack.appendChild(e); feeders.push({e,d:0,state:"wait",lane:0}); }   /* 건물 뒤로 → Accept·IOCP 워커가 가림 */
+  let feedTimer=0, feedLane=0, recvStarted=false;   /* 시작 시 전부 대기(빈 화면) → 아래 워커부터 한 개씩 순환 방출. 첫 도착 후 공유 큐 적재 시작 */
+  const FEED_INTERVAL=0.25;             /* 파랑 한 개씩 방출 간격 */
+  const DRAIN=seg([[SWAP.uS,SWAP.v],[425,SWAP.v],[425,80]]);   /* 로컬 큐(앞·아래 v)→게임 앞변 */
+  const drains=[]; for(let i=0;i<12;i++){ const e=el("polygon",{points:"0,0",fill:"#6cc7ff"}); gChipBack.appendChild(e); drains.push({e,d:0,state:"wait",delay:0}); }   /* 드레인도 건물 뒤로 */
+  /* 공유/로컬 큐 대기열 칩(최대 QMAX개, 한 줄로 줄서기) — 카운터 qShared로 적재, 틱마다 줄 통째 hop.
+     트레이가 작아 칩을 많이 넣으면 뭉치므로, 적은 수를 넓게 벌려 벨트를 따라 뒤로 늘어선 줄로 표현 */
+  const QMAX=4;   /* 공유큐: 피더 도착마다 1개씩 이산 적립 → 4개 차면 스왑 */
+  const pileChips=[]; for(let i=0;i<QMAX;i++){ const e=el("polygon",{points:"0,0",fill:"#8ad4ff"}); gChip.appendChild(e); pileChips.push(e); }
+  const QHEAD=12, QSTEP=6;   /* 머리(u=uS+QHEAD)에서 iso-u 따라 뒤로 QSTEP 간격 한 줄(4개) — 슬롯 안에 정렬 */
+  /* 주황(응답)·초록(저장) — 게임에 파랑이 들어간 직후 함께 방출. 평소엔 게임 앞에서 대기(wait) */
+  const emitO=[], emitG=[];
+  for(let i=0;i<26;i++){ const c=mk(i%2?SEND1:SEND0,"#ffb648"); c.state="wait"; emitO.push(c); }   /* 절반씩 두 Send 박스 경로에 배정 · 밀도↑ */
+  let sendToggle=0, sendTimer=0;   /* 방출 시 두 박스 번갈아 */
+  const SEND_INTERVAL=0.17;   /* 응답 칩 방출 간격(작을수록 촘촘) */
+  const CAP=16;   /* dirty 정사각형 = 4×4 */
+  for(let i=0;i<8;i++){ const c=mk(STORE,"#57d694",0,true); c.state="wait"; emitG.push(c); }
+  function setChip(e,x,y){ e.setAttribute("points",
+    `${x.toFixed(1)},${(y-3).toFixed(1)} ${(x+5).toFixed(1)},${y.toFixed(1)} ${x.toFixed(1)},${(y+3).toFixed(1)} ${(x-5).toFixed(1)},${y.toFixed(1)}`); }
+  /* dirty 배치 = 작은 사각형이 4×4 격자를 셀 단위로 채워감(부드럽게 안착) → 가득 차면 batch 크레이트로 묶여 레일 타고 DB로 */
+  const BN=4, BC=8;                                  /* 4×4 격자, 셀 변=8 → 수집 정사각형 변=32(수집함 H=17에 맞춤) */
+  function tilePts(u,v){ const q=0.6;                /* 셀 코너(u,v) → 수집함 윗면(z14) iso 타일 */
+    return [[u+q,v+q],[u+BC-q,v+q],[u+BC-q,v+BC-q],[u+q,v+BC-q]].map(p=>px(p[0],p[1]).toFixed(1)+","+py(p[0],p[1],14).toFixed(1)).join(" "); }
+  const originTiles=(function(){ const a=[]; for(let i=0;i<BN*BN;i++){ const e=el("polygon",{points:"0,0",fill:"#5fd39a",stroke:"#0d2115","stroke-width":.7,opacity:"0"}); gChip.appendChild(e); a.push(e); } return a; })();
+  const cellUV=(cu,cv,i)=>{ const c=i%BN, r=(i/BN)|0; return [cu+(c-BN/2)*BC, cv+(r-BN/2)*BC]; };
+  originTiles.forEach((e,i)=>{ const p=cellUV(TANK_U,TANK_V,i); e.setAttribute("points",tilePts(p[0],p[1])); });   /* 수집 격자: 고정 위치 */
+  /* batch 크레이트 — z0=9 바닥에 접지해 레일 위를 미끄러지는 솔리드 상자(붕뜸 방지: 접지 그림자 + 레일폭=상자폭) */
+  const crate=el("g"); gChip.appendChild(crate);
+  const CW=20, CH=12, TANK_SX=px(TANK_U,TANK_V), TANK_SY=py(TANK_U,TANK_V,0);
+  crate.appendChild(el("ellipse",{cx:TANK_SX,cy:py(TANK_U,TANK_V,0)+5,rx:CW*0.62,ry:CW*0.24,fill:"#04120a",opacity:.5}));   /* 접지 그림자 */
+  prism(crate,TANK_U-CW/2,TANK_V-CW/2,CW,CW,9,CH,["#43b884","#123322","#1f5f40"]);
+  crate.appendChild(el("text",{x:TANK_SX,y:py(TANK_U,TANK_V,9+CH)-1,"text-anchor":"middle","font-size":"8.5","font-weight":"800",fill:"#eafff4","font-family":"var(--mono)"},"batch"));
+  crate.setAttribute("opacity","0");
+  let batchN=0, tankState="fill", packT=0, moveP=0, settleReserved=0;
+  let qShared=0, hopActive=false, hopT=1, hopN=0;   /* SwapQ 대기열 */
+  let run=false, raf=0, prev=0, t=0, lastTick=-1;
+  let emitQ=[];               /* 게임 방출 예약 큐 — 지연(>틱)이라 여러 건이 파이프라인으로 겹쳐 흐름 */
+  const DRAIN_SPEED=120;      /* 로컬 큐→게임 유입(파랑) 속도 — 과하게 빠르지 않게 */
+  const PROC_HOLD=1.0;        /* 게임루프 처리시간 은유: 파랑이 게임에 도달한 뒤 1.0초 지나 노랑·초록 방출 */
+  function frame(now){
+    if(!run) return;
+    const dt=Math.min(.05,(now-prev)/1000); prev=now; t+=dt;
+    const TICK=0.6, tickN=Math.floor(t/TICK);
+    const swapPulse=(tickN!==lastTick);
+    lastTick=tickN;
+    /* SwapQ 스왑(매 틱): 공유 큐 대기열을 통째로 로컬 큐로 hop. 방출 예약은 파랑이 게임에 실제 도달한 뒤(hop 완료 블록에서) */
+    if(!hopActive && qShared>=QMAX){ hopN=qShared; qShared=0; hopT=0; hopActive=true; }   /* 3개 차면 즉시 스왑 */
+    /* 게임 방출: 파랑이 게임 도달 후 PROC_HOLD(1.5s) 지나면 주황(응답)+초록(저장) 방출. 예약 큐를 순서대로 소진 */
+    while(emitQ.length && t>=emitQ[0]){ emitQ.shift();
+      const gif=emitG.filter(c=>c.state==="flow"||c.state==="settle").length;   /* 안착 중인 것도 in-flight로 카운트(CAP 초과 방지) */
+      if(tankState==="fill" && batchN+gif<CAP){ const gg=emitG.find(c=>c.state==="wait"); if(gg){ gg.state="flow"; gg.d=0; } }
+    }
+    /* 응답(주황) 방출 — 게임이 계속 응답을 내보냄. 촘촘한 스트림(SEND_INTERVAL) → 게임→Send→클라 모두 밀도↑ */
+    sendTimer+=dt;
+    if(recvStarted && sendTimer>=SEND_INTERVAL){ sendTimer-=SEND_INTERVAL;
+      const sp=(sendToggle++&1)?SEND1:SEND0;
+      const o=emitO.find(c=>c.state==="wait"&&c.R===sp)||emitO.find(c=>c.state==="wait"); if(o){ o.state="flow"; o.d=0; } }
+    /* 파랑 유입: 클라에서 한 개씩 방출(시작 시 빈 화면). 단일 레일로 게이트까지, 첫 도착 시 recvStarted */
+    feedTimer+=dt;
+    if(feedTimer>=FEED_INTERVAL){ feedTimer-=FEED_INTERVAL; const f=feeders.find(x=>x.state==="wait"); if(f){ f.state="flow"; f.d=0; f.lane=feedLane; feedLane=(feedLane+1)%4; } }   /* 아래(lane0)부터 순환 */
+    feeders.forEach(f=>{ if(f.state!=="flow") return; f.d+=78*dt; if(f.d>=FEED[f.lane].tot){ f.state="wait"; f.d=0; recvStarted=true; if(!hopActive && qShared<QMAX) qShared++; } });   /* 도착마다 공유큐 +1 */
+    /* 공유 큐 적재: 피더 도착 시 1개씩(위 블록). 3개(QMAX) 차면 스왑 — 연속 카운터 제거 */
+    /* 스왑 hop: 공유 큐 무리를 통째로 로컬 큐로(0.16s ease). 끝나면 그만큼 드레인 방출 */
+    if(hopActive){ hopT=Math.min(1,hopT+dt/0.16);
+      if(hopT>=1){ hopActive=false; let rel=0;
+        drains.forEach(dr=>{ if(rel<hopN && dr.state==="wait"){ dr.state="flow"; dr.d=0; dr.delay=rel*0.03; rel++; } });
+        emitQ.push(t + DRAIN.tot/DRAIN_SPEED + PROC_HOLD); } }   /* 파랑 게임 도달(이동시간)+처리 hold 뒤 방출 예약 */
+    /* 파랑 유출 드레인: 로컬 큐→게임(짧게 지연 스태거) */
+    drains.forEach(dr=>{ if(dr.state!=="flow") return; if(dr.delay>0){ dr.delay-=dt; return; } dr.d+=DRAIN_SPEED*dt; if(dr.d>=DRAIN.tot){ dr.state="wait"; dr.d=0; } });
+    /* 주황 update: flow 중인 것만 진행, 끝나면 대기 */
+    emitO.forEach(c=>{ if(c.state!=="flow") return; c.d+=128*dt; if(c.d>=c.R.tot){ c.state="wait"; c.d=0; } });
+    /* 초록 update: 탱크 도착→목표 셀에 안착(settle, 부드럽게). settle 끝나면 batchN++. 가득(CAP) 차면 flush */
+    emitG.forEach(c=>{
+      if(c.state==="flow"){ c.d+=75*dt;
+        if(c.d>=STORE_GATE){ if(tankState==="fill"){ c.state="settle"; c.settleT=0; c.cellIdx=batchN+settleReserved; settleReserved++; } else c.d=STORE_GATE; } }
+      else if(c.state==="settle"){ c.settleT=Math.min(1,c.settleT+dt/0.22);
+        if(c.settleT>=1){ c.state="wait"; c.d=0; batchN++; settleReserved--;
+          if(batchN>=CAP && tankState==="fill"){ tankState="flush"; packT=0; moveP=0; } } }
+    });
+    /* flush: (1) 격자→크레이트 크로스페이드(pack) → (2) 크레이트가 접지한 채 레일 타고 DB로 미끄러짐(ease) */
+    if(tankState==="flush"){ if(packT<1) packT=Math.min(1,packT+dt/0.18);
+      else { moveP=Math.min(1,moveP+dt/0.9); if(moveP>=1){ tankState="fill"; batchN=0; } } }
+    /* 렌더: 주황(응답) — 대기=숨김, flow=양끝 페이드 */
+    chips.forEach(c=>{ if(c.batch) return;                /* 초록은 아래 블록 */
+      if(c.state!=="flow"){ c.e.setAttribute("opacity","0"); return; }
+      const p=at(c.R,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],9));
+      c.e.setAttribute("opacity",Math.max(0,Math.min(1,c.d/20,(c.R.tot-c.d)/14)).toFixed(2)); });
+    /* 렌더: 파랑 유입 피더(단일 레일, 대기=숨김, 양끝 페이드 — 게이트서 공유 큐로 흡수) */
+    feeders.forEach(f=>{ if(f.state!=="flow"){ f.e.setAttribute("opacity","0"); return; } const R=FEED[f.lane], p=at(R,f.d); setChip(f.e,px(p[0],p[1]),py(p[0],p[1],9));
+      f.e.setAttribute("opacity",Math.max(0,Math.min(1,f.d/16,(R.tot-f.d)/14)).toFixed(2)); });
+    /* 렌더: 공유/로컬 큐 대기열 — 평소엔 공유 큐에 한 줄로 줄서고, hop 중엔 줄 통째로 로컬 큐로 미끄러짐 */
+    { const nS=hopActive?hopN:Math.round(qShared), es=hopActive?(hopT<0.5?2*hopT*hopT:1-Math.pow(-2*hopT+2,2)/2):0;
+      const uHead=SWAP.uS+QHEAD, vChip=SWAP.v+SWAP.gv*(1-es);   /* 공유(v+gv, 뒤·위)에 4개 쌓였다가 스왑 시 로컬(v, 앞·아래)로 통째 이동 */
+      pileChips.forEach((e,i)=>{ if(i>=nS){ e.setAttribute("opacity","0"); return; }
+        const u=uHead-i*QSTEP; setChip(e,px(u,vChip),py(u,vChip,9)); e.setAttribute("opacity","1"); }); }
+    /* 렌더: 파랑 유출 드레인(로컬 큐→게임) */
+    drains.forEach(dr=>{ if(dr.state!=="flow"||dr.delay>0){ dr.e.setAttribute("opacity","0"); return; }
+      const p=at(DRAIN,dr.d); setChip(dr.e,px(p[0],p[1]),py(p[0],p[1],9));
+      dr.e.setAttribute("opacity",Math.max(0,Math.min(1,dr.d/12,(DRAIN.tot-dr.d)/12)).toFixed(2)); });
+    /* 렌더: 초록 칩 — flow(게임→탱크 페이드인) · settle(탱크 중심→목표 셀로 안착하며 페이드아웃 = 셀이 채워짐) */
+    chips.forEach(c=>{ if(!c.batch) return;
+      if(c.state==="flow"){ const p=at(c.R,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],9));
+        c.e.setAttribute("opacity",Math.min(1,c.d/20).toFixed(2)); }
+      else if(c.state==="settle"){ const a=at(STORE,STORE_GATE), cl=cellUV(TANK_U,TANK_V,c.cellIdx);
+        const es=c.settleT<0.5?2*c.settleT*c.settleT:1-Math.pow(-2*c.settleT+2,2)/2;
+        const u=a[0]+(cl[0]+BC/2-a[0])*es, v=a[1]+(cl[1]+BC/2-a[1])*es;
+        setChip(c.e,px(u,v),py(u,v,9+5*es)); c.e.setAttribute("opacity",(1-c.settleT*0.65).toFixed(2)); }   /* 레일 z9 → 수집함 윗면 z14로 부드럽게 안착 */
+      else c.e.setAttribute("opacity","0"); });
+    /* 수집 격자: 안착 완료 셀=꽉참, 안착 중 셀=settleT로 서서히, flush pack 동안 전체 페이드아웃 */
+    { const packFade=tankState==="flush"?(1-packT):1, st=emitG.find(c=>c.state==="settle");
+      originTiles.forEach((e,i)=>{ let o=(i<batchN)?1:(st&&i===st.cellIdx?st.settleT:0);
+        e.setAttribute("opacity",(o*packFade).toFixed(2)); }); }
+    /* batch 크레이트: pack 동안 격자와 크로스페이드로 등장 → 접지한 채 레일 타고 DB 워커 앞까지 미끄러져 흡수(페이드아웃) */
+    if(tankState==="flush"){ const DB_ARR=STORE_GATE+52;
+      const es=moveP<0.5?2*moveP*moveP:1-Math.pow(-2*moveP+2,2)/2, d=STORE_GATE+(DB_ARR-STORE_GATE)*es, p=at(STORE,d);
+      crate.setAttribute("transform","translate("+(px(p[0],p[1])-TANK_SX).toFixed(1)+","+(py(p[0],p[1],0)-TANK_SY).toFixed(1)+")");
+      crate.setAttribute("opacity",Math.min(packT,Math.max(0,(DB_ARR-d)/16),1).toFixed(2)); }
+    else crate.setAttribute("opacity","0");
+    if(dirtyCountTxt) dirtyCountTxt.textContent = (tankState==="fill" && batchN>0) ? "×"+Math.min(CAP,batchN) : "";   /* flush 중엔 크레이트 batch 라벨에 넘겨줌 */
+    /* 타이밍휠: 바늘 회전 + 슬롯 스캔/만료(빨강) + 하트비트 맥박 + 생존신호 유입 */
+    if(twCursor){ const a=t*0.9-Math.PI/2;
+      const ex=TW.cx+Math.cos(a)*TW.rx, ey=TW.cy+Math.sin(a)*TW.ry;
+      const dxx=ex-TW.cx, dyy=ey-TW.cy, len=Math.hypot(dxx,dyy)||1, nx=-dyy/len*2.3, ny=dxx/len*2.3;
+      twCursor.setAttribute("points",ex.toFixed(1)+","+ey.toFixed(1)+" "+(TW.cx+nx).toFixed(1)+","+(TW.cy+ny).toFixed(1)+" "+(TW.cx-nx).toFixed(1)+","+(TW.cy-ny).toFixed(1));
+      const ca=((a%(2*Math.PI))+2*Math.PI)%(2*Math.PI);
+      const EXP=5.5, ep=t%EXP, eidx=Math.floor(t/EXP)%12;
+      twSlots.forEach((sl,i)=>{ let da=Math.abs(sl.a-ca); da=Math.min(da,2*Math.PI-da); const near=da<0.42;
+        if(i===eidx && ep<1.3){
+          if(ep<0.5){ sl.dot.setAttribute("fill","#ff6a5a"); sl.dot.setAttribute("r",(2+ep*4).toFixed(1)); sl.dot.setAttribute("opacity","1"); }
+          else{ const f=(ep-0.5)/0.8; sl.dot.setAttribute("fill","#ff6a5a"); sl.dot.setAttribute("r",(4-f*2).toFixed(1)); sl.dot.setAttribute("opacity",(1-f).toFixed(2)); }
+        } else { sl.dot.setAttribute("fill",near?"#cfeaff":"#4a6b8f"); sl.dot.setAttribute("r",near?"2.7":"1.7"); sl.dot.setAttribute("opacity",near?"1":"0.5"); } });
+      const hb=0.5+0.5*Math.sin(t*1.6);
+      twPulse.setAttribute("opacity",(0.35+0.55*hb).toFixed(2)); twPulse.setAttribute("r",(3+1.5*hb).toFixed(1)); }
+    if(twSignals){ twSignals.forEach(sg=>{ const p=(t*0.5+sg.off)%1;
+      sg.s.setAttribute("cx",(TW.cx+sg.dx*(1-p)).toFixed(1));
+      sg.s.setAttribute("cy",(TW.cy+(TW.ry+16)*(1-p)).toFixed(1));
+      sg.s.setAttribute("opacity",(0.8*Math.min(1,(1-p)*2.2)).toFixed(2)); }); }
+    const ph=(t%0.6)/0.6;
+    if(beacon){ beacon.setAttribute("opacity",(0.45+0.55*(1-ph)).toFixed(2)); beacon.setAttribute("r",(4.5+2.5*(1-ph)).toFixed(1)); }
+    /* 섹터 AOI 팬아웃 — 중심 mover가 주기적으로 이웃 8섹터에 브로드캐스트(1→N) */
+    if(AOI){ const rate=1.15, p=(t*rate)%1, reach=AOI.S*0.95;
+      AOI.dirs.forEach((d,i)=>{ const u=AOI.cu+d[0]*reach*p, v=AOI.cv+d[1]*reach*p;
+        setChip(AOI.chips[i],px(u,v),py(u,v,AOI.Z+2));
+        AOI.chips[i].setAttribute("opacity",(0.95*Math.max(0,Math.min(1,p*3,(1-p)*3))).toFixed(2)); });
+      AOI.pulse.setAttribute("r",(3.2+1.7*(1-p)).toFixed(1));
+      AOI.pulse.setAttribute("opacity",(0.55+0.45*(1-p)).toFixed(2)); }
+    raf=requestAnimationFrame(frame);
+  }
+  const io=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting&&!run){ run=true; prev=performance.now(); raf=requestAnimationFrame(frame); }
+    else if(!e.isIntersecting&&run){ run=false; cancelAnimationFrame(raf); }
+  }),{threshold:.05});
+  io.observe($("#stage"));
+}
+})();
+
+/* ─────────── 탭 전환 + 병목 카드 ─────────── */
+(function(){
+  const tabs=[].slice.call(document.querySelectorAll(".tab"));
+  const ids={build:"p-build",bneck:"p-bneck",dummy:"p-dummy",misc:"p-misc"};
+  function show(id){
+    for(var i=0;i<tabs.length;i++){ var t=tabs[i], on=(t.getAttribute("data-tab")===id);
+      t.className = on ? "tab act" : "tab";
+      t.setAttribute("aria-selected", on?"true":"false"); }
+    for(var k in ids){ document.getElementById(ids[k]).hidden = (k!==id); }
+  }
+  tabs.forEach(function(t){ t.addEventListener("click",function(){ show(t.getAttribute("data-tab")); }); });
+  show("build");   /* 초기 상태 정규화 */
+
+  const OK=[
+    {n:"Send Coalescing", r:"syscall −94%", m:"틱 단위로 송신을 모아 WSASend 호출을 배칭", ex:"tick p99 65→9ms"},
+    {n:"SendWorker 분리 + WT×K", r:"handle p99 −56%", m:"송신을 게임 틱에서 떼어 K워커로 분산 (WT4·K2)", ex:"워커 동시실행 간섭까지 스윕으로 규명"},
+    {n:"섹터 묶음 패킷", r:"tick p99 −83%", m:"틱 끝에 섹터별로 한 번에 묶어 복사 횟수 상한 고정", ex:"복사 병목 75.7→42.7%"},
+    {n:"멤버십 팬아웃 묶음", r:"membership −68%", m:"아웃바운드 dedup + 인바운드 1버퍼 배칭", ex:"gameloop 0.86→0.49코어"},
+    {n:"브로드캐스트 수신섹터 묶음", r:"복사 −88%", m:"대상마다 세션핀 고정비를 수신섹터 연접 배칭으로", ex:"gameloop 0.57→0.21코어"},
+  ];
+  const RJ=[
+    {n:"SendQ Lock-Free", m:"락 경합이 0.08ms로 고정 — 락프리 이득이 없음", ex:"실측 없이 병목이라 단정 안 함"},
+    {n:"SO_SNDBUF=0", m:"복사 비용이 워커로 이전될 뿐, 시스템 CPU +75%", ex:"송신 실험은 worker CPU·완료율 함께 봐야"},
+  ];
+  const cOK=e=>`<div class="exp"><div class="top"><span class="rs ok">채택</span><span class="nm">${e.n}</span></div><div class="r">${e.r}</div><div class="m">${e.m}</div><div class="ex">${e.ex}</div></div>`;
+  const cRJ=e=>`<div class="exp rj"><div class="top"><span class="rs rj">기각</span><span class="nm">${e.n}</span></div><div class="r">기각</div><div class="m">${e.m}</div><div class="ex">${e.ex}</div></div>`;
+  document.getElementById("bneck-body").innerHTML=
+    `<div class="exp-h">채택 <span class="cnt">${OK.length}</span></div><div class="exp-grid">${OK.map(cOK).join("")}</div>`+
+    `<div class="exp-h">기각 <span class="cnt">${RJ.length}</span></div><div class="exp-grid">${RJ.map(cRJ).join("")}</div>`;
+})();
+</script>
+</body>
+</html>

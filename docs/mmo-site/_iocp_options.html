@@ -1,0 +1,95 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<style>
+body{margin:0;background:#0d1220;color:#eef2fb;font-family:"Malgun Gothic","Pretendard",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1040px;margin:0 auto;padding:22px}
+h1{font-size:1.2rem;margin:0 0 4px}
+.sub{color:#8496b3;font-size:.82rem;margin:0 0 16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:#0f1626;border:1px solid #28324a;border-radius:14px;padding:13px 15px}
+.card .t{font-size:1rem;font-weight:800}
+.card .t b{color:#63afe6}
+.card .d{font-size:.8rem;color:#9fb0cc;margin:2px 0 8px;line-height:1.5}
+.card .d b{color:#cfe0f2}
+svg{display:block;width:100%;height:auto;background:linear-gradient(180deg,#0c1120,#0a0e1a);border-radius:10px;border:1px solid #1a2333}
+.cur{opacity:.7;font-weight:600}
+</style></head>
+<body><div class="wrap">
+<h1>IOCP 워커 영역 — 시안 A · C <span style="font-size:.8rem;color:#8496b3;font-weight:400">(애니메이션)</span></h1>
+<p class="sub">파랑 칩이 <b style="color:#8ad4ff">레인을 타고 워커까지 들어갔다 → 출력 레일로 나옵니다</b>. 워커가 반짝 = 처리 · 입력(Accept)→출력(SwapQ).</p>
+<div class="grid" id="grid"></div>
+</div>
+<script>
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+const NET=["#63afe6","#1b4870","#2b6597"], NETHI="#b8e0fb", BELT="#39465f", Q=["#243c5e","#0f1d31","#172a44"];
+function el(t,a,txt){const e=document.createElementNS(NS,t);if(a)for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e;}
+function proj(OX,OY,KY){KY=KY||1.95;const KX=3.5;return{px:(u,v)=>OX+(u-v)*KX,py:(u,v,z)=>OY-(u+v)*KY-(z||0)};}
+function P(pr,p){return pr.px(p[0],p[1])+","+pr.py(p[0],p[1],p[2]||0);}
+function poly(g,pr,pts,fill,ex){const e=el("polygon",Object.assign({points:pts.map(p=>P(pr,p)).join(" "),fill},ex||{}));g.appendChild(e);return e;}
+function prism(g,pr,u,v,w,d,z0,h,c){const t=z0+h;
+  poly(g,pr,[[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],c[2]);
+  poly(g,pr,[[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],c[1]);
+  return poly(g,pr,[[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],c[0],{stroke:"rgba(255,255,255,.18)","stroke-width":1,"stroke-linejoin":"round"});}
+function shadow(g,pr,u,v,w,d){g.appendChild(el("ellipse",{cx:pr.px(u+w/2,v+d/2),cy:pr.py(u+w/2,v+d/2,0)+3,rx:(w+d)*.42,ry:(w+d)*.13,fill:"#04060c",opacity:.5}));}
+function belt(g,pr,axis,a0,a1,fix,W){W=W||6;const Z=6;
+  const pts=axis==='u'?[[a0,fix-W/2,Z],[a1,fix-W/2,Z],[a1,fix+W/2,Z],[a0,fix+W/2,Z]]:[[fix-W/2,a0,Z],[fix+W/2,a0,Z],[fix+W/2,a1,Z],[fix-W/2,a1,Z]];
+  poly(g,pr,pts,BELT);}
+function tag(g,pr,u,v,z,txt,anchor,fill){g.appendChild(el("text",{x:pr.px(u,v),y:pr.py(u,v,z),"text-anchor":anchor||"middle","font-size":"11","font-weight":"700",fill:fill||"#9fb0cc","font-family":"Malgun Gothic,sans-serif"},txt));}
+function wk(g,pr,u,v,h,w){h=h||20;w=w||13;shadow(g,pr,u,v,w,w);return{el:prism(g,pr,u,v,w,w,6,h,NET),c:[u+w/2,v+w/2]};}
+function seg(wp){const s=[];let tot=0;for(let i=1;i<wp.length;i++){const l=Math.hypot(wp[i][0]-wp[i-1][0],wp[i][1]-wp[i-1][1]);s.push({a:wp[i-1],b:wp[i],l,acc:tot});tot+=l;}return{s,tot};}
+function at(R,d){d=((d%R.tot)+R.tot)%R.tot;const g=R.s.find(x=>d<=x.acc+x.l)||R.s[R.s.length-1],t=(d-g.acc)/g.l;return[g.a[0]+(g.b[0]-g.a[0])*t,g.a[1]+(g.b[1]-g.a[1])*t];}
+function lerp(a,b,t){a=parseInt(a.slice(1),16);b=parseInt(b.slice(1),16);const ar=a>>16,ag=(a>>8)&255,ab=a&255,br=b>>16,bg=(b>>8)&255,bb=b&255;const r=Math.round(ar+(br-ar)*t),gg=Math.round(ag+(bg-ag)*t),bl=Math.round(ab+(bb-ab)*t);return"#"+((1<<24)+(r<<16)+(gg<<8)+bl).toString(16).slice(1);}
+
+const variants=[];
+function make(title,desc,build){
+  const card=document.createElement("div");card.className="card";
+  card.innerHTML='<div class="t">'+title+'</div><div class="d">'+desc+'</div>';
+  const svg=el("svg",{viewBox:"0 0 500 300",role:"img"});card.appendChild(svg);document.getElementById("grid").appendChild(card);
+  const g=el("g");svg.appendChild(g);const chipG=el("g");svg.appendChild(chipG);
+  const spec=build(g);
+  const chips=[];
+  spec.lanes.forEach((R,li)=>{ for(let ci=0;ci<2;ci++){ const e=el("polygon",{fill:"#8ad4ff"}); chipG.appendChild(e);
+    chips.push({e,R,li,d:((li*0.17)+(ci*0.5))*R.tot}); } });
+  variants.push({pr:spec.pr,workers:spec.workers,chips});
+}
+function setChip(e,pr,u,v){const x=pr.px(u,v),y=pr.py(u,v,10);e.setAttribute("points",x+","+(y-3)+" "+(x+5)+","+y+" "+x+","+(y+3)+" "+(x-5)+","+y);}
+function fade(d,tot){return Math.max(0,Math.min(1,d/9,(tot-d)/9));}
+
+/* ── A) 2×2 병렬 풀 ── */
+make("A. 2×2 병렬 풀","입력 1줄 → <b>완료 큐</b> → 4워커가 한 큐에서 병렬로 당겨감 → 출력 1줄. 가장 컴팩트.",g=>{
+  const pr=proj(210,215);
+  belt(g,pr,'u',-34,4,10); belt(g,pr,'u',28,80,24);           /* 입력 · 출력 레일 */
+  prism(g,pr,-8,4,12,12,6,2,Q); tag(g,pr,-2,10,18,"완료 큐","middle","#93a9cd");
+  const W=[wk(g,pr,16,16),wk(g,pr,0,16),wk(g,pr,16,0),wk(g,pr,0,0)];
+  tag(g,pr,-40,10,26,"Accept","end","#6b7c99"); tag(g,pr,84,24,26,"SwapQ","start","#6b7c99");
+  const lanes=W.map(w=>seg([[-40,10],[0,10],w.c,[30,23],[84,24]]));
+  return{pr,workers:W,lanes};
+});
+/* ── C) 완료 큐 중심 (납작 워커 + 출력 레일) ── */
+make("C. 완료 큐 중심 <span class='cur'>(추천)</span>","넓은 <b>완료 큐 바</b> 앞에 <b>납작한 4워커</b>가 병렬로 당겨감 → 출력 레일로. IOCP 본질에 충실.",g=>{
+  const pr=proj(150,206);
+  const uw=[2,15,28,41], H=9, W=13;
+  belt(g,pr,'u',-34,6,8);                                     /* 입력 */
+  belt(g,pr,'u',2,66,31);                                     /* 출력 레일(워커 뒤 → SwapQ) */
+  prism(g,pr,0,0,54,12,6,3,Q); tag(g,pr,27,6,20,"완료 큐","middle","#93a9cd");
+  const Wk=uw.map(u=>wk(g,pr,u,16,H,W));                       /* 납작한 워커 */
+  Wk.forEach(w=>{const x=pr.px(w.c[0],12),y=pr.py(w.c[0],12,9);
+    g.appendChild(el("line",{x1:x,y1:y,x2:pr.px(w.c[0],15),y2:pr.py(w.c[0],15,9)+2,stroke:"#8ad4ff","stroke-width":1.2,opacity:.5}));});
+  tag(g,pr,-40,8,20,"Accept","end","#6b7c99"); tag(g,pr,68,31,20,"SwapQ","start","#6b7c99");
+  /* 레인: 입력 → 큐 → 워커 진입 → 뒤 출력 레일 → SwapQ */
+  const lanes=Wk.map(w=>seg([[-34,8],[w.c[0],8],w.c,[w.c[0],31],[66,31]]));
+  return{pr,workers:Wk,lanes};
+});
+
+let t=0,prev=0;
+function frame(now){const dt=Math.min(.05,(now-prev)/1000);prev=now;t+=dt;
+  variants.forEach(V=>{
+    const hot=V.workers.map(()=>0);
+    V.chips.forEach(c=>{c.d=(c.d+26*dt)%c.R.tot;const p=at(c.R,c.d);setChip(c.e,V.pr,p[0],p[1]);c.e.setAttribute("opacity",fade(c.d,c.R.tot).toFixed(2));
+      const w=V.workers[c.li];const near=Math.hypot(p[0]-w.c[0],p[1]-w.c[1]);if(near<6)hot[c.li]=Math.max(hot[c.li],1-near/6);});
+    V.workers.forEach((w,i)=>{const base=0.12+0.12*Math.sin((t*1.6+i*0.6)*Math.PI);w.el.setAttribute("fill",lerp(NET[0],NETHI,Math.min(1,base+hot[i]*0.85)));});
+  });
+  requestAnimationFrame(frame);}
+requestAnimationFrame(frame);
+</script>
+</body></html>
