@@ -96,10 +96,10 @@ section{scroll-margin-top:76px}
   background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
   background-size:46px 46px; mask-image:radial-gradient(120% 80% at 78% 0%,#000,transparent 62%)}
 .hero .wrap{position:relative; z-index:1; width:100%}
-.hero h1{margin:.5em 0 0; font-size:clamp(1.8rem,4vw,2.9rem); font-weight:800; letter-spacing:-.03em;
-  line-height:1.14; text-wrap:balance}
+.hero h1{margin:.5em 0 0; font-size:clamp(1.9rem,4.9vw,3.7rem); font-weight:800; letter-spacing:-.042em;
+  line-height:1.08; text-wrap:balance}
 .hero h1 .l2{display:block}
-.hero .hmeta{margin:1.15em 0 0; font-family:var(--mono); font-size:.94rem; color:var(--ink2);
+.hero .hmeta{margin:1.5em 0 0; font-family:var(--mono); font-size:.94rem; color:var(--ink2);
   line-height:1.6; letter-spacing:-.01em}
 .hero .hmeta b{color:var(--hot-soft); font-weight:700}
 .hero .hmeta .sep{color:var(--faint); margin:0 .3em; font-size:1.18em; vertical-align:-.02em}
@@ -213,9 +213,9 @@ section{scroll-margin-top:76px}
   opacity:0; transition:opacity .5s ease 1.35s}
 .rndstep.in .rsceil{opacity:1}
 /* 칩 배경은 불투명이어야 한다 — 반투명이면 천장선이 글자 사이로 비쳐 '천장 ·· 게임' 처럼 보인다. */
-.rsceil span{position:absolute; left:0; top:-19px; font-family:var(--mono); font-size:1.02rem;
+.rsceil span{position:absolute; left:0; top:-17px; font-family:var(--mono); font-size:.88rem;
   font-weight:800; color:var(--sig); letter-spacing:-.01em; line-height:1;
-  padding:7px 15px; border-radius:999px;
+  padding:6px 13px; border-radius:999px;
   background:#111a29; border:1px solid rgba(245,177,61,.45);
   box-shadow:inset 0 0 0 99px rgba(245,177,61,.10)}
 .rsgrid{display:grid; grid-template-columns:repeat(5,1fr); gap:18px; align-items:end}
@@ -298,13 +298,9 @@ section{scroll-margin-top:76px}
 .ivit .tt{font-size:.96rem; font-weight:800; color:var(--ink); letter-spacing:-.01em; line-height:1.3}
 .ivit .dd{margin-top:2px; font-size:.84rem; color:var(--muted); line-height:1.45}
 .ivit .dd b{color:var(--ink2); font-weight:700}
-.ivit .r{flex:0 0 auto; margin-left:auto; align-self:center; font-size:.9rem; font-weight:800; color:var(--faint); white-space:nowrap;
-  transition:color .55s ease, text-shadow .55s ease, transform .55s cubic-bezier(.2,1.4,.4,1)}
-.ivhalf .ivit:nth-child(1) .r{transition-delay:.30s}
-.ivhalf .ivit:nth-child(2) .r{transition-delay:.45s}
-.ivhalf + .ivhalf .ivit:nth-child(1) .r{transition-delay:.60s}
-.ivhalf + .ivhalf .ivit:nth-child(2) .r{transition-delay:.75s}
-.ivhalf.in .ivit .r{color:var(--hot-soft); text-shadow:0 0 12px var(--hot-glow); transform:scale(1.05)}
+/* 결과 배지는 단색 고정 — 순차 점등·발광·확대 없이 네 개가 같은 무게로 읽히게 한다. */
+.ivit .r{flex:0 0 auto; margin-left:auto; align-self:center; font-size:.9rem; font-weight:800;
+  color:var(--hot-soft); white-space:nowrap}
 @media(max-width:760px){
   .ivsplit{grid-template-columns:1fr}
   .ivhalf{padding:8px 0 4px}
@@ -410,7 +406,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
   <div class="wrap">
     <div class="hero-copy">
       <h1 class="anim d1">대형 라이브 경험과 저수준 성능<span class="l2">추측 아닌 <span class="hot">실측</span>으로</span></h1>
-      <div class="hmeta anim d3"><b>경력 3년</b><span class="sep">·</span>10개국 브랜치 통합<span class="sep">·</span>DB 100만 건 이관<span class="sep">·</span>하드코딩 50 → 2</div>
+      <div class="hmeta anim d3"><b>라이브 3년</b><span class="sep">·</span>라그나로크<span class="sep">·</span>던전앤파이터<span class="sep">·</span>신규 MMO 설계</div>
       <div class="hmeta hm2 anim d4"><b>개인 R&amp;D</b><span class="sep">·</span>맵당 동접 ~5,000<span class="sep">·</span>tick p99 65 → 9ms</div>
     </div>
   </div>
@@ -435,7 +431,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         <div class="stat" data-reveal style="--d:2">
           <div class="stat-k">DB 이관</div>
           <div class="stat-v"><span class="now" data-to="100" data-suffix="만 건">0만 건</span></div>
-          <div class="stat-s">라이브 데이터 무중단 이관</div>
+          <div class="stat-s">라이브 데이터 이관</div>
         </div>
         <div class="stat" data-reveal style="--d:0">
           <div class="stat-k">이벤트 순회</div>
@@ -699,7 +695,8 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
   }
   window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
 
-  var revEls = document.querySelectorAll('[data-reveal]');
+  // .rndstep(성장 차트)은 아래에서 따로 관찰한다 — 기본 임계값이 너무 일러 재생이 앞당겨진다.
+  var revEls = document.querySelectorAll('[data-reveal]:not(.rndstep)');
   if('IntersectionObserver' in window && !reduce){
     var ro = new IntersectionObserver(function(es){
       es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } });
@@ -731,6 +728,24 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
     }, {threshold:.6});
     nums.forEach(function(el){ co.observe(el); });
   } else { nums.forEach(countUp); }
+
+  // 성장 차트는 높이가 400px 남짓이라 기본 임계값(14%)이면 화면 아래에 꼭대기만 걸쳐도 막대가 다 자란다.
+  // 실제로 차트를 보게 되는 시점에 재생되도록 임계값을 올리고, 막대와 숫자를 같은 순간에 시작시킨다.
+  var step = document.querySelector('.rndstep');
+  if(step){
+    var playStep = function(){
+      step.classList.add('in');
+      step.querySelectorAll('[data-to]').forEach(function(n){
+        if(!doneSet.has(n)){ doneSet.add(n); countUp(n); if(co) co.unobserve(n); }
+      });
+    };
+    if('IntersectionObserver' in window && !reduce){
+      var so = new IntersectionObserver(function(es){
+        es.forEach(function(e){ if(e.isIntersecting){ playStep(); so.unobserve(e.target); } });
+      }, {threshold:.35, rootMargin:'0px 0px -12% 0px'});
+      so.observe(step);
+    } else { playStep(); }
+  }
 
   // 좁은 화면에서 구조도는 가로 스크롤(min-width:740px)이 된다. 씬의 좌상단은 비어 있고
   // 병목(게임 루프)은 오른쪽에 있어, 처음 보이는 화면이 한산해지지 않도록 가운데로 당겨 놓는다.
