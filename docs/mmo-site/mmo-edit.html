@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MMO 배치 에디터 — 드래그로 오브젝트 배치</title>
+<style>
+:root{
+  --bg:#0d1220; --ink:#eef2fb; --mut:#8496b3; --dim:#5d6c85;
+  --panel:#131a26; --line:#28324a;
+  --net:#6cc7ff; --game:#ffb648; --store:#57d694;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Consolas,"D2Coding",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.5;
+  -webkit-font-smoothing:antialiased; word-break:keep-all;
+  background-image:radial-gradient(rgba(108,199,255,.05) 1px, transparent 1px); background-size:26px 26px}
+.wrap{display:flex; gap:14px; padding:12px 16px; align-items:flex-start; max-width:1900px; margin:0 auto}
+.stage{position:relative; flex:1 1 auto; min-width:0}
+#scene{display:block; width:100%; height:auto; touch-action:none; user-select:none}
+#scene .top{stroke:rgba(255,255,255,.18); stroke-width:1; stroke-linejoin:round}
+#scene .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
+#scene .body{cursor:grab}
+#scene .body.dragging{cursor:grabbing}
+#scene .handle{cursor:grab; fill:#0d1220; stroke:var(--net); stroke-width:2; opacity:.92}
+#scene .handle:hover{fill:#1b3a57}
+#scene .handle.sel{fill:var(--net)}
+#scene .selbox{fill:rgba(108,199,255,.08); stroke:var(--net); stroke-width:1.6; stroke-dasharray:6 4; pointer-events:none}
+#scene .conn{stroke-linecap:round; pointer-events:none}
+#scene .railhit{pointer-events:stroke; cursor:pointer}
+#scene .wpt{fill:#0d1220; stroke:#ffb648; stroke-width:2; cursor:grab}
+#scene .wpt.sel{fill:#ffb648}
+#scene .ins{fill:#57d694; opacity:.5; cursor:copy}
+#scene .ins:hover{opacity:1}
+#scene .lblgrp{cursor:grab}
+#scene .zone{cursor:grab}
+#scene .zonesel{fill:none; stroke:#ffb648; stroke-width:1.6; stroke-dasharray:7 5; pointer-events:none}
+#scene .zres{fill:#0d1220; stroke:#ffb648; stroke-width:2; cursor:nwse-resize}
+#scene .zword{cursor:grab}
+#scene .gridlyr{pointer-events:none}   /* 격자선이 그 아래 구역·바닥글자 클릭을 가로채지 않게 */
+
+/* 사이드 패널 */
+.side{flex:0 0 320px; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 15px}
+.side h1{font-size:1.02rem; margin:0 0 3px}
+.side .sub{font-size:.78rem; color:var(--mut); margin:0 0 12px; line-height:1.5}
+.side .grp{border-top:1px solid var(--line); padding:11px 0 3px}
+.side .lb{font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; color:var(--dim); text-transform:uppercase; margin-bottom:7px}
+.row{display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap}
+.btn{font-family:var(--mono); font-size:.78rem; color:var(--ink); background:#1a2333; border:1px solid var(--line);
+  border-radius:9px; padding:7px 11px; cursor:pointer; transition:border-color .15s}
+.btn:hover{border-color:var(--net)}
+.btn.pri{background:#173049; border-color:#2b6597; color:#cfe6ff}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden}
+.seg button{font-family:var(--mono); font-size:.74rem; color:var(--mut); background:none; border:none; padding:6px 10px; cursor:pointer}
+.seg button.on{background:#173049; color:#cfe6ff}
+label.ck{font-size:.8rem; color:var(--mut); display:flex; align-items:center; gap:6px; cursor:pointer}
+textarea{width:100%; height:180px; resize:vertical; background:#0b111d; color:#cfe0f2; border:1px solid var(--line);
+  border-radius:9px; font-family:var(--mono); font-size:.72rem; line-height:1.5; padding:9px 10px; transition:border-color .2s, box-shadow .2s}
+textarea.flash{border-color:#57d694; box-shadow:0 0 0 2px rgba(87,214,148,.35)}
+.hint{font-size:.74rem; color:var(--dim); line-height:1.55}
+.hint b{color:var(--mut)}
+.sel-name{font-family:var(--mono); font-size:.82rem; color:var(--game); min-height:1.2em}
+.coord{font-family:var(--mono); font-size:.74rem; color:var(--mut)}
+.prop{margin-top:6px}
+.prop .fld{display:flex; align-items:center; gap:6px; margin:6px 0; font-size:.78rem; color:var(--mut)}
+.prop .fld>span{flex:0 0 34px}
+.prop .row .fld>span{flex:0 0 22px}
+.prop .fld input, .prop .fld select{flex:1 1 auto; min-width:0; background:#0b111d; color:#cfe0f2;
+  border:1px solid var(--line); border-radius:7px; padding:5px 7px; font-family:var(--mono); font-size:.74rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage">
+    <!-- 본편과 같은 프레이밍(오른쪽 259칸은 상세카드 자리로 비워 둔 열) -->
+    <svg id="scene" viewBox="259 172 1042 500" role="img" aria-label="배치 에디터"></svg>
+  </div>
+  <aside class="side">
+    <h1>배치 에디터</h1>
+    <p class="sub">오브젝트를 <b>끌어서</b> 배치하세요. 진짜 레일은 배치 확정 후 다시 맞춥니다. 이 파일은 실제 다이어그램과 분리돼 있어 안전합니다.</p>
+
+    <div class="grp">
+      <div class="lb">선택</div>
+      <div class="sel-name" id="selName">— 없음 —</div>
+      <div class="coord" id="selCoord"></div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">새 오브젝트 / 편집</div>
+      <div class="row">
+        <button class="btn pri" id="addBox">+ 상자 추가</button>
+        <button class="btn" id="addRail">＋ 레일 잇기</button>
+        <button class="btn" id="addZone">＋ 구역 바닥</button>
+      </div>
+      <div class="hint" style="margin:4px 0 2px">‘레일 잇기’ → 오브젝트 <b>두 개</b> 차례로 클릭 = 연결. 레일·상자 클릭하면 선택(편집·삭제).</div>
+      <div id="propBox" class="prop"></div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">격자 간격 (스냅)</div>
+      <div class="row">
+        <div class="seg" id="snapSeg">
+          <button data-snap="10">10</button>
+          <button data-snap="20" class="on">20</button>
+          <button data-snap="40">40</button>
+          <button data-snap="0">off</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="ck"><input type="checkbox" id="showGrid" checked> 격자 보기</label>
+        <label class="ck"><input type="checkbox" id="showConn" checked> 연결선</label>
+        <label class="ck"><input type="checkbox" id="showZone" checked> 구역 바닥·이름</label>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">조작</div>
+      <div class="row">
+        <button class="btn" id="reset">처음으로</button>
+        <button class="btn" id="snapAll">격자 정렬</button>
+        <button class="btn pri" id="export">Export ▸</button>
+      </div>
+      <div class="row" style="margin-top:2px">
+        <button class="btn" id="saveFile">💾 저장(.json)</button>
+        <label class="btn" for="loadFile" style="cursor:pointer; display:inline-block">📂 불러오기</label>
+        <input type="file" id="loadFile" accept=".json,application/json" style="display:none">
+      </div>
+      <div class="hint" id="exportMsg" style="min-height:1.3em">Export = 클립보드 복사(저에게 붙여넣기용) · 저장(.json) = 내 PC에 파일로 보관/재불러오기.</div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">좌표 (LAYOUT)</div>
+      <textarea id="out" readonly spellcheck="false"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="copy">복사</button>
+        <span class="hint" id="copyMsg"></span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+"use strict";
+(function(){
+const SVGNS="http://www.w3.org/2000/svg";
+const svg=document.getElementById("scene");
+function el(t,a,txt){ const e=document.createElementNS(SVGNS,t);
+  if(a) for(const k in a) e.setAttribute(k,a[k]);
+  if(txt!=null) e.textContent=txt; return e; }
+
+/* ── 아이소 투영 (원본과 동일) ── */
+const KX=0.86, KY=0.46, OX=560, OY=560;
+const px=(u,v)=>OX+(u-v)*KX;
+const py=(u,v,z)=>OY-(u+v)*KY-(z||0);
+const P=(u,v,z)=>px(u,v).toFixed(1)+","+py(u,v,z).toFixed(1);
+function poly(pts,fill,extra){ return el("polygon",Object.assign(
+  {points:pts.map(p=>P(p[0],p[1],p[2]||0)).join(" "),fill},extra||{})); }
+function prism(g,u,v,w,d,z0,h,c,rim){ const t=z0+h;
+  g.appendChild(poly([[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],c[2]));
+  g.appendChild(poly([[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],c[1]));
+  g.appendChild(poly([[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],c[0],{class:"top"}));
+  if(rim) g.appendChild(el("polyline",{class:"rim",
+    points:[[u+w,v,t],[u+w,v+d,t],[u,v+d,t]].map(p=>P(p[0],p[1],p[2])).join(" ")})); }
+function shadow(g,u,v,w,d){ g.appendChild(el("ellipse",
+  {cx:px(u+w/2,v+d/2), cy:py(u+w/2,v+d/2,0)+5, rx:(w+d)*.38, ry:(w+d)*.13, fill:"#04060c", opacity:.36})); }
+
+/* ── 팔레트 (현재 다이어그램 = 롤백본) ── */
+const SLATE=["#3a4763","#1a2234","#232d44"];
+const GAME =["#f4c862","#7d5a1c","#b3842a"];
+const CROWD=["#4f7cb4","#1e3a54","#2d5276"];
+const NET  =["#63afe6","#1b4870","#2b6597"];
+const DBBOX=["#3f8f68","#154029","#1f5f40"];
+const TRAY =["#243c5e","#0f1d31","#172a44"];
+const RECV="#6cc7ff", SEND="#ffb648", STORE="#57d694";
+
+/* ── 구역 바닥(스레드 그룹) — 얕은 판 + 앞·오른쪽 테두리 + 바닥에 눕힌 이름. 모든 것 뒤에 깔린다.
+   name = 바닥에 눕혀 찍는 글자 · lu,lv = 그 글자의 중앙(따로 끌어서 자리 잡음)
+   ws = 글자 크기 · wo = 진하기(0~1). 자리는 건물·레일에 안 걸리는 빈 줄을 골라 잡은 기본값 ── */
+const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
+             game: {top:"#1b1710",side:"#131009",edge:"#ffb648"},
+             store:{top:"#0f1b17",side:"#0a1210",edge:"#57d694"},
+             /* gray 는 바탕색과 거의 같아 안 보였다 → 확실히 밝은 중립으로 */
+             gray: {top:"#18202f",side:"#111827",edge:"#93a5c2"},
+             /* 수신/응답/저장 3색과 안 겹치는 4번째 색조 (현재 쓰는 구역 없음) */
+             violet:{top:"#1b1533",side:"#120e24",edge:"#a78bfa"},
+             /* outside = 우리 서버 밖(클라이언트 등). 실선·밝은 중립.
+                점선 버전이 필요하면 여기에 dash:true 만 붙이면 된다 */
+             outside:{top:"#161d2b",side:"#0f1522",edge:"#93a5c2"} };
+/* 크기 29 통일(사용자 지정) — 계산상 안 걸리는 자리는 22까지라, NETWORK 와 DB 는 이 크기에서
+   건물·레일에 일부 가린다. 자리는 툴에서 직접 잡는 중. 안 가리게 하려면 22로 내리면 된다. */
+const ZONE_INIT=[
+  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-80,lv:152, ws:29, wo:.22},
+  {u:40, v:-100,w:200,d:320,color:"net",   name:"NETWORK", lu:44, lv:142, ws:29, wo:.22},
+  {u:262,v:-98, w:200,d:200,color:"game",  name:"GAME",    lu:436,lv:-42, ws:29, wo:.22},
+  {u:260,v:120, w:220,d:100,color:"store", name:"DB",      lu:264,lv:132, ws:29, wo:.22} ];
+/* 바닥에 눕힌 글자 — (u,v) 평면에 얹는 아핀 변환. 진행 방향은 왼→오·위→아래(-v)로 고정이고,
+   글자 아래쪽이 화면 앞(-u)을 향하게 잡아 좌우가 뒤집히지 않는다. */
+const ZW_LS=.12;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격이 같이 움직인다 */
+function floorMat(u,v){ return "matrix("+KX+","+KY+","+(-KX)+","+KY+","+px(u,v).toFixed(2)+","+py(u,v,0).toFixed(2)+")"; }
+/* 레일 표현(초기 디자인) — 폭 있는 바닥 채널 + 이음선. 본편 mmo.src.html 과 동일 */
+const LTINT={recv:"#16243a", send:"#2a2412", store:"#12281c"};
+/* 본편과 동일 — 줄별 평행 경로(꺾임은 마이터). cross 면 꺾일 때마다 부호를 뒤집어 X 로 겹친다 */
+function offsetPath(wp,off,cross){
+  if(!off) return wp.slice();
+  const L=[]; let k=0;
+  for(let i=1;i<wp.length;i++){ const a=wp[i-1], b=wp[i];
+    const du=b[0]-a[0], dv=b[1]-a[1], l=Math.hypot(du,dv); if(l<0.5) continue;
+    const o = cross ? (k%2 ? -off : off) : off; k++;
+    const ou=-dv/l*o, ov=du/l*o;
+    L.push({p:[a[0]+ou,a[1]+ov], q:[b[0]+ou,b[1]+ov], d:[du/l,dv/l]}); }
+  if(!L.length) return wp.slice();
+  const out=[L[0].p];
+  for(let i=1;i<L.length;i++){ const A=L[i-1], B=L[i];
+    const cr=A.d[0]*B.d[1]-A.d[1]*B.d[0];
+    if(Math.abs(cr)<1e-6){ out.push(B.p); continue; }
+    const t=((B.p[0]-A.p[0])*B.d[1]-(B.p[1]-A.p[1])*B.d[0])/cr;
+    out.push([A.p[0]+A.d[0]*t, A.p[1]+A.d[1]*t]); }
+  out.push(L[L.length-1].q);
+  return out; }
+/* 본편과 동일 — 폴리라인 하나를 통째로 띠로. knee 반경 안쪽에만 밑그림자(겹침에서 위/아래 구분) */
+const XSHADE=.45, XSHADE_R=38, XSHADE_W=2.5;
+function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
+  if(knee) knee.forEach(function(C){ const hs=h+XSHADE_W;
+    for(let i=1;i<pts.length;i++){ const A=pts[i-1], B=pts[i];
+      const du=B[0]-A[0], dv=B[1]-A[1], L=Math.hypot(du,dv); if(L<0.5) continue;
+      const ux=du/L, uy=dv/L, wx=A[0]-C[0], wy=A[1]-C[1];
+      const b=wx*ux+wy*uy, c=wx*wx+wy*wy-XSHADE_R*XSHADE_R, disc=b*b-c; if(disc<=0) continue;
+      const t0=Math.max(0,-b-Math.sqrt(disc)), t1=Math.min(L,-b+Math.sqrt(disc)); if(t1<=t0) continue;
+      const P0=[A[0]+ux*t0,A[1]+uy*t0], P1=[A[0]+ux*t1,A[1]+uy*t1], pu=-uy, pv=ux;
+      g.appendChild(poly([[P0[0]+pu*hs,P0[1]+pv*hs],[P1[0]+pu*hs,P1[1]+pv*hs],
+        [P1[0]-pu*hs,P1[1]-pv*hs],[P0[0]-pu*hs,P0[1]-pv*hs]],"#05080f",{opacity:String(XSHADE)})); } });
+  for(let i=1;i<pts.length;i++){ const A=pts[i-1], B=pts[i];
+    const du=B[0]-A[0], dv=B[1]-A[1], L=Math.hypot(du,dv); if(L<0.5) continue;
+    S.push({A,B,L,pu:-dv/L,pv:du/L}); }
+  S.forEach(s=>g.appendChild(poly([[s.A[0]+s.pu*h,s.A[1]+s.pv*h],[s.B[0]+s.pu*h,s.B[1]+s.pv*h],
+    [s.B[0]-s.pu*h,s.B[1]-s.pv*h],[s.A[0]-s.pu*h,s.A[1]-s.pv*h]],tint)));
+  for(let i=1;i<pts.length-1;i++){ const q=pts[i];
+    g.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
+  S.forEach(s=>{ const upSign = py(s.A[0]+s.pu,s.A[1]+s.pv,0)<=py(s.A[0]-s.pu,s.A[1]-s.pv,0) ? 1 : -1;
+    [[1,true],[-1,false]].forEach(q=>{ const e=q[0]*upSign*h, up=q[1];
+      g.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
+        x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
+        stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); }
+const LANE_W=10, SEAM=22, SUB_W=10, SUB_GAP=4;   /* SUB_*: lanes>1(다중 파이프)일 때 줄 하나 폭/간격 — 줄 폭=일반 레인과 동일 */
+const ZONES=[]; let zoneSeq=0;
+function addZone(o){ o=o||{}; const id="zone"+(++zoneSeq);
+  const z={ id, u:(o.u!=null?o.u:0), v:(o.v!=null?o.v:0), w:o.w||160, d:o.d||120,
+    color:o.color||"net", name:o.name||("새 구역 "+zoneSeq),
+    lu:(o.lu!=null?o.lu:(o.u!=null?o.u:0)), lv:(o.lv!=null?o.lv:(o.v!=null?o.v:0)),
+    ws:(+o.ws>0?+o.ws:24), wo:(o.wo!=null?+o.wo:.22) };
+  ZONES.push(z); return z; }
+function initZones(){ ZONES.length=0; zoneSeq=0; ZONE_INIT.forEach(z=>addZone(z)); }
+initZones();
+function delZone(id){ const i=ZONES.findIndex(z=>z.id===id); if(i<0) return;
+  ZONES.splice(i,1); if(selZone===id) selZone=null; renderProp(); render(); }
+
+/* ── 각 오브젝트 = (u,v) 기준점 + 그리기 함수 + 히트 박스 크기 ──
+   NODES 순서 = 뒤→앞(painter). hit(w,d,h)=상단면 히트박스. */
+/* u,v / lab.dx,dy 기본값 = 현재 mmo.src.html 의 LAYOUT·LABELS 와 동기화(2026-07-25).
+   → 툴을 그냥 열면 실제 씬 배치가 뜨고, '처음으로'도 이 배치로 되돌아온다. */
+/* 큐 노드 공통 치수 — 본편과 같은 값 (SLOT = 크기 5 칩의 실제 한 변) */
+const SLOT=+(5/KX).toFixed(2), Q_HEAD=0.9+SLOT/2, SQ_N=4, SQ_HW=27, DBQ_N=5;
+/* 큐 판 반폭은 칸 수에서 나온다 = 첫 칸 + 나머지 칸 + 칸 반쪽 + 여백 2.8 (SwapQ 27 · 송신 큐 21 도 이 값) */
+const DBQ_HW=Math.round(Q_HEAD+(DBQ_N-1)*SLOT+SLOT/2+2.8);   /* = 33 */
+const DBW=["#2f7a56","#0d2b1d","#1a4b35"], DBPLATE=["#1e3a2b","#0a1710","#132b1e"];
+/* 몸통 확대 배수 — 본편 mmo.src.html 과 같은 값을 유지할 것.
+   레일/칩/큐 칸은 제외(칩 크기에 물려 있어 따로 못 키운다). 중심 고정, 크기만 곱한다 */
+const BODY=1.18, bw=w=>w*BODY, bo=(u,w)=>u-w*(BODY-1)/2;
+const NODES=[
+  { name:"mysql", label:"MySQL", u:383, v:148, hit:[0,0,48,40,24],
+    lab:{dx:5,dy:-32,anch:"middle",lines:[["MySQL",14,"#eef2fb","800",0],["주기 UPSERT",11,"#8496b3","600",15]]},
+    draw(g,u,v){ const x=bo(u,48), y=bo(v,40), W=bw(48), D=bw(40), H=bw(8); shadow(g,x,y,W,D);
+      prism(g,x,y,W,D,0,H,DBBOX,true); prism(g,x,y,W,D,H,H,DBBOX,true); prism(g,x,y,W,D,H*2,H,DBBOX,true); } },
+
+  /* SwapQ·송신 큐와 같은 양식(판 + 파인 홈 + 가운데 칸막이 + 쌓이는 칸), 색만 저장 계열.
+     홈 축 = MySQL 로 나가는 축(+u), 쌓이는 칸은 그 반대쪽(-u). 워커 큐브는 홈 뒤(+v). */
+  { name:"dbw", label:"DB 워커", u:273, v:148, hit:[37-DBQ_HW,11,2*DBQ_HW,22,4],
+    lab:{dx:2,dy:-62,anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["통째 인출 · 배치 UPSERT",10.5,"#8496b3","600",15]]},
+    draw(g,u,v){ const CU=u+37, HW=DBQ_HW, GD=5, Z=3.4, cy=v+22;
+      const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
+      shadow(g,CU-HW,cy-11,2*HW,22);
+      prism(g,CU-HW,cy-11,2*HW,22,0,Z,DBPLATE,true);
+      g.appendChild(el("polygon",{points:PT([[CU-HW+2.5,cy-GD,Z],[CU+HW-2.5,cy-GD,Z],[CU+HW-2.5,cy+GD,Z],[CU-HW+2.5,cy+GD,Z]]),
+        fill:"#0d2018",stroke:"#2c6a4a","stroke-width":.7,opacity:.9}));
+      prism(g,CU-1.1,cy-GD,2.2,2*GD,Z,1.4,["#57d694","#1b5b3c","#2a7d55"],true);   /* 칸막이 = 인출 경계 */
+      for(let i=0;i<DBQ_N;i++){ const cu=CU-Q_HEAD-i*SLOT;
+        g.appendChild(el("polygon",{fill:"#122a1e",stroke:"#2a5741","stroke-width":.7,
+          points:PT([[cu-SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy+4,Z+0.35],[cu-SLOT/2,cy+4,Z+0.35]])})); }
+      /* DB 워커 스레드 몸통 — 판 뒷변에 슬랩을 붙이고 큐브. 몸통 17×11×14 = Send 워커 상자와 동일, 슬랩 여백 6 */
+      const sx=bo(CU+18.5,29), sy=cy+11;
+      shadow(g,sx,sy,bw(29),bw(23));
+      prism(g,sx,sy,bw(29),bw(23),-bw(2),bw(3),DBPLATE);
+      prism(g,sx+bw(6),sy+bw(6),bw(17),bw(11),bw(1),bw(14),DBW,true); } },
+
+  { name:"game", label:"게임 루프", u:380, v:20, hit:[0,0,60,60,58],
+    lab:{dx:50,dy:-32,anch:"start",lines:[["게임 루프",18,"#ffe0a0","800",0],["단일 코어 · 25fps 틱",12,"#c9b48c","600",19],["◆ BOTTLENECK",11,"#ffb648","800",40]]},
+    draw(g,u,v){ const w=bw(60),d=bw(60),h=bw(58), x=bo(u,60), y=bo(v,60); shadow(g,x,y,w,d);
+      prism(g,x,y,w,d,0,h,GAME,true);
+      g.appendChild(el("polygon",{points:[[x,y],[x+w,y],[x+w,y+d],[x,y+d]].map(p=>P(p[0],p[1],h)).join(" "),
+        fill:"none",stroke:"#ffe0a0","stroke-width":1.6,opacity:.9}));
+      const tx=px(x+w/2,y+d/2), ty=py(x+w/2,y+d/2,h);
+      g.appendChild(el("line",{x1:tx,y1:ty,x2:tx,y2:ty-bw(24),stroke:"#ffb648","stroke-width":2.4}));
+      g.appendChild(el("circle",{cx:tx,cy:ty-bw(29),r:bw(5),fill:"#ffd88a"})); } },
+
+  { name:"sector", label:"송신 큐 ×3", u:310, v:-70, hit:[-21,-22,42,44,4],
+    lab:{dx:41,dy:-18,anch:"start",lines:[["송신 큐 ×3",12.5,"#eef2fb","800",0],["워커별 통째 스왑",10.5,"#8496b3","600",15]]},
+    draw(g,u,v){ const HW=21, HD=22, LANE=14, GD=5, Z=3.4;   /* 홈 3개 = 워커별 큐(본편과 동일) */
+      const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
+      shadow(g,u-HW,v-HD,2*HW,2*HD);
+      prism(g,u-HW,v-HD,2*HW,2*HD,0,Z,["#332613","#160e04","#241a0b"],true);
+      for(let k=1;k>=-1;k--){ const cv=v+k*LANE;
+        g.appendChild(el("polygon",{points:PT([[u-HW+2.5,cv-GD,Z],[u+HW-2.5,cv-GD,Z],[u+HW-2.5,cv+GD,Z],[u-HW+2.5,cv+GD,Z]]),
+          fill:"#1d1407",stroke:"#4a3718","stroke-width":.7,opacity:.9}));
+        prism(g,u-1.1,cv-GD,2.2,2*GD,Z,1.4,["#ffb648","#7d5a1c","#b3842a"],true);   /* 칸막이 = 스왑 경계 */
+        for(let i=0;i<3;i++){ const cu=u+Q_HEAD+i*SLOT;
+          g.appendChild(el("polygon",{fill:"#1d1409",stroke:"#553f1c","stroke-width":.7,
+            points:PT([[cu-SLOT/2,cv-4,Z+0.35],[cu+SLOT/2,cv-4,Z+0.35],[cu+SLOT/2,cv+4,Z+0.35],[cu-SLOT/2,cv+4,Z+0.35]])})); } } } },
+
+  /* 송신 큐와 같은 양식, 색만 수신 계열. 홈 1개 = 공유(왼쪽) ↔ 로컬(오른쪽) */
+  { name:"swapq", label:"SwapQ", u:310, v:42, hit:[-SQ_HW,-3,2*SQ_HW,22,4],
+    lab:{dx:49,dy:6,anch:"middle",lines:[["SwapQ",13.5,"#cfe0f2","800",0],["통째 스왑 · 락 1회",10.5,"#93a9cd","600",14]]},
+    draw(g,u,v){ const HW=SQ_HW, GD=5, Z=3.4, cy=v+8;
+      const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
+      shadow(g,u-HW,cy-11,2*HW,22);
+      prism(g,u-HW,cy-11,2*HW,22,0,Z,["#22314c","#0d1524","#182640"],true);
+      g.appendChild(el("polygon",{points:PT([[u-HW+2.5,cy-GD,Z],[u+HW-2.5,cy-GD,Z],[u+HW-2.5,cy+GD,Z],[u-HW+2.5,cy+GD,Z]]),
+        fill:"#101a2c",stroke:"#33507e","stroke-width":.7,opacity:.9}));
+      prism(g,u-1.1,cy-GD,2.2,2*GD,Z,1.4,["#8ad4ff","#1b4870","#2b6597"],true);
+      for(let i=0;i<SQ_N;i++){ const cu=u-Q_HEAD-i*SLOT;
+        g.appendChild(el("polygon",{fill:"#16223a",stroke:"#2c4266","stroke-width":.7,
+          points:PT([[cu-SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy+4,Z+0.35],[cu-SLOT/2,cy+4,Z+0.35]])})); } } },
+
+  { name:"iocp", label:"IOCP 워커", u:190, v:50, hit:[-23,-22,46,44,16],
+    lab:{dx:20,dy:39,anch:"middle",lines:[["IOCP 워커",14.5,"#eef2fb","800",0],["×4 · 병렬 파싱",11,"#6cc7ff","700",16]]},
+    draw(g,u,v){ prism(g,u-bw(23),v-bw(22),bw(46),bw(44),-bw(2),bw(3),["#1c2b45","#0e1626","#152238"]);
+      const cells=[[-17,-16],[1,-16],[-17,1],[1,1]].map(c=>[u+bw(c[0]), v+bw(c[1])])
+        .sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
+      cells.forEach(c=>prism(g,c[0],c[1],bw(16),bw(15),0,bw(16),NET,true)); } },
+
+  { name:"send", label:"Send 워커", u:168, v:-92, hit:[0,0,44,44,17],
+    lab:{dx:52,dy:43,anch:"middle",lines:[["Send 워커 ×3",14.5,"#eef2fb","800",0],["uniqueId%3 · WSASend",11,"#8496b3","600",15]]},
+    draw(g,u,v){ const x=bo(u,44), y=bo(v,44); prism(g,x,y,bw(44),bw(44),-bw(2),bw(3),["#20304e","#101a2c","#16233b"]);
+      [36,21,6].forEach(dv=>prism(g,x+bw(6),y+bw(dv-3),bw(17),bw(11),bw(3),bw(14),NET,true)); } },   /* 뒤(v큰 것)부터 — 앞 상자가 가리게 */
+
+  { name:"accept", label:"Accept", u:55, v:36, hit:[0,0,30,28,20],
+    lab:{dx:-52,dy:-26,anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",10.5,"#8496b3","600",15]]},
+    draw(g,u,v){ const x=bo(u,30), y=bo(v,28);
+      shadow(g,x,y,bw(30),bw(28)); prism(g,x,y,bw(30),bw(28),0,bw(20),NET,true); } },
+
+  { name:"clients", label:"클라이언트", u:-63, v:21, hit:[0,0,66,58,11],
+    lab:{dx:0,dy:36,anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
+    draw(g,u,v){ const x=bo(u,66), y=bo(v,58), cubes=[];
+      for(let cu=0;cu<=66;cu+=14) for(let cv=0;cv<=58;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
+      cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
+      cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
+
+  { name:"timer", label:"Timing Wheel", u:190, v:170, hit:[-22,-22,44,44,4],
+    lab:{dx:-40,dy:-34,anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
+    draw(g,u,v){ const R=bw(32), cx=px(u,v), cy=py(u,v,bw(4));
+      g.appendChild(el("ellipse",{cx,cy:cy+5,rx:R*KX*1.1,ry:R*KY*1.1,fill:"#05070d",opacity:.4}));
+      prism(g,u-bw(22),v-bw(22),bw(44),bw(44),0,bw(4),["#2a3450","#141c30","#1d2740"]);
+      const rx=R*KX*1.02, ry=R*KY*1.02;
+      g.appendChild(el("ellipse",{cx,cy,rx,ry,fill:"#101828",stroke:"#3a4864","stroke-width":1.4}));
+      for(let i=0;i<12;i++){ const a=i/12*Math.PI*2;
+        g.appendChild(el("line",{x1:cx+Math.cos(a)*rx*0.78,y1:cy+Math.sin(a)*ry*0.78,
+          x2:cx+Math.cos(a)*rx*0.96,y2:cy+Math.sin(a)*ry*0.96,stroke:"#46577a","stroke-width":1.3,opacity:.7})); }
+      g.appendChild(el("circle",{cx,cy,r:3.5,fill:"#cfe0f2"})); } },
+];
+/* 히트박스·라벨 높이도 몸통과 같이 키운다(중심 = 레일 끝점은 그대로). 큐 3종은 몸통을 안 키웠으니 제외 */
+const BODY_KEEP={swapq:1, sector:1, dbw:1};
+if(BODY!==1) NODES.forEach(n=>{ if(BODY_KEEP[n.name]) return; const h=n.hit;
+  h[0]-=h[2]*(BODY-1)/2; h[2]*=BODY; h[1]-=h[3]*(BODY-1)/2; h[3]*=BODY; h[4]*=BODY; });
+
+/* ── 레일(연결선): 오브젝트 A→B 연결. 추가/삭제/색 편집 가능 ── */
+/* 현재 mmo.src.html 의 RAILS 와 동기화(꺾기점 pts 포함) */
+const RAIL_INIT=[
+  {a:"clients",b:"accept",color:"recv"},
+  {a:"accept", b:"iocp",  color:"recv"},
+  {a:"iocp",   b:"swapq", color:"recv"},
+  {a:"swapq",  b:"game",  color:"recv"},
+  {a:"send",   b:"clients",color:"recv",lanes:3,cross:true,pts:[{u:-30,v:-70}]},
+  {a:"game",   b:"dbw",   color:"store",pts:[{u:410,v:70},{u:410,v:130},{u:310,v:130}]},
+  {a:"dbw",    b:"mysql", color:"store"},
+  {a:"game",   b:"sector",color:"send",lanes:3,cross:true,pts:[{u:410,v:-70}]},
+  {a:"sector", b:"send",  color:"send", lanes:3},   /* 워커 3개 고정 파이프 — uniqueId%3 */
+  {a:"iocp",   b:"timer", color:"recv",pts:[{u:190,v:170}]},
+  {a:"accept", b:"timer", color:"recv",pts:[{u:70,v:170}]} ];
+const RAILS=[]; let railSeq=0;
+const RAILCOL={recv:RECV, send:SEND, store:STORE, net:"#8fb6e6"};
+function railColorHex(k){ return RAILCOL[k]||RECV; }
+function addRail(a,b,color,pts,lanes,cross){ const id="rail"+(++railSeq);
+  RAILS.push({id,a,b,color:color||"recv",pts:(pts||[]).map(p=>({u:p.u,v:p.v})),
+    lanes:(+lanes>1?+lanes:1),cross:!!cross}); return id; }
+function delRail(id){ const i=RAILS.findIndex(r=>r.id===id); if(i<0) return;
+  RAILS.splice(i,1); if(selRail===id) selRail=null; renderProp(); render(); }
+function initRails(){ RAILS.length=0; railSeq=0; RAIL_INIT.forEach(r=>addRail(r.a,r.b,r.color,r.pts,r.lanes,r.cross)); }
+initRails();
+
+/* 초기 LAYOUT 스냅샷 */
+const INIT={}; NODES.forEach(n=>INIT[n.name]={u:n.u,v:n.v});
+/* 초기 라벨 글자 스냅샷 — Export 때 "바뀐 것만 texts:로" 판별 + '처음으로' 복원용 */
+const INIT_TXT={}; NODES.forEach(n=>INIT_TXT[n.name]=n.lab?n.lab.lines.map(l=>l[0]):null);
+const LAYOUT={}; NODES.forEach(n=>LAYOUT[n.name]={u:n.u,v:n.v});
+const byName={}; NODES.forEach(n=>byName[n.name]=n);
+
+/* ── 사용자 추가 오브젝트(EXTRA) — 기본 상자. 기본 오브젝트와 동일 인터페이스(.hit/.draw) ── */
+const EXTRA=[]; let extraSeq=0;
+const PALS={slate:SLATE, blue:NET, green:DBBOX, orange:GAME, crowd:CROWD};
+function palette(k){ return PALS[k]||SLATE; }
+function allObjs(){ return NODES.concat(EXTRA); }
+function syncExtraHit(o){ o.hit=[0,0,o.props.w,o.props.d,o.props.h]; }
+function labLinesFromProps(p){ const L=[[p.label||"",13,"#eef2fb","800",0]]; if(p.cap) L.push([p.cap,10.5,"#8496b3","600",15]); return L; }
+function addExtra(opt){ opt=opt||{}; const id="box"+(++extraSeq);
+  const o={ name:id, extra:true,
+    props:{w:opt.w||36, d:opt.d||36, h:opt.h||24, label:opt.label||("새 상자 "+extraSeq), cap:opt.cap||"", color:opt.color||"slate"},
+    draw(g,U,V){ const p=this.props; shadow(g,U,V,p.w,p.d); prism(g,U,V,p.w,p.d,0,p.h,palette(p.color),true); } };
+  o.lab={dx:0,dy:-6,anch:"middle",lines:labLinesFromProps(o.props)};
+  syncExtraHit(o); EXTRA.push(o); byName[id]=o;
+  LAYOUT[id]={u:(opt.u!=null?opt.u:120), v:(opt.v!=null?opt.v:90)};
+  return o; }
+function delObj(name){ const i=EXTRA.findIndex(o=>o.name===name); if(i<0) return;
+  EXTRA.splice(i,1); delete byName[name]; delete LAYOUT[name]; if(sel===name) sel=null;
+  renderProp(); render(); }
+
+/* 레이어 */
+const gZoneL=el("g"), gGrid=el("g"), gConn=el("g"), gBody=el("g"), gSel=el("g"), gGuide=el("g"), gLbl=el("g"), gHandle=el("g");
+[gZoneL,gGrid,gConn,gBody,gSel,gGuide,gLbl,gHandle].forEach(g=>svg.appendChild(g));
+gGrid.setAttribute("class","gridlyr");
+
+let SNAP=20, showConn=true, showGrid=true, showZone=true, sel=null, selRail=null, selWpt=null, selZone=null, activeGuides=[], connectMode=false, connectFrom=null;
+const GUIDE_EPS=4;
+function foot(n){ const L=LAYOUT[n.name]; const h=n.hit; return [L.u+h[0], L.v+h[1], h[2], h[3]]; }
+function center(n){ const f=foot(n); return [f[0]+f[2]/2, f[1]+f[3]/2]; }
+function snapPt(u,v){ if(SNAP<=0) return {u:Math.round(u),v:Math.round(v)};
+  return {u:(Math.round(u/SNAP-0.5)+0.5)*SNAP, v:(Math.round(v/SNAP-0.5)+0.5)*SNAP}; }  /* 도형 중앙과 같은 '칸 중앙' 격자 */
+function railPath(r){ const oa=byName[r.a], ob=byName[r.b], A=oa?center(oa):[0,0], B=ob?center(ob):[0,0];
+  return [A].concat((r.pts||[]).map(p=>[p.u,p.v])).concat([B]); }
+/* 중앙을 격자 '칸 한가운데'로 스냅 → 도형이 네모 칸 안에 딱 앉음 */
+function snapBase(n,u,v){ if(SNAP<=0) return {u:Math.round(u),v:Math.round(v)};
+  const cox=n.hit[0]+n.hit[2]/2, coy=n.hit[1]+n.hit[3]/2;
+  const cu=(Math.round((u+cox)/SNAP-0.5)+0.5)*SNAP, cv=(Math.round((v+coy)/SNAP-0.5)+0.5)*SNAP;
+  return {u:Math.round(cu-cox), v:Math.round(cv-coy)}; }
+const GU0=-160,GU1=480,GV0=-140,GV1=280;
+function drawGrid(){ if(!showGrid||SNAP<=0) return;
+  for(let u=Math.ceil(GU0/SNAP)*SNAP; u<=GU1; u+=SNAP){ const mj=(Math.round(u)%(SNAP*5)===0);
+    gGrid.appendChild(el("line",{x1:px(u,GV0),y1:py(u,GV0,0),x2:px(u,GV1),y2:py(u,GV1,0),
+      stroke:mj?"#324a6b":"#1b2740","stroke-width":mj?1:.8,opacity:mj?.65:.42})); }
+  for(let v=Math.ceil(GV0/SNAP)*SNAP; v<=GV1; v+=SNAP){ const mj=(Math.round(v)%(SNAP*5)===0);
+    gGrid.appendChild(el("line",{x1:px(GU0,v),y1:py(GU0,v,0),x2:px(GU1,v),y2:py(GU1,v,0),
+      stroke:mj?"#324a6b":"#1b2740","stroke-width":mj?1:.8,opacity:mj?.65:.42})); } }
+
+/* 구역 이름을 바닥에 눕혀 그린다. 얇은 글자도 잡히게 글자 크기만 한 투명 판을 깔아 둔다.
+   글자는 건물보다 아래라 가려질 수 있는데, 가려지면 클릭도 안 잡혀 다시 못 끌어낸다 →
+   선택된 구역은 맨 위 레이어에 같은 자리로 '잡이판 + 점선'을 하나 더 얹어 항상 끌 수 있게 한다. */
+function drawZoneWord(zg,z,pal){
+  const s=+z.ws||24, ls=ZW_LS*s, mat=floorMat(z.lu,z.lv);
+  const wg=el("g",{class:"zword","data-zword":z.id,transform:mat});
+  zg.appendChild(wg);
+  const t=el("text",{x:(ls/2).toFixed(1),y:(s*.34).toFixed(1),"text-anchor":"middle",
+    "font-size":s,"font-weight":"900","letter-spacing":ls.toFixed(2),
+    "font-family":"var(--sans)",fill:pal.edge,opacity:(z.wo!=null?z.wo:.22)},z.name);
+  wg.appendChild(t);
+  const tl=t.getComputedTextLength();
+  const box={x:(-tl/2+ls/2).toFixed(1), y:(-s*.76).toFixed(1), width:tl.toFixed(1), height:(s*1.02).toFixed(1)};
+  wg.insertBefore(el("rect",Object.assign({fill:"transparent"},box)),t);
+  if(selZone===z.id){
+    const hg=el("g",{class:"zword","data-zword":z.id,transform:mat});
+    hg.appendChild(el("rect",Object.assign({fill:"transparent"},box)));
+    hg.appendChild(el("rect",Object.assign({fill:"none",stroke:"#ffb648",
+      "stroke-width":1,"stroke-dasharray":"4 3",opacity:.75},box)));
+    gHandle.appendChild(hg); }
+}
+
+function render(){
+  gZoneL.textContent=""; gGrid.textContent=""; gConn.textContent=""; gBody.textContent=""; gSel.textContent=""; gGuide.textContent=""; gLbl.textContent=""; gHandle.textContent="";
+  /* 구역 바닥 (맨 뒤 · 격자보다도 아래) */
+  if(showZone) ZONES.forEach(z=>{ const pal=ZPAL[z.color]||ZPAL.net;
+    const zg=el("g",{class:"zone","data-zone":z.id});
+    prism(zg,z.u,z.v,z.w,z.d,-6,6,[pal.top,pal.side,pal.side]);
+    const eAttr=pal.dash?{"stroke-dasharray":"6 5"}:{};
+    zg.appendChild(el("line",Object.assign({x1:px(z.u,z.v+z.d),y1:py(z.u,z.v+z.d,0),
+      x2:px(z.u+z.w,z.v+z.d),y2:py(z.u+z.w,z.v+z.d,0),stroke:pal.edge,"stroke-width":1.6,opacity:.42},eAttr)));
+    zg.appendChild(el("line",Object.assign({x1:px(z.u+z.w,z.v),y1:py(z.u+z.w,z.v,0),
+      x2:px(z.u+z.w,z.v+z.d),y2:py(z.u+z.w,z.v+z.d,0),stroke:pal.edge,"stroke-width":1.6,opacity:.42},eAttr)));
+    gZoneL.appendChild(zg);
+    if(z.name) drawZoneWord(zg,z,pal);   /* 판과 같은 그룹 = 레일·건물보다 아래(본편과 동일) */
+    if(selZone===z.id){
+      gSel.appendChild(el("polygon",{class:"zonesel",points:
+        [[z.u,z.v],[z.u+z.w,z.v],[z.u+z.w,z.v+z.d],[z.u,z.v+z.d]].map(q=>P(q[0],q[1],0)).join(" ")}));
+      gHandle.appendChild(el("rect",{class:"zres","data-zres":z.id,
+        x:(px(z.u+z.w,z.v+z.d)-5).toFixed(1),y:(py(z.u+z.w,z.v+z.d,0)-5).toFixed(1),
+        width:10,height:10,rx:2})); }
+  });
+  drawGrid();
+  /* 선택 도형이 놓인 격자 칸 강조(딱 맞음 확인) */
+  if(sel && byName[sel] && SNAP>0){ const c=center(byName[sel]);
+    const u0=Math.floor(c[0]/SNAP)*SNAP, v0=Math.floor(c[1]/SNAP)*SNAP;
+    gGrid.appendChild(el("polygon",{points:[[u0,v0],[u0+SNAP,v0],[u0+SNAP,v0+SNAP],[u0,v0+SNAP]].map(p=>P(p[0],p[1],0)).join(" "),
+      fill:"rgba(108,199,255,.12)",stroke:"#6cc7ff","stroke-width":1})); }
+  /* 정렬 가이드(드래그 중, 다른 오브젝트 중앙선과 정렬되면 표시) */
+  activeGuides.forEach(g=>{ const p=(g[0]==="u")?[[g[1],GV0],[g[1],GV1]]:[[GU0,g[1]],[GU1,g[1]]];
+    gGuide.appendChild(el("line",{x1:px(p[0][0],p[0][1]),y1:py(p[0][0],p[0][1],0),
+      x2:px(p[1][0],p[1][1]),y2:py(p[1][0],p[1][1],0),stroke:"#ffb648","stroke-width":1.4,
+      "stroke-dasharray":"7 5",opacity:.9})); });
+  /* 레일(연결선): 꺾은선(polyline) + 굵은 투명 히트선(클릭용) */
+  if(showConn) RAILS.forEach(r=>{ if(!byName[r.a]||!byName[r.b]) return;
+    const path=railPath(r), col=railColorHex(r.color), on=(selRail===r.id);
+    const ptsStr=path.map(p=>px(p[0],p[1]).toFixed(1)+","+py(p[0],p[1],0).toFixed(1)).join(" ");
+    /* 본편과 같은 표현: 폭 있는 바닥 채널(아주 어두운 흐름색) + 꺾임 패치 + 이음선 + 다중 레인(lanes) */
+    const NL=r.lanes||1, subW=NL>1?SUB_W:LANE_W, totW=NL>1?NL*SUB_W+(NL-1)*SUB_GAP:LANE_W;
+    const offs=[]; for(let i=0;i<NL;i++) offs.push((i-(NL-1)/2)*(SUB_W+SUB_GAP));
+    const tint=LTINT[r.color]||LTINT.recv, segs=[];
+    for(let i=1;i<path.length;i++){ const A=path[i-1], B=path[i];
+      const du=B[0]-A[0], dv=B[1]-A[1], L=Math.hypot(du,dv); if(L<0.5) continue;
+      segs.push({A,B,du,dv,L,pu:-dv/L,pv:du/L}); }
+    if(r.cross && NL>1){   /* 교차 레일 — 줄마다 통째로(본편과 동일) */
+      const knee=path.slice(1,-1);
+      offs.forEach(c=>ribbon(gConn, offsetPath(path,c,true), subW, tint, knee));
+      const HT=totW/2-1;
+      segs.forEach(s=>{ const hu=s.pu*HT, hv=s.pv*HT;
+        for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
+          if(knee.some(q=>Math.hypot(cu-q[0],cv-q[1])<totW)) continue;
+          gConn.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
+            x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
+      if(on) gConn.appendChild(el("polyline",{class:"conn",points:ptsStr,fill:"none",stroke:col,
+        "stroke-width":2,"stroke-dasharray":"6 4",opacity:.95}));
+      gConn.appendChild(el("polyline",{class:"railhit","data-rail":r.id,points:ptsStr,fill:"none",
+        stroke:"transparent","stroke-width":Math.max(14,totW+6)}));
+      return; }
+    segs.forEach(s=>offs.forEach(c=>{ const h=subW/2;
+      gConn.appendChild(poly([[s.A[0]+s.pu*(c+h),s.A[1]+s.pv*(c+h)],[s.B[0]+s.pu*(c+h),s.B[1]+s.pv*(c+h)],
+        [s.B[0]+s.pu*(c-h),s.B[1]+s.pv*(c-h)],[s.A[0]+s.pu*(c-h),s.A[1]+s.pv*(c-h)]],tint)); }));
+    for(let i=1;i<path.length-1;i++){ const q=path[i], h=totW/2;
+      gConn.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
+    const H=totW/2-1;   /* 이음선(완화) + 채널 모서리 음영(그루브) — 본편과 동일 */
+    segs.forEach(s=>{ const hu=s.pu*H, hv=s.pv*H;
+      for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
+        gConn.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
+          x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
+    segs.forEach(s=>{ const upSign=py(s.A[0]+s.pu,s.A[1]+s.pv,0)<=py(s.A[0]-s.pu,s.A[1]-s.pv,0)?1:-1;
+      offs.forEach(c=>{ [[1,true],[-1,false]].forEach(q=>{ const e=c+q[0]*upSign*subW/2, up=q[1];
+        gConn.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
+          x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
+          stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); });
+    if(on) gConn.appendChild(el("polyline",{class:"conn",points:ptsStr,fill:"none",stroke:col,
+      "stroke-width":2,"stroke-dasharray":"6 4",opacity:.95}));   /* 선택된 레일 표시 */
+    gConn.appendChild(el("polyline",{class:"railhit","data-rail":r.id,points:ptsStr,fill:"none",stroke:"transparent","stroke-width":Math.max(14,totW+6)})); });
+  /* 노드: 뒤→앞 정렬(u+v 큰 것 먼저) */
+  const order=allObjs().slice().sort((p,q)=>{ const a=LAYOUT[p.name],b=LAYOUT[q.name];
+    return (b.u+b.v)-(a.u+a.v); });
+  order.forEach(n=>{ const L=LAYOUT[n.name];
+    /* 몸통 전체가 드래그 타깃(data-name). 그림자·건물·라벨 아무 데나 잡아도 이동 */
+    const g=el("g",{class:"body"+(drag&&drag.name===n.name?" dragging":""),"data-name":n.name});
+    n.draw(g,L.u,L.v); gBody.appendChild(g);
+    const f=foot(n), c=center(n), hz=n.hit[4]||0;
+    if(sel===n.name)  /* 선택 표시: 바닥 풋프린트 점선 */
+      gSel.appendChild(el("polygon",{class:"selbox",
+        points:[[f[0],f[1]],[f[0]+f[2],f[1]],[f[0]+f[2],f[1]+f[3]],[f[0],f[1]+f[3]]].map(p=>P(p[0],p[1],0)).join(" ")}));
+    /* 중앙 그랩 핸들: 풋프린트 정중앙, 바닥(z=0) — 레일 접점·격자 칸 중앙과 일치 */
+    gHandle.appendChild(el("circle",{class:"handle"+(sel===n.name?" sel":""),"data-name":n.name,
+      cx:px(c[0],c[1]), cy:py(c[0],c[1],0), r:6}));
+  });
+  /* 라벨(개별 드래그): 각 도형의 이름/캡션을 따로 옮길 수 있음 */
+  order.forEach(n=>{ if(!n.lab) return;
+    const c=center(n), az=n.hit[4]||0, ax=px(c[0],c[1])+n.lab.dx, ay=py(c[0],c[1],az)+n.lab.dy;
+    const lg=el("g",{class:"lblgrp","data-lbl":n.name});
+    n.lab.lines.forEach(ln=> lg.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
+      "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)"},ln[0])));
+    if(sel===n.name) lg.appendChild(el("circle",{cx:ax.toFixed(1),cy:(ay-7).toFixed(1),r:3.5,fill:"#ffb648",opacity:.9}));
+    gLbl.appendChild(lg); });
+  /* 레일 잇기 모드: 시작 오브젝트 표시 */
+  if(connectFrom && byName[connectFrom]){ const cc=center(byName[connectFrom]);
+    gHandle.appendChild(el("circle",{cx:px(cc[0],cc[1]),cy:py(cc[0],cc[1],0),r:11,fill:"none",stroke:"#57d694","stroke-width":2.5})); }
+  /* 선택된 레일: 꺾기점 핸들(드래그) + 세그먼트 중간 ＋(꺾기점 추가) */
+  if(selRail){ const r=RAILS.find(x=>x.id===selRail);
+    if(r && byName[r.a] && byName[r.b]){ const path=railPath(r);
+      (r.pts||[]).forEach((p,i)=>{ const on=(selWpt&&selWpt.rail===r.id&&selWpt.idx===i);
+        gHandle.appendChild(el("rect",{class:"wpt"+(on?" sel":""),"data-wpt":r.id+":"+i,
+          x:(px(p.u,p.v)-5).toFixed(1),y:(py(p.u,p.v,0)-5).toFixed(1),width:10,height:10,rx:2})); });
+      for(let s=0;s<path.length-1;s++){ const m=[(path[s][0]+path[s+1][0])/2,(path[s][1]+path[s+1][1])/2];
+        gHandle.appendChild(el("circle",{class:"ins","data-ins":r.id+":"+s,cx:px(m[0],m[1]),cy:py(m[0],m[1],0),r:5})); } } }
+  syncOut();
+}
+
+/* ── 드래그 ── */
+let drag=null;
+function svgScale(){ const r=svg.getBoundingClientRect(); return 1042/r.width; } /* viewBox폭/픽셀폭 */
+svg.addEventListener("pointerdown",e=>{
+  const wptHit=e.target.closest("[data-wpt]");
+  const insHit=e.target.closest("[data-ins]");
+  const lblHit=e.target.closest("[data-lbl]");
+  const objHit=e.target.closest("[data-name]");
+  const railHit=e.target.closest("[data-rail]");
+  const zresHit=e.target.closest("[data-zres]");
+  const zwordHit=e.target.closest("[data-zword]");
+  const zoneHit=e.target.closest("[data-zone]");
+  /* 레일 잇기 모드: 오브젝트 두 개를 차례로 클릭 */
+  if(connectMode){
+    if(objHit){ const nm=objHit.getAttribute("data-name");
+      if(!connectFrom){ connectFrom=nm; render(); }
+      else if(nm!==connectFrom){ const id=addRail(connectFrom,nm,"recv");
+        connectFrom=null; setConnect(false); sel=null; selRail=id; selWpt=null; renderProp(); render(); }
+    } else { setConnect(false); }   /* 빈 곳 = 취소 */
+    return;
+  }
+  /* ── 구역 바닥: 크기조절 핸들 / 이름표 / 몸통 ── */
+  if(zresHit){ const z=ZONES.find(x=>x.id===zresHit.getAttribute("data-zres"));
+    if(z){ sel=null; selRail=null; selWpt=null; selZone=z.id;
+      drag={kind:"zres",id:z.id,sx:e.clientX,sy:e.clientY,w0:z.w,d0:z.d,s:svgScale()};
+      svg.setPointerCapture(e.pointerId); renderProp(); render(); } return; }
+  if(zwordHit){ const z=ZONES.find(x=>x.id===zwordHit.getAttribute("data-zword"));
+    if(z){ sel=null; selRail=null; selWpt=null; selZone=z.id;
+      drag={kind:"zword",id:z.id,sx:e.clientX,sy:e.clientY,u0:z.lu,v0:z.lv,s:svgScale()};
+      svg.setPointerCapture(e.pointerId); renderProp(); render(); } return; }
+  if(insHit){   /* 세그먼트 중간 ＋ = 꺾기점 삽입 후 바로 드래그 */
+    const a=insHit.getAttribute("data-ins").split(":"), rid=a[0], si=+a[1], r=RAILS.find(x=>x.id===rid);
+    if(r){ if(!r.pts) r.pts=[]; const path=railPath(r);
+      const m=[(path[si][0]+path[si+1][0])/2,(path[si][1]+path[si+1][1])/2], gp=snapPt(m[0],m[1]);
+      r.pts.splice(si,0,{u:gp.u,v:gp.v}); selRail=rid; sel=null; selZone=null; selWpt={rail:rid,idx:si};
+      const s=svgScale(); drag={kind:"wpt",rail:rid,idx:si,sx:e.clientX,sy:e.clientY,u0:gp.u,v0:gp.v,s};
+      svg.setPointerCapture(e.pointerId); renderProp(); render(); } return;
+  }
+  if(wptHit){   /* 꺾기점 선택 + 드래그 */
+    const a=wptHit.getAttribute("data-wpt").split(":"), rid=a[0], i=+a[1], r=RAILS.find(x=>x.id===rid);
+    if(r&&r.pts&&r.pts[i]){ selRail=rid; sel=null; selZone=null; selWpt={rail:rid,idx:i};
+      const s=svgScale(); drag={kind:"wpt",rail:rid,idx:i,sx:e.clientX,sy:e.clientY,u0:r.pts[i].u,v0:r.pts[i].v,s};
+      svg.setPointerCapture(e.pointerId); renderProp(); render(); } return;
+  }
+  if(lblHit){   /* 라벨(글자) 선택 + 드래그 — 화면 오프셋 */
+    const name=lblHit.getAttribute("data-lbl"), o=byName[name];
+    if(o&&o.lab){ sel=name; selRail=null; selWpt=null; selZone=null;
+      const s=svgScale(); drag={kind:"lbl",name,sx:e.clientX,sy:e.clientY,dx0:o.lab.dx,dy0:o.lab.dy,s};
+      svg.setPointerCapture(e.pointerId); renderProp(); render(); } return;
+  }
+  if(objHit){   /* 오브젝트 선택 + 드래그 */
+    const name=objHit.getAttribute("data-name"); const changed=(sel!==name||selRail!==null||selWpt!==null||selZone!==null);
+    sel=name; selRail=null; selWpt=null; selZone=null;
+    const s=svgScale();
+    drag={kind:"obj", name, sx:e.clientX, sy:e.clientY, u0:LAYOUT[name].u, v0:LAYOUT[name].v, s};
+    svg.setPointerCapture(e.pointerId); if(changed) renderProp(); render(); return;
+  }
+  if(railHit){   /* 레일 선택 */
+    const id=railHit.getAttribute("data-rail"); const changed=(selRail!==id||sel!==null||selZone!==null);
+    selRail=id; sel=null; selWpt=null; selZone=null; if(changed) renderProp(); render(); return;
+  }
+  if(zoneHit){   /* 구역 바닥 = 맨 마지막 판정 → 노드·레일 클릭을 절대 가로채지 않음 */
+    const z=ZONES.find(x=>x.id===zoneHit.getAttribute("data-zone"));
+    if(z){ sel=null; selRail=null; selWpt=null; selZone=z.id;
+      drag={kind:"zone",id:z.id,sx:e.clientX,sy:e.clientY,u0:z.u,v0:z.v,s:svgScale()};
+      svg.setPointerCapture(e.pointerId); renderProp(); render(); }
+    return;
+  }
+  if(sel||selRail||selWpt||selZone){ sel=null; selRail=null; selWpt=null; selZone=null; renderProp(); render(); }   /* 빈 곳 = 해제 */
+});
+svg.addEventListener("pointermove",e=>{
+  if(!drag) return;
+  const dxs=(e.clientX-drag.sx)*drag.s, dys=(e.clientY-drag.sy)*drag.s;
+  /* 화면 이동 → (du,dv) 역산.  x=(u-v)KX, y=-(u+v)KY */
+  let du=(dxs/KX - dys/KY)/2, dv=(-dxs/KX - dys/KY)/2;
+  if(drag.kind==="zone"){ const z=ZONES.find(x=>x.id===drag.id);
+    if(z){ const g=SNAP>0?SNAP:1;
+      const nu=Math.round((drag.u0+du)/g)*g, nv=Math.round((drag.v0+dv)/g)*g;
+      z.lu+=nu-z.u; z.lv+=nv-z.v; z.u=nu; z.v=nv; render(); } return; }   /* 이름표도 같이 따라감 */
+  if(drag.kind==="zres"){ const z=ZONES.find(x=>x.id===drag.id);
+    if(z){ const g=SNAP>0?SNAP:1;
+      z.w=Math.max(24,Math.round((drag.w0+du)/g)*g); z.d=Math.max(24,Math.round((drag.d0+dv)/g)*g); render(); } return; }
+  if(drag.kind==="zword"){ const z=ZONES.find(x=>x.id===drag.id);
+    if(z){ z.lu=Math.round(drag.u0+du); z.lv=Math.round(drag.v0+dv); render(); } return; }
+  if(drag.kind==="wpt"){ const r=RAILS.find(x=>x.id===drag.rail);
+    if(r&&r.pts&&r.pts[drag.idx]){ const sp=snapPt(drag.u0+du,drag.v0+dv); r.pts[drag.idx]={u:sp.u,v:sp.v}; render(); } return; }
+  if(drag.kind==="lbl"){ const o=byName[drag.name]; if(o&&o.lab){
+    o.lab.dx=Math.round(drag.dx0+(e.clientX-drag.sx)*drag.s); o.lab.dy=Math.round(drag.dy0+(e.clientY-drag.sy)*drag.s); render(); } return; }
+  const n=byName[drag.name];
+  const sb=snapBase(n, drag.u0+du, drag.v0+dv);
+  /* 스마트 정렬: 다른 오브젝트 중앙선에 근접하면 딱 맞추고 가이드선 표시 */
+  const cox=n.hit[0]+n.hit[2]/2, coy=n.hit[1]+n.hit[3]/2;
+  let cu=sb.u+cox, cv=sb.v+coy; activeGuides=[];
+  allObjs().forEach(m=>{ if(m.name===n.name) return; const mc=center(m);
+    if(Math.abs(cu-mc[0])<=GUIDE_EPS){ cu=mc[0]; activeGuides.push(["u",mc[0]]); }
+    if(Math.abs(cv-mc[1])<=GUIDE_EPS){ cv=mc[1]; activeGuides.push(["v",mc[1]]); } });
+  LAYOUT[drag.name].u=Math.round(cu-cox); LAYOUT[drag.name].v=Math.round(cv-coy);
+  render();
+});
+function endDrag(e){ if(!drag) return; drag=null; activeGuides=[]; render(); }
+svg.addEventListener("pointerup",endDrag);
+svg.addEventListener("pointercancel",endDrag);
+
+/* 방향키 미세이동 · Delete=선택 레일/추가 상자 삭제 */
+window.addEventListener("keydown",e=>{
+  const t=e.target.tagName; if(t==="INPUT"||t==="SELECT"||t==="TEXTAREA") return;  /* 입력 중엔 무시 */
+  if(e.key==="Delete"||e.key==="Backspace"){
+    if(selWpt){ const r=RAILS.find(x=>x.id===selWpt.rail); if(r&&r.pts) r.pts.splice(selWpt.idx,1); selWpt=null; e.preventDefault(); render(); return; }
+    if(selRail){ e.preventDefault(); delRail(selRail); return; }
+    if(selZone){ e.preventDefault(); delZone(selZone); return; }
+    if(sel && byName[sel] && byName[sel].extra){ e.preventDefault(); delObj(sel); return; } }
+  if(e.key==="Escape" && connectMode){ setConnect(false); return; }
+  if(!sel && !selZone) return;
+  const g=SNAP>0?SNAP:1; const step=(e.shiftKey?5:1)*g;
+  let du=0,dv=0;
+  if(e.key==="ArrowLeft") du=-step; else if(e.key==="ArrowRight") du=step;
+  else if(e.key==="ArrowUp") dv=-step; else if(e.key==="ArrowDown") dv=step; else return;
+  e.preventDefault();
+  if(selZone){ const z=ZONES.find(x=>x.id===selZone);
+    if(z){ z.u+=du; z.v+=dv; z.lu+=du; z.lv+=dv; } }
+  else { LAYOUT[sel].u+=du; LAYOUT[sel].v+=dv; }
+  render();
+});
+
+/* ── 패널 ── */
+const outEl=document.getElementById("out");
+const selName=document.getElementById("selName"), selCoord=document.getElementById("selCoord");
+function syncOut(){
+  if(selZone){ const z=ZONES.find(x=>x.id===selZone);
+    selName.textContent = z?("구역 "+z.name+"  ("+z.id+")"):"— 없음 —";
+    selCoord.textContent = z?("u="+z.u+" v="+z.v+"  w="+z.w+" d="+z.d):""; }
+  else if(selRail){ const r=RAILS.find(x=>x.id===selRail);
+    selName.textContent = r?("레일 "+r.a+" → "+r.b+"  ("+r.id+")"):"— 없음 —";
+    selCoord.textContent = r?("색: "+r.color+((r.lanes||1)>1?" · 줄수: "+r.lanes:"")+(r.cross?" · 교차":"")):""; }
+  else if(sel && byName[sel]){ const o=byName[sel]; const lbl=o.extra?o.props.label:o.label;
+    selName.textContent=lbl+"  ("+sel+")"; selCoord.textContent="u="+LAYOUT[sel].u+"  v="+LAYOUT[sel].v; }
+  else { selName.textContent="— 없음 —"; selCoord.textContent=""; }
+  const pos=allObjs().map(n=>{ const L=LAYOUT[n.name];
+    const moved=(!n.extra && (L.u!==INIT[n.name].u||L.v!==INIT[n.name].v));
+    return "  "+n.name+": {u:"+L.u+", v:"+L.v+"},"+(moved?"   // ← 이동됨":(n.extra?"   // ← 추가됨":"")); });
+  let out="LAYOUT = {\n"+pos.join("\n")+"\n}";
+  if(EXTRA.length){ const ex=EXTRA.map(o=>{ const L=LAYOUT[o.name], p=o.props;
+    return "  {id:'"+o.name+"', u:"+L.u+", v:"+L.v+", w:"+p.w+", d:"+p.d+", h:"+p.h+", color:'"+p.color+"', label:'"+String(p.label).replace(/'/g,"\\'")+"'"+(p.cap?", cap:'"+String(p.cap).replace(/'/g,"\\'")+"'":"")+"},"; });
+    out+="\n\nEXTRA = [\n"+ex.join("\n")+"\n]"; }
+  out+="\n\nRAILS = [\n"+RAILS.map(r=>{ const pts=(r.pts&&r.pts.length)?", pts:["+r.pts.map(p=>"{u:"+p.u+",v:"+p.v+"}").join(",")+"]":"";
+    const ln=(r.lanes>1)?", lanes:"+r.lanes:"";
+    const cx=(r.cross&&r.lanes>1)?", cross:true":"";
+    return "  {from:'"+r.a+"', to:'"+r.b+"', color:'"+r.color+"'"+ln+cx+pts+"},"; }).join("\n")+"\n]";
+  out+="\n\nLABELS = [\n"+allObjs().filter(n=>n.lab).map(n=>{
+    const t=n.lab.lines.map(l=>l[0]);
+    const chg=(!n.extra && INIT_TXT[n.name] && t.join("")!==INIT_TXT[n.name].join(""));
+    const tx=chg?", texts:["+t.map(s=>"'"+String(s).replace(/'/g,"\\'")+"'").join(", ")+"]":"";
+    return "  {name:'"+n.name+"', dx:"+Math.round(n.lab.dx)+", dy:"+Math.round(n.lab.dy)+tx+"},"; }).join("\n")+"\n]";
+  out+="\n\nZONES = [\n"+ZONES.map(z=>"  {u:"+z.u+", v:"+z.v+", w:"+z.w+", d:"+z.d+", color:'"+z.color+
+    "', name:'"+String(z.name).replace(/'/g,"\\'")+"', lu:"+z.lu+", lv:"+z.lv+
+    ", ws:"+(+(+z.ws).toFixed(1))+", wo:"+(+(+z.wo).toFixed(2))+"},").join("\n")+"\n]";
+  outEl.value=out;
+}
+/* 선택된 EXTRA 오브젝트의 속성 편집기(선택 변경 때만 재생성 → 입력 포커스 유지) */
+function renderProp(){
+  const box=document.getElementById("propBox"); box.innerHTML="";
+  function fld(t,inp){ const w=document.createElement("label"); w.className="fld";
+    const s=document.createElement("span"); s.textContent=t; w.appendChild(s); w.appendChild(inp); return w; }
+  function selOf(cur,keys,on){ const s=document.createElement("select");
+    keys.forEach(k=>{ const op=document.createElement("option"); op.value=k; op.textContent=k; if(k===cur)op.selected=true; s.appendChild(op); });
+    s.onchange=()=>on(s.value); return s; }
+  /* 구역 바닥 편집 */
+  if(selZone){ const z=ZONES.find(x=>x.id===selZone); if(!z) return;
+    const tinZ=k=>{ const i=document.createElement("input"); i.type="text"; i.value=z[k]||"";
+      i.oninput=()=>{ z[k]=i.value; render(); }; return i; };
+    const ninZ=k=>{ const i=document.createElement("input"); i.type="number"; i.value=z[k];
+      i.oninput=()=>{ z[k]=Math.max(24,parseFloat(i.value)||24); render(); }; return i; };
+    const posZ=k=>{ const i=document.createElement("input"); i.type="number"; i.value=z[k];
+      i.oninput=()=>{ const nv=Math.round(parseFloat(i.value)||0);
+        if(k==="u"){ z.lu+=nv-z.u; } else { z.lv+=nv-z.v; }   /* 이름표도 같이 */
+        z[k]=nv; render(); }; return i; };
+    /* 바닥 글자: 문구는 name, 자리는 끌어서(lu,lv), 크기·진하기는 여기서 */
+    const numZ=(k,mn,mx,st)=>{ const i=document.createElement("input"); i.type="number";
+      i.step=st; i.min=mn; i.max=mx; i.value=z[k];
+      i.oninput=()=>{ const nv=parseFloat(i.value);
+        if(!isNaN(nv)){ z[k]=Math.min(mx,Math.max(mn,nv)); render(); } }; return i; };
+    box.appendChild(fld("이름",tinZ("name")));
+    const rt=document.createElement("div"); rt.className="row";
+    rt.appendChild(fld("크기",numZ("ws",8,80,1))); rt.appendChild(fld("진하기",numZ("wo",0,1,.02)));
+    box.appendChild(rt);
+    const rp=document.createElement("div"); rp.className="row";
+    rp.appendChild(fld("u",posZ("u"))); rp.appendChild(fld("v",posZ("v")));
+    box.appendChild(rp);
+    const rw=document.createElement("div"); rw.className="row";
+    rw.appendChild(fld("폭",ninZ("w"))); rw.appendChild(fld("깊이",ninZ("d")));
+    box.appendChild(rw);
+    box.appendChild(fld("색", selOf(z.color,["net","game","store","gray","outside"],v=>{z.color=v; render();})));
+    const dz=document.createElement("button"); dz.className="btn"; dz.textContent="🗑 구역 삭제"; dz.style.marginTop="6px";
+    dz.onclick=()=>delZone(z.id); box.appendChild(dz);
+    const hint=document.createElement("div"); hint.className="hint"; hint.style.marginTop="6px";
+    hint.textContent="모서리 주황 사각형=구역 크기. 바닥에 눕힌 이름은 글자를 직접 끌어서 자리를 잡습니다(점선이 잡히는 범위). 이름을 지우면 글자가 사라집니다.";
+    box.appendChild(hint); return; }
+  /* 레일 편집 */
+  if(selRail){ const r=RAILS.find(x=>x.id===selRail); if(!r) return;
+    box.appendChild(fld("색", selOf(r.color,["recv","send","store","net"],v=>{r.color=v; render();})));
+    box.appendChild(fld("줄수", selOf(String(r.lanes||1),["1","2","3","4"],v=>{r.lanes=+v; render();})));
+    /* 교차 = 꺾이는 곳에서 바깥 두 줄이 자리를 맞바꿔 X 로 겹친다(줄 2개 이상일 때만 의미 있음) */
+    box.appendChild(fld("교차", selOf(r.cross?"켬":"끔",["끔","켬"],v=>{r.cross=(v==="켬"); render();})));
+    box.appendChild(fld("시작", selOf(r.a, allObjs().map(o=>o.name), v=>{r.a=v; render();})));
+    box.appendChild(fld("끝", selOf(r.b, allObjs().map(o=>o.name), v=>{r.b=v; render();})));
+    const del=document.createElement("button"); del.className="btn"; del.textContent="🗑 레일 삭제"; del.style.marginTop="6px";
+    del.onclick=()=>delRail(r.id); box.appendChild(del); return; }
+  /* 오브젝트 편집 */
+  const o=sel?byName[sel]:null; if(!o) return;
+  if(!o.extra){
+    if(o.lab&&o.lab.lines.length){
+      const h=document.createElement("div"); h.className="hint";
+      h.textContent="기본 오브젝트 — 위치 이동과 글자 수정만 됩니다(모양 고정)."; box.appendChild(h);
+      o.lab.lines.forEach((ln,i)=>{ const inp=document.createElement("input"); inp.type="text"; inp.value=ln[0];
+        inp.oninput=()=>{ ln[0]=inp.value; render(); };
+        box.appendChild(fld("글자 "+(i+1),inp)); });
+    } else box.innerHTML='<div class="hint">기본 오브젝트 — 위치만 이동됩니다(모양 고정).</div>';
+    return; }
+  const p=o.props;
+  function tin(key){ const i=document.createElement("input"); i.type="text"; i.value=p[key]||"";
+    i.oninput=()=>{ p[key]=i.value; if(o.lab) o.lab.lines=labLinesFromProps(p); render(); }; return i; }
+  function nin(key){ const i=document.createElement("input"); i.type="number"; i.value=p[key];
+    i.oninput=()=>{ p[key]=parseFloat(i.value)||0; syncExtraHit(o); render(); }; return i; }
+  box.appendChild(fld("라벨",tin("label")));
+  box.appendChild(fld("캡션",tin("cap")));
+  const row=document.createElement("div"); row.className="row";
+  row.appendChild(fld("폭",nin("w"))); row.appendChild(fld("깊이",nin("d"))); row.appendChild(fld("높이",nin("h")));
+  box.appendChild(row);
+  box.appendChild(fld("색", selOf(p.color,["slate","blue","green","orange","crowd"],v=>{p.color=v; render();})));
+  const del=document.createElement("button"); del.className="btn"; del.textContent="🗑 삭제"; del.style.marginTop="6px";
+  del.onclick=()=>delObj(o.name); box.appendChild(del);
+}
+
+document.getElementById("snapSeg").addEventListener("click",e=>{
+  const b=e.target.closest("[data-snap]"); if(!b) return;
+  SNAP=+b.getAttribute("data-snap");
+  [...e.currentTarget.children].forEach(c=>c.classList.toggle("on",c===b)); render(); });
+document.getElementById("showGrid").addEventListener("change",e=>{ showGrid=e.target.checked; render(); });
+document.getElementById("showConn").addEventListener("change",e=>{ showConn=e.target.checked; render(); });
+document.getElementById("showZone").addEventListener("change",e=>{ showZone=e.target.checked; render(); });
+document.getElementById("reset").addEventListener("click",()=>{
+  NODES.forEach(n=>{ LAYOUT[n.name].u=INIT[n.name].u; LAYOUT[n.name].v=INIT[n.name].v; });
+  NODES.forEach(n=>{ if(n.lab&&INIT_TXT[n.name]) n.lab.lines.forEach((ln,i)=>{ ln[0]=INIT_TXT[n.name][i]; }); });
+  EXTRA.forEach(o=>{ delete byName[o.name]; delete LAYOUT[o.name]; }); EXTRA.length=0;
+  initRails(); initZones(); sel=null; selRail=null; selWpt=null; selZone=null; connectFrom=null; setConnect(false); renderProp(); render(); });
+document.getElementById("addBox").addEventListener("click",()=>{
+  const o=addExtra({u:120,v:90}); sel=o.name; selRail=null; selZone=null; renderProp(); render(); });
+document.getElementById("addZone").addEventListener("click",()=>{
+  const z=addZone({u:0,v:0,w:160,d:120,color:"net",name:"새 구역",lu:0,lv:0});
+  sel=null; selRail=null; selWpt=null; selZone=z.id; renderProp(); render(); });
+function snapAll(){ allObjs().forEach(n=>{ LAYOUT[n.name]=snapBase(n,LAYOUT[n.name].u,LAYOUT[n.name].v); }); render(); }
+document.getElementById("snapAll").addEventListener("click",snapAll);
+/* 레일 잇기 모드 토글 */
+const addRailBtn=document.getElementById("addRail");
+function setConnect(on){ connectMode=on; if(!on) connectFrom=null;
+  addRailBtn.classList.toggle("pri",on);
+  addRailBtn.textContent=on?"오브젝트 2개 클릭…(취소=빈곳/Esc)":"＋ 레일 잇기"; render(); }
+addRailBtn.addEventListener("click",()=>setConnect(!connectMode));
+function flashOut(msgEl, text){ if(msgEl){ msgEl.textContent=text; msgEl.style.color="#7fe0aa"; }
+  outEl.classList.add("flash"); setTimeout(()=>outEl.classList.remove("flash"),700);
+  if(msgEl) setTimeout(()=>{ msgEl.textContent=""; msgEl.style.color=""; },2600); }
+function copyExport(msgEl){ syncOut(); outEl.focus(); outEl.select();
+  const ok=()=>flashOut(msgEl,"✔ 복사됨 — 저(클로드)에게 붙여넣으세요");
+  const no=()=>flashOut(msgEl,"아래 텍스트를 Ctrl+C 로 복사하세요");
+  if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(outEl.value).then(ok).catch(no); }
+  else { try{ document.execCommand("copy"); ok(); }catch(e){ no(); } } }
+document.getElementById("export").addEventListener("click",()=>copyExport(document.getElementById("exportMsg")));
+document.getElementById("copy").addEventListener("click",()=>copyExport(document.getElementById("copyMsg")));
+
+/* ── 저장/불러오기: 전체 상태(위치·상자·레일·꺾기·라벨)를 JSON 파일로 ── */
+function download(name,text){ const b=new Blob([text],{type:"application/json"}); const a=document.createElement("a");
+  a.href=URL.createObjectURL(b); a.download=name; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1500); }
+function serialize(){ return { v:1,
+  positions: NODES.map(n=>({name:n.name,u:LAYOUT[n.name].u,v:LAYOUT[n.name].v})),
+  labels: NODES.filter(n=>n.lab).map(n=>({name:n.name,dx:Math.round(n.lab.dx),dy:Math.round(n.lab.dy),texts:n.lab.lines.map(l=>l[0])})),
+  extras: EXTRA.map(o=>({props:Object.assign({},o.props), u:LAYOUT[o.name].u, v:LAYOUT[o.name].v,
+    lab:{dx:Math.round(o.lab.dx),dy:Math.round(o.lab.dy)}})),
+  rails: RAILS.map(r=>({a:r.a,b:r.b,color:r.color,lanes:r.lanes||1,cross:!!r.cross,pts:(r.pts||[]).map(p=>({u:p.u,v:p.v}))})),
+  zones: ZONES.map(z=>({u:z.u,v:z.v,w:z.w,d:z.d,color:z.color,name:z.name,lu:z.lu,lv:z.lv,ws:z.ws,wo:z.wo})) }; }
+function applyState(s){
+  EXTRA.slice().forEach(o=>{ delete byName[o.name]; delete LAYOUT[o.name]; }); EXTRA.length=0; extraSeq=0;
+  (s.positions||[]).forEach(p=>{ if(byName[p.name]&&!byName[p.name].extra) LAYOUT[p.name]={u:p.u,v:p.v}; });
+  (s.labels||[]).forEach(l=>{ const o=byName[l.name]; if(o&&o.lab){ o.lab.dx=l.dx||0; o.lab.dy=l.dy||0;
+    if(l.texts) l.texts.forEach((s2,i)=>{ if(o.lab.lines[i]) o.lab.lines[i][0]=s2; }); } });
+  (s.extras||[]).forEach(e=>{ const o=addExtra(Object.assign({},e.props||{})); LAYOUT[o.name]={u:Math.round(e.u||0),v:Math.round(e.v||0)};
+    if(e.lab){ o.lab.dx=e.lab.dx||0; o.lab.dy=e.lab.dy||0; } });
+  RAILS.length=0; railSeq=0; (s.rails||[]).forEach(r=>addRail(r.a,r.b,r.color,r.pts,r.lanes,r.cross));
+  /* zones 키가 없는 옛 저장본은 구역 없음으로 복원된다(저장 시점 그대로) */
+  ZONES.length=0; zoneSeq=0; (s.zones||[]).forEach(z=>addZone(z));
+  sel=null; selRail=null; selWpt=null; selZone=null; renderProp(); render(); }
+document.getElementById("saveFile").addEventListener("click",()=>{
+  download("mmo-layout.json", JSON.stringify(serialize(),null,1));
+  flashOut(document.getElementById("exportMsg"),"💾 mmo-layout.json 저장됨"); });
+document.getElementById("loadFile").addEventListener("change",e=>{ const f=e.target.files&&e.target.files[0]; if(!f) return;
+  const rd=new FileReader(); rd.onload=()=>{ try{ applyState(JSON.parse(rd.result)); flashOut(document.getElementById("exportMsg"),"📂 불러옴 ✔"); }
+    catch(err){ flashOut(document.getElementById("exportMsg"),"불러오기 실패 — 형식 오류"); } };
+  rd.readAsText(f); e.target.value=""; });
+
+/* URL로 초기 배치/선택 주입(공유·데모용): ?l={"game":{"u":..,"v":..},...}&sel=game */
+(function(){ const q=new URLSearchParams(location.search);
+  const lp=q.get("l"); if(lp){ try{ const o=JSON.parse(lp);
+    for(const k in o){ if(LAYOUT[k]){ if(o[k].u!=null)LAYOUT[k].u=o[k].u; if(o[k].v!=null)LAYOUT[k].v=o[k].v; } } }catch(e){} }
+  const ad=+(q.get("add")||0); for(let i=0;i<ad;i++) addExtra({u:100+i*30,v:90});
+  const sp=q.get("sel"); if(sp&&byName[sp]) sel=sp;
+  const sr=q.get("selrail"); if(sr&&RAILS.find(r=>r.id===sr)){ selRail=sr;
+    if(q.get("bend")){ const r=RAILS.find(x=>x.id===sr); r.pts=[{u:300,v:-20},{u:240,v:-40}]; } }
+  if(q.get("snapall")) allObjs().forEach(n=>{ LAYOUT[n.name]=snapBase(n,LAYOUT[n.name].u,LAYOUT[n.name].v); }); })();
+
+renderProp();
+render();
+})();
+</script>
+</body>
+</html>
