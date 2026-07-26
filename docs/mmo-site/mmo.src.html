@@ -107,7 +107,9 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .links a:hover{border-color:var(--net)}
 
 /* node detail card */
-.card{position:absolute; right:18px; bottom:18px; width:420px; max-height:calc(100% - 40px); overflow-y:auto; z-index:8;
+/* 폭은 viewBox 오른쪽에 비워 둔 열(전체의 24.9%)을 따라간다 — 고정 420px 이면 화면이 좁아질 때 씬을 덮는다 */
+.card{position:absolute; right:18px; bottom:18px; width:22%; min-width:318px; max-width:430px;
+  max-height:calc(100% - 40px); overflow-y:auto; z-index:8;
   background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; color:#dbe4f2;
   box-shadow:0 30px 60px -28px rgba(0,0,0,.7); display:none}
 .card.on{display:block}
@@ -171,7 +173,10 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
     <div class="lhint">▸ 노드 클릭 = 상세</div>
   </div>
   <div class="tag">IOCP MMO SERVER<br><b>단일 게임 스레드</b> 병목</div>
-  <svg id="scene" viewBox="212 172 946 500" role="img"
+  <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
+       내용 bbox=x285~1042 이므로 오른쪽 259칸(≈462px)이 상세카드(420px+여백) 전용 열이 된다.
+       ※ 병목 탭 #bnscene 은 카드가 없으므로 옛 946 프레이밍 유지. -->
+  <svg id="scene" viewBox="259 172 1042 500" role="img"
        aria-label="IOCP 기반 MMO 게임 서버의 아이소메트릭 아키텍처 다이어그램"></svg>
   <div class="card" id="card"><button class="x" data-close aria-label="닫기">✕</button><div id="cardbd"></div></div>
 </div>
@@ -251,12 +256,13 @@ const gZone=el("g"), gShad=el("g"), gLane=el("g"), gChipBack=el("g"), gBuild=el(
 gZone.id="lyr-plat"; gShad.id="lyr-shad"; gLane.id="lyr-lane"; gBuild.id="lyr-build"; gLbl.id="lyr-lbl";
 
 /* 팔레트 */
-const SLATE=["#3a4763","#1a2234","#232d44"];
 const GAME =["#f4c862","#7d5a1c","#b3842a"];
 const CROWD=["#4f7cb4","#1e3a54","#2d5276"];
 const NET  =["#63afe6","#1b4870","#2b6597"];
 const DBBOX=["#3f8f68","#154029","#1f5f40"];
-const TRAY =["#243c5e","#0f1d31","#172a44"];
+/* DB 워커 스레드 = 저장 계열이되 MySQL(DBBOX)보다 한 단계 죽인 톤 — 외부 저장소와 헷갈리면 안 된다 */
+const DBW    =["#2f7a56","#0d2b1d","#1a4b35"];
+const DBPLATE=["#1e3a2b","#0a1710","#132b1e"];   /* DB 워커 큐 판·슬랩 (SwapQ 판의 저장 계열 버전) */
 const RECV="#6cc7ff", SEND="#ffb648", STORE="#57d694";
 
 /* 등장 웨이브가 레이어의 '직계 자식' opacity를 1로 덮어쓰므로(scenePop 100%{opacity:1} + fill both),
@@ -265,9 +271,6 @@ function addShad(node){ const g=el("g"); g.appendChild(node); gShad.appendChild(
 function shadow(u,v,w,d){ addShad(el("ellipse",
   {cx:px(u+w/2,v+d/2), cy:py(u+w/2,v+d/2,0)+5, rx:(w+d)*.38, ry:(w+d)*.13,
    fill:"#04060c", opacity:.42, filter:"url(#softShadow)"})); }
-function txt(g,x,y,s,size,fill,w,anch){ g.appendChild(el("text",
-  {x,y,"text-anchor":anch||"middle","font-size":size,"font-weight":w||"800",
-   fill,"font-family":"var(--sans)"},s)); }
 
 /* ═══ 에디터 Export 데이터 ═══ */
 const LAYOUT={ mysql:{u:383,v:148}, dbw:{u:273,v:148}, game:{u:380,v:20}, sector:{u:310,v:-70},
@@ -277,15 +280,17 @@ const RAILS=[
   {from:"accept",to:"iocp",color:"recv"},
   {from:"iocp",to:"swapq",color:"recv"},
   {from:"swapq",to:"game",color:"recv"},
-  {from:"send",to:"clients",color:"recv",lanes:3,pts:[{u:-30,v:-70}]},   /* 클라 복귀 구간 — 레인은 파랑 계열(사용자 확정), 복귀 칩은 주황 유지 */
+  {from:"send",to:"clients",color:"recv",lanes:3,cross:true,pts:[{u:-30,v:-70}]},   /* 클라 복귀 구간 — 레인은 파랑 계열(사용자 확정), 복귀 칩은 주황 유지 */
   {from:"game",to:"dbw",color:"store",pts:[{u:410,v:70},{u:410,v:130},{u:310,v:130}]},
   {from:"dbw",to:"mysql",color:"store"},
-  {from:"game",to:"sector",color:"send",lanes:3,pts:[{u:410,v:-70}]},
+  {from:"game",to:"sector",color:"send",lanes:3,cross:true,pts:[{u:410,v:-70}]},
   {from:"sector",to:"send",color:"send",lanes:3},   /* 워커 3개로 가는 고정 파이프 — 세션마다 uniqueId%3 배정 */
   {from:"iocp",to:"timer",color:"recv",pts:[{u:190,v:170}]},
   {from:"accept",to:"timer",color:"recv",pts:[{u:70,v:170}]},
 ];
-const LABELS={ mysql:{dx:5,dy:-32}, dbw:{dx:17,dy:-41}, game:{dx:36,dy:-32}, sector:{dx:41,dy:-18},
+/* dbw·game 오프셋은 BODY(몸통 확대) 를 올리면서 다시 잡은 값 — 커진 몸통에 글자가 얹히지 않게.
+   BODY 를 더 키우면 이 둘부터 다시 확인할 것(가장 먼저 부딪히는 라벨이다). */
+const LABELS={ mysql:{dx:5,dy:-32}, dbw:{dx:2,dy:-62}, game:{dx:50,dy:-32}, sector:{dx:41,dy:-18},
   swapq:{dx:49,dy:6}, iocp:{dx:20,dy:39}, send:{dx:52,dy:43}, accept:{dx:-52,dy:-26}, clients:{dx:0,dy:36}, timer:{dx:-40,dy:-34} };
 /* 구역 바닥(스레드 그룹) — 얕은 색판 + 앞·오른쪽 테두리 + 바닥에 눕힌 이름.
    name = 바닥 글자 · lu,lv = 그 글자의 중앙 · ws = 크기 · wo = 진하기 (전부 mmo-edit.html 에서 조정) */
@@ -299,14 +304,15 @@ const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
              /* outside = 서버 밖(클라이언트). 실선·밝은 중립 — 색을 안 주고 밝기로만 구분.
                 dash:true 를 붙이면 점선 테두리 버전이 된다 */
              outside:{top:"#161d2b",side:"#0f1522",edge:"#93a5c2"} };
+/* 크기 29 통일(사용자 지정). 건물·레일·노드 이름표에 안 걸리는 자리는 계산상 22까지라
+   NETWORK·DB 는 이 크기에서 일부 가린다 — 자리는 에디터에서 직접 잡는 중.
+   (안 가리게 하려면 22. NETWORK 는 29면 171칸이 필요한데 네트워크 판 최장 빈 줄이 160,
+    DB 는 저장 판이 꽉 차 앞쪽 v120~150 창밖으로 못 나간다.) */
 const ZONES=[
-  /* 글자 자리는 '건물·레일에 안 걸리는 가장 긴 빈 줄'을 글자 진행 방향으로 계산해 잡은 값 */
   {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-80,lv:152, ws:29, wo:.22},
-  {u:40, v:-100,w:200,d:320,color:"net",  name:"NETWORK", lu:44, lv:142, ws:22, wo:.22},
-  {u:262,v:-98, w:200,d:200,color:"game", name:"GAME",    lu:434,lv:-46, ws:28, wo:.22},
-  /* 저장 판은 dbw·mysql·초록 파이프가 꽉 차 안 가리는 자리가 앞쪽 v120~148 한 칸뿐이라 18. 더 키우면
-     MySQL 오른쪽(게임 큐브 뒤)·dbw 골목(그 위 상자 그림자) 어디로 옮겨도 잘린다 — 렌더로 셋 다 확인함 */
-  {u:260,v:120, w:220,d:100,color:"store",name:"DB",      lu:264,lv:134, ws:18, wo:.22} ];
+  {u:40, v:-100,w:200,d:320,color:"net",  name:"NETWORK", lu:44, lv:142, ws:29, wo:.22},
+  {u:262,v:-98, w:200,d:200,color:"game", name:"GAME",    lu:436,lv:-42, ws:29, wo:.22},
+  {u:260,v:120, w:220,d:100,color:"store",name:"DB",      lu:264,lv:132, ws:29, wo:.22} ];
 /* 바닥에 눕힌 글자 — (u,v) 평면에 얹는 아핀 변환. 진행 방향은 왼→오·위→아래(-v)로 고정이고,
    글자 아래쪽이 화면 앞(-u)을 향하게 잡아 좌우가 뒤집히지 않는다. */
 const ZW_LS=.12;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격이 같이 움직인다 */
@@ -315,73 +321,146 @@ function floorMat(u,v){ return "matrix("+KX+","+KY+","+(-KX)+","+KY+","+px(u,v).
 /* Stage2 애니메이션이 잡아 쓸 노드 내부 참조 — 각 draw()에서 채운다 */
 let gameBeacon=null, sectorCells=null, iocpCells=null, twGeo=null;
 
+/* 큐 노드(SwapQ · 송신 큐) 공통 치수.
+   SLOT = 크기 5 칩의 실제 한 변(=5/KX). 슬롯 폭·칩 간격·스왑 이동량이 전부 이 값에서 나온다
+   — 임의 값을 쓰면 쌓인 칩 사이가 벌어지거나 슬롯과 어긋난다. */
+const SLOT=+(5/KX).toFixed(2);          /* ≈5.81 */
+const Q_HEAD=0.9+SLOT/2;                /* 칸막이 옆 첫 칸의 중심 */
+const SQ_N=4, SQ_HW=27;                 /* SwapQ: 칸 4개(공유 쪽), 판 반폭 */
+const DBQ_N=5;                          /* DB 워커 큐: 칸 5개 */
+/* 큐 판 반폭은 눈대중이 아니라 칸 수에서 나온다 = 첫 칸 + 나머지 칸 + 칸 반쪽 + 여백 2.8.
+   SwapQ(칸4 → 27)·송신 큐(칸3 → 21) 가 이미 이 값이라, DB 도 같은 식으로 뽑아야 셋이 한 식구로 보인다. */
+const DBQ_HW=Math.round(Q_HEAD+(DBQ_N-1)*SLOT+SLOT/2+2.8);   /* = 33 */
+
+/* ═══ 몸통 확대 배수 ═══
+   레일·칩·큐 칸은 손대지 않는다 — 이 셋은 서로 물려 있어서(칩 크기 → SLOT → 칸 폭 → 판 반폭,
+   칩 크기 → 레인 폭) 하나만 키우면 칩이 칸이나 레일 밖으로 삐져나온다.
+   그래서 '건물'만 키운다: 노드 중심(레일 끝점)을 고정한 채 크기만 곱하므로 배치는 그대로다.
+   1 로 두면 원래 크기로 정확히 돌아온다. */
+const BODY=1.18;
+const bw=w=>w*BODY;                      /* 크기 */
+const bo=(u,w)=>u-w*(BODY-1)/2;          /* 중심을 유지하려면 시작 좌표를 이만큼 당긴다 */
+
 /* ═══ 노드 정의 (몸통 그리기 + 히트박스 + 라벨 내용). 좌표는 LAYOUT, 라벨 오프셋은 LABELS ═══
    hit=[ox,oy,w,d,hz]  lab={anch,lines:[[text,size,color,weight,offY],...]}  card=상세카드 키 */
 const NODES=[
-  { name:"mysql", card:"mysql", hit:[0,0,54,44,34],
+  /* 외부 저장소라 주변부인데 덩치가 3위였다(게임 루프 앵커와 경쟁) → 54×44×34 에서 한 단계 낮춤 */
+  { name:"mysql", card:"mysql", hit:[0,0,48,40,24],
     lab:{anch:"middle",lines:[["MySQL",14,"#eef2fb","800",0],["주기 UPSERT",11,"#8496b3","600",15]]},
-    draw(g,u,v){ shadow(u,v,54,44);
-      prism(g,u,v,54,44,0,10,DBBOX,true); prism(g,u,v,54,44,10,12,DBBOX,true); prism(g,u,v,54,44,22,12,DBBOX,true); } },
-  { name:"dbw", card:"dbw", hit:[0,0,74,44,12],
-    lab:{anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["자체 큐 · UPSERT",10.5,"#8496b3","600",15]]},
-    draw(g,u,v){ shadow(u,v,74,44);
-      prism(g,u,v,74,44,-2,3,["#22344f","#101a2c","#17253c"]);
-      prism(g,u+44,v+8,30,26,1,20,SLATE,true);
-      txt(g,px(u+12,v+8),py(u+12,v+8,20),"쌓이는 배치",10,"#7fc6a0","700"); } },
+    draw(g,u,v){ const x=bo(u,48), y=bo(v,40), W=bw(48), D=bw(40), H=bw(8); shadow(x,y,W,D);
+      prism(g,x,y,W,D,0,H,DBBOX,true); prism(g,x,y,W,D,H,H,DBBOX,true); prism(g,x,y,W,D,H*2,H,DBBOX,true); } },
+  /* SwapQ·송신 큐와 같은 양식(판 + 파인 홈 + 가운데 칸막이 + 쌓이는 칸), 색만 저장 계열.
+     실제 코드도 같은 패턴이다 — CDBWorker 는 SendWorker 를 복제해서
+     게임스레드가 push, 워커스레드가 swap-out 으로 큐를 통째 인출한다(DBWorker.h).
+     홈 축 = MySQL 로 나가는 축(+u), 쌓이는 칸은 그 반대쪽(-u) = 게임에서 오는 쪽.
+     워커 큐브는 홈 '뒤'(+v)에 세운다 — 앞(-v)에 두면 높이가 홈을 덮어 큐가 안 보인다. */
+  { name:"dbw", card:"dbw", hit:[37-DBQ_HW,11,2*DBQ_HW,22,4],
+    lab:{anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["통째 인출 · 배치 UPSERT",10.5,"#8496b3","600",15]]},
+    draw(g,u,v){ const CU=u+37, HW=DBQ_HW, GD=5, Z=3.4, cy=v+22;   /* CU,cy = 노드 중심(레일 끝점) */
+      const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
+      shadow(CU-HW,cy-11,2*HW,22);
+      prism(g,CU-HW,cy-11,2*HW,22,0,Z,DBPLATE,true);
+      g.appendChild(el("polygon",{points:PT([[CU-HW+2.5,cy-GD,Z],[CU+HW-2.5,cy-GD,Z],[CU+HW-2.5,cy+GD,Z],[CU-HW+2.5,cy+GD,Z]]),
+        fill:"#0d2018",stroke:"#2c6a4a","stroke-width":.7,opacity:.9}));
+      prism(g,CU-1.1,cy-GD,2.2,2*GD,Z,1.4,["#57d694","#1b5b3c","#2a7d55"],true);   /* 칸막이 = 인출 경계 */
+      for(let i=0;i<DBQ_N;i++){ const cu=CU-Q_HEAD-i*SLOT;           /* 쌓이는 칸은 게임 쪽(-u) */
+        g.appendChild(el("polygon",{fill:"#122a1e",stroke:"#2a5741","stroke-width":.7,
+          points:PT([[cu-SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy+4,Z+0.35],[cu-SLOT/2,cy+4,Z+0.35]])})); }
+      /* DB 워커 스레드 몸통 — 판 바로 뒤(칩이 앞을 지난다). 슬랩 앞변 = 판 뒷변이라 이음새가 딱 맞는다.
+         몸통 17×11×14 = Send 워커 상자와 같은 치수(둘 다 '워커 스레드 하나'), 슬랩은 IOCP 와 같은 여백 6.
+         저장 초록이되 MySQL(DBBOX)보다 한 단계 어두운 톤 — 바로 뒤 스택과 값이 갈려야 안 뭉친다.
+         판·홈·칸은 칩에 물려 있어 그대로, 워커 몸통만 BODY 배(앞변은 판 뒷변에 붙여 두고 뒤로만 커진다) */
+      const sx=bo(CU+18.5,29), sy=cy+11;
+      shadow(sx,sy,bw(29),bw(23));
+      prism(g,sx,sy,bw(29),bw(23),-bw(2),bw(3),DBPLATE);
+      prism(g,sx+bw(6),sy+bw(6),bw(17),bw(11),bw(1),bw(14),DBW,true); } },
   { name:"game", card:"loop", hit:[0,0,60,60,58],
     lab:{anch:"start",lines:[["게임 루프",18,"#ffe0a0","800",0],["단일 코어 · 25fps 틱",12,"#c9b48c","600",19],["◆ BOTTLENECK",11,"#ffb648","800",40]]},
-    draw(g,u,v){ const w=60,d=60,h=58; shadow(u,v,w,d);
-      prism(g,u,v,w,d,0,h,GAME,true);
-      g.appendChild(el("polygon",{points:[[u,v],[u+w,v],[u+w,v+d],[u,v+d]].map(p=>P(p[0],p[1],h)).join(" "),
+    draw(g,u,v){ const w=bw(60),d=bw(60),h=bw(58), x=bo(u,60), y=bo(v,60); shadow(x,y,w,d);
+      prism(g,x,y,w,d,0,h,GAME,true);
+      g.appendChild(el("polygon",{points:[[x,y],[x+w,y],[x+w,y+d],[x,y+d]].map(p=>P(p[0],p[1],h)).join(" "),
         fill:"none",stroke:"#ffe0a0","stroke-width":1.6,opacity:.9}));
-      const tx=px(u+w/2,v+d/2), ty=py(u+w/2,v+d/2,h);
-      g.appendChild(el("line",{class:"beacon",x1:tx,y1:ty,x2:tx,y2:ty-24,stroke:"#ffb648","stroke-width":2.4}));
-      gameBeacon=el("circle",{class:"beacon",cx:tx,cy:ty-29,r:5,fill:"#ffd88a"}); g.appendChild(gameBeacon); } },
-  { name:"sector", card:"loop", hit:[-19,-19,38,38,7],
-    lab:{anch:"start",lines:[["섹터 묶음",12.5,"#eef2fb","800",0],["틱 끝 · N→1",10.5,"#8496b3","600",15]]},
-    draw(g,u,v){ const S=12, BH=7; sectorCells=[];
-      prism(g,u-1.6*S,v-1.6*S,3.2*S,3.2*S,0,BH,["#37291a","#150e06","#241a0c"],true);
-      for(let r=-1;r<=1;r++) for(let c=-1;c<=1;c++){ const cu=u+c*S, cv=v+r*S, m=1.4;
-        const e=el("polygon",{points:[[cu-S/2+m,cv-S/2+m],[cu+S/2-m,cv-S/2+m],[cu+S/2-m,cv+S/2-m],[cu-S/2+m,cv+S/2-m]]
-          .map(p=>P(p[0],p[1],BH)).join(" "),fill:"#1d1409",stroke:"#7c5a26","stroke-width":.8});
-        g.appendChild(e); sectorCells.push(e); } } },
-  { name:"swapq", card:"iocp", hit:[-15,-6,30,29,2],
+      const tx=px(x+w/2,y+d/2), ty=py(x+w/2,y+d/2,h);
+      g.appendChild(el("line",{class:"beacon",x1:tx,y1:ty,x2:tx,y2:ty-bw(24),stroke:"#ffb648","stroke-width":2.4}));
+      gameBeacon=el("circle",{class:"beacon",cx:tx,cy:ty-bw(29),r:bw(5),fill:"#ffd88a"}); g.appendChild(gameBeacon); } },
+  /* 송신 핸드오프 = SwapQ 와 같은 '통째 스왑' 큐가 워커 수(3)만큼.
+       게임: perWorker[uniqueId%K] 로 나눠 담고 워커별 락 1회로 append
+       워커: local.swap(worker.queue) 로 락 1회에 통째 인출
+     홈 3개를 레인 3줄과 같은 간격(SUB_W+SUB_GAP=14)에 파서 파이프와 1:1로 물린다.
+     색은 이 구간 레인(응답 send)에 맞춘 주황 계열 — 칸 색 #1d1409/#c98c2e 는 애니가 그대로 쓴다. */
+  { name:"sector", card:"send", hit:[-21,-22,42,44,4],
+    lab:{anch:"start",lines:[["송신 큐 ×3",12.5,"#eef2fb","800",0],["워커별 통째 스왑",10.5,"#8496b3","600",15]]},
+    draw(g,u,v){ const HW=21, HD=22, LANE=14, GD=5, Z=3.4; sectorCells=[];
+      const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
+      shadow(u-HW,v-HD,2*HW,2*HD);
+      prism(g,u-HW,v-HD,2*HW,2*HD,0,Z,["#332613","#160e04","#241a0b"],true);
+      const made=[];
+      for(let k=1;k>=-1;k--){ const cv=v+k*LANE, idx=(1-k)*3;   /* 뒤(v 큰 것)부터 */
+        g.appendChild(el("polygon",{points:PT([[u-HW+2.5,cv-GD,Z],[u+HW-2.5,cv-GD,Z],[u+HW-2.5,cv+GD,Z],[u-HW+2.5,cv+GD,Z]]),
+          fill:"#1d1407",stroke:"#4a3718","stroke-width":.7,opacity:.9}));       /* 파인 홈 = 큐 하나 */
+        /* 칸막이 = 스왑 경계(공유↔로컬). 낮은 벽으로 세운다 — 평평한 색 띠로 두면 쌓인 칩과 붙어 안 보인다 */
+        prism(g,u-1.1,cv-GD,2.2,2*GD,Z,1.4,["#ffb648","#7d5a1c","#b3842a"],true);
+        /* 쌓이는 자리 3칸 — 게임에서 오는 쪽(+u)에. 폭=간격=SLOT 이라 서로 붙는다 */
+        for(let i=0;i<3;i++){ const cu=u+Q_HEAD+i*SLOT, e=el("polygon",{fill:"#1d1409",stroke:"#553f1c","stroke-width":.7,
+          points:PT([[cu-SLOT/2,cv-4,Z+0.35],[cu+SLOT/2,cv-4,Z+0.35],[cu+SLOT/2,cv+4,Z+0.35],[cu-SLOT/2,cv+4,Z+0.35]])});
+          g.appendChild(e); made[idx+i]=e; } }
+      for(let i=0;i<9;i++) sectorCells.push(made[i]); } },
+  /* 송신 큐와 같은 양식(판 + 파인 홈 + 가운데 칸막이 + 쌓이는 칸), 색만 수신 계열.
+     홈은 1개 — 공유 큐(칸막이 왼쪽, IOCP가 쌓음) ↔ 로컬 큐(오른쪽, 게임이 빼감).
+     판 중심 v = 노드 v+8 이라 IOCP·게임과 같은 축선에 놓인다(레일이 안 기운다). */
+  { name:"swapq", card:"iocp", hit:[-SQ_HW,-3,2*SQ_HW,22,4],
     lab:{anch:"middle",lines:[["SwapQ",13.5,"#cfe0f2","800",0],["통째 스왑 · 락 1회",10.5,"#93a9cd","600",14]]},
-    draw(g,u,v){ const gv=17, RW=15, RD=6;
-      function tray(vv){ prism(g,u-RW,vv-RD,2*RW,2*RD,0,1.6,TRAY);
-        g.appendChild(el("polygon",{points:[[u-RW,vv-RD],[u+RW,vv-RD],[u+RW,vv+RD],[u-RW,vv+RD]].map(p=>P(p[0],p[1],1.8)).join(" "),
-          fill:"none",stroke:"#41669c","stroke-width":1,"stroke-dasharray":"3 3",opacity:.55})); }
-      tray(v+gv); tray(v); } },
+    draw(g,u,v){ const HW=SQ_HW, GD=5, Z=3.4, cy=v+8;
+      const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
+      shadow(u-HW,cy-11,2*HW,22);
+      prism(g,u-HW,cy-11,2*HW,22,0,Z,["#22314c","#0d1524","#182640"],true);
+      g.appendChild(el("polygon",{points:PT([[u-HW+2.5,cy-GD,Z],[u+HW-2.5,cy-GD,Z],[u+HW-2.5,cy+GD,Z],[u-HW+2.5,cy+GD,Z]]),
+        fill:"#101a2c",stroke:"#33507e","stroke-width":.7,opacity:.9}));
+      prism(g,u-1.1,cy-GD,2.2,2*GD,Z,1.4,["#8ad4ff","#1b4870","#2b6597"],true);   /* 칸막이 = 스왑 경계 */
+      for(let i=0;i<SQ_N;i++){ const cu=u-Q_HEAD-i*SLOT;            /* 쌓이는 칸은 IOCP 쪽(-u) */
+        g.appendChild(el("polygon",{fill:"#16223a",stroke:"#2c4266","stroke-width":.7,
+          points:PT([[cu-SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy+4,Z+0.35],[cu-SLOT/2,cy+4,Z+0.35]])})); } } },
   { name:"iocp", card:"iocp", hit:[-23,-22,46,44,16],
     lab:{anch:"middle",lines:[["IOCP 워커",14.5,"#eef2fb","800",0],["×4 · 병렬 파싱",11,"#6cc7ff","700",16]]},
-    draw(g,u,v){ prism(g,u-23,v-22,46,44,-2,3,["#1c2b45","#0e1626","#152238"]);
-      const cells=[[u-17,v-16],[u+1,v-16],[u-17,v+1],[u+1,v+1]].sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
-      iocpCells=cells.map(c=>({u:c[0]+8, v:c[1]+7.5, top:prism(g,c[0],c[1],16,15,0,16,NET,true)})); } },
-  { name:"send", card:"send", hit:[0,0,44,44,12],
+    draw(g,u,v){ prism(g,u-bw(23),v-bw(22),bw(46),bw(44),-bw(2),bw(3),["#1c2b45","#0e1626","#152238"]);
+      const cells=[[-17,-16],[1,-16],[-17,1],[1,1]].map(c=>[u+bw(c[0]), v+bw(c[1])])
+        .sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
+      iocpCells=cells.map(c=>({u:c[0]+bw(8), v:c[1]+bw(7.5),
+        top:prism(g,c[0],c[1],bw(16),bw(15),0,bw(16),NET,true)})); } },
+  /* IOCP 워커 큐브(16×15×16)와 같은 급이어야 하는데 혼자 작았다 → 17×11×14.
+     높이만 올리면 앞 상자가 뒤를 덮어 한 덩어리로 보이므로 간격도 같이 벌린다(8/22/36 → 6/21/36) */
+  { name:"send", card:"send", hit:[0,0,44,44,17],
     lab:{anch:"middle",lines:[["Send 워커 ×3",14.5,"#eef2fb","800",0],["uniqueId%3 · WSASend",11,"#8496b3","600",15]]},
-    draw(g,u,v){ prism(g,u,v,44,44,-2,3,["#20304e","#101a2c","#16233b"]);
-      [36,22,8].forEach(dv=>prism(g,u+6,v+dv-3,16,10,3,12,NET)); } },   /* 뒤(v큰 것)부터 — 앞 상자가 가리게 */
+    draw(g,u,v){ const x=bo(u,44), y=bo(v,44); prism(g,x,y,bw(44),bw(44),-bw(2),bw(3),["#20304e","#101a2c","#16233b"]);
+      /* 뒤(v큰 것)부터 — 앞 상자가 가리게 */
+      [36,21,6].forEach(dv=>prism(g,x+bw(6),y+bw(dv-3),bw(17),bw(11),bw(3),bw(14),NET,true)); } },
   { name:"accept", card:"accept", hit:[0,0,30,28,20],
     lab:{anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",10.5,"#8496b3","600",15]]},
-    draw(g,u,v){ shadow(u,v,30,28); prism(g,u,v,30,28,0,20,NET,true); } },
+    draw(g,u,v){ const x=bo(u,30), y=bo(v,28);
+      shadow(x,y,bw(30),bw(28)); prism(g,x,y,bw(30),bw(28),0,bw(20),NET,true); } },
   { name:"clients", card:"client", hit:[0,0,66,58,11],
     lab:{anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
-    draw(g,u,v){ const cubes=[];
-      for(let cu=u;cu<=u+66;cu+=14) for(let cv=v;cv<=v+58;cv+=14) cubes.push([cu,cv]);
+    draw(g,u,v){ const x=bo(u,66), y=bo(v,58), cubes=[];
+      for(let cu=0;cu<=66;cu+=14) for(let cv=0;cv<=58;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
       cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
-      cubes.forEach(p=>prism(g,p[0],p[1],9,9,0,11,CROWD)); } },
+      cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
   { name:"timer", card:"iocp", hit:[-22,-22,44,44,4],
     lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
-    draw(g,u,v){ const R=32, cx=px(u,v), cy=py(u,v,4);
+    draw(g,u,v){ const R=bw(32), cx=px(u,v), cy=py(u,v,bw(4));
       addShad(el("ellipse",{cx,cy:cy+5,rx:R*KX*1.1,ry:R*KY*1.1,fill:"#05070d",opacity:.42}));
-      prism(g,u-22,v-22,44,44,0,4,["#2a3450","#141c30","#1d2740"]);
+      prism(g,u-bw(22),v-bw(22),bw(44),bw(44),0,bw(4),["#2a3450","#141c30","#1d2740"]);
       const rx=R*KX*1.02, ry=R*KY*1.02; twGeo={cx,cy,rx,ry};
       g.appendChild(el("ellipse",{cx,cy,rx,ry,fill:"#101828",stroke:"#3a4864","stroke-width":1.4}));
       for(let i=0;i<12;i++){ const a=i/12*Math.PI*2;
         g.appendChild(el("line",{x1:cx+Math.cos(a)*rx*0.78,y1:cy+Math.sin(a)*ry*0.78,
           x2:cx+Math.cos(a)*rx*0.96,y2:cy+Math.sin(a)*ry*0.96,stroke:"#46577a","stroke-width":1.3,opacity:.7})); }
-      g.appendChild(el("circle",{cx,cy,r:3.5,fill:"#cfe0f2"})); } },
+      g.appendChild(el("circle",{cx,cy,r:bw(3.5),fill:"#cfe0f2"})); } },
 ];
+/* 히트박스·라벨 높이도 몸통과 같이 키운다 — 중심(레일 끝점)은 그대로.
+   큐 3종은 몸통을 안 키웠으니(칩에 물림) 제외한다. */
+const BODY_KEEP={swapq:1, sector:1, dbw:1};
+if(BODY!==1) NODES.forEach(n=>{ if(BODY_KEEP[n.name]) return; const h=n.hit;
+  h[0]-=h[2]*(BODY-1)/2; h[2]*=BODY; h[1]-=h[3]*(BODY-1)/2; h[3]*=BODY; h[4]*=BODY; });
 const byName={}; NODES.forEach(n=>byName[n.name]=n);
 function center(n){ const L=LAYOUT[n.name], h=n.hit; return [L.u+h[0]+h[2]/2, L.v+h[1]+h[3]/2]; }
 function railPath(r){ const A=center(byName[r.from]), B=center(byName[r.to]);
@@ -409,6 +488,33 @@ ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g");
    색은 그 위를 흐르는 칩이 낸다. 일정 간격 이음선으로 컨베이어/통로 질감. */
 const RCOL={recv:RECV,send:SEND,store:STORE};
 const LTINT={recv:"#16243a", send:"#2a2412", store:"#12281c"};   /* 초기본 RTINT/STINT/GTINT 그대로 */
+/* 폴리라인 하나를 따라 '폭 있는 띠' 를 통째로 그린다(바닥 + 꺾임 패치 + 그루브 모서리).
+   교차 레일은 줄마다 이걸 한 번씩 불러서, 나중에 그린 줄이 앞 줄을 덮게 = 위로 지나가게 한다.
+   knee(꺾임 좌표들)를 주면 그 반경 안쪽 구간에만 줄 밑에 살짝 넓은 어두운 띠를 먼저 깐다
+   — 겹친 자리에서 어느 줄이 위인지 보이라고. 직선 구간의 모습은 그대로다. */
+const XSHADE=.45, XSHADE_R=38, XSHADE_W=2.5;
+function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
+  if(knee) knee.forEach(function(C){ const hs=h+XSHADE_W;
+    for(let i=1;i<pts.length;i++){ const A=pts[i-1], B=pts[i];
+      const du=B[0]-A[0], dv=B[1]-A[1], L=Math.hypot(du,dv); if(L<0.5) continue;
+      const ux=du/L, uy=dv/L, wx=A[0]-C[0], wy=A[1]-C[1];
+      const b=wx*ux+wy*uy, c=wx*wx+wy*wy-XSHADE_R*XSHADE_R, disc=b*b-c; if(disc<=0) continue;
+      const t0=Math.max(0,-b-Math.sqrt(disc)), t1=Math.min(L,-b+Math.sqrt(disc)); if(t1<=t0) continue;
+      const P0=[A[0]+ux*t0,A[1]+uy*t0], P1=[A[0]+ux*t1,A[1]+uy*t1], pu=-uy, pv=ux;
+      g.appendChild(poly([[P0[0]+pu*hs,P0[1]+pv*hs],[P1[0]+pu*hs,P1[1]+pv*hs],
+        [P1[0]-pu*hs,P1[1]-pv*hs],[P0[0]-pu*hs,P0[1]-pv*hs]],"#05080f",{opacity:String(XSHADE)})); } });
+  for(let i=1;i<pts.length;i++){ const A=pts[i-1], B=pts[i];
+    const du=B[0]-A[0], dv=B[1]-A[1], L=Math.hypot(du,dv); if(L<0.5) continue;
+    S.push({A,B,L,pu:-dv/L,pv:du/L}); }
+  S.forEach(s=>g.appendChild(poly([[s.A[0]+s.pu*h,s.A[1]+s.pv*h],[s.B[0]+s.pu*h,s.B[1]+s.pv*h],
+    [s.B[0]-s.pu*h,s.B[1]-s.pv*h],[s.A[0]-s.pu*h,s.A[1]-s.pv*h]],tint)));
+  for(let i=1;i<pts.length-1;i++){ const q=pts[i];
+    g.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
+  S.forEach(s=>{ const upSign = py(s.A[0]+s.pu,s.A[1]+s.pv,0)<=py(s.A[0]-s.pu,s.A[1]-s.pv,0) ? 1 : -1;
+    [[1,true],[-1,false]].forEach(q=>{ const e=q[0]*upSign*h, up=q[1];
+      g.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
+        x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
+        stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); }
 const LANE_W=10, SEAM=22, SUB_W=10, SUB_GAP=4;   /* SUB_*: lanes>1(다중 파이프)일 때 줄 하나 폭/간격 — 줄 폭=일반 레인과 동일 */
 RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv, g=el("g");
   const NL=r.lanes||1;                                   /* 레일 줄 수 — 기본 1 */
@@ -420,6 +526,18 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv, g=el
     const du=B[0]-A[0], dv=B[1]-A[1], L=Math.hypot(du,dv);
     if(L<0.5) continue;
     segs.push({A,B,du,dv,L, pu:-dv/L, pv:du/L}); }       /* pu,pv = 진행 수직 단위벡터 */
+  /* 교차 레일 — 세그먼트별로 자르지 않고 줄마다 통째로 그린다(그래야 겹침이 보인다).
+     이음선은 교차 구간에선 건너뛴다 — 서로 지나가는 줄을 한 다발로 묶어 보이면 안 되니까. */
+  if(r.cross && NL>1){
+    const knee=path.slice(1,-1);
+    offs.forEach(c=>ribbon(g, offsetPath(path,c,true), subW, tint, knee));
+    const HT=totW/2-1;
+    segs.forEach(s=>{ const hu=s.pu*HT, hv=s.pv*HT;
+      for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
+        if(knee.some(q=>Math.hypot(cu-q[0],cv-q[1])<totW)) continue;
+        g.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
+          x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
+    gLane.appendChild(g); return; }
   /* 1) 통로 바닥 — 줄 수만큼 나란히 */
   segs.forEach(s=>offs.forEach(c=>{ const h=subW/2;
     g.appendChild(poly([[s.A[0]+s.pu*(c+h),s.A[1]+s.pv*(c+h)],[s.B[0]+s.pu*(c+h),s.B[1]+s.pv*(c+h)],
@@ -464,7 +582,7 @@ const ND={
     docs:["SendThread 분리 유무와 이슈"],bns:[["ok","Send Coalescing — syscall −94%"],["ok","SendThread 분리 — p99 −56%"],["rj","SendQ LockFree — 기각"],["rj","SO_SNDBUF=0 — 기각"],["ok","WT×K 스윕 — WT4·K2"]]},
   loop:{nm:"게임 루프",x:"×1",zone:"게임",impl:"모든 게임 로직이 도는 단일 코어. 섹터 격자 관심영역(AOI), per-player viewlist 미채택 근거가 핵심입니다.",
     docs:["섹터/맵 크기 · viewlist 미채택 이유"],bns:[["ok","섹터 묶음 패킷 — tick p99 −83%"],["ok","멤버십 팬아웃 dedup+묶음 — −68%"],["ok","수신섹터 묶음 — 복사 −88%·게임루프 0.57→0.21코어"]]},
-  dbw:{nm:"DB 워커",x:"×1",zone:"저장",impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). accountId%K 풀로 확장 가능하며 현재 1개 운영.",
+  dbw:{nm:"DB 워커",x:"×1",zone:"저장",impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). 워커는 쌓인 큐를 swap 한 번으로 통째 인출해 UPSERT 합니다 — SwapQ·Send 워커와 같은 패턴입니다. accountId%K 풀로 확장 가능하며 현재 1개 운영.",
     docs:["dirty 선별·주기 batch 저장","DB Thread 분리 및 저장 설계"],bns:[]},
   mysql:{nm:"MySQL",x:"",zone:"저장",impl:"주기적 스냅샷 UPSERT로 영속화합니다.",docs:[],bns:[]}
 };
@@ -491,8 +609,8 @@ NODES.forEach(function(n){ if(!n.card) return; const L=LAYOUT[n.name], h=n.hit;
 /* ═══════════════ Stage 2 — 칩 흐름 (경로는 전부 RAILS에서 뽑아 씀) ═══════════════
    수신 : 클라 → Accept → IOCP 워커 → SwapQ 공유 큐에 적재
    스왑 : 공유 큐가 차면 통째로 로컬 큐로 미끄러짐(락 1회) → 게임으로 하나씩 드레인
-   응답 : 게임 → 섹터 격자 9칸을 채움(칩은 3파이프 순환) → 가득 차면 묶음 3개가 파이프별 출발 → 도착한 묶음이 같은 파이프로 클라 복귀
-   저장 : 게임 → DB 워커 dirty 칸 적재 → 가득 차면 batch 크레이트가 MySQL로 이관
+   응답 : 게임 → 송신 큐 3개에 칩이 하나씩 도착할 때마다 칸 하나씩 적재 → 아홉 칸이 차면 파이프별로 3개씩 출발 → 도착한 것이 같은 파이프로 클라 복귀
+   저장 : 게임 → DB 워커 큐에 dirty 적재 → 가득 차면 통째로 인출돼 MySQL로 (SwapQ와 같은 메커니즘)
    타임아웃 : Accept·IOCP → Timing Wheel 등록 신호 (휠 바늘 회전 + 등록 시 링 점멸)
    ※ 레일 굵기/색은 건드리지 않는다. 칩만 얹는다. */
 const RMOT=matchMedia("(prefers-reduced-motion:reduce)").matches;
@@ -500,19 +618,43 @@ const RMOT=matchMedia("(prefers-reduced-motion:reduce)").matches;
 /* ── 경로 유틸: (u,v) 웨이포인트 → 누적 길이 세그먼트 ── */
 function seg(wp){ const s=[]; let tot=0;
   for(let i=1;i<wp.length;i++){ const du=wp[i][0]-wp[i-1][0], dv=wp[i][1]-wp[i-1][1], l=Math.hypot(du,dv);
-    s.push({a:wp[i-1],b:wp[i],l,acc:tot, pu:l?-dv/l:0, pv:l?du/l:0}); tot+=l; } return {s,tot}; }
-/* off = 경로 수직 오프셋(다중 파이프의 특정 줄 위를 달리게). 꺾임 근처(±9)에선
-   이웃 세그먼트의 수직벡터와 섞어 줄이 끊기지 않고 부드럽게 도는 것처럼 보이게 한다 */
-function at(R,d,off){ if(!R.s.length) return [0,0];
+    s.push({a:wp[i-1],b:wp[i],l,acc:tot}); tot+=l; } return {s,tot,wp}; }
+/* 경로 시작보다 뒤(음수 거리)는 첫 구간 방향으로 뒤로 연장해서 그린다.
+   큐 안에 놓인 칩이 '출발선 뒤'에 서 있다가 그대로 밀려 나오게 하는 데 쓴다. */
+function atExt(R,d){ if(d>=0||!R.s.length) return at(R,d);
+  const s=R.s[0], ux=(s.b[0]-s.a[0])/s.l, uy=(s.b[1]-s.a[1])/s.l;
+  return [s.a[0]+ux*d, s.a[1]+uy*d]; }
+function at(R,d){ if(!R.s.length) return [0,0];
   d=Math.max(0,Math.min(d,R.tot));
   let gi=R.s.findIndex(x=>d<=x.acc+x.l); if(gi<0) gi=R.s.length-1;
   const g=R.s[gi], t=g.l?(d-g.acc)/g.l:0;
-  let x=g.a[0]+(g.b[0]-g.a[0])*t, y=g.a[1]+(g.b[1]-g.a[1])*t;
-  if(off){ let pu=g.pu, pv=g.pv; const BL=9, dIn=d-g.acc, dOut=g.acc+g.l-d;
-    if(dIn<BL && gi>0){ const w=.5+.5*dIn/BL, p=R.s[gi-1]; pu=pu*w+p.pu*(1-w); pv=pv*w+p.pv*(1-w); }
-    else if(dOut<BL && gi<R.s.length-1){ const w=.5+.5*dOut/BL, n=R.s[gi+1]; pu=pu*w+n.pu*(1-w); pv=pv*w+n.pv*(1-w); }
-    const L=Math.hypot(pu,pv)||1; x+=pu/L*off; y+=pv/L*off; }
-  return [x,y]; }
+  return [g.a[0]+(g.b[0]-g.a[0])*t, g.a[1]+(g.b[1]-g.a[1])*t]; }
+/* ── 3줄 파이프: 줄마다 '자기 경로'를 미리 만든다 ──
+   예전엔 칩이 중심선 거리로 달리면서 수직 오프셋만 받았다. 그러면 꺾임에서 바깥 줄이
+   안쪽보다 훨씬 긴 호를 같은 시간에 돌아야 해서 그 구간만 두 배 넘게 빨라졌다(눈에 띔).
+   중심선을 줄 간격만큼 평행이동한 폴리라인을 만들어 두면(꺾임은 두 직선의 교점 = 마이터),
+   각 줄이 자기 길이를 같은 속도로 달리므로 어느 줄도 빨라지지 않는다. */
+function offsetPath(wp,off,cross){
+  if(!off) return wp.slice();
+  const L=[]; let k=0;
+  for(let i=1;i<wp.length;i++){ const a=wp[i-1], b=wp[i];
+    const du=b[0]-a[0], dv=b[1]-a[1], l=Math.hypot(du,dv); if(l<0.5) continue;
+    /* cross = 꺾일 때마다 오프셋 부호를 뒤집는다 → 바깥 두 줄이 자리를 맞바꾸며 X 로 겹친다.
+       마이터(두 직선의 교점) 계산은 그대로라 꺾임이 자연스럽고, 덤으로 세 줄 길이가 똑같아진다
+       (게임→송신큐 192/220/248 → 220 셋, Send→클라 312/340/368 → 340 셋). */
+    const o = cross ? (k%2 ? -off : off) : off; k++;
+    const ou=-dv/l*o, ov=du/l*o;                           /* 진행방향의 수직 = 레일 그릴 때와 같은 부호 */
+    L.push({p:[a[0]+ou,a[1]+ov], q:[b[0]+ou,b[1]+ov], d:[du/l,dv/l]}); }
+  if(!L.length) return wp.slice();
+  const out=[L[0].p];
+  for(let i=1;i<L.length;i++){ const A=L[i-1], B=L[i];
+    const cr=A.d[0]*B.d[1]-A.d[1]*B.d[0];
+    if(Math.abs(cr)<1e-6){ out.push(B.p); continue; }       /* 나란한 두 구간 = 꺾임 아님 */
+    const t=((B.p[0]-A.p[0])*B.d[1]-(B.p[1]-A.p[1])*B.d[0])/cr;
+    out.push([A.p[0]+A.d[0]*t, A.p[1]+A.d[1]*t]); }
+  out.push(L[L.length-1].q);
+  return out; }
+function lanePaths(R,cross){ return [-LOFF,0,LOFF].map(o=>seg(offsetPath(R.wp,o,cross))); }
 /* RAILS에서 경로를 꺼내 이어붙임 — 레일을 옮기면 칩 경로도 같이 따라옴 */
 function wpOf(f,t){ const r=RAILS.find(x=>x.from===f&&x.to===t); return r?railPath(r):null; }
 function route(){ let wp=[];
@@ -523,16 +665,18 @@ function mix(a,b,t){ a=parseInt(a.slice(1),16); b=parseInt(b.slice(1),16);
   const ar=a>>16,ag=(a>>8)&255,ab=a&255, br=b>>16,bg=(b>>8)&255,bb=b&255;
   return "#"+((1<<24)+((Math.round(ar+(br-ar)*t))<<16)+((Math.round(ag+(bg-ag)*t))<<8)
     +Math.round(ab+(bb-ab)*t)).toString(16).slice(1); }
-/* 칩 = 아이소 평면에 누운 마름모 */
+/* 칩 = 아이소 평면에 누운 마름모.
+   납작한 정도는 반드시 KY/KX — 예전의 .58 은 실제 아이소 정사각형보다 살짝 높아서,
+   칩을 한 칸 간격으로 붙여 놔도 위아래에 틈이 생겼다. */
+const CHIP_R=KY/KX;
 function setChip(e,x,y,s){ e.setAttribute("points",
-  x.toFixed(1)+","+(y-s*.58).toFixed(1)+" "+(x+s).toFixed(1)+","+y.toFixed(1)+" "+
-  x.toFixed(1)+","+(y+s*.58).toFixed(1)+" "+(x-s).toFixed(1)+","+y.toFixed(1)); }
+  x.toFixed(1)+","+(y-s*CHIP_R).toFixed(1)+" "+(x+s).toFixed(1)+","+y.toFixed(1)+" "+
+  x.toFixed(1)+","+(y+s*CHIP_R).toFixed(1)+" "+(x-s).toFixed(1)+","+y.toFixed(1)); }
 function pool(n,fill,layer){ const a=[];
   for(let i=0;i<n;i++){ const e=el("polygon",{points:"0,0",fill,opacity:"0"});
     layer.appendChild(e); a.push({e,st:"wait",d:0,delay:0}); } return a; }
 function emit(p){ return p.find(c=>c.st==="wait"); }
-/* 부드러운 가감속 + 양끝 페이드 */
-function ease(x){ return x<.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2; }
+/* 양끝 페이드 */
 function fade(d,tot,inL,outL){ return Math.max(0,Math.min(1,d/inL,(tot-d)/outL)); }
 
 const R_RECV = route(["clients","accept"],["accept","iocp"],["iocp","swapq"]);
@@ -541,41 +685,64 @@ const R_FAN  = route(["game","sector"]);
 const R_BUND = route(["sector","send"]);
 const R_OUT  = route(["send","clients"]);
 const R_DIRTY= route(["game","dbw"]);
+const R_STORE= route(["dbw","mysql"]);
 const R_TWA  = route(["accept","timer"]);
 const R_TWI  = route(["iocp","timer"]);
+/* 응답 왕복 3구간은 줄이 3개 — 줄별 경로를 미리 뽑아 둔다(lane 0/1/2 = 안쪽/가운데/바깥) */
+const LOFF=SUB_W+SUB_GAP;
+const R_FAN_L=lanePaths(R_FAN,true), R_BUND_L=lanePaths(R_BUND), R_OUT_L=lanePaths(R_OUT,true);
+/* 교차하면 fan 줄 i 는 송신 큐의 반대쪽 홈에 도착한다 — 칸 채우기 인덱스를 뒤집어 준다 */
+const FAN_END=[2,1,0];
+/* 드레인 칩이 레이어를 갈아타는 지점.
+   SwapQ 판 위에 있는 동안은 건물 앞(gChip)이어야 판에 안 가리고, 판을 벗어난 뒤에는
+   건물 뒤(gChipBack)여야 게임 큐브가 칩을 가린다 — 다른 칩들과 같은 규칙.
+   한 레이어로는 둘 다 안 된다: 건물은 (u+v) 내림차순이라 SwapQ 가 게임 큐브보다 나중에
+   그려지므로, 그 사이에 끼워 넣으면 '큐브 위 + 판 아래' 가 되어 정확히 반대가 된다.
+   기준 = 판 +u 끝(SQ_HW) + 칩 반폭(6) → 칩이 판을 완전히 벗어난 뒤에 갈아탄다. */
+const DRAIN_HOP=SQ_HW+6;
 
 const recvChips = pool(11, RECV,      gChipBack);
-const drainChips= pool(6,  "#9adcff", gChipBack);
+/* 드레인은 출발할 때만 건물 앞(gChip) — 큐 안에서 출발해 SwapQ 판 위를 지나야 해서.
+   판을 벗어나면 gChipBack 으로 옮겨 게임 큐브 뒤로 들어간다(DRAIN_HOP) */
+const drainChips= pool(10, "#9adcff", gChip);
 const fanChips  = pool(13, SEND,      gChipBack);
-const bundChips = pool(6,  "#ffd88a", gChipBack);
-const outChips   = pool(9, SEND,      gChipBack);
+const bundChips = pool(12, SEND,      gChipBack);   /* 큐 3개 × 3개 = 한 번에 9개가 나간다 */
+/* 복귀 구간(send→클라)이 길어 앞 묶음이 아직 가는 중에 다음 묶음이 출발한다 —
+   풀이 모자라면 emit 이 null 을 돌려줘 어떤 줄은 3개, 어떤 줄은 1개만 나가 불규칙해 보인다 */
+const outChips  = pool(27, RECV,      gChipBack);   /* Send 워커에서 클라로 — 그 구간 레일과 같은 파랑 */
 const dirtyChips= pool(8,  STORE,     gChipBack);
+/* 인출된 것들은 판 위(큐 안)에서 출발하므로 드레인과 같은 이유로 건물 앞(gChip) */
+const saveChips = pool(10, "#7fe6b0", gChip);
 const twChips   = pool(4,  "#7fa8d8", gChipBack);
 
-/* ── SwapQ: 공유 큐(뒤 트레이)에 쌓였다가 통째로 로컬 큐(앞 트레이)로 ── */
-const QMAX=4, SQ={u:LAYOUT.swapq.u, v:LAYOUT.swapq.v, gv:17};
+/* ── SwapQ: 공유 큐(칸막이 왼쪽)에 쌓였다가 통째로 로컬 큐(오른쪽)로 ── */
+const QMAX=SQ_N, SQ={u:LAYOUT.swapq.u, v:LAYOUT.swapq.v+8};   /* v+8 = 판 중심(=IOCP·게임과 같은 축선) */
+let qShared=0;
+/* 쌓였다 한꺼번에 나가는 칩은 이동 중에도 서로 붙어 있어야 한다.
+   → 시간 지연(delay)이 아니라 **거리**를 한 칸(SLOT)씩 뒤로 밀어 출발시킨다(d = -i*SLOT).
+     시간으로 벌리면 지연이 프레임 단위로 반올림돼(0.045s 를 60fps 로 = 0.05s) 매번 사이가 벌어진다. */
 const pile=[]; for(let i=0;i<QMAX;i++){ const e=el("polygon",{points:"0,0",fill:"#9adcff",opacity:"0"});
   gChip.appendChild(e); pile.push(e); }
-let qShared=0, hopOn=false, hopT=0, hopN=0;
 
-/* ── 섹터 묶음: 격자 9칸이 다 차면 묶음 1개로 ── */
-const SEC_N=9; let secN=0, secFlash=0;
+/* ── 송신 큐 ×3: 아홉 칸이 다 차면 통째로 ── */
+/* 칸은 '칩이 실제로 도착할 때' 찬다. 게임이 세 줄로 동시에 보내므로 세 큐가 같이 한 칸씩
+   차오른다(세션마다 워커가 고정 — uniqueId%3). secN[k] = 큐 k 에 쌓인 칸 수(0~3).
+   아홉 칸이 다 찬 뒤 다음 것이 도착하면 그때 9개가 통째로 나간다. */
+const SEC_ROWS=3; let secN=[0,0,0], secFlash=0;
+const secTotal=()=>secN[0]+secN[1]+secN[2];
 
-/* ── DB 워커: '쌓이는 배치' 상자 윗면에 dirty 칸이 참 → 가득 차면 크레이트로 flush ── */
-const CAP=6, BB={u:LAYOUT.dbw.u+44, v:LAYOUT.dbw.v+8, w:30, d:26, z:21};
-const batchCells=[]; (function(){ const cols=3, rows=2, m=3.2;
-  for(let i=0;i<CAP;i++){ const c=i%cols, r=(i/cols)|0;
-    const cu=BB.u+BB.w*(c+.5)/cols, cv=BB.v+BB.d*(r+.5)/rows;
-    const e=el("polygon",{points:[[cu-m,cv-m],[cu+m,cv-m],[cu+m,cv+m],[cu-m,cv+m]]
-      .map(p=>P(p[0],p[1],BB.z)).join(" "),fill:"#5fd39a",stroke:"#0d2115","stroke-width":.6,opacity:"0"});
-    gChip.appendChild(e); batchCells.push(e); } })();
-let batchN=0, dbState="fill", flushT=0;
-const BCU=BB.u+BB.w/2, BCV=BB.v+BB.d/2;
-const R_CRATE=seg([[BCU,BCV],[LAYOUT.mysql.u+27, LAYOUT.mysql.v+22]]);
-const crate=el("g"); gChip.appendChild(crate);
-const CX0=px(BCU,BCV), CY0=py(BCU,BCV,BB.z), CW=13;
-prism(crate, BCU-CW/2, BCV-CW/2, CW, CW, BB.z, 9, ["#43b884","#123322","#1f5f40"], true);
-crate.setAttribute("opacity","0");
+/* ── DB 워커 큐: 게임이 dirty 를 쌓고, 워커가 통째로 인출해 MySQL 로 ──
+   SwapQ 와 완전히 같은 메커니즘(코드도 같은 패턴이다 — DBWorker.h 가 SendWorker 를 복제했다).
+   판 중심 = 레일 끝점(노드 중앙)이라, 인출된 덩어리는 dbw→mysql 레일을 그대로 탄다. */
+const DQ={u:LAYOUT.dbw.u+37, v:LAYOUT.dbw.v+22};
+/* 드레인 칩과 같은 처리(DRAIN_HOP 참고). DB 큐 판 위에서는 건물 앞(gChip)이라야 판에 안 가리고,
+   판을 벗어난 뒤에는 건물 뒤(gChipBack)라야 MySQL 블록이 칩을 가린다.
+   기준 = 판 +u 끝(DBQ_HW) + 칩 반폭(6). 예전엔 블록 앞에서 경로를 잘랐는데(STORE_END),
+   그러면 '블록 뒤로 들어간다'가 아니라 '블록 앞에서 사라진다'로 보인다. */
+const STORE_HOP=DBQ_HW+6;
+let qStore=0;
+const dpile=[]; for(let i=0;i<DBQ_N;i++){ const e=el("polygon",{points:"0,0",fill:"#7fe6b0",opacity:"0"});
+  gChip.appendChild(e); dpile.push(e); }
 
 /* ── Timing Wheel: 바늘 + 등록 신호 링 ── */
 let twPing=0, twAlt=0, twHand=null, twRing=null;
@@ -590,8 +757,21 @@ let run=false, prev=0, t=0, tRecv=0, tFan=0, tDirty=0, tTw=0;
    첫 수신이 Accept를 지나야 타이머 등록이, 게임에 도착해야 응답·저장이 시작된다 */
 let feedAccept=false, feedGame=false;
 const D_ACCEPT=R_RECV.s[0].l;   /* 수신 경로 첫 구간 = 클라 → Accept */
-/* 응답 경로(3파이프) 주행: lane 0/1/2 → 수직 오프셋. 게임→섹터 칩은 순환 배정 */
-const LOFF=SUB_W+SUB_GAP; let fanSeq=0;
+/* 큐에서 나가기 — 줄 3개(=9개)가 파이프별로 붙어서 출발. 자리가 모자라면 0 을 돌려준다 */
+function queueOut(){ let sent=0;
+  for(let k=0;k<3;k++) for(let i=0;i<SEC_ROWS;i++){ const b=emit(bundChips);
+    if(b){ b.st="flow"; b.d=-i*SLOT; b.delay=0; b.lane=k; sent++; } }
+  return sent; }
+/* SwapQ 에서 나가기 — 쌓여 있던 자리 그대로(음수 거리) 한 덩어리가 게임까지 */
+function swapOut(){ let rel=0;
+  drainChips.forEach(dr=>{ if(rel<QMAX && dr.st==="wait"){
+    dr.st="flow"; dr.d=-(Q_HEAD+rel*SLOT); dr.delay=0; rel++; } });
+  return rel; }
+/* DB 큐에서 나가기 — 같은 방식. 쌓여 있던 자리에서 그대로 MySQL 까지 한 덩어리로 */
+function storeOut(){ let rel=0;
+  saveChips.forEach(sv=>{ if(rel<DBQ_N && sv.st==="wait"){
+    sv.st="flow"; sv.d=-(Q_HEAD+rel*SLOT); sv.delay=0; rel++; } });
+  return rel; }
 
 function frame(now){
   if(!run) return;
@@ -602,10 +782,13 @@ function frame(now){
   /* ── 방출 (수신만 무조건 — 나머지는 클라 데이터가 그 지점에 닿은 뒤부터) ── */
   tRecv+=dt;  if(tRecv>=0.30){ tRecv-=0.30; const c=emit(recvChips); if(c){c.st="flow";c.d=0;} }
   if(feedGame){
-    tFan+=dt;   if(tFan>=0.26){ tFan-=0.26; const c=emit(fanChips); if(c){c.st="flow";c.d=0;c.lane=fanSeq++%3;} }
-    tDirty+=dt; if(tDirty>=0.52){ tDirty-=0.52;
-      const infl=dirtyChips.filter(c=>c.st==="flow").length;
-      if(dbState==="fill" && batchN+infl<CAP){ const c=emit(dirtyChips); if(c){c.st="flow";c.d=0;} } } }
+    /* 게임 루프는 한 틱에 세 워커 몫을 한꺼번에 넘긴다 — 줄 3개로 동시에 출발.
+       레일이 교차하면서 세 줄 길이가 같아졌으므로(220 셋) 셋이 나란히 가서 같이 도착한다.
+       큐 하나당 주기는 예전(0.24×3)과 같은 0.72초라 채우고 비우는 리듬은 그대로다. */
+    tFan+=dt;   if(tFan>=0.72){ tFan-=0.72;
+      for(let k=0;k<3;k++){ const c=emit(fanChips); if(c){ c.st="flow"; c.d=0; c.lane=k; } } }
+    /* 큐가 알아서 쌓고 내보내므로 방출을 막을 필요가 없다(옛 batch 상자 시절의 게이트 제거) */
+    tDirty+=dt; if(tDirty>=0.52){ tDirty-=0.52; const c=emit(dirtyChips); if(c){c.st="flow";c.d=0;} } }
   if(feedAccept){
     tTw+=dt;    if(tTw>=1.5){ tTw-=1.5; const c=emit(twChips);
       if(c){ c.st="flow"; c.d=0; c.alt=twAlt; twAlt=1-twAlt; } } }
@@ -615,75 +798,91 @@ function frame(now){
     c.d+=125*dt;
     if(!feedAccept && c.d>=D_ACCEPT) feedAccept=true;
     if(c.d>=R_RECV.tot){ c.st="wait"; c.e.setAttribute("opacity","0");
-      if(!hopOn && qShared<QMAX) qShared++; return; }
+      /* 4칸이 찬 상태에서 하나 더 오면 그때 통째로 나간다(= 스왑). 방금 온 것부터 다시 쌓인다 */
+      if(qShared>=QMAX){ if(swapOut()===QMAX) qShared=1; }
+      else qShared++;
+      return; }
     const p=at(R_RECV,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),5);
     c.e.setAttribute("opacity",fade(c.d,R_RECV.tot,18,16).toFixed(2)); });
 
   /* IOCP 워커 처리 반짝 효과는 사용자 요청으로 제거(2026-07-26) — 칸은 정적 유지 */
 
-  /* ── 스왑: 공유 큐가 차면 통째로 로컬 큐로(락 1회) → 게임으로 스태거 드레인 ── */
-  if(!hopOn && qShared>=QMAX){ hopN=qShared; qShared=0; hopOn=true; hopT=0; }
-  if(hopOn){ hopT=Math.min(1,hopT+dt/0.26);
-    if(hopT>=1){ hopOn=false; let rel=0;
-      drainChips.forEach(dr=>{ if(rel<hopN && dr.st==="wait"){ dr.st="flow"; dr.d=0; dr.delay=rel*0.07; rel++; } }); } }
-  { const nS=hopOn?hopN:qShared, es=hopOn?ease(hopT):0;
-    const vc=(SQ.v+SQ.gv)*(1-es)+SQ.v*es, uHead=SQ.u+9;
-    pile.forEach((e,i)=>{ if(i>=nS){ e.setAttribute("opacity","0"); return; }
-      const u=uHead-i*7; setChip(e,px(u,vc),py(u,vc,3),4.4); e.setAttribute("opacity","1"); }); }
+  /* ── 스왑(swapOut) 은 '가득 찬 뒤 하나 더 도착'하는 순간 위 수신 처리에서 일으킨다 ──
+     쌓여 있던 자리(= 경로 시작보다 뒤, 음수 거리)에서 그대로 출발시켜 한 덩어리가
+     칸막이를 넘어 게임까지 끊김 없이 간다. '통째·락 1회'는 줄이 안 흩어지는 걸로 읽힌다. */
+  /* 쌓여 있는 것 — 칩 크기 5 는 레일 위를 흐르던 것과 동일(같은 패킷), 간격 SLOT 이라 서로 붙는다 */
+  pile.forEach((e,i)=>{ if(i>=qShared){ e.setAttribute("opacity","0"); return; }
+    const u=SQ.u-Q_HEAD-i*SLOT; setChip(e,px(u,SQ.v),py(u,SQ.v,3.9),5); e.setAttribute("opacity","1"); });
   drainChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
-    if(c.delay>0){ c.delay-=dt; c.e.setAttribute("opacity","0"); return; }
-    c.d+=120*dt; if(c.d>=R_DRAIN.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); feedGame=true; return; }
-    const p=at(R_DRAIN,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),5);
-    c.e.setAttribute("opacity",fade(c.d,R_DRAIN.tot,14,12).toFixed(2)); });
+    c.d+=120*dt;
+    if(c.d>=R_DRAIN.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); feedGame=true; return; }
+    /* 판을 벗어나는 순간 건물 뒤 레이어로 옮긴다 → 그다음부터는 게임 큐브에 가려 들어간다 */
+    const front=(c.d<DRAIN_HOP);
+    if(c.front!==front){ c.front=front; (front?gChip:gChipBack).appendChild(c.e); }
+    const p=atExt(R_DRAIN,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3.9),5);
+    /* 큐브가 가려 주므로 페이드는 짧게 — 끝까지 또렷하게 가다가 큐브 뒤로 들어간다 */
+    c.e.setAttribute("opacity",(c.d<0?1:fade(c.d,R_DRAIN.tot,1,8)).toFixed(2)); });
 
-  /* ── 응답: 게임 → 섹터 격자 채우기 ── */
+  /* ── 응답: 게임 → 송신 큐 3개 ──
+     칩 하나가 도착하면 그 큐의 칸 하나가 찬다(도착 시점 = 칸 채워지는 시점).
+     아홉 칸이 다 차 있다가 하나 더 도착하면 그때 9개가 통째로 나간다. */
   fanChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
+    const RL=R_FAN_L[c.lane||0];
     c.d+=125*dt;
-    if(c.d>=R_FAN.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); if(secN<SEC_N) secN++; return; }
-    const p=at(R_FAN,c.d,((c.lane||0)-1)*LOFF); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),4.6);
-    c.e.setAttribute("opacity",fade(c.d,R_FAN.tot,16,14).toFixed(2)); });
+    if(c.d>=RL.tot){ c.st="wait"; c.e.setAttribute("opacity","0");
+      const k=FAN_END[c.lane||0];      /* 교차 뒤 실제로 도착하는 큐 */
+      if(secTotal()>=SEC_ROWS*3){                                        /* 가득 → 통째로 내보내고 방금 것부터 다시 */
+        if(queueOut()){ secN=[0,0,0]; secN[k]=1; secFlash=1; } }
+      else if(secN[k]<SEC_ROWS) secN[k]++;
+      return; }
+    const p=at(RL,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),4.6);
+    c.e.setAttribute("opacity",fade(c.d,RL.tot,16,14).toFixed(2)); });
 
-  /* 격자가 다 차면 N→1 — 전체가 한 번 번쩍하고 묶음이 파이프별로 3개 출발(워커별 제출) */
-  if(secN>=SEC_N && secFlash<=0){ let k=0;
-    bundChips.forEach(b=>{ if(k<3 && b.st==="wait"){ b.st="flow"; b.d=0; b.lane=k; b.delay=k*0.07; k++; } });
-    if(k){ secN=0; secFlash=1; } }
   if(sectorCells){
     if(secFlash>0){ secFlash=Math.max(0,secFlash-dt/0.40);
       const fl=mix("#1d1409","#ffe0a0",secFlash);
       sectorCells.forEach(e=>e.setAttribute("fill",fl)); }
-    else sectorCells.forEach((e,i)=>e.setAttribute("fill", i<secN?"#c98c2e":"#1d1409")); }
+    /* 칸 순서: 인덱스 i 에서 i/3 = 어느 큐인지, i%3 = 그 큐 안에서 몇 번째 칸인지 */
+    else sectorCells.forEach((e,i)=>e.setAttribute("fill", (i%3)<secN[(i/3)|0]?"#c98c2e":"#1d1409")); }
 
-  /* 묶음 3개: 각자 파이프로 섹터 → Send 워커. 도착한 묶음이 같은 파이프로 복귀 칩 발사 */
+  /* 큐에서 나온 것들: 각자 파이프로 송신 큐 → Send 워커. 도착한 것이 같은 파이프로 복귀 칩 발사 */
   bundChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
     if(c.delay>0){ c.delay-=dt; c.e.setAttribute("opacity","0"); return; }
+    const RL=R_BUND_L[c.lane||0];
     c.d+=130*dt;
-    if(c.d>=R_BUND.tot){ c.st="wait"; c.e.setAttribute("opacity","0");
-      const o=emit(outChips); if(o){ o.st="flow"; o.d=0; o.delay=0; o.lane=c.lane; } return; }
-    const p=at(R_BUND,c.d,((c.lane||0)-1)*LOFF); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],4),6.5);
-    c.e.setAttribute("opacity",fade(c.d,R_BUND.tot,12,12).toFixed(2)); });
+    if(c.d<0){ c.e.setAttribute("opacity","0"); return; }
+    if(c.d>=RL.tot){ c.st="wait"; c.e.setAttribute("opacity","0");
+      /* 넘긴 거리를 그대로 이어받아 출발 — 프레임 경계에서 잘리지 않아 복귀 칩도 붙어서 간다(속도도 같게 130) */
+      const o=emit(outChips); if(o){ o.st="flow"; o.d=c.d-RL.tot; o.delay=0; o.lane=c.lane; } return; }
+    const p=at(RL,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],4),5);
+    c.e.setAttribute("opacity",fade(c.d,RL.tot,12,12).toFixed(2)); });
   outChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
     if(c.delay>0){ c.delay-=dt; c.e.setAttribute("opacity","0"); return; }
-    c.d+=135*dt; if(c.d>=R_OUT.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); return; }
-    const p=at(R_OUT,c.d,((c.lane||0)-1)*LOFF); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),5);
-    c.e.setAttribute("opacity",fade(c.d,R_OUT.tot,16,16).toFixed(2)); });
+    const RL=R_OUT_L[c.lane||0];
+    c.d+=130*dt; if(c.d>=RL.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); return; }
+    const p=at(RL,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),5);
+    c.e.setAttribute("opacity",fade(c.d,RL.tot,16,16).toFixed(2)); });
 
-  /* ── 저장: 게임 → DB 워커 dirty 적재 → 가득 차면 크레이트가 MySQL로 ── */
+  /* ── 저장: 게임 → DB 워커 큐에 적재 → 가득 차면 통째로 인출돼 MySQL로 ── */
   dirtyChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
     c.d+=95*dt;
     if(c.d>=R_DIRTY.tot){ c.st="wait"; c.e.setAttribute("opacity","0");
-      if(dbState==="fill" && batchN<CAP) batchN++; return; }
-    const p=at(R_DIRTY,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),4.6);
+      /* 5칸이 찬 상태에서 하나 더 오면 그때 통째로 나간다. 방금 온 것부터 다시 쌓인다 */
+      if(qStore>=DBQ_N){ if(storeOut()===DBQ_N) qStore=1; }
+      else qStore++;
+      return; }
+    const p=at(R_DIRTY,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),5);
     c.e.setAttribute("opacity",fade(c.d,R_DIRTY.tot,18,14).toFixed(2)); });
-  batchCells.forEach((e,i)=>e.setAttribute("opacity",
-    dbState==="fill" ? (i<batchN?"0.95":"0") : (1-flushT).toFixed(2)));
-  if(dbState==="fill" && batchN>=CAP){ dbState="flush"; flushT=0; }
-  if(dbState==="flush"){ flushT=Math.min(1,flushT+dt/1.15);
-    const p=at(R_CRATE,ease(flushT)*R_CRATE.tot);
-    crate.setAttribute("transform","translate("+(px(p[0],p[1])-CX0).toFixed(1)+","
-      +(py(p[0],p[1],BB.z)-CY0).toFixed(1)+")");
-    crate.setAttribute("opacity",Math.min(1,flushT*5,(1-flushT)*5).toFixed(2));
-    if(flushT>=1){ dbState="fill"; batchN=0; } }
-  else crate.setAttribute("opacity","0");
+  /* 쌓여 있는 것 — 칸막이 반대쪽(-u)으로 자란다. SwapQ 와 같은 치수(칩 5 · 간격 SLOT) */
+  dpile.forEach((e,i)=>{ if(i>=qStore){ e.setAttribute("opacity","0"); return; }
+    const u=DQ.u-Q_HEAD-i*SLOT; setChip(e,px(u,DQ.v),py(u,DQ.v,3.9),5); e.setAttribute("opacity","1"); });
+  saveChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
+    c.d+=110*dt;
+    if(c.d>=R_STORE.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); return; }
+    const front=(c.d<STORE_HOP);
+    if(c.front!==front){ c.front=front; (front?gChip:gChipBack).appendChild(c.e); }
+    const p=atExt(R_STORE,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3.9),5);
+    c.e.setAttribute("opacity",(c.d<0?1:fade(c.d,R_STORE.tot,1,8)).toFixed(2)); });
 
   /* ── 타임아웃 등록: Accept·IOCP → Timing Wheel ── */
   twChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
@@ -712,10 +911,10 @@ function frame(now){
 if(!RMOT) setTimeout(function(){ run=true; prev=performance.now(); requestAnimationFrame(frame); }, 1250);
 /* '다시 재생' 훅: 흐름을 처음부터 — 클라에서 출발하는 인과 순서가 다시 보이게 */
 window.__flowReset=function(){
-  [recvChips,drainChips,fanChips,bundChips,outChips,dirtyChips,twChips]
+  [recvChips,drainChips,fanChips,bundChips,outChips,dirtyChips,saveChips,twChips]
     .forEach(p=>p.forEach(c=>{ c.st="wait"; c.e.setAttribute("opacity","0"); }));
-  qShared=0; hopOn=false; secN=0; secFlash=0; batchN=0; dbState="fill"; flushT=0; twPing=0;
-  crate.setAttribute("opacity","0");
+  qShared=0; secN=[0,0,0]; secFlash=0; qStore=0; twPing=0;
+  dpile.forEach(e=>e.setAttribute("opacity","0"));
   feedAccept=false; feedGame=false; tRecv=tFan=tDirty=tTw=0;
 };
 
