@@ -187,13 +187,15 @@ const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
              /* outside = 우리 서버 밖(클라이언트 등). 실선·밝은 중립.
                 점선 버전이 필요하면 여기에 dash:true 만 붙이면 된다 */
              outside:{top:"#161d2b",side:"#0f1522",edge:"#93a5c2"} };
-/* 크기 29 통일(사용자 지정) — 계산상 안 걸리는 자리는 22까지라, NETWORK 는 이 크기에서
-   건물·레일에 일부 가린다. 자리는 툴에서 직접 잡는 중. 안 가리게 하려면 22로 내리면 된다.
-   DATA BASE 만 17 — 글자가 아홉이라 29 로는 저장 판(깊이 100) 을 세 배 넘겨 옆 판까지 삐져나온다. */
+/* 크기가 넷 다 다른 이유 — 판 '위'에 올리면 건물이 먹고, 판 '밖'으로 빼면 잘리거나 엉뚱한 판에 뜬다.
+   CLIENT(40)·GAME(36) = 판 바깥 모서리 밀착(씬 가장자리라 바깥에 빈자리가 있다).
+   NETWORK(29) = 클라·게임 판 사이에 끼어 바깥에 자리가 없어 판 위 유지.
+   DATA BASE(17) = 저장 판 깊이가 100뿐이라 아홉 글자가 이 이상은 안 들어간다.
+   ※ 글자는 -v 방향으로만 눕는다 = 판의 깊이(d)만 글자 길이로 쓸 수 있다. */
 const ZONE_INIT=[
-  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-80,lv:152, ws:29, wo:.22},
+  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-100,lv:60, ws:40, wo:.22},
   {u:40, v:-100,w:200,d:320,color:"net",   name:"NETWORK", lu:44, lv:142, ws:29, wo:.22},
-  {u:262,v:-98, w:200,d:200,color:"game",  name:"GAME",    lu:436,lv:-42, ws:29, wo:.22},
+  {u:262,v:-98, w:200,d:200,color:"game",  name:"GAME",    lu:486,lv:-6, ws:36, wo:.22},
   {u:260,v:120, w:220,d:100,color:"store", name:"DATA BASE", lu:276,lv:170, ws:17, wo:.22} ];
 /* 바닥에 눕힌 글자 — (u,v) 평면에 얹는 아핀 변환. 진행 방향은 왼→오·위→아래(-v)로 고정이고,
    글자 아래쪽이 화면 앞(-u)을 향하게 잡아 좌우가 뒤집히지 않는다. */
@@ -386,7 +388,7 @@ const RAIL_INIT=[
   {a:"game",   b:"sector",color:"send",lanes:3,cross:true,pts:[{u:410,v:-70}]},
   {a:"sector", b:"send",  color:"send", lanes:3},   /* 워커 3개 고정 파이프 — uniqueId%3 */
   {a:"iocp",   b:"timer", color:"recv",pts:[{u:190,v:170}]},
-  {a:"accept", b:"timer", color:"recv",pts:[{u:70,v:170}]} ];
+  {a:"accept", b:"timer", color:"recv",pts:[{u:55,v:170}]} ];   /* u 를 Accept(55) 와 맞춰야 첫 구간이 축에 붙는다 */
 const RAILS=[]; let railSeq=0;
 const RAILCOL={recv:RECV, send:SEND, store:STORE, net:"#8fb6e6"};
 function railColorHex(k){ return RAILCOL[k]||RECV; }
