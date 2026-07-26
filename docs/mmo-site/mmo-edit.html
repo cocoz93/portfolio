@@ -187,16 +187,17 @@ const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
              /* outside = 우리 서버 밖(클라이언트 등). 실선·밝은 중립.
                 점선 버전이 필요하면 여기에 dash:true 만 붙이면 된다 */
              outside:{top:"#161d2b",side:"#0f1522",edge:"#93a5c2"} };
-/* 크기 29 통일(사용자 지정) — 계산상 안 걸리는 자리는 22까지라, NETWORK 와 DB 는 이 크기에서
-   건물·레일에 일부 가린다. 자리는 툴에서 직접 잡는 중. 안 가리게 하려면 22로 내리면 된다. */
+/* 크기 29 통일(사용자 지정) — 계산상 안 걸리는 자리는 22까지라, NETWORK 는 이 크기에서
+   건물·레일에 일부 가린다. 자리는 툴에서 직접 잡는 중. 안 가리게 하려면 22로 내리면 된다.
+   DATA BASE 만 17 — 글자가 아홉이라 29 로는 저장 판(깊이 100) 을 세 배 넘겨 옆 판까지 삐져나온다. */
 const ZONE_INIT=[
   {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-80,lv:152, ws:29, wo:.22},
   {u:40, v:-100,w:200,d:320,color:"net",   name:"NETWORK", lu:44, lv:142, ws:29, wo:.22},
   {u:262,v:-98, w:200,d:200,color:"game",  name:"GAME",    lu:436,lv:-42, ws:29, wo:.22},
-  {u:260,v:120, w:220,d:100,color:"store", name:"DB",      lu:264,lv:132, ws:29, wo:.22} ];
+  {u:260,v:120, w:220,d:100,color:"store", name:"DATA BASE", lu:276,lv:170, ws:17, wo:.22} ];
 /* 바닥에 눕힌 글자 — (u,v) 평면에 얹는 아핀 변환. 진행 방향은 왼→오·위→아래(-v)로 고정이고,
    글자 아래쪽이 화면 앞(-u)을 향하게 잡아 좌우가 뒤집히지 않는다. */
-const ZW_LS=.12;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격이 같이 움직인다 */
+const ZW_LS=.04;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격이 같이 움직인다 */
 function floorMat(u,v){ return "matrix("+KX+","+KY+","+(-KX)+","+KY+","+px(u,v).toFixed(2)+","+py(u,v,0).toFixed(2)+")"; }
 /* 레일 표현(초기 디자인) — 폭 있는 바닥 채널 + 이음선. 본편 mmo.src.html 과 동일 */
 const LTINT={recv:"#16243a", send:"#2a2412", store:"#12281c"};
