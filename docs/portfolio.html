@@ -821,5 +821,22 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 
 })();
 </script>
-<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "060e5d3f66d546fdb5d923b01003f244"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Cloudflare Web Analytics (본인 방문 제외: ?noan=1 로 한 번 접속 / 해제는 ?noan=0) -->
+<script>
+(function(){
+  try{
+    var q = location.search;
+    if (q.indexOf('noan=0') >= 0) { localStorage.removeItem('noan'); }
+    else if (q.indexOf('noan=1') >= 0) { localStorage.setItem('noan','1'); }
+    if (localStorage.getItem('noan') === '1') { return; }
+  }catch(e){}
+  var s = document.createElement('script');
+  s.type = 'module';
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', '{"token": "060e5d3f66d546fdb5d923b01003f244"}');
+  document.head.appendChild(s);
+})();
+</script>
+<!-- End Cloudflare Web Analytics -->
 </html>
