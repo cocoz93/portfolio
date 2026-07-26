@@ -210,12 +210,14 @@ section{scroll-margin-top:76px}
 .rsinner{position:relative}
 .rsceil{position:absolute; left:0; right:0; top:36px; pointer-events:none;
   border-top:2px solid rgba(245,177,61,.55); box-shadow:0 0 18px rgba(245,177,61,.18);
-  opacity:0; transition:opacity .5s ease 1.35s}
+  /* 마지막 막대가 멈추는 시점이 440ms(지연) + 850ms(길이) = 1.29s.
+     바로 뒤에 붙으면 동시처럼 보여 '올리고 나서 벽을 만났다'는 순서가 죽는다. 한 박자 띄운다. */
+  opacity:0; transition:opacity .5s ease 1.62s}
 .rndstep.in .rsceil{opacity:1}
 /* 칩 배경은 불투명이어야 한다 — 반투명이면 천장선이 글자 사이로 비쳐 '천장 ·· 게임' 처럼 보인다. */
-.rsceil span{position:absolute; left:0; top:-17px; font-family:var(--mono); font-size:.88rem;
+.rsceil span{position:absolute; left:0; top:-15px; font-family:var(--mono); font-size:.79rem;
   font-weight:800; color:var(--sig); letter-spacing:-.01em; line-height:1;
-  padding:6px 13px; border-radius:999px;
+  padding:5px 11px; border-radius:999px;
   background:#111a29; border:1px solid rgba(245,177,61,.45);
   box-shadow:inset 0 0 0 99px rgba(245,177,61,.10)}
 .rsgrid{display:grid; grid-template-columns:repeat(5,1fr); gap:18px; align-items:end}
