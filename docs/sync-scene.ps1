@@ -88,6 +88,14 @@ $j = $t.IndexOf('</svg>', $i)
 if ($j -lt 0) { throw 'portfolio.html 의 #scene 이 닫히지 않았다' }
 $j += 6
 $before = $t.Substring($i, $j - $i)
+# 홈 컷에는 상세카드가 없다. 원본은 카드 자리로 오른쪽 259칸을 비워 두는데(폭 1042),
+# 그대로 가져오면 그림이 왼쪽으로 몰리고 오른쪽 1/4 이 빈 채로 남는다.
+# 내용 실측은 x246~1042 · y207~658 이므로 그 범위에 맞춰 다시 잡는다 = 같은 카드 폭에서 그림이 커진다.
+# 원본(mmo-site)은 카드가 있어 1042 가 맞다 — 그쪽은 건드리지 않고 여기서만 바꾼다.
+$homeVB = 'viewBox="216 172 856 500"'
+$scene  = [regex]::Replace($scene, 'viewBox="[^"]*"', $homeVB, 1)
+if ($scene -notmatch [regex]::Escape($homeVB)) { throw '홈 컷 viewBox 치환 실패' }
+
 $scene  = ($scene -replace "`r`n", "`n") -replace "`n", "`r`n"   # 파일 줄바꿈(CRLF)에 맞춘다
 if ($before -eq $scene) { Write-Host '[sync] 이미 최신 - 변경 없음'; }
 else {
