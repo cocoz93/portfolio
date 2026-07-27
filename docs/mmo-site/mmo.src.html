@@ -31,7 +31,11 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 
 /* stage (isometric diagram) */
 .stage{position:relative; width:100%; margin:14px auto 0}
-#scene{display:block; width:100%; height:auto}
+/* touch-action:pan-y = 세로 페이지 스크롤은 브라우저에 남기고, 가로 드래그·핀치만 우리가 받는다.
+   확대 상태(.pannable)에서는 none 으로 바꿔 세로 드래그도 씬 이동으로 쓴다 */
+#scene{display:block; width:100%; height:auto; touch-action:pan-y}
+#scene.pannable{cursor:grab; touch-action:none}
+#scene.dragging{cursor:grabbing}
 #scene .top, #bnscene .top{stroke:rgba(255,255,255,.18); stroke-width:1; stroke-linejoin:round}
 #scene .rim, #bnscene .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
 
@@ -128,6 +132,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .card .none{font-size:.8rem; color:var(--dim)}
 .legend .lhint{font-family:var(--mono); font-size:12px; color:var(--dim); margin-top:2px}
 #scene .hit{cursor:pointer}
+#scene.dragging .hit{cursor:grabbing}   /* 노드 위를 지나도 끄는 손 모양을 유지 (뒤에 와야 .hit 를 이긴다) */
 #scene .hit .halo{opacity:0; transition:opacity .12s}
 #scene .hit:hover .halo, #scene .hit:focus-visible .halo{opacity:1}
 #scene .hit:focus-visible{outline:none}
@@ -147,6 +152,18 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
   border-radius:9px; padding:7px 14px; backdrop-filter:blur(4px); transition:border-color .15s, color .15s}
 .stage-replay:hover{border-color:var(--net); color:var(--ink)}
 .stage-replay:focus-visible{outline:2px solid var(--net); outline-offset:2px}
+
+/* ═══ 카메라 컨트롤 — 씬 왼쪽 위(비어 있는 하늘). 재생 버튼과 같은 양식 ═══ */
+.cam{position:absolute; left:16px; top:14px; z-index:6; display:flex; gap:6px; align-items:center; flex-wrap:wrap}
+.cam button{font-family:var(--mono); font-size:.82rem; color:#b7c4da; cursor:pointer;
+  background:rgba(19,26,38,.55); border:1px solid rgba(120,140,175,.42); border-radius:9px;
+  padding:6px 12px; backdrop-filter:blur(4px); transition:border-color .15s, color .15s, background .15s}
+.cam button:hover{border-color:var(--net); color:var(--ink)}
+.cam button.on{border-color:var(--net); color:var(--ink); background:rgba(30,48,72,.8)}
+.cam button:focus-visible{outline:2px solid var(--net); outline-offset:2px}
+.cam .zb{padding:6px 11px; font-weight:700}
+.cam .sep{width:1px; height:19px; background:rgba(120,140,175,.3); margin:0 3px}
+@media(max-width:680px){ .cam{left:12px; top:10px; gap:4px} .cam button{padding:5px 9px; font-size:.72rem} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
 </style>
@@ -170,7 +187,8 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
     <div class="row recv"><i></i>수신 recv<span class="cap">client → 게임</span></div>
     <div class="row send"><i></i>응답 send<span class="cap">게임 → client</span></div>
     <div class="row store"><i></i>저장 DB<span class="cap">게임 → MySQL</span></div>
-    <div class="lhint">▸ 노드 클릭 = 상세</div>
+    <div class="lhint">▸ 노드 클릭 = 상세 · 더블클릭 = 확대</div>
+    <div class="lhint">▸ 드래그 = 이동 · Ctrl+휠 = 확대</div>
   </div>
   <div class="tag">IOCP MMO SERVER<br><b>단일 게임 스레드</b> 병목</div>
   <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
@@ -610,12 +628,206 @@ if(card){ card.addEventListener("click",function(e){ if(e.target.closest("[data-
 /* 히트박스(투명, 최상위) */
 NODES.forEach(function(n){ if(!n.card) return; const L=LAYOUT[n.name], h=n.hit;
   const pts=[[L.u+h[0],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]+h[3]],[L.u+h[0],L.v+h[1]+h[3]]].map(p=>P(p[0],p[1],h[4])).join(" ");
-  const g=el("g",{class:"hit",tabindex:"0",role:"button","aria-label":ND[n.card].nm});
+  const g=el("g",{class:"hit",tabindex:"0",role:"button","aria-label":ND[n.card].nm,"data-node":n.name});
   g.appendChild(el("polygon",{points:pts,fill:"transparent"}));
   g.appendChild(el("polygon",{class:"halo",points:pts,fill:"none",stroke:"#cfe0f2","stroke-width":1.6,"stroke-dasharray":"4 4"}));
   g.addEventListener("click",function(){ openCard(n.card); });
   g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openCard(n.card); } });
   gHit.appendChild(g); });
+
+/* ═══════════════ 카메라 — 확대(Ctrl+휠·핀치)·이동(드래그)·구역 포커스 ═══════════════
+   움직이는 건 svg 의 viewBox 하나뿐이다. 레이어(gZone…gHit)를 래퍼 g 로 감싸지 않는다 —
+   등장 웨이브 CSS(#lyr-* > *), 병목 탭 클론(gZone…gLbl 을 직접 cloneNode),
+   포폴 홈 정지컷 추출(sync-scene.ps1 이 #scene.outerHTML 을 뜸) 셋이 전부 이 구조를 직접 잡고 있어서
+   중간에 g 를 하나 끼우면 셋 다 다시 확인해야 한다. viewBox 는 그 아래를 안 건드린다.
+
+   비율(가로:세로)은 고정한다. #scene 은 width:100%·height:auto 라 표시 높이가 viewBox 비율에서 나오므로,
+   비율이 바뀌면 확대할 때마다 페이지 레이아웃이 위아래로 튄다. */
+(function(){
+  const vb=svg.getAttribute("viewBox").trim().split(/[\s,]+/).map(Number);
+  const HOME={x:vb[0],y:vb[1],w:vb[2],h:vb[3]}, ASPECT=HOME.w/HOME.h;
+  const MAXZ=5, RMO=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const stage=svg.closest(".stage"); if(!stage) return;
+  const cam={x:HOME.x,y:HOME.y,w:HOME.w};
+  const camH=()=>cam.w/ASPECT;
+  const zoom=()=>HOME.w/cam.w;
+
+  /* 이동 범위는 원래 프레임 안쪽으로 묶는다 — 확대해도 씬 밖 허공으로 빠져나갈 수 없다 */
+  function clamp(){ const h=camH();
+    cam.x=Math.min(Math.max(cam.x,HOME.x),HOME.x+HOME.w-cam.w);
+    cam.y=Math.min(Math.max(cam.y,HOME.y),HOME.y+HOME.h-h); }
+  function apply(){ clamp();
+    svg.setAttribute("viewBox",cam.x.toFixed(2)+" "+cam.y.toFixed(2)+" "+cam.w.toFixed(2)+" "+camH().toFixed(2));
+    svg.classList.toggle("pannable",zoom()>1.001); }
+
+  /* 화면(client) 좌표 → 씬 좌표. 비율이 같으므로 가로 배율 하나로 양축이 맞는다 */
+  function toUser(cx,cy){ const r=svg.getBoundingClientRect(); if(!r.width) return [cam.x,cam.y];
+    return [cam.x+(cx-r.left)/r.width*cam.w, cam.y+(cy-r.top)/r.height*camH()]; }
+
+  /* ── 부드러운 이동 ── */
+  let flyId=0;
+  function stopFly(){ if(flyId){ cancelAnimationFrame(flyId); flyId=0; } }
+  function flyTo(x,y,w,ms){ stopFly();
+    if(RMO||!ms){ cam.x=x; cam.y=y; cam.w=w; apply(); return; }
+    const s={x:cam.x,y:cam.y,w:cam.w}, t0=performance.now();
+    (function step(now){ const p=Math.min(1,(now-t0)/ms), k=1-Math.pow(1-p,3);   /* ease-out */
+      cam.x=s.x+(x-s.x)*k; cam.y=s.y+(y-s.y)*k; cam.w=s.w+(w-s.w)*k; apply();
+      flyId = p<1 ? requestAnimationFrame(step) : 0; })(t0);
+  }
+  function zoomTo(z,ax,ay){ stopFly();
+    z=Math.min(Math.max(z,1),MAXZ);
+    const nw=HOME.w/z, nh=nw/ASPECT, rx=(ax-cam.x)/cam.w, ry=(ay-cam.y)/camH();
+    cam.x=ax-rx*nw; cam.y=ay-ry*nh; cam.w=nw; apply();   /* 잡은 점을 화면 같은 자리에 붙들어 둔다 */
+  }
+  function zoomStep(f){ const c=toUser(...viewMid()); zoomTo(zoom()*f,c[0],c[1]); }
+  function viewMid(){ const r=svg.getBoundingClientRect(); return [r.left+r.width/2, r.top+r.height/2]; }
+
+  /* ── 포커스 대상: 화면좌표 점 묶음을 감싸는 사각형 ──
+     이름표까지 같이 넣어야 한다. 이름표는 LABELS 오프셋만큼 몸통 밖에 떨어져 있어서
+     몸통만 맞춰 확대하면 정작 그 노드 이름이 화면 밖으로 잘린다.
+     글자 폭은 실측(getBBox) 대신 어림한다 — 한글 1.0배, 나머지 0.55배. 여백 M 이 오차를 먹는다. */
+  function bbox(pts){ let x0=1/0,y0=1/0,x1=-1/0,y1=-1/0;
+    pts.forEach(function(p){ if(p[0]<x0)x0=p[0]; if(p[0]>x1)x1=p[0]; if(p[1]<y0)y0=p[1]; if(p[1]>y1)y1=p[1]; });
+    return {x:x0,y:y0,w:x1-x0,h:y1-y0}; }
+  const S=function(u,v,z){ return [px(u,v),py(u,v,z||0)]; };
+  function textW(s,size){ let w=0; for(let i=0;i<s.length;i++) w+=(s.charCodeAt(i)>0x1100?1:0.55)*size; return w; }
+
+  /* 구역은 바닥 판만 있고 건물은 그 위로 솟는다 → 판 네 귀퉁이를 z=0 과 z=110 두 번 투영해 높이를 포함
+     (110 = 가장 높은 게임 큐브 68 + 비콘 34 + 여유) */
+  function zoneBB(z){ const pts=[];
+    [[z.u,z.v],[z.u+z.w,z.v],[z.u+z.w,z.v+z.d],[z.u,z.v+z.d]].forEach(function(c){
+      pts.push(S(c[0],c[1],0)); pts.push(S(c[0],c[1],110)); });
+    if(z.name){ const s=+z.ws||24, W=textW(z.name,s)+ZW_LS*s*z.name.length, H=s*.9, b=S(z.lu,z.lv,0);
+      /* 바닥에 눕힌 글자는 floorMat 아핀 위에 있다 — 그 네 귀퉁이를 같은 식으로 옮겨 넣는다 */
+      [[-W/2,-H/2],[W/2,-H/2],[W/2,H/2],[-W/2,H/2]].forEach(function(q){
+        pts.push([b[0]+KX*q[0]+KX*q[1], b[1]-KY*q[0]+KY*q[1]]); }); }
+    return bbox(pts); }
+
+  function nodeBB(n){ const L=LAYOUT[n.name], h=n.hit, pts=[];
+    [[0,0],[h[2],0],[h[2],h[3]],[0,h[3]]].forEach(function(o){
+      const u=L.u+h[0]+o[0], v=L.v+h[1]+o[1];
+      pts.push(S(u,v,0)); pts.push(S(u,v,(h[4]||0)+38)); });   /* +38 = 게임 큐브 위 비콘까지 */
+    const c=center(n), off=LABELS[n.name]||{dx:0,dy:0}, anch=n.lab.anch||"middle";
+    const ax=px(c[0],c[1])+off.dx, ay=py(c[0],c[1],h[4]||0)+off.dy;
+    n.lab.lines.forEach(function(ln,i){
+      const t=(off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0], sz=ln[1], W=textW(t,sz);
+      const x0=anch==="start"?ax:(anch==="end"?ax-W:ax-W/2), y=ay+(ln[4]||0);
+      pts.push([x0,y-sz*.85]); pts.push([x0+W,y+sz*.3]); });
+    return bbox(pts); }
+
+  /* 상세 카드가 열려 있으면 그 폭만큼 화면 오른쪽을 못 쓰는 것으로 친다 —
+     안 그러면 확대해서 맞춰 놓은 노드를 카드가 그대로 덮는다 */
+  function reserveRight(){ if(!card||!card.classList.contains("on")) return 0;
+    const r=svg.getBoundingClientRect(), c=card.getBoundingClientRect();
+    return r.width ? Math.min(.45,(c.width+24)/r.width) : 0; }
+  function frameTo(bb,ms){
+    /* M = 대상 둘레 여백. 프레임이 2.08:1 로 넓고 구역은 거의 정사각이라, 구역 포커스는 세로가 먼저 차서
+       아무리 조여도 1.4배 남짓이 한계다 — 여기를 더 줄여봐야 여백만 사라지고 배율은 안 오른다 */
+    const M=1.12, rf=reserveRight();
+    let w=Math.max(bb.w*M, bb.h*M*ASPECT);
+    if(rf>0) w=w/(1-rf);
+    w=Math.min(Math.max(w,HOME.w/MAXZ),HOME.w);
+    const h=w/ASPECT, cx=bb.x+bb.w/2+rf*w/2, cy=bb.y+bb.h/2;   /* 가운데를 왼쪽으로 밀어 오른쪽을 비운다 */
+    flyTo(cx-w/2, cy-h/2, w, ms==null?420:ms);
+  }
+
+  /* ── 컨트롤 (재생 버튼과 같이 JS로 만들어 .stage 에 붙인다 — 정지컷 추출은 #scene 만 뜨므로 안 딸려간다) ── */
+  const bar=document.createElement("div"); bar.className="cam";
+  const TARGETS=[{k:"all",t:"전체"},{k:"net",t:"네트워크"},{k:"game",t:"게임"},{k:"store",t:"저장"}];
+  const chips={};
+  function lit(k){ for(const j in chips) chips[j].classList.toggle("on",j===k); }
+  function goto(k,ms){ const z=ZONES.filter(function(z){ return z.color===k; })[0];
+    if(k==="all"||!z){ stopFly(); flyTo(HOME.x,HOME.y,HOME.w,ms==null?420:ms); lit("all"); return; }
+    frameTo(zoneBB(z),ms); lit(k); }
+  TARGETS.forEach(function(t){ const b=document.createElement("button");
+    b.type="button"; b.textContent=t.t; b.setAttribute("aria-label",t.t+" 구역 확대");
+    b.addEventListener("click",function(){ goto(t.k); }); bar.appendChild(b); chips[t.k]=b; });
+  chips.all.classList.add("on");
+  const sep=document.createElement("span"); sep.className="sep"; bar.appendChild(sep);
+  [["−",1/1.6,"축소"],["＋",1.6,"확대"]].forEach(function(z){ const b=document.createElement("button");
+    b.type="button"; b.className="zb"; b.textContent=z[0]; b.setAttribute("aria-label",z[2]);
+    b.addEventListener("click",function(){ zoomStep(z[1]); lit(""); }); bar.appendChild(b); });
+  stage.appendChild(bar);
+
+  /* ── 휠: Ctrl(⌘)을 눌렀을 때만 확대. 그냥 휠은 페이지 스크롤로 흘려보낸다.
+        preventDefault 가 크롬 자체 확대(= wheel 의 기본 동작)를 취소한다 — 그래서 passive:false 가 필수다.
+        svg 가 아니라 .stage 에 단다: 씬 위에는 범례·상세 카드·카메라 칩·재생 버튼이 HTML 로 떠 있어서,
+        svg 에만 달면 그 패널 위에서만 크롬이 확대돼 버린다(씬 가리키다 살짝 벗어나면 페이지가 튄다).
+        노트북 트랙패드 핀치는 브라우저가 ctrlKey=true 인 wheel 로 보내주므로 여기서 같이 걸린다 ── */
+  stage.addEventListener("wheel",function(e){
+    if(!(e.ctrlKey||e.metaKey)) return;
+    e.preventDefault();
+    const u=toUser(e.clientX,e.clientY);
+    zoomTo(zoom()*Math.pow(1.0022,-e.deltaY),u[0],u[1]); lit("");
+  },{passive:false});
+
+  /* ── 드래그 이동 + 두 손가락 핀치 ── */
+  const ptr=new Map(); let drag=null, pinch=null, moved=false;
+  function pts2(){ const a=[]; ptr.forEach(function(p){ a.push(p); }); return a; }
+  svg.addEventListener("pointerdown",function(e){
+    if(e.pointerType==="mouse"&&e.button!==0) return;
+    ptr.set(e.pointerId,{x:e.clientX,y:e.clientY}); stopFly();
+    if(ptr.size===1){ drag={sx:e.clientX,sy:e.clientY,vx:cam.x,vy:cam.y}; moved=false;
+      svg.classList.add("dragging"); }
+    else if(ptr.size===2){ drag=null; const a=pts2();
+      pinch={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y), z:zoom(),
+             u:toUser((a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2)}; }
+  });
+  /* move·up 은 window 에서 받는다. setPointerCapture 를 쓰면 뒤따르는 click 까지 svg 로 끌려와
+     노드 히트박스의 상세 카드가 안 열린다 — 씬의 본 기능이라 여기서 모험하지 않는다.
+     덤으로 씬 밖으로 끌고 나가도 이동이 끊기지 않는다. */
+  window.addEventListener("pointermove",function(e){
+    if(!ptr.has(e.pointerId)) return;
+    ptr.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pinch&&ptr.size>=2){ const a=pts2(), d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);
+      if(pinch.d>4){ zoomTo(pinch.z*d/pinch.d,pinch.u[0],pinch.u[1]); moved=true; lit(""); }
+      e.preventDefault(); return; }
+    if(!drag) return;
+    const dx=e.clientX-drag.sx, dy=e.clientY-drag.sy;
+    if(!moved && Math.abs(dx)<4 && Math.abs(dy)<4) return;   /* 손떨림은 클릭으로 남긴다 */
+    moved=true;
+    const r=svg.getBoundingClientRect(), k=r.width?cam.w/r.width:0;
+    cam.x=drag.vx-dx*k; cam.y=drag.vy-dy*k; apply(); lit("");
+    e.preventDefault();
+  });
+  function up(e){ ptr.delete(e.pointerId);
+    if(ptr.size<2) pinch=null;
+    if(ptr.size===0){ drag=null; svg.classList.remove("dragging"); } }
+  window.addEventListener("pointerup",up); window.addEventListener("pointercancel",up);
+  /* 끌고 나서 손을 뗀 자리가 노드 위여도 상세 카드가 튀어나오지 않게 — 캡처 단계라 히트박스보다 먼저 잡는다 */
+  svg.addEventListener("click",function(e){ if(moved){ moved=false; e.stopPropagation(); e.preventDefault(); } },true);
+
+  /* ── 더블클릭: 노드 위면 그 노드로, 빈 곳이면 전체로 ── */
+  svg.addEventListener("dblclick",function(e){
+    const g=e.target.closest?e.target.closest(".hit"):null;
+    const nm=g&&g.getAttribute("data-node");
+    const n=nm?NODES.filter(function(x){ return x.name===nm; })[0]:null;
+    if(n){ frameTo(nodeBB(n)); lit(""); } else goto("all");
+  });
+
+  /* ── 키보드: 씬 안(히트박스·컨트롤 버튼)에 초점이 있을 때만. 페이지 스크롤을 뺏지 않는다 ── */
+  document.addEventListener("keydown",function(e){
+    if(!e.target.closest||!e.target.closest(".stage")) return;
+    const P=cam.w*0.18, K=e.key;
+    if(K==="+"||K==="="){ zoomStep(1.6); }
+    else if(K==="-"||K==="_"){ zoomStep(1/1.6); }
+    else if(K==="0"){ goto("all"); }
+    else if(K==="ArrowLeft"){ cam.x-=P; apply(); }
+    else if(K==="ArrowRight"){ cam.x+=P; apply(); }
+    else if(K==="ArrowUp"){ cam.y-=P/ASPECT; apply(); }
+    else if(K==="ArrowDown"){ cam.y+=P/ASPECT; apply(); }
+    else return;
+    e.preventDefault(); lit(K==="0"?"all":"");
+  });
+
+  /* ── 딥링크 #focus=game|net|store|<노드이름> ── */
+  const m=/(?:^|#|&)focus=([a-z]+)/i.exec(location.hash||"");
+  if(m){ const k=m[1].toLowerCase();
+    const n=NODES.filter(function(x){ return x.name===k; })[0];
+    if(n) setTimeout(function(){ frameTo(nodeBB(n),600); },900);           /* 등장 웨이브가 끝난 뒤 */
+    else if(ZONES.some(function(z){ return z.color===k; })||k==="all") setTimeout(function(){ goto(k,600); },900);
+  }
+})();
 
 /* ═══════════════ Stage 2 — 칩 흐름 (경로는 전부 RAILS에서 뽑아 씀) ═══════════════
    수신 : 클라 → Accept → IOCP 워커 → SwapQ 공유 큐에 적재
