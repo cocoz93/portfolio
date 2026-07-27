@@ -67,7 +67,11 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* bneck: 병목 지도 — 설계 탭 씬을 클론(고스트)해 깔고 병목 핀을 얹는다 */
 .bn-stage{position:relative; max-width:1180px; margin:4px auto 0}
 #bnscene{display:block; width:100%; height:auto; transform:perspective(1400px) rotateX(8deg)}
-#bnscene .ghost{filter:saturate(.3) brightness(.62)}
+/* 병목 지도는 설계 탭과 같은 씬을 '단색 청사진' 으로 다시 그린다.
+   무슨 색이든 회색으로 눌렀다가(grayscale) 한 색조로 물들인다(sepia + hue-rotate).
+   와이어프레임이 못 덮는 잔여 도형(시계 문자판·큐 홈)까지 같은 색으로 끌고 오기 위한 것이다.
+   168도 = 사이트가 이미 쓰는 --net(#6cc7ff) 계열 — 이 그림만 따로 놀지 않게. */
+#bnscene .ghost{filter:grayscale(1) sepia(1) hue-rotate(168deg) saturate(2.4) brightness(1.06)}
 #bnscene .pin{cursor:pointer}
 #bnscene .pin:focus-visible{outline:none}
 #bnscene .pin .pin-badge{transition:filter .15s}
@@ -287,7 +291,46 @@ const py=(u,v,z)=>OY-(u+v)*KY-(z||0);
 const P=(u,v,z)=>px(u,v).toFixed(1)+","+py(u,v,z).toFixed(1);
 function poly(pts,fill,extra){ return el("polygon",Object.assign(
   {points:pts.map(p=>P(p[0],p[1],p[2]||0)).join(" "),fill},extra||{})); }
+/* ═══ 와이어프레임(청사진) — 병목 지도 전용 ═══
+   배치·각도·도형은 설계 탭과 똑같고, 면을 칠하는 방식만 바꾼다:
+   면은 바탕에 가까운 어두운 값으로 채우고(뒤가 안 비치게) 그 위에 격자선을 긋는다.
+   WSTEP = 격자 한 칸(월드 단위). 0 이면 외곽선만 — 구역 판처럼 넓은 면에 쓴다
+   (판에 같은 칸을 주면 칸 수가 폭발해 그림이 촘촘해진다).
+   WIRE=0 이면 아래 prism 은 옛 경로 그대로라 설계 탭은 픽셀 단위로 지금과 같다. */
+let WIRE=0, WSTEP=26;
+const WF={fill:"rgba(120,195,255,.055)", edge:"rgba(150,210,255,.62)", grid:"rgba(140,205,255,.30)"};
+const WFO={t:"#16283f", l:"#0b1726", r:"#0f2033"};   /* 면 3개의 명도 3단 — 이래야 상자 모양이 남는다 */
+function wireBox(g,u,v,w,d,z0,t){
+  const st=WSTEP>0?WSTEP:1e9;
+  const nu=Math.max(1,Math.round(w/st)), nv=Math.max(1,Math.round(d/st)), nz=Math.max(1,Math.round((t-z0)/st));
+  const F=(pts,k)=>poly(pts,WFO[k],{stroke:WF.edge,"stroke-width":.7,"stroke-linejoin":"round",class:"wf"});
+  const L=(a,b)=>g.appendChild(el("line",{x1:px(a[0],a[1]),y1:py(a[0],a[1],a[2]),
+    x2:px(b[0],b[1]),y2:py(b[0],b[1],b[2]),stroke:WF.grid,"stroke-width":.55}));
+  const top=F([[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],"t");
+  [F([[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],"r"),
+   F([[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],"l"), top].forEach(e=>g.appendChild(e));
+  for(let i=1;i<nu;i++){ const x=u+w*i/nu; L([x,v,t],[x,v+d,t]); L([x,v,t],[x,v,z0]); }
+  for(let i=1;i<nv;i++){ const y=v+d*i/nv; L([u,y,t],[u+w,y,t]); L([u,y,t],[u,y,z0]); }
+  for(let i=1;i<nz;i++){ const z=z0+(t-z0)*i/nz; L([u,v,z],[u+w,v,z]); L([u,v,z],[u,v+d,z]); }
+  return top; }
+/* prism 을 안 거치고 직접 그린 잔여 도형(시계 문자판·큐 홈·칸)도 같은 선으로 통일한다.
+   하나하나 고치는 대신 다 그린 뒤에 훑는다 — 노드 draw() 를 건드리면 설계 탭까지 바뀐다. */
+function wireify(host,isRail){
+  [].slice.call(host.querySelectorAll("polygon,rect,circle,ellipse,path")).forEach(function(e){
+    if(e.getAttribute("class")==="wf") return;
+    /* 교차 레일 밑에 깔던 '어두운' 그림자는 밝은 칠로 뒤집히면 빛 덩어리가 된다 → 뺀다 */
+    if(isRail&&e.getAttribute("fill")==="#05080f"){ e.parentNode.removeChild(e); return; }
+    e.setAttribute("fill",isRail?"rgba(110,190,255,.13)":WF.fill);       /* 레일은 판 격자에 묻히지 않게 한 단계 밝게 */
+    e.setAttribute("stroke",isRail?"rgba(170,222,255,.5)":WF.grid);
+    e.setAttribute("stroke-width",isRail?".8":".55");
+    e.removeAttribute("opacity"); e.removeAttribute("filter"); });
+  [].slice.call(host.querySelectorAll("line")).forEach(function(e){
+    /* 레일 이음선·그루브 모서리는 채널 외곽선과 겹쳐 그냥 촘촘해 보인다 */
+    if(isRail){ e.parentNode.removeChild(e); return; }
+    e.setAttribute("stroke",WF.grid); e.removeAttribute("opacity"); }); }
+
 function prism(g,u,v,w,d,z0,h,c,rim){ const t=z0+h;
+  if(WIRE) return wireBox(g,u,v,w,d,z0,t);
   g.appendChild(poly([[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],c[2]));
   g.appendChild(poly([[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],c[1]));
   const top=poly([[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],c[0],{class:"top"}); g.appendChild(top);
@@ -306,6 +349,8 @@ function prism(g,u,v,w,d,z0,h,c,rim){ const t=z0+h;
 const gZone=el("g"), gShad=el("g"), gLane=el("g"), gChipBack=el("g"), gBuild=el("g"), gChip=el("g"), gLbl=el("g"), gHit=el("g");
 [gZone,gShad,gLane,gChipBack,gBuild,gChip,gLbl,gHit].forEach(g=>svg.appendChild(g));
 gZone.id="lyr-plat"; gShad.id="lyr-shad"; gLane.id="lyr-lane"; gBuild.id="lyr-build"; gLbl.id="lyr-lbl";
+/* 정적 레이어(구역·그림자·레일·몸통·라벨)를 어느 그룹에 그릴지 — 병목 지도가 같은 코드를 다른 SVG 로 재사용한다 */
+let TZ=gZone, TS=gShad, TR=gLane, TB=gBuild, TL=gLbl;
 
 /* 팔레트 */
 const GAME =["#f4c862","#7d5a1c","#b3842a"];
@@ -323,7 +368,7 @@ const RECV="#6cc7ff", SEND="#ffb648", STORE="#57d694";
    지금 그리는 노드의 구역을 여기 걸어 두고 물려준다(구역 강조에서 몸통과 같이 죽어야 한다) */
 let drawZone="";
 function addShad(node){ const g=el("g"); if(drawZone) g.setAttribute("data-z",drawZone);
-  g.appendChild(node); gShad.appendChild(g); }
+  g.appendChild(node); TS.appendChild(g); }
 function shadow(u,v,w,d){ addShad(el("ellipse",
   {cx:px(u+w/2,v+d/2), cy:py(u+w/2,v+d/2,0)+5, rx:(w+d)*.38, ry:(w+d)*.13,
    fill:"#04060c", opacity:.42, filter:"url(#softShadow)"})); }
@@ -575,7 +620,7 @@ function railPath(r){ const A=center(byName[r.from]), B=center(byName[r.to]);
   return [A].concat((r.pts||[]).map(p=>[p.u,p.v])).concat([B]); }
 
 /* ── 구역 바닥 (맨 뒤) — 구역 1개 = 래퍼 g 1개(테두리 반투명이 등장 웨이브에 안 덮이게) ── */
-ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g",{"data-z":z.color});
+function paintZones(){ ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g",{"data-z":z.color});
   prism(g,z.u,z.v,z.w,z.d,-6,6,[p.top,p.side,p.side]);
   const ea=p.dash?{"stroke-dasharray":"6 5"}:{};
   g.appendChild(el("line",Object.assign({x1:px(z.u,z.v+z.d),y1:py(z.u,z.v+z.d,0),
@@ -589,7 +634,8 @@ ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g",{"data-z":z.color})
       "font-size":s,"font-weight":"900","letter-spacing":ls.toFixed(2),
       "font-family":"var(--sans)",fill:p.edge,opacity:(z.wo!=null?z.wo:.22)},z.name));
     g.appendChild(wg); }
-  gZone.appendChild(g); });
+  TZ.appendChild(g); }); }
+paintZones();
 
 /* ── 레일: 초기 디자인 방식 ──
    선이 아니라 '폭 있는 바닥 채널'. 채움은 흐름색을 거의 다 뺀 아주 어두운 tint라 정지 상태에서는 조용하고,
@@ -624,6 +670,7 @@ function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
         x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
         stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); }
 const LANE_W=10, SEAM=22, SUB_W=10, SUB_GAP=4;   /* SUB_*: lanes>1(다중 파이프)일 때 줄 하나 폭/간격 — 줄 폭=일반 레인과 동일 */
+function paintRails(){
 RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
     g=el("g",{"data-z":zonesOf(r.from,r.to)});
   const NL=r.lanes||1;                                   /* 레일 줄 수 — 기본 1 */
@@ -646,7 +693,7 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
         if(knee.some(q=>Math.hypot(cu-q[0],cv-q[1])<totW)) continue;
         g.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
           x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
-    gLane.appendChild(g); return; }
+    TR.appendChild(g); return; }
   /* 1) 통로 바닥 — 줄 수만큼 나란히 */
   segs.forEach(s=>offs.forEach(c=>{ const h=subW/2;
     g.appendChild(poly([[s.A[0]+s.pu*(c+h),s.A[1]+s.pv*(c+h)],[s.B[0]+s.pu*(c+h),s.B[1]+s.pv*(c+h)],
@@ -666,22 +713,27 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
       g.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
         x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
         stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); });
-  gLane.appendChild(g); });
+  TR.appendChild(g); }); }
+paintRails();
 
 /* ── 노드 몸통 (뒤→앞) ── */
+function paintBodies(){
 NODES.slice().sort((a,b)=>{ const A=LAYOUT[a.name],B=LAYOUT[b.name]; return (B.u+B.v)-(A.u+A.v); })
   .forEach(n=>{ const L=LAYOUT[n.name], g=el("g");
     drawZone=zoneOf(n.name); if(drawZone) g.setAttribute("data-z",drawZone);   /* 몸통 안에서 부르는 shadow() 도 이 값을 물려받는다 */
-    n.draw(g,L.u,L.v); gBuild.appendChild(g); });
-drawZone="";   /* 노드 그리기가 끝났으므로 되돌린다 — 뒤에서 addShad 를 부르는 곳은 없지만 상태를 남기지 않는다 */
+    n.draw(g,L.u,L.v); TB.appendChild(g); });
+drawZone=""; }   /* 노드 그리기가 끝났으므로 되돌린다 — 뒤에서 addShad 를 부르는 곳은 없지만 상태를 남기지 않는다 */
+paintBodies();
 
 /* ── 라벨 (LABELS 오프셋 · texts 배열이 있으면 해당 줄 글자를 덮어씀 — 에디터에서 수정한 문구) ── */
+function paintLabels(){
 NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, off=LABELS[n.name]||{dx:0,dy:0};
   const ax=px(c[0],c[1])+off.dx, ay=py(c[0],c[1],az)+off.dy, z=zoneOf(n.name);
-  n.lab.lines.forEach((ln,i)=> gLbl.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
+  n.lab.lines.forEach((ln,i)=> TL.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
     "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)",
     "data-z":z},
-    (off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0]))); });
+    (off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0]))); }); }
+paintLabels();
 
 /* ═══ 노드 클릭 → 상세 카드 ═══ */
 const ND={
@@ -1075,17 +1127,30 @@ window.__flowReset=function(){
    핀 좌표는 getBBox가 아니라 px/py 수식으로 계산 → hidden 패널 안이어도 안전. */
 (function(){
   const bn=document.getElementById("bnscene"); if(!bn) return;
+  /* 복제(cloneNode)가 아니라 같은 코드를 이 SVG 로 한 번 더 돌린다 — 면을 칠하는 방식이 달라서 복제로는 안 된다.
+     배치·각도·도형은 설계 탭과 완전히 같고, 청사진으로 칠하는 것만 다르다. */
   const ghost=el("g",{class:"ghost"});
-  [gZone,gShad,gLane,gBuild,gLbl].forEach(function(src){ ghost.appendChild(src.cloneNode(true)); });
-  [].slice.call(ghost.querySelectorAll("[id]")).forEach(function(e){ e.removeAttribute("id"); });   /* 중복 id 방지(등장 웨이브 CSS·앵커 오염) */
+  const gz=el("g"), gr=el("g"), gb=el("g"), gl=el("g");
+  [gz,gr,gb,gl].forEach(function(x){ ghost.appendChild(x); }); bn.appendChild(ghost);
+
+  /* draw() 는 애니메이션이 잡아 쓸 참조를 전역에 남긴다 — 두 번째 그리기가 덮으면 설계 탭 애니가 죽는다 */
+  const keep=[gameBeacon,sectorCells,iocpCells,twGeo,swapqLit,dbwLit];
+  const oz=TZ, osh=TS, orl=TR, ob=TB, ol=TL;
+  TZ=gz; TS=el("g"); TR=gr; TB=gb; TL=gl;   /* 청사진에 접지 그림자는 없다 → 어디에도 안 붙는 g 로 흘려보낸다 */
+  WIRE=1;
+  WSTEP=0;  paintZones();                    /* 구역 판은 격자 없이 면만 */
+  WSTEP=26; paintRails(); paintBodies(); paintLabels();
+  WIRE=0;
+  TZ=oz; TS=osh; TR=orl; TB=ob; TL=ol;
+  gameBeacon=keep[0]; sectorCells=keep[1]; iocpCells=keep[2]; twGeo=keep[3]; swapqLit=keep[4]; dbwLit=keep[5];
+  wireify(gb,false); wireify(gr,true);
   [].slice.call(ghost.querySelectorAll(".beacon")).forEach(function(e){ e.parentNode.removeChild(e); });   /* 비콘 자리는 핀 ②가 대신함 */
-  bn.appendChild(ghost);
 
   /* 핀 3곳 = 실험이 실제로 붙었던 자리 (카드 배지 1·2·3과 1:1).
      핀 이름은 노드 라벨과 겹치지 않게 '병목 현상'으로 짓는다(게임 루프 옆에 또 게임 루프 금지) */
   const HOT="#ff6b52";
   const PINS=[
-    {n:"1", name:"송신 경로",        sub:"채택 2 · 기각 2", u:190, v:-70, z:15, h:46, rx:15, side:1},
+    {n:"1", name:"송신 경로",        sub:"채택 2 · 기각 2", u:190, v:-70, z:15, h:60, rx:15, side:-1},
     {n:"2", name:"멤버십 팬아웃",    sub:"채택 1",          u:410, v:50,  z:58, h:64, rx:20, side:1},
     {n:"3", name:"브로드캐스트 복사", sub:"채택 2",          u:310, v:-70, z:7,  h:54, rx:17, side:1},
   ];
