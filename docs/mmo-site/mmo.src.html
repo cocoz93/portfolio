@@ -148,6 +148,49 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
 .stage-replay:hover{border-color:var(--net); color:var(--ink)}
 .stage-replay:focus-visible{outline:2px solid var(--net); outline-offset:2px}
 
+/* ═══ 구역 강조 — 고른 구역만 남기고 나머지를 죽인다 ═══
+   opacity 로는 못 죽인다: 등장 웨이브(scenePop)가 fill both 로 opacity:1 을 영구히 덮어쓴다.
+   그래서 병목 탭 고스트(#bnscene .ghost)와 같은 수단인 filter 를 쓴다.
+   구역 표시는 요소마다 data-z 로 붙여 두고(공백으로 여러 개 — 레일은 양 끝 둘 다) CSS 가 거른다.
+   래퍼 g 로 다시 묶지 않는 이유: 레이어 구조(gZone·gLane·gBuild…)를 등장 웨이브 선택자·병목 탭 복제·
+   포폴 홈 정지컷 추출이 전부 그대로 잡고 있어서, 한 겹만 끼워도 셋이 같이 어긋난다.
+   #scene 에 data-zone 이 없으면(=전체) 아래 규칙이 하나도 안 걸린다 → 기본 화면은 지금 그대로. */
+:root{ --zdim:saturate(.16) brightness(.40) }   /* 죽이는 정도 — 여기 한 줄로 네 구역이 같이 움직인다 */
+/* 전이는 data-zone 이 있든 없든 항상 걸어 둔다. 죽이는 규칙 쪽에 얹으면 '전체'로 돌아갈 때
+   선택자가 떨어져 나가면서 전이까지 같이 사라져, 켤 때만 부드럽고 끌 때는 딱 끊긴다.
+   기본 상태에서는 바뀌는 값이 없으므로 이 한 줄이 화면에 미치는 영향은 없다. */
+#scene [data-z]{transition:filter .35s ease}
+#scene[data-zone] [data-z]{filter:var(--zdim)}
+#scene[data-zone="outside"] [data-z~="outside"],
+#scene[data-zone="net"]     [data-z~="net"],
+#scene[data-zone="game"]    [data-z~="game"],
+#scene[data-zone="store"]   [data-z~="store"]{filter:none}
+/* 죽은 노드는 클릭도 막는다 — 안 보이는 노드의 상세 카드가 열리면 강조한 의미가 사라진다.
+   키보드 tab 은 pointer-events 로 못 막으므로 tabindex 는 JS 가 같이 내린다 */
+#scene[data-zone] .hit{pointer-events:none}
+#scene[data-zone="outside"] .hit[data-z~="outside"],
+#scene[data-zone="net"]     .hit[data-z~="net"],
+#scene[data-zone="game"]    .hit[data-z~="game"],
+#scene[data-zone="store"]   .hit[data-z~="store"]{pointer-events:auto}
+
+/* 구역 버튼 줄 — 씬 왼쪽 위(그림이 비어 있는 띠). 생김새는 '다시 재생' 버튼과 같은 어휘 */
+.zonebar{position:absolute; left:16px; top:14px; z-index:6; display:flex; flex-wrap:wrap; gap:6px}
+/* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유).
+   대신 배경·테두리·반경은 '다시 재생' 버튼과 똑같이 맞춰 같은 식구로 읽히게 한다. */
+.zb{display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:.88rem; font-weight:700; color:#b7c4da;
+  cursor:pointer; background:rgba(19,26,38,.55); border:1px solid rgba(120,140,175,.42);
+  border-radius:9px; padding:7px 12px; backdrop-filter:blur(4px);
+  transition:border-color .15s, color .15s, background .15s}
+.zb:hover{border-color:var(--net); color:var(--ink)}
+.zb:focus-visible{outline:2px solid var(--net); outline-offset:2px}
+.zb.act{color:var(--ink); background:rgba(30,40,58,.88); border-color:rgba(160,180,215,.72)}
+/* 점 색 = 구역 바닥판 테두리 색(ZPAL.edge)과 같은 값 — 버튼과 판이 같은 것을 가리킨다는 표시 */
+.zb i{width:9px; height:9px; border-radius:50%; flex:0 0 auto; opacity:.9}
+.zb[data-z="outside"] i{background:#93a5c2}  .zb[data-z="net"] i{background:var(--net)}
+.zb[data-z="game"]    i{background:var(--game)} .zb[data-z="store"] i{background:var(--store)}
+.zb.all{margin-right:5px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
+@media(max-width:680px){ .zonebar{left:10px; top:10px; gap:4px} .zb{font-size:.72rem; padding:5px 9px; gap:5px} }
+
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
 </style>
 </head>
@@ -165,6 +208,15 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
   <section class="panel act" id="p-build" role="tabpanel">
 
 <div class="stage">
+  <!-- 구역 강조 — 누르면 그 구역만 남고 나머지는 죽는다. 같은 버튼을 다시 누르면 전체로 복귀.
+       data-z 값은 ZONES[].color(=ZPAL 키)와 같은 문자열이라 스크립트가 그대로 씬에 얹는다. -->
+  <div class="zonebar" role="group" aria-label="구역 강조">
+    <button type="button" class="zb all act" data-z="" aria-pressed="true">전체</button>
+    <button type="button" class="zb" data-z="outside" aria-pressed="false"><i></i>클라</button>
+    <button type="button" class="zb" data-z="net" aria-pressed="false"><i></i>네트워크</button>
+    <button type="button" class="zb" data-z="game" aria-pressed="false"><i></i>게임</button>
+    <button type="button" class="zb" data-z="store" aria-pressed="false"><i></i>저장</button>
+  </div>
   <div class="legend">
     <div class="hd">데이터 흐름</div>
     <div class="row recv"><i></i>수신 recv<span class="cap">client → 게임</span></div>
@@ -267,7 +319,11 @@ const RECV="#6cc7ff", SEND="#ffb648", STORE="#57d694";
 
 /* 등장 웨이브가 레이어의 '직계 자식' opacity를 1로 덮어쓰므로(scenePop 100%{opacity:1} + fill both),
    반투명이 살아야 하는 요소는 반드시 래퍼 g 안에 넣는다. 래퍼가 애니메이션을 받고, 자식 opacity는 보존. */
-function addShad(node){ const g=el("g"); g.appendChild(node); gShad.appendChild(g); }
+/* 그림자는 draw() 안에서 gShad 로 바로 들어가 나중에 보면 어느 노드 것인지 알 길이 없다 →
+   지금 그리는 노드의 구역을 여기 걸어 두고 물려준다(구역 강조에서 몸통과 같이 죽어야 한다) */
+let drawZone="";
+function addShad(node){ const g=el("g"); if(drawZone) g.setAttribute("data-z",drawZone);
+  g.appendChild(node); gShad.appendChild(g); }
 function shadow(u,v,w,d){ addShad(el("ellipse",
   {cx:px(u+w/2,v+d/2), cy:py(u+w/2,v+d/2,0)+5, rx:(w+d)*.38, ry:(w+d)*.13,
    fill:"#04060c", opacity:.42, filter:"url(#softShadow)"})); }
@@ -324,6 +380,17 @@ const ZONES=[
   {u:40, v:-100,w:200,d:320,color:"net",  name:"NETWORK", lu:153,lv:261, ws:35, wo:.22},
   {u:262,v:-98, w:200,d:200,color:"game", name:"GAME",    lu:318,lv:-147, ws:40, wo:.22},
   {u:260,v:120, w:220,d:100,color:"store",name:"DATA BASE", lu:378,lv:264, ws:35, wo:.22} ];
+/* ── 구역 강조용: 노드가 어느 구역 판 위에 서 있는지 = LAYOUT 좌표가 그 판 사각형 안인지로 판정 ──
+   표를 따로 두지 않는 이유: 에디터에서 노드를 옮기면 구역도 저절로 따라와야 하기 때문.
+   지금 10개 전부 판 하나에만 걸린다(겹치면 먼저 선언된 판을 따른다). */
+function zoneOf(name){ const L=LAYOUT[name]; if(!L) return "";
+  for(let i=0;i<ZONES.length;i++){ const z=ZONES[i];
+    if(L.u>=z.u&&L.u<=z.u+z.w&&L.v>=z.v&&L.v<=z.v+z.d) return z.color; }
+  return ""; }
+/* 레일은 '양 끝 중 하나라도 그 구역'이면 살아 있어야 한다(구역 밖으로 나가는 흐름이 보이라고) → 둘 다 적는다 */
+function zonesOf(){ const out=[];
+  for(let i=0;i<arguments.length;i++){ const z=zoneOf(arguments[i]); if(z&&out.indexOf(z)<0) out.push(z); }
+  return out.join(" "); }
 /* 바닥에 눕힌 글자 — (u,v) 평면에 얹는 아핀 변환. 진행 방향은 +u(화면 오른쪽 위)로 고정이고,
    글자 아래쪽이 -v(화면 오른쪽 아래)를 향한다.
    ※ 바닥에 누운 글자가 똑바로 읽히는 방향은 이 판에서 딱 둘뿐이다 — 지금의 +u, 그리고 예전 -v.
@@ -491,7 +558,7 @@ function railPath(r){ const A=center(byName[r.from]), B=center(byName[r.to]);
   return [A].concat((r.pts||[]).map(p=>[p.u,p.v])).concat([B]); }
 
 /* ── 구역 바닥 (맨 뒤) — 구역 1개 = 래퍼 g 1개(테두리 반투명이 등장 웨이브에 안 덮이게) ── */
-ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g");
+ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g",{"data-z":z.color});
   prism(g,z.u,z.v,z.w,z.d,-6,6,[p.top,p.side,p.side]);
   const ea=p.dash?{"stroke-dasharray":"6 5"}:{};
   g.appendChild(el("line",Object.assign({x1:px(z.u,z.v+z.d),y1:py(z.u,z.v+z.d,0),
@@ -540,7 +607,8 @@ function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
         x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
         stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); }
 const LANE_W=10, SEAM=22, SUB_W=10, SUB_GAP=4;   /* SUB_*: lanes>1(다중 파이프)일 때 줄 하나 폭/간격 — 줄 폭=일반 레인과 동일 */
-RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv, g=el("g");
+RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
+    g=el("g",{"data-z":zonesOf(r.from,r.to)});
   const NL=r.lanes||1;                                   /* 레일 줄 수 — 기본 1 */
   const subW = NL>1 ? SUB_W : LANE_W;
   const totW = NL>1 ? NL*SUB_W+(NL-1)*SUB_GAP : LANE_W;  /* 전체 폭(패치·이음선 기준) */
@@ -585,13 +653,17 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv, g=el
 
 /* ── 노드 몸통 (뒤→앞) ── */
 NODES.slice().sort((a,b)=>{ const A=LAYOUT[a.name],B=LAYOUT[b.name]; return (B.u+B.v)-(A.u+A.v); })
-  .forEach(n=>{ const L=LAYOUT[n.name], g=el("g"); n.draw(g,L.u,L.v); gBuild.appendChild(g); });
+  .forEach(n=>{ const L=LAYOUT[n.name], g=el("g");
+    drawZone=zoneOf(n.name); if(drawZone) g.setAttribute("data-z",drawZone);   /* 몸통 안에서 부르는 shadow() 도 이 값을 물려받는다 */
+    n.draw(g,L.u,L.v); gBuild.appendChild(g); });
+drawZone="";   /* 노드 그리기가 끝났으므로 되돌린다 — 뒤에서 addShad 를 부르는 곳은 없지만 상태를 남기지 않는다 */
 
 /* ── 라벨 (LABELS 오프셋 · texts 배열이 있으면 해당 줄 글자를 덮어씀 — 에디터에서 수정한 문구) ── */
 NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, off=LABELS[n.name]||{dx:0,dy:0};
-  const ax=px(c[0],c[1])+off.dx, ay=py(c[0],c[1],az)+off.dy;
+  const ax=px(c[0],c[1])+off.dx, ay=py(c[0],c[1],az)+off.dy, z=zoneOf(n.name);
   n.lab.lines.forEach((ln,i)=> gLbl.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
-    "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)"},
+    "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)",
+    "data-z":z},
     (off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0]))); });
 
 /* ═══ 노드 클릭 → 상세 카드 ═══ */
@@ -623,7 +695,7 @@ if(card){ card.addEventListener("click",function(e){ if(e.target.closest("[data-
 /* 히트박스(투명, 최상위) */
 NODES.forEach(function(n){ if(!n.card) return; const L=LAYOUT[n.name], h=n.hit;
   const pts=[[L.u+h[0],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]+h[3]],[L.u+h[0],L.v+h[1]+h[3]]].map(p=>P(p[0],p[1],h[4])).join(" ");
-  const g=el("g",{class:"hit",tabindex:"0",role:"button","aria-label":ND[n.card].nm});
+  const g=el("g",{class:"hit",tabindex:"0",role:"button","aria-label":ND[n.card].nm,"data-z":zoneOf(n.name)});
   g.appendChild(el("polygon",{points:pts,fill:"transparent"}));
   g.appendChild(el("polygon",{class:"halo",points:pts,fill:"none",stroke:"#cfe0f2","stroke-width":1.6,"stroke-dasharray":"4 4"}));
   g.addEventListener("click",function(){ openCard(n.card); });
@@ -696,8 +768,9 @@ const CHIP_R=KY/KX;
 function setChip(e,x,y,s){ e.setAttribute("points",
   x.toFixed(1)+","+(y-s*CHIP_R).toFixed(1)+" "+(x+s).toFixed(1)+","+y.toFixed(1)+" "+
   x.toFixed(1)+","+(y+s*CHIP_R).toFixed(1)+" "+(x-s).toFixed(1)+","+y.toFixed(1)); }
-function pool(n,fill,layer){ const a=[];
-  for(let i=0;i<n;i++){ const e=el("polygon",{points:"0,0",fill,opacity:"0"});
+/* z = 이 칩이 타는 레일의 구역(구역 강조에서 레일과 같이 살고 죽으라고) — 레일이 두 구역에 걸치면 둘 다 적는다 */
+function pool(n,fill,layer,z){ const a=[];
+  for(let i=0;i<n;i++){ const e=el("polygon",{points:"0,0",fill,opacity:"0","data-z":z||""});
     layer.appendChild(e); a.push({e,st:"wait",d:0,delay:0}); } return a; }
 function emit(p){ return p.find(c=>c.st==="wait"); }
 /* 양끝 페이드 */
@@ -725,20 +798,22 @@ const FAN_END=[2,1,0];
    기준 = 판 +u 끝(SQ_HW) + 칩 반폭(6) → 칩이 판을 완전히 벗어난 뒤에 갈아탄다. */
 const DRAIN_HOP=SQ_HW+6;
 
-const recvChips = pool(11, RECV,      gChipBack);
+/* 수신 칩만 구역이 고정이 아니다 — 레일 셋(클라→Accept→IOCP→SwapQ)을 잇달아 타면서 구역이 바뀐다.
+   그래서 출발할 때 첫 구간 값으로 시작하고, Accept·IOCP 를 지날 때 아래 프레임 루프에서 갈아 끼운다. */
+const recvChips = pool(11, RECV,      gChipBack, zonesOf("clients","accept"));
 /* 드레인은 출발할 때만 건물 앞(gChip) — 큐 안에서 출발해 SwapQ 판 위를 지나야 해서.
    판을 벗어나면 gChipBack 으로 옮겨 게임 큐브 뒤로 들어간다(DRAIN_HOP) */
-const drainChips= pool(10, "#9adcff", gChip);
-const fanChips  = pool(13, SEND,      gChipBack);
-const bundChips = pool(12, SEND,      gChipBack);   /* 큐 3개 × 3개 = 한 번에 9개가 나간다 */
+const drainChips= pool(10, "#9adcff", gChip,     zonesOf("swapq","game"));
+const fanChips  = pool(13, SEND,      gChipBack, zonesOf("game","sector"));
+const bundChips = pool(12, SEND,      gChipBack, zonesOf("sector","send"));   /* 큐 3개 × 3개 = 한 번에 9개가 나간다 */
 /* 복귀 구간(send→클라)이 길어 앞 묶음이 아직 가는 중에 다음 묶음이 출발한다 —
    풀이 모자라면 emit 이 null 을 돌려줘 어떤 줄은 3개, 어떤 줄은 1개만 나가 불규칙해 보인다 */
-const outChips  = pool(27, RECV,      gChipBack);   /* Send 워커에서 클라로 — 그 구간 레일과 같은 파랑 */
-const dirtyChips= pool(8,  STORE,     gChipBack);
+const outChips  = pool(27, RECV,      gChipBack, zonesOf("send","clients"));   /* Send 워커에서 클라로 — 그 구간 레일과 같은 파랑 */
+const dirtyChips= pool(8,  STORE,     gChipBack, zonesOf("game","dbw"));
 /* 인출된 것들은 판 위(큐 안)에서 출발하므로 드레인과 같은 이유로 건물 앞(gChip) */
-const saveChips = pool(10, "#7fe6b0", gChip);
+const saveChips = pool(10, "#7fe6b0", gChip,     zonesOf("dbw","mysql"));
 /* 수신 칩이 Accept·IOCP 를 지날 때마다 하나씩 나가므로(0.3초 간격 × 두 경로) 한 레일에 8개쯤이 동시에 떠 있다 */
-const twChips   = pool(20, "#7fa8d8", gChipBack);
+const twChips   = pool(20, "#7fa8d8", gChipBack, zonesOf("accept","iocp","timer"));
 
 /* ── SwapQ: 공유 큐(칸막이 왼쪽)에 쌓였다가 통째로 로컬 큐(오른쪽)로 ── */
 const QMAX=SQ_N, SQ={u:LAYOUT.swapq.u, v:LAYOUT.swapq.v+8};   /* v+8 = 판 중심(=IOCP·게임과 같은 축선) */
@@ -746,7 +821,8 @@ let qShared=0;
 /* 쌓였다 한꺼번에 나가는 칩은 이동 중에도 서로 붙어 있어야 한다.
    → 시간 지연(delay)이 아니라 **거리**를 한 칸(SLOT)씩 뒤로 밀어 출발시킨다(d = -i*SLOT).
      시간으로 벌리면 지연이 프레임 단위로 반올림돼(0.045s 를 60fps 로 = 0.05s) 매번 사이가 벌어진다. */
-const pile=[]; for(let i=0;i<QMAX;i++){ const e=el("polygon",{points:"0,0",fill:"#9adcff",opacity:"0"});
+const pile=[]; for(let i=0;i<QMAX;i++){ const e=el("polygon",{points:"0,0",fill:"#9adcff",opacity:"0",
+    "data-z":zoneOf("swapq")});   /* 쌓인 자리는 SwapQ 판 위 = 게임 구역 */
   gChip.appendChild(e); pile.push(e); }
 /* 수신 칩이 SwapQ 판에 올라서는 지점 — 여기서부터 건물 앞(gChip) 레이어로 올린다.
    드레인 칩의 DRAIN_HOP 과 같은 처리를 방향만 뒤집은 것이다(저쪽은 판을 벗어날 때 뒤로 간다).
@@ -773,7 +849,8 @@ const DQ={u:LAYOUT.dbw.u+37, v:LAYOUT.dbw.v+22};
    그러면 '블록 뒤로 들어간다'가 아니라 '블록 앞에서 사라진다'로 보인다. */
 const STORE_HOP=DBQ_HW+6;
 let qStore=0;
-const dpile=[]; for(let i=0;i<DBQ_N;i++){ const e=el("polygon",{points:"0,0",fill:"#7fe6b0",opacity:"0"});
+const dpile=[]; for(let i=0;i<DBQ_N;i++){ const e=el("polygon",{points:"0,0",fill:"#7fe6b0",opacity:"0",
+    "data-z":zoneOf("dbw")});   /* 쌓인 자리는 DB 워커 큐 판 위 = 저장 구역 */
   gChip.appendChild(e); dpile.push(e); }
 
 /* ── 통째 스왑 순간의 번쩍 — 세 큐(SwapQ · 송신 큐 ×3 · DB 워커 큐)가 같은 신호를 쓴다.
@@ -783,9 +860,11 @@ const FLASH_T=0.40; let swapFlash=0, storeFlash=0;
 
 /* ── Timing Wheel: 바늘 + 등록 신호 링 ── */
 let twPing=0, twHand=null, twRing=null;
-if(twGeo){ twRing=el("ellipse",{cx:twGeo.cx,cy:twGeo.cy,rx:twGeo.rx,ry:twGeo.ry,
-    fill:"none",stroke:"#8ad4ff","stroke-width":1.6,opacity:".25"});
-  twHand=el("polygon",{points:"0,0",fill:"#cfe0f2",opacity:".9"});
+/* 바늘·링은 Timing Wheel 문자판에 얹히는 것이라 그 노드와 같은 구역(네트워크)으로 묶는다 */
+if(twGeo){ const twZ=zoneOf("timer");
+  twRing=el("ellipse",{cx:twGeo.cx,cy:twGeo.cy,rx:twGeo.rx,ry:twGeo.ry,
+    fill:"none",stroke:"#8ad4ff","stroke-width":1.6,opacity:".25","data-z":twZ});
+  twHand=el("polygon",{points:"0,0",fill:"#cfe0f2",opacity:".9","data-z":twZ});
   gChip.appendChild(twRing); gChip.appendChild(twHand); }
 
 const pBuild=document.getElementById("p-build");
@@ -795,6 +874,8 @@ let run=false, prev=0, t=0, tRecv=0, tFan=0, tDirty=0;
 let feedGame=false;
 const D_ACCEPT=R_RECV.s[0].l;                          /* 수신 경로 첫 구간 끝 = Accept */
 const D_IOCP  =R_RECV.s[1].acc+R_RECV.s[1].l;          /* 두 구간 끝 = IOCP 워커 */
+/* 수신 칩이 지나는 레일 셋의 구역 — 위 두 지점이 그대로 레일 경계라 여기서 칩의 data-z 를 넘긴다 */
+const RECV_Z=[zonesOf("clients","accept"), zonesOf("accept","iocp"), zonesOf("iocp","swapq")];
 /* 타임아웃 등록 신호 하나 — alt 0=Accept 경로, 1=IOCP 경로.
    실제로도 accept 때 휠에 등록하고, 그 뒤 수신이 완료될 때마다 갱신한다. */
 function twFire(alt){ const c=emit(twChips); if(c){ c.st="flow"; c.d=0; c.alt=alt; } }
@@ -821,7 +902,8 @@ function frame(now){
   const dt=Math.min(.05,(now-prev)/1000); prev=now; t+=dt;
 
   /* ── 방출 (수신만 무조건 — 나머지는 클라 데이터가 그 지점에 닿은 뒤부터) ── */
-  tRecv+=dt;  if(tRecv>=0.30){ tRecv-=0.30; const c=emit(recvChips); if(c){c.st="flow";c.d=0;c.twA=0;c.twI=0;} }
+  tRecv+=dt;  if(tRecv>=0.30){ tRecv-=0.30; const c=emit(recvChips);
+    if(c){c.st="flow";c.d=0;c.twA=0;c.twI=0; c.e.setAttribute("data-z",RECV_Z[0]);} }   /* 다시 첫 구간 구역으로 */
   if(feedGame){
     /* 게임 루프는 한 틱에 세 워커 몫을 한꺼번에 넘긴다 — 줄 3개로 동시에 출발.
        레일이 교차하면서 세 줄 길이가 같아졌으므로(220 셋) 셋이 나란히 가서 같이 도착한다.
@@ -834,9 +916,11 @@ function frame(now){
   /* ── 수신: 클라 → Accept → IOCP → SwapQ (자기 칸에 닿는 순간 그대로 적재) ── */
   recvChips.forEach(c=>{ if(c.st!=="flow"){ c.e.setAttribute("opacity","0"); return; }
     c.d+=125*dt;
-    /* 지나가는 길에 타임아웃 등록 신호를 하나씩 떨어뜨린다 — 칩 하나당 Accept 에서 한 번, IOCP 에서 한 번 */
-    if(!c.twA && c.d>=D_ACCEPT){ c.twA=1; twFire(0); }
-    if(!c.twI && c.d>=D_IOCP  ){ c.twI=1; twFire(1); }
+    /* 지나가는 길에 타임아웃 등록 신호를 하나씩 떨어뜨린다 — 칩 하나당 Accept 에서 한 번, IOCP 에서 한 번.
+       같은 지점이 구역 경계이기도 해서, 구역 강조용 data-z 도 여기서 다음 레일 값으로 갈아 끼운다
+       (수신 칩만 레일 셋을 잇달아 타므로 고정값을 주면 죽은 구역 위를 밝게 날아간다) */
+    if(!c.twA && c.d>=D_ACCEPT){ c.twA=1; twFire(0); c.e.setAttribute("data-z",RECV_Z[1]); }
+    if(!c.twI && c.d>=D_IOCP  ){ c.twI=1; twFire(1); c.e.setAttribute("data-z",RECV_Z[2]); }
     /* 판에 올라서면 건물 앞으로 — 판 뒤로 숨었다 나오는 끊김이 없어진다 */
     const front=(c.d>=SWAP_ON);
     if(c.front!==front){ c.front=front; (front?gChip:gChipBack).appendChild(c.e); }
@@ -1020,6 +1104,29 @@ window.__flowReset=function(){
     const on=c ? c.getAttribute("data-loc") : null;
     for(var k in pinEls) pinEls[k].classList.toggle("lit", k===on);
   });
+})();
+
+/* ═══════════ 구역 강조 — 버튼이 하는 일은 #scene 에 data-zone 을 거는 것뿐 ═══════════
+   무엇이 밝고 어두운지는 전부 CSS 가 요소의 data-z 를 보고 고른다. 그래서 칩처럼 달리는 도중
+   구역이 바뀌는 요소도(수신 칩) data-z 만 갈아 끼우면 알아서 따라온다 — 여기서 다시 훑을 필요가 없다. */
+(function(){
+  const bar=document.querySelector(".zonebar"); if(!bar||!svg) return;
+  const btns=[].slice.call(bar.querySelectorAll(".zb"));
+  const hits=[].slice.call(gHit.children);
+  function apply(z){
+    if(z) svg.setAttribute("data-zone",z); else svg.removeAttribute("data-zone");
+    btns.forEach(function(b){ const on=(b.getAttribute("data-z")||"")===z;
+      b.classList.toggle("act",on); b.setAttribute("aria-pressed",on?"true":"false"); });
+    /* 죽은 노드는 마우스뿐 아니라 키보드에서도 빠져야 한다 — tab 이동은 pointer-events 로 못 막는다 */
+    hits.forEach(function(h){ const live=!z||(" "+h.getAttribute("data-z")+" ").indexOf(" "+z+" ")>=0;
+      h.setAttribute("tabindex",live?"0":"-1");
+      if(live) h.removeAttribute("aria-hidden"); else h.setAttribute("aria-hidden","true"); });
+    closeCard();   /* 열려 있던 상세 카드가 죽은 노드의 것일 수 있다 — 강조를 바꿀 때는 접는다 */
+  }
+  btns.forEach(function(b){ b.addEventListener("click",function(){
+    const z=b.getAttribute("data-z")||"";
+    /* 같은 버튼을 다시 누르면 전체로 — 따로 '해제' 조작을 두지 않는다 */
+    apply(svg.getAttribute("data-zone")===z?"":z); }); });
 })();
 })();
 
