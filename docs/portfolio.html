@@ -142,7 +142,8 @@ section{scroll-margin-top:76px}
 .stat-v{margin-top:10px; font-size:clamp(1.65rem,2.7vw,2.2rem); font-weight:800; letter-spacing:-.03em; line-height:1;
   display:flex; align-items:baseline; gap:.28em; flex-wrap:wrap}
 .stat-v .now{color:var(--ink)}
-.stat-v .was{color:var(--faint); font-size:.52em; font-weight:700}
+/* .was=바뀌기 전 값, .pre=값 앞에 붙는 단서("코드" 0줄). 둘 다 큰 숫자를 받쳐주는 작은 회색 */
+.stat-v .was, .stat-v .pre{color:var(--faint); font-size:.52em; font-weight:700}
 .stat-v .arw{color:var(--muted); font-size:.52em; font-weight:700}
 .stat-s{margin-top:12px; color:var(--ink2); font-size:.92rem; font-weight:600; line-height:1.5}
 @media(max-width:760px){ .stats{grid-template-columns:1fr 1fr} }
@@ -344,6 +345,9 @@ section{scroll-margin-top:76px}
 @media(max-width:680px){ .skills{grid-template-columns:1fr} }
 
 .about{display:grid; grid-template-columns:auto 1fr; gap:clamp(24px,4vw,46px); align-items:start}
+/* 링크줄을 연혁의 '보이저' 점과 나란히 놓는다. 연혁 항목 간격(32.6px)은 고정이고 문단 높이도
+   고정이라 이 값이 흔들리지 않는다 — 기본 22px 에서 실측 차이 14.5px 만큼 내린 값. */
+.about .flinks{margin-top:36px}
 .about .mono-side{font-family:var(--mono); font-size:.78rem; color:var(--muted); letter-spacing:.04em;
   position:relative; display:flex; flex-direction:column; gap:12px; padding-left:22px; white-space:nowrap}
 .about .mono-side::before{content:""; position:absolute; left:4px; top:6px; bottom:6px; width:2px;
@@ -468,7 +472,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
         </div>
         <div class="stat" data-reveal style="--d:1">
           <div class="stat-k">신규 스킬 추가</div>
-          <div class="stat-v"><span class="now">코드 0줄</span></div>
+          <div class="stat-v"><span class="pre">코드 변경</span><span class="now">0</span></div>
           <div class="stat-s">데이터 드리븐 스킬 체인 구축</div>
         </div>
         <div class="stat" data-reveal style="--d:2">
@@ -600,7 +604,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
             <a class="acgo sub" href="https://feline-vacation-d6d.notion.site/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">기술 문서 확인
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
             </a>
-            <a class="acgo" href="mmo-site/" target="_blank" rel="noopener">인터랙티브 구조도 열기
+            <a class="acgo" href="mmo-site/" target="_blank" rel="noopener">데이터 흐름 보기
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
             </a>
           </span>
