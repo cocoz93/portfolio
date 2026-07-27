@@ -54,6 +54,20 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .seg{display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden}
 .seg button{font-family:var(--mono); font-size:.74rem; color:var(--mut); background:none; border:none; padding:6px 10px; cursor:pointer}
 .seg button.on{background:#173049; color:#cfe6ff}
+/* ── 구역 강조: 고른 구역만 남기고 나머지를 죽인다 ──
+   죽이는 값은 본편 mmo.src.html 과 같다(같은 그림을 같은 세기로 봐야 판단이 옮겨간다).
+   다만 뷰어와 달리 여기서는 클릭을 막지 않는다 — 죽은 것도 계속 집어서 편집할 수 있어야 한다.
+   본편은 구역이 넷뿐이라 색 이름으로 걸렀지만, 에디터는 구역을 더 만들 수 있어(색이 겹칠 수 있다)
+   구역 id 로 가른다. id 는 정해진 목록이 아니라서 CSS 선택자로는 못 거르고 JS 가 class 를 붙인다. */
+:root{ --zdim:saturate(.16) brightness(.40) }
+#scene .zdim{filter:var(--zdim); transition:filter .35s ease}
+.zbar{display:flex; flex-wrap:wrap; gap:4px}
+.zb{display:flex; align-items:center; gap:5px; font-size:.74rem; font-weight:700; color:var(--mut);
+  background:#1a2333; border:1px solid var(--line); border-radius:8px; padding:5px 9px; cursor:pointer;
+  transition:border-color .15s, color .15s, background .15s}
+.zb:hover{border-color:var(--net); color:var(--ink)}
+.zb.act{background:#173049; border-color:#2b6597; color:#cfe6ff}
+.zb i{width:8px; height:8px; border-radius:50%; flex:0 0 auto; opacity:.9}
 label.ck{font-size:.8rem; color:var(--mut); display:flex; align-items:center; gap:6px; cursor:pointer}
 textarea{width:100%; height:180px; resize:vertical; background:#0b111d; color:#cfe0f2; border:1px solid var(--line);
   border-radius:9px; font-family:var(--mono); font-size:.72rem; line-height:1.5; padding:9px 10px; transition:border-color .2s, box-shadow .2s}
@@ -112,6 +126,10 @@ textarea.flash{border-color:#57d694; box-shadow:0 0 0 2px rgba(87,214,148,.35)}
         <label class="ck"><input type="checkbox" id="showConn" checked> 연결선</label>
         <label class="ck"><input type="checkbox" id="showZone" checked> 구역 바닥·이름</label>
       </div>
+      <div class="lb" style="margin-top:2px">구역 강조</div>
+      <!-- 버튼은 현재 ZONES 에서 만들어진다(구역을 추가·삭제·개명하면 따라온다) -->
+      <div class="zbar" id="zonebar"></div>
+      <div class="hint" style="margin-top:6px">고른 구역만 남기고 나머지를 죽입니다. 죽은 것도 그대로 집어서 편집됩니다.</div>
     </div>
 
     <div class="grp">
@@ -189,13 +207,16 @@ const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
              outside:{top:"#161d2b",side:"#0f1522",edge:"#93a5c2"} };
 /* 글자를 +u 방향(화면 오른쪽 위)으로 눕힌다 — 이 방향은 글자 길이가 판의 폭(w) 을 먹는다.
    클라(120)·네트워크(200) 판은 폭이 깊이(320)보다 좁아 그만큼 글자를 줄여야 한다(CLIENT 26).
-   판 위는 건물·레일·이름표가 꽉 차 있어 셋은 자기 판 바로 뒤(v 252~264)로 뺐고,
-   GAME 만 뒤가 저장 판이라 앞(v=-147)으로 뺐다. 덕분에 크기를 35~40 으로 올릴 수 있다. */
+   판 위는 건물·레일·이름표가 꽉 차 있어 넷 다 판 밖으로 뺐고, 두 줄로 lv 를 맞춰 뒀다:
+   뒤 줄(251) = NETWORK·DATA BASE, 앞 줄(-132) = GAME(뒤가 저장 판이라 앞)·CLIENT(뒤면 NETWORK 와 붙어 읽힘).
+   판을 벗어난 덕에 크기를 40~50 까지 올릴 수 있다.
+   ※ 같은 줄끼리는 가로로 붙으면 한 문장처럼 읽힌다. 뒤 줄이 특히 빠듯해서(글자 합 450.7 > 두 판 폭 440)
+     lu 를 판 중앙이 아니라 바깥으로 30 씩 민 값(110/400)이다 — 글자를 키우면 여기부터 다시 볼 것. */
 const ZONE_INIT=[
-  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-26,lv:252, ws:35, wo:.22},
-  {u:40, v:-100,w:200,d:320,color:"net",   name:"NETWORK", lu:153,lv:261, ws:35, wo:.22},
-  {u:262,v:-98, w:200,d:200,color:"game",  name:"GAME",    lu:318,lv:-147, ws:40, wo:.22},
-  {u:260,v:120, w:220,d:100,color:"store", name:"DATA BASE", lu:378,lv:264, ws:35, wo:.22} ];
+  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:-28,lv:-132, ws:40, wo:.3},
+  {u:40, v:-100,w:200,d:320,color:"net",   name:"NETWORK", lu:110,lv:251, ws:40, wo:.3},
+  {u:262,v:-98, w:200,d:200,color:"game",  name:"GAME",    lu:354,lv:-132, ws:50, wo:.3},
+  {u:260,v:120, w:220,d:100,color:"store", name:"DATA BASE", lu:400,lv:251, ws:40, wo:.3} ];
 /* 바닥에 눕힌 글자 — (u,v) 평면에 얹는 아핀 변환. 진행 방향은 +u(화면 오른쪽 위), 글자 아래쪽은 -v.
    ※ 바닥에서 똑바로 읽히는 방향은 +u 와 -v 둘뿐 — 나머지로 돌리면 거꾸로 서거나 좌우가 뒤집힌다. */
 const ZW_LS=.04;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격이 같이 움직인다 */
@@ -350,16 +371,20 @@ const NODES=[
     draw(g,u,v){ const x=bo(u,30), y=bo(v,28);
       shadow(g,x,y,bw(30),bw(28)); prism(g,x,y,bw(30),bw(28),0,bw(20),NET,true); } },
 
+  /* 무리 범위·라벨 dy 는 본편 mmo.src.html 과 같은 값이다(2026-07-27 재동기화).
+     5×5 였을 때는 CLIENT 판(120×320)에 견줘 무리가 작아 판이 비어 보였다. 양쪽으로 늘리되
+     -v 쪽을 -18 에서 끊는 건 그 앞이 send→클라 복귀 3레인 자리이기 때문. 라벨 dy 36→78 도 같은 이유 —
+     무리를 키우면서 옛 자리가 큐브 한가운데가 됐다. */
   { name:"clients", label:"클라이언트", u:-63, v:21, hit:[0,0,66,58,11],
-    lab:{dx:0,dy:36,anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
-    draw(g,u,v){ const x=bo(u,66), y=bo(v,58), cubes=[];
-      for(let cu=0;cu<=66;cu+=14) for(let cv=0;cv<=58;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
+    lab:{dx:0,dy:78,anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
+    draw(g,u,v){ const CU0=-14, CU1=66, CV0=-18, CV1=126, x=bo(u,66), y=bo(v,58), cubes=[];
+      for(let cu=CU0;cu<=CU1;cu+=14) for(let cv=CV0;cv<=CV1;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
       cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
       cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
 
   { name:"timer", label:"Timing Wheel", u:190, v:170, hit:[-22,-22,44,44,4],
     /* dy 는 -50 이상 띄운다 — 문자판이 넓어 -22 쯤이면 부제가 눈금 위에 얹힌다 */
-    lab:{dx:3,dy:-50,anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
+    lab:{dx:41,dy:-44,anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
     draw(g,u,v){ const R=bw(32), cx=px(u,v), cy=py(u,v,bw(4));
       g.appendChild(el("ellipse",{cx,cy:cy+5,rx:R*KX*1.1,ry:R*KY*1.1,fill:"#05070d",opacity:.4}));
       prism(g,u-bw(22),v-bw(22),bw(44),bw(44),0,bw(4),["#2a3450","#141c30","#1d2740"]);
@@ -368,7 +393,7 @@ const NODES=[
       for(let i=0;i<12;i++){ const a=i/12*Math.PI*2;
         g.appendChild(el("line",{x1:cx+Math.cos(a)*rx*0.78,y1:cy+Math.sin(a)*ry*0.78,
           x2:cx+Math.cos(a)*rx*0.96,y2:cy+Math.sin(a)*ry*0.96,stroke:"#46577a","stroke-width":1.3,opacity:.7})); }
-      g.appendChild(el("circle",{cx,cy,r:3.5,fill:"#cfe0f2"})); } },
+      g.appendChild(el("circle",{cx,cy,r:bw(3.5),fill:"#cfe0f2"})); } },   /* 가운데 축 — 몸통과 같이 BODY 배(본편과 같은 값) */
 ];
 /* 히트박스·라벨 높이도 몸통과 같이 키운다(중심 = 레일 끝점은 그대로). 큐 3종은 몸통을 안 키웠으니 제외 */
 const BODY_KEEP={swapq:1, sector:1, dbw:1};
@@ -388,7 +413,7 @@ const RAIL_INIT=[
   {a:"game",   b:"sector",color:"send",lanes:3,cross:true,pts:[{u:410,v:-70}]},
   {a:"sector", b:"send",  color:"send", lanes:3},   /* 워커 3개 고정 파이프 — uniqueId%3 */
   {a:"iocp",   b:"timer", color:"recv",pts:[{u:190,v:170}]},
-  {a:"accept", b:"timer", color:"recv",pts:[{u:55,v:170}]} ];   /* u 를 Accept(55) 와 맞춰야 첫 구간이 축에 붙는다 */
+  {a:"accept", b:"timer", color:"recv",pts:[{u:70,v:170}]} ];   /* u 는 Accept 의 '중심'(70)에 맞춘다 — 레일 끝점은 LAYOUT(55) 이 아니라 히트박스 중심이라 55 로 두면 첫 구간이 기운다 */
 const RAILS=[]; let railSeq=0;
 const RAILCOL={recv:RECV, send:SEND, store:STORE, net:"#8fb6e6"};
 function railColorHex(k){ return RAILCOL[k]||RECV; }
@@ -432,6 +457,25 @@ const gZoneL=el("g"), gGrid=el("g"), gConn=el("g"), gBody=el("g"), gSel=el("g"),
 gGrid.setAttribute("class","gridlyr");
 
 let SNAP=20, showConn=true, showGrid=true, showZone=true, sel=null, selRail=null, selWpt=null, selZone=null, activeGuides=[], connectMode=false, connectFrom=null;
+/* ── 구역 강조 ── hiZone="" 이면 전체(아무것도 안 죽임) */
+let hiZone="";
+/* 노드가 어느 구역 판 위에 서 있는지 = LAYOUT 좌표가 그 판 사각형 안인지.
+   본편 mmo.src.html 의 zoneOf 와 같은 판정인데 돌려주는 값이 색이 아니라 구역 id 다 —
+   에디터는 구역을 더 만들 수 있어 색이 겹칠 수 있다(본편은 네 구역이 색으로 유일). */
+function zoneOfNode(name){ const L=LAYOUT[name]; if(!L) return "";
+  for(let i=0;i<ZONES.length;i++){ const z=ZONES[i];
+    if(L.u>=z.u&&L.u<=z.u+z.w&&L.v>=z.v&&L.v<=z.v+z.d) return z.id; }
+  return ""; }
+/* 레일은 양 끝 중 하나라도 그 구역이면 살아 있어야 한다 — 구역 밖으로 나가는 흐름이 보이라고 */
+function zonesOfRail(r){ const a=zoneOfNode(r.a), b=zoneOfNode(r.b);
+  return a===b ? a : [a,b].filter(Boolean).join(" "); }
+/* render() 가 요소를 매번 새로 만들므로 여기서는 붙이기만 하면 된다(뗄 것이 없다) */
+function applyZoneHi(){
+  if(hiZone && !ZONES.some(z=>z.id===hiZone)) hiZone="";   /* 지운 구역을 가리키고 있으면 전체로 */
+  if(!hiZone) return;
+  [gZoneL,gConn,gBody,gLbl].forEach(function(layer){
+    [].slice.call(layer.querySelectorAll("[data-z]")).forEach(function(e){
+      if((" "+e.getAttribute("data-z")+" ").indexOf(" "+hiZone+" ")<0) e.classList.add("zdim"); }); }); }
 const GUIDE_EPS=4;
 function foot(n){ const L=LAYOUT[n.name]; const h=n.hit; return [L.u+h[0], L.v+h[1], h[2], h[3]]; }
 function center(n){ const f=foot(n); return [f[0]+f[2]/2, f[1]+f[3]/2]; }
@@ -479,7 +523,7 @@ function render(){
   gZoneL.textContent=""; gGrid.textContent=""; gConn.textContent=""; gBody.textContent=""; gSel.textContent=""; gGuide.textContent=""; gLbl.textContent=""; gHandle.textContent="";
   /* 구역 바닥 (맨 뒤 · 격자보다도 아래) */
   if(showZone) ZONES.forEach(z=>{ const pal=ZPAL[z.color]||ZPAL.net;
-    const zg=el("g",{class:"zone","data-zone":z.id});
+    const zg=el("g",{class:"zone","data-zone":z.id,"data-z":z.id});   /* data-zone=클릭 대상 · data-z=구역 강조용 */
     prism(zg,z.u,z.v,z.w,z.d,-6,6,[pal.top,pal.side,pal.side]);
     const eAttr=pal.dash?{"stroke-dasharray":"6 5"}:{};
     zg.appendChild(el("line",Object.assign({x1:px(z.u,z.v+z.d),y1:py(z.u,z.v+z.d,0),
@@ -510,6 +554,9 @@ function render(){
   if(showConn) RAILS.forEach(r=>{ if(!byName[r.a]||!byName[r.b]) return;
     const path=railPath(r), col=railColorHex(r.color), on=(selRail===r.id);
     const ptsStr=path.map(p=>px(p[0],p[1]).toFixed(1)+","+py(p[0],p[1],0).toFixed(1)).join(" ");
+    /* 레일 하나 = 그룹 하나. 예전엔 조각들을 gConn 에 평평하게 쌓아 레일 단위로 고를 수가 없었다.
+       구역 강조가 레일을 통째로 죽이고 살려야 해서 묶는다. 히트선(data-rail)은 그룹 안에 있어도 그대로 잡힌다. */
+    const rg=el("g",{"data-z":zonesOfRail(r)});
     /* 본편과 같은 표현: 폭 있는 바닥 채널(아주 어두운 흐름색) + 꺾임 패치 + 이음선 + 다중 레인(lanes) */
     const NL=r.lanes||1, subW=NL>1?SUB_W:LANE_W, totW=NL>1?NL*SUB_W+(NL-1)*SUB_GAP:LANE_W;
     const offs=[]; for(let i=0;i<NL;i++) offs.push((i-(NL-1)/2)*(SUB_W+SUB_GAP));
@@ -519,42 +566,44 @@ function render(){
       segs.push({A,B,du,dv,L,pu:-dv/L,pv:du/L}); }
     if(r.cross && NL>1){   /* 교차 레일 — 줄마다 통째로(본편과 동일) */
       const knee=path.slice(1,-1);
-      offs.forEach(c=>ribbon(gConn, offsetPath(path,c,true), subW, tint, knee));
+      offs.forEach(c=>ribbon(rg, offsetPath(path,c,true), subW, tint, knee));
       const HT=totW/2-1;
       segs.forEach(s=>{ const hu=s.pu*HT, hv=s.pv*HT;
         for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
           if(knee.some(q=>Math.hypot(cu-q[0],cv-q[1])<totW)) continue;
-          gConn.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
+          rg.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
             x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
-      if(on) gConn.appendChild(el("polyline",{class:"conn",points:ptsStr,fill:"none",stroke:col,
+      if(on) rg.appendChild(el("polyline",{class:"conn",points:ptsStr,fill:"none",stroke:col,
         "stroke-width":2,"stroke-dasharray":"6 4",opacity:.95}));
-      gConn.appendChild(el("polyline",{class:"railhit","data-rail":r.id,points:ptsStr,fill:"none",
+      rg.appendChild(el("polyline",{class:"railhit","data-rail":r.id,points:ptsStr,fill:"none",
         stroke:"transparent","stroke-width":Math.max(14,totW+6)}));
-      return; }
+      gConn.appendChild(rg); return; }
     segs.forEach(s=>offs.forEach(c=>{ const h=subW/2;
-      gConn.appendChild(poly([[s.A[0]+s.pu*(c+h),s.A[1]+s.pv*(c+h)],[s.B[0]+s.pu*(c+h),s.B[1]+s.pv*(c+h)],
+      rg.appendChild(poly([[s.A[0]+s.pu*(c+h),s.A[1]+s.pv*(c+h)],[s.B[0]+s.pu*(c+h),s.B[1]+s.pv*(c+h)],
         [s.B[0]+s.pu*(c-h),s.B[1]+s.pv*(c-h)],[s.A[0]+s.pu*(c-h),s.A[1]+s.pv*(c-h)]],tint)); }));
     for(let i=1;i<path.length-1;i++){ const q=path[i], h=totW/2;
-      gConn.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
+      rg.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
     const H=totW/2-1;   /* 이음선(완화) + 채널 모서리 음영(그루브) — 본편과 동일 */
     segs.forEach(s=>{ const hu=s.pu*H, hv=s.pv*H;
       for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
-        gConn.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
+        rg.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
           x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
     segs.forEach(s=>{ const upSign=py(s.A[0]+s.pu,s.A[1]+s.pv,0)<=py(s.A[0]-s.pu,s.A[1]-s.pv,0)?1:-1;
       offs.forEach(c=>{ [[1,true],[-1,false]].forEach(q=>{ const e=c+q[0]*upSign*subW/2, up=q[1];
-        gConn.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
+        rg.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
           x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
           stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); });
-    if(on) gConn.appendChild(el("polyline",{class:"conn",points:ptsStr,fill:"none",stroke:col,
+    if(on) rg.appendChild(el("polyline",{class:"conn",points:ptsStr,fill:"none",stroke:col,
       "stroke-width":2,"stroke-dasharray":"6 4",opacity:.95}));   /* 선택된 레일 표시 */
-    gConn.appendChild(el("polyline",{class:"railhit","data-rail":r.id,points:ptsStr,fill:"none",stroke:"transparent","stroke-width":Math.max(14,totW+6)})); });
+    rg.appendChild(el("polyline",{class:"railhit","data-rail":r.id,points:ptsStr,fill:"none",stroke:"transparent","stroke-width":Math.max(14,totW+6)}));
+    gConn.appendChild(rg); });
   /* 노드: 뒤→앞 정렬(u+v 큰 것 먼저) */
   const order=allObjs().slice().sort((p,q)=>{ const a=LAYOUT[p.name],b=LAYOUT[q.name];
     return (b.u+b.v)-(a.u+a.v); });
   order.forEach(n=>{ const L=LAYOUT[n.name];
     /* 몸통 전체가 드래그 타깃(data-name). 그림자·건물·라벨 아무 데나 잡아도 이동 */
-    const g=el("g",{class:"body"+(drag&&drag.name===n.name?" dragging":""),"data-name":n.name});
+    const g=el("g",{class:"body"+(drag&&drag.name===n.name?" dragging":""),"data-name":n.name,
+      "data-z":zoneOfNode(n.name)});
     n.draw(g,L.u,L.v); gBody.appendChild(g);
     const f=foot(n), c=center(n), hz=n.hit[4]||0;
     if(sel===n.name)  /* 선택 표시: 바닥 풋프린트 점선 */
@@ -567,7 +616,7 @@ function render(){
   /* 라벨(개별 드래그): 각 도형의 이름/캡션을 따로 옮길 수 있음 */
   order.forEach(n=>{ if(!n.lab) return;
     const c=center(n), az=n.hit[4]||0, ax=px(c[0],c[1])+n.lab.dx, ay=py(c[0],c[1],az)+n.lab.dy;
-    const lg=el("g",{class:"lblgrp","data-lbl":n.name});
+    const lg=el("g",{class:"lblgrp","data-lbl":n.name,"data-z":zoneOfNode(n.name)});
     n.lab.lines.forEach(ln=> lg.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
       "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)"},ln[0])));
     if(sel===n.name) lg.appendChild(el("circle",{cx:ax.toFixed(1),cy:(ay-7).toFixed(1),r:3.5,fill:"#ffb648",opacity:.9}));
@@ -583,8 +632,28 @@ function render(){
           x:(px(p.u,p.v)-5).toFixed(1),y:(py(p.u,p.v,0)-5).toFixed(1),width:10,height:10,rx:2})); });
       for(let s=0;s<path.length-1;s++){ const m=[(path[s][0]+path[s+1][0])/2,(path[s][1]+path[s+1][1])/2];
         gHandle.appendChild(el("circle",{class:"ins","data-ins":r.id+":"+s,cx:px(m[0],m[1]),cy:py(m[0],m[1],0),r:5})); } } }
+  syncZoneBar(); applyZoneHi();   /* 선택·가이드·핸들은 편집용이라 죽이지 않는다 — 죽으면 집을 수가 없다 */
   syncOut();
 }
+
+/* ── 구역 강조 버튼 — 목록이 고정이 아니라 현재 ZONES 에서 만든다(추가·삭제·개명·색변경을 따라감).
+   render() 는 드래그 중 매 프레임 불리므로, 버튼은 실제로 달라졌을 때만 다시 그린다. ── */
+const zbarEl=document.getElementById("zonebar");
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+let zbarSig=null;
+function syncZoneBar(){
+  const sig=ZONES.map(z=>z.id+":"+z.name+":"+z.color).join("|")+"#"+hiZone;
+  if(sig===zbarSig) return; zbarSig=sig;
+  let h='<button type="button" class="zb'+(hiZone?"":" act")+'" data-z="">전체</button>';
+  ZONES.forEach(function(z){ const pal=ZPAL[z.color]||ZPAL.net;
+    h+='<button type="button" class="zb'+(hiZone===z.id?" act":"")+'" data-z="'+esc(z.id)+'">'
+      +'<i style="background:'+esc(pal.edge)+'"></i>'+esc(z.name||z.id)+'</button>'; });
+  zbarEl.innerHTML=h; }
+zbarEl.addEventListener("click",function(e){
+  const b=e.target.closest(".zb"); if(!b) return;
+  const z=b.getAttribute("data-z")||"";
+  hiZone=(hiZone===z)?"":z;   /* 같은 버튼을 다시 누르면 전체로 */
+  render(); });
 
 /* ── 드래그 ── */
 let drag=null;
