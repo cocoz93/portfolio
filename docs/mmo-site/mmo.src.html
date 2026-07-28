@@ -112,17 +112,22 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
    translateX 로 밀지 않는 이유: 창이 좁으면 왼쪽으로 삐져나간다(좁은 창에선 지도가 이미 폭을 다 쓴다).
    폭을 85%로 잡으면 어느 창에서도 안 넘치고 오른쪽 15%가 항상 빈다.
    ※ 창이 넓어져 지도가 1180 에서 멈추면 오른쪽 여백은 15%보다 더 넓어진다 — 의도한 쪽이다. */
-.bn-shift{width:85%; max-width:1180px; margin:4px 0 0}
+/* 폭은 설계 탭(.stage = .wrap 내용폭 1860)과 같이 간다.
+   한때 1500 에서 멈췄던 것은 옛 프레이밍(946)의 지도 크기를 그대로 지키려던 계산이었는데
+   (1180×1200/946 ≈ 1500), 그 바람에 넓은 화면에서 병목 탭만 오른쪽이 360px 남았다.
+   같은 폭을 쓰면 지도와 패널이 같이 커지면서 그 빈자리가 사라진다. 97%→100% 도 같은 이유다
+   (오른쪽 여백은 이제 viewBox 안의 카드 열이 맡는다 — 바깥에 또 비워 둘 이유가 없다). */
+.bn-shift{width:100%; max-width:1860px; margin:4px 0 0}
 .bn-stage{position:relative; --bn-ease:cubic-bezier(.22,.61,.36,1)}   /* 카메라·기울기가 같은 곡선 = 한 동작으로 읽힌다 */
 .bn-cam{position:relative; transform-origin:0 0}                 /* 2단계 카메라 */
-/* 기울기 — 카메라와 분리(원점이 다르다). 설계 탭은 0°, 여기만 눕혀 '다른 시점으로 옮겼다'를 만든다.
-   방향은 내려다보기(양수)로 고정한다. 아이소 블록은 윗면(.top)을 밝게 칠해 둔 그림이라,
-   음수로 돌려 올려다보면 '위에서 그린 면을 아래에서 본다'가 되어 빛과 기하가 어긋난다.
-   핀도 판에서 위로 솟은 막대라 올려다볼수록 막대가 길어지며 라벨끼리 겹친다.
-   각도는 이 한 줄과 아래 bnTilt 도착값 두 곳을 같이 바꾼다.
-   위 한계는 34° 근처다 — 눕힐수록 원근이 아래쪽을 벌려서 그림이 판 밖으로 번지는데,
-   그림 좌우에 남은 여백이 91px·104px 뿐이다(32°에서 79px 번짐, 34°에서 84px). */
-.bn-tilt{transform:perspective(1400px) rotateX(32deg)}
+/* 예전에는 여기서 판을 32° 눕혀 '다른 시점' 을 만들었다. 지금은 지도가 진짜로 평면이라 뺐다 —
+   정면에서 봐야 정사각형이 정사각형으로 남는다. 눕히면 그 즉시 위에서 본 그림이 아니게 된다.
+   요소는 남겨 둔다: 전환 애니가 판 높이(offsetHeight)를 여기서 잰다. */
+/* 폭 63% = 지도가 가져가는 몫. 나머지 35% 는 오른쪽 패널, 사이 2%(≈54px)는 이름표와 패널 사이 틈이다.
+   여기 한 값이 '그림을 줄이고 설명을 넓힌다' 를 조절한다 — 높이는 viewBox 비율(900:500)로 따라온다.
+   position:relative 가 필요하다: 청사진 판·핀 판이 이 요소를 기준으로 겹쳐야 한다
+   (없으면 기준이 .bn-cam(폭 100%)이 되어, 밑판만 63% 로 줄고 위 두 장은 100% 인 채 어긋난다). */
+.bn-tilt{position:relative; width:63%; transform:none}
 .bn-tilt>svg{display:block; width:100%; height:auto}
 /* 설계 모습 사본은 계속 깔아 둔다. 청사진 474개 도형 중 167개가 밑을 비치므로(반투명 68 · 채움 없음 99,
    구역 판은 알파 0.13), 이 판을 껐다 켜면 지도 전체의 톤이 통째로 달라진다.
@@ -145,13 +150,18 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 #bnpins .pin-pulse{opacity:0; transform-box:fill-box; transform-origin:center; animation:pinPulse 2.4s ease-out infinite}
 @keyframes pinPulse{0%{transform:scale(.55); opacity:.9} 70%,100%{transform:scale(2); opacity:0}}
 
-/* ═══ 전환 애니 — '설계 · 구현' 화면이 병목 지도로 변한다 (총 1.34s) ═══
-   두 단계를 겹치지 않는다. 같이 굴리면 무엇이 변하는지가 섞여 '그냥 뭔가 움직였다' 가 된다.
+/* ═══ 전환 애니 — '설계 · 구현' 화면이 병목 지도로 변한다 (총 1.86s) ═══
+   세 단계를 겹치지 않는다. 같이 굴리면 무엇이 변하는지가 섞여 '그냥 뭔가 움직였다' 가 된다.
 
-   1단계 0.00–1.04  카메라 완전 고정 — 설계 탭 씬이 있던 자리에, 있던 크기 그대로 겹쳐 있다
-                    · 0.00–0.90 클라이언트 단에서 원형으로 번지며 부위별로 톤이 바뀐다
-                    · 0.55–1.01 핀 3개가 0.08s 간격으로 꽂힌다
-   2단계 1.04–1.56  이제 카메라만 움직인다 — 눕고(32도), 병목 지도의 제자리·제 크기로 안착
+   1단계 0.00–0.86  카메라 완전 고정 — 설계 탭 씬이 있던 자리에, 있던 크기 그대로 겹쳐 있다
+                    클라이언트 단에서 원형으로 번지며 부위별로 톤이 바뀐다
+   2단계 0.86–1.58  카메라가 머리 위로 올라가며 그림이 평면도로 펴진다(건물은 발자국만 남는다)
+                    + 같은 구간에 병목 지도의 제자리·제 크기로 안착
+   3단계 1.34–1.80  핀 3개가 0.08s 간격으로 꽂힌다 — 땅이 거의 다 펴진 뒤다
+
+   ※ 2단계만 CSS 가 아니라 JS(rAF) 다. 아이소를 평면으로 펴는 것은 transform 으로 표현되지 않는다
+     (높이가 화면 세로에 섞여 있어, 바닥을 펴는 변환이 건물 높이까지 같이 편다).
+     자세한 방법은 스크립트의 '평면화' 주석. 그래서 모션 줄이기도 거기서 따로 막는다.
 
    ── 번지는 속도는 설계 탭 등장 웨이브에 맞춘다 ──
    등장 웨이브는 좌하→우상 대각선을 900ms 동안 '등속' 으로 훑는다(지연을 축 f 에 선형 분배).
@@ -175,31 +185,97 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
    ※ 전부 CSS 애니라 prefers-reduced-motion 전역 규칙이 그대로 다 꺼 준다(rAF 를 안 쓴 이유).
      정지 상태 값을 규칙이 아니라 키프레임 안에만 두는 것도 같은 이유다 — 애니가 꺼지면 잔재가 없다
      (옛 .bn-reveal 규칙은 위치·크기를 규칙 쪽에 두는 바람에, 모션 끄기 상태에서 판이 어긋난 채 남았다). */
-.bn-stage.bn-enter .bn-reveal{will-change:clip-path; animation:bnGrow .9s linear both}
-.bn-stage.bn-enter .bn-cam{will-change:transform; animation:bnCam .52s var(--bn-ease) 1.04s both}
-.bn-stage.bn-enter .bn-tilt{animation:bnTilt .52s var(--bn-ease) 1.04s both}
+.bn-stage.bn-enter .bn-reveal{will-change:clip-path; animation:bnGrow .86s linear both}
+.bn-stage.bn-enter .bn-cam{will-change:transform; animation:bnCam .72s var(--bn-ease) .86s both}
 .bn-stage.bn-enter .pin{animation:bnPinDrop .30s cubic-bezier(.3,1.25,.5,1) both}
 .bn-stage.bn-enter .pin-pulse{animation:none; opacity:0}   /* 꽂히기 전에는 파문이 없다 */
 /* 진입하는 그 프레임은 이 패널(SVG 두 벌 ≈950개 요소)을 처음 배치하고 그리는 프레임이다.
    같은 프레임에 애니 시계까지 켜면 그 비용이 그대로 초반 프레임 드랍이 된다.
    그래서 애니는 걸어 두되 시계는 세워 두고, 그리기가 끝난 뒤 JS 가 두 번째 rAF 에서 뗀다. */
 .bn-stage.bn-hold .bn-reveal, .bn-stage.bn-hold .bn-cam,
-.bn-stage.bn-hold .bn-tilt, .bn-stage.bn-hold .pin{animation-play-state:paused}
+.bn-stage.bn-hold .pin{animation-play-state:paused}
 @keyframes bnGrow{from{clip-path:circle(var(--r0) at var(--cx) var(--cy))}
                     to{clip-path:circle(var(--r1) at var(--cx) var(--cy))}}
-@keyframes bnTilt{from{transform:perspective(1400px) rotateX(0deg)} to{transform:perspective(1400px) rotateX(32deg)}}
 @keyframes bnCam{from{transform:var(--bn-t0,none)} to{transform:none}}
 @keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{opacity:1; transform:none}}
-.bn-cap{font-size:.8rem; color:var(--dim); text-align:center; margin:6px 0 20px}   /* 한글이라 mono 금지(폴백 벌어짐) */
-.exp .loc{margin-left:auto; flex:0 0 auto; width:21px; height:21px; border-radius:50%; border:1.5px solid #ff6b52;
-  color:#ff6b52; font-family:var(--mono); font-size:.66rem; font-weight:800; display:grid; place-items:center}
-.exp.hl{animation:expHl 1.8s ease-out}
-@keyframes expHl{0%{box-shadow:0 0 0 2px #ff6b52, 0 0 26px -8px rgba(255,107,82,.9)} 100%{box-shadow:0 0 0 0 rgba(255,107,82,0)}}
-
-/* bneck cards */
-.exp-h{margin:6px 0 10px; font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mut)}
-.exp-h .cnt{color:var(--ink); margin-left:4px}
-.exp-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(272px,1fr)); gap:12px; margin-bottom:22px}
+/* 폭을 지도 몫(.bn-tilt 63%)에 맞추는 이유: 캡션은 .bn-shift(지도+패널) 안에 있어서,
+   그냥 가운데 정렬하면 지도가 아니라 '지도+패널' 의 한가운데로 밀린다. 한글이라 mono 금지(폴백 벌어짐) */
+.bn-cap{font-size:.8rem; color:var(--dim); text-align:center; margin:6px 0 20px; max-width:63%}
+/* ═══ 병목 상세 — 지도 오른쪽 열에 늘 떠 있는 패널 ═══
+   한때는 눌러야 열리는 카드였고, 실험 목록은 지도 아래에 따로 한 벌 더 있었다. 그 구성은 두 가지가 나빴다:
+   ① 안 누르고 지나가면 오른쪽 26%가 그냥 빈 검은 자리 ② 눌러 봐야 아래에 있는 카드가 위로 올라올 뿐이라
+   클릭의 보상이 없었다. 목록을 걷어내고 이 패널을 유일한 자리로 만든다 —
+   그러면 '안 누르면 아무것도 안 보이는' 상태가 되므로, 처음부터 1번이 열려 있고 핀을 누르면 갈아 끼운다.
+   자리는 viewBox 오른쪽에 비워 둔 열이라 지도를 덮지 않는다. 높이는 지도와 같게 세로를 다 쓴다. */
+/* 스크롤은 실험 목록(#bnc-b)만 한다. 패널 통째로 스크롤시키면 핀 1(실험 4건)에서
+   맨 아래 전환 줄이 화면 밖으로 밀려, 다른 자리로 넘어갈 길이 스크롤 뒤에 숨는다. */
+/* 폭 35% — 지도(.bn-tilt 63%)와 짝인 값이다. 둘을 더해 98% 로 두는 2% 가
+   '단일 코어 · 25fps 틱' 이름표와 패널 사이의 틈(≈54px)이다.
+   상한도 같은 비율로(1860×0.35 ≈ 650) — 낮게 묶어 두면 판만 넓어지고 패널은 안 커져서 그 차이가 다시 빈 자리가 된다. */
+.bncard{position:absolute; right:0; top:0; bottom:0; width:35%; min-width:270px; max-width:650px;
+  overflow:hidden; z-index:8; display:flex; flex-direction:column;
+  background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; color:#dbe4f2;
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.7);
+  /* 진입 애니 도중에는 감춰 둔다 — 핀이 꽂히는 순간(1.34s)에 같이 들어와야
+     '핀이 박히고 그 내용이 옆에 열린다' 한 동작으로 읽힌다 */
+  opacity:0; transition:opacity .35s ease}
+.bncard.on{opacity:1}
+.bncard[hidden]{display:none}
+/* 설계 탭 카드의 같은 자리는 mono 인데 여기만 sans 인 이유: 이 두 줄은 한글이다.
+   mono 에 한글을 넣으면 글꼴이 폴백되어 자간이 벌어진다(범례·캡션과 같은 규칙). */
+.bncard .k{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut)}
+.bncard h3{margin:7px 0 0; font-size:1.18rem; font-weight:800}
+.bncard .cl{margin:6px 0 0; font-size:.84rem; color:#c3cfe0}
+.bncard .lb{font-family:var(--sans); font-size:.68rem; font-weight:700; letter-spacing:.04em; color:var(--mut); margin:14px 0 6px}
+/* 이 자리가 왜 병목이었나 — 실험 목록 바로 위 한 줄. 실험이 1건뿐인 핀(2·3)에서 패널이 휑해지는 것도 이 줄이 받는다 */
+.bncard .why{margin:9px 0 0; font-size:.8rem; color:#93a3ba; line-height:1.6; border-left:2px solid #7a3b31; padding-left:9px}
+/* 머리글은 줄어들면 안 된다(기본 flex-shrink:1 이라 자리가 빠듯하면 글자가 잘린다) — 스크롤은 목록만 */
+.bncard>.k,.bncard>h3,.bncard>.cl,.bncard>.why,.bncard>.lb{flex:0 0 auto}
+/* min-height:0 이 없으면 격자가 내용 높이만큼 버텨서 패널을 밀어낸다.
+   자리마다 실험 수가 다르다(4 · 1 · 2). 행을 1fr 로 균등하게 나눠 남는 세로를 카드가 다 가져가고,
+   4건인 자리만 두 열로 접는다 — 패널이 넓어진 덕에 네 장이 스크롤 없이 한 화면에 들어온다.
+   (한 열로 두면 네 장 중 두 장 반만 보이고 나머지는 스크롤 뒤에 숨는다.) */
+#bnc-b{flex:1 1 auto; overflow-y:auto; min-height:0; display:grid; gap:7px; grid-auto-rows:1fr;
+  scrollbar-width:thin; scrollbar-gutter:stable}
+#bnc-b[data-n="4"]{grid-template-columns:1fr 1fr}
+.bncard .exp{margin:0; padding:9px 12px; display:flex; flex-direction:column; justify-content:center}
+.bncard .exp .r{font-size:1.14rem; margin:5px 0 3px}
+/* 1건뿐인 자리(핀 2)는 그 한 장이 패널을 통째로 쓴다. 기본 크기로 두면 큰 상자 한가운데
+   글자 넉 줄만 떠 있는 그림이 되므로, 남는 자리만큼 글자를 키워 '한 방으로 끝난 자리' 로 보이게 한다.
+   2건은 키우지 않는다 — 두 장이 세로를 넘겨 스크롤이 생겼다(스크롤 없이 다 보이는 쪽이 낫다). */
+#bnc-b[data-n="1"] .exp .r{font-size:2.6rem; margin:10px 0 6px}
+#bnc-b[data-n="1"] .exp .nm{font-size:1.16rem}
+#bnc-b[data-n="1"] .exp .m{font-size:.94rem}
+#bnc-b[data-n="1"] .exp .ex{font-size:.76rem; margin-top:11px}
+.bncard .exp .m{font-size:.79rem; line-height:1.45}
+.bncard .exp.rj .r{font-size:.95rem}
+.bncard .lb .cnt{color:var(--ink); margin-left:3px}
+/* 핀 전환 줄 — 패널 맨 아래에 붙인다(margin-top:auto).
+   지도 아래 목록을 걷어내면서 '실험이 전부 몇 건인지' 를 보여 주던 자리도 같이 사라졌다.
+   여기 세 칸이 그 몫을 대신한다: 지금 보는 자리 + 남은 자리 둘이 늘 같이 보인다. */
+.bnnav{flex:0 0 auto; margin-top:12px; padding-top:12px; border-top:1px solid #232e42; display:grid; gap:5px}
+.bnnav .t{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut); margin-bottom:2px}
+.bnnav button{display:flex; align-items:center; gap:8px; width:100%; text-align:left; cursor:pointer;
+  font-family:var(--sans); font-size:.8rem; font-weight:700; color:#8e9cb4;
+  background:transparent; border:1px solid #232e42; border-radius:9px; padding:7px 10px;
+  transition:border-color .15s, color .15s, background .15s}
+.bnnav button i{width:19px; height:19px; flex:0 0 auto; border-radius:50%; border:1.4px solid #55414a;
+  color:#9b7a80; font-family:var(--mono); font-size:.63rem; font-weight:800; display:grid; place-items:center;
+  font-style:normal; transition:border-color .15s, color .15s}
+.bnnav button span{margin-left:auto; font-weight:600; font-size:.7rem; color:var(--dim)}
+.bnnav button:hover{color:#d3ddee; border-color:#3c4a63; background:rgba(24,32,47,.6)}
+.bnnav button:hover i{border-color:#ff6b52; color:#ff6b52}
+.bnnav button.act{color:#fff; border-color:#7a3b31; background:rgba(52,22,20,.5)}
+.bnnav button.act i{border-color:#ff6b52; color:#ff6b52; background:#241014}
+.bnnav button:focus-visible{outline:2px solid var(--net); outline-offset:2px}
+/* 패널이 그림을 덮기 시작하는 폭부터는 지도 아래로 내린다.
+   그러면 옆자리를 비워 둘 이유가 없어지므로 지도는 판 폭을 다 쓴다(63%→100%). */
+@media(max-width:1080px){
+  .bn-tilt{width:100%}
+  .bncard{position:static; width:auto; min-width:0; max-width:none; margin-top:12px}
+  .bnnav{margin-top:14px}
+  .bn-cap{max-width:100%}
+}
 .exp{border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#0f1626}
 .exp .top{display:flex; align-items:center; gap:8px}
 .exp .rs{font-family:var(--mono); font-size:.57rem; font-weight:800; padding:2px 7px; border-radius:999px; border:1.4px solid; flex:0 0 auto}
@@ -210,6 +286,9 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .exp.rj .r{color:#ff9a8d; font-size:1.05rem}
 .exp .m{font-size:.82rem; color:#b7c4da; line-height:1.55}
 .exp .ex{margin-top:8px; font-family:var(--mono); font-size:.68rem; color:var(--mut)}
+/* 한글이 섞인 꼬리말은 sans 로 — mono 에 한글을 넣으면 글꼴이 폴백되어 자간이 벌어진다
+   (범례·캡션·패널 머리글과 같은 규칙). 순수 수치·영문은 그대로 mono 가 어울린다. */
+.exp .ex.ko{font-family:var(--sans); font-size:.72rem}
 
 /* notes / links */
 .note-list{display:grid; gap:10px; max-width:82ch}
@@ -384,18 +463,35 @@ body.pop-hold #scene .chips{opacity:0}
          .bn-shift = 지도와 캡션을 한 덩어리로 묶어 왼쪽에 붙이는 껍데기. 오른쪽은 비워 둔다. -->
     <div class="bn-shift">
       <div class="bn-stage">
+        <!-- viewBox 900 = 그림이 실제로 차지하는 칸 그대로다(내용 bbox x 256~1099 를 재서 잡았다).
+             한때는 여기를 1200·1420 으로 늘려 오른쪽에 빈 칸을 만들고 그 자리에 패널을 얹었는데,
+             그러면 패널이 지도 아래로 내려가는 좁은 화면에서 그 빈 칸이 갈 곳 없이 남는다
+             (그림이 판의 62% 만 쓰고 오른쪽 38% 가 빈 채로 그려진다).
+             그래서 자리 나누기는 CSS 폭(.bn-tilt 63% / .bncard 35%)이 맡고, viewBox 는 그림만 담는다. -->
         <div class="bn-cam"><div class="bn-tilt">
-          <svg id="bnsolid" viewBox="212 172 946 500" aria-hidden="true"></svg>
+          <svg id="bnsolid" viewBox="212 172 900 500" aria-hidden="true"></svg>
           <div class="bn-reveal">
-            <svg id="bnscene" viewBox="212 172 946 500" role="img"
-                 aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조도"></svg>
+            <svg id="bnscene" viewBox="212 172 900 500" role="img"
+                 aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조 평면도"></svg>
           </div>
-          <svg id="bnpins" viewBox="212 172 946 500" aria-hidden="true"></svg>
+          <!-- 핀은 키보드로 짚어 갈 수 있는 버튼이다. aria-hidden 을 걸면 스크린리더에서만 사라지고
+               tab 순서에는 그대로 남아, 읽히지 않는 것에 초점이 가는 상태가 된다. -->
+          <svg id="bnpins" viewBox="212 172 900 500" role="group" aria-label="병목 지점 핀 3개"></svg>
         </div></div>
+        <!-- 닫기 버튼이 없는 이유: 이제 이 패널이 실험을 볼 수 있는 유일한 자리다(지도 아래 목록을 걷어냈다).
+             닫아 버리면 화면에서 실험이 통째로 사라진다. 대신 맨 아래 1·2·3 줄로 자리를 갈아 끼운다. -->
+        <div class="bncard" id="bncard" role="region" aria-label="병목 상세" aria-live="polite" hidden>
+          <div class="k">병목 <span id="bnc-n"></span></div>
+          <h3 id="bnc-t"></h3>
+          <div class="cl" id="bnc-s"></div>
+          <div class="why" id="bnc-w"></div>
+          <div class="lb">이 자리에서 한 실험 <span class="cnt" id="bnc-c"></span></div>
+          <div id="bnc-b"></div>
+          <div class="bnnav" id="bnc-nav"><div class="t">병목 지점</div></div>
+        </div>
       </div>
-      <div class="bn-cap">붉은 핀 = 실측으로 확인한 병목 지점 · 핀을 누르면 해당 실험 카드로 이동</div>
+      <div class="bn-cap">설계 · 구현 화면과 같은 구조를 위에서 내려다본 평면도 · 붉은 핀 = 실측으로 확인한 병목 지점 · 핀을 누르면 상세가 그 자리의 실험으로 바뀝니다</div>
     </div>
-    <div id="bneck-body"></div>
   </section>
 
   <section class="panel" id="p-dummy" role="tabpanel" hidden>
@@ -436,8 +532,19 @@ function el(t,a,txt){ const e=document.createElementNS(SVGNS,t);
 
 /* 아이소 투영 */
 const KX=0.86, KY=0.46, OX=560, OY=560;
-const px=(u,v)=>OX+(u-v)*KX;
-const py=(u,v,z)=>OY-(u+v)*KY-(z||0);
+/* ═══ 투영을 상수가 아니라 값으로 들고 있는 이유 ═══
+   병목 지도는 같은 씬을 '위에서 내려다본 평면' 으로 한 벌 더 그린다(전환 애니의 도착 그림).
+   두 그림은 배치·도형이 같고 투영만 다르므로, 투영을 이렇게 일반형으로 빼 두면
+   드로잉 코드를 한 줄도 안 고치고 같은 함수로 두 벌을 뽑을 수 있다.
+       px = cx + ax·u + bx·v
+       py = cy + ay·u + by·v − kz·z
+   아이소  : ax=KX  bx=−KX  cx=OX / ay=−KY by=−KY cy=OY / kz=1
+   평면    : ax=S   bx=0    cx=… / ay=0    by=−S   cy=…  / kz=0  ← 높이가 사라져 발자국만 남는다
+   PJ.iso 일 때는 옛 식을 그대로 탄다 — 설계 탭이 부동소수점 마지막 자리까지 지금과 같아야 하고,
+   칩 흐름 루프가 매 프레임 부르는 자리라 곱셈 두 번을 아끼는 뜻도 있다. */
+const PJ={iso:true, ax:KX, bx:-KX, cx:OX, ay:-KY, by:-KY, cy:OY, kz:1};
+const px=(u,v)=>PJ.iso?OX+(u-v)*KX:PJ.cx+PJ.ax*u+PJ.bx*v;
+const py=(u,v,z)=>PJ.iso?OY-(u+v)*KY-(z||0):PJ.cy+PJ.ay*u+PJ.by*v-PJ.kz*(z||0);
 const P=(u,v,z)=>px(u,v).toFixed(1)+","+py(u,v,z).toFixed(1);
 function poly(pts,fill,extra){ return el("polygon",Object.assign(
   {points:pts.map(p=>P(p[0],p[1],p[2]||0)).join(" "),fill},extra||{})); }
@@ -448,6 +555,12 @@ function poly(pts,fill,extra){ return el("polygon",Object.assign(
    (판에 같은 칸을 주면 칸 수가 폭발해 그림이 촘촘해진다).
    WIRE=0 이면 아래 prism 은 옛 경로 그대로라 설계 탭은 픽셀 단위로 지금과 같다. */
 let WIRE=0, WSTEP=26;
+/* ═══ 평면 모드 — 병목 지도의 '도착 그림'을 뽑을 때만 1 ═══
+   투영(PJ)만 바꿔서는 안 되고 값 몇 개를 같이 갈아야 평면도로 읽힌다(라벨 자리·구역 글자·접지 그림자).
+   ※ 절대 규칙: 여기서 바뀌는 것은 '값' 뿐이다. 도형을 더하거나 빼면 아이소 그림과 요소 수가 어긋나
+      전환 애니(같은 자리끼리 값을 이어 붙인다)가 통째로 성립하지 않는다.
+      빼고 싶은 것이 있으면 지우지 말고 opacity 를 0 으로 둘 것 — 그러면 보간이 알아서 페이드로 만든다. */
+let FLAT=0;
 const WF={fill:"rgba(120,195,255,.055)", edge:"rgba(150,210,255,.62)", grid:"rgba(140,205,255,.30)"};
 const WFO={t:"#16283f", l:"#0b1726", r:"#0f2033"};   /* 면 3개의 명도 3단 — 이래야 상자 모양이 남는다 */
 function wireBox(g,u,v,w,d,z0,t){
@@ -521,12 +634,18 @@ const RECV="#6cc7ff", SEND="#ffb648", STORE="#57d694";
 let drawZone="";
 function addShad(node){ const g=el("g"); if(drawZone) g.setAttribute("data-z",drawZone);
   g.appendChild(node); TS.appendChild(g); }
+/* 평면도에는 접지 그림자가 없다(빛이 정면이라 그림자가 도형 밑에 완전히 숨는다).
+   지우지 않고 opacity 만 0 으로 두는 것이 규칙 — 전환 애니가 이 값을 보간해 저절로 사라지게 한다. */
 function shadow(u,v,w,d){ addShad(el("ellipse",
   {cx:px(u+w/2,v+d/2), cy:py(u+w/2,v+d/2,0)+5, rx:(w+d)*.38, ry:(w+d)*.13,
-   fill:"#04060c", opacity:.42, filter:"url(#softShadow)"})); }
+   fill:"#04060c", opacity:FLAT?0:.42, filter:"url(#softShadow)"})); }
 
 /* ═══ 에디터 Export 데이터 ═══ */
-const LAYOUT={ mysql:{u:383,v:148}, dbw:{u:273,v:148}, game:{u:380,v:20}, sector:{u:310,v:-70},
+/* mysql 이 383,148 이 아니라 386,150 인 이유: 이 값이라야 중심이 (410,170) 이 되어
+   위 줄(타이밍휠·DB 워커 v=170)과 오른쪽 열(게임 루프 u=410)에 정확히 얹힌다.
+   예전 값에서는 중심이 (407,168) 이라 dbw→mysql 레일만 1.2° 기울어 있었다 —
+   아이소에서는 안 보이지만 평면도에서는 유일하게 축을 벗어난 선이 된다. */
+const LAYOUT={ mysql:{u:386,v:150}, dbw:{u:273,v:148}, game:{u:380,v:20}, sector:{u:310,v:-70},
   swapq:{u:310,v:42}, iocp:{u:190,v:50}, send:{u:168,v:-92}, accept:{u:55,v:36}, clients:{u:-63,v:21}, timer:{u:190,v:170} };
 const RAILS=[
   {from:"clients",to:"accept",color:"recv"},
@@ -545,6 +664,20 @@ const RAILS=[
    BODY 를 더 키우면 이 둘부터 다시 확인할 것(가장 먼저 부딪히는 라벨이다). */
 const LABELS={ mysql:{dx:5,dy:-32}, dbw:{dx:2,dy:-62}, game:{dx:50,dy:-32}, sector:{dx:41,dy:-18},
   swapq:{dx:49,dy:6}, iocp:{dx:20,dy:39}, send:{dx:52,dy:43}, accept:{dx:-52,dy:-26}, clients:{dx:0,dy:78}, timer:{dx:41,dy:-44} };
+/* 평면에서만 다시 잡는 라벨.
+   아이소에서는 라벨을 '몸통 높이만큼 띄운 자리' 에 놓는데, 평면에서는 그 높이가 없어서
+   대부분이 자기 발자국 위로 주저앉는다. 게다가 아이소에서 비어 있던 옆자리가
+   평면에서는 옆 노드 자리가 되기도 한다 — 실제로 부딪힌 곳:
+     accept  왼쪽으로 빼 뒀는데 평면에서는 그 자리가 클라이언트 무리 한복판이다 → 위로
+     swapq   오른쪽으로 빼 뒀는데 그쪽이 게임 루프 발자국이다 → 가운데 위로
+     mysql·dbw  블록 위가 'DATA BASE' 바닥 글자 자리다 → 각각 오른쪽·아래로
+     timer   위로 빼면 문자판(지름 76)과 판 윗변 사이에 3px 밖에 안 남는다 → 문자판 왼쪽으로.
+             높이는 Accept→타이밍휠 레일(v=170)보다 위로 — 그 자리에 두면 얇은 선이 글자를 관통해 취소선처럼 보인다
+     clients 무리 아래는 도킹한 복귀 레일이 끝나는 자리다 → 무리 위(판 윗변과 무리 사이)로.
+             덤으로 지도 왼쪽 위 빈 자리가 채워져 위 줄(타이밍휠·DB 워커·MySQL)과 균형이 맞는다
+   여기 없는 둘(game·sector)만 원래 오프셋 그대로도 안 겹친다. */
+const FLABELS={ mysql:{dx:85,dy:-8}, dbw:{dx:2,dy:28}, swapq:{dx:0,dy:-41}, iocp:{dx:20,dy:59},
+  send:{dx:52,dy:50}, accept:{dx:0,dy:-48}, clients:{dx:0,dy:-213}, timer:{dx:-120,dy:-30} };
 /* clients 만 36 → 78 로 내렸다: 무리를 판 크기에 맞게 키우면서 옛 자리가 큐브 한가운데가 됐다.
    78 = 무리의 화면상 아래끝(-v 끝 큐브 바닥) 바로 밑 — 판 앞꼭지 안쪽에 세 줄이 다 들어온다. */
 /* timer 는 오른쪽 위로 비켜 둔다(41,-44). 시계 문자판이 넓어서(반지름 R*KX≈32) 세로로만 띄우면
@@ -589,11 +722,26 @@ const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
        - NETWORK 90 = 거기서 왼쪽으로 더 뺀 자리. 판 중앙(140)으로 되돌리면 간격이 다시 무너진다.
      앞 줄 CLIENT 30 은 클라 판 끝(20)과 네트워크 판 시작(40) 사이, 두 판 경계의 한가운데다.
      글자를 키우거나 이름을 늘릴 거면 이 계산부터 다시 할 것. */
+/* f = 평면(병목 지도)에서 쓰는 자리·크기. 위 값들은 아이소에서 '판 밖' 으로 빼 둔 것이라
+   평면으로 펴면 판에서 한참 떨어진 허공에 남는다. 평면에서는 판 위가 비어서 안에 넣을 수 있다:
+     CLIENT  무리와 판 앞변 사이   NETWORK 노드 두 줄 사이
+     GAME    송신 큐와 게임 사이   DATA BASE 판 윗변의 오른쪽
+   셋은 ws28, DATA BASE 만 22 다. 저장 판은 220×100 으로 다른 판(200×320·200×200)보다 얕고,
+   윗변 왼쪽은 DB 워커 몸통이 차지한다 — 이 몸통은 히트박스 밖(판 뒤 +v 로 27)이라 좌표만 봐서는 안 보인다.
+   방 크기에 글자 크기가 따라가는 것은 평면도에서 오히려 자연스럽다.
+   레일이 글자를 가로지르는 자리가 있는데, 구역 글자는 맨 뒤 레이어(gZone)라 레일이 위로 지나간다 = 의도. */
 const ZONES=[
-  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:30, lv:-132, ws:40, wo:.3},
-  {u:40, v:-100,w:200,d:320,color:"net",  name:"NETWORK", lu:90, lv:251, ws:40, wo:.3},
-  {u:262,v:-98, w:200,d:200,color:"game", name:"GAME",    lu:354,lv:-136, ws:50, wo:.3},
-  {u:260,v:120, w:220,d:100,color:"store",name:"DATA BASE", lu:365,lv:251, ws:40, wo:.3} ];
+  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:30, lv:-132, ws:40, wo:.3, f:{lu:-40,lv:-85, ws:28}},
+  {u:40, v:-100,w:200,d:320,color:"net",  name:"NETWORK", lu:90, lv:251, ws:40, wo:.3, f:{lu:140,lv:112, ws:28}},
+  /* 게임 판은 저장 판과 좌우 변을, 클라·네트워크 판과 아래 변을 공유한다.
+     아이소에서는 원근이 어긋남을 덮어 줘서 262/-98/200 이어도 안 보였는데,
+     평면도에서는 변이 2px·18px 씩 어긋난 게 그대로 드러난다. 지금은 네 판의 틈이 전부 20 이다.
+     폭이 220 이 아니라 240 인 것은 바닥 글자 때문이다 — 220 에서는 'DATA BASE' 의 마지막 E 가
+     판 오른쪽 선을 7px 넘었다. 글자를 줄이는 대신 판을 늘렸다(오른쪽은 비어 있던 자리다).
+     ※ 글자 폭은 눈대중이나 계산식으로 잡으면 틀린다 — 반드시 렌더에서 text 의 getBBox 로 잴 것.
+       계산식(대문자 0.62em)은 실제보다 7px 좁게 나왔다. */
+  {u:260,v:-100,w:240,d:200,color:"game", name:"GAME",    lu:354,lv:-136, ws:50, wo:.3, f:{lu:322,lv:-3,  ws:28}},
+  {u:260,v:120, w:240,d:100,color:"store",name:"DATA BASE", lu:365,lv:251, ws:40, wo:.3, f:{lu:420,lv:207,ws:22}} ];
 /* ── 구역 강조용: 노드가 어느 구역 판 위에 서 있는지 = LAYOUT 좌표가 그 판 사각형 안인지로 판정 ──
    표를 따로 두지 않는 이유: 에디터에서 노드를 옮기면 구역도 저절로 따라와야 하기 때문.
    지금 10개 전부 판 하나에만 걸린다(겹치면 먼저 선언된 판을 따른다). */
@@ -610,7 +758,11 @@ function zonesOf(){ const out=[];
    ※ 바닥에 누운 글자가 똑바로 읽히는 방향은 이 판에서 딱 둘뿐이다 — 지금의 +u, 그리고 예전 -v.
       나머지 둘(-u, +v)로 돌리면 글자가 거꾸로 서거나 좌우가 뒤집힌다(행렬식 부호). */
 const ZW_LS=.04;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격이 같이 움직인다 */
-function floorMat(u,v){ return "matrix("+KX+","+(-KY)+","+KX+","+KY+","+px(u,v).toFixed(2)+","+py(u,v,0).toFixed(2)+")"; }
+/* 앞 두 열 = 글자의 가로축이 향할 방향(+u), 뒤 두 열 = 세로축(−v).
+   투영에서 바로 뽑으므로 평면에서는 저절로 matrix(S,0,0,S,…) = 기울기 없는 순수 확대가 된다.
+   아이소에서는 옛 상수식 matrix(KX,−KY,KX,KY,…) 와 같은 값이다. */
+function floorMat(u,v){ return "matrix("+PJ.ax.toFixed(4)+","+PJ.ay.toFixed(4)+","
+  +(-PJ.bx).toFixed(4)+","+(-PJ.by).toFixed(4)+","+px(u,v).toFixed(2)+","+py(u,v,0).toFixed(2)+")"; }
 
 /* Stage2 애니메이션이 잡아 쓸 노드 내부 참조 — 각 draw()에서 채운다 */
 let gameBeacon=null, sectorCells=null, iocpCells=null, twGeo=null;
@@ -745,16 +897,24 @@ const NODES=[
        한쪽으로만 늘리면 무리가 판 한 귀퉁이로 쏠리므로(+v 는 화면 왼쪽 위, -v 는 오른쪽 아래) 양쪽으로 늘린다.
        -v 쪽을 -18 에서 끊는 건 그 앞이 send→클라 복귀 3레인이 내려오는 자리이기 때문 — 레인을 큐브로 덮으면
        응답이 클라로 돌아가는 마지막 구간이 사라진다. 라벨 자리(LABELS.clients.dy)도 이 -v 끝에 맞춰 잡혀 있다. */
+    /* 레일이 멈추는 자리 = 무리 바깥 테두리.
+       다른 노드는 몸통 하나라 레일이 중심까지 들어가도 몸통에 가려 안 보이는데,
+       클라는 무리가 히트박스의 5배라 중심까지 오면 무리 한복판을 세로로 가른다
+       (평면도에서는 큐브가 속이 비어 그 선이 그대로 보인다).
+       아래 draw 의 CU0..CV1 과 같은 값에서 뽑으므로 무리를 키우면 도킹도 따라온다. */
+    dock(L){ const x=bo(L.u,66), y=bo(L.v,58);
+      return [x+bw(-14), y+bw(-18), x+bw(66+9), y+bw(126+9)]; },
     draw(g,u,v){ const CU0=-14, CU1=66, CV0=-18, CV1=126, x=bo(u,66), y=bo(v,58), cubes=[];
       for(let cu=CU0;cu<=CU1;cu+=14) for(let cv=CV0;cv<=CV1;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
       cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
       cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
   { name:"timer", card:"iocp", hit:[-22,-22,44,44,4],
     lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
-    draw(g,u,v){ const R=bw(32), cx=px(u,v), cy=py(u,v,bw(4));
-      addShad(el("ellipse",{cx,cy:cy+5,rx:R*KX*1.1,ry:R*KY*1.1,fill:"#05070d",opacity:.42}));
+    /* 문자판은 바닥에 놓인 원이라 반지름 두 개가 투영에서 나와야 한다(아이소 R·KX/R·KY → 평면 R·S/R·S = 정원) */
+    draw(g,u,v){ const R=bw(32), cx=px(u,v), cy=py(u,v,bw(4)), EX=PJ.ax, EY=-PJ.by;
+      addShad(el("ellipse",{cx,cy:cy+5,rx:R*EX*1.1,ry:R*EY*1.1,fill:"#05070d",opacity:FLAT?0:.42}));
       prism(g,u-bw(22),v-bw(22),bw(44),bw(44),0,bw(4),["#2a3450","#141c30","#1d2740"]);
-      const rx=R*KX*1.02, ry=R*KY*1.02; twGeo={cx,cy,rx,ry};
+      const rx=R*EX*1.02, ry=R*EY*1.02; twGeo={cx,cy,rx,ry};
       g.appendChild(el("ellipse",{cx,cy,rx,ry,fill:"#101828",stroke:"#3a4864","stroke-width":1.4}));
       for(let i=0;i<12;i++){ const a=i/12*Math.PI*2;
         g.appendChild(el("line",{x1:cx+Math.cos(a)*rx*0.78,y1:cy+Math.sin(a)*ry*0.78,
@@ -768,8 +928,25 @@ if(BODY!==1) NODES.forEach(n=>{ if(BODY_KEEP[n.name]) return; const h=n.hit;
   h[0]-=h[2]*(BODY-1)/2; h[2]*=BODY; h[1]-=h[3]*(BODY-1)/2; h[3]*=BODY; h[4]*=BODY; });
 const byName={}; NODES.forEach(n=>byName[n.name]=n);
 function center(n){ const L=LAYOUT[n.name], h=n.hit; return [L.u+h[0]+h[2]/2, L.v+h[1]+h[3]/2]; }
+/* 노드에 dock 사각형이 있으면 레일 끝점을 그 경계로 끌어낸다(안까지 안 들어간다).
+   레일 방향은 그대로라 축 정렬이 안 깨진다 — 옛 '부착점(anchors)' 실패의 원인이 방향 변경이었다.
+   칩 경로도 railPath 에서 나오므로 같이 짧아진다. */
+function dockTrim(n,pts,iE,iN){
+  if(!n||!n.dock) return;
+  const R=n.dock(LAYOUT[n.name]), E=pts[iE], N=pts[iN];
+  const du=N[0]-E[0], dv=N[1]-E[1];
+  if(E[0]<R[0]||E[0]>R[2]||E[1]<R[1]||E[1]>R[3]) return;   /* 애초에 안에 없으면 둘 것 없다 */
+  let t=1;
+  const hit=(s,x,y)=>{ if(s>0&&s<t&&x>=R[0]-.01&&x<=R[2]+.01&&y>=R[1]-.01&&y<=R[3]+.01) t=s; };
+  if(du) [R[0],R[2]].forEach(x=>{ const s=(x-E[0])/du; hit(s,x,E[1]+dv*s); });
+  if(dv) [R[1],R[3]].forEach(y=>{ const s=(y-E[1])/dv; hit(s,E[0]+du*s,y); });
+  if(t<1) pts[iE]=[E[0]+du*t, E[1]+dv*t];
+}
 function railPath(r){ const A=center(byName[r.from]), B=center(byName[r.to]);
-  return [A].concat((r.pts||[]).map(p=>[p.u,p.v])).concat([B]); }
+  const pts=[A].concat((r.pts||[]).map(p=>[p.u,p.v])).concat([B]);
+  dockTrim(byName[r.from], pts, 0, 1);
+  dockTrim(byName[r.to],   pts, pts.length-1, pts.length-2);
+  return pts; }
 
 /* ── 구역 바닥 (맨 뒤) — 구역 1개 = 래퍼 g 1개(테두리 반투명이 등장 웨이브에 안 덮이게) ── */
 function paintZones(){ ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el("g",{"data-z":z.color});
@@ -781,7 +958,7 @@ function paintZones(){ ZONES.forEach(z=>{ const p=ZPAL[z.color]||ZPAL.net, g=el(
     x2:px(z.u+z.w,z.v+z.d),y2:py(z.u+z.w,z.v+z.d,0),stroke:p.edge,"stroke-width":1.6,opacity:.42},ea)));
   /* 구역 이름은 바닥에 눕혀서 — 판·레일과 같은 평면에 깔리고 건물이 앞을 가리면 깊이감이 된다.
      래퍼 g 안이라 등장 웨이브가 opacity 를 덮어쓰지 않는다(반투명 유지) */
-  if(z.name){ const s=+z.ws||24, ls=ZW_LS*s, wg=el("g",{transform:floorMat(z.lu,z.lv)});
+  if(z.name){ const fz=(FLAT&&z.f)||z, s=+fz.ws||24, ls=ZW_LS*s, wg=el("g",{transform:floorMat(fz.lu,fz.lv)});
     wg.appendChild(el("text",{x:(ls/2).toFixed(1),y:(s*.34).toFixed(1),"text-anchor":"middle",
       "font-size":s,"font-weight":"900","letter-spacing":ls.toFixed(2),
       "font-family":"var(--sans)",fill:p.edge,opacity:(z.wo!=null?z.wo:.22)},z.name));
@@ -798,6 +975,12 @@ const LTINT={recv:"#16243a", send:"#2a2412", store:"#12281c"};   /* 초기본 RT
    교차 레일은 줄마다 이걸 한 번씩 불러서, 나중에 그린 줄이 앞 줄을 덮게 = 위로 지나가게 한다.
    knee(꺾임 좌표들)를 주면 그 반경 안쪽 구간에만 줄 밑에 살짝 넓은 어두운 띠를 먼저 깐다
    — 겹친 자리에서 어느 줄이 위인지 보이라고. 직선 구간의 모습은 그대로다. */
+/* 채널 모서리 두 줄 중 어느 쪽이 '화면 위' 인가 — 그림자/빛을 나눠 칠하는 기준.
+   원래는 py 두 개를 비교했는데, 아이소에서 그 비교는 (pu+pv)>=0 과 정확히 같은 식이다(KY>0).
+   투영에 안 기대는 쪽으로 바꾼 이유: 병목 지도의 평면 사본에서는 py 가 u 를 안 보므로
+   세로 레일에서 두 값이 같아져 판정이 뒤집힌다. 그러면 아이소 그림과 평면 그림의
+   '같은 자리' 선이 서로 반대쪽 모서리가 되어, 전환 애니에서 선 하나가 레일을 가로질러 미끄러진다. */
+const UPSIGN=(pu,pv)=>(pu+pv>=0?1:-1);
 const XSHADE=.45, XSHADE_R=38, XSHADE_W=2.5;
 function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
   if(knee) knee.forEach(function(C){ const hs=h+XSHADE_W;
@@ -816,7 +999,7 @@ function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
     [s.B[0]-s.pu*h,s.B[1]-s.pv*h],[s.A[0]-s.pu*h,s.A[1]-s.pv*h]],tint)));
   for(let i=1;i<pts.length-1;i++){ const q=pts[i];
     g.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
-  S.forEach(s=>{ const upSign = py(s.A[0]+s.pu,s.A[1]+s.pv,0)<=py(s.A[0]-s.pu,s.A[1]-s.pv,0) ? 1 : -1;
+  S.forEach(s=>{ const upSign = UPSIGN(s.pu,s.pv);
     [[1,true],[-1,false]].forEach(q=>{ const e=q[0]*upSign*h, up=q[1];
       g.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
         x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
@@ -860,7 +1043,7 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
       g.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
         x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
   /* 4) 채널 모서리 음영(그루브) — 줄마다: 화면상 위 모서리=그림자·아래=빛 */
-  segs.forEach(s=>{ const upSign = py(s.A[0]+s.pu,s.A[1]+s.pv,0)<=py(s.A[0]-s.pu,s.A[1]-s.pv,0) ? 1 : -1;
+  segs.forEach(s=>{ const upSign = UPSIGN(s.pu,s.pv);
     offs.forEach(c=>{ [[1,true],[-1,false]].forEach(q=>{ const e=c+q[0]*upSign*subW/2, up=q[1];
       g.appendChild(el("line",{x1:px(s.A[0]+s.pu*e,s.A[1]+s.pv*e),y1:py(s.A[0]+s.pu*e,s.A[1]+s.pv*e,0),
         x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
@@ -879,7 +1062,8 @@ paintBodies();
 
 /* ── 라벨 (LABELS 오프셋 · texts 배열이 있으면 해당 줄 글자를 덮어씀 — 에디터에서 수정한 문구) ── */
 function paintLabels(){
-NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, off=LABELS[n.name]||{dx:0,dy:0};
+NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, base=LABELS[n.name]||{dx:0,dy:0},
+    fo=FLAT&&FLABELS[n.name], off=fo?{dx:fo.dx,dy:fo.dy,texts:base.texts}:base;
   const ax=px(c[0],c[1])+off.dx, ay=py(c[0],c[1],az)+off.dy, z=zoneOf(n.name);
   n.lab.lines.forEach((ln,i)=> TL.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
     "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)",
@@ -896,7 +1080,7 @@ const ND={
   iocp:{nm:"IOCP 워커",x:"×N",zone:"네트워크",impl:"완료 통지 처리와 패킷 파싱. 워커는 파싱한 이벤트를 공유 큐에 쌓고, 게임 루프는 틱마다 std::queue::swap 한 번으로 큐를 통째로 로컬에 넘겨받아(락 1회·무복사) 락 없이 소비합니다. 세션당 I/O 1회 제한·Timing Wheel 타임아웃도 여기서 얽힙니다.",
     docs:["세션당 Recv/Send 1회 제한","Timing Wheel (타임아웃)","Worker→Game SwapQ"],bns:[]},
   send:{nm:"Send 워커",x:"×3",zone:"네트워크",impl:"송신 제출을 게임 틱에서 떼어 3개 워커로 분산합니다. uniqueId%3 고정 배분(sessionId 상위 인덱스 비트 누수 방지).",
-    docs:["SendThread 분리 유무와 이슈"],bns:[["ok","Send Coalescing — syscall −94%"],["ok","SendThread 분리 — p99 −56%"],["rj","SendQ LockFree — 기각"],["rj","SO_SNDBUF=0 — 기각"],["ok","WT×K 스윕 — WT4·K2"]]},
+    docs:["SendThread 분리 유무와 이슈"],bns:[["ok","Send Coalescing — syscall −94%"],["ok","SendThread 분리 — tick p99 −56%"],["rj","SendQ LockFree — 기각"],["rj","SO_SNDBUF=0 — 기각"],["ok","WT×K 스윕 — WT4·K3"]]},
   loop:{nm:"게임 루프",x:"×1",zone:"게임",impl:"모든 게임 로직이 도는 단일 코어. 섹터 격자 관심영역(AOI), per-player viewlist 미채택 근거가 핵심입니다.",
     docs:["섹터/맵 크기 · viewlist 미채택 이유"],bns:[["ok","섹터 묶음 패킷 — tick p99 −83%"],["ok","멤버십 팬아웃 dedup+묶음 — −68%"],["ok","수신섹터 묶음 — 복사 −88%·게임루프 0.57→0.21코어"]]},
   dbw:{nm:"DB 워커",x:"×1",zone:"데이터베이스",impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). 워커는 쌓인 큐를 swap 한 번으로 통째 인출해 UPSERT 합니다 — SwapQ·Send 워커와 같은 패턴입니다. accountId%K 풀로 확장 가능하며 현재 1개 운영.",
@@ -909,7 +1093,7 @@ function openCard(k){ const n=ND[k]; if(!n) return;
   let h='<span class="k">'+n.zone+' 스레드</span><h3>'+n.nm+'<span>'+(n.x||"")+'</span></h3><p class="cl">'+n.impl+'</p>';
   if(n.docs.length) h+='<div class="lb">설계 문서 '+n.docs.length+'</div>'+n.docs.map(function(d){return '<div class="it"><span>'+d+'</span></div>';}).join("");
   if(n.bns.length) h+='<div class="lb">병목 실험 '+n.bns.length+'</div>'+n.bns.map(function(x){return '<div class="it"><span class="rs '+x[0]+'">'+(x[0]==="ok"?"채택":"기각")+'</span><span>'+x[1]+'</span></div>';}).join("");
-  if(!n.docs.length&&!n.bns.length) h+='<div class="lb">연결 문서</div><div class="none">구현 노트가 이 자리에 옵니다.</div>';
+  if(!n.docs.length&&!n.bns.length) h+='<div class="lb">연결 문서</div><div class="none">저장소 자체라 별도 구현 노트가 없습니다 — 설계는 DB Worker 노드에 있습니다.</div>';
   cbd.innerHTML=h; card.classList.add("on"); if(legendEl) legendEl.style.display="none"; }
 if(card){ card.addEventListener("click",function(e){ if(e.target.closest("[data-close]")) closeCard(); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeCard(); }); }
@@ -1120,8 +1304,11 @@ function storeOut(){ let rel=0;
 
 function frame(now){
   if(!run) return;
-  /* 다른 탭을 보는 동안은 계산만 건너뛴다(루프는 유지) */
-  if(pBuild && pBuild.hidden){ prev=now; rafId=requestAnimationFrame(frame); return; }
+  /* 다른 탭을 보는 동안은 루프 자체를 세운다.
+     예전에는 계산만 건너뛰고 rAF 는 계속 걸었는데, 그러면 아무 일도 안 하면서 초당 60번
+     프레임 수명주기를 깨운다(도형 1,800개짜리 문서라 공짜가 아니다).
+     다시 켜는 것은 탭 전환 쪽(paint)이 맡는다 — 켜는 사람이 없으면 흐름이 영영 안 돈다. */
+  if(pBuild && pBuild.hidden){ run=false; rafId=0; return; }
   const dt=Math.min(.05,(now-prev)/1000); prev=now; t+=dt;
 
   /* ── 방출 (수신만 무조건 — 나머지는 클라 데이터가 그 지점에 닿은 뒤부터) ── */
@@ -1289,6 +1476,80 @@ window.__flowReset=function(){
   const bn=document.getElementById("bnscene"); if(!bn) return;
   const bs=document.getElementById("bnsolid"), bp=document.getElementById("bnpins");
   const stage=document.querySelector(".bn-stage");
+  /* ═══ 이 판은 첫 화면에 안 보인다 → 첫 페인트 뒤로 미룬다 ═══
+     지도 두 벌(보이는 것)과 평면 사본 두 벌, 값 추출까지 합쳐 20ms 이고 도형이 1,077개다.
+     그런데 처음 열리는 것은 '설계 · 구현' 탭이라 이 판은 그때 단 한 픽셀도 안 그려진다.
+     그래서 브라우저가 한가해질 때 짓고, 그 전에 사용자가 병목 탭을 누르면 그 자리에서 바로 짓는다.
+     (미리 짓기가 먼저 끝나는 게 보통이라, 누르는 순간에 짓는 일은 거의 없다.) */
+  let built=false, setFlat=function(){}, MORPHABLE=false, realIntro=function(){};
+  const pinEls={};
+
+  /* ═══ 실험 데이터 — 오른쪽 패널이 유일한 표시 자리다 ═══
+     예전에는 지도 아래에 카드 목록이 한 벌 더 있었고 이 패널은 그것을 복제해 썼다. 목록을 걷어내면서
+     데이터도 이리로 옮겼다(복제 대상이 없어졌으므로). loc = 핀 번호 — 어느 자리에서 한 실험인지.
+     r 이 있으면 채택, 없으면 기각이다. */
+  const EXPS=[
+    {loc:"1", n:"Send Coalescing", r:"syscall −94%", m:"틱 단위로 송신을 모아 WSASend 호출을 배칭", ex:"tick p99 65→9ms"},
+    {loc:"1", n:"SendWorker 분리 + WT×K", r:"tick p99 −56%", m:"송신을 게임 틱에서 떼어 K워커로 분산 (WT4·K3)", ex:"워커 동시실행 간섭까지 스윕으로 규명"},
+    {loc:"1", n:"SendQ Lock-Free", m:"락 경합이 0.08ms로 고정 — 락프리 이득이 없음", ex:"실측 없이 병목이라 단정 안 함"},
+    {loc:"1", n:"SO_SNDBUF=0", m:"복사 비용이 워커로 이전될 뿐, 시스템 CPU +75%", ex:"송신 실험은 worker CPU·완료율 함께 봐야"},
+    {loc:"2", n:"멤버십 팬아웃 묶음", r:"membership −68%", m:"아웃바운드 dedup + 인바운드 1버퍼 배칭", ex:"gameloop 0.86→0.49코어"},
+    {loc:"3", n:"섹터 묶음 패킷", r:"tick p99 −83%", m:"틱 끝에 섹터별로 한 번에 묶어 복사 횟수 상한 고정", ex:"복사 병목 75.7→42.7%"},
+    {loc:"3", n:"브로드캐스트 수신섹터 묶음", r:"복사 −88%", m:"대상마다 세션핀 고정비를 수신섹터 연접 배칭으로", ex:"gameloop 0.57→0.21코어"},
+  ];
+  function expHtml(e){
+    const ok=!!e.r;
+    return '<div class="exp'+(ok?'':' rj')+'"><div class="top"><span class="rs '+(ok?'ok':'rj')+'">'+(ok?"채택":"기각")+'</span>'+
+      '<span class="nm">'+e.n+'</span></div><div class="r">'+(ok?e.r:"기각")+'</div>'+
+      '<div class="m">'+e.m+'</div><div class="ex'+(/[가-힣]/.test(e.ex)?" ko":"")+'">'+e.ex+'</div></div>';
+  }
+
+  /* ═══ 핀 클릭 → 오른쪽 패널 교체 ═══
+     예전에는 아래 실험 목록으로 스크롤해 카드를 번쩍이게 했다. 그건 '지도에서 눈을 떼게' 만든다 —
+     어느 자리를 눌렀는지 확인하려면 다시 올라와야 했다. 지도를 그대로 둔 채 옆에서 갈아 끼우는 쪽이 맞다. */
+  const bnCard=document.getElementById("bncard");
+  let pinDefs=[];        /* buildBody 가 PINS 를 만들면서 채운다 — 아래 전환 줄이 이 배열을 쓴다 */
+  function openCard(p){
+    if(!bnCard) return;
+    document.getElementById("bnc-n").textContent=p.n;
+    document.getElementById("bnc-t").textContent=p.name;
+    document.getElementById("bnc-s").textContent=p.sub;
+    document.getElementById("bnc-w").textContent=p.why||"";
+    const mine=EXPS.filter(function(e){ return e.loc===p.n; });
+    /* 개수를 라벨에 박아 둔다 — 목록이 스크롤되므로, 몇 건이 더 있는지가 스크롤바 말고도 보여야 한다 */
+    document.getElementById("bnc-c").textContent=mine.length;
+    const body=document.getElementById("bnc-b");
+    body.innerHTML=mine.map(expHtml).join("");
+    body.setAttribute("data-n",mine.length);   /* 실험이 적은 자리는 CSS 가 수치를 키운다 */
+    body.scrollTop=0;
+    const nav=document.getElementById("bnc-nav");
+    if(nav) [].slice.call(nav.querySelectorAll("button")).forEach(function(b){
+      b.classList.toggle("act", b.getAttribute("data-loc")===p.n); });
+    bnCard.hidden=false;
+    requestAnimationFrame(function(){ bnCard.classList.add("on"); });   /* hidden 을 뗀 다음 프레임이라야 전이가 걸린다 */
+    for(var k in pinEls) pinEls[k].classList.toggle("lit", k===p.n);
+  }
+  /* 패널 아래 전환 줄 — 핀을 못 찾은 사람도 여기서 자리를 옮길 수 있다 */
+  function buildNav(){
+    const nav=document.getElementById("bnc-nav"); if(!nav||nav.dataset.built) return;
+    nav.dataset.built="1";
+    pinDefs.forEach(function(p){
+      const b=document.createElement("button");
+      b.type="button"; b.setAttribute("data-loc",p.n);
+      b.innerHTML='<i>'+p.n+'</i>'+p.name+'<span>'+p.sub+'</span>';
+      b.addEventListener("click",function(){ openCard(p); });
+      nav.appendChild(b);
+    });
+  }
+  /* 사용자가 닫는 조작은 없다(닫으면 실험이 화면에서 사라진다). 이건 탭에 다시 들어올 때
+     진입 애니 동안만 감춰 두는 용도 — 핀이 꽂히는 시점에 openCard 가 다시 켠다. */
+  function closeCard(){
+    if(!bnCard) return;
+    bnCard.classList.remove("on"); bnCard.hidden=true;
+    for(var k in pinEls) pinEls[k].classList.remove("lit");
+  }
+  function build(){ if(built) return; built=true; buildBody(); }
+  function buildBody(){
   /* 복제(cloneNode)가 아니라 같은 코드를 이 SVG 로 한 번 더 돌린다 — 면을 칠하는 방식이 달라서 복제로는 안 된다.
      배치·각도·도형은 설계 탭과 완전히 같고, 청사진으로 칠하는 것만 다르다.
 
@@ -1300,29 +1561,53 @@ window.__flowReset=function(){
      '설계 → 병목' 으로 변하는 장면을 만들려면 설계 모습 한 벌이 실제로 있어야 한다.
      판을 나눠 두는 이유는 성능이다 — 한 SVG 안에서 무엇 하나라도 움직이면 그 SVG 전체를 다시 그린다.
      판을 나누면 움직이는 것은 HTML 요소의 transform/opacity 뿐이라 이미 그려 둔 그림을 옮기기만 한다. */
-  const solid=el("g",{class:"solid"});
-  const sz=el("g"), ss=el("g"), sr=el("g"), sb=el("g"), sl=el("g");
-  [sz,ss,sr,sb,sl].forEach(function(x){ solid.appendChild(x); }); bs.appendChild(solid);
-  const ghost=el("g",{class:"ghost"});
-  const gz=el("g"), gr=el("g"), gb=el("g"), gl=el("g");
-  [gz,gr,gb,gl].forEach(function(x){ ghost.appendChild(x); }); bn.appendChild(ghost);
+  /* 판 한 벌 = 레이어 5장. 같은 구성으로 아이소·평면 두 번 그린다(뒤에서 값끼리 이어 붙이려고). */
+  function plate(host,wire){
+    const root=el("g"), L=[el("g"),el("g"),el("g"),el("g"),el("g")];
+    L.forEach(function(x){ root.appendChild(x); });
+    const oz=TZ, osh=TS, orl=TR, ob=TB, ol=TL;
+    TZ=L[0]; TR=L[2]; TB=L[3]; TL=L[4];
+    /* 청사진에 접지 그림자는 없다 → 어디에도 안 붙는 g 로 흘려보낸다(그래서 레이어가 4장으로 보인다) */
+    TS = wire ? el("g") : L[1];
+    if(wire){ WIRE=1;
+      WSTEP=0;  paintZones();                  /* 구역 판은 격자 없이 면만 */
+      WSTEP=26; paintRails(); paintBodies(); paintLabels();
+      WIRE=0;
+    } else { paintZones(); paintRails(); paintBodies(); paintLabels(); }
+    TZ=oz; TS=osh; TR=orl; TB=ob; TL=ol;
+    if(wire){
+      wireify(L[3],false); wireify(L[2],true);
+      /* 비콘 자리는 핀 ②가 대신함 */
+      [].slice.call(root.querySelectorAll(".beacon")).forEach(function(e){ e.parentNode.removeChild(e); });
+    }
+    if(host) host.appendChild(root);
+    return root;
+  }
+
+  /* ═══ 평면 투영 — 위에서 똑바로 내려다본 자세 ═══
+     u 는 화면 오른쪽, v 는 화면 위. 아이소에서 회전만으로 갈 수 있는 조합이 이것뿐이라
+     전환 도중 그림이 뒤집히지 않는다(u 오른쪽·v 아래는 거울상이라 중간에 뒤집힘이 생긴다).
+     배치를 격자에 맞춰 놨던 덕에 펴면 세 줄이 된다:
+       위   Timing Wheel · DB 워커 · MySQL
+       가운데 클라 → Accept → IOCP → SwapQ → 게임 루프   (수신)
+       아래  Send 워커 ← 송신 큐                          (응답)
+     1.36 과 원점 두 개는 '구역판 + 발자국 + 라벨' 을 전부 넣고 판 한가운데 오도록 푼 값이다. */
+  const FPJ={iso:false, ax:1.36, bx:0, cx:391.84, ay:0, by:-1.36, cy:496.25, kz:0};
+  const fx=function(u){ return FPJ.cx+FPJ.ax*u; };
+  const fy=function(v){ return FPJ.cy+FPJ.by*v; };
 
   /* draw() 는 애니메이션이 잡아 쓸 참조를 전역에 남긴다 — 두 번째 그리기가 덮으면 설계 탭 애니가 죽는다 */
   const keep=[gameBeacon,sectorCells,iocpCells,twGeo,swapqLit,dbwLit];
-  const oz=TZ, osh=TS, orl=TR, ob=TB, ol=TL;
-  /* ① 설계 탭 사본 — 기본 경로(WIRE=0) 그대로. 히트박스는 이 네 함수 밖에서 만들어지므로 안 늘어난다 */
-  TZ=sz; TS=ss; TR=sr; TB=sb; TL=sl;
-  paintZones(); paintRails(); paintBodies(); paintLabels();
-  /* ② 청사진 */
-  TZ=gz; TS=el("g"); TR=gr; TB=gb; TL=gl;   /* 청사진에 접지 그림자는 없다 → 어디에도 안 붙는 g 로 흘려보낸다 */
-  WIRE=1;
-  WSTEP=0;  paintZones();                    /* 구역 판은 격자 없이 면만 */
-  WSTEP=26; paintRails(); paintBodies(); paintLabels();
-  WIRE=0;
-  TZ=oz; TS=osh; TR=orl; TB=ob; TL=ol;
+  const solid=plate(bs,false), ghost=plate(bn,true);   /* ① 설계 모습  ② 청사진 — 둘 다 아이소 */
+  solid.setAttribute("class","solid"); ghost.setAttribute("class","ghost");
+  /* ③④ 같은 두 벌을 평면으로. 문서에 안 붙인다 — 숫자만 빼 쓰고 버릴 그림이다. */
+  const OPJ={}; for(var pk in PJ) OPJ[pk]=PJ[pk];
+  for(var fk in FPJ) PJ[fk]=FPJ[fk];
+  FLAT=1;
+  const solidF=plate(null,false), ghostF=plate(null,true);
+  FLAT=0;
+  for(var rk in OPJ) PJ[rk]=OPJ[rk];
   gameBeacon=keep[0]; sectorCells=keep[1]; iocpCells=keep[2]; twGeo=keep[3]; swapqLit=keep[4]; dbwLit=keep[5];
-  wireify(gb,false); wireify(gr,true);
-  [].slice.call(ghost.querySelectorAll(".beacon")).forEach(function(e){ e.parentNode.removeChild(e); });   /* 비콘 자리는 핀 ②가 대신함 */
 
   /* 청사진의 단색 물들이기는 원래 CSS filter 한 줄이었다. 그런데 474개 요소를 담은 그룹에 필터가 걸리면
      브라우저가 프레임마다 그룹을 통째로 오프스크린에 다시 그린 뒤 색변환을 한다 —
@@ -1348,34 +1633,83 @@ window.__flowReset=function(){
     ["fill","stroke"].forEach(function(k){
       const n=blueprint(e.getAttribute(k)); if(n) e.setAttribute(k,n); }); });
 
+  /* ═══════════ 평면화 — 아이소 그림과 평면 그림 사이를 오간다 ═══════════
+     아이소를 평면으로 펴는 것은 기하가 바뀌는 일이라 CSS transform 으로는 안 된다.
+     높이 z 가 화면 세로에 섞여 있어서, 평면을 펴는 변환이 건물 높이까지 같이 펴 버린다.
+     그렇다고 매 프레임 씬을 다시 그릴 수도 없다(판 두 벌 ≈950개 도형).
+
+     그래서 두 그림을 미리 그려 놓고 '숫자만' 이어 붙인다.
+     같은 코드가 만든 두 트리라 요소가 1:1 로 맞고, 자리마다 값이 어떻게 달라지는지만 표로 떠 두면
+     매 프레임 할 일은 곱셈과 문자열 조립뿐이다.
+     ※ 두 그림 사이를 직선으로 오가면 중간 프레임도 전부 멀쩡한 평행투영이 된다(2×3 행렬이면 다 유효).
+       카메라를 실제로 돌리는 경로도 만들어 봤는데, 도중에 직사각형의 대각선이 세로로 서면서
+       그림 세로가 414 → 561 로 부풀어 판을 넘었다. 직선 경로는 428 → 474 로 단조롭게 는다. */
+  const MATTR=["points","x1","y1","x2","y2","cx","cy","rx","ry","r","x","y",
+               "transform","font-size","letter-spacing","opacity"];
+  const NUMS=/-?\d*\.?\d+(?:e[-+]?\d+)?/g;
+  const tracks=[]; let mism=0;
+  function collect(a,b){
+    if(!a||!b||a.tagName!==b.tagName){ mism++; return; }
+    for(let i=0;i<MATTR.length;i++){ const k=MATTR[i];
+      const va=a.getAttribute(k), vb=b.getAttribute(k);
+      if(va==null||vb==null||va===vb) continue;
+      const na=va.match(NUMS), nb=vb.match(NUMS);
+      if(!na||!nb||na.length!==nb.length){ mism++; continue; }
+      tracks.push({e:a, k:k, p:va.split(NUMS), f:na.map(Number), t:nb.map(Number)});
+    }
+    const ca=a.children, cb=b.children;
+    if(ca.length!==cb.length){ mism++; return; }
+    for(let i=0;i<ca.length;i++) collect(ca[i],cb[i]);
+  }
+  collect(solid,solidF); collect(ghost,ghostF);
+  /* 두 트리가 안 맞으면(드로잉 코드에 도형을 더한 것이다) 애니를 포기하고 평면으로 고정한다 —
+     어긋난 채 이어 붙이면 엉뚱한 도형끼리 섞여 그림이 무너진다. */
+  MORPHABLE = (mism===0 && tracks.length>0);
+  setFlat = function(k){
+    if(!MORPHABLE) return;
+    for(let i=0;i<tracks.length;i++){ const tr=tracks[i], f=tr.f, t=tr.t, p=tr.p;
+      let s=p[0];
+      for(let j=0;j<f.length;j++) s += Math.round((f[j]+(t[j]-f[j])*k)*100)/100 + p[j+1];
+      tr.e.setAttribute(tr.k,s); }
+  };
+  if(!MORPHABLE && window.console) console.warn("[bneck] 평면화 보간 불가 — 두 그림의 구조가 다르다",mism);
+
   /* 핀 3곳 = 실험이 실제로 붙었던 자리 (카드 배지 1·2·3과 1:1).
      핀 이름은 노드 라벨과 겹치지 않게 '병목 현상'으로 짓는다(게임 루프 옆에 또 게임 루프 금지) */
   const HOT="#ff6b52";
+  /* 좌표는 평면 기준이다 — 핀은 평면화가 거의 끝난 뒤에 꽂히므로 도중 자세를 따라다닐 필요가 없다.
+     지면에 놓인 테는 평면에서 정원이 된다(아이소의 rx:ry=2:1 눌린 타원이 아니라).
+     ②만 막대를 76 으로 세운 것은, 게임 루프 라벨이 그 자리 오른쪽에 있어 배지 이름표와 붙기 때문. */
+  /* why = 이 자리가 왜 병목이었나. 실험 이름만으로는 '왜 하필 여기' 가 안 보인다 —
+     지도에서 핀을 누르는 이유가 이 한 줄이다(실험 목록은 아래에 있던 것을 그대로 옮겨 온 것뿐이므로). */
   const PINS=[
-    {n:"1", name:"송신 경로",        sub:"채택 2 · 기각 2", u:190, v:-70, z:15, h:60, rx:15, side:-1},
-    {n:"2", name:"멤버십 팬아웃",    sub:"채택 1",          u:410, v:50,  z:58, h:64, rx:20, side:1},
-    {n:"3", name:"브로드캐스트 복사", sub:"채택 2",          u:310, v:-70, z:7,  h:54, rx:17, side:1},
+    {n:"1", name:"송신 경로",        sub:"채택 2 · 기각 2", u:190, v:-70, h:60, rx:15, side:-1,
+     why:"송신이 게임 틱에 매달려 있었다 — 클라 수만큼 늘어나는 send 호출을 틱이 그대로 떠안는 자리."},
+    {n:"2", name:"멤버십 팬아웃",    sub:"채택 1",          u:410, v:50,  h:76, rx:20, side:1,
+     why:"게임 루프 안에서 도는 대상 계산이라 틱 시간을 직접 먹는다 — 단일 코어의 예산을 깎아먹던 자리."},
+    {n:"3", name:"브로드캐스트 복사", sub:"채택 2",          u:310, v:-70, h:54, rx:17, side:1,
+     why:"한 번 만든 패킷을 대상 수만큼 다시 복사했다 — 동접이 오를수록 복사가 제곱으로 붙던 자리."},
   ];
+  pinDefs=PINS; buildNav();
   /* 톤이 화면 전체에서 '한 번에' 바뀌면 두 그림을 겹쳐 놓고 밝기만 만진 것으로 보인다.
      클라이언트 단(좌하)에서 바깥으로 번지게 한다 — 패킷이 들어오는 자리에서 시작해 왼쪽에서
      오른쪽으로 훑어 나간다. 설계 탭 등장 웨이브(좌하 클라 → 우상 MySQL)와 같은 방향이라
      두 화면이 같은 문법으로 읽힌다. 원형 창의 중심이 이 좌표다.
      ※ 한때 병목 1번지(게임 루프)에서 시작했는데, 그 점이 화면 가로 69.5% 자리라 오른쪽부터 덮였다.
        클라이언트는 29.2% — 게임 루프의 거의 정확한 거울점이라 방향만 깔끔하게 뒤집힌다. */
-  const VX=212, VY=172, VW=946, VH=500;          /* 이 SVG 의 viewBox */
+  const VX=212, VY=172, VW=900, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로 */
   const CX=px(-63,21), CY=py(-63,21,12);         /* 클라이언트 단 = 패킷이 들어오는 자리 (좌하) */
 
   const gPins=el("g",{class:"pins"}); bp.appendChild(gPins);
-  const pinEls={};
   PINS.forEach(function(p,i){
-    const x=px(p.u,p.v), yb=py(p.u,p.v,p.z), yt=yb-p.h;
+    const x=fx(p.u), yb=fy(p.v), yt=yb-p.h;
     const g=el("g",{class:"pin","data-loc":p.n,tabindex:"0",role:"button",
-      "aria-label":"병목 "+p.n+" "+p.name+" — 해당 실험 카드로 이동"});
-    /* 톤이 세 자리를 다 지난 뒤(≈0.53s)부터 꽂는다 — 아직 안 바뀐 땅에 핀이 먼저 서면 순서가 어긋난다.
-       꽂는 순서는 톤이 닿는 순서(①③②)가 아니라 배지 번호 순서다. 카드 1·2·3 과 짝이라 세는 순서가 먼저다. */
-    g.style.animationDelay=(0.55+i*0.08)+"s";
-    g.appendChild(el("ellipse",{class:"pin-base",cx:x,cy:yb,rx:p.rx,ry:p.rx/2,fill:"none",stroke:HOT,"stroke-width":1.6,opacity:".85"}));
-    const pulse=el("ellipse",{class:"pin-pulse",cx:x,cy:yb,rx:p.rx,ry:p.rx/2,fill:"none",stroke:HOT,"stroke-width":1.4});
+      "aria-label":"병목 "+p.n+" "+p.name+" — 오른쪽 패널을 이 자리의 실험으로"});
+    /* 땅이 다 펴진 뒤에 꽂는다 — 아직 기울어 있는 땅에 평면 좌표의 핀이 먼저 서면 자리가 어긋나 보인다.
+       꽂는 순서는 배지 번호 순서다. 카드 1·2·3 과 짝이라 세는 순서가 먼저다. */
+    g.style.animationDelay=(1.34+i*0.08)+"s";
+    g.appendChild(el("ellipse",{class:"pin-base",cx:x,cy:yb,rx:p.rx,ry:p.rx,fill:"none",stroke:HOT,"stroke-width":1.6,opacity:".85"}));
+    const pulse=el("ellipse",{class:"pin-pulse",cx:x,cy:yb,rx:p.rx,ry:p.rx,fill:"none",stroke:HOT,"stroke-width":1.4});
     pulse.style.animationDelay=(i*0.55)+"s"; g.appendChild(pulse);
     g.appendChild(el("line",{x1:x,y1:yb-2,x2:x,y2:yt+11,stroke:HOT,"stroke-width":1.6,opacity:".7"}));
     g.appendChild(el("circle",{class:"pin-badge",cx:x,cy:yt,r:11,fill:"#241014",stroke:HOT,"stroke-width":1.8}));
@@ -1383,32 +1717,64 @@ window.__flowReset=function(){
     const tx=x+p.side*19, anch=p.side>0?"start":"end";
     g.appendChild(el("text",{x:tx,y:yt-1,"text-anchor":anch,"font-size":12.5,"font-weight":"800",fill:"#ffd9cf","font-family":"var(--sans)"},p.name));
     g.appendChild(el("text",{x:tx,y:yt+13,"text-anchor":anch,"font-size":10,"font-weight":"600",fill:"#9aa7bd","font-family":"var(--sans)"},p.sub));
-    function go(){ focusExp(p.n); }
+    function go(){ openCard(p); }
     g.addEventListener("click",go);
     g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     gPins.appendChild(g); pinEls[p.n]=g;
   });
-  function focusExp(loc){
-    const cards=[].slice.call(document.querySelectorAll('#bneck-body .exp[data-loc="'+loc+'"]'));
-    if(!cards.length) return;
-    cards[0].scrollIntoView({behavior:"smooth",block:"center"});
-    cards.forEach(function(c){ c.classList.remove("hl"); void c.offsetWidth; c.classList.add("hl"); });
-  }
   /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다.
      클래스를 뺐다가 강제 리플로우 뒤 다시 걸어야 두 번째 진입부터도 처음부터 재생된다.
 
      여기서 재는 값 두 묶음:
        ① 원형 창 — 게임 루프 점을 화면 좌표로 옮기고, 씬 네 귀퉁이를 다 덮는 지름을 구한다.
        ② 카메라 — fromRect(방금까지 보이던 설계 탭 씬의 위치·크기)에 그대로 겹치는 transform.
-     둘 다 상수로 못 박는다. 설계 씬은 .stage(최대 1860) 폭을 다 쓰고 병목 씬은 .bn-shift(1180) 안에
-     들어가서, 창 크기마다 어긋나는 폭이 달라진다(viewBox 만 보고 계산하면 틀린다). */
+     둘 다 상수로 못 박는다. 설계 씬은 .stage(최대 1860) 폭을 다 쓰고 병목 그림은 그 63% 만 쓰므로,
+     창 크기마다 어긋나는 폭이 달라진다(viewBox 만 보고 계산하면 틀린다). */
   const tilt=stage.querySelector(".bn-tilt");
-  let bnTimer=0, bnRaf=0;
-  window.playBneckIntro=function(fromRect){
+  let bnTimer=0, bnRaf=0, bnOpen=0;
+
+  /* ── 평면화 구동 ──
+     CSS 로는 못 하는 유일한 조각이라 여기만 rAF 다. 그래서 '모션 줄이기' 도 직접 막아야 한다
+     (다른 연출은 전역 CSS 규칙 한 줄이 다 꺼 주지만 rAF 는 안 꺼진다). */
+  const FLAT_AT=860, FLAT_DUR=720, BN_TOTAL=1860;
+  const RMB=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const panel=document.getElementById("p-bneck");
+  /* CSS 카메라 안착이 쓰는 cubic-bezier(.22,.61,.36,1) 을 그대로 계산한다 —
+     같은 구간에 같이 도는 두 움직임이 다른 곡선을 타면 한 동작으로 안 읽힌다. */
+  function bnEase(t){
+    const x1=.22,y1=.61,x2=.36,y2=1;
+    const cx=3*x1, bx=3*(x2-x1)-cx, ax=1-cx-bx;
+    const cy=3*y1, by=3*(y2-y1)-cy, ay=1-cy-by;
+    let u=t;
+    for(let i=0;i<6;i++){ const d=(3*ax*u+2*bx)*u+cx; if(!d) break;
+      const e=((ax*u+bx)*u+cx)*u-t; if(Math.abs(e)<1e-5) break; u-=e/d; }
+    return ((ay*u+by)*u+cy)*u;
+  }
+  let flatRaf=0;
+  function startFlatten(){
+    cancelAnimationFrame(flatRaf);
+    if(RMB||!MORPHABLE){ setFlat(1); return; }
+    const t0=performance.now();
+    flatRaf=requestAnimationFrame(function step(now){
+      /* 도중에 탭을 떠나면 남은 프레임을 굴릴 이유가 없다 — 결과만 앉히고 끝낸다 */
+      if(panel&&panel.hidden){ setFlat(1); return; }
+      const e=now-t0;
+      if(e<FLAT_AT){ flatRaf=requestAnimationFrame(step); return; }
+      const k=Math.min(1,(e-FLAT_AT)/FLAT_DUR);
+      setFlat(bnEase(k));
+      if(k<1) flatRaf=requestAnimationFrame(step);
+    });
+  }
+  setFlat(1);   /* 평소 모습 = 평면. 전환 애니는 여기서 아이소로 되돌렸다가 다시 편다 */
+
+  realIntro=function(fromRect){
     stage.classList.remove("bn-enter","bn-hold"); void stage.getBoundingClientRect();
     /* 크기는 레이아웃 값(clientWidth/offsetHeight)으로 잰다 — getBoundingClientRect 는 기울기(rotateX)가
        반영된 '보이는' 상자라 그 값으로 판 크기를 잡으면 두 판이 어긋난다. 전환 1단계에는 기울기가 없다. */
-    const sr=stage.getBoundingClientRect(), W=stage.clientWidth, H=tilt.offsetHeight;
+    /* 폭은 판(.bn-stage)이 아니라 그림(.bn-tilt = 판의 63%)에서 잰다.
+       원형 창은 그림 판 안에서 열리고, 카메라 배율도 '이 그림을 설계 씬 크기에 맞추는' 값이다 —
+       판 폭으로 재면 둘 다 1/0.63 만큼 어긋난다. */
+    const sr=stage.getBoundingClientRect(), W=tilt.clientWidth, H=tilt.offsetHeight;
     if(W>0 && H>0){
       const s=W/VW;                                /* 그림 단위 → 화면 px */
       const cx=(CX-VX)*s, cy=(CY-VY)*s;            /* 원형 창 중심 (판 왼쪽 위 기준) */
@@ -1417,27 +1783,45 @@ window.__flowReset=function(){
       st.setProperty("--cx",cx+"px"); st.setProperty("--cy",cy+"px");
       st.setProperty("--r0","0px");   st.setProperty("--r1",r+"px");
       /* 카메라는 판 전체(.bn-cam)를 옮긴다 — 원점이 왼쪽 위라 계산이 화면 px 그대로다.
-         지도를 왼쪽에 붙인 것(.bn-shift)은 sr 에 이미 들어 있어 여기서 따로 뺄 것이 없다. */
-      st.setProperty("--bn-t0", (fromRect && fromRect.width>0)
-        ? "translate("+(fromRect.left-sr.left)+"px,"+(fromRect.top-sr.top)+"px) scale("+(fromRect.width/W)+")"
-        : "none");
+         지도를 왼쪽에 붙인 것(.bn-shift)은 sr 에 이미 들어 있어 여기서 따로 뺄 것이 없다.
+
+         맞춰야 하는 것은 판이 아니라 '그림' 이다. 두 씬은 같은 그림을 다른 창(viewBox)으로 잘라 보여 준다
+         — 설계는 259 부터 1042칸, 병목은 212 부터 900칸. 그래서 판 폭만 맞추면(옛 fromRect.width/W)
+         그림 한 칸의 크기가 서로 달라, 겹쳐 놓아도 15% 안팎으로 어긋난 채 시작했다.
+           u = 설계 씬에서 그림 한 칸이 몇 px 인가
+           k = 병목 판을 그 칸 크기로 만드는 배율        (k·W/VW = u)
+           tx = 판 왼쪽을 맞춘 뒤, 창 시작점 차이(212−259 칸)만큼 더 민다
+         세로는 두 창의 시작점이 같아(172) 보정할 것이 없다. */
+      const svb=svg && svg.viewBox && svg.viewBox.baseVal;     /* 설계 씬(#scene)의 viewBox */
+      if(fromRect && fromRect.width>0 && svb && svb.width>0){
+        const u=fromRect.width/svb.width;
+        st.setProperty("--bn-t0",
+          "translate("+((fromRect.left-sr.left)+(VX-svb.x)*u)+"px,"+
+                       ((fromRect.top -sr.top )+(VY-svb.y)*u)+"px) scale("+(u*VW/W)+")");
+      } else st.setProperty("--bn-t0","none");
     }
-    clearTimeout(bnTimer); cancelAnimationFrame(bnRaf);
+    clearTimeout(bnTimer); clearTimeout(bnOpen); cancelAnimationFrame(bnRaf); cancelAnimationFrame(flatRaf);
     /* 애니는 걸되 시계는 세워 둔다 — 지금 이 프레임이 패널을 처음 배치하고 그리는 비싼 프레임이다.
        그리기가 끝난 다음 프레임에 시계를 켜야 초반이 안 잘린다. */
     stage.classList.add("bn-enter","bn-hold");
+    if(!RMB) setFlat(0);       /* 출발 자세 = 아이소. 설계 탭에서 보던 그 그림 그대로 겹친다 */
     bnRaf=requestAnimationFrame(function(){ bnRaf=requestAnimationFrame(function(){
       stage.classList.remove("bn-hold");
+      startFlatten();          /* CSS 시계를 푸는 바로 그 프레임에 같이 출발시킨다 */
+      /* 오른쪽 패널은 핀 1이 꽂히는 시점에 같이 들어온다 — '핀이 박히고 그 내용이 옆에 열린다' 한 동작.
+         더 일찍 띄우면 아직 변형 중인 지도 옆에서 패널만 따로 떠 있는 장면이 된다. */
+      bnOpen=setTimeout(function(){ openCard(PINS[0]); }, RMB?0:1340);
       /* 끝나면 클래스를 뗀다 — 그래야 핀 펄스(무한 반복)가 이 시점부터 처음 주기로 시작한다 */
-      bnTimer=setTimeout(function(){ stage.classList.remove("bn-enter"); },1620);
+      bnTimer=setTimeout(function(){ stage.classList.remove("bn-enter"); },BN_TOTAL);
     }); });
   };
-  /* 카드 hover → 핀 강조. 카드는 뒤의 IIFE가 나중에 만들므로 문서 위임으로 연결 */
-  document.addEventListener("mouseover",function(e){
-    const c=e.target.closest ? e.target.closest("#bneck-body .exp[data-loc]") : null;
-    const on=c ? c.getAttribute("data-loc") : null;
-    for(var k in pinEls) pinEls[k].classList.toggle("lit", k===on);
-  });
+  }   /* ← buildBody 끝 */
+
+  /* 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다. 아직 안 지었으면 여기서 짓는다. */
+  window.playBneckIntro=function(fromRect){ build(); closeCard(); realIntro(fromRect); };
+  /* 브라우저가 한가해지는 첫 순간에 미리 지어 둔다 — 그래야 탭을 눌렀을 때 짓느라 멈칫하지 않는다.
+     requestIdleCallback 이 없는 브라우저(사파리 구버전)는 짧은 타이머로 대신한다. */
+  (window.requestIdleCallback||function(f){ setTimeout(f,300); })(build,{timeout:1200});
 })();
 
 /* ═══════════ 구역 강조 — 버튼이 하는 일은 #scene 에 data-zone 을 거는 것뿐 ═══════════
@@ -1493,6 +1877,16 @@ window.__flowReset=function(){
     document.getElementById("p-misc").hidden  = (top!=="misc");
     /* 구조도 화면으로 올 때마다 구역 강조는 전체로 — 켜 둔 구역을 들고 다니지 않는다 */
     if(top==="mmo" && sub==="build" && window.resetZone) window.resetZone();
+    /* 이 화면으로 (다시) 들어올 때는 첫 로드와 똑같이 '구조가 먼저 서고 데이터가 흐른다' 를 다시 보여준다.
+       그냥 흐름만 되살리면, 돌아온 순간 칩이 이미 화면 한복판을 지나가고 있다 —
+       무엇이 어디서 출발해 어디로 가는지가 이 그림의 요지인데 그 시작을 놓치게 된다.
+       __scenePlay 가 흐름 정지 → 처음으로 되돌리기 → 등장 웨이브 → 웨이브가 끝난 뒤 흐름 시작까지 한다.
+       첫 로드에서는 이 IIFE 가 웨이브 IIFE 보다 먼저라 __scenePlay 가 아직 없다 —
+       그때는 웨이브 IIFE 가 스스로 한 번 재생하므로 흐름만 켜 두면 된다(이중 재생 없음). */
+    if(top==="mmo" && sub==="build"){
+      if(window.__scenePlay) window.__scenePlay();
+      else if(window.__flowStart) window.__flowStart();
+    }
     /* 병목 지도로 들어올 때마다 '설계 → 청사진' 전환 애니를 처음부터.
        설계 씬이 있던 자리를 넘겨줘야 그 자리에 그대로 겹친 채 시작한다(위에서 숨기기 전에 재 뒀다) */
     if(top==="mmo" && sub==="bneck" && window.playBneckIntro) window.playBneckIntro(fromRect);
@@ -1505,23 +1899,6 @@ window.__flowReset=function(){
   else if(h0==="dummy"||h0==="misc"){ top=h0; }
   paint();
 
-  /* l = 병목 지도 핀 번호(1 송신 경로 · 2 게임 루프 · 3 섹터 팬아웃) */
-  const OK=[
-    {l:"1", n:"Send Coalescing", r:"syscall −94%", m:"틱 단위로 송신을 모아 WSASend 호출을 배칭", ex:"tick p99 65→9ms"},
-    {l:"1", n:"SendWorker 분리 + WT×K", r:"handle p99 −56%", m:"송신을 게임 틱에서 떼어 K워커로 분산 (WT4·K2)", ex:"워커 동시실행 간섭까지 스윕으로 규명"},
-    {l:"3", n:"섹터 묶음 패킷", r:"tick p99 −83%", m:"틱 끝에 섹터별로 한 번에 묶어 복사 횟수 상한 고정", ex:"복사 병목 75.7→42.7%"},
-    {l:"2", n:"멤버십 팬아웃 묶음", r:"membership −68%", m:"아웃바운드 dedup + 인바운드 1버퍼 배칭", ex:"gameloop 0.86→0.49코어"},
-    {l:"3", n:"브로드캐스트 수신섹터 묶음", r:"복사 −88%", m:"대상마다 세션핀 고정비를 수신섹터 연접 배칭으로", ex:"gameloop 0.57→0.21코어"},
-  ];
-  const RJ=[
-    {l:"1", n:"SendQ Lock-Free", m:"락 경합이 0.08ms로 고정 — 락프리 이득이 없음", ex:"실측 없이 병목이라 단정 안 함"},
-    {l:"1", n:"SO_SNDBUF=0", m:"복사 비용이 워커로 이전될 뿐, 시스템 CPU +75%", ex:"송신 실험은 worker CPU·완료율 함께 봐야"},
-  ];
-  const cOK=e=>`<div class="exp" data-loc="${e.l}"><div class="top"><span class="rs ok">채택</span><span class="nm">${e.n}</span><span class="loc">${e.l}</span></div><div class="r">${e.r}</div><div class="m">${e.m}</div><div class="ex">${e.ex}</div></div>`;
-  const cRJ=e=>`<div class="exp rj" data-loc="${e.l}"><div class="top"><span class="rs rj">기각</span><span class="nm">${e.n}</span><span class="loc">${e.l}</span></div><div class="r">기각</div><div class="m">${e.m}</div><div class="ex">${e.ex}</div></div>`;
-  document.getElementById("bneck-body").innerHTML=
-    `<div class="exp-h">채택 <span class="cnt">${OK.length}</span></div><div class="exp-grid">${OK.map(cOK).join("")}</div>`+
-    `<div class="exp-h">기각 <span class="cnt">${RJ.length}</span></div><div class="exp-grid">${RJ.map(cRJ).join("")}</div>`;
 })();
 
 /* ═══════════ 등장 웨이브 — 좌하(클라) → 우상(MySQL) 대각선 팝인 (factory-v3식 · 2배속) ═══════════ */
@@ -1567,6 +1944,9 @@ window.__flowReset=function(){
     }, WAVE);
   }
   replay.addEventListener("click", play);
+  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '설계 · 구현' 으로 돌아올 때마다 이걸 부른다.
+     '다시 재생' 버튼과 완전히 같은 길을 타야 두 경우의 순서가 어긋나지 않는다. */
+  window.__scenePlay=play;
   play();
 })();
 </script>
