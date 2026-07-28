@@ -238,8 +238,19 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
   -webkit-mask-size:280% 280%;   mask-size:280% 280%;
   -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
   -webkit-mask-position:0% 100%; mask-position:0% 100%}
-.bn-stage.bn-enter .bn-cam{will-change:transform; animation:bnCam .72s var(--bn-ease) .86s both}
+/* 카메라에 will-change:transform 을 걸지 않는다. 걸면 판이 합성 레이어로 올라가는데,
+   그 안의 SVG 는 평면화 때문에 매 프레임 다시 그려지는 중이라 레이어가 되어도 굽는 일이 줄지 않는다.
+   그러면서 카메라(합성 스레드)와 도형(메인 스레드)의 시계는 갈라진다 — 메인이 한 프레임 늦으면
+   '옮겨진 카메라 + 이전 프레임 도형' 이 합성돼 그림이 어긋난 채 한 장 지나갈 수 있다.
+   ※ 이 줄만 따로 떼어 재지는 않았다. 위 패널 수정과 묶어서 잰 값이 앞의 2.00 → 1.25 다.
+     힌트를 뺀 뒤 겉모습은 그대로였다(평면 완료 화면 렌더가 바이트 단위로 동일). */
+.bn-stage.bn-enter .bn-cam{animation:bnCam .72s var(--bn-ease) .86s both}
 .bn-stage.bn-enter .pin{animation:bnPinDrop .30s cubic-bezier(.3,1.25,.5,1) both}
+/* 진입 동안만 오른쪽 패널을 제 레이어로 띄운다. opacity:0 인 서브트리는 배치는 해도 '그리기'는 통째로 건너뛰므로,
+   미리 지어 두기만 하면 켜지는 1.34s 에 첫 페인트가 그대로 남는다 — 옮긴 것이 배치뿐이라 절반만 고친 셈이 된다.
+   레이어로 올려 두면 투명해도 미리 구워지고, 1.34s 에 바뀌는 것은 합성 단계의 알파 한 값뿐이다.
+   진입이 끝나 .bn-enter 가 떨어지면 이 힌트도 같이 사라진다(레이어를 계속 들고 있을 이유가 없다). */
+.bn-stage.bn-enter .bncard{will-change:opacity}
 .bn-stage.bn-enter .pin-pulse{animation:none; opacity:0}   /* 꽂히기 전에는 파문이 없다 */
 /* 진입하는 그 프레임은 이 패널(SVG 두 벌 ≈950개 요소)을 처음 배치하고 그리는 프레임이다.
    같은 프레임에 애니 시계까지 켜면 그 비용이 그대로 초반 프레임 드랍이 된다.
@@ -269,9 +280,17 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
   background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; color:#dbe4f2;
   box-shadow:0 30px 60px -28px rgba(0,0,0,.7);
   /* 진입 애니 도중에는 감춰 둔다 — 핀이 꽂히는 순간(1.34s)에 같이 들어와야
-     '핀이 박히고 그 내용이 옆에 열린다' 한 동작으로 읽힌다 */
-  opacity:0; transition:opacity .35s ease}
-.bncard.on{opacity:1}
+     '핀이 박히고 그 내용이 옆에 열린다' 한 동작으로 읽힌다.
+     감추는 수단은 opacity 뿐이다. hidden(display:none) 으로 감췄다 켜면, 켜지는 그 순간이
+     이 패널(격자 + 실험 카드 4장 + 그림자)을 처음 배치하고 그리는 프레임이 된다 —
+     그 프레임이 하필 평면화가 도는 중이고 핀이 꽂히는 1.34s 라 전환 한복판이 통째로 밀렸다.
+     그래서 자리는 0.30s 에 미리 잡아 두고(fillCard), 1.34s 에는 투명도만 바꾼다.
+     실측 — 크롬 80회 전환, '프레임 간격 33ms 이상(한 장 건너뜀)' 을 눈에 보이는 구간에서만 셌다:
+       고치기 전 2.00회/전환 (카메라 구간 31 · 핀+패널 구간 49)
+       고친 뒤   1.25회/전환 (카메라 구간 25 · 핀+패널 구간 25)
+     투명한 동안 클릭을 먹지 않게 pointer-events 도 같이 잠근다 — 지도 오른쪽을 덮고 있어서다. */
+  opacity:0; pointer-events:none; transition:opacity .35s ease}
+.bncard.on{opacity:1; pointer-events:auto}
 .bncard[hidden]{display:none}
 /* 설계 탭 카드의 같은 자리는 mono 인데 여기만 sans 인 이유: 이 두 줄은 한글이다.
    mono 에 한글을 넣으면 글꼴이 폴백되어 자간이 벌어진다(범례·캡션과 같은 규칙). */
@@ -1560,7 +1579,9 @@ window.__flowReset=function(){
      어느 자리를 눌렀는지 확인하려면 다시 올라와야 했다. 지도를 그대로 둔 채 옆에서 갈아 끼우는 쪽이 맞다. */
   const bnCard=document.getElementById("bncard");
   let pinDefs=[];        /* buildBody 가 PINS 를 만들면서 채운다 — 아래 전환 줄이 이 배열을 쓴다 */
-  function openCard(p){
+  /* 짓기와 켜기를 가른다: 전환 애니는 진입하는 프레임에 미리 짓고(fillCard) 1.34s 에 켜기만 한다.
+     핀·전환줄 클릭은 예전처럼 openCard 하나로 둘 다 한다. */
+  function fillCard(p){
     if(!bnCard) return;
     document.getElementById("bnc-n").textContent=p.n;
     document.getElementById("bnc-t").textContent=p.name;
@@ -1577,8 +1598,12 @@ window.__flowReset=function(){
     if(nav) [].slice.call(nav.querySelectorAll("button")).forEach(function(b){
       b.classList.toggle("act", b.getAttribute("data-loc")===p.n); });
     bnCard.hidden=false;
-    requestAnimationFrame(function(){ bnCard.classList.add("on"); });   /* hidden 을 뗀 다음 프레임이라야 전이가 걸린다 */
     for(var k in pinEls) pinEls[k].classList.toggle("lit", k===p.n);
+  }
+  function openCard(p){
+    fillCard(p);
+    /* hidden 을 뗀 다음 프레임이라야 전이가 걸린다 — 이미 떼여 있으면 그 프레임에 바로 켜진다 */
+    requestAnimationFrame(function(){ if(bnCard) bnCard.classList.add("on"); });
   }
   /* 패널 아래 전환 줄 — 핀을 못 찾은 사람도 여기서 자리를 옮길 수 있다 */
   function buildNav(){
@@ -1780,7 +1805,7 @@ window.__flowReset=function(){
      병목 그림은 그 63% 만 쓰므로, 창 크기마다 어긋나는 폭이 달라진다(viewBox 만 보고 계산하면 틀린다).
      번지는 쪽은 마스크 위치를 %로 미는 것이라 판 크기를 안 봐도 된다 — 그래서 잴 것이 없다. */
   const tilt=stage.querySelector(".bn-tilt");
-  let bnTimer=0, bnRaf=0, bnOpen=0;
+  let bnTimer=0, bnRaf=0, bnOpen=0, bnFill=0;
 
   /* ── 평면화 구동 ──
      CSS 로는 못 하는 유일한 조각이라 여기만 rAF 다. 그래서 '모션 줄이기' 도 직접 막아야 한다
@@ -1843,7 +1868,7 @@ window.__flowReset=function(){
                        ((fromRect.top -sr.top )+(VY-svb.y)*u)+"px) scale("+(u*VW/W)+")");
       } else st.setProperty("--bn-t0","none");
     }
-    clearTimeout(bnTimer); clearTimeout(bnOpen); cancelAnimationFrame(bnRaf); cancelAnimationFrame(flatRaf);
+    clearTimeout(bnTimer); clearTimeout(bnOpen); clearTimeout(bnFill); cancelAnimationFrame(bnRaf); cancelAnimationFrame(flatRaf);
     /* 애니는 걸되 시계는 세워 둔다 — 지금 이 프레임이 패널을 처음 배치하고 그리는 비싼 프레임이다.
        그리기가 끝난 다음 프레임에 시계를 켜야 초반이 안 잘린다. */
     stage.classList.add("bn-enter","bn-hold");
@@ -1852,8 +1877,15 @@ window.__flowReset=function(){
       stage.classList.remove("bn-hold");
       startFlatten();          /* CSS 시계를 푸는 바로 그 프레임에 같이 출발시킨다 */
       /* 오른쪽 패널은 핀 1이 꽂히는 시점에 같이 들어온다 — '핀이 박히고 그 내용이 옆에 열린다' 한 동작.
-         더 일찍 띄우면 아직 변형 중인 지도 옆에서 패널만 따로 떠 있는 장면이 된다. */
-      bnOpen=setTimeout(function(){ openCard(PINS[0]); }, RMB?0:1340);
+         더 일찍 띄우면 아직 변형 중인 지도 옆에서 패널만 따로 떠 있는 장면이 된다.
+         다만 '짓기' 와 '켜기' 는 나눠 둔다:
+           0.30s  짓기 — 이 구간은 마스크만 훑고 지나가는 중이라(평면화는 0.86s 부터) 메인 스레드가 비어 있다.
+                        여기서 배치하고 레이어로 구워 둔다.
+           1.34s  켜기 — 남은 일은 합성 단계의 알파 한 값뿐.
+         한 박자로 1.34s 에 다 하면 그 프레임이 평면화·핀 드랍과 겹쳐 전환 한복판이 통째로 밀린다.
+         반대로 진입 프레임에 몰아넣어도 안 된다 — 거기는 이미 도형 950개를 처음 그리는 프레임이다. */
+      bnFill=setTimeout(function(){ fillCard(PINS[0]); }, RMB?0:300);
+      bnOpen=setTimeout(function(){ if(bnCard) bnCard.classList.add("on"); }, RMB?0:1340);
       /* 끝나면 클래스를 뗀다 — 그래야 핀 펄스(무한 반복)가 이 시점부터 처음 주기로 시작한다 */
       bnTimer=setTimeout(function(){ stage.classList.remove("bn-enter"); },BN_TOTAL);
     }); });
