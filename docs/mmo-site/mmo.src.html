@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MMO 서버 R&D · 주우진 — 병목 개선</title>
-<meta name="description" content="IOCP 기반 MMO 서버 R&D. 맵당 동접 5,000, 실측(Prometheus/Grafana)으로 채택·기각한 병목 개선. MMO-IOCP(설계 및 구현 · 병목 추적 해결), 부하/검증 더미, 기타 참고.">
+<meta name="description" content="IOCP 기반 MMO 서버 R&D. 맵당 동접 5,000, 실측(Prometheus/Grafana)으로 채택·기각한 병목 개선. MMO 서버(설계 · 구현 / 병목 · 실험), 부하 테스트, 스택 · 링크.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MMO 서버 R&D · 주우진">
 <meta property="og:description" content="IOCP MMO 서버, 동접 5,000. 실측 기반 병목 개선 R&D.">
@@ -32,8 +32,8 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* stage (isometric diagram) */
 .stage{position:relative; width:100%; margin:14px auto 0}
 #scene{display:block; width:100%; height:auto}
-#scene .top, #bnscene .top{stroke:rgba(255,255,255,.18); stroke-width:1; stroke-linejoin:round}
-#scene .rim, #bnscene .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
+#scene .top, #bnscene .top, #bnsolid .top{stroke:rgba(255,255,255,.18); stroke-width:1; stroke-linejoin:round}
+#scene .rim, #bnscene .rim, #bnsolid .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
 
 /* legend */
 .legend{position:absolute; right:18px; bottom:18px; z-index:4;
@@ -53,46 +53,143 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
    그 자리가 비면서 구역 필터를 오른쪽 위로 보낼 수 있게 됐다. */
 
 /* tabs */
-.tabs{display:flex; gap:6px; margin:0; border-bottom:1px solid var(--line); flex-wrap:wrap}
-.tab{padding:16px 28px; font-size:1.3rem; font-weight:700; color:var(--mut); background:none; border:none;
+/* 탭 이름에는 기술 약어(IOCP·RIO)를 넣지 않는다 — 탭 축은 '만든 서버'고, 전송 방식은 그 안에서 바뀌는 것이다.
+   대신 스택은 탭 줄 오른쪽 끝 메타 텍스트로 뺐다(RIO 가 붙으면 이 줄만 늘리면 된다).
+   밑선은 .tabs 가 아니라 이 줄이 갖는다 — 탭의 margin-bottom:-1px 이 덮는 대상이 여기로 옮겨왔다. */
+.tabrow{display:flex; align-items:flex-end; gap:16px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+.tabmeta{margin-left:auto; padding-bottom:15px; font-family:var(--mono); font-size:.78rem;
+  letter-spacing:.06em; color:var(--dim); white-space:nowrap}
+/* 좁은 화면 — 메타는 탭이 줄바꿈되며 탭처럼 얹히므로 숨긴다 */
+@media(max-width:680px){ .tabmeta{display:none}
+  .tab{padding:11px 14px 12px} .tab b{font-size:1.05rem} .tab span{font-size:.7rem}
+  .subtab{padding:6px 10px; font-size:.88rem; gap:7px} .stepsep{width:20px} }
+.tabs{display:flex; gap:6px; margin:0; flex-wrap:wrap}
+/* 탭은 두 줄이다: 이름 + 안에 뭐가 있는지 한 줄.
+   이름만 두면 '부하 테스트' 가 뭘 보여주는 탭인지 눌러 보기 전엔 알 수 없다 —
+   탭이 안 눌리는 원인은 생김새가 아니라 정보가 없는 것이었다. */
+.tab{display:flex; flex-direction:column; align-items:flex-start; gap:3px; line-height:1.2;
+  padding:14px 26px 15px; font-weight:700; color:var(--mut); background:none; border:none;
   border-bottom:3px solid transparent; margin-bottom:-1px; cursor:pointer; transition:color .15s, border-color .15s}
+.tab b{font-size:1.3rem; font-weight:700}
+.tab span{font-size:.78rem; font-weight:600; color:var(--dim); transition:color .15s}
 .tab:hover{color:var(--ink)}
 .tab.act{color:var(--ink); border-bottom-color:var(--net)}
+.tab.act span{color:var(--mut)}
 .tab:focus-visible{outline:2px solid var(--net); outline-offset:-2px; border-radius:6px}
-/* 하위 탭 — 상위 탭(MMO-IOCP) 안에서만 뜬다. 상위와 같은 밑줄 양식을 쓰면 어느 줄이 위인지 안 보이고,
-   알약으로 하면 아래 구역 필터 버튼과 같은 모양이라 탭인지 필터인지 섞인다.
-   그래서 '열린 탭' 은유로 간다: 활성만 아래 패널과 같은 바탕색(--bg)으로 뚫려 띠의 밑선을 끊는다.
-   margin-bottom:-1px 이 그 1px 을 덮는 장치라, 띠의 border-bottom 을 지우면 효과가 사라진다. */
-.subtabs{display:flex; gap:4px; margin:0; padding:8px 14px 0; flex-wrap:wrap;
-  background:rgba(255,255,255,.025); border-bottom:1px solid var(--line)}
+/* 하위 탭 — 상위 탭(MMO 서버) 안에서만 뜬다. 이 둘은 나란한 선택지가 아니라 순서다:
+   만들었다(설계·구현) → 재서 고쳤다(병목·실험). 그래서 탭 모양 대신 번호+화살표 '단계'로 둔다.
+   덤으로 어휘가 갈려서 위층(상위 탭)과 안 섞이고, 화살표가 '다음이 있다'를 알려 준다.
+   ※ 옛 '열린 탭' 은유(회색 띠 + 활성만 --bg 로 뚫기)는 뺐다 — 띠가 화면 폭 끝까지 이어져
+     내용보다 배경이 먼저 보였다. */
+.subtabs{display:flex; gap:0; margin:0; padding:12px 0 0; flex-wrap:wrap; align-items:center;
+  border-bottom:1px solid var(--line)}
 .subtabs[hidden]{display:none}
-.subtab{padding:10px 22px; font-size:1rem; font-weight:700; color:var(--mut);
-  background:none; border:1px solid transparent; border-bottom:0;
-  border-radius:9px 9px 0 0; margin-bottom:-1px;
-  cursor:pointer; transition:color .15s, border-color .15s, background .15s}
+.subtab{display:flex; align-items:center; gap:9px; padding:7px 14px; font-size:.95rem; font-weight:600;
+  color:var(--mut); background:none; border:0; border-bottom:2px solid transparent; margin-bottom:-1px;
+  cursor:pointer; transition:color .15s, border-color .15s}
+.subtab em{display:grid; place-items:center; width:20px; height:20px; border-radius:50%; font-style:normal;
+  font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--dim);
+  border:1px solid rgba(120,140,175,.35); transition:color .15s, background .15s, border-color .15s}
 .subtab:hover{color:var(--ink)}
-.subtab.act{color:var(--ink); background:var(--bg); border-color:var(--line)}
+.subtab.act{color:var(--ink); font-weight:700; border-bottom-color:rgba(148,168,205,.8)}
+.subtab.act em{color:var(--bg); background:var(--net); border-color:var(--net)}
 .subtab:focus-visible{outline:2px solid var(--net); outline-offset:-2px}
+/* 단계 사이 화살표 — 선 + CSS 삼각형. marker 를 쓰면 폭이 바뀔 때 촉이 찌그러진다(긴 화살표와 같은 이유) */
+.stepsep{position:relative; align-self:center; width:34px; height:1px; margin:0 2px;
+  background:rgba(120,140,175,.38)}
+.stepsep::after{content:""; position:absolute; right:0; top:-3px;
+  border-left:5px solid rgba(120,140,175,.55); border-top:3.5px solid transparent; border-bottom:3.5px solid transparent}
 .panel{margin-top:8px}
 .panel[hidden]{display:none}
 .panel .lead{color:var(--mut); font-size:.95rem; max-width:74ch; margin:14px 0 14px}
 .panel .lead b{color:var(--ink); font-weight:700}
 
-/* bneck: 병목 지도 — 설계 탭 씬을 클론(고스트)해 깔고 병목 핀을 얹는다 */
-.bn-stage{position:relative; max-width:1180px; margin:4px auto 0}
-#bnscene{display:block; width:100%; height:auto; transform:perspective(1400px) rotateX(8deg)}
+/* bneck: 병목 지도 — 설계 탭과 같은 씬을 두 벌(설계 모습·청사진) 그려 놓고 핀을 얹는다.
+   판 세 장을 겹쳐 둔다: 아래부터 설계 모습(#bnsolid) · 청사진(#bnscene) · 핀(#bnpins).
+   전환 애니에서 움직이는 것은 전부 '이 HTML 요소들' 의 clip-path/transform/opacity 다 — SVG 안은 한 번 그려진 뒤 정지.
+   그래야 브라우저가 이미 만든 그림을 옮기고 섞기만 하고, 매 프레임 다시 그리지 않는다. */
+/* 오른쪽을 비워 두려고 지도를 왼쪽에 붙인다. 캡션도 같이 묶어야 지도 밑에 그대로 따라온다.
+   translateX 로 밀지 않는 이유: 창이 좁으면 왼쪽으로 삐져나간다(좁은 창에선 지도가 이미 폭을 다 쓴다).
+   폭을 85%로 잡으면 어느 창에서도 안 넘치고 오른쪽 15%가 항상 빈다.
+   ※ 창이 넓어져 지도가 1180 에서 멈추면 오른쪽 여백은 15%보다 더 넓어진다 — 의도한 쪽이다. */
+.bn-shift{width:85%; max-width:1180px; margin:4px 0 0}
+.bn-stage{position:relative; --bn-ease:cubic-bezier(.22,.61,.36,1)}   /* 카메라·기울기가 같은 곡선 = 한 동작으로 읽힌다 */
+.bn-cam{position:relative; transform-origin:0 0}                 /* 2단계 카메라 */
+/* 기울기 — 카메라와 분리(원점이 다르다). 설계 탭은 0°, 여기만 눕혀 '다른 시점으로 옮겼다'를 만든다.
+   방향은 내려다보기(양수)로 고정한다. 아이소 블록은 윗면(.top)을 밝게 칠해 둔 그림이라,
+   음수로 돌려 올려다보면 '위에서 그린 면을 아래에서 본다'가 되어 빛과 기하가 어긋난다.
+   핀도 판에서 위로 솟은 막대라 올려다볼수록 막대가 길어지며 라벨끼리 겹친다.
+   각도는 이 한 줄과 아래 bnTilt 도착값 두 곳을 같이 바꾼다.
+   위 한계는 34° 근처다 — 눕힐수록 원근이 아래쪽을 벌려서 그림이 판 밖으로 번지는데,
+   그림 좌우에 남은 여백이 91px·104px 뿐이다(32°에서 79px 번짐, 34°에서 84px). */
+.bn-tilt{transform:perspective(1400px) rotateX(32deg)}
+.bn-tilt>svg{display:block; width:100%; height:auto}
+/* 설계 모습 사본은 계속 깔아 둔다. 청사진 474개 도형 중 167개가 밑을 비치므로(반투명 68 · 채움 없음 99,
+   구역 판은 알파 0.13), 이 판을 껐다 켜면 지도 전체의 톤이 통째로 달라진다.
+   예전엔 전환 애니 동안만 켰다가 끝나면서 껐는데, 그게 '다 끝난 뒤 색이 한 번 더 바뀐다' 로 보였다.
+   번지는 애니가 만들어 낸 색이 곧 최종색이 되려면, 그 색을 만든 밑판이 그대로 남아 있어야 한다. */
+#bnsolid{opacity:1}
+.bn-reveal, #bnpins{position:absolute; left:0; top:0; width:100%; height:100%}
+.bn-reveal>svg{display:block; width:100%; height:auto}
 /* 병목 지도는 설계 탭과 같은 씬을 '단색 청사진' 으로 다시 그린다.
    무슨 색이든 회색으로 눌렀다가(grayscale) 한 색조로 물들인다(sepia + hue-rotate).
    와이어프레임이 못 덮는 잔여 도형(시계 문자판·큐 홈)까지 같은 색으로 끌고 오기 위한 것이다.
-   168도 = 사이트가 이미 쓰는 --net(#6cc7ff) 계열 — 이 그림만 따로 놀지 않게. */
-#bnscene .ghost{filter:grayscale(1) sepia(1) hue-rotate(168deg) saturate(2.4) brightness(1.06)}
-#bnscene .pin{cursor:pointer}
-#bnscene .pin:focus-visible{outline:none}
-#bnscene .pin .pin-badge{transition:filter .15s}
-#bnscene .pin:hover .pin-badge, #bnscene .pin:focus-visible .pin-badge, #bnscene .pin.lit .pin-badge{
+   168도 = 사이트가 이미 쓰는 --net(#6cc7ff) 계열 — 이 그림만 따로 놀지 않게.
+   ※ 이 색변환은 여기 CSS filter 가 아니라 그릴 때 한 번 계산해 칠한다(스크립트의 blueprint 함수) —
+     필터를 걸어 두면 프레임마다 그룹 전체를 다시 래스터라이즈해서 전환 애니가 끊겼다. */
+#bnpins .pin{cursor:pointer}
+#bnpins .pin:focus-visible{outline:none}
+#bnpins .pin .pin-badge{transition:filter .15s}
+#bnpins .pin:hover .pin-badge, #bnpins .pin:focus-visible .pin-badge, #bnpins .pin.lit .pin-badge{
   filter:drop-shadow(0 0 7px #ff6b52)}
-#bnscene .pin-pulse{opacity:0; transform-box:fill-box; transform-origin:center; animation:pinPulse 2.4s ease-out infinite}
+#bnpins .pin-pulse{opacity:0; transform-box:fill-box; transform-origin:center; animation:pinPulse 2.4s ease-out infinite}
 @keyframes pinPulse{0%{transform:scale(.55); opacity:.9} 70%,100%{transform:scale(2); opacity:0}}
+
+/* ═══ 전환 애니 — '설계 · 구현' 화면이 병목 지도로 변한다 (총 1.34s) ═══
+   두 단계를 겹치지 않는다. 같이 굴리면 무엇이 변하는지가 섞여 '그냥 뭔가 움직였다' 가 된다.
+
+   1단계 0.00–1.04  카메라 완전 고정 — 설계 탭 씬이 있던 자리에, 있던 크기 그대로 겹쳐 있다
+                    · 0.00–0.90 클라이언트 단에서 원형으로 번지며 부위별로 톤이 바뀐다
+                    · 0.55–1.01 핀 3개가 0.08s 간격으로 꽂힌다
+   2단계 1.04–1.56  이제 카메라만 움직인다 — 눕고(32도), 병목 지도의 제자리·제 크기로 안착
+
+   ── 번지는 속도는 설계 탭 등장 웨이브에 맞춘다 ──
+   등장 웨이브는 좌하→우상 대각선을 900ms 동안 '등속' 으로 훑는다(지연을 축 f 에 선형 분배).
+   그래서 여기도 900ms · linear 다. 두 화면에서 화면을 훑고 지나가는 속도가 같아진다.
+   ※ 한때 0.58s 에 강한 감속(.22,.61,.36,1)을 걸었는데, 그 곡선은 절반 시간에 87%가 끝나
+     체감이 0.3s 짜리였다 — '너무 빠르다' 의 원인은 길이보다 이 곡선 쪽이 컸다.
+
+   ── 원형으로 번지는 법: 청사진 판의 clip-path 원 반지름 하나만 키운다 ──
+   안쪽 그림은 아예 안 움직인다. 창이 커지며 아래(설계 모습)를 덮어 갈 뿐이다.
+
+   예전에는 창을 scale 로 키우고 그 안을 역배율로 줄여 곱이 1이 되게 했다. 그런데 이 방식은
+   키프레임 '사이' 에서 곱이 1을 벗어난다 — 구간비 1.15 라면 중간점에서 (1+1.15)²/(4·1.15)=1.0049.
+   그 0.49% 가 구간마다 0→최대→0 으로 되풀이되니 씬 가장자리가 4px 안팎으로 떨었다 돌아오기를
+   19번 했다. 뒤로 갈수록 구간이 길어져 후반은 10Hz 근처 — 이게 '울렁거림' 의 정체였다.
+   덤으로 안쪽이 12.5배로 시작해, 브라우저가 그 배율로 텍스처를 굽다 한계에 걸려 도중에 다시 구웠다.
+   반지름 하나만 움직이면 보간 오차 0, 배율은 1 고정이라 둘 다 사라진다.
+
+   출발 위치·배율(--bn-t0)은 JS 가 화면에서 직접 재서 넣는다. 상수로 못 박으면 틀린다
+   (설계 씬 .stage 는 최대 1860, 병목 씬 .bn-shift 는 max-width 1180 — 창 크기마다 어긋나는 폭이 다르다).
+   지연 구간을 붙잡는 건 both 의 역방향 채우기다.
+   ※ 전부 CSS 애니라 prefers-reduced-motion 전역 규칙이 그대로 다 꺼 준다(rAF 를 안 쓴 이유).
+     정지 상태 값을 규칙이 아니라 키프레임 안에만 두는 것도 같은 이유다 — 애니가 꺼지면 잔재가 없다
+     (옛 .bn-reveal 규칙은 위치·크기를 규칙 쪽에 두는 바람에, 모션 끄기 상태에서 판이 어긋난 채 남았다). */
+.bn-stage.bn-enter .bn-reveal{will-change:clip-path; animation:bnGrow .9s linear both}
+.bn-stage.bn-enter .bn-cam{will-change:transform; animation:bnCam .52s var(--bn-ease) 1.04s both}
+.bn-stage.bn-enter .bn-tilt{animation:bnTilt .52s var(--bn-ease) 1.04s both}
+.bn-stage.bn-enter .pin{animation:bnPinDrop .30s cubic-bezier(.3,1.25,.5,1) both}
+.bn-stage.bn-enter .pin-pulse{animation:none; opacity:0}   /* 꽂히기 전에는 파문이 없다 */
+/* 진입하는 그 프레임은 이 패널(SVG 두 벌 ≈950개 요소)을 처음 배치하고 그리는 프레임이다.
+   같은 프레임에 애니 시계까지 켜면 그 비용이 그대로 초반 프레임 드랍이 된다.
+   그래서 애니는 걸어 두되 시계는 세워 두고, 그리기가 끝난 뒤 JS 가 두 번째 rAF 에서 뗀다. */
+.bn-stage.bn-hold .bn-reveal, .bn-stage.bn-hold .bn-cam,
+.bn-stage.bn-hold .bn-tilt, .bn-stage.bn-hold .pin{animation-play-state:paused}
+@keyframes bnGrow{from{clip-path:circle(var(--r0) at var(--cx) var(--cy))}
+                    to{clip-path:circle(var(--r1) at var(--cx) var(--cy))}}
+@keyframes bnTilt{from{transform:perspective(1400px) rotateX(0deg)} to{transform:perspective(1400px) rotateX(32deg)}}
+@keyframes bnCam{from{transform:var(--bn-t0,none)} to{transform:none}}
+@keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{opacity:1; transform:none}}
 .bn-cap{font-size:.8rem; color:var(--dim); text-align:center; margin:6px 0 20px}   /* 한글이라 mono 금지(폴백 벌어짐) */
 .exp .loc{margin-left:auto; flex:0 0 auto; width:21px; height:21px; border-radius:50%; border:1.5px solid #ff6b52;
   color:#ff6b52; font-family:var(--mono); font-size:.66rem; font-weight:800; display:grid; place-items:center}
@@ -160,6 +257,10 @@ body.pop-armed #scene #lyr-build>*, body.pop-armed #scene #lyr-lbl>*{opacity:0}
 body.pop-run #scene #lyr-plat>*, body.pop-run #scene #lyr-shad>*, body.pop-run #scene #lyr-lane>*,
 body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
   animation:scenePop .25s cubic-bezier(.22,.9,.3,1) both}
+/* 웨이브가 도는 동안은 데이터 흐름을 아예 감춘다 — 구조가 다 서고 나서 흐르기 시작한다.
+   칩 레이어는 id 가 없어(웨이브 대상 제외) 클래스로 잡는다. 루프도 같이 멈추므로(__flowStop)
+   이 규칙은 멈춘 순간 남아 있던 것(쌓인 칸·타이밍 휠 바늘)까지 덮는 몫이다. */
+body.pop-hold #scene .chips{opacity:0}
 .stage-replay{position:absolute; left:16px; bottom:16px; z-index:6; font-family:var(--mono); font-size:.85rem;
   color:#b7c4da; cursor:pointer; background:rgba(19,26,38,.55); border:1px solid rgba(120,140,175,.42);
   border-radius:9px; padding:7px 14px; backdrop-filter:blur(4px); transition:border-color .15s, color .15s}
@@ -191,27 +292,38 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
 #scene[data-zone="game"]    .hit[data-z~="game"],
 #scene[data-zone="store"]   .hit[data-z~="store"]{pointer-events:auto}
 
-/* 구역 버튼 줄 — 씬 왼쪽 위(그림이 비어 있는 띠). 생김새는 '다시 재생' 버튼과 같은 어휘 */
-/* 오른쪽 위 — 왼쪽 위에서 옮겨왔다. 왼쪽에 두면 왼쪽 정렬 탭 바로 아래에 버튼 줄이 붙어
-   탭이 한 층 더 있는 것처럼 읽혔다. 줄바꿈되면 오른쪽 끝에 맞춰 쌓인다.
-   아래 상세카드(.card, 오른쪽 아래)는 가장 긴 것도 화면 아래 절반부터 시작해 여기까지 올라오지 않는다. */
-.zonebar{position:absolute; right:16px; top:14px; z-index:6; display:flex; flex-wrap:wrap; gap:6px;
-  justify-content:flex-end}
+/* 구역 버튼 줄 — 씬 왼쪽 위. 생김새는 '다시 재생' 버튼과 같은 어휘.
+   씬의 내용 대각선이 좌하(클라이언트) → 우상(게임 루프·MySQL) 이라 비는 코너는 좌상·우하다.
+   우하는 범례가 쓰고 있으니 조작(구역 버튼)은 좌상이 짝 — 한때 오른쪽 위에 뒀지만
+   거기는 게임 루프·BOTTLENECK 바로 위라 주인공과 경쟁했다.
+   top 을 14 가 아니라 46 으로 내리는 게 핵심이다: 왼쪽 정렬 탭 줄 바로 밑에 붙이면
+   버튼 줄이 '탭 한 층 더' 로 읽힌다(그래서 예전에 오른쪽으로 도망갔던 것). 한 단 내리면 씬 안쪽 것이 된다. */
+.zonebar{position:absolute; left:16px; top:46px; z-index:6; display:flex; flex-wrap:wrap; gap:6px;
+  justify-content:flex-start}
 /* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유).
    대신 배경·테두리·반경은 '다시 재생' 버튼과 똑같이 맞춰 같은 식구로 읽히게 한다. */
-.zb{display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:.88rem; font-weight:700; color:#b7c4da;
-  cursor:pointer; background:rgba(19,26,38,.55); border:1px solid rgba(120,140,175,.42);
+/* 켜짐/꺼짐이 한눈에 갈리게 만든다 — 예전엔 두 상태가 밝기 한 단계 차이라 "누르면 바뀌는 버튼"으로 안 읽혔다.
+   꺼진 것은 글자·테두리를 눌러 두고 점의 채도를 뺀다(=불 꺼짐), 켜진 것만 그 구역 색으로 테두리와 빛이 들어온다. */
+.zb{--zc:#93a5c2;   /* 켜졌을 때 테두리·불빛이 쓰는 색. 버튼마다 자기 구역 색으로 덮어쓴다 */
+  display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:.88rem; font-weight:700;
+  cursor:pointer; color:#727f96; background:rgba(19,26,38,.34); border:1px solid rgba(120,140,175,.20);
   border-radius:9px; padding:7px 12px; backdrop-filter:blur(4px);
-  transition:border-color .15s, color .15s, background .15s}
-.zb:hover{border-color:var(--net); color:var(--ink)}
-.zb:focus-visible{outline:2px solid var(--net); outline-offset:2px}
-.zb.act{color:var(--ink); background:rgba(30,40,58,.88); border-color:rgba(160,180,215,.72)}
+  transition:border-color .15s, color .15s, background .15s, box-shadow .15s}
 /* 점 색 = 구역 바닥판 테두리 색(ZPAL.edge)과 같은 값 — 버튼과 판이 같은 것을 가리킨다는 표시 */
-.zb i{width:9px; height:9px; border-radius:50%; flex:0 0 auto; opacity:.9}
-.zb[data-z="outside"] i{background:#93a5c2}  .zb[data-z="net"] i{background:var(--net)}
-.zb[data-z="game"]    i{background:var(--game)} .zb[data-z="store"] i{background:var(--store)}
-.zb.all{margin-right:5px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
-@media(max-width:680px){ .zonebar{right:10px; top:10px; gap:4px} .zb{font-size:.72rem; padding:5px 9px; gap:5px} }
+.zb i{width:9px; height:9px; border-radius:50%; flex:0 0 auto; background:var(--zc);
+  opacity:.38; filter:grayscale(.75); transition:opacity .15s, filter .15s, box-shadow .15s}
+.zb[data-z="outside"]{--zc:#93a5c2}  .zb[data-z="net"]{--zc:var(--net)}
+.zb[data-z="game"]   {--zc:var(--game)} .zb[data-z="store"]{--zc:var(--store)}
+.zb:focus-visible{outline:2px solid var(--net); outline-offset:2px}
+.zb:hover{color:#d3ddee; background:rgba(24,32,47,.68); border-color:rgba(160,180,215,.52)}
+.zb:hover i{opacity:.8; filter:none}
+/* 켜짐 — 흰 글자 + 구역 색 테두리(안쪽 한 겹 더) + 점 복구. 번짐은 테두리 두께감 정도만 남긴다
+   (한때 15px 로 퍼뜨렸더니 버튼이 아니라 광고 배너처럼 떴다 — 대비는 꺼진 쪽을 눌러서 만든다) */
+.zb.act{color:#fff; background:rgba(33,45,66,.94); border-color:var(--zc);
+  box-shadow:inset 0 0 0 1px var(--zc), 0 0 9px -6px var(--zc)}
+.zb.act i{opacity:1; filter:none; box-shadow:0 0 5px -1px var(--zc)}
+.zb.all{--zc:#c3d3ec; margin-right:5px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
+@media(max-width:680px){ .zonebar{left:10px; top:30px; gap:4px} .zb{font-size:.72rem; padding:5px 9px; gap:5px} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
 </style>
@@ -220,16 +332,20 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
 
 <div class="wrap">
 
-<nav class="tabs" role="tablist" aria-label="섹션">
-    <button class="tab act" data-tab="mmo" role="tab" aria-selected="true">MMO-IOCP</button>
-    <button class="tab" data-tab="dummy" role="tab" aria-selected="false">부하/검증 더미</button>
-    <button class="tab" data-tab="misc" role="tab" aria-selected="false">기타 참고</button>
-  </nav>
+<div class="tabrow">
+    <nav class="tabs" role="tablist" aria-label="섹션">
+      <button class="tab act" data-tab="mmo" role="tab" aria-selected="true"><b>MMO 서버</b><span>동접 5,000 · 구조와 병목</span></button>
+      <button class="tab" data-tab="dummy" role="tab" aria-selected="false"><b>부하 테스트</b><span>더미 클라이언트 · 측정법</span></button>
+      <button class="tab" data-tab="misc" role="tab" aria-selected="false"><b>스택 · 링크</b><span>GitHub · 기술경력서</span></button>
+    </nav>
+    <span class="tabmeta">C++17 · Windows IOCP</span>
+  </div>
 
-  <!-- MMO-IOCP 하위 탭. 상위 탭이 MMO-IOCP 일 때만 보인다 -->
-  <div class="subtabs" id="subtabs" role="tablist" aria-label="MMO-IOCP 하위 섹션">
-    <button class="subtab act" data-sub="build" role="tab" aria-selected="true">설계 및 구현</button>
-    <button class="subtab" data-sub="bneck" role="tab" aria-selected="false">병목 추적 해결</button>
+  <!-- MMO 서버 하위 탭. 상위 탭이 MMO 서버일 때만 보인다 -->
+  <div class="subtabs" id="subtabs" role="tablist" aria-label="MMO 서버 하위 섹션">
+    <button class="subtab act" data-sub="build" role="tab" aria-selected="true"><em>1</em>설계 · 구현</button>
+    <span class="stepsep" aria-hidden="true"></span>
+    <button class="subtab" data-sub="bneck" role="tab" aria-selected="false"><em>2</em>병목 · 실험</button>
   </div>
 
   <section class="panel act" id="p-build" role="tabpanel">
@@ -263,10 +379,22 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
 
 <section class="panel" id="p-bneck" role="tabpanel" hidden>
     <p class="lead">가설을 세우고 <b>실측으로 채택/기각</b>한 병목 개선 실험입니다. 수치는 전부 Prometheus/Grafana 실측값 — 실측 없이는 병목이라 단정하지 않았습니다.</p>
-    <div class="bn-stage">
-      <svg id="bnscene" viewBox="212 172 946 500" aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조도"></svg>
+    <!-- 판 세 장을 겹친다. 아래부터 설계 모습 → 청사진(원형 창 안) → 핀.
+         전환 애니는 이 요소들의 clip-path/transform/opacity 만 건드린다(SVG 안은 그린 뒤 정지).
+         .bn-shift = 지도와 캡션을 한 덩어리로 묶어 왼쪽에 붙이는 껍데기. 오른쪽은 비워 둔다. -->
+    <div class="bn-shift">
+      <div class="bn-stage">
+        <div class="bn-cam"><div class="bn-tilt">
+          <svg id="bnsolid" viewBox="212 172 946 500" aria-hidden="true"></svg>
+          <div class="bn-reveal">
+            <svg id="bnscene" viewBox="212 172 946 500" role="img"
+                 aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조도"></svg>
+          </div>
+          <svg id="bnpins" viewBox="212 172 946 500" aria-hidden="true"></svg>
+        </div></div>
+      </div>
+      <div class="bn-cap">붉은 핀 = 실측으로 확인한 병목 지점 · 핀을 누르면 해당 실험 카드로 이동</div>
     </div>
-    <div class="bn-cap">붉은 핀 = 실측으로 확인한 병목 지점 · 핀을 누르면 해당 실험 카드로 이동</div>
     <div id="bneck-body"></div>
   </section>
 
@@ -367,10 +495,12 @@ function prism(g,u,v,w,d,z0,h,c,rim){ const t=z0+h;
 
 /* 레이어 (등장 웨이브가 잡을 수 있게 lyr-* id).
    칩 레이어 2장은 일부러 id를 안 준다 = 등장 웨이브 대상에서 제외(구조가 먼저 서고 데이터가 흐름).
+   대신 class="chips" 를 준다 — 웨이브가 도는 동안 이 두 장을 통째로 감추는 데 쓴다(CSS 의 .pop-hold).
    gChipBack=건물 뒤(레일 위를 달리다 건물에 가림) / gChip=건물 앞(적재·묶음 등 '얹히는' 것) */
 const gZone=el("g"), gShad=el("g"), gLane=el("g"), gChipBack=el("g"), gBuild=el("g"), gChip=el("g"), gLbl=el("g"), gHit=el("g");
 [gZone,gShad,gLane,gChipBack,gBuild,gChip,gLbl,gHit].forEach(g=>svg.appendChild(g));
 gZone.id="lyr-plat"; gShad.id="lyr-shad"; gLane.id="lyr-lane"; gBuild.id="lyr-build"; gLbl.id="lyr-lbl";
+gChipBack.setAttribute("class","chips"); gChip.setAttribute("class","chips");
 /* 정적 레이어(구역·그림자·레일·몸통·라벨)를 어느 그룹에 그릴지 — 병목 지도가 같은 코드를 다른 SVG 로 재사용한다 */
 let TZ=gZone, TS=gShad, TR=gLane, TB=gBuild, TL=gLbl;
 
@@ -960,6 +1090,8 @@ if(twGeo){ const twZ=zoneOf("timer");
 
 const pBuild=document.getElementById("p-build");
 let run=false, prev=0, t=0, tRecv=0, tFan=0, tDirty=0;
+/* 예약해 둔 다음 프레임의 번호. 멈췄다 다시 켤 때 옛 루프가 남아 두 겹으로 도는 것을 막으려고 들고 있는다 */
+let rafId=0;
 /* 인과 게이트: 데이터의 출발점은 클라이언트 하나 — 게임에 도착해야 응답·저장이 시작된다.
    타임아웃 등록은 게이트가 아니라 수신 칩 자체가 그 지점을 지날 때 일으킨다(아래 twFire) */
 let feedGame=false;
@@ -989,7 +1121,7 @@ function storeOut(){ let rel=0;
 function frame(now){
   if(!run) return;
   /* 다른 탭을 보는 동안은 계산만 건너뛴다(루프는 유지) */
-  if(pBuild && pBuild.hidden){ prev=now; requestAnimationFrame(frame); return; }
+  if(pBuild && pBuild.hidden){ prev=now; rafId=requestAnimationFrame(frame); return; }
   const dt=Math.min(.05,(now-prev)/1000); prev=now; t+=dt;
 
   /* ── 방출 (수신만 무조건 — 나머지는 클라 데이터가 그 지점에 닿은 뒤부터) ── */
@@ -1131,15 +1263,21 @@ function frame(now){
     gameBeacon.setAttribute("r",(4.4+1.5*s).toFixed(2));
     gameBeacon.setAttribute("opacity",(0.62+0.38*s).toFixed(2)); }
 
-  requestAnimationFrame(frame);
+  rafId=requestAnimationFrame(frame);
 }
-/* 등장 웨이브(≈1.15s)가 끝난 뒤 흐르기 시작 — 구조가 먼저 서고 데이터가 흐른다 */
-if(!RMOT) setTimeout(function(){ run=true; prev=performance.now(); requestAnimationFrame(frame); }, 1250);
+/* 흐름 시작·정지 훅 — 구조가 먼저 서고 데이터가 흐른다.
+   '언제' 시작할지는 등장 웨이브 쪽(맨 아래 IIFE)이 쥔다. 첫 로드와 '다시 재생' 이 같은 길을 타야
+   두 경우의 순서가 어긋나지 않는다 — 예전엔 첫 로드만 1250ms 타이머로 늦추고 다시 재생은 안 늦춰서,
+   구조가 아직 팝인하는 중에 칩이 먼저 떠다녔다. */
+window.__flowStop =function(){ run=false; cancelAnimationFrame(rafId); rafId=0; };
+window.__flowStart=function(){ if(RMOT) return; run=true; prev=performance.now();
+  cancelAnimationFrame(rafId); rafId=requestAnimationFrame(frame); };
 /* '다시 재생' 훅: 흐름을 처음부터 — 클라에서 출발하는 인과 순서가 다시 보이게 */
 window.__flowReset=function(){
   [recvChips,drainChips,fanChips,bundChips,outChips,dirtyChips,saveChips,twChips]
     .forEach(p=>p.forEach(c=>{ c.st="wait"; c.e.setAttribute("opacity","0"); }));
   qShared=0; secN=[0,0,0]; secFlash=0; qStore=0; twPing=0; swapFlash=0; storeFlash=0;
+  pile.forEach(e=>e.setAttribute("opacity","0"));    /* SwapQ 쌓인 칸 — qShared 를 0 으로 되돌리면 칸도 비워야 짝이 맞는다 */
   dpile.forEach(e=>e.setAttribute("opacity","0"));
   feedGame=false; tRecv=tFan=tDirty=0;
 };
@@ -1149,8 +1287,22 @@ window.__flowReset=function(){
    핀 좌표는 getBBox가 아니라 px/py 수식으로 계산 → hidden 패널 안이어도 안전. */
 (function(){
   const bn=document.getElementById("bnscene"); if(!bn) return;
+  const bs=document.getElementById("bnsolid"), bp=document.getElementById("bnpins");
+  const stage=document.querySelector(".bn-stage");
   /* 복제(cloneNode)가 아니라 같은 코드를 이 SVG 로 한 번 더 돌린다 — 면을 칠하는 방식이 달라서 복제로는 안 된다.
-     배치·각도·도형은 설계 탭과 완전히 같고, 청사진으로 칠하는 것만 다르다. */
+     배치·각도·도형은 설계 탭과 완전히 같고, 청사진으로 칠하는 것만 다르다.
+
+     씬을 두 벌 그리되 서로 '다른 SVG 판' 에 그린다:
+       #bnsolid = 설계 탭과 똑같은 모습   ← 전환 애니의 출발 프레임
+       #bnscene = 청사진                  ← 도착 프레임(평소 보이는 것)
+       #bnpins  = 핀만
+     청사진은 도형 자체가 와이어(wireBox)라, filter 만 꺼서는 설계 탭 색이 나오지 않는다.
+     '설계 → 병목' 으로 변하는 장면을 만들려면 설계 모습 한 벌이 실제로 있어야 한다.
+     판을 나눠 두는 이유는 성능이다 — 한 SVG 안에서 무엇 하나라도 움직이면 그 SVG 전체를 다시 그린다.
+     판을 나누면 움직이는 것은 HTML 요소의 transform/opacity 뿐이라 이미 그려 둔 그림을 옮기기만 한다. */
+  const solid=el("g",{class:"solid"});
+  const sz=el("g"), ss=el("g"), sr=el("g"), sb=el("g"), sl=el("g");
+  [sz,ss,sr,sb,sl].forEach(function(x){ solid.appendChild(x); }); bs.appendChild(solid);
   const ghost=el("g",{class:"ghost"});
   const gz=el("g"), gr=el("g"), gb=el("g"), gl=el("g");
   [gz,gr,gb,gl].forEach(function(x){ ghost.appendChild(x); }); bn.appendChild(ghost);
@@ -1158,6 +1310,10 @@ window.__flowReset=function(){
   /* draw() 는 애니메이션이 잡아 쓸 참조를 전역에 남긴다 — 두 번째 그리기가 덮으면 설계 탭 애니가 죽는다 */
   const keep=[gameBeacon,sectorCells,iocpCells,twGeo,swapqLit,dbwLit];
   const oz=TZ, osh=TS, orl=TR, ob=TB, ol=TL;
+  /* ① 설계 탭 사본 — 기본 경로(WIRE=0) 그대로. 히트박스는 이 네 함수 밖에서 만들어지므로 안 늘어난다 */
+  TZ=sz; TS=ss; TR=sr; TB=sb; TL=sl;
+  paintZones(); paintRails(); paintBodies(); paintLabels();
+  /* ② 청사진 */
   TZ=gz; TS=el("g"); TR=gr; TB=gb; TL=gl;   /* 청사진에 접지 그림자는 없다 → 어디에도 안 붙는 g 로 흘려보낸다 */
   WIRE=1;
   WSTEP=0;  paintZones();                    /* 구역 판은 격자 없이 면만 */
@@ -1168,6 +1324,30 @@ window.__flowReset=function(){
   wireify(gb,false); wireify(gr,true);
   [].slice.call(ghost.querySelectorAll(".beacon")).forEach(function(e){ e.parentNode.removeChild(e); });   /* 비콘 자리는 핀 ②가 대신함 */
 
+  /* 청사진의 단색 물들이기는 원래 CSS filter 한 줄이었다. 그런데 474개 요소를 담은 그룹에 필터가 걸리면
+     브라우저가 프레임마다 그룹을 통째로 오프스크린에 다시 그린 뒤 색변환을 한다 —
+     전환 애니(마스크가 매 프레임 바뀜)에서 이게 그대로 겹쳐 화면이 툭툭 끊겼다.
+     같은 색변환을 그릴 때 한 번만 계산해 칠해 두면 결과는 같고, 상시 렌더 비용은 0 이 된다.
+     CM = brightness(1.06)·saturate(2.4)·hue-rotate(168deg)·sepia(1)·grayscale(1) 을 하나로 접은 행렬
+     (다섯 함수 모두 선형이라 3×3 하나로 접힌다. 값이 255를 넘으면 브라우저와 똑같이 자른다). */
+  const CM=[0.17084,0.57473,0.05802, 0.29129,0.97991,0.09892, 0.40592,1.36553,0.13785];
+  function blueprint(c){
+    if(!c||c==="none"||c.indexOf("url(")===0) return null;
+    let r,g,b,a=null;
+    if(c.charAt(0)==="#"){ let h=c.slice(1);
+      if(h.length===3) h=h.charAt(0)+h.charAt(0)+h.charAt(1)+h.charAt(1)+h.charAt(2)+h.charAt(2);
+      r=parseInt(h.slice(0,2),16); g=parseInt(h.slice(2,4),16); b=parseInt(h.slice(4,6),16);
+    } else { const m=c.match(/rgba?\(([^)]+)\)/); if(!m) return null;
+      const p=m[1].split(",").map(parseFloat); r=p[0]; g=p[1]; b=p[2]; if(p.length>3) a=p[3]; }
+    if(isNaN(r)||isNaN(g)||isNaN(b)) return null;
+    const ch=function(i){ return Math.max(0,Math.min(255,Math.round(CM[i]*r+CM[i+1]*g+CM[i+2]*b))); };
+    const o=ch(0)+","+ch(3)+","+ch(6);
+    return a===null ? "rgb("+o+")" : "rgba("+o+","+a+")";
+  }
+  [].slice.call(ghost.querySelectorAll("*")).forEach(function(e){
+    ["fill","stroke"].forEach(function(k){
+      const n=blueprint(e.getAttribute(k)); if(n) e.setAttribute(k,n); }); });
+
   /* 핀 3곳 = 실험이 실제로 붙었던 자리 (카드 배지 1·2·3과 1:1).
      핀 이름은 노드 라벨과 겹치지 않게 '병목 현상'으로 짓는다(게임 루프 옆에 또 게임 루프 금지) */
   const HOT="#ff6b52";
@@ -1176,12 +1356,24 @@ window.__flowReset=function(){
     {n:"2", name:"멤버십 팬아웃",    sub:"채택 1",          u:410, v:50,  z:58, h:64, rx:20, side:1},
     {n:"3", name:"브로드캐스트 복사", sub:"채택 2",          u:310, v:-70, z:7,  h:54, rx:17, side:1},
   ];
-  const gPins=el("g",{class:"pins"}); bn.appendChild(gPins);
+  /* 톤이 화면 전체에서 '한 번에' 바뀌면 두 그림을 겹쳐 놓고 밝기만 만진 것으로 보인다.
+     클라이언트 단(좌하)에서 바깥으로 번지게 한다 — 패킷이 들어오는 자리에서 시작해 왼쪽에서
+     오른쪽으로 훑어 나간다. 설계 탭 등장 웨이브(좌하 클라 → 우상 MySQL)와 같은 방향이라
+     두 화면이 같은 문법으로 읽힌다. 원형 창의 중심이 이 좌표다.
+     ※ 한때 병목 1번지(게임 루프)에서 시작했는데, 그 점이 화면 가로 69.5% 자리라 오른쪽부터 덮였다.
+       클라이언트는 29.2% — 게임 루프의 거의 정확한 거울점이라 방향만 깔끔하게 뒤집힌다. */
+  const VX=212, VY=172, VW=946, VH=500;          /* 이 SVG 의 viewBox */
+  const CX=px(-63,21), CY=py(-63,21,12);         /* 클라이언트 단 = 패킷이 들어오는 자리 (좌하) */
+
+  const gPins=el("g",{class:"pins"}); bp.appendChild(gPins);
   const pinEls={};
   PINS.forEach(function(p,i){
     const x=px(p.u,p.v), yb=py(p.u,p.v,p.z), yt=yb-p.h;
     const g=el("g",{class:"pin","data-loc":p.n,tabindex:"0",role:"button",
       "aria-label":"병목 "+p.n+" "+p.name+" — 해당 실험 카드로 이동"});
+    /* 톤이 세 자리를 다 지난 뒤(≈0.53s)부터 꽂는다 — 아직 안 바뀐 땅에 핀이 먼저 서면 순서가 어긋난다.
+       꽂는 순서는 톤이 닿는 순서(①③②)가 아니라 배지 번호 순서다. 카드 1·2·3 과 짝이라 세는 순서가 먼저다. */
+    g.style.animationDelay=(0.55+i*0.08)+"s";
     g.appendChild(el("ellipse",{class:"pin-base",cx:x,cy:yb,rx:p.rx,ry:p.rx/2,fill:"none",stroke:HOT,"stroke-width":1.6,opacity:".85"}));
     const pulse=el("ellipse",{class:"pin-pulse",cx:x,cy:yb,rx:p.rx,ry:p.rx/2,fill:"none",stroke:HOT,"stroke-width":1.4});
     pulse.style.animationDelay=(i*0.55)+"s"; g.appendChild(pulse);
@@ -1202,6 +1394,44 @@ window.__flowReset=function(){
     cards[0].scrollIntoView({behavior:"smooth",block:"center"});
     cards.forEach(function(c){ c.classList.remove("hl"); void c.offsetWidth; c.classList.add("hl"); });
   }
+  /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다.
+     클래스를 뺐다가 강제 리플로우 뒤 다시 걸어야 두 번째 진입부터도 처음부터 재생된다.
+
+     여기서 재는 값 두 묶음:
+       ① 원형 창 — 게임 루프 점을 화면 좌표로 옮기고, 씬 네 귀퉁이를 다 덮는 지름을 구한다.
+       ② 카메라 — fromRect(방금까지 보이던 설계 탭 씬의 위치·크기)에 그대로 겹치는 transform.
+     둘 다 상수로 못 박는다. 설계 씬은 .stage(최대 1860) 폭을 다 쓰고 병목 씬은 .bn-shift(1180) 안에
+     들어가서, 창 크기마다 어긋나는 폭이 달라진다(viewBox 만 보고 계산하면 틀린다). */
+  const tilt=stage.querySelector(".bn-tilt");
+  let bnTimer=0, bnRaf=0;
+  window.playBneckIntro=function(fromRect){
+    stage.classList.remove("bn-enter","bn-hold"); void stage.getBoundingClientRect();
+    /* 크기는 레이아웃 값(clientWidth/offsetHeight)으로 잰다 — getBoundingClientRect 는 기울기(rotateX)가
+       반영된 '보이는' 상자라 그 값으로 판 크기를 잡으면 두 판이 어긋난다. 전환 1단계에는 기울기가 없다. */
+    const sr=stage.getBoundingClientRect(), W=stage.clientWidth, H=tilt.offsetHeight;
+    if(W>0 && H>0){
+      const s=W/VW;                                /* 그림 단위 → 화면 px */
+      const cx=(CX-VX)*s, cy=(CY-VY)*s;            /* 원형 창 중심 (판 왼쪽 위 기준) */
+      const r=Math.hypot(Math.max(cx,W-cx), Math.max(cy,H-cy))+20;   /* 제일 먼 귀퉁이까지 + 여유 */
+      const st=stage.style;
+      st.setProperty("--cx",cx+"px"); st.setProperty("--cy",cy+"px");
+      st.setProperty("--r0","0px");   st.setProperty("--r1",r+"px");
+      /* 카메라는 판 전체(.bn-cam)를 옮긴다 — 원점이 왼쪽 위라 계산이 화면 px 그대로다.
+         지도를 왼쪽에 붙인 것(.bn-shift)은 sr 에 이미 들어 있어 여기서 따로 뺄 것이 없다. */
+      st.setProperty("--bn-t0", (fromRect && fromRect.width>0)
+        ? "translate("+(fromRect.left-sr.left)+"px,"+(fromRect.top-sr.top)+"px) scale("+(fromRect.width/W)+")"
+        : "none");
+    }
+    clearTimeout(bnTimer); cancelAnimationFrame(bnRaf);
+    /* 애니는 걸되 시계는 세워 둔다 — 지금 이 프레임이 패널을 처음 배치하고 그리는 비싼 프레임이다.
+       그리기가 끝난 다음 프레임에 시계를 켜야 초반이 안 잘린다. */
+    stage.classList.add("bn-enter","bn-hold");
+    bnRaf=requestAnimationFrame(function(){ bnRaf=requestAnimationFrame(function(){
+      stage.classList.remove("bn-hold");
+      /* 끝나면 클래스를 뗀다 — 그래야 핀 펄스(무한 반복)가 이 시점부터 처음 주기로 시작한다 */
+      bnTimer=setTimeout(function(){ stage.classList.remove("bn-enter"); },1620);
+    }); });
+  };
   /* 카드 hover → 핀 강조. 카드는 뒤의 IIFE가 나중에 만들므로 문서 위임으로 연결 */
   document.addEventListener("mouseover",function(e){
     const c=e.target.closest ? e.target.closest("#bneck-body .exp[data-loc]") : null;
@@ -1231,6 +1461,10 @@ window.__flowReset=function(){
     const z=b.getAttribute("data-z")||"";
     /* 같은 버튼을 다시 누르면 전체로 — 따로 '해제' 조작을 두지 않는다 */
     apply(svg.getAttribute("data-zone")===z?"":z); }); });
+  /* 탭을 옮겼다 '설계 · 구현' 으로 돌아오면 강조는 항상 전체로 되돌린다.
+     구역 하나만 켜 둔 채 나갔다 오면 다시 왔을 때 '그림이 반쯤 꺼진 화면' 부터 보게 된다.
+     탭 전환 코드는 뒤의 IIFE(다른 스코프)에 있어 여기서 창에 걸어 준다. */
+  window.resetZone=function(){ apply(""); };
 })();
 })();
 
@@ -1244,6 +1478,10 @@ window.__flowReset=function(){
   const subbar=document.getElementById("subtabs");
   let top="mmo", sub="build";
   function paint(){
+    /* 숨기기 '전에' 설계 씬이 화면 어디에 얼마 크기로 있었는지 잰다 — 숨긴 뒤에는 0 이 나온다.
+       병목 지도가 바로 이 자리에 겹쳐 시작해야 '그림이 그대로 있다가 변한다' 가 된다. */
+    const pb=document.getElementById("p-build"), sc=document.getElementById("scene");
+    const fromRect=(!pb.hidden && top==="mmo" && sub==="bneck") ? sc.getBoundingClientRect() : null;
     tabs.forEach(function(t){ var on=(t.getAttribute("data-tab")===top);
       t.className = on ? "tab act" : "tab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subs.forEach(function(t){ var on=(t.getAttribute("data-sub")===sub);
@@ -1253,6 +1491,11 @@ window.__flowReset=function(){
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
     document.getElementById("p-dummy").hidden = (top!=="dummy");
     document.getElementById("p-misc").hidden  = (top!=="misc");
+    /* 구조도 화면으로 올 때마다 구역 강조는 전체로 — 켜 둔 구역을 들고 다니지 않는다 */
+    if(top==="mmo" && sub==="build" && window.resetZone) window.resetZone();
+    /* 병목 지도로 들어올 때마다 '설계 → 청사진' 전환 애니를 처음부터.
+       설계 씬이 있던 자리를 넘겨줘야 그 자리에 그대로 겹친 채 시작한다(위에서 숨기기 전에 재 뒀다) */
+    if(top==="mmo" && sub==="bneck" && window.playBneckIntro) window.playBneckIntro(fromRect);
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });
   subs.forEach(function(t){ t.addEventListener("click",function(){ top="mmo"; sub=t.getAttribute("data-sub"); paint(); }); });
@@ -1286,11 +1529,12 @@ window.__flowReset=function(){
   const RMx=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const scene=document.getElementById("scene");
   const stage=scene && scene.closest(".stage");
-  if(!scene||!stage) return;
+  /* 흐름 시작을 이제 이 IIFE 가 쥐고 있다 — 여기서 그냥 빠져나가면 데이터가 영영 안 흐른다 */
+  if(!scene||!stage){ if(window.__flowStart) window.__flowStart(); return; }
   const body=document.body, SPAN=900;   /* factory-v3의 1800ms → 2배속 */
   const sel="#lyr-plat>*,#lyr-shad>*,#lyr-lane>*,#lyr-build>*,#lyr-lbl>*";
   const els=[].slice.call(scene.querySelectorAll(sel));
-  if(!els.length) return;
+  if(!els.length){ if(window.__flowStart) window.__flowStart(); return; }
   let H=500; try{ H=scene.getBBox().height||500; }catch(e){}
   /* 흐름축 f = cx + (H - cy) : 좌하일수록 작고(먼저), 우상일수록 큼(나중) → 대각선 스윕 */
   const info=els.map(function(el){ let cx=0,cy=0; try{ const b=el.getBBox(); cx=b.x+b.width/2; cy=b.y+b.height/2; }catch(e){} return {el:el,f:cx+(H-cy)}; });
@@ -1300,13 +1544,27 @@ window.__flowReset=function(){
   const replay=document.createElement("button");
   replay.type="button"; replay.className="stage-replay"; replay.textContent="↻ 다시 재생";
   stage.appendChild(replay);
+  /* 웨이브가 완전히 끝나는 시점 = 맨 뒤 요소의 지연(SPAN) + 요소 하나의 애니 길이(250ms).
+     +100 은 마지막 칸이 자리를 잡은 걸 눈이 확인하는 짬 — 데이터는 그 뒤에 흐른다. */
+  const WAVE=SPAN+250+100;
+  let holdTimer=0;
   function play(){
-    if(RMx){ body.classList.remove("pop-armed","pop-run"); return; }
-    if(window.__flowReset) window.__flowReset();   /* 칩 흐름도 처음부터(클라 출발) */
+    if(RMx){ body.classList.remove("pop-armed","pop-run","pop-hold"); return; }
+    /* 흐름은 멈추고(Stop) 처음으로 되돌린 뒤(Reset) 감춘다(pop-hold).
+       예전엔 Reset 만 하고 멈추지는 않아, 되돌리자마자 루프가 다시 칩을 뿜어
+       구조가 아직 팝인하는 중에 데이터가 먼저 떠다녔다. */
+    if(window.__flowStop)  window.__flowStop();
+    if(window.__flowReset) window.__flowReset();
+    body.classList.add("pop-hold");
     body.classList.remove("pop-run");
     body.classList.add("pop-armed");
     void stage.offsetWidth;   /* armed 상태를 브라우저가 인식하도록 강제 리플로우 */
     body.classList.add("pop-run");
+    clearTimeout(holdTimer);
+    holdTimer=setTimeout(function(){
+      body.classList.remove("pop-hold");
+      if(window.__flowStart) window.__flowStart();
+    }, WAVE);
   }
   replay.addEventListener("click", play);
   play();
