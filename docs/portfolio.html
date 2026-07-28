@@ -233,8 +233,8 @@ section{scroll-margin-top:76px}
 /* ── R&D · 동접 막대 계단 ── */
 /* 막대 높이 = 동접. 4,000 → 5,000 은 +25% 뿐이라 높이만으로는 안 갈라진다.
    그래서 100% 지점에 천장선을 긋고 5,000 만 닿게 해, 높이차가 아니라 "닿았나"로 구분한다.
-   트랙 266px = 막대 최대 230px + 그 위 36px(숫자 자리). */
-.rndstep{margin-top:14px}
+   트랙 = 막대 최대(--rsmax) + 그 위 36px(숫자 자리). */
+.rndstep{margin-top:14px; --rsmax:180px}
 /* 차트를 카드로 감싸 섹션 배경에서 분리한다(구조도 카드와 짝). */
 .rschart{border:1px solid var(--line); border-radius:16px; padding:32px 26px 22px;
   background:linear-gradient(180deg,#0e1626,#0b1119); box-shadow:0 18px 44px rgba(0,0,0,.30)}
@@ -252,7 +252,7 @@ section{scroll-margin-top:76px}
   background:#111a29; border:1px solid rgba(245,177,61,.45);
   box-shadow:inset 0 0 0 99px rgba(245,177,61,.10)}
 .rsgrid{display:grid; grid-template-columns:repeat(5,1fr); gap:18px; align-items:end}
-.rstrack{height:266px; display:flex; flex-direction:column; justify-content:flex-end; gap:9px}
+.rstrack{height:calc(var(--rsmax) + 36px); display:flex; flex-direction:column; justify-content:flex-end; gap:9px}
 .rs .n{font-size:1.5rem; font-weight:800; letter-spacing:-.04em; line-height:1; color:var(--ink)}
 .rs.last .n{color:var(--sig)}
 /* 막대는 0에서 자란다. 숫자가 track 안 flex-end 에 있어 막대에 밀려 같이 올라온다.
@@ -260,7 +260,7 @@ section{scroll-margin-top:76px}
 .rsbar{display:block; height:0; border-radius:7px 7px 0 0;
   background:linear-gradient(180deg,var(--hot),var(--hot-deep));
   transition:height .85s cubic-bezier(.2,.7,.2,1) calc(var(--i,0) * 110ms)}
-.rndstep.in .rsbar{height:calc(230px * var(--h) / 100)}
+.rndstep.in .rsbar{height:calc(var(--rsmax) * var(--h) / 100)}
 .rs.last .rsbar{background:linear-gradient(180deg,var(--sig),#c9861f)}
 .rs .f{margin-top:13px; padding-top:12px; border-top:1px solid var(--line);
   font-family:var(--mono); font-size:.76rem; font-weight:700; color:var(--ink2); line-height:1.45}
@@ -393,7 +393,7 @@ body.inv #about,body.inv #contact{filter:invert(1) hue-rotate(180deg)}
 [data-reveal].in{opacity:1; transform:none}
 
 @media (prefers-reduced-motion:reduce) and (min-width:841px){
-  .rndstep .rsbar{height:calc(230px * var(--h) / 100)}
+  .rndstep .rsbar{height:calc(var(--rsmax) * var(--h) / 100)}
 }
 @media (prefers-reduced-motion:reduce) and (max-width:840px){
   .rndstep .rsbar{width:calc(100% * var(--h) / 100)}
