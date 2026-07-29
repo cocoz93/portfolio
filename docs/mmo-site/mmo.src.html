@@ -517,6 +517,10 @@ body.pop-hold #scene .chips{opacity:0}
     <div class="lhint">▸ 노드 클릭 = 상세</div>
   </div>
   <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
+       ※ 클라 판을 72 로 좁히면서 내용 왼쪽이 48칸 들어왔지만, 여기는 안 당긴다.
+         폭만 줄이면 세로는 그대로라(viewBox 높이 500 고정) 씬이 통째로 4.8% 커져서
+         1800×980 화면에서 범례와 '동시 접속' 줄이 첫 화면 밖으로 밀렸다. 왼쪽 여백은 그대로 두는 쪽이 낫다.
+         (병목 씬은 반대다 — 거기선 판이 커질수록 오른쪽 패널도 같이 세로가 늘어 이득이라 당겼다.)
        내용 bbox=x285~1042 이므로 오른쪽 259칸(≈462px)이 상세카드(420px+여백) 전용 열이 된다.
        ※ 병목 탭 #bnscene 은 카드가 없으므로 옛 946 프레이밍 유지. -->
   <svg id="scene" viewBox="259 172 1042 500" role="img"
@@ -533,20 +537,20 @@ body.pop-hold #scene .chips{opacity:0}
          .bn-shift = 지도와 캡션을 한 덩어리로 묶어 왼쪽에 붙이는 껍데기. 오른쪽은 비워 둔다. -->
     <div class="bn-shift">
       <div class="bn-stage">
-        <!-- viewBox 900 = 그림이 실제로 차지하는 칸 그대로다(내용 bbox x 256~1099 를 재서 잡았다).
+        <!-- viewBox 835 = 그림이 실제로 차지하는 칸 그대로다(내용 bbox x 321~1099 를 재서 잡았다 — 클라 판을 좁히기 전에는 256~1099·900 이었다).
              한때는 여기를 1200·1420 으로 늘려 오른쪽에 빈 칸을 만들고 그 자리에 패널을 얹었는데,
              그러면 패널이 지도 아래로 내려가는 좁은 화면에서 그 빈 칸이 갈 곳 없이 남는다
              (그림이 판의 62% 만 쓰고 오른쪽 38% 가 빈 채로 그려진다).
              그래서 자리 나누기는 CSS 폭(.bn-tilt 63% / .bncard 35%)이 맡고, viewBox 는 그림만 담는다. -->
         <div class="bn-cam"><div class="bn-tilt">
-          <svg id="bnsolid" viewBox="212 172 900 500" aria-hidden="true"></svg>
+          <svg id="bnsolid" viewBox="277 172 835 500" aria-hidden="true"></svg>
           <div class="bn-reveal">
-            <svg id="bnscene" viewBox="212 172 900 500" role="img"
+            <svg id="bnscene" viewBox="277 172 835 500" role="img"
                  aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조 평면도"></svg>
           </div>
           <!-- 핀은 키보드로 짚어 갈 수 있는 버튼이다. aria-hidden 을 걸면 스크린리더에서만 사라지고
                tab 순서에는 그대로 남아, 읽히지 않는 것에 초점이 가는 상태가 된다. -->
-          <svg id="bnpins" viewBox="212 172 900 500" role="group" aria-label="병목 지점 핀 3개"></svg>
+          <svg id="bnpins" viewBox="277 172 835 500" role="group" aria-label="병목 지점 핀 3개"></svg>
         </div></div>
         <!-- 닫기 버튼이 없는 이유: 이제 이 패널이 실험을 볼 수 있는 유일한 자리다(지도 아래 목록을 걷어냈다).
              닫아 버리면 화면에서 실험이 통째로 사라진다. 대신 맨 아래 1·2·3 줄로 자리를 갈아 끼운다. -->
@@ -716,13 +720,16 @@ function shadow(u,v,w,d){ addShad(el("ellipse",
    예전 값에서는 중심이 (407,168) 이라 dbw→mysql 레일만 1.2° 기울어 있었다 —
    아이소에서는 안 보이지만 평면도에서는 유일하게 축을 벗어난 선이 된다. */
 const LAYOUT={ mysql:{u:386,v:150}, dbw:{u:273,v:148}, game:{u:380,v:20}, sector:{u:310,v:-70},
-  swapq:{u:310,v:42}, iocp:{u:190,v:50}, send:{u:168,v:-92}, accept:{u:55,v:36}, clients:{u:-63,v:21}, timer:{u:190,v:170} };
+  swapq:{u:310,v:42}, iocp:{u:190,v:50}, send:{u:168,v:-92}, accept:{u:55,v:36}, clients:{u:-27,v:21}, timer:{u:190,v:170} };
 const RAILS=[
   {from:"clients",to:"accept",color:"recv"},
   {from:"accept",to:"iocp",color:"recv"},
   {from:"iocp",to:"swapq",color:"recv"},
   {from:"swapq",to:"game",color:"recv"},
-  {from:"send",to:"clients",color:"recv",lanes:3,cross:true,pts:[{u:-30,v:-70}]},   /* 클라 복귀 구간 — 레인은 파랑 계열(사용자 확정), 복귀 칩은 주황 유지 */
+  {from:"send",to:"clients",color:"recv",lanes:3,cross:true,pts:[{u:-14,v:-70}]},   /* 클라 복귀 구간 — 레인은 파랑 계열(사용자 확정), 복귀 칩은 주황 유지.
+     u 는 clients 의 '히트박스 중심'(LAYOUT −27 + 26/2 = −14) 이어야 마지막 구간이 수직으로 곧게 선다 —
+     레일 끝점은 LAYOUT 이 아니라 center() = L.u + hit.w/2 다(accept 70 · iocp 190 과 같은 규칙).
+     무리를 줄이면서 이 값을 안 따라가면 끝점이 무리 오른쪽 끝으로 밀려 마지막 구간이 30° 로 눕는다. */
   {from:"game",to:"dbw",color:"store",pts:[{u:410,v:70},{u:410,v:130},{u:310,v:130}]},
   {from:"dbw",to:"mysql",color:"store"},
   {from:"game",to:"sector",color:"send",lanes:3,cross:true,pts:[{u:410,v:-70}]},
@@ -801,7 +808,7 @@ const ZPAL={ net:  {top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"},
    방 크기에 글자 크기가 따라가는 것은 평면도에서 오히려 자연스럽다.
    레일이 글자를 가로지르는 자리가 있는데, 구역 글자는 맨 뒤 레이어(gZone)라 레일이 위로 지나간다 = 의도. */
 const ZONES=[
-  {u:-100,v:-100,w:120,d:320,color:"outside",name:"CLIENT",  lu:30, lv:-132, ws:40, wo:.3, f:{lu:-40,lv:-85, ws:28}},
+  {u:-52, v:-100,w:72, d:320,color:"outside",name:"CLIENT",  lu:30, lv:-132, ws:40, wo:.3, f:{lu:-16,lv:-85, ws:18}},
   {u:40, v:-100,w:200,d:320,color:"net",  name:"NETWORK", lu:90, lv:251, ws:40, wo:.3, f:{lu:140,lv:112, ws:28}},
   /* 게임 판은 저장 판과 좌우 변을, 클라·네트워크 판과 아래 변을 공유한다.
      아이소에서는 원근이 어긋남을 덮어 줘서 262/-98/200 이어도 안 보였는데,
@@ -961,9 +968,11 @@ const NODES=[
     lab:{anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",10.5,"#8496b3","600",15]]},
     draw(g,u,v){ const x=bo(u,30), y=bo(v,28);
       shadow(x,y,bw(30),bw(28)); prism(g,x,y,bw(30),bw(28),0,bw(20),NET,true); } },
-  { name:"clients", card:"client", hit:[0,0,66,58,11],
+  { name:"clients", card:"client", hit:[0,0,26,58,11],
     lab:{anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
-    /* 무리 범위 — 5×5 였을 때는 CLIENT 판(120×320)에 견줘 무리가 너무 작아 판이 비어 보였다.
+    /* 무리 범위 — 판이 120×320 이던 시절에는 5×5 로는 너무 작아 판이 비어 보여 6×11 로 키웠다.
+       지금은 판을 72×320 으로 좁혔으므로(왼쪽 여백 회수) 무리도 3열(CU1 66→26)로 같이 줄인다 —
+       판만 좁히면 무리가 넘치고, 무리만 줄이면 판이 다시 빈다.
        한쪽으로만 늘리면 무리가 판 한 귀퉁이로 쏠리므로(+v 는 화면 왼쪽 위, -v 는 오른쪽 아래) 양쪽으로 늘린다.
        -v 쪽을 -18 에서 끊는 건 그 앞이 send→클라 복귀 3레인이 내려오는 자리이기 때문 — 레인을 큐브로 덮으면
        응답이 클라로 돌아가는 마지막 구간이 사라진다. 라벨 자리(LABELS.clients.dy)도 이 -v 끝에 맞춰 잡혀 있다. */
@@ -971,10 +980,12 @@ const NODES=[
        다른 노드는 몸통 하나라 레일이 중심까지 들어가도 몸통에 가려 안 보이는데,
        클라는 무리가 히트박스의 5배라 중심까지 오면 무리 한복판을 세로로 가른다
        (평면도에서는 큐브가 속이 비어 그 선이 그대로 보인다).
-       아래 draw 의 CU0..CV1 과 같은 값에서 뽑으므로 무리를 키우면 도킹도 따라온다. */
-    dock(L){ const x=bo(L.u,66), y=bo(L.v,58);
-      return [x+bw(-14), y+bw(-18), x+bw(66+9), y+bw(126+9)]; },
-    draw(g,u,v){ const CU0=-14, CU1=66, CV0=-18, CV1=126, x=bo(u,66), y=bo(v,58), cubes=[];
+       아래 draw 의 CU0..CV1 과 같은 값에서 뽑으므로 무리를 키우면 도킹도 따라온다.
+       ※ 폭(26)은 hit·draw·dock 세 군데가 같은 값이어야 한다. 하나만 고치면 레일 끝점(center=L.u+hit.w/2)이
+         무리 밖으로 나가 마지막 구간이 비스듬해진다. */
+    dock(L){ const x=bo(L.u,26), y=bo(L.v,58);
+      return [x+bw(-14), y+bw(-18), x+bw(26+9), y+bw(126+9)]; },
+    draw(g,u,v){ const CU0=-14, CU1=26, CV0=-18, CV1=126, x=bo(u,26), y=bo(v,58), cubes=[];
       for(let cu=CU0;cu<=CU1;cu+=14) for(let cv=CV0;cv<=CV1;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
       cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
       cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
@@ -1773,7 +1784,7 @@ window.__flowReset=function(){
      방향은 CSS 마스크가 갖고 있으므로(bnGrow) 여기서 잡을 좌표가 없다.
      ※ 한때 원형이었고, 그 중심을 병목 1번지(게임 루프)에 뒀다가 클라이언트로 옮긴 적이 있다.
        지금은 방향이 대각선 하나로 고정돼 그 선택 자체가 사라졌다. */
-  const VX=212, VY=172, VW=900, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로 */
+  const VX=277, VY=172, VW=835, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로 */
 
   const gPins=el("g",{class:"pins"}); bp.appendChild(gPins);
   PINS.forEach(function(p,i){
