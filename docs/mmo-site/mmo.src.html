@@ -91,11 +91,13 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .subtabs::before{content:""; position:absolute; left:0; top:-2px; width:22px; height:26px;
   border-left:2px solid rgba(108,199,255,.6); border-bottom:2px solid rgba(108,199,255,.6);
   border-bottom-left-radius:4px}
-/* 레일 : ㄴ의 가로팔을 그대로 이어 오른쪽으로. 끝에 화살표가 없으니 흐려서 끊는다
-   (딱 자르면 '잘린 선' 으로 보인다). 오른쪽 -40px 이 그 꼬리 자리다.
+/* 레일 : ㄴ의 가로팔을 그대로 이어 두 정거장까지만. 예전에는 오른쪽으로 -40px 더 빼서 흐려지는
+   꼬리를 뒀는데, 마지막 정거장 뒤에 갈 곳 없는 선이 남아 '이어질 것이 더 있다' 로 읽혔다.
+   지금은 right:0 = 마지막 알약의 오른쪽 끝. 알약이 불투명하고 위(z-index:1)라 선은 그 밑으로
+   들어가 사라지고, 눈에는 정거장 2에서 딱 끊긴 것으로 보인다 — 꼬리가 없으니 페이드도 필요 없다.
    높이·top 은 ㄴ의 가로팔과 같은 줄이어야 한다: min-height 48 → 한가운데 24 → 팔은 22~24 → 레일도 22. */
-.subtabs::after{content:""; position:absolute; left:20px; right:-40px; top:22px; height:2px;
-  background:linear-gradient(90deg, rgba(108,199,255,.6) 0 calc(100% - 48px), rgba(108,199,255,0) 100%)}
+.subtabs::after{content:""; position:absolute; left:20px; right:0; top:22px; height:2px;
+  background:rgba(108,199,255,.6)}
 /* 정거장 — 배경이 불투명해야 레일이 글자를 뚫고 지나가지 않는다.
    비활성에도 테를 두르는 이유: 배경색만 깔면 레일이 그 폭만큼 통째로 사라져 '끊긴 점선' 으로 보인다.
    둘 다 테가 있어야 '레일 위에 정거장 두 개' 로 읽힌다. */
@@ -125,12 +127,12 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
   .tab{padding:11px 14px 12px} .tab b{font-size:1.05rem} .tab span{font-size:.7rem}
   .subtabs{margin-left:14px; padding-left:16px; gap:8px; min-height:44px}
   .subtabs::before{width:16px; height:24px}
-  .subtabs::after{left:15px; top:20px; right:-26px}
+  .subtabs::after{left:15px; top:20px; right:0}
   .subtab{padding:5px 11px 5px 7px; font-size:.88rem; gap:7px} }
 @media(max-width:430px){
   .subtabs{margin-left:10px; padding-left:14px; min-height:40px}
   .subtabs::before{width:14px; height:22px}
-  .subtabs::after{left:13px; top:18px; right:-18px}
+  .subtabs::after{left:13px; top:18px; right:0}
   .subtab{padding:4px 10px 4px 6px; font-size:.82rem; gap:6px}
   .subtab em{width:18px; height:18px; font-size:.66rem} }
 
@@ -244,7 +246,14 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
    '옮겨진 카메라 + 이전 프레임 도형' 이 합성돼 그림이 어긋난 채 한 장 지나갈 수 있다.
    ※ 이 줄만 따로 떼어 재지는 않았다. 위 패널 수정과 묶어서 잰 값이 앞의 2.00 → 1.25 다.
      힌트를 뺀 뒤 겉모습은 그대로였다(평면 완료 화면 렌더가 바이트 단위로 동일). */
-.bn-stage.bn-enter .bn-cam{animation:bnCam .72s var(--bn-ease) .86s both}
+/* ═══ 카메라를 평면화보다 '먼저' 끝낸다 (0.14~0.86s) ═══
+   예전엔 이 둘을 0.86s 에 같이 돌렸다 — 한 동작으로 읽히라고. 그런데 그 구간에서 그림이 계단처럼 끊겼다.
+   실측으로 원인이 갈렸다: 그 구간 프레임 간격은 60Hz(17.1ms)이고 메인 스레드는 1.6ms 밖에 안 쓴다.
+   즉 JS 가 아니라 굽는 쪽이다 — 평면화가 매 프레임 도형 900여 개를 바꿔 SVG 두 판을 다시 굽는데,
+   같은 프레임에 카메라가 배율까지 바꾸니 매번 '다른 배율로 처음부터' 굽는 꼴이 된다(캐시가 통째로 무효).
+   시안 5종을 놓고 눈으로 고른 결과도 같았다: 배율 변화와 도형 변화를 떼어 놓은 쪽만 매끄러웠다.
+   ※ 카메라에 will-change:transform 을 거는 시안(합성 레이어로 올려 배율 재굽기를 피하는 쪽)은 효과가 없었다. */
+.bn-stage.bn-enter .bn-cam{animation:bnCam .72s var(--bn-ease) .14s both}
 .bn-stage.bn-enter .pin{animation:bnPinDrop .30s cubic-bezier(.3,1.25,.5,1) both}
 /* 진입 동안만 오른쪽 패널을 제 레이어로 띄운다. opacity:0 인 서브트리는 배치는 해도 '그리기'는 통째로 건너뛰므로,
    미리 지어 두기만 하면 켜지는 1.34s 에 첫 페인트가 그대로 남는다 — 옮긴 것이 배치뿐이라 절반만 고친 셈이 된다.
@@ -522,8 +531,11 @@ body.pop-hold #scene .chips{opacity:0}
          1800×980 화면에서 범례와 '동시 접속' 줄이 첫 화면 밖으로 밀렸다. 왼쪽 여백은 그대로 두는 쪽이 낫다.
          (병목 씬은 반대다 — 거기선 판이 커질수록 오른쪽 패널도 같이 세로가 늘어 이득이라 당겼다.)
        내용 bbox=x285~1042 이므로 오른쪽 259칸(≈462px)이 상세카드(420px+여백) 전용 열이 된다.
-       ※ 병목 탭 #bnscene 은 카드가 없으므로 옛 946 프레이밍 유지. -->
-  <svg id="scene" viewBox="259 172 1042 500" role="img"
+       ※ 병목 탭 #bnscene 은 카드가 없으므로 옛 946 프레이밍 유지.
+       ※ 요각 YAW=−12 를 준 뒤 시작점을 259,172 → 311,190 으로 옮겼다. 그림이 통째로 오른쪽·아래로
+         밀렸을 뿐(폭 767→776, 높이 442→423) 크기는 그대로라, 창을 같은 만큼 따라 옮기면
+         여백 배분이 그대로 유지된다. 각도를 되돌리려면 이 값도 함께 되돌릴 것. -->
+  <svg id="scene" viewBox="311 190 1042 500" role="img"
        aria-label="IOCP 기반 MMO 게임 서버의 아이소메트릭 아키텍처 다이어그램"></svg>
   <div class="card" id="card"><button class="x" data-close aria-label="닫기">✕</button><div id="cardbd"></div></div>
 </div>
@@ -541,16 +553,19 @@ body.pop-hold #scene .chips{opacity:0}
              한때는 여기를 1200·1420 으로 늘려 오른쪽에 빈 칸을 만들고 그 자리에 패널을 얹었는데,
              그러면 패널이 지도 아래로 내려가는 좁은 화면에서 그 빈 칸이 갈 곳 없이 남는다
              (그림이 판의 62% 만 쓰고 오른쪽 38% 가 빈 채로 그려진다).
-             그래서 자리 나누기는 CSS 폭(.bn-tilt 63% / .bncard 35%)이 맡고, viewBox 는 그림만 담는다. -->
+             그래서 자리 나누기는 CSS 폭(.bn-tilt 63% / .bncard 35%)이 맡고, viewBox 는 그림만 담는다.
+             ※ 요각 YAW=−12 로 아이소 그림이 오른쪽·아래로 밀려서 시작점을 277,172 → 329,190 으로 옮겼다.
+               평면 그림(FPJ)은 각도의 영향을 안 받으므로, 창을 옮긴 만큼 FPJ 의 원점도 같이 옮겨야
+               평소 보이는 평면도가 제자리에 남는다(cx +52 · cy +18). 둘은 항상 같이 움직인다. -->
         <div class="bn-cam"><div class="bn-tilt">
-          <svg id="bnsolid" viewBox="277 172 835 500" aria-hidden="true"></svg>
+          <svg id="bnsolid" viewBox="329 190 835 500" aria-hidden="true"></svg>
           <div class="bn-reveal">
-            <svg id="bnscene" viewBox="277 172 835 500" role="img"
+            <svg id="bnscene" viewBox="329 190 835 500" role="img"
                  aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조 평면도"></svg>
           </div>
           <!-- 핀은 키보드로 짚어 갈 수 있는 버튼이다. aria-hidden 을 걸면 스크린리더에서만 사라지고
                tab 순서에는 그대로 남아, 읽히지 않는 것에 초점이 가는 상태가 된다. -->
-          <svg id="bnpins" viewBox="277 172 835 500" role="group" aria-label="병목 지점 핀 3개"></svg>
+          <svg id="bnpins" viewBox="329 190 835 500" role="group" aria-label="병목 지점 핀 3개"></svg>
         </div></div>
         <!-- 닫기 버튼이 없는 이유: 이제 이 패널이 실험을 볼 수 있는 유일한 자리다(지도 아래 목록을 걷어냈다).
              닫아 버리면 화면에서 실험이 통째로 사라진다. 대신 맨 아래 1·2·3 줄로 자리를 갈아 끼운다. -->
@@ -606,6 +621,21 @@ function el(t,a,txt){ const e=document.createElementNS(SVGNS,t);
 
 /* 아이소 투영 */
 const KX=0.86, KY=0.46, OX=560, OY=560;
+/* ═══ 요각(YAW) — 바닥을 수직축 둘레로 몇 도 돌려서 보느냐 ═══
+   0 이면 옛 좌우대칭 아이소, 음수면 시계방향. −12 는 GAME 판을 조금 더 정면으로 돌린 자세다.
+   KX·KY 는 45° 대칭일 때의 값이라 각도를 넣으려면 한 단계 되돌려야 한다:
+     AXLEN = 축 한 칸이 화면에서 갖는 길이      = KX / cos45
+     ELEV  = 카메라 고도의 sin                  = KY / (AXLEN·sin45)
+   축의 월드 방위 ψ 에 대해   x = AXLEN·cosψ ,  y = −AXLEN·sinψ·ELEV   (u축 ψ=45+YAW · v축 ψ=135+YAW)
+   YAW=0 을 넣으면 ax=KX, bx=−KX, ay=by=−KY 로 옛 값이 그대로 나온다 — 되돌리려면 이 한 줄만 0 으로. */
+const YAW=-12;
+const AXLEN=KX/Math.cos(Math.PI/4), ELEV=KY/(AXLEN*Math.sin(Math.PI/4));
+const YU=(45+YAW)*Math.PI/180, YV=(135+YAW)*Math.PI/180;
+/* 아이소 기준 기저 — PJ 는 평면 사본을 뽑는 동안 잠시 FPJ 로 바뀐다.
+   '바닥 위 앞뒤 순서', '어느 모서리가 화면 위인가', '바닥에 누운 칩 모양' 처럼
+   두 사본이 반드시 같은 답을 내야 하는 계산은 PJ 가 아니라 이 값을 본다(평면에서 판정이 뒤집히면 전환 애니가 어긋난다). */
+const ISO={ax:AXLEN*Math.cos(YU),               bx:AXLEN*Math.cos(YV),
+           ay:-AXLEN*Math.sin(YU)*ELEV,         by:-AXLEN*Math.sin(YV)*ELEV};
 /* ═══ 투영을 상수가 아니라 값으로 들고 있는 이유 ═══
    병목 지도는 같은 씬을 '위에서 내려다본 평면' 으로 한 벌 더 그린다(전환 애니의 도착 그림).
    두 그림은 배치·도형이 같고 투영만 다르므로, 투영을 이렇게 일반형으로 빼 두면
@@ -614,9 +644,9 @@ const KX=0.86, KY=0.46, OX=560, OY=560;
        py = cy + ay·u + by·v − kz·z
    아이소  : ax=KX  bx=−KX  cx=OX / ay=−KY by=−KY cy=OY / kz=1
    평면    : ax=S   bx=0    cx=… / ay=0    by=−S   cy=…  / kz=0  ← 높이가 사라져 발자국만 남는다
-   PJ.iso 일 때는 옛 식을 그대로 탄다 — 설계 탭이 부동소수점 마지막 자리까지 지금과 같아야 하고,
-   칩 흐름 루프가 매 프레임 부르는 자리라 곱셈 두 번을 아끼는 뜻도 있다. */
-const PJ={iso:true, ax:KX, bx:-KX, cx:OX, ay:-KY, by:-KY, cy:OY, kz:1};
+   PJ.iso 는 YAW=0 일 때만 켜지는 지름길이다(대칭이라야 (u−v)·KX 로 접힌다).
+   칩 흐름 루프가 매 프레임 부르는 자리라 곱셈 두 번을 아끼는 뜻인데, 각도를 주면 일반형으로 가야 맞다. */
+const PJ={iso:(YAW===0), ax:ISO.ax, bx:ISO.bx, cx:OX, ay:ISO.ay, by:ISO.by, cy:OY, kz:1};
 const px=(u,v)=>PJ.iso?OX+(u-v)*KX:PJ.cx+PJ.ax*u+PJ.bx*v;
 const py=(u,v,z)=>PJ.iso?OY-(u+v)*KY-(z||0):PJ.cy+PJ.ay*u+PJ.by*v-PJ.kz*(z||0);
 const P=(u,v,z)=>px(u,v).toFixed(1)+","+py(u,v,z).toFixed(1);
@@ -840,6 +870,12 @@ const ZW_LS=.04;   /* 자간(em) — 여기 한 줄로 네 구역 글자 간격�
    아이소에서는 옛 상수식 matrix(KX,−KY,KX,KY,…) 와 같은 값이다. */
 function floorMat(u,v){ return "matrix("+PJ.ax.toFixed(4)+","+PJ.ay.toFixed(4)+","
   +(-PJ.bx).toFixed(4)+","+(-PJ.by).toFixed(4)+","+px(u,v).toFixed(2)+","+py(u,v,0).toFixed(2)+")"; }
+/* 바닥에 눕히는 변환 — 위 floorMat 과 달리 v 축을 뒤집지 않는다(글자가 아니라 도형용).
+   안쪽을 (u,v) 로 그리면 투영이 알아서 눕혀 준다. 바닥에 놓인 '원' 처럼
+   화면 좌표로는 축정렬 타원이 될 수 없는 도형이 이걸 쓴다(요각이 들어가면 기울어진 타원이 된다).
+   z 를 주면 그 높이의 면에 얹는다. 전환 애니는 transform 안 숫자 6개를 그대로 보간한다. */
+function floorTf(u,v,z){ return "matrix("+PJ.ax.toFixed(4)+","+PJ.ay.toFixed(4)+","
+  +PJ.bx.toFixed(4)+","+PJ.by.toFixed(4)+","+px(u,v).toFixed(2)+","+py(u,v,z||0).toFixed(2)+")"; }
 
 /* Stage2 애니메이션이 잡아 쓸 노드 내부 참조 — 각 draw()에서 채운다 */
 let gameBeacon=null, sectorCells=null, iocpCells=null, twGeo=null;
@@ -954,7 +990,7 @@ const NODES=[
     lab:{anch:"middle",lines:[["IOCP 워커",14.5,"#eef2fb","800",0],["×4 · 병렬 파싱",11,"#6cc7ff","700",16]]},
     draw(g,u,v){ prism(g,u-bw(23),v-bw(22),bw(46),bw(44),-bw(2),bw(3),["#1c2b45","#0e1626","#152238"]);
       const cells=[[-17,-16],[1,-16],[-17,1],[1,1]].map(c=>[u+bw(c[0]), v+bw(c[1])])
-        .sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
+        .sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
       iocpCells=cells.map(c=>({u:c[0]+bw(8), v:c[1]+bw(7.5),
         top:prism(g,c[0],c[1],bw(16),bw(15),0,bw(16),NET,true)})); } },
   /* IOCP 워커 큐브(16×15×16)와 같은 급이어야 하는데 혼자 작았다 → 17×11×14.
@@ -987,20 +1023,29 @@ const NODES=[
       return [x+bw(-14), y+bw(-18), x+bw(26+9), y+bw(126+9)]; },
     draw(g,u,v){ const CU0=-14, CU1=26, CV0=-18, CV1=126, x=bo(u,26), y=bo(v,58), cubes=[];
       for(let cu=CU0;cu<=CU1;cu+=14) for(let cv=CV0;cv<=CV1;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
-      cubes.sort((a,b)=>(b[0]+b[1])-(a[0]+a[1]));
+      cubes.sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
       cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
   { name:"timer", card:"iocp", hit:[-22,-22,44,44,4],
     lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
-    /* 문자판은 바닥에 놓인 원이라 반지름 두 개가 투영에서 나와야 한다(아이소 R·KX/R·KY → 평면 R·S/R·S = 정원) */
-    draw(g,u,v){ const R=bw(32), cx=px(u,v), cy=py(u,v,bw(4)), EX=PJ.ax, EY=-PJ.by;
-      addShad(el("ellipse",{cx,cy:cy+5,rx:R*EX*1.1,ry:R*EY*1.1,fill:"#05070d",opacity:FLAT?0:.42}));
+    /* 문자판은 바닥에 놓인 원이다. 예전에는 화면 좌표에 축정렬 타원(rx=R·ax, ry=−R·by)으로 그렸는데,
+       그 모양은 좌우대칭 아이소에서만 맞다 — 요각이 들어가면 실제로는 기울어진 타원이라
+       판은 돌아가는데 문자판만 안 돌아 바닥에서 떠 보인다. 그래서 바닥 변환(floorTf) 안에
+       '진짜 원' 으로 그리고 눕히는 일은 투영에 맡긴다. 선 굵기는 변환에 안 눌리게 non-scaling-stroke.
+       (평면 사본에서는 이 변환이 등배라 옛날처럼 정원이 된다 — 보이는 결과는 그대로.) */
+    draw(g,u,v){ const R=bw(32), tf=floorTf(u,v,bw(4));
+      const shg=el("g",{transform:"translate(0,5) "+tf});
+      shg.appendChild(el("ellipse",{cx:0,cy:0,rx:R*1.1,ry:R*1.1,fill:"#05070d",opacity:FLAT?0:.42}));
+      addShad(shg);
       prism(g,u-bw(22),v-bw(22),bw(44),bw(44),0,bw(4),["#2a3450","#141c30","#1d2740"]);
-      const rx=R*EX*1.02, ry=R*EY*1.02; twGeo={cx,cy,rx,ry};
-      g.appendChild(el("ellipse",{cx,cy,rx,ry,fill:"#101828",stroke:"#3a4864","stroke-width":1.4}));
+      const dial=el("g",{transform:tf}); twGeo={tf:tf, R:R*1.02};
+      dial.appendChild(el("circle",{cx:0,cy:0,r:R*1.02,fill:"#101828",stroke:"#3a4864",
+        "stroke-width":1.4,"vector-effect":"non-scaling-stroke"}));
       for(let i=0;i<12;i++){ const a=i/12*Math.PI*2;
-        g.appendChild(el("line",{x1:cx+Math.cos(a)*rx*0.78,y1:cy+Math.sin(a)*ry*0.78,
-          x2:cx+Math.cos(a)*rx*0.96,y2:cy+Math.sin(a)*ry*0.96,stroke:"#46577a","stroke-width":1.3,opacity:.7})); }
-      g.appendChild(el("circle",{cx,cy,r:bw(3.5),fill:"#cfe0f2"})); } },
+        dial.appendChild(el("line",{x1:Math.cos(a)*R*0.78,y1:Math.sin(a)*R*0.78,
+          x2:Math.cos(a)*R*0.96,y2:Math.sin(a)*R*0.96,stroke:"#46577a","stroke-width":1.3,
+          opacity:.7,"vector-effect":"non-scaling-stroke"})); }
+      dial.appendChild(el("circle",{cx:0,cy:0,r:bw(3.5),fill:"#cfe0f2"}));
+      g.appendChild(dial); } },
 ];
 /* 히트박스·라벨 높이도 몸통과 같이 키운다 — 중심(레일 끝점)은 그대로.
    큐 3종은 몸통을 안 키웠으니(칩에 물림) 제외한다. */
@@ -1057,11 +1102,15 @@ const LTINT={recv:"#16243a", send:"#2a2412", store:"#12281c"};   /* 초기본 RT
    knee(꺾임 좌표들)를 주면 그 반경 안쪽 구간에만 줄 밑에 살짝 넓은 어두운 띠를 먼저 깐다
    — 겹친 자리에서 어느 줄이 위인지 보이라고. 직선 구간의 모습은 그대로다. */
 /* 채널 모서리 두 줄 중 어느 쪽이 '화면 위' 인가 — 그림자/빛을 나눠 칠하는 기준.
-   원래는 py 두 개를 비교했는데, 아이소에서 그 비교는 (pu+pv)>=0 과 정확히 같은 식이다(KY>0).
-   투영에 안 기대는 쪽으로 바꾼 이유: 병목 지도의 평면 사본에서는 py 가 u 를 안 보므로
-   세로 레일에서 두 값이 같아져 판정이 뒤집힌다. 그러면 아이소 그림과 평면 그림의
-   '같은 자리' 선이 서로 반대쪽 모서리가 되어, 전환 애니에서 선 하나가 레일을 가로질러 미끄러진다. */
-const UPSIGN=(pu,pv)=>(pu+pv>=0?1:-1);
+   바닥 오프셋 (pu,pv) 가 화면에서 세로로 얼마나 가는가 = ay·pu + by·pv (음수면 위).
+   반드시 '아이소' 기저(ISO)로 재야 한다. 현재 PJ 로 재면 평면 사본에서는 ay 가 0 이라
+   세로 레일에서 두 값이 같아져 판정이 뒤집히고, 아이소 그림과 평면 그림의 '같은 자리' 선이
+   서로 반대쪽 모서리가 되어 전환 애니에서 선 하나가 레일을 가로질러 미끄러진다.
+   (YAW=0 이면 ay=by=−KY 라 옛 식 (pu+pv)>=0 과 완전히 같은 결과다.) */
+const UPSIGN=(pu,pv)=>(ISO.ay*pu+ISO.by*pv<=0?1:-1);
+/* 바닥 위 앞뒤 순서(뒤에 있는 것부터 그린다) — 화면에서 위에 놓이는 쪽이 뒤다.
+   옛 식은 (u+v) 내림차순이었는데 그것도 대칭일 때만 맞다. 같은 이유로 ISO 로 잰다. */
+const DEPTH=(u,v)=>ISO.ay*u+ISO.by*v;
 const XSHADE=.45, XSHADE_R=38, XSHADE_W=2.5;
 function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
   if(knee) knee.forEach(function(C){ const hs=h+XSHADE_W;
@@ -1134,7 +1183,7 @@ paintRails();
 
 /* ── 노드 몸통 (뒤→앞) ── */
 function paintBodies(){
-NODES.slice().sort((a,b)=>{ const A=LAYOUT[a.name],B=LAYOUT[b.name]; return (B.u+B.v)-(A.u+A.v); })
+NODES.slice().sort((a,b)=>{ const A=LAYOUT[a.name],B=LAYOUT[b.name]; return DEPTH(A.u,A.v)-DEPTH(B.u,B.v); })
   .forEach(n=>{ const L=LAYOUT[n.name], g=el("g");
     drawZone=zoneOf(n.name); if(drawZone) g.setAttribute("data-z",drawZone);   /* 몸통 안에서 부르는 shadow() 도 이 값을 물려받는다 */
     n.draw(g,L.u,L.v); TB.appendChild(g); });
@@ -1247,13 +1296,19 @@ function mix(a,b,t){ a=parseInt(a.slice(1),16); b=parseInt(b.slice(1),16);
   const ar=a>>16,ag=(a>>8)&255,ab=a&255, br=b>>16,bg=(b>>8)&255,bb=b&255;
   return "#"+((1<<24)+((Math.round(ar+(br-ar)*t))<<16)+((Math.round(ag+(bg-ag)*t))<<8)
     +Math.round(ab+(bb-ab)*t)).toString(16).slice(1); }
-/* 칩 = 아이소 평면에 누운 마름모.
-   납작한 정도는 반드시 KY/KX — 예전의 .58 은 실제 아이소 정사각형보다 살짝 높아서,
-   칩을 한 칸 간격으로 붙여 놔도 위아래에 틈이 생겼다. */
-const CHIP_R=KY/KX;
+/* 칩 = 바닥에 누운 정사각형. 옛 코드는 '마름모(가로 s · 세로 s·KY/KX)' 로 못 박혀 있었는데,
+   그 모양은 좌우대칭 아이소일 때만 바닥 정사각형과 일치한다. 요각이 들어가면 평행사변형이라
+   같은 식으로 그리면 칩이 레일·큐 칸과 미세하게 어긋난다(슬롯에 쌓을수록 벌어진다).
+   그래서 두 축을 그대로 세워 그린다. s 의 뜻은 그대로 둔다(호출부 숫자를 안 건드리려고):
+   s = 옛 마름모의 가로 반폭 → 월드 한 변 = s/KX. 그 절반이 축 방향 반벡터다.
+   YAW=0 이면 CH_P=(0,−KY/KX)·s, CH_Q=(1,0)·s 가 되어 옛 마름모와 꼭짓점까지 같다. */
+const CH_P=[(ISO.ax+ISO.bx)/(2*KX), (ISO.ay+ISO.by)/(2*KX)];
+const CH_Q=[(ISO.ax-ISO.bx)/(2*KX), (ISO.ay-ISO.by)/(2*KX)];
 function setChip(e,x,y,s){ e.setAttribute("points",
-  x.toFixed(1)+","+(y-s*CHIP_R).toFixed(1)+" "+(x+s).toFixed(1)+","+y.toFixed(1)+" "+
-  x.toFixed(1)+","+(y+s*CHIP_R).toFixed(1)+" "+(x-s).toFixed(1)+","+y.toFixed(1)); }
+  (x+s*CH_P[0]).toFixed(1)+","+(y+s*CH_P[1]).toFixed(1)+" "+
+  (x+s*CH_Q[0]).toFixed(1)+","+(y+s*CH_Q[1]).toFixed(1)+" "+
+  (x-s*CH_P[0]).toFixed(1)+","+(y-s*CH_P[1]).toFixed(1)+" "+
+  (x-s*CH_Q[0]).toFixed(1)+","+(y-s*CH_Q[1]).toFixed(1)); }
 /* z = 이 칩이 타는 레일의 구역(구역 강조에서 레일과 같이 살고 죽으라고) — 레일이 두 구역에 걸치면 둘 다 적는다 */
 function pool(n,fill,layer,z){ const a=[];
   for(let i=0;i<n;i++){ const e=el("polygon",{points:"0,0",fill,opacity:"0","data-z":z||""});
@@ -1347,10 +1402,12 @@ const FLASH_T=0.40; let swapFlash=0, storeFlash=0;
 /* ── Timing Wheel: 바늘 + 등록 신호 링 ── */
 let twPing=0, twHand=null, twRing=null;
 /* 바늘·링은 Timing Wheel 문자판에 얹히는 것이라 그 노드와 같은 구역(네트워크)으로 묶는다 */
+/* 문자판과 같은 바닥 변환(twGeo.tf) 위에 얹는다 — 안쪽 좌표는 바닥 기준이라 반지름이 하나면 된다 */
 if(twGeo){ const twZ=zoneOf("timer");
-  twRing=el("ellipse",{cx:twGeo.cx,cy:twGeo.cy,rx:twGeo.rx,ry:twGeo.ry,
-    fill:"none",stroke:"#8ad4ff","stroke-width":1.6,opacity:".25","data-z":twZ});
-  twHand=el("polygon",{points:"0,0",fill:"#cfe0f2",opacity:".9","data-z":twZ});
+  twRing=el("ellipse",{cx:0,cy:0,rx:twGeo.R,ry:twGeo.R,transform:twGeo.tf,
+    fill:"none",stroke:"#8ad4ff","stroke-width":1.6,opacity:".25",
+    "vector-effect":"non-scaling-stroke","data-z":twZ});
+  twHand=el("polygon",{points:"0,0",transform:twGeo.tf,fill:"#cfe0f2",opacity:".9","data-z":twZ});
   gChip.appendChild(twRing); gChip.appendChild(twHand); }
 
 const pBuild=document.getElementById("p-build");
@@ -1516,12 +1573,14 @@ function frame(now){
     if(c.d>=R.tot){ c.st="wait"; c.e.setAttribute("opacity","0"); twPing=1; return; }
     const p=at(R,c.d); setChip(c.e,px(p[0],p[1]),py(p[0],p[1],3),3.8);
     c.e.setAttribute("opacity",(0.75*fade(c.d,R.tot,16,16)).toFixed(2)); });
+  /* 바늘도 바닥 좌표로 그린다(요소에 twGeo.tf 가 걸려 있다). −sin 인 이유: 바닥의 v 축은
+     화면에서 왼쪽 위로 가므로, 그냥 (cos,sin) 을 쓰면 시계바늘이 반시계로 돈다. */
   if(twHand){ const a=t*0.9-Math.PI/2;
-    const ex=twGeo.cx+Math.cos(a)*twGeo.rx*0.86, ey=twGeo.cy+Math.sin(a)*twGeo.ry*0.86;
-    const dx=ex-twGeo.cx, dy=ey-twGeo.cy, L=Math.hypot(dx,dy)||1, nx=-dy/L*2, ny=dx/L*2;
+    const ex=Math.cos(a)*twGeo.R*0.86, ey=-Math.sin(a)*twGeo.R*0.86;
+    const L=Math.hypot(ex,ey)||1, nx=-ey/L*2, ny=ex/L*2;
     twHand.setAttribute("points", ex.toFixed(1)+","+ey.toFixed(1)+" "
-      +(twGeo.cx+nx).toFixed(1)+","+(twGeo.cy+ny).toFixed(1)+" "
-      +(twGeo.cx-nx).toFixed(1)+","+(twGeo.cy-ny).toFixed(1));
+      +nx.toFixed(1)+","+ny.toFixed(1)+" "
+      +(-nx).toFixed(1)+","+(-ny).toFixed(1));
     /* 등록 신호가 잦아졌으므로(수신 칩마다 두 번) 감쇠를 짧게 — 안 그러면 링이 계속 켜진 채 맥동이 안 보인다 */
     twPing=Math.max(0,twPing-dt/0.28);
     twRing.setAttribute("opacity",(0.22+0.50*twPing).toFixed(2)); }
@@ -1678,8 +1737,10 @@ window.__flowReset=function(){
        위   Timing Wheel · DB 워커 · MySQL
        가운데 클라 → Accept → IOCP → SwapQ → 게임 루프   (수신)
        아래  Send 워커 ← 송신 큐                          (응답)
-     1.36 과 원점 두 개는 '구역판 + 발자국 + 라벨' 을 전부 넣고 판 한가운데 오도록 푼 값이다. */
-  const FPJ={iso:false, ax:1.36, bx:0, cx:391.84, ay:0, by:-1.36, cy:496.25, kz:0};
+     1.36 과 원점 두 개는 '구역판 + 발자국 + 라벨' 을 전부 넣고 판 한가운데 오도록 푼 값이다.
+     원점(cx·cy)에 52·18 이 더해져 있는 것은 요각(YAW=−12) 때문에 옮긴 viewBox 를 따라간 것이다 —
+     평면 그림 자체는 각도와 무관하므로, 창이 움직인 만큼 같이 움직여야 화면에서 제자리에 남는다. */
+  const FPJ={iso:false, ax:1.36, bx:0, cx:443.84, ay:0, by:-1.36, cy:514.25, kz:0};
   const fx=function(u){ return FPJ.cx+FPJ.ax*u; };
   const fy=function(v){ return FPJ.cy+FPJ.by*v; };
 
@@ -1784,7 +1845,7 @@ window.__flowReset=function(){
      방향은 CSS 마스크가 갖고 있으므로(bnGrow) 여기서 잡을 좌표가 없다.
      ※ 한때 원형이었고, 그 중심을 병목 1번지(게임 루프)에 뒀다가 클라이언트로 옮긴 적이 있다.
        지금은 방향이 대각선 하나로 고정돼 그 선택 자체가 사라졌다. */
-  const VX=277, VY=172, VW=835, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로 */
+  const VX=329, VY=190, VW=835, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로 */
 
   const gPins=el("g",{class:"pins"}); bp.appendChild(gPins);
   PINS.forEach(function(p,i){
@@ -1821,11 +1882,19 @@ window.__flowReset=function(){
   /* ── 평면화 구동 ──
      CSS 로는 못 하는 유일한 조각이라 여기만 rAF 다. 그래서 '모션 줄이기' 도 직접 막아야 한다
      (다른 연출은 전역 CSS 규칙 한 줄이 다 꺼 주지만 rAF 는 안 꺼진다). */
+  /* 시계 (전부 클릭 기준):
+       0.14~0.86s 카메라 안착   ← CSS. 여기서 끝나야 평면화가 고정 배율에서 돈다
+       0.00~0.86s 청사진 번지기 ← CSS 마스크
+       0.86~1.58s 평면화        ← 여기 rAF
+       1.34s      핀 드랍·카드  ← 평면화가 거의 끝난 뒤. 핀 좌표가 '평면 기준' 이라 순서를 지켜야 한다
+     ※ 끊김을 잡으려고 이 길이를 1200ms 로 늘려 본 적이 있는데, 원인은 길이가 아니라 카메라와 겹친 것이었다.
+       카메라를 앞으로 뺀 뒤로는 720ms 로도 매끄럽다 — 원래 속도가 더 낫다고 판단해 되돌렸다.
+     FLAT_DUR 을 건드리면 핀 지연(1.34)·카드 켜기(1340)·BN_TOTAL 을 같은 폭으로 함께 옮길 것. */
   const FLAT_AT=860, FLAT_DUR=720, BN_TOTAL=1860;
   const RMB=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const panel=document.getElementById("p-bneck");
-  /* CSS 카메라 안착이 쓰는 cubic-bezier(.22,.61,.36,1) 을 그대로 계산한다 —
-     같은 구간에 같이 도는 두 움직임이 다른 곡선을 타면 한 동작으로 안 읽힌다. */
+  /* CSS 카메라 안착과 같은 곡선(cubic-bezier(.22,.61,.36,1))을 그대로 계산한다.
+     이제 두 움직임이 시간상 이어 달리므로, 곡선이 같아야 '한 동작이 계속된다' 로 읽힌다. */
   function bnEase(t){
     const x1=.22,y1=.61,x2=.36,y2=1;
     const cx=3*x1, bx=3*(x2-x1)-cx, ax=1-cx-bx;
@@ -1892,7 +1961,7 @@ window.__flowReset=function(){
          다만 '짓기' 와 '켜기' 는 나눠 둔다:
            0.30s  짓기 — 이 구간은 마스크만 훑고 지나가는 중이라(평면화는 0.86s 부터) 메인 스레드가 비어 있다.
                         여기서 배치하고 레이어로 구워 둔다.
-           1.34s  켜기 — 남은 일은 합성 단계의 알파 한 값뿐.
+           1.34s  켜기 — 남은 일은 합성 단계의 알파 한 값뿐. 핀 드랍과 같은 시각이다.
          한 박자로 1.34s 에 다 하면 그 프레임이 평면화·핀 드랍과 겹쳐 전환 한복판이 통째로 밀린다.
          반대로 진입 프레임에 몰아넣어도 안 된다 — 거기는 이미 도형 950개를 처음 그리는 프레임이다. */
       bnFill=setTimeout(function(){ fillCard(PINS[0]); }, RMB?0:300);
@@ -1905,9 +1974,45 @@ window.__flowReset=function(){
 
   /* 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다. 아직 안 지었으면 여기서 짓는다. */
   window.playBneckIntro=function(fromRect){ build(); closeCard(); realIntro(fromRect); };
+  /* ═══ 첫 전환이 유독 한 번 멈칫하던 이유 = '지어 두기' 만으로는 모자랐다 ═══
+     실측(창 1584×905 · dpr 1 · 새 프로필): 첫 전환에서 프레임 하나가 83ms(=5프레임 유실).
+     두 번째·세 번째 전환은 최대 17ms 로 깨끗했다. long task 는 0 — 즉 JS 가 아니라 그리기 쪽이다.
+     display:none 인 판은 지어 놔도 레이아웃도 래스터도 안 된다. 탭을 누른 그 프레임에
+     도형 900여 개를 처음 래스터하느라 밀린 것이다(한 번 미리 그려 두고 재니 83 → 33ms 로 떨어졌다).
+     그래서 한가할 때 두 프레임만 실제로 그려 본다: 흐름에서 빼고(absolute) 거의 투명하게 올렸다 내린다
+     — 문서 높이가 안 변하니 스크롤이 안 튀고, opacity .01 이라 눈에도 안 띈다. */
+  var warmAt=-1e9;
+  function prewarm(){
+    var pb=document.getElementById("p-bneck"); if(!pb) return;
+    if(performance.now()-warmAt<1500) return;      /* 마우스가 들락거려도 두 프레임짜리 예열이 겹치지 않게 */
+    warmAt=performance.now();
+    /* 이미 병목 탭에 들어와 있으면(딥링크 #bneck 이거나 예열 전에 눌렀다) 벌써 그려진 뒤다 —
+       여기서 손대면 보이는 판을 두 프레임 흔드는 꼴이 된다. */
+    if(!pb.hidden) return;
+    var st=pb.style;
+    st.position="absolute"; st.left="0"; st.right="0"; st.top="0";
+    st.opacity="0.01"; st.pointerEvents="none";
+    pb.hidden=false;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      /* 두 프레임 사이에 사용자가 탭을 눌렀을 수도 있다 — 그때는 판을 도로 숨기면 안 된다.
+         (탭 코드가 hidden 을 이미 false 로 만들어 뒀으므로 자리 잡는 값만 되돌린다.) */
+      var live=document.querySelector('.subtab[data-sub="bneck"]');
+      if(!(live&&live.classList.contains("act"))) pb.hidden=true;
+      st.position=st.left=st.right=st.top=st.opacity=st.pointerEvents="";
+    }); });
+  }
   /* 브라우저가 한가해지는 첫 순간에 미리 지어 둔다 — 그래야 탭을 눌렀을 때 짓느라 멈칫하지 않는다.
-     requestIdleCallback 이 없는 브라우저(사파리 구버전)는 짧은 타이머로 대신한다. */
-  (window.requestIdleCallback||function(f){ setTimeout(f,300); })(build,{timeout:1200});
+     requestIdleCallback 이 없는 브라우저(사파리 구버전)는 짧은 타이머로 대신한다.
+     예열은 짓기와 같은 작업에 붙이지 않는다 — 한 프레임에 몰면 등장 웨이브가 도는 중에 겹친다. */
+  var idle=window.requestIdleCallback||function(f){ setTimeout(f,300); };
+  idle(function(){ build(); idle(prewarm,{timeout:2000}); },{timeout:1200});
+  /* 한가할 때 해 둔 예열은 시간이 지나면 효과가 옅어진다 — 숨은 판의 래스터 타일은 브라우저가 회수한다.
+     실측: 처음 83ms → 한가할 때 예열 50ms → 누르기 직전에 예열 33ms(=1프레임).
+     그래서 '누르기 직전' 을 잡는다. 정거장에 마우스가 얹히거나 키보드 초점이 오면 그때 한 번 더 데운다.
+     클릭까지 보통 100~300ms 라 타일이 살아 있는 동안 눌린다. */
+  var subB=document.querySelector('.subtab[data-sub="bneck"]');
+  if(subB) ["pointerenter","focus"].forEach(function(ev){
+    subB.addEventListener(ev,function(){ build(); prewarm(); },{passive:true}); });
 })();
 
 /* ═══════════ 구역 강조 — 버튼이 하는 일은 #scene 에 data-zone 을 거는 것뿐 ═══════════
