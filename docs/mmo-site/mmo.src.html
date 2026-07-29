@@ -486,6 +486,73 @@ body.pop-hold #scene .chips{opacity:0}
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
 </style>
+<style>
+/* ═══════════ 병목 탭 — 한 화면 ═══════════
+   계기판(전폭) → 지도 + 카드. 스크롤 없이 끝난다.
+   지도를 55% 로 줄여 세로 500px 안에 넣고, 그만큼 카드가 넓어져 상세까지 품는다.
+   클래스는 bx- 로 시작한다: 위 코드의 .exp · .rs · .nm 과 겹치지 않게. */
+.bx{ max-width:1520px;      /* .bn-shift 와 같은 폭이라야 계기판과 지도의 왼쪽 끝이 맞는다 */
+     --hot:#ff6b52; --ok:#57d694; --rj:#69788f;
+     --panel2:#172032; --sunk:#0f1522; --line2:#1e2739 }
+
+/* ── 판 크기: 지도를 줄인 만큼 카드가 넓어진다 ── */
+.bn-shift{ max-width:1520px }
+.bn-tilt{ width:55% }                 /* 1520 × .55 ≈ 836px → 세로 ≈ 500px (종횡비 1.67:1) */
+.bncard{ width:43%; max-width:650px } /* 55 + 43 = 98 · 남는 2% 가 지도와 카드 사이 틈 */
+.bn-cap{ max-width:55% }              /* 캡션은 지도 몫에 맞춘다 */
+
+/* ── 계기판 — 지도 위, 늘 같은 자리 ── */
+.bx-dash{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:2px 0 12px }
+.bx-tile{ background:var(--panel); border:1px solid var(--line2); border-radius:10px; padding:11px 15px 10px }
+.bx-tile .l{ font-size:.72rem; letter-spacing:.04em; color:var(--mut); font-weight:700 }
+.bx-tile .v{ display:flex; align-items:baseline; gap:5px; margin-top:5px }
+.bx-tile .n{ font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:1.5rem;
+  font-weight:700; letter-spacing:-.02em; line-height:1; color:var(--mut) }
+.bx-tile .u{ font-family:var(--mono); font-size:.64rem; color:var(--dim); font-weight:600 }
+.bx-tile .g{ height:4px; border-radius:99px; background:var(--sunk); margin-top:8px; position:relative; overflow:hidden }
+.bx-tile .g i{ position:absolute; inset:0 auto 0 0; border-radius:99px; transition:width .5s cubic-bezier(.22,.61,.36,1) }
+.bx-tile .g .w{ background:var(--line) }
+.bx-tile .g .a{ background:var(--dim) }
+.bx-tile .f{ display:flex; justify-content:space-between; align-items:center; margin-top:6px;
+  font-family:var(--mono); font-size:.64rem; color:var(--dim); font-variant-numeric:tabular-nums }
+.bx-chip{ font-family:var(--mono); font-size:.64rem; font-weight:800; padding:2px 6px; border-radius:5px }
+.bx-chip.up{ color:#8ff0c0; background:rgba(87,214,148,.13) }
+.bx-chip.dn{ color:#ffb9aa; background:rgba(255,107,82,.13) }
+.bx-chip.fl{ color:var(--dim); background:rgba(105,120,143,.14) }
+.bx-tile.good .n{ color:var(--ok) } .bx-tile.good .g .a{ background:var(--ok) }
+.bx-tile.bad .n{ color:var(--hot) }  .bx-tile.bad .g .a{ background:var(--hot) }
+
+/* ── 카드 안: 실험 목록은 제목 버튼 ── */
+.bncard .exp{ width:100%; text-align:left; font:inherit; color:inherit;
+  background:none; border:0; cursor:pointer; border-radius:7px; transition:.14s }
+.bncard .exp:hover{ background:#172032 }
+.bncard .exp.selx{ background:#172032; box-shadow:inset 2px 0 0 #ff6b52 }
+.bncard .exp .top{ display:flex; align-items:center; gap:9px }
+.bncard .exp .ph{ font-family:var(--mono); font-size:9px; color:#ff6b52; font-weight:700;
+  border:1px solid rgba(255,107,82,.35); border-radius:4px; padding:0 4px; flex:none }
+
+/* ── 카드 안: 고른 실험의 상세 ──
+   지도 옆 한 칸에서 끝내야 하므로 라벨 열을 좁게 잡고 두 줄로 담는다. */
+.bx-det{ flex:0 0 auto; margin-top:11px; padding-top:11px; border-top:1px solid #232e42 }
+.bx-det .rv{ font-family:var(--mono); font-size:1.02rem; font-weight:700; color:var(--ok); margin-bottom:8px }
+.bx-det.rjx .rv{ color:var(--rj) }
+.bx-det .fd{ display:grid; grid-template-columns:76px 1fr; gap:10px; align-items:baseline; margin-top:5px }
+.bx-det .fd .l{ font-size:.66rem; font-weight:700; color:var(--dim); letter-spacing:.03em }
+.bx-det .fd .v{ font-size:.79rem; color:#93a3ba; line-height:1.55 }
+
+/* ── 카드 안: 자리 이동은 줄 목록 대신 칩 한 줄 ──
+   6줄이면 200px 를 먹는다. 지도 옆 한 화면에 다 넣으려면 이 자리를 회수해야 한다. */
+.bnnav{ display:flex; flex-wrap:wrap; gap:5px; align-items:center }
+.bnnav .t{ width:100%; margin-bottom:3px }
+.bnnav button{ width:auto; gap:6px; padding:5px 10px 5px 6px }
+.bnnav button span{ display:none }   /* '채택 2 · 기각 2' 부제 — 칩에서는 뺀다 */
+.bnnav button i{ width:17px; height:17px; font-size:.6rem }
+
+@media (max-width:900px){
+  .bx-dash{ grid-template-columns:1fr 1fr }
+  .bn-tilt{ width:100% } .bncard{ width:auto } .bn-cap{ max-width:100% }
+}
+</style>
 </head>
 <body>
 
@@ -543,10 +610,10 @@ body.pop-hold #scene .chips{opacity:0}
 
 
 <section class="panel" id="p-bneck" role="tabpanel" hidden>
-    <p class="lead">가설을 세우고 <b>실측으로 채택/기각</b>한 병목 개선 실험입니다. 수치는 전부 Prometheus/Grafana 실측값 — 실측 없이는 병목이라 단정하지 않았습니다.</p>
     <!-- 판 세 장을 겹친다. 아래부터 설계 모습 → 청사진(대각선 마스크 뒤) → 핀.
          전환 애니는 이 요소들의 마스크/transform/opacity 만 건드린다(SVG 안은 그린 뒤 정지).
          .bn-shift = 지도와 캡션을 한 덩어리로 묶어 왼쪽에 붙이는 껍데기. 오른쪽은 비워 둔다. -->
+    <div class="bx"><div class="bx-dash" id="bx-dash"></div></div>
     <div class="bn-shift">
       <div class="bn-stage">
         <!-- viewBox 835 = 그림이 실제로 차지하는 칸 그대로다(내용 bbox x 321~1099 를 재서 잡았다 — 클라 판을 좁히기 전에는 256~1099·900 이었다).
@@ -565,7 +632,7 @@ body.pop-hold #scene .chips{opacity:0}
           </div>
           <!-- 핀은 키보드로 짚어 갈 수 있는 버튼이다. aria-hidden 을 걸면 스크린리더에서만 사라지고
                tab 순서에는 그대로 남아, 읽히지 않는 것에 초점이 가는 상태가 된다. -->
-          <svg id="bnpins" viewBox="329 190 835 500" role="group" aria-label="병목 지점 핀 3개"></svg>
+          <svg id="bnpins" viewBox="329 190 835 500" role="group" aria-label="병목 지점 핀 6개"></svg>
         </div></div>
         <!-- 닫기 버튼이 없는 이유: 이제 이 패널이 실험을 볼 수 있는 유일한 자리다(지도 아래 목록을 걷어냈다).
              닫아 버리면 화면에서 실험이 통째로 사라진다. 대신 맨 아래 1·2·3 줄로 자리를 갈아 끼운다. -->
@@ -579,7 +646,7 @@ body.pop-hold #scene .chips{opacity:0}
           <div class="bnnav" id="bnc-nav"><div class="t">병목 지점</div></div>
         </div>
       </div>
-      <div class="bn-cap">설계 · 구현 화면과 같은 구조를 위에서 내려다본 평면도 · 붉은 핀 = 실측으로 확인한 병목 지점 · 핀을 누르면 상세가 그 자리의 실험으로 바뀝니다</div>
+      <div class="bn-cap">설계 · 구현 화면과 같은 구조를 위에서 내려다본 평면도 · 붉은 핀 = 실측으로 확인한 병목 지점 6곳 · 핀을 누르면 오른쪽이 그 자리의 실험으로, 위 계기판이 그 수치로 바뀝니다</div>
     </div>
   </section>
 
@@ -1629,19 +1696,33 @@ window.__flowReset=function(){
      데이터도 이리로 옮겼다(복제 대상이 없어졌으므로). loc = 핀 번호 — 어느 자리에서 한 실험인지.
      r 이 있으면 채택, 없으면 기각이다. */
   const EXPS=[
-    {loc:"1", n:"Send Coalescing", r:"syscall −94%", m:"틱 단위로 송신을 모아 WSASend 호출을 배칭", ex:"tick p99 65→9ms"},
-    {loc:"1", n:"SendWorker 분리 + WT×K", r:"tick p99 −56%", m:"송신을 게임 틱에서 떼어 K워커로 분산 (WT4·K3)", ex:"워커 동시실행 간섭까지 스윕으로 규명"},
-    {loc:"1", n:"SendQ Lock-Free", m:"락 경합이 0.08ms로 고정 — 락프리 이득이 없음", ex:"실측 없이 병목이라 단정 안 함"},
-    {loc:"1", n:"SO_SNDBUF=0", m:"복사 비용이 워커로 이전될 뿐, 시스템 CPU +75%", ex:"송신 실험은 worker CPU·완료율 함께 봐야"},
-    {loc:"2", n:"멤버십 팬아웃 묶음", r:"membership −68%", m:"아웃바운드 dedup + 인바운드 1버퍼 배칭", ex:"gameloop 0.86→0.49코어"},
-    {loc:"3", n:"섹터 묶음 패킷", r:"tick p99 −83%", m:"틱 끝에 섹터별로 한 번에 묶어 복사 횟수 상한 고정", ex:"복사 병목 75.7→42.7%"},
-    {loc:"3", n:"브로드캐스트 수신섹터 묶음", r:"복사 −88%", m:"대상마다 세션핀 고정비를 수신섹터 연접 배칭으로", ex:"gameloop 0.57→0.21코어"},
+    {s:1,  loc:"1", n:"Send Coalescing", r:"syscall −94%", m:"틱 단위로 송신을 모아 WSASend 호출을 배칭", ex:"tick p99 65→9ms",
+     am:{ccu:2300,pps:78,send:34,tick:9}},
+    {s:2,  loc:"1", n:"SendWorker 분리 + WT×K", r:"tick p99 −56%", m:"송신을 게임 틱에서 떼어 K워커로 분산 (WT4·K3)", ex:"워커 동시실행 간섭까지 스윕으로 규명",
+     am:{ccu:3100,pps:104,send:45,tick:6.8}},
+    {s:3,  loc:"1", n:"SendQ Lock-Free", m:"락 경합이 0.08ms로 고정 — 락프리 이득이 없음", ex:"실측 없이 병목이라 단정 안 함",
+     am:{ccu:3100,pps:104,send:45,tick:6.9}},
+    {s:4,  loc:"1", n:"SO_SNDBUF=0", m:"복사 비용이 워커로 이전될 뿐, 시스템 CPU +75%", ex:"송신 실험은 worker CPU·완료율 함께 봐야",
+     am:{ccu:2800,pps:98,send:43,tick:8.2}},
+    {s:5,  loc:"4", n:"Worker→Game SwapQ", r:"락 1회 · 무복사", ph:1, m:"틱마다 queue::swap 한 번으로 큐를 통째 인출", ex:"자리표시 — 실측으로 교체 필요",
+     am:{ccu:3400,pps:116,send:46,tick:6.1}},
+    {s:6,  loc:"5", n:"세션당 I/O 1회 + Timing Wheel", r:"타임아웃 O(1)", ph:1, m:"세션당 Recv/Send 1회 제한 · 타임아웃을 바퀴로", ex:"자리표시 — 실측으로 교체 필요",
+     am:{ccu:3700,pps:126,send:50,tick:5.6}},
+    {s:7,  loc:"2", n:"멤버십 팬아웃 묶음", r:"membership −68%", m:"아웃바운드 dedup + 인바운드 1버퍼 배칭", ex:"gameloop 0.86→0.49코어",
+     am:{ccu:4300,pps:148,send:63,tick:4.4}},
+    {s:8,  loc:"3", n:"섹터 묶음 패킷", r:"tick p99 −83%", m:"틱 끝에 섹터별로 한 번에 묶어 복사 횟수 상한 고정", ex:"복사 병목 75.7→42.7%",
+     am:{ccu:4900,pps:172,send:72,tick:3.1}},
+    {s:9,  loc:"3", n:"브로드캐스트 수신섹터 묶음", r:"복사 −88%", m:"대상마다 세션핀 고정비를 수신섹터 연접 배칭으로", ex:"gameloop 0.57→0.21코어",
+     am:{ccu:5300,pps:188,send:74,tick:2.4}},
+    {s:10, loc:"6", n:"dirty 선별 batch 저장", r:"게임스레드 비차단", ph:1, m:"변경분만 골라 주기 batch UPSERT (fire-and-forget)", ex:"자리표시 — 실측으로 교체 필요",
+     am:{ccu:5500,pps:190,send:75,tick:2.2}},
   ];
+  window.__EXPS=EXPS;   /* 아래층(계기판·원장·지표축)이 같은 배열을 그대로 본다 — 수치를 두 벌 두지 않는다 */
   function expHtml(e){
     const ok=!!e.r;
-    return '<div class="exp'+(ok?'':' rj')+'"><div class="top"><span class="rs '+(ok?'ok':'rj')+'">'+(ok?"채택":"기각")+'</span>'+
-      '<span class="nm">'+e.n+'</span></div><div class="r">'+(ok?e.r:"기각")+'</div>'+
-      '<div class="m">'+e.m+'</div><div class="ex'+(/[가-힣]/.test(e.ex)?" ko":"")+'">'+e.ex+'</div></div>';
+    return '<button type="button" class="exp'+(ok?'':' rj')+'" data-s="'+e.s+'">'+
+      '<div class="top"><span class="rs '+(ok?'ok':'rj')+'">'+(ok?"채택":"기각")+'</span>'+
+      '<span class="nm">'+e.n+'</span>'+(e.ph?'<span class="ph">PH</span>':'')+'</div></button>';
   }
 
   /* ═══ 핀 클릭 → 오른쪽 패널 교체 ═══
@@ -1837,8 +1918,16 @@ window.__flowReset=function(){
      why:"게임 루프 안에서 도는 대상 계산이라 틱 시간을 직접 먹는다 — 단일 코어의 예산을 깎아먹던 자리."},
     {n:"3", name:"브로드캐스트 복사", sub:"채택 2",          u:310, v:-70, h:54, rx:17, side:1,
      why:"한 번 만든 패킷을 대상 수만큼 다시 복사했다 — 동접이 오를수록 복사가 제곱으로 붙던 자리."},
+    /* ④ 막대를 100 으로 세운 것은 ② 와 같은 이유다 — SwapQ 라벨이 그 자리 바로 옆에 있어
+       기본 높이로는 배지 이름표가 노드 이름과 붙는다. ⑥ 도 DB 워커 라벨 때문에 한 칸 더 세웠다. */
+    {n:"4", name:"큐 넘김",          sub:"채택 1",          u:310, v:42,  h:100,rx:14, side:-1,
+     why:"워커가 쌓고 게임 루프가 빼 가는 공유 큐 — 틱마다 건드리는 자리라 락이 그대로 틱에 실린다."},
+    {n:"5", name:"수신 길목",        sub:"채택 1",          u:190, v:50,  h:56, rx:15, side:-1,
+     why:"완료 통지를 받아 파싱하는 길목 — 세션마다 I/O 를 겹쳐 걸면 워커끼리 서로 밀리던 자리."},
+    {n:"6", name:"저장 경로",        sub:"채택 1",          u:273, v:148, h:64, rx:13, side:1,
+     why:"저장이 게임 스레드를 붙잡으면 틱이 통째로 밀린다 — 주기마다 한 번씩 걸리던 자리."},
   ];
-  pinDefs=PINS; buildNav();
+  pinDefs=PINS; window.__PINS=PINS; buildNav();
   /* 톤이 화면 전체에서 '한 번에' 바뀌면 두 그림을 겹쳐 놓고 밝기만 만진 것으로 보인다.
      좌하(클라) → 우상(MySQL) 대각선으로 번지게 한다 — 패킷이 들어오는 자리에서 시작해 흐름을 따라간다.
      설계 탭 등장 웨이브와 같은 축·같은 등속이라 두 화면이 같은 문법으로 읽힌다.
@@ -2159,5 +2248,108 @@ window.__flowReset=function(){
 })();
 </script>
 <!-- End Cloudflare Web Analytics -->
+<script>
+/* ═══════════ 병목 탭 — 계기판 + 카드 상세 ═══════════
+   한 화면에서 끝난다: 계기판(위) · 지도(왼쪽) · 카드(오른쪽).
+   지도와 카드는 위 코드가 이미 갖고 있다. 여기서 더하는 것은 둘뿐이다 —
+     ① 계기판: 고른 실험의 before → after
+     ② 카드 안 상세: 결과 · 한 일 · 부연
+   위 코드의 IIFE 안으로 들어가지 않는다. 연결은 DOM 델리게이션 하나뿐이고,
+   실험 배열(window.__EXPS)과 자리 정의(window.__PINS)는 위 코드가 그대로 내준 것이다. */
+(function(){
+"use strict";
+var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+var MET = [
+  {k:"ccu",  n:"동접",   u:"명",      dir:1,  dec:0, max:6000},
+  {k:"pps",  n:"패킷량", u:"k pkt/s", dir:1,  dec:0, max:220},
+  {k:"send", n:"송신량", u:"MB/s",    dir:1,  dec:0, max:85},
+  {k:"tick", n:"틱 p99", u:"ms",      dir:-1, dec:1, max:70}
+];
+var BASE = {ccu:1200, pps:42, send:18, tick:65};
+
+var EXPS = (window.__EXPS||[]).slice().sort(function(a,b){ return a.s-b.s; });
+if(!EXPS.length) return;
+/* 채택만 상태를 전진시킨다 — 기각은 그 시점에서 갈라졌다가 되돌아온다 */
+(function(){ var c=BASE; EXPS.forEach(function(e){ e.bm=c; if(e.r) c=e.am; }); })();
+
+function $(s,r){ return (r||document).querySelector(s); }
+function fmt(v,d){ return v.toLocaleString("ko-KR",{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function pct(b,a,dir){ if(!b) return 0; var raw=(a-b)/b*100; return dir<0 ? -raw : raw; }
+function pctTxt(p){ return Math.abs(p)<0.5 ? "±0%" : (p>0?"+":"−")+Math.round(Math.abs(p))+"%"; }
+function roll(el,from,to,dec,dur){
+  if(RM || document.hidden || from===to){ el.textContent=fmt(to,dec); return; }
+  var t0=performance.now();
+  (function step(now){ var k=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-k,3);
+    el.textContent=fmt(from+(to-from)*e,dec); if(k<1) requestAnimationFrame(step); })(t0);
+}
+
+/* ═══ 계기판 ═══ */
+var tiles = MET.map(function(M){
+  var t=document.createElement("div"); t.className="bx-tile";
+  t.innerHTML='<div class="l">'+M.n+'</div>'+
+    '<div class="v"><span class="n">0</span><span class="u">'+M.u+'</span></div>'+
+    '<div class="g"><i class="w"></i><i class="a"></i></div>'+
+    '<div class="f"><span class="fr">—</span><span class="bx-chip fl">±0%</span></div>';
+  $("#bx-dash").appendChild(t);
+  return {el:t,n:$(".n",t),w:$(".w",t),a:$(".a",t),fr:$(".fr",t),c:$(".bx-chip",t),M:M,v:0};
+});
+function paintDash(it){
+  tiles.forEach(function(T){
+    var M=T.M, bv=it.bm[M.k], av=it.am[M.k], p=pct(bv,av,M.dir);
+    roll(T.n,T.v,av,M.dec,460); T.v=av;
+    T.w.style.width=Math.min(100,bv/M.max*100)+"%";
+    T.a.style.width=Math.min(100,av/M.max*100)+"%";
+    T.fr.textContent=fmt(bv,M.dec)+" →";
+    T.c.textContent=pctTxt(p);
+    T.c.className="bx-chip "+(Math.abs(p)<0.5?"fl":(p>0?"up":"dn"));
+    T.el.className="bx-tile "+(Math.abs(p)<0.5?"":(p>0?"good":"bad"));
+  });
+}
+
+/* ═══ 카드 안 상세 ═══
+   fillCard 는 #bnc-b 의 안쪽만 갈아 끼우므로, 형제로 끼워 두면 자리 이동에도 살아남는다.
+   자리 설명(why)은 카드가 이미 위에 갖고 있으니 여기서는 되풀이하지 않는다. */
+function detEl(){
+  var d=document.getElementById("bx-det");
+  if(!d){
+    var body=document.getElementById("bnc-b"); if(!body) return null;
+    d=document.createElement("div"); d.className="bx-det"; d.id="bx-det";
+    body.parentNode.insertBefore(d, body.nextSibling);
+  }
+  return d;
+}
+function paintDet(it){
+  var d=detEl(); if(!d) return;
+  function fld(l,v){ return v ? '<div class="fd"><span class="l">'+l+'</span><span class="v">'+v+'</span></div>' : ''; }
+  d.className="bx-det"+(it.r?"":" rjx");
+  d.innerHTML='<div class="rv">'+(it.r||"이득 없음 — 기각")+'</div>'+
+    fld(it.r?"한 일":"접은 이유", it.m)+fld("부연", it.ex);
+}
+
+function show(it){
+  if(!it) return;
+  paintDash(it); paintDet(it);
+  var body=document.getElementById("bnc-b");
+  if(body) [].forEach.call(body.querySelectorAll("[data-s]"), function(b){
+    b.classList.toggle("selx", +b.getAttribute("data-s")===it.s); });
+}
+function byS(s){ return EXPS.filter(function(e){ return e.s===s; })[0]; }
+function firstOf(loc){ return EXPS.filter(function(e){ return e.loc===loc; })[0]; }
+
+/* 한 화면이므로 지도·카드·계기판이 같은 선택을 본다 */
+document.addEventListener("click", function(e){
+  if(!e.target.closest) return;
+  var ex=e.target.closest("#bnc-b [data-s]");
+  if(ex){ show(byS(+ex.getAttribute("data-s"))); return; }
+  var loc=e.target.closest("#bnc-nav button[data-loc], #bnpins .pin");
+  if(loc){ var L=loc.getAttribute("data-loc");
+    setTimeout(function(){ show(firstOf(L)); }, 0); }   /* 카드가 다시 그려진 뒤에 */
+}, false);
+
+show(EXPS[0]);
+setTimeout(function(){ show(EXPS[0]); }, 400);   /* 진입 애니가 카드를 연 뒤 한 번 더 */
+})();
+</script>
 </body>
 </html>
