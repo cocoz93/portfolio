@@ -55,8 +55,15 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* tabs */
 /* 탭 이름에는 기술 약어(IOCP·RIO)를 넣지 않는다 — 탭 축은 '만든 서버'고, 전송 방식은 그 안에서 바뀌는 것이다.
    대신 스택은 탭 줄 오른쪽 끝 메타 텍스트로 뺐다(RIO 가 붙으면 이 줄만 늘리면 된다).
-   밑선은 .tabs 가 아니라 이 줄이 갖는다 — 탭의 margin-bottom:-1px 이 덮는 대상이 여기로 옮겨왔다. */
-.tabrow{display:flex; align-items:flex-end; gap:16px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+   밑선은 .tabs 가 아니라 이 줄이 갖는다 — 탭의 margin-bottom:-1px 이 덮는 대상이 여기로 옮겨왔다.
+   단 그 밑선을 border 로 한 줄에 긋지 않고 두 토막(::before·::after)으로 나눈다:
+   활성 탭 구간만 비워 두고, 그 자리는 아래 하위 줄 상자가 잇는다(하위 탭 주석 참고).
+   활성 탭의 파란 밑줄이 정확히 그 빈 구간에 놓여 상자의 열린 위쪽이 된다. */
+.tabrow{position:relative; display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap}
+.tabrow::before{content:""; position:absolute; left:0; bottom:0;
+  width:var(--tabx,0px); height:1px; background:var(--line)}
+.tabrow::after{content:""; position:absolute; right:0; bottom:0;
+  left:calc(var(--tabx,0px) + var(--tabw,0px)); height:1px; background:var(--line)}
 .tabmeta{margin-left:auto; padding-bottom:15px; font-family:var(--mono); font-size:.78rem;
   letter-spacing:.06em; color:var(--dim); white-space:nowrap}
 /* ※ 좁은 화면 규칙은 이 파일 아래쪽, 탭 규칙을 다 쓴 뒤에 있다.
@@ -72,69 +79,65 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .tab b{font-size:1.3rem; font-weight:700}
 .tab span{font-size:.78rem; font-weight:600; color:var(--dim); transition:color .15s}
 .tab:hover{color:var(--ink)}
-.tab.act{color:var(--ink); border-bottom-color:var(--net)}
+.tab.act{color:#fff; border-bottom-color:var(--net)}
 .tab.act span{color:var(--mut)}
 .tab:focus-visible{outline:2px solid var(--net); outline-offset:-2px; border-radius:6px}
 /* 하위 탭 — 상위 탭(MMO 서버) 안에서만 뜬다. 이 둘은 나란한 선택지가 아니라 순서다:
    만들었다(설계·구현) → 재서 고쳤다(병목·실험).
-   그래서 탭 모양을 아예 안 쓴다. 상위 탭 선에서 ㄴ 자로 내려온 레일이 두 단계를 꿰고 지나가고,
-   단계는 그 레일 위에 선 정거장이 된다 — 선 하나가 '위에 딸린 것' 과 '1 다음 2' 를 같이 말한다.
-   ※ 옛 모양은 위층과 똑같은 밑줄 탭이었다. 층이 안 나뉘는 데다 짧은 세로 구간에 가로선이 4줄
-     (탭줄 밑선 · 활성 파란 밑줄 · 하위탭 밑선 · 활성 회색 밑줄) 겹쳤다. 여기서 3줄이 사라진다.
-   ※ 그 전에는 '열린 탭' 은유(회색 띠 + 활성만 --bg 로 뚫기)였는데, 띠가 화면 폭 끝까지 이어져
-     내용보다 배경이 먼저 보였다. */
-.subtabs{position:relative; display:flex; width:fit-content; gap:20px; align-items:center;
-  min-height:48px; margin:0 0 0 30px; padding:0 0 0 22px}
+   하위가 하위로 안 보이던 진짜 원인은 표식이 아니라 둘 사이에 탭줄 밑선이 가로로 끼어 있던 것이다.
+   그래서 그 선을 활성 탭 구간에서만 한 칸 아래로 내려앉힌다: 위(.tabrow)의 밑선은 두 토막이 되어
+   활성 탭 아래를 비우고, 이 줄이 좌·우·아래 테두리를 갖는 상자가 되어 그 자리를 잇는다.
+   위가 열려 있으니 '활성 탭에서 아래로 열린 칸' 으로 읽힌다 — 소속을 새로 그리지 않고 있던 선만 옮긴 것이다.
+   지금 보는 단계는 굵기와 밝기로만 낸다 — 글자 크기는 항목마다 같게 둔다.
+   (활성만 키우는 안을 한 번 넣었다가 껐다: 전환할 때 옆 항목이 밀려 줄 전체가 움직인다.)
+   ※ 여기까지 오면서 기각된 모양들. 되돌리지 않기 위해 남긴다:
+     · 알약 + ㄴ자 레일(정거장 은유): 알약이 아래 구역 필터 줄(.zonebar)과 같은 급으로 보여
+       화면 위쪽이 '비슷한 버튼 줄 셋' 이 됐다. 하위 줄만 다듬어도 그 셋째 줄이 그대로 남는다.
+     · 번호를 씌운 동그라미: 위와 같은 이유로 도형이 하나 더 늘어난다. 번호는 맨 숫자로 남긴다.
+     · 위층과 똑같은 밑줄 탭: 층이 안 나뉘는 데다 짧은 세로 구간에 가로선이 4줄 겹쳤다.
+     · '열린 탭' 은유(회색 띠 + 활성만 --bg 로 뚫기): 띠가 화면 폭 끝까지 이어져
+       내용보다 배경이 먼저 보였다.
+   상자의 왼쪽은 활성 탭의 왼쪽 끝에 맞추고 최소 폭도 그 탭 폭이다 — 그래야 정확히 그 탭 아래를
+   덮고, 항목이 더 길면 그만큼 오른쪽으로만 늘어난다. --tabx·--tabw 는 스크립트가 채운다.
+   정렬은 baseline 이다 — 이름(sans)과 번호(mono)의 크기가 달라 center 로 두면 밑선이 어긋난다. */
+.subtabs{display:flex; align-items:baseline; gap:28px;
+  margin:0 0 0 var(--tabx,0px); min-width:var(--tabw,0px); width:fit-content;
+  padding:13px 22px 14px 26px;
+  border-left:1px solid var(--line); border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line); border-radius:0 0 9px 9px}
 .subtabs[hidden]{display:none}
-/* ㄴ : 상위 탭 선에서 내려와 레일 높이에서 꺾인다. 2px·각진 모서리라야 장식이 아니라 구조로 읽힌다.
-   가로팔은 첫 정거장에 닿는 길이여야 한다 — 앞에서 멈추면 '매달림' 이 아니라 '떠 있음' 이 된다. */
-.subtabs::before{content:""; position:absolute; left:0; top:-2px; width:22px; height:26px;
-  border-left:2px solid rgba(108,199,255,.6); border-bottom:2px solid rgba(108,199,255,.6);
-  border-bottom-left-radius:4px}
-/* 레일 : ㄴ의 가로팔을 그대로 이어 두 정거장까지만. 예전에는 오른쪽으로 -40px 더 빼서 흐려지는
-   꼬리를 뒀는데, 마지막 정거장 뒤에 갈 곳 없는 선이 남아 '이어질 것이 더 있다' 로 읽혔다.
-   지금은 right:0 = 마지막 알약의 오른쪽 끝. 알약이 불투명하고 위(z-index:1)라 선은 그 밑으로
-   들어가 사라지고, 눈에는 정거장 2에서 딱 끊긴 것으로 보인다 — 꼬리가 없으니 페이드도 필요 없다.
-   높이·top 은 ㄴ의 가로팔과 같은 줄이어야 한다: min-height 48 → 한가운데 24 → 팔은 22~24 → 레일도 22. */
-.subtabs::after{content:""; position:absolute; left:20px; right:0; top:22px; height:2px;
-  background:rgba(108,199,255,.6)}
-/* 정거장 — 배경이 불투명해야 레일이 글자를 뚫고 지나가지 않는다.
-   비활성에도 테를 두르는 이유: 배경색만 깔면 레일이 그 폭만큼 통째로 사라져 '끊긴 점선' 으로 보인다.
-   둘 다 테가 있어야 '레일 위에 정거장 두 개' 로 읽힌다. */
-/* flex:0 0 auto — 자리가 모자랄 때 알약이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
+/* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
    줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다. */
-.subtab{position:relative; z-index:1; flex:0 0 auto; display:flex; align-items:center; gap:9px;
-  padding:6px 15px 6px 8px; font-size:.95rem; font-weight:600; color:var(--mut);
-  background:var(--bg); border:0; border-radius:999px; box-shadow:0 0 0 1px #2b3852;
-  cursor:pointer; transition:color .15s, background .15s, box-shadow .15s}
-.subtab em{display:grid; place-items:center; width:20px; height:20px; border-radius:50%; font-style:normal;
-  font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--dim);
-  border:1px solid rgba(120,140,175,.35); transition:color .15s, background .15s, border-color .15s}
-.subtab:hover{color:var(--ink); box-shadow:0 0 0 1px #3d4d6b}
-.subtab.act{color:var(--ink); font-weight:700; background:#18202f; box-shadow:0 0 0 1px rgba(108,199,255,.45)}
-.subtab.act em{color:var(--bg); background:var(--net); border-color:var(--net)}
-/* 알약이라 초점 테두리는 바깥으로 — 안쪽(-2px)에 두면 둥근 모서리에서 테두리와 겹쳐 두 겹으로 보인다 */
-.subtab:focus-visible{outline:2px solid var(--net); outline-offset:2px}
+.subtab{position:relative; flex:0 0 auto; display:flex; align-items:baseline; gap:10px;
+  padding:0; font-size:1.15rem; font-weight:600; color:var(--mut);
+  background:none; border:0; cursor:pointer; transition:color .15s}
+/* 상단 탭 이름은 1.3rem 이다 — 하위는 그보다 확실히 작게 두어야 층이 갈린다.
+   1.25rem 까지 올리면 두 줄의 무게가 비슷해져 계단 상자만으로 층을 버티게 된다. */
+.subtab em{font-style:normal; font-family:var(--mono); font-size:.92rem; font-weight:400;
+  color:#54627d; transition:color .15s}
+.subtab:hover{color:var(--ink)}
+.subtab.act{font-weight:700; color:#fff}
+.subtab.act em{color:var(--net)}
+/* 담는 도형이 없으니 초점 테두리는 글자에서 조금 띄운다 */
+.subtab:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:4px}
+/* 창이 좁아 탭줄이 두 줄로 접히면 활성 탭의 x·폭을 따라가는 게 뜻을 잃는다(둘째 줄 기준이 된다).
+   그때는 계단을 포기하고 밑선을 통째로 되돌린다 — 어긋난 자리가 열린 상자보다 낫다. */
+body.subdetach .tabrow::before{width:auto; right:0}
+body.subdetach .tabrow::after{display:none}
+body.subdetach .subtabs{margin-left:16px; min-width:0}
 
 /* ═══ 좁은 화면 — 탭 두 층 ═══
    반드시 위 규칙들 '뒤' 에 온다. 특정도가 같으므로 순서로만 이긴다(앞에 두면 한 줄도 안 먹는다).
    메타 텍스트는 탭이 줄바꿈되며 탭처럼 얹히므로 숨긴다.
-   하위 탭은 줄바꿈시키지 않는다 — 두 정거장이 위아래로 갈리면 레일이 헛돈다. 대신 값을 줄인다.
-   ㄴ의 꺾이는 높이와 레일 높이는 항상 같은 줄이어야 한다:
-     min-height 44 → 한가운데 22 → 팔은 20~22 → 레일 top:20
-     min-height 40 → 한가운데 20 → 팔은 18~20 → 레일 top:18 */
+   하위 탭은 줄바꿈시키지 않는다 — 두 단계가 위아래로 갈리면 상자가 헛돈다. 대신 값을 줄인다.
+   상자의 안쪽 여백만 줄이고 margin-left·min-width 는 그대로 둔다(활성 탭에 물려 있어야 한다). */
 @media(max-width:680px){ .tabmeta{display:none}
   .tab{padding:11px 14px 12px} .tab b{font-size:1.05rem} .tab span{font-size:.7rem}
-  .subtabs{margin-left:14px; padding-left:16px; gap:8px; min-height:44px}
-  .subtabs::before{width:16px; height:24px}
-  .subtabs::after{left:15px; top:20px; right:0}
-  .subtab{padding:5px 11px 5px 7px; font-size:.88rem; gap:7px} }
+  .subtabs{gap:18px; padding:10px 14px 11px 18px}
+  .subtab{font-size:1.02rem; gap:8px} .subtab em{font-size:.82rem} }
 @media(max-width:430px){
-  .subtabs{margin-left:10px; padding-left:14px; min-height:40px}
-  .subtabs::before{width:14px; height:22px}
-  .subtabs::after{left:13px; top:18px; right:0}
-  .subtab{padding:4px 10px 4px 6px; font-size:.82rem; gap:6px}
-  .subtab em{width:18px; height:18px; font-size:.66rem} }
+  .subtabs{gap:14px; padding:8px 12px 9px 14px}
+  .subtab{font-size:.92rem; gap:7px} .subtab em{font-size:.76rem} }
 
 .panel{margin-top:8px}
 .panel[hidden]{display:none}
@@ -2586,6 +2589,26 @@ window.__flowReset=function(){
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");
   let top="mmo", sub="build", csub="env";
+  /* 하위 줄 상자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)과 최소 폭(--tabw)이 그 탭과 같아야
+     '그 탭 아래가 열린 칸' 으로 보인다. 탭줄 밑선의 빈 구간도 같은 두 값으로 잡는다.
+     offsetLeft 는 offsetParent 에 따라 기준이 흔들려서 탭줄과의 상대 좌표로 잰다.
+     창이 좁아 탭줄이 두 줄로 접히면(활성 탭이 마지막 줄이 아니면) 그 좌표를 따라가는 게 뜻을
+     잃으므로 body.subdetach 로 계단을 포기한다. */
+  const tabrow=document.querySelector(".tabrow"), tabsNav=document.querySelector(".tabs");
+  const wrapEl=document.querySelector(".wrap");
+  function alignSub(){
+    const at=document.querySelector(".tab.act");
+    if(!at||!tabrow||!tabsNav||!wrapEl) return;
+    const ar=at.getBoundingClientRect();
+    wrapEl.style.setProperty("--tabx", Math.round(ar.left-tabrow.getBoundingClientRect().left)+"px");
+    wrapEl.style.setProperty("--tabw", Math.round(ar.width)+"px");
+    document.body.classList.toggle("subdetach",
+      Math.abs(ar.bottom-tabsNav.getBoundingClientRect().bottom) > 2);
+  }
+  addEventListener("resize", alignSub);
+  /* 폰트가 늦게 얹히면 탭 폭이 바뀌어 좌표가 어긋난다 — 딥링크(#dummy 등)로 둘째·셋째 탭이
+     처음부터 활성인 경우에 실제로 틀어진다. 글꼴이 준비된 뒤 한 번 더 잰다. */
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(alignSub);
   function paint(){
     /* 숨기기 '전에' 설계 씬이 화면 어디에 얼마 크기로 있었는지 잰다 — 숨긴 뒤에는 0 이 나온다.
        병목 지도가 바로 이 자리에 겹쳐 시작해야 '그림이 그대로 있다가 변한다' 가 된다. */
@@ -2599,6 +2622,7 @@ window.__flowReset=function(){
       t.className = on ? "subtab act" : "subtab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subbar.hidden  = (top!=="mmo");
     subbar2.hidden = (top!=="dummy");
+    alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
     document.getElementById("p-cenv").hidden  = !(top==="dummy" && csub==="env");
