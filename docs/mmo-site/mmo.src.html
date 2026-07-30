@@ -728,26 +728,27 @@ body.pop-hold #scene .chips{opacity:0}
    판·칸이 열넷이 되어 시선이 흩어졌다. 그래서 웹 화면 하나를 크게 두고 나머지 둘을 종속시킨다 —
    오른쪽 둘은 판이 아니라 '이름표만 얹은 참조컷' 이라 머리줄·캡션줄이 없다. 초점이 하나로 모인다.
 
-   ── 히어로 폭 66.13% 는 계산값이다 ──
-   눈대중이 아니라 두 칸의 아래 선이 맞는 지점이다. 칸 폭 C, 히어로 비율 f, 칸 사이 틈 14:
-     히어로 폭 = C·f          오른쪽 폭 = C·(1−f) − 14   (flex-basis 의 % 는 틈을 뺀 값이 아니라 C 기준)
-     왼쪽 높이  = (히어로폭 − 2)/1.5921 + 78              (78 = 머리 36 + 캡션 22 + 안쪽 여백 20 · 실측)
-     오른쪽 높이 = (오른쪽폭 − 2)·(1/1.2903 + 1/1.5921) + 16   (콘솔 + 덮임컷 + 틈 12 + 테두리 4)
-   1.5921=1296/814(웹·덮임컷) · 1.2903=640/496(콘솔). −2 는 판 좌우 테두리다.
-   C=1472 로 풀면 f≈0.663 이다. 틀리게 풀었던 값과 그때 벌어진 차이를 남겨 둔다:
-     68%(오른쪽이 42px 짧음) → 66.6%(틈 14 를 빼먹어 16px) → 66%(머리줄을 키우기 전 값이라 4px)
-   align-items:stretch 는 칸만 늘리고 종횡비로 높이가 정해진 그림은 안 늘어나므로,
-   그 차이가 그대로 빈 자리로 남는다. 머리·캡션 줄을 고치면 78 이 달라지니 이 식으로 다시 풀 것.
-   ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 이 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
+   ── 두 칸의 아래 선은 CSS 가 스스로 맞춘다 ──
+   한동안 히어로 폭을 손으로 풀어서 맞췄다. 왼쪽 높이(=폭÷종횡비 + 머리·캡션)와 오른쪽 높이
+   (=콘솔 + 덮임컷 + 틈)가 같아지는 폭을 구하는 식이었는데, 세 번 연달아 틀렸다:
+     68%(오른쪽이 42px 짧음) → 66.6%(칸 사이 틈 14 를 빼먹어 16px) → 66%(제목을 키우자 5px)
+   원인은 식이 머리줄 높이에 매달려 있던 것이다. 제목 크기를 건드릴 때마다 다시 풀어야 했다.
+   그래서 계산을 걷고, 덮임컷이 남는 높이를 그대로 먹게 했다(flex:1 1 0 · min-height:0).
+   그림은 cover 로 채우며 아래를 조금 자르는데(1512px 에서 9px · 3%), 그 자리는 이미 아래
+   이름표 띠가 덮고 있어서 잘려도 보이지 않는다. 이제 제목·캡션을 키워도 바닥선이 안 어긋난다.
+   ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 폭 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
 .cr-hero{display:flex; gap:14px; align-items:stretch}
-.cr-hero .big{flex:0 0 66.13%}
+.cr-hero .big{flex:0 0 66%}
 .cr-side{flex:1 1 0; display:flex; flex-direction:column; gap:12px}
+.cr-side>.cr-ref.con{flex:0 0 auto}
+.cr-side>.cr-ref.lim{flex:1 1 0; min-height:0}
+.cr-side>.cr-ref.lim img{height:100%; object-fit:cover; object-position:center top}
 .cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px;
   padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
 .cr-hd{display:flex; align-items:baseline; gap:9px; margin:0 12px 8px; flex-wrap:wrap}
-/* 화면 이름은 이 판이 무엇인지 말하는 유일한 글자다 — 곁의 메타(픽셀로 그린다 · 더미 250명)와
-   크기 차이를 벌려서 이름이 먼저 읽히게 한다(.95→1.16rem) */
-.cr-hd b{font-size:1.16rem; font-weight:800; letter-spacing:-.01em}
+/* 화면 이름은 이 판이 무엇인지 말하는 유일한 글자다 — 곁의 메타(픽셀로 그린다 · 더미 250명)는
+   그대로 두고 이름만 키워서 크기 차이를 벌린다(.95 → 1.16 → 1.34rem) */
+.cr-hd b{font-size:1.34rem; font-weight:800; letter-spacing:-.015em}
 .cr-hd span{font-family:var(--mono); font-size:.66rem; color:var(--dim)}
 /* 영상은 카드 좌우 끝까지 채운다 — 화면을 담은 판이라 테두리에 붙는 쪽이 '기계 화면' 으로 읽힌다.
    눌러서 멈출 수 있으므로 손가락 커서를 준다(컨트롤 바는 화면을 어지럽혀서 안 쓴다). */
@@ -765,16 +766,16 @@ body.pop-hold #scene .chips{opacity:0}
    증거라 가리면 안 된다. 그 아래로 내리고(10.5% = 640×496 에서 상태줄이 차지하는 약 8% + 여유),
    폭도 글자만큼만 쓴다. 통짜 덮개는 격자를 지운다. */
 .cr-ref .pill{position:absolute; left:9px; top:10.5%; display:inline-flex; align-items:baseline; gap:8px;
-  padding:6px 12px; border-radius:8px; font-size:.96rem; font-weight:800; color:#fff;
-  letter-spacing:-.01em; background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
-.cr-ref .pill span{font-size:.7rem; font-weight:600; color:#a9b8cf}
+  padding:6px 13px 7px; border-radius:9px; font-size:1.14rem; font-weight:800; color:#fff;
+  letter-spacing:-.015em; background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
+.cr-ref .pill span{font-size:.72rem; font-weight:600; color:#a9b8cf}
 /* 덮임 컷은 왼쪽 위에 '시야 1,118명' 이 떠 있다 — 이 컷의 핵심 숫자다. 그래서 위는 비워 두고
    이름표와 수치를 아래 한 줄에 합쳤다(덮개 하나). */
 .cr-ref>i{position:absolute; left:0; right:0; bottom:0; box-sizing:border-box; display:block;
   padding:26px 12px 9px; font-style:normal; font-size:.68rem; font-weight:600; color:#cfe0f5;
   background:linear-gradient(to top, rgba(8,11,19,.94) 0%, rgba(8,11,19,.72) 52%, rgba(8,11,19,0) 100%)}
-.cr-ref>i>b{display:block; margin-bottom:4px; font-size:1rem; font-weight:800; color:#fff;
-  letter-spacing:-.01em}
+.cr-ref>i>b{display:block; margin-bottom:5px; font-size:1.2rem; font-weight:800; color:#fff;
+  letter-spacing:-.015em}
 .cr-ref>i>b .hot{color:var(--game); font-weight:800}
 /* 규격·녹화 조건은 여기 한 줄로 모은다. 글을 판 사이에 흘리면 그림 셋의 리듬이 끊긴다 */
 .cr-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:11px 2px 0;
@@ -812,7 +813,15 @@ body.pop-hold #scene .chips{opacity:0}
      덮임컷(1.5921)이 콘솔(1.2903)보다 75px 낮아지고, 그 빈 자리 때문에 아래 이름표 띠가
      그림에서 떨어져 뜬다(bottom:0 은 그림 바닥이 아니라 칸 바닥이다). */
   .cr-side>.cr-ref.con{flex:1.2903 1 0}
-  .cr-side>.cr-ref.lim{flex:1.5921 1 0}
+  .cr-side>.cr-ref.lim{flex:1.5921 1 0; min-height:auto}
+  /* 세로로 쌓였을 때 덮임컷이 남는 높이를 먹으라고 준 cover 를 되돌린다 — 가로로 눕히면
+     'flex 값 = 종횡비' 만으로 두 컷 높이가 맞으므로 자를 이유가 없다 */
+  .cr-side>.cr-ref.lim img{height:auto; object-fit:fill}
+  /* 참조컷이 반 폭으로 줄면 알약이 두 줄로 감싸며 작은 컷을 덮는다(700px 에서 확인).
+     이름표는 컷 크기에 맞춰 같이 줄어야 한다 — 이름은 남기고 크기만 내린다. */
+  .cr-ref .pill{font-size:.88rem; padding:5px 10px 6px; flex-wrap:wrap}
+  .cr-ref .pill span{font-size:.64rem}
+  .cr-ref>i>b{font-size:.98rem}
 }
 /* 세로 레일은 옆에 두 칸이 더 있어야 성립한다. 카드가 지도 밑으로 내려가는 폭(1080)부터는
    레일도 같이 풀어 예전처럼 가로 줄로 눕힌다 — 셋이 한 번에 바뀌어야 중간 모양이 안 생긴다.
@@ -1027,8 +1036,7 @@ body.pop-hold #scene .chips{opacity:0}
     </div>
     <!-- '실제 녹화' 라고 못 박는 자리 — 앞의 재현 시절 문구가 그대로 남으면 정반대 뜻이 된다 -->
     <div class="cr-foot">
-      <span><b>앞 둘은 실제 실행 화면 녹화</b>(같은 서버에 부하 더미를 붙이고 각각 접속한 20초 · 창 테두리만 잘라냈고 배속·편집 없음) ·
-        서버는 무수정(릴레이 43줄이 봉투만 벗긴다) · 웹의 상한은 브라우저 성능이 아니라 한 화면이 담을 수 있는 정보량이다</span>
+      <span><b>앞 둘은 실제 실행 화면 녹화</b>(같은 서버에 부하 더미를 붙이고 각각 접속한 20초 · 창 테두리만 잘라냈고 배속·편집 없음)</span>
       <a class="cr-more" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
         target="_blank" rel="noopener">자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em></a>
     </div>
@@ -3170,8 +3178,8 @@ var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 
 /* ═══ 규격 여섯 칸 ═══
    ※ 한때 여기에 칩 넷(두 화면 한 서버 · 데드레커닝 · 묶음 되풀기 · 릴레이 43줄)과 그 설명 문단이
-   있었다. 눌러야 보이는 글은 안 읽힌다 — 알맹이는 노션 쪽으로 넘기고, 서버 무수정·릴레이 43줄만
-   맨 아래 각주 한 줄에 문장으로 남겼다.
+   있었다. 눌러야 보이는 글은 안 읽힌다 — 알맹이는 통째로 노션 쪽으로 넘겼다(맨 아래 링크).
+   서버 무수정·릴레이 43줄도 각주에 한 줄로 남겨 뒀다가 걷어냈다. 이 탭이 보여줄 것은 화면이다.
    값은 규격이라 각주 줄(.f)이 필요 없다. 마지막 칸만 숫자가 없어서 .t 로 넣는다. */
 (function(){
   var rows=[["맵","120×120",""],
