@@ -681,6 +681,22 @@ body.pop-hold #scene .chips{opacity:0}
 .cl-tile .f{margin-top:6px; font-family:var(--mono); font-size:.63rem; color:var(--dim)}
 .cl-tile.ok .n{color:var(--ok)}
 
+/* ── 규격 칸(.spec) — 2-1 만 쓴다 ──
+   2-2·2-3 의 계기판은 실측 성과(에코 3,791,301건/초 · 무결성 위반 0건)라 큼직한 게 맞다.
+   2-1 에는 자랑할 성과 수치가 없다 — 여기 값은 전부 '규격' 이라 성격이 다르다.
+   네 칸을 크게 두고 억지로 채우는 대신, 각주 줄(.f)을 걷어 높이를 90px → 72px 로 낮추고
+   여섯 칸을 담는다. 각주가 없으니 라벨이 뜻을 다 져야 한다(맵 · 섹터 · 시야 …). */
+.cl-dash.spec{grid-template-columns:repeat(6,1fr); gap:9px}
+.cl-dash.spec .cl-tile{padding:7px 12px 8px}
+.cl-dash.spec .cl-tile .l{font-size:.68rem}
+.cl-dash.spec .cl-tile .v{margin-top:2px; gap:5px}
+.cl-dash.spec .cl-tile .n{font-size:1.14rem}
+/* 단위는 sans 로 되돌린다 — .cl-tile .u 는 mono 라서 '칸 · 36개' 처럼 한글이 섞이면 글꼴이
+   폴백돼 자간이 벌어진다(확대해서 확인했다). 여섯 칸 중 셋이 한글 단위다 */
+.cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.66rem; font-weight:600}
+/* 숫자가 없는 칸(더미 부하) — 값 자리가 비면 칸이 무너져 보이므로 같은 높이의 글자로 채운다 */
+.cl-dash.spec .cl-tile .t{font-size:.86rem; font-weight:700; color:var(--ink); line-height:1.5}
+
 /* ── 그림 안에서 누를 수 있는 것 ──
    한때 선택 표시를 반투명 흰 판으로 덮었는데, 그 판이 격자·막대 위에 얹혀 내용을 회색으로 지웠다.
    테두리만 켠다 — 무엇이 골라졌는지는 알려 주되 그림은 가리지 않는다. */
@@ -704,27 +720,64 @@ body.pop-hold #scene .chips{opacity:0}
 .cl-chips button.act{color:#fff; border-color:#2c5f85; background:rgba(20,40,60,.5)}
 .cl-chips button.act i{border-color:var(--net); color:var(--net); background:#0e2333}
 
-/* ═══════════ ① 클라이언트 — 두 화면을 나란히 ═══════════
-   이 탭만 '그림 + 카드' 문법을 안 쓴다. 요지가 두 화면의 대비이기 때문이다:
-   같은 서버를 왼쪽은 문자로, 오른쪽은 픽셀로 그린다. 카드를 옆에 세우면 그 대비가 반으로 줄어든다.
-   글은 칩으로 고른 한 줄만 남기고, 자세한 것은 노션으로 보낸다.
+/* ═══════════ ① 클라이언트 — 큰 그림 하나 + 참조컷 둘 ═══════════
+   이 탭만 '그림 + 카드' 문법을 안 쓴다. 요지가 화면 그 자체이기 때문이다.
 
-   ── 두 영상의 아래 선을 맞추는 방법 ──
-   콘솔 녹화는 640×496(1.290), 웹 녹화는 1296×814(1.592) 이다. 폭을 40:60 처럼 고정하면 높이가 어긋난다.
-   flex 값에 종횡비를 그대로 넣으면 폭이 종횡비에 비례해 나뉘고, 높이(=폭÷종횡비)는 저절로 같아진다.
-   단 조건이 하나 붙는다: 카드의 좌우 안쪽 여백이 0 이어야 한다. 여백은 폭에 상수로 얹히므로
-   창 폭이 바뀔 때마다 비례가 조금씩 깨진다(1166px 에서 4px 어긋났다). 그래서 여백은 글줄이 각자 갖는다. */
-.cr-two{display:flex; gap:14px; align-items:flex-start}
+   ── 한때 두 판을 나란히 뒀다(콘솔 · 웹). 왜 바꿨나 ──
+   같은 크기의 판을 늘어놓으면 눈이 갈 곳이 없다. 셋째 컷(더미 5,000명)까지 더하니 같은 무게의
+   판·칸이 열넷이 되어 시선이 흩어졌다. 그래서 웹 화면 하나를 크게 두고 나머지 둘을 종속시킨다 —
+   오른쪽 둘은 판이 아니라 '이름표만 얹은 참조컷' 이라 머리줄·캡션줄이 없다. 초점이 하나로 모인다.
+
+   ── 히어로 폭 66% 는 계산값이다 ──
+   눈대중이 아니라 두 칸의 아래 선이 맞는 지점이다. 칸 폭 C, 히어로 비율 f, 칸 사이 틈 14:
+     히어로 = C·f              오른쪽 = C·(1−f) − 14      (flex-basis 의 % 는 틈을 뺀 값이 아니라 C 기준)
+     왼쪽 높이  = C·f/1.5921 + 87                (87 = 머리 30 + 캡션 28 + 안쪽 여백 20 + 테두리 2 · 실측)
+     오른쪽 높이 = 오른쪽·(1/1.2903 + 1/1.5921) + 16      (콘솔 + 덮임컷 + 틈 12 + 테두리 4)
+   1.5921=1296/814(웹·덮임컷) · 1.2903=640/496(콘솔). C=1472 로 풀면 f≈0.660 이다.
+   틈 14 를 빼먹고 풀면 66.6% 가 나오는데, 그러면 오른쪽 칸이 16px 짧다(실제로 그렇게 났다).
+   그 앞서 68% 로 뒀을 때는 42px 짧았다 — align-items:stretch 는 칸만 늘리고,
+   종횡비로 높이가 정해진 그림은 안 늘어나므로 그 차이가 그대로 빈 자리로 남는다.
+   머리·캡션 줄을 고치면 87 이 달라지므로 이 식으로 f 를 다시 풀 것.
+   ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 이 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
+.cr-hero{display:flex; gap:14px; align-items:stretch}
+.cr-hero .big{flex:0 0 66%}
+.cr-side{flex:1 1 0; display:flex; flex-direction:column; gap:12px}
 .cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px;
   padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
-.cr-screen.con{flex:1.2903 1 0} .cr-screen.web{flex:1.5921 1 0}
 .cr-hd{display:flex; align-items:baseline; gap:9px; margin:0 12px 8px; flex-wrap:wrap}
 .cr-hd b{font-size:.95rem; font-weight:800}
 .cr-hd span{font-family:var(--mono); font-size:.63rem; color:var(--dim)}
 /* 영상은 카드 좌우 끝까지 채운다 — 화면을 담은 판이라 테두리에 붙는 쪽이 '기계 화면' 으로 읽힌다.
    눌러서 멈출 수 있으므로 손가락 커서를 준다(컨트롤 바는 화면을 어지럽혀서 안 쓴다). */
 .cr-screen video{display:block; width:100%; height:auto; background:#070a10; cursor:pointer}
-.cr-cap{margin:7px 13px 0; font-size:.7rem; color:var(--dim); line-height:1.5}
+.cr-cap{margin:8px 13px 0; font-size:.72rem; color:var(--dim); line-height:1.5}
+
+/* ── 참조컷 — 판이 아니라 그림에 이름표만 얹은 것 ──
+   두 컷 다 네 귀퉁이가 다 쓰여 있어서, 덮개를 위에 통째로 깔면 내용을 지운다. 그래서 컷마다
+   비어 있는 자리를 찾아 하나씩만 얹는다. */
+.cr-ref{position:relative; border:1px solid var(--line2); border-radius:11px; overflow:hidden;
+  background:#070a10}
+.cr-ref img, .cr-ref video{display:block; width:100%; height:auto}
+.cr-ref video{cursor:pointer}
+/* 알약 이름표(콘솔) — 맨 위 두 줄이 상태줄(Zone · Player · Pos · Speed)이다. 실서버에 붙어 있다는
+   증거라 가리면 안 된다. 그 아래로 내리고(10.5% = 640×496 에서 상태줄이 차지하는 약 8% + 여유),
+   폭도 글자만큼만 쓴다. 통짜 덮개는 격자를 지운다. */
+.cr-ref .pill{position:absolute; left:9px; top:10.5%; display:inline-flex; align-items:baseline; gap:7px;
+  padding:5px 11px; border-radius:8px; font-size:.78rem; font-weight:800; color:#fff;
+  background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
+.cr-ref .pill span{font-size:.66rem; font-weight:600; color:#a9b8cf}
+/* 덮임 컷은 왼쪽 위에 '시야 1,118명' 이 떠 있다 — 이 컷의 핵심 숫자다. 그래서 위는 비워 두고
+   이름표와 수치를 아래 한 줄에 합쳤다(덮개 하나). */
+.cr-ref>i{position:absolute; left:0; right:0; bottom:0; box-sizing:border-box; display:block;
+  padding:26px 12px 9px; font-style:normal; font-size:.68rem; font-weight:600; color:#cfe0f5;
+  background:linear-gradient(to top, rgba(8,11,19,.94) 0%, rgba(8,11,19,.72) 52%, rgba(8,11,19,0) 100%)}
+.cr-ref>i>b{display:block; margin-bottom:3px; font-size:.82rem; font-weight:800; color:#fff}
+.cr-ref>i>b .hot{color:var(--game); font-weight:800}
+/* 규격·녹화 조건은 여기 한 줄로 모은다. 글을 판 사이에 흘리면 그림 셋의 리듬이 끊긴다 */
+.cr-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:11px 2px 0;
+  font-size:.72rem; color:var(--dim); line-height:1.6}
+.cr-foot b{color:var(--mut); font-weight:700}
+.cr-foot .cr-more{margin-left:auto}
 /* 칩으로 고른 보기의 한 줄 설명. 자리를 미리 잡아 둬야 칩을 눌러도 아래 줄이 안 흔들린다 */
 .cr-note{display:flex; gap:11px; align-items:flex-start; margin:11px 0 0; min-height:42px;
   background:var(--sunk); border:1px solid var(--line2); border-radius:10px; padding:9px 13px}
@@ -734,8 +787,8 @@ body.pop-hold #scene .chips{opacity:0}
 /* 전폭 그림 한 장 — 옆에 카드를 세우지 않는 탭이 쓴다 */
 .cr-wide{background:var(--panel); border:1px solid var(--line2); border-radius:12px; padding:12px 14px}
 .cr-wide svg{display:block; width:100%; height:auto}
-.cr-real{margin:10px 2px 0; font-size:.72rem; color:var(--dim); line-height:1.6}
-.cr-real b{color:var(--mut); font-weight:700}
+/* ※ .cr-real(영상 아래 다섯 줄 문단)은 없앴다 — 그 문단이 글로 설명하던 '5,000명이면 시야가
+   1,118명이 되어 화면이 흰 판으로 덮인다' 를 실측 캡처 한 장이 대신한다(오른쪽 아래 참조컷). */
 .cr-chips{max-width:100%}
 /* 노션으로 보내는 문 — 칩 줄 오른쪽 끝. 칩과 같은 크기지만 눌리는 성격이 달라 색을 뺀다 */
 .cr-more{margin-left:auto; display:inline-flex; align-items:center; gap:7px; text-decoration:none;
@@ -746,10 +799,17 @@ body.pop-hold #scene .chips{opacity:0}
 
 @media (max-width:1200px){
   /* 상세의 2단→1단은 여기가 아니라 카드 폭을 보는 @container 가 맡는다(위 .bx-det .cols 옆) */
-  /* 두 화면을 위아래로 — 콘솔 80칸이 좁은 폭에서 글자 4px 이 되면 문자 격자가 회색 띠로 보인다.
-     세로로 쌓이면 폭 비례로 높이를 맞출 이유가 없어지므로 flex 값을 되돌린다(둘 다 전폭). */
-  .cr-two{flex-wrap:wrap}
-  .cr-screen.con, .cr-screen.web{flex:1 1 100%}
+  /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
+     내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어
+     문자 격자가 회색 띠로 보이므로, 참조컷 상태로 반씩 나눠 갖는 편이 낫다. */
+  .cr-hero{flex-wrap:wrap}
+  .cr-hero .big{flex:1 1 100%}
+  .cr-side{flex-direction:row; align-items:flex-start}
+  /* 여기서도 폭을 종횡비에 비례해 나눈다(= 두 컷의 높이가 같아진다). 반씩 균등하게 주면
+     덮임컷(1.5921)이 콘솔(1.2903)보다 75px 낮아지고, 그 빈 자리 때문에 아래 이름표 띠가
+     그림에서 떨어져 뜬다(bottom:0 은 그림 바닥이 아니라 칸 바닥이다). */
+  .cr-side>.cr-ref.con{flex:1.2903 1 0}
+  .cr-side>.cr-ref.lim{flex:1.5921 1 0}
 }
 /* 세로 레일은 옆에 두 칸이 더 있어야 성립한다. 카드가 지도 밑으로 내려가는 폭(1080)부터는
    레일도 같이 풀어 예전처럼 가로 줄로 눕힌다 — 셋이 한 번에 바뀌어야 중간 모양이 안 생긴다.
@@ -920,49 +980,51 @@ body.pop-hold #scene .chips{opacity:0}
     </div>
   </section>
 
-  <!-- ═══ ① 클라이언트 — 콘솔과 웹, 실제 실행 화면 녹화 ═══
+  <!-- ═══ ① 클라이언트 — 웹 화면 하나를 크게, 콘솔과 덮임컷은 참조컷으로 ═══
        한때 이 자리는 페이지가 같은 규칙으로 다시 그린 '재현' 이었다(캔버스 두 장 + 시뮬레이션 한 벌).
        재현은 규칙을 설명하기엔 좋았지만 '진짜 돌아간다' 를 증명하지 못했다 — 실행 녹화로 바꿨다.
-       두 판의 아래 선을 맞추는 방법: 칸의 폭을 영상 종횡비에 비례해 나눈다(CSS flex 값이 곧 종횡비).
-       그래서 카드의 좌우 안쪽 여백은 0 이고, 글줄만 자기 여백을 갖는다 — 여백이 있으면 폭 비례가 깨진다.
 
        ── 두 녹화의 더미 수가 다른 이유(콘솔 1,000 · 웹 250) ──
-       화면이 감당하는 밀도가 다르다. 근거는 실측이다:
-       웹 250명 = 시야 54명 · 말풍선 20개로 다 읽힌다. 5,000명이면 시야가 1,118명이 되고 그들이 전부 말풍선을 띄워
-       화면이 흰 판으로 덮인다(WebClient/screenshots/aoi-flood-5000.png · CHAT 1,427/s · 수신 224KB/s).
+       화면이 감당하는 밀도가 다르다. 그런데 그 근거를 다섯 줄 문단으로 적어 뒀었다.
+       사진이 이미 있는데 글로 적고 있었던 것이다 — 오른쪽 아래 참조컷이 그 사진이고,
+       5,000명에서 시야 1,118명이 전부 말풍선을 띄워 화면이 흰 판으로 덮인 실측이다.
        콘솔은 문자판이라 1,000명도 그리는 비용이 같다.
        ※ 그 사진은 맵 가장자리가 아니라 섹터 한가운데(유효 섹터 9개)에서 찍어야 한다 — 가장자리면 카메라가 맵 밖으로
        못 나가 멈추는 바람에 화면 한쪽에 시야 밖 영역이 들어오고, 그쪽만 텅 비어 "렌더가 깨졌나"로 읽힌다.
-       즉 웹의 상한은 브라우저 성능이 아니라 한 화면이 담을 수 있는 정보량이다. -->
+       원본은 MMO/WebClient/screenshots/aoi-flood-5000.png (1296×814) — 참조컷은 2배 해상도만 남겨 줄였다. -->
   <section class="panel cl-pane" id="p-crender" role="tabpanel" hidden>
-    <div class="cl-dash" id="d-render"></div>
-    <div class="cr-two">
-      <div class="cr-screen con">
-        <div class="cr-hd"><b>콘솔 클라이언트</b><span>80×21 문자 격자</span><span>더미 1,000명 · 천장의 1/5</span></div>
-        <video id="vd-con" muted loop playsinline preload="metadata" width="640" height="496"
-          poster="media/client-console.jpg" title="눌러서 멈추기 / 다시 재생"
-          aria-label="콘솔 클라이언트 실행 화면 녹화 — 더미 1,000명이 붙은 서버에서 문자 격자 위 알파벳 예순 몇 개가 움직이고 아래로 채팅이 쏟아진다">
-          <source src="media/client-console.mp4" type="video/mp4"></video>
-        <div class="cr-cap">문자 하나가 맵 한 칸, 알파벳 하나가 사람이다. 1,000명이 붙어도 문자판은 그리는 비용이 그대로다. 다만 이동·시야·채팅이 다 되는데도 무엇이 왜 그렇게 움직이는지는 로그를 읽어야 알았다.</div>
-      </div>
-      <div class="cr-screen web">
-        <div class="cr-hd"><b>웹 클라이언트</b><span>Canvas 한 장</span><span>더미 250명 · 1/20</span></div>
+    <div class="cl-dash spec" id="d-render"></div>
+    <div class="cr-hero">
+      <div class="cr-screen web big">
+        <div class="cr-hd"><b>웹 클라이언트</b><span>픽셀로 그린다</span><span>더미 250명</span></div>
         <video id="vd-web" muted loop playsinline preload="metadata" width="1296" height="814"
           poster="media/client-web.jpg" title="눌러서 멈추기 / 다시 재생"
           aria-label="웹 클라이언트 실행 화면 녹화 — 더미 250명이 붙은 서버에서 픽셀 캐릭터들이 섹터 격자 위를 움직이고 말풍선이 뜨며, 오른쪽 위 서버 내부 관측 패널의 값이 실시간으로 바뀐다">
           <source src="media/client-web.mp4" type="video/mp4"></video>
-        <div class="cr-cap">같은 서버, 같은 규칙. 섹터 격자와 내 섹터가 화면에 있고 서버가 보고 있는 값(좌표 · 섹터 · 시야 인원 · 초당 패킷 · 수신량)이 오른쪽 위에, 주변 사람 레이더가 오른쪽 아래에 뜬다.</div>
+        <div class="cr-cap">섹터 격자와 내 섹터가 화면에 있고, 오른쪽 위는 서버가 보고 있는 값(좌표 · 섹터 · 시야 인원 · 초당 패킷 · 수신량), 오른쪽 아래는 주변 사람 레이더다.</div>
+      </div>
+      <div class="cr-side">
+        <div class="cr-ref con">
+          <video id="vd-con" muted loop playsinline preload="metadata" width="640" height="496"
+            poster="media/client-console.jpg" title="눌러서 멈추기 / 다시 재생"
+            aria-label="콘솔 클라이언트 실행 화면 녹화 — 더미 1,000명이 붙은 서버에서 문자 격자 위 알파벳 예순 몇 개가 움직이고 아래로 채팅이 쏟아진다">
+            <source src="media/client-console.mp4" type="video/mp4"></video>
+          <b class="pill">콘솔 클라이언트<span>문자로 그린다 · 더미 1,000명</span></b>
+        </div>
+        <div class="cr-ref lim">
+          <img src="media/client-flood-5000.jpg" width="980" height="616" loading="lazy"
+            alt="더미 5,000명이 붙은 서버에 웹 클라로 접속한 화면 — 시야 안 1,118명이 한꺼번에 말풍선을 띄워 흰 판이 화면을 덮었고, 오른쪽 아래 레이더는 점이 꽉 차 노란 사각형이 됐다">
+          <i><b>같은 웹 화면 <span class="hot">더미 5,000명</span></b>시야 1,118명 · 채팅 1,427건/초 · 수신 223.9KB/초 — 서버는 버텼고 화면이 덮였다</i>
+        </div>
       </div>
     </div>
-    <!-- 여기서 '실제 녹화' 라고 못 박는다 — 앞의 재현 시절 문구가 그대로 남으면 정반대 뜻이 된다 -->
-    <div class="cr-real">두 화면 모두 <b>실제 실행 화면을 그대로 녹화</b>한 것이다.
-      같은 서버(맵 120×120 · 섹터 20 · 시야 = 내 섹터 ±1 · 틱 40ms)에 부하 더미를 붙이고
-      각각 접속해 걸어 다닌 20초 — 창 테두리만 잘라냈고 배속도 편집도 없다.
-      <b>더미 수가 다른 건 화면이 감당하는 밀도가 달라서다.</b> 문자판은 인원이 늘어도 그리는 비용이 같아 1,000명을 그대로 담았고,
-      픽셀 화면은 250명에서 가장 잘 읽힌다 — 5,000명을 붙이면 시야 안 1,118명이 한꺼번에 말풍선을 띄워 화면이 흰 판으로 덮인다(실측).
-      서버 성능이 아니라 화면이 감당할 정보량 문제다.</div>
-    <div class="cr-note" id="cr-note"></div>
-    <div class="cl-chips cr-chips" id="ch-render"><span class="t">보기</span></div>
+    <!-- '실제 녹화' 라고 못 박는 자리 — 앞의 재현 시절 문구가 그대로 남으면 정반대 뜻이 된다 -->
+    <div class="cr-foot">
+      <span><b>앞 둘은 실제 실행 화면 녹화</b>(같은 서버에 부하 더미를 붙이고 각각 접속한 20초 · 창 테두리만 잘라냈고 배속·편집 없음) ·
+        서버는 무수정(릴레이 43줄이 봉투만 벗긴다) · 웹의 상한은 브라우저 성능이 아니라 한 화면이 담을 수 있는 정보량이다</span>
+      <a class="cr-more" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
+        target="_blank" rel="noopener">자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em></a>
+    </div>
   </section>
 
   <!-- ═══ ② 안전성 검증 — 옆 카드를 없애고 그림을 전폭으로 ═══
@@ -3089,10 +3151,9 @@ setTimeout(function(){ show(EXPS[0]); }, 400);   /* 진입 애니가 카드를 �
    재현은 결국 그림이다. 그래서 실제로 서버를 띄우고 두 클라이언트로 접속해 녹화한 영상으로 바꿨다.
    재현 코드(서버 틱 · 도착 지연 · 데드레커닝 · 문자판 · 픽셀 렌더 약 650줄)는 통째로 걷어냈다.
 
-   ── 여기 남은 일 셋 ──
-   ① 계기판 넉 장, ② 칩 넉 개(영상 위에 주석을 얹는 대신 아래 한 줄을 바꾼다),
-   ③ 판이 보일 때만 재생 — 숨은 판에서 두 영상이 돌면 화면에 없는 그림에 디코딩을 쓴다.
-   판 크기 계산은 CSS 가 한다(flex 값이 곧 종횡비 — CSS 쪽 주석 참고). */
+   ── 여기 남은 일 둘 ──
+   ① 규격 여섯 칸, ② 판이 보일 때만 재생 — 숨은 판에서 두 영상이 돌면 화면에 없는 그림에 디코딩을 쓴다.
+   판 크기·이름표 자리 계산은 전부 CSS 가 한다(히어로 66.6% 의 근거는 CSS 쪽 주석 참고). */
 (function(){
 "use strict";
 var pane=document.getElementById("p-crender");
@@ -3100,57 +3161,32 @@ if(!pane) return;
 var vids=[document.getElementById("vd-con"),document.getElementById("vd-web")];
 var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-/* ═══ 보기 네 가지 — 칩이 아래 한 줄을 바꾼다(글을 늘리지 않고 영상이 말하게) ═══ */
-var VIEWS=[
-  {k:"두 화면 한 서버",
-   n:"같은 서버에 붙은 두 클라이언트다. 왼쪽은 문자 하나가 맵 한 칸, 오른쪽은 픽셀 — 서버가 보내는 값은 한 벌이고 그리는 방식만 다르다. 콘솔로도 기능은 다 됐다. 안 되던 것은 보여주는 일이었다. 같은 서버에 붙는 클라이언트는 세 벌인데, 성능 수치는 사람이 보는 이 둘이 아니라 사람 없이 도는 부하 더미에서만 뽑는다(2-3 부하 검증)."},
-  {k:"데드레커닝",
-   n:"서버는 사건(출발·꺾임·정지)만 띄엄띄엄 보내고, 빈 시간은 클라가 직진으로 메운다. 남의 다음 입력은 알 수 없으니 꺾임·정지를 지연만큼 늦게 알고 그때 보정한다. 내 캐릭터엔 그 보정이 없다 — 내 입력은 내가 아니까 예측이 맞는다."},
-  {k:"묶음 되풀기",
-   n:"서버가 섹터마다 묶어 보낸 한 통을 클라가 낱개 이동 이벤트로 되풀어 기존 경로에 흘린다. 그래서 서버의 묶음 토글을 껐다 켜며 A/B 를 돌려도 클라는 고칠 것도, 다시 빌드할 것도 없다."},
-  {k:"릴레이 43줄",
-   n:"브라우저는 TCP 소켓을 열 수 없다. 서버에 WebSocket 을 넣으면 그 뒤 모든 성능 수치가 데모 코드 섞인 서버의 수치가 되므로, 봉투만 벗기는 43줄을 서버 밖에 뒀다 — 오른쪽 화면 위에 뜬 ws://127.0.0.1:9000 이 그 릴레이고, 서버는 한 줄도 고치지 않았다."}
-];
-
-/* ═══ 계기판 ═══ */
+/* ═══ 규격 여섯 칸 ═══
+   ※ 한때 여기에 칩 넷(두 화면 한 서버 · 데드레커닝 · 묶음 되풀기 · 릴레이 43줄)과 그 설명 문단이
+   있었다. 눌러야 보이는 글은 안 읽힌다 — 알맹이는 노션 쪽으로 넘기고, 서버 무수정·릴레이 43줄만
+   맨 아래 각주 한 줄에 문장으로 남겼다.
+   값은 규격이라 각주 줄(.f)이 필요 없다. 마지막 칸만 숫자가 없어서 .t 로 넣는다. */
 (function(){
-  var rows=[["콘솔 뷰","80×21","문자","기능 검증의 원본",0],
-            ["웹 뷰","1","캔버스","게임 엔진·외부 라이브러리 0",0],
-            ["서버 틱","40","ms","클라도 같은 주기",0],
-            ["서버 수정","0","줄","릴레이가 봉투만 벗긴다",1]];
+  var rows=[["맵","120×120",""],
+            ["섹터","20","칸 · 36개"],
+            ["시야","±1","섹터"],
+            ["서버 틱","40","ms"],
+            ["콘솔 화면","80×21","문자"],
+            ["더미 부하",null,"이동 · 채팅"]];
   var d=document.getElementById("d-render");
   rows.forEach(function(r){
-    var t=document.createElement("div"); t.className="cl-tile"+(r[4]?" ok":"");
-    t.innerHTML='<div class="l"></div><div class="v"><span class="n"></span><span class="u"></span></div><div class="f"></div>';
-    t.querySelector(".l").textContent=r[0]; t.querySelector(".n").textContent=r[1];
-    t.querySelector(".u").textContent=r[2]; t.querySelector(".f").textContent=r[3];
+    var t=document.createElement("div"); t.className="cl-tile";
+    t.innerHTML='<div class="l"></div><div class="v"></div>';
+    t.querySelector(".l").textContent=r[0];
+    var v=t.querySelector(".v");
+    if(r[1]==null){
+      var s=document.createElement("span"); s.className="t"; s.textContent=r[2]; v.appendChild(s);
+    }else{
+      var n=document.createElement("span"); n.className="n"; n.textContent=r[1]; v.appendChild(n);
+      if(r[2]){ var u=document.createElement("span"); u.className="u"; u.textContent=r[2]; v.appendChild(u); }
+    }
     d.appendChild(t);
   });
-})();
-
-/* ═══ 칩 · 설명 한 줄 ═══ */
-(function(){
-  var box=document.getElementById("ch-render"), note=document.getElementById("cr-note");
-  function sel(i){
-    [].forEach.call(box.querySelectorAll("button"),function(b,k){ b.classList.toggle("act",k===i); });
-    note.innerHTML="";
-    var em=document.createElement("i"); em.textContent="보기 "+(i+1);
-    var p=document.createElement("p"); p.textContent=VIEWS[i].n;
-    note.appendChild(em); note.appendChild(p);
-  }
-  VIEWS.forEach(function(v,i){
-    var b=document.createElement("button");
-    var ic=document.createElement("i"); ic.textContent=String(i+1);
-    b.appendChild(ic); b.appendChild(document.createTextNode(v.k));
-    b.addEventListener("click",function(){ sel(i); });
-    box.appendChild(b);
-  });
-  var more=document.createElement("a");
-  more.className="cr-more"; more.target="_blank"; more.rel="noopener";
-  more.href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46";
-  more.innerHTML='자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em>';
-  box.appendChild(more);
-  sel(0);
 })();
 
 /* ═══ 재생 — 판이 보이는 동안만 ═══
