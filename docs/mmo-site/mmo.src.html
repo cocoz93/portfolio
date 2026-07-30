@@ -454,7 +454,9 @@ body.pop-hold #scene .chips{opacity:0}
 /* 전이는 data-zone 이 있든 없든 항상 걸어 둔다. 죽이는 규칙 쪽에 얹으면 '전체'로 돌아갈 때
    선택자가 떨어져 나가면서 전이까지 같이 사라져, 켤 때만 부드럽고 끌 때는 딱 끊긴다.
    기본 상태에서는 바뀌는 값이 없으므로 이 한 줄이 화면에 미치는 영향은 없다. */
-#scene [data-z]{transition:filter .35s ease}
+/* 이 길이는 진입 순회의 한 칸 머무는 시간(TOUR_HOLD)과 한 쌍이다 — 페이드가 머무는 시간에 가까워지면
+   칸마다 '다 켜진 화면' 이 안 나오고 계속 흐리기만 한 것으로 보인다. 한쪽을 줄이면 다른 쪽도 줄일 것. */
+#scene [data-z]{transition:filter .22s ease}
 #scene[data-zone] [data-z]{filter:var(--zdim)}
 #scene[data-zone="outside"] [data-z~="outside"],
 #scene[data-zone="net"]     [data-z~="net"],
@@ -2693,7 +2695,9 @@ window.__flowReset=function(){
      아직 예약뿐이었으면 예약만 버린다(화면은 손댄 적이 없으니 되돌릴 것도 없다).
      받는 곳은 capture 라 클릭보다 먼저다. 구역 버튼을 눌러 끝난 경우에도 순서가 맞는다 —
      먼저 순회가 풀리고, 뒤이어 그 버튼의 click 이 얹힌다. */
-  const TOUR=["outside","net","game","store"], TOUR_HOLD=550;
+  /* TOUR_HOLD = 한 구역에 머무는 시간. 페이드(#scene [data-z] 의 transition)와 한 쌍으로 움직인다 —
+     머무는 시간이 페이드보다 넉넉해야 칸마다 '다 켜진 화면' 이 한 박자 보인다. */
+  const TOUR=["outside","net","game","store"], TOUR_HOLD=380;
   const TOUR_EV=["pointerdown","keydown","wheel","touchstart"];
   const tourRM=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const pBuild=document.getElementById("p-build");
