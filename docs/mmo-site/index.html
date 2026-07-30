@@ -1223,24 +1223,32 @@ const NODES=[
   { name:"clients", card:"client", hit:[0,0,26,58,11],
     lab:{anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
     /* 무리 범위 — 판이 120×320 이던 시절에는 5×5 로는 너무 작아 판이 비어 보여 6×11 로 키웠다.
-       지금은 판을 72×320 으로 좁혔으므로(왼쪽 여백 회수) 무리도 3열(CU1 66→26)로 같이 줄인다 —
+       지금은 판을 72×320 으로 좁혔으므로(왼쪽 여백 회수) 무리도 3열로 같이 줄인다 —
        판만 좁히면 무리가 넘치고, 무리만 줄이면 판이 다시 빈다.
        한쪽으로만 늘리면 무리가 판 한 귀퉁이로 쏠리므로(+v 는 화면 왼쪽 위, -v 는 오른쪽 아래) 양쪽으로 늘린다.
        -v 쪽을 -18 에서 끊는 건 그 앞이 send→클라 복귀 3레인이 내려오는 자리이기 때문 — 레인을 큐브로 덮으면
        응답이 클라로 돌아가는 마지막 구간이 사라진다. 라벨 자리(LABELS.clients.dy)도 이 -v 끝에 맞춰 잡혀 있다. */
+    /* 무리의 '열'(가로 자리)은 send→클라 복귀 3레인에 맞춘다 — 레인 한 줄이 열 하나로 그대로 꽂힌다.
+       열 중심 = 레일 중심선(center) ± LOFF, 큐브 폭 bw(9)=10.6 ≒ 레인 폭 10 이라 줄과 열이 같은 굵기로 보인다.
+       그래서 열 간격은 bw(14)=16.5 가 아니라 레인 간격 그대로 14 다 — 레인은 몸통 배수(BODY)를 안 받으니
+       예전처럼 cu 를 14 씩 띄우면(=세계좌표 16.5) 세 줄과 세 열이 갈수록 벌어져 어긋난다.
+       세로(행)는 맞출 상대가 없으므로 예전 값(cv 14 간격 = 세계좌표 16.5) 그대로. */
+    grid(L){ const cu=L.u+this.hit[0]+this.hit[2]/2, y=bo(L.v,58), S=bw(9), col=[], row=[];
+      for(let i=-1;i<=1;i++) col.push(cu+i*LOFF-S/2);
+      for(let cv=-18;cv<=126;cv+=14) row.push(y+bw(cv));
+      return {col,row,S}; },
     /* 레일이 멈추는 자리 = 무리 바깥 테두리.
        다른 노드는 몸통 하나라 레일이 중심까지 들어가도 몸통에 가려 안 보이는데,
        클라는 무리가 히트박스의 5배라 중심까지 오면 무리 한복판을 세로로 가른다
        (평면도에서는 큐브가 속이 비어 그 선이 그대로 보인다).
-       아래 draw 의 CU0..CV1 과 같은 값에서 뽑으므로 무리를 키우면 도킹도 따라온다.
-       ※ 폭(26)은 hit·draw·dock 세 군데가 같은 값이어야 한다. 하나만 고치면 레일 끝점(center=L.u+hit.w/2)이
-         무리 밖으로 나가 마지막 구간이 비스듬해진다. */
-    dock(L){ const x=bo(L.u,26), y=bo(L.v,58);
-      return [x+bw(-14), y+bw(-18), x+bw(26+9), y+bw(126+9)]; },
-    draw(g,u,v){ const CU0=-14, CU1=26, CV0=-18, CV1=126, x=bo(u,26), y=bo(v,58), cubes=[];
-      for(let cu=CU0;cu<=CU1;cu+=14) for(let cv=CV0;cv<=CV1;cv+=14) cubes.push([x+bw(cu), y+bw(cv)]);
+       draw 와 같은 grid() 에서 뽑으므로 무리를 키우면 도킹도 따라온다 — 예전에는 '마지막 큐브가 놓이는 자리'가
+       아니라 루프 상한(CU1·CV1)으로 계산해서, 오른쪽으로 14 · 아래로 4.7 만큼 실제 무리 밖에서 잘렸다. */
+    dock(L){ const G=this.grid(L);
+      return [G.col[0], G.row[0], G.col[2]+G.S, G.row[G.row.length-1]+G.S]; },
+    draw(g,u,v){ const G=this.grid({u,v}), cubes=[];
+      G.col.forEach(x=>G.row.forEach(y=>cubes.push([x,y])));
       cubes.sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
-      cubes.forEach(p=>prism(g,p[0],p[1],bw(9),bw(9),0,bw(11),CROWD)); } },
+      cubes.forEach(p=>prism(g,p[0],p[1],G.S,G.S,0,bw(11),CROWD)); } },
   { name:"timer", card:"iocp", hit:[-22,-22,44,44,4],
     lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
     /* 문자판은 바닥에 놓인 원이다. 예전에는 화면 좌표에 축정렬 타원(rx=R·ax, ry=−R·by)으로 그렸는데,
@@ -1351,6 +1359,9 @@ function ribbon(g,pts,w,tint,knee){ const S=[], h=w/2;
         x2:px(s.B[0]+s.pu*e,s.B[1]+s.pv*e),y2:py(s.B[0]+s.pu*e,s.B[1]+s.pv*e,0),
         stroke:up?"#060a13":"#55688f","stroke-width":1,opacity:up?.6:.28})); }); }); }
 const LANE_W=10, SEAM=22, SUB_W=10, SUB_GAP=4;   /* SUB_*: lanes>1(다중 파이프)일 때 줄 하나 폭/간격 — 줄 폭=일반 레인과 동일 */
+/* 줄 하나가 중심선에서 벗어난 거리. 여기서 선언하는 이유는 클라 무리의 열 간격(grid())이 이 값을 쓰는데,
+   그 grid() 가 바로 아래 paintRails()/paintBodies() 에서 불리기 때문 — 칩 쪽(R_*_L)에서 선언하면 늦다. */
+const LOFF=SUB_W+SUB_GAP;
 function paintRails(){
 RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
     g=el("g",{"data-z":zonesOf(r.from,r.to)});
@@ -1547,8 +1558,7 @@ const R_DIRTY= route(["game","dbw"]);
 const R_STORE= route(["dbw","mysql"]);
 const R_TWA  = route(["accept","timer"]);
 const R_TWI  = route(["iocp","timer"]);
-/* 응답 왕복 3구간은 줄이 3개 — 줄별 경로를 미리 뽑아 둔다(lane 0/1/2 = 안쪽/가운데/바깥) */
-const LOFF=SUB_W+SUB_GAP;
+/* 응답 왕복 3구간은 줄이 3개 — 줄별 경로를 미리 뽑아 둔다(lane 0/1/2 = 안쪽/가운데/바깥). LOFF 는 레일 폭 옆에서 선언 */
 const R_FAN_L=lanePaths(R_FAN,true), R_BUND_L=lanePaths(R_BUND), R_OUT_L=lanePaths(R_OUT,true);
 /* 교차하면 fan 줄 i 는 송신 큐의 반대쪽 홈에 도착한다 — 칸 채우기 인덱스를 뒤집어 준다 */
 const FAN_END=[2,1,0];
