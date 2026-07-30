@@ -20,6 +20,10 @@
   --panel:#131a26; --line:#28324a;
   --net:#6cc7ff; --game:#ffb648; --store:#57d694;
   --recv:#6cc7ff; --send:#ffb648;
+  /* 아래 넷은 원래 .bx(병목 탭) 안에서만 선언돼 있었다. 클라이언트 탭의 판·계기판은 .bx 밖이라
+     var(--line2) 가 값을 못 찾아 border 선언 자체가 무효였고(테두리 없음), .cl-tile.ok .n 의 초록도
+     안 먹었다. 여기로 올려 둔다 — .bx 안에서는 그쪽 선언이 그대로 이긴다. */
+  --line2:#1e2739; --ok:#57d694; --panel2:#172032; --sunk:#0f1522;
   --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
   --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Consolas,"D2Coding",monospace;
 }
@@ -613,13 +617,6 @@ body.pop-hold #scene .chips{opacity:0}
 .cl-tile .f{margin-top:6px; font-family:var(--mono); font-size:.63rem; color:var(--dim)}
 .cl-tile.ok .n{color:var(--ok)}
 
-/* ═══ 무대: 왼쪽 그림 / 오른쪽 카드 ═══ */
-.cl-two{display:flex; gap:2%; align-items:stretch}
-.cl-stage{width:57%; position:relative; background:var(--panel); border:1px solid var(--line2);
-  border-radius:12px; padding:10px 12px; min-height:470px}
-.cl-stage svg{display:block; width:100%; height:auto}
-.cl-cap{margin-top:6px; font-size:.72rem; color:var(--dim); text-align:center}
-
 /* ── 그림 안에서 누를 수 있는 것 ──
    한때 선택 표시를 반투명 흰 판으로 덮었는데, 그 판이 격자·막대 위에 얹혀 내용을 회색으로 지웠다.
    테두리만 켠다 — 무엇이 골라졌는지는 알려 주되 그림은 가리지 않는다. */
@@ -628,25 +625,8 @@ body.pop-hold #scene .chips{opacity:0}
 .cl-hit:hover .cl-plate{opacity:.4}
 .cl-hit.on .cl-plate{opacity:.9}
 
-/* ═══ 오른쪽 카드 ═══ */
-.cl-side{width:41%; background:var(--panel); border:1px solid var(--line2); border-radius:12px;
-  padding:14px 16px; display:flex; flex-direction:column; min-height:470px}
-.cl-side .k{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut)}
-.cl-side h3{margin:4px 0 0; font-size:1.12rem; font-weight:800}
-.cl-side .why{margin:8px 0 0; font-size:.8rem; color:#93a3ba; line-height:1.6;
-  border-left:2px solid #2c5f85; padding-left:10px}
-.cl-side .rv{font-family:var(--mono); font-size:1rem; font-weight:700; color:var(--net); margin:12px 0 2px}
-.cl-side .
-table.cl-t{width:100%; table-layout:fixed; border-collapse:collapse; margin-top:8px;
-  font-family:var(--mono); font-size:.64rem; font-variant-numeric:tabular-nums}
-table.cl-t th{text-align:right; font-weight:700; color:var(--dim); padding:0 0 5px; border-bottom:1px solid #232e42}
-table.cl-t th:first-child{text-align:left}
-table.cl-t td{text-align:right; padding:3px 0; color:#93a3ba; border-bottom:1px solid #161f2e}
-table.cl-t tr:last-child td{border-bottom:0}
-table.cl-t td:first-child{text-align:left; color:var(--mut); font-family:var(--sans); font-size:.72rem}
-table.cl-t td:last-child{font-weight:700; color:var(--dim)}
-table.cl-t th+th, table.cl-t td+td{padding-left:9px}
-table.cl-t col.a{width:40%} table.cl-t col.b{width:36%} table.cl-t col.c{width:24%}
+/* ※ 옆 카드(.cl-two / .cl-stage / .cl-side / table.cl-t)는 세 장이 다 전폭 그림으로 바뀌면서 없앴다.
+   카드가 하던 일(무엇을 골랐나 · 왜 그랬나)은 그림 안 라벨과 아래 한 줄(.cr-note)이 나눠 가졌다. */
 
 /* ── 아래 칩 줄 ── */
 .cl-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; max-width:57%}
@@ -660,8 +640,43 @@ table.cl-t col.a{width:40%} table.cl-t col.b{width:36%} table.cl-t col.c{width:2
 .cl-chips button.act{color:#fff; border-color:#2c5f85; background:rgba(20,40,60,.5)}
 .cl-chips button.act i{border-color:var(--net); color:var(--net); background:#0e2333}
 
+/* ═══════════ ① 클라이언트 — 두 화면을 나란히 ═══════════
+   이 탭만 '그림 + 카드' 문법을 안 쓴다. 요지가 두 화면의 대비이기 때문이다:
+   같은 순간을 왼쪽은 문자로, 오른쪽은 픽셀로 그린다. 카드를 옆에 세우면 그 대비가 반으로 줄어든다.
+   글은 칩으로 고른 한 줄만 남기고, 자세한 것은 노션으로 보낸다. */
+.cr-two{display:flex; gap:14px; align-items:flex-start}
+.cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px; padding:9px 11px 11px}
+.cr-screen.con{width:40%} .cr-screen.web{width:60%}
+.cr-hd{display:flex; align-items:baseline; gap:9px; margin:0 1px 8px; flex-wrap:wrap}
+.cr-hd b{font-size:.95rem; font-weight:800}
+.cr-hd span{font-family:var(--mono); font-size:.63rem; color:var(--dim)}
+.cr-screen canvas{display:block; width:100%; border-radius:8px; background:#070a10}
+/* 재현이라는 사실은 화면 바로 아래에 붙인다 — 캡션을 멀리 두면 실측 캡처로 읽힌다 */
+.cr-cap{margin:7px 2px 0; font-size:.7rem; color:var(--dim); line-height:1.5}
+/* 칩으로 고른 보기의 한 줄 설명. 자리를 미리 잡아 둬야 칩을 눌러도 아래 줄이 안 흔들린다 */
+.cr-note{display:flex; gap:11px; align-items:flex-start; margin:11px 0 0; min-height:42px;
+  background:var(--sunk); border:1px solid var(--line2); border-radius:10px; padding:9px 13px}
+.cr-note i{flex:0 0 auto; margin-top:1px; font-style:normal; font-family:var(--mono);
+  font-size:.63rem; font-weight:800; letter-spacing:.06em; color:var(--net)}
+.cr-note p{margin:0; font-size:.81rem; color:#93a3ba; line-height:1.6}
+/* 전폭 그림 한 장 — 옆에 카드를 세우지 않는 탭이 쓴다 */
+.cr-wide{background:var(--panel); border:1px solid var(--line2); border-radius:12px; padding:12px 14px}
+.cr-wide svg{display:block; width:100%; height:auto}
+.cr-real{margin:10px 2px 0; font-size:.72rem; color:var(--dim); line-height:1.6}
+.cr-real b{color:var(--mut); font-weight:700}
+.cr-chips{max-width:100%}
+/* 노션으로 보내는 문 — 칩 줄 오른쪽 끝. 칩과 같은 크기지만 눌리는 성격이 달라 색을 뺀다 */
+.cr-more{margin-left:auto; display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+  font-size:.78rem; font-weight:700; color:var(--mut); border:1px dashed #2c3b55;
+  border-radius:9px; padding:5px 11px}
+.cr-more:hover{color:var(--ink); border-color:#3c4a63}
+.cr-more em{font-style:normal; font-family:var(--mono); font-size:.66rem; color:var(--dim)}
+
 @media (max-width:1200px){
   .bx-det .cols{ grid-template-columns:1fr; gap:0 }   /* 카드가 좁아지면 표를 아래로 내린다 */
+  /* 두 화면을 위아래로 — 콘솔 80칸이 좁은 폭에서 글자 4px 이 되면 문자 격자가 회색 띠로 보인다 */
+  .cr-two{flex-wrap:wrap}
+  .cr-screen.con, .cr-screen.web{width:100%}
 }
 @media (max-width:900px){
   .bx-dash{ grid-template-columns:1fr 1fr }
@@ -688,10 +703,13 @@ table.cl-t col.a{width:40%} table.cl-t col.b{width:36%} table.cl-t col.c{width:2
     <button class="subtab" data-sub="bneck" role="tab" aria-selected="false"><em>2</em>병목 · 실험</button>
   </div>
   <!-- 클라이언트 탭의 하위 줄. MMO 쪽과 같은 생김새를 쓰되 상태는 따로 갖는다(csub) -->
+  <!-- 세 단계는 나란한 선택지가 아니라 검증 순서다: 무엇을 만들었나 → 믿을 수 있나 → 어디까지 버티나.
+       ②③ 이 곧 노션 허브의 3단 사다리(남의 자 → 내 자 → 컨텐츠)에서 Step1·2 와 Step3 이다.
+       ④ 는 3회차에 ③ 으로 흡수하고 없앤다 — 그 내용은 부하 수치를 믿을 수 있는 근거라 ③ 자리다. -->
   <div class="subtabs" id="subtabs2" role="tablist" aria-label="클라이언트 하위 섹션" hidden>
-    <button class="subtab act" data-csub="env" role="tab" aria-selected="true"><em>1</em>테스트 환경 · 클라 모습</button>
-    <button class="subtab" data-csub="safe" role="tab" aria-selected="false"><em>2</em>안전성 테스트</button>
-    <button class="subtab" data-csub="load" role="tab" aria-selected="false"><em>3</em>부하 테스트</button>
+    <button class="subtab act" data-csub="render" role="tab" aria-selected="true"><em>1</em>클라이언트</button>
+    <button class="subtab" data-csub="safe" role="tab" aria-selected="false"><em>2</em>안전성 검증</button>
+    <button class="subtab" data-csub="load" role="tab" aria-selected="false"><em>3</em>부하 검증</button>
   </div>
 
   <section class="panel act" id="p-build" role="tabpanel">
@@ -775,41 +793,55 @@ table.cl-t col.a{width:40%} table.cl-t col.b{width:36%} table.cl-t col.c{width:2
     </div>
   </section>
 
-  <!-- ═══ 클라이언트 탭 — 하위 3장. 서버 탭과 같은 골격(그림 + 고른 것 하나) ═══ -->
-  <section class="panel cl-pane" id="p-cenv" role="tabpanel" hidden>
-    <div class="cl-dash" id="d-env"></div>
-    <div class="cl-two">
-      <div class="cl-stage"><svg id="sc-env" viewBox="0 0 760 470" role="img"
-        aria-label="한 PC 안에서 서버와 부하 클라이언트를 물리코어로 나눈 그림"></svg>
-        <div class="cl-cap">i9-10900 한 대 · 물리코어를 갈라 서버와 부하 클라를 붙였다 — 회선이 끼지 않는다</div>
+  <!-- ═══ ① 클라이언트 — 콘솔과 웹이 같은 순간을 각자 방식으로 그린다 ═══
+       두 캔버스가 시뮬레이션 하나를 공유한다. 요지가 '같은 서버 값, 다른 그림' 이라
+       각자 난수를 굴리면 그 요지가 깨진다(스크립트 쪽 주석 참고). -->
+  <section class="panel cl-pane" id="p-crender" role="tabpanel" hidden>
+    <div class="cl-dash" id="d-render"></div>
+    <div class="cr-two">
+      <div class="cr-screen con">
+        <div class="cr-hd"><b>콘솔 클라이언트</b><span>80×21 문자 격자</span><span>기능 검증의 원본</span></div>
+        <canvas id="cv-con" role="img"
+          aria-label="콘솔 클라이언트 화면 재현 — 80×21 문자 격자에 알파벳으로 찍힌 플레이어들"></canvas>
+        <div class="cr-cap">문자 하나가 맵 한 칸이다. 기능은 다 되지만 섹터 경계도 시야 범위도 화면에 없다.</div>
       </div>
-      <div class="cl-side" id="sd-env"></div>
+      <div class="cr-screen web">
+        <div class="cr-hd"><b>웹 클라이언트</b><span>Canvas 한 장</span><span>서버 내부를 화면에 얹는다</span></div>
+        <canvas id="cv-web" role="img"
+          aria-label="웹 클라이언트 화면 재현 — 픽셀 캐릭터에 섹터 격자·시야 점선·서버 내부 관측 패널이 얹힌 화면"></canvas>
+        <div class="cr-cap">같은 순간, 같은 사람들. 섹터 격자와 시야 점선이 화면에 있고, 서버가 보고 있는 값이 오른쪽 위에 뜬다.</div>
+      </div>
     </div>
-    <div class="cl-chips" id="ch-env"><span class="t">자리</span></div>
+    <!-- 실측 캡처로 읽히면 안 되는 자리다. 두 화면 바로 밑에 붙여 둔다 -->
+    <div class="cr-real">두 화면 모두 <b>이 페이지에서 다시 그린 재현</b>이다 — 실제 화면 캡처가 아니다.
+      규칙은 실물과 같게 맞췄고(맵 120×120 · 섹터 20 · 시야 = 내 섹터 ±1 · 서버 틱 40ms),
+      눈으로 따라갈 수 있게 배속만 늦췄다.</div>
+    <div class="cr-note" id="cr-note"></div>
+    <div class="cl-chips cr-chips" id="ch-render"><span class="t">보기</span></div>
   </section>
 
+  <!-- ═══ ② 안전성 검증 — 옆 카드를 없애고 그림을 전폭으로 ═══
+       요지가 '남의 자로 먼저, 내 자로 다시' 라는 순서인데, 그 순서가 카드 표 한 줄에만 있었다.
+       그림을 네 띠로 세우고 글은 칩으로 고른 한 줄만 남긴다. -->
   <section class="panel cl-pane" id="p-csafe" role="tabpanel" hidden>
     <div class="cl-dash" id="d-safe"></div>
-    <div class="cl-two">
-      <div class="cl-stage"><svg id="sc-safe" viewBox="0 0 760 470" role="img"
-        aria-label="에코 더미가 서버에 패킷을 보내고 되돌려받는 그림"></svg>
-        <div class="cl-cap">보낸 값이 그대로 돌아오는가 · 서버가 먼저 끊지 않는가 — 이 둘만 본다</div>
-      </div>
-      <div class="cl-side" id="sd-safe"></div>
+    <div class="cr-wide"><svg id="sc-safe" viewBox="0 0 1180 370" role="img"
+      aria-label="검증 사다리 두 칸, 에코 패킷 한 통의 구조, 0이어야 하는 지표 넷, 일부러 이상하게 보내는 시험 넷"></svg>
     </div>
-    <div class="cl-chips" id="ch-safe"><span class="t">자리</span></div>
+    <div class="cr-note" id="nt-safe"></div>
+    <div class="cl-chips cr-chips" id="ch-safe"><span class="t">보기</span></div>
   </section>
 
+  <!-- ═══ ③ 부하 검증 — 자리 0(테스트 환경)을 첫 띠로 흡수했다 ═══
+       코어 분리·loopback·회선 4번 이사는 그 자체가 주제가 아니라 이 탭의 수치를 믿을 수 있는 근거다.
+       별도 탭으로 두면 '5,000이 나왔다' 와 '그게 서버 성능이다' 가 두 화면으로 갈린다. -->
   <section class="panel cl-pane" id="p-cload" role="tabpanel" hidden>
     <div class="cl-dash" id="d-load"></div>
-    <div class="cl-two">
-      <div class="cl-stage"><svg id="sc-load" viewBox="0 0 760 470" role="img"
-        aria-label="120x120 맵의 36개 섹터에 봇 5000이 흩어져 움직이는 그림"></svg>
-        <div class="cl-cap">맵 120×120 · 섹터 36칸 · 봇 5,000이 매 틱 주사위를 굴려 움직인다</div>
-      </div>
-      <div class="cl-side" id="sd-load"></div>
+    <div class="cr-wide"><svg id="sc-load" viewBox="0 0 1180 430" role="img"
+      aria-label="한 PC의 물리코어를 서버와 부하 클라로 나눈 그림, 회선을 네 번 옮긴 내역, 맵 36섹터와 시야 3x3, 봇의 매 틱 주사위, 5000명을 다섯 스레드가 나눠 든 그림"></svg>
     </div>
-    <div class="cl-chips" id="ch-load"><span class="t">자리</span></div>
+    <div class="cr-note" id="nt-load"></div>
+    <div class="cl-chips cr-chips" id="ch-load"><span class="t">보기</span></div>
   </section>
 
   <section class="panel" id="p-misc" role="tabpanel" hidden>
@@ -2588,7 +2620,7 @@ window.__flowReset=function(){
   const subbar=document.getElementById("subtabs");
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");
-  let top="mmo", sub="build", csub="env";
+  let top="mmo", sub="build", csub="render";
   /* 하위 줄 상자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)과 최소 폭(--tabw)이 그 탭과 같아야
      '그 탭 아래가 열린 칸' 으로 보인다. 탭줄 밑선의 빈 구간도 같은 두 값으로 잡는다.
      offsetLeft 는 offsetParent 에 따라 기준이 흔들려서 탭줄과의 상대 좌표로 잰다.
@@ -2625,7 +2657,7 @@ window.__flowReset=function(){
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
-    document.getElementById("p-cenv").hidden  = !(top==="dummy" && csub==="env");
+    document.getElementById("p-crender").hidden = !(top==="dummy" && csub==="render");
     document.getElementById("p-csafe").hidden = !(top==="dummy" && csub==="safe");
     document.getElementById("p-cload").hidden = !(top==="dummy" && csub==="load");
     document.getElementById("p-misc").hidden  = (top!=="misc");
@@ -2644,6 +2676,9 @@ window.__flowReset=function(){
     /* 병목 지도로 들어올 때마다 '설계 → 청사진' 전환 애니를 처음부터.
        설계 씬이 있던 자리를 넘겨줘야 그 자리에 그대로 겹친 채 시작한다(위에서 숨기기 전에 재 뒀다) */
     if(top==="mmo" && sub==="bneck" && window.playBneckIntro) window.playBneckIntro(fromRect);
+    /* 두 화면은 숨은 동안 rAF 를 아예 안 돈다(캔버스 두 장을 계속 다시 그리는 자리라 비용이 크다).
+       그래서 다시 들어올 때 여기서 깨워 준다 — 안 깨우면 정지 화면이 남는다. */
+    if(top==="dummy" && csub==="render" && window.__crenderPlay) window.__crenderPlay();
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });
   subs.forEach(function(t){ t.addEventListener("click",function(){ top="mmo"; sub=t.getAttribute("data-sub"); paint(); }); });
@@ -2652,7 +2687,9 @@ window.__flowReset=function(){
   const h0=(location.hash||"").replace("#","");
   if(h0==="bneck"||h0==="build"){ top="mmo"; sub=h0; }
   else if(h0==="dummy"||h0==="misc"){ top=h0; }
-  else if(h0==="cenv"||h0==="csafe"||h0==="cload"){ top="dummy"; csub=h0.slice(1); }
+  else if(h0==="csafe"||h0==="cload"||h0==="crender"){ top="dummy"; csub=h0.slice(1); }
+  /* #cenv 는 옛 ④ 테스트 환경 탭이었다. 그 내용이 ③ 부하 검증의 첫 띠로 들어갔으니 그쪽으로 보낸다 */
+  else if(h0==="cenv"){ top="dummy"; csub="load"; }
   paint();
 
 })();
@@ -2883,6 +2920,657 @@ show(EXPS[0]);
 setTimeout(function(){ show(EXPS[0]); }, 400);   /* 진입 애니가 카드를 연 뒤 한 번 더 */
 })();
 
+/* ═══════════ ① 클라이언트 — 콘솔 / 웹 두 화면 재현 ═══════════
+   실제 화면 캡처가 아니라 이 페이지에서 같은 규칙으로 다시 그린 것이다(화면 아래 그 사실을 적어 뒀다).
+   맞춘 규칙: 맵 120×120 · 섹터 20(6×6) · 시야 = 내 섹터 ±1 · 서버 틱 40ms ·
+             주기 동기화 13틱(≈500ms, 2타일 이상 움직인 경우만) · 서버 권위 + 클라 예측.
+
+   ── 왜 시뮬레이션을 한 벌만 두는가 ──
+   이 탭의 요지는 '같은 서버 값을 두 클라가 각자 그린다' 다. 화면마다 난수를 따로 굴리면
+   두 화면에 다른 사람이 서 있게 되고, 그 요지가 그림에서 사라진다. 그래서 서버 역할(권위 좌표 sx,sy)과
+   클라 역할(예측 좌표 kx,ky)을 한 벌만 두고 두 렌더러가 같은 값을 읽는다.
+
+   ── 왜 캔버스인가 ──
+   이 파일의 다른 그림은 전부 SVG 다. 여기만 캔버스인 이유는 콘솔 격자가 한 프레임에 80×21=1680칸이라
+   SVG 로는 프레임마다 노드를 수백 개 만들어야 하고, 웹 클라 원본이 애초에 캔버스 한 장이기 때문이다. */
+(function(){
+"use strict";
+var pane=document.getElementById("p-crender");
+if(!pane) return;
+var cvC=document.getElementById("cv-con"), cvW=document.getElementById("cv-web");
+var ctxC=cvC.getContext("2d"), ctxW=cvW.getContext("2d");
+var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
+var DPR=Math.min(2,window.devicePixelRatio||1);
+var MONO="'JetBrains Mono', ui-monospace, monospace", SANS="Pretendard, sans-serif";
+
+/* ═══ 규칙 값 ═══ */
+var MAP=120, SEC=20, GRID=MAP/SEC;
+var TICK=0.040, SYNC_TICKS=13;
+var COLS=80, ROWS=21, CHATR=3;      /* 콘솔 뷰 80×21 + 아래 채팅 3줄 */
+/* 실제 속도(25~50 유닛/초)로 돌리면 콘솔 80칸을 2초에 지나간다 — 무엇이 어디로 가는지 눈으로 못 쫓는다.
+   규칙은 그대로 두고 시계만 늦춘다(화면 아래 캡션에 적어 뒀다). */
+var SLOW=0.42;
+
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+/* 결정적 난수 — 방문마다 같은 장면이 나와야 한다(헤드리스 캡처와 눈 검증이 흔들리지 않게) */
+var seed=20260730>>>0;
+function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; }
+function ri(n){ return Math.floor(rnd()*n); }
+
+/* ═══ 사람들 ═══ */
+var DIRV=[[0,-1],[0,1],[-1,0],[1,0]];      /* 상 하 좌 우 — 서버가 쓰는 방향 값이 4방향이라 대각선이 없다 */
+var LETTERS="ABCDEFGHJKLMNPQRSTUVWXYZ";
+var CPAL=["#7fd0ff","#9ad4ff","#ffb648","#ffd08a","#57d694","#8ff0c0","#c9a8ff","#ff9a8d","#d3ddee"];
+var SHIRT=["#4f7fc4","#c4574f","#4fa877","#8a5fc4","#c49a4f","#4fb6c4"];
+var PANT =["#33405c","#4a3b32","#2f4a3a","#3d3550"];
+var HAIR =["#2a2118","#4a3324","#6b4a2a","#1d222e","#7a6a4a"];
+var SKIN =["#e0b48c","#c99268","#a87450","#f0cba6"];
+var CHATS=["안녕하세요","같이 가요","여기 사람 많네요","섹터 넘어갑니다","저 여기 있어요","잠깐만요","오케이","길을 잃었다"];
+
+/* 외형은 서버가 모른다 — playerId 를 해시해 유도한다(같은 id 면 언제나 같은 모습) */
+function look(id){
+  var h=(id*2654435761)>>>0;
+  return {sh:SHIRT[h%SHIRT.length], pa:PANT[(h>>>5)%PANT.length],
+          ha:HAIR[(h>>>10)%HAIR.length], sk:SKIN[(h>>>15)%SKIN.length]};
+}
+function Ent(i){
+  var e={};
+  e.id=1013+i*7;
+  e.ch=LETTERS.charAt(i%LETTERS.length);
+  e.col=CPAL[i%CPAL.length];
+  e.lk=look(e.id);
+  e.sx=2+rnd()*(MAP-4); e.sy=2+rnd()*(MAP-4);   /* 서버 권위 좌표 */
+  e.kx=e.sx; e.ky=e.sy;                          /* 클라가 아는 좌표 = 예측이 굴리는 값 */
+  e.dir=ri(4); e.mv=rnd()<.65; e.spd=25+ri(6)*5; /* 25~50, 5 단위 */
+  e.cdir=e.dir; e.cmv=e.mv;                      /* 클라가 '믿고 있는' 방향·이동 상태(서버 값과 다를 수 있다) */
+  e.ph=rnd()*9;                                  /* 걷기 프레임 위상 — 모두가 같은 발을 내딛는 군무 방지 */
+  e.chat=null; e.chatT=-99; e.evT=-99; e.seen=false;
+  return e;
+}
+/* 인원 — 맵 전체 260명. 시야(맵의 25%)에 60명쯤 들고, 그중 콘솔 80×21 에 스무 명 안팎이 찍힌다.
+   더 적게 두면 두 화면이 다 텅 비어 '문자 벽 vs 픽셀' 대비가 성립하지 않는다(실제 캡처도 시야 32명이었다). */
+var ENTS=[]; for(var i=0;i<260;i++) ENTS.push(Ent(i));
+/* 나 — 천천히 돌아다닌다. 내 섹터가 바뀌어야 '유효 섹터' 가 9 에서 6 으로 줄는 것을 보여줄 수 있다 */
+var me=Ent(900); me.ch="@"; me.col="#eaf3ff"; me.spd=26;
+me.sx=me.kx=60.5; me.sy=me.ky=60.5; me.dir=3; me.mv=true;
+/* 내 것도 세어야 패널 숫자가 맞는다 — 서버는 수신 대상에서 본인을 빼지 않는다(자기 섹터 주민 자격) */
+me.seen=true;
+var ALL=ENTS.concat([me]);
+
+function sec(v){ return clamp(Math.floor(v/SEC),0,GRID-1); }
+function inAOI(e){ return Math.abs(sec(e.sx)-sec(me.sx))<=1 && Math.abs(sec(e.sy)-sec(me.sy))<=1; }
+/* 유효 섹터 — 내 섹터 ±1 중 월드 안에 실제로 있는 칸. 가장자리에 서면 9 보다 작아진다 */
+function validSec(){
+  var a=sec(me.sx), b=sec(me.sy), n=0;
+  for(var u=a-1;u<=a+1;u++) for(var v=b-1;v<=b+1;v++) if(u>=0&&u<GRID&&v>=0&&v<GRID) n++;
+  return n;
+}
+
+/* ═══ 서버 틱 / 클라 예측 ═══ */
+var now=0, tickAcc=0, tickNo=0, rateAcc=0;
+var CNT={sup:0,cre:0,del:0,chat:0,by:0};       /* 이번 1초의 건수 */
+var RATE={sup:0,cre:0,del:0,chat:0,kb:0};      /* 1초마다 스냅해 패널에 띄운다 */
+var CHATLOG=[];
+
+function say(e){
+  if(!e.seen) return;                          /* 시야 밖 채팅은 서버가 보내 주지 않는다 */
+  e.chat=CHATS[ri(CHATS.length)]; e.chatT=now;
+  CHATLOG.push({ch:e.ch,msg:e.chat,col:e.col});
+  if(CHATLOG.length>7) CHATLOG.shift();
+  CNT.chat++; CNT.by+=6+e.chat.length*2;       /* 가변 길이 — 실제 글자 수만큼만 */
+}
+/* ═══ 사건은 지연을 두고 도착한다 — 이게 데드레커닝이 어긋나는 유일한 이유다 ═══
+   즉시 전달하면 클라 예측이 서버와 똑같이 굴러가 어긋날 일이 없다(그렇게 만들었더니 마름모가
+   캐릭터에 붙어 있어 보기 2가 아무것도 설명하지 못했다). 남의 다음 입력을 지연만큼 늦게 알고
+   그때 보정하는 것이 실제 순서라, 사건을 큐에 담아 LAT 뒤에 적용한다.
+   ※ 내 캐릭터는 예외다 — 내 입력은 내가 아니까 즉시 반영한다. 그래서 나는 안 튄다. */
+var LAT=0.13, QUE=[];
+function notify(e){
+  e.evT=now;
+  if(e.seen){ CNT.sup++; CNT.by+=14; }         /* 섹터 묶음 엔트리 14B */
+  if(e===me){ e.kx=e.sx; e.ky=e.sy; e.cdir=e.dir; e.cmv=e.mv; return; }
+  QUE.push({e:e,x:e.sx,y:e.sy,d:e.dir,m:e.mv,at:now+LAT});
+}
+/* LAT 이 상수라 도착 순서 = 넣은 순서다. 앞에서부터 때가 된 것만 꺼낸다 */
+function applyDue(){
+  var i=0;
+  while(i<QUE.length&&QUE[i].at<=now){
+    var q=QUE[i++]; q.e.kx=q.x; q.e.ky=q.y; q.e.cdir=q.d; q.e.cmv=q.m;
+  }
+  if(i) QUE.splice(0,i);
+}
+/* 지금 자리에서 벽에 막히지 않는 방향 하나 — 서버가 벽 방향 입력을 아예 막는 것과 같은 취지 */
+function freeDir(e){
+  var ok=[];
+  for(var d=0;d<4;d++){
+    var nx=e.sx+DIRV[d][0]*3, ny=e.sy+DIRV[d][1]*3;
+    if(nx>1&&nx<MAP-1&&ny>1&&ny<MAP-1) ok.push(d);
+  }
+  return ok.length?ok[ri(ok.length)]:ri(4);
+}
+function serverTick(){
+  tickNo++;
+  var sync=(tickNo%SYNC_TICKS===0);
+  for(var i=0;i<ALL.length;i++){
+    var e=ALL[i], ev=false;
+    if(e.mv){
+      var d=DIRV[e.dir];
+      e.sx+=d[0]*e.spd*TICK; e.sy+=d[1]*e.spd*TICK;
+      /* 맵 경계에 닿으면 정지로 전환 — 클라도 같은 조건을 복제한다(다른 규칙이면 벽마다 보정이 터진다) */
+      if(e.sx<1||e.sx>MAP-1||e.sy<1||e.sy>MAP-1){
+        e.sx=clamp(e.sx,1,MAP-1); e.sy=clamp(e.sy,1,MAP-1); e.mv=false; ev=true;
+      }
+    }
+    /* 행동 전이 — 실제 더미의 주사위 분배(서 있을 때 이동 75 / 채팅 20 / 존이동 5)는 ③ 부하 검증 탭이 다룬다.
+       여기서는 화면을 눈으로 읽을 수 있는 낮은 확률로 굴린다. */
+    var r=rnd()*100;
+    if(e===me){
+      /* 나는 가운데를 크게 벗어나지 않게 돌린다. 구석에 붙으면 시야 3×3 의 절반이 월드 밖이라
+         '같은 순간 같은 사람들' 을 보여줄 사람이 두 화면에 얼마 없다.
+         가장자리 얘기(유효 섹터 9→6)는 이 범위 안에서도 한 번씩 나온다. */
+      if(e.sx<22||e.sx>98||e.sy<22||e.sy>98){
+        e.dir=(e.sx<22)?3:((e.sx>98)?2:((e.sy<22)?1:0)); e.mv=true; ev=true;
+      }
+      else if(r<2.6){ e.dir=ri(4); e.mv=true; ev=true; } else if(r<3.1){ e.mv=false; ev=true; }
+    }
+    else if(!e.mv){
+      /* 다시 걸을 때 방향은 벽 쪽을 뺀 것 중에서 고른다.
+         벽에 닿아 멈춘 놈이 4분의 1 확률로 다시 벽을 향하면, 그 자리에 붙어 버린다 —
+         레이더에 맵 경계선을 따라 점이 한 줄로 늘어서는 것이 그 흔적이었다. */
+      if(r<8){ e.dir=freeDir(e); e.mv=true; ev=true; }
+      else if(r<8.4) say(e);
+    }
+    else { if(r<2.2){ e.mv=false; ev=true; } else if(r<3.4){ e.dir=ri(4); ev=true; } }
+
+    if(ev) notify(e);
+    else if(sync && Math.abs(e.kx-e.sx)+Math.abs(e.ky-e.sy)>=2) notify(e);  /* 주기 동기화 조건 */
+  }
+  /* 시야 진입·이탈 — 서버가 보내 주는 만큼만 클라가 안다 */
+  for(var j=0;j<ENTS.length;j++){
+    var b=ENTS[j], v=inAOI(b);
+    /* 시야에 들어오면 서버가 지금 상태를 통째로 보내 준다 — 그 순간만은 클라가 서버와 같다 */
+    if(v&&!b.seen){ b.seen=true; b.kx=b.sx; b.ky=b.sy; b.cdir=b.dir; b.cmv=b.mv; CNT.cre++; CNT.by+=21; }
+    else if(!v&&b.seen){ b.seen=false; b.chat=null; CNT.del++; CNT.by+=4; }
+  }
+}
+/* 클라 예측 — 서버가 준 마지막 방향·상태(cdir·cmv)로 매 프레임 직진시킨다.
+   서버 상태(dir·mv)를 보면 안 된다: 그건 클라가 아직 모르는 값이다. */
+function predict(dt){
+  for(var i=0;i<ALL.length;i++){ var e=ALL[i];
+    if(e.cmv){ var d=DIRV[e.cdir]; e.kx+=d[0]*e.spd*dt; e.ky+=d[1]*e.spd*dt; }
+    e.kx=clamp(e.kx,1,MAP-1); e.ky=clamp(e.ky,1,MAP-1);
+  }
+}
+
+/* ═══ 보기 네 가지 — 칩이 그림 위 주석을 바꾼다(글을 늘리지 않고 그림으로 말하게) ═══ */
+var VIEWS=[
+  {k:"두 화면 한 서버",
+   n:"같은 순간의 같은 사람들이다. 왼쪽은 문자 하나가 맵 한 칸, 오른쪽은 픽셀 — 서버가 보낸 값은 한 벌이고 그리는 방식만 다르다. 콘솔로도 기능은 다 됐다. 안 되던 것은 보여주는 일이었다. 같은 서버에 붙는 클라이언트는 세 벌인데, 성능 수치는 사람이 보는 이 둘이 아니라 사람 없이 도는 부하 더미에서만 뽑는다(③ 부하 검증)."},
+  {k:"데드레커닝",
+   n:"서버는 사건(출발·꺾임·정지)만 띄엄띄엄 보내고, 빈 시간은 클라가 직진으로 메운다. 주황 마름모가 서버 좌표, 캐릭터가 클라가 그리는 좌표다 — 남의 다음 입력은 알 수 없어 꺾임·정지를 지연만큼 늦게 알고 그때 보정한다. 내 캐릭터엔 마름모가 안 붙는다: 내 입력은 내가 아니까 예측이 맞는다."},
+  {k:"묶음 되풀기",
+   n:"서버가 섹터마다 묶어 보낸 한 통을 클라가 낱개 이동 이벤트로 되풀어 기존 경로에 흘린다. 그래서 서버의 묶음 토글을 껐다 켜며 A/B 를 돌려도 클라는 고칠 것도, 다시 빌드할 것도 없다."},
+  {k:"릴레이 43줄",
+   n:"브라우저는 TCP 소켓을 열 수 없다. 서버에 WebSocket 을 넣으면 그 뒤 모든 성능 수치가 데모 코드 섞인 서버의 수치가 되므로, 봉투만 벗기는 43줄을 서버 밖에 뒀다 — 서버는 한 줄도 고치지 않았다."}
+];
+var MODE=0;
+
+/* ═══ 계기판 ═══ */
+(function(){
+  var rows=[["콘솔 뷰","80×21","문자","기능 검증의 원본",0],
+            ["웹 뷰","1","캔버스","게임 엔진·외부 라이브러리 0",0],
+            ["서버 틱","40","ms","클라도 같은 주기",0],
+            ["서버 수정","0","줄","릴레이가 봉투만 벗긴다",1]];
+  var d=document.getElementById("d-render");
+  rows.forEach(function(r){
+    var t=document.createElement("div"); t.className="cl-tile"+(r[4]?" ok":"");
+    t.innerHTML='<div class="l"></div><div class="v"><span class="n"></span><span class="u"></span></div><div class="f"></div>';
+    t.querySelector(".l").textContent=r[0]; t.querySelector(".n").textContent=r[1];
+    t.querySelector(".u").textContent=r[2]; t.querySelector(".f").textContent=r[3];
+    d.appendChild(t);
+  });
+})();
+
+/* ═══ 판 크기 ═══
+   콘솔 칸은 가로:세로 = 1:1.85(콘솔 셀 비율). 웹 판은 콘솔과 같은 높이로 맞춘다 —
+   두 판의 아래 선이 어긋나면 '나란한 두 화면' 으로 안 읽힌다. */
+var cw=0, ch=0, ww=0, wh=0;
+function setCv(cv,w,h){ cv.style.height=h+"px"; cv.width=Math.round(w*DPR); cv.height=Math.round(h*DPR); }
+function layout(){
+  var a=cvC.clientWidth||600, b=cvW.clientWidth||900;
+  var cell=a/COLS, rowh=cell*1.85;
+  cw=a; ch=Math.round(rowh*(ROWS+1+CHATR));
+  ww=b; wh=ch;
+  setCv(cvC,cw,ch); setCv(cvW,ww,wh);
+}
+
+/* ═══ 콘솔 화면 ═══
+   한 행을 문자 하나씩 찍으면 프레임마다 1680번을 그린다. 칸 폭을 글자 자폭(0.6em)에 맞춰 두면
+   행 전체를 문자열 하나로 찍어도 칸이 정확히 맞으므로, 바닥·격자·벽을 행당 세 번으로 끝낸다. */
+function drawCon(){
+  var g=ctxC; g.setTransform(DPR,0,0,DPR,0,0);
+  g.fillStyle="#070a10"; g.fillRect(0,0,cw,ch);
+  var cell=cw/COLS, rowh=cell*1.85, fs=cell/0.6;
+  g.font="500 "+fs.toFixed(2)+"px "+MONO; g.textBaseline="middle"; g.textAlign="left";
+  var ox=Math.round(clamp(me.kx-COLS/2,0,MAP-COLS)), oy=Math.round(clamp(me.ky-ROWS/2,0,MAP-ROWS));
+  for(var r=0;r<ROWS;r++){
+    var wy=oy+r, fl="", gr="", wl="";
+    for(var c=0;c<COLS;c++){
+      var wx=ox+c;
+      if(wx===0||wy===0||wx===MAP-1||wy===MAP-1){ fl+=" "; gr+=" "; wl+="#"; }
+      else{
+        var gx=(wx%SEC===0), gy=(wy%SEC===0);
+        if(gx&&gy){ fl+=" "; gr+="┼"; wl+=" "; }
+        else if(gx){ fl+=" "; gr+="│"; wl+=" "; }
+        else if(gy){ fl+=" "; gr+="─"; wl+=" "; }
+        else { fl+="·"; gr+=" "; wl+=" "; }
+      }
+    }
+    var y=(r+.5)*rowh;
+    g.fillStyle="#242f42"; g.fillText(fl,0,y);      /* 바닥 — 더 어두우면 문자 격자가 아니라 빈 판으로 보인다 */
+    g.fillStyle="#235d74"; g.fillText(gr,0,y);      /* 섹터 격자 — 서버가 준 sectorSize 로 그린다 */
+    g.fillStyle="#33415f"; g.fillText(wl,0,y);      /* 경계벽 */
+  }
+  /* 남 → 나 순서로(뒤에서 앞으로). 시야 밖은 아예 존재하지 않는다 */
+  for(var i=0;i<ENTS.length;i++){
+    var e=ENTS[i]; if(!e.seen) continue;
+    var c2=Math.floor(e.kx)-ox, r2=Math.floor(e.ky)-oy;
+    if(c2<0||c2>=COLS||r2<0||r2>=ROWS) continue;
+    /* 서버 좌표와 벌어진 놈만 — 붙어 있는데도 흐린 글자를 겹쳐 찍으면 글자가 굵어 보일 뿐이다 */
+    if(MODE===1&&Math.abs(e.sx-e.kx)+Math.abs(e.sy-e.ky)>1.2){
+      var c3=Math.floor(e.sx)-ox, r3=Math.floor(e.sy)-oy;
+      if(c3>=0&&c3<COLS&&r3>=0&&r3<ROWS){ g.fillStyle="rgba(255,182,72,.45)"; g.fillText(e.ch,c3*cell,(r3+.5)*rowh); }
+    }
+    g.fillStyle=e.col; g.fillText(e.ch,c2*cell,(r2+.5)*rowh);
+  }
+  /* 나 — 색 반전 + 밑줄(원본 콘솔 클라와 같은 표시).
+     한때 칸보다 작은 판을 깔았더니 글자가 판을 넘어가 UI 부스러기처럼 보였다 — 칸을 통째로 채운다. */
+  var mc=Math.floor(me.kx)-ox, mr=Math.floor(me.ky)-oy;
+  if(mc>=0&&mc<COLS&&mr>=0&&mr<ROWS){
+    g.fillStyle="#6cc7ff"; g.fillRect(mc*cell,mr*rowh,cell,rowh);
+    g.fillStyle="#08101c"; g.fillText("@",mc*cell,(mr+.5)*rowh);
+    g.fillStyle="#eaf3ff"; g.fillRect(mc*cell,mr*rowh+rowh-Math.max(1.4,rowh*.1),cell,Math.max(1.4,rowh*.1));
+  }
+  /* 아래 채팅 — 한글은 mono 에서 글꼴이 갈려 격자가 어긋난다. 이름표만 mono, 말은 sans */
+  var cy0=ROWS*rowh;
+  g.fillStyle="#0a0e16"; g.fillRect(0,cy0,cw,ch-cy0);
+  g.fillStyle="#141c2a"; g.fillRect(0,cy0,cw,1);
+  for(var k=0;k<CHATR;k++){
+    var it=CHATLOG[CHATLOG.length-CHATR+k]; if(!it) continue;
+    var y2=cy0+rowh*(1.1+k);
+    /* 좁은 창에서는 rowh 가 10px 까지 내려간다 — 비율만 쓰면 6px 글자가 되어 못 읽는다 */
+    g.font="700 "+Math.max(8.5,rowh*.62).toFixed(1)+"px "+MONO; g.fillStyle=it.col;
+    g.fillText("["+it.ch+"]",cell*1.2,y2);
+    g.font="500 "+Math.max(9.5,rowh*.66).toFixed(1)+"px "+SANS; g.fillStyle="#8496b3";
+    g.fillText(it.msg,cell*5.2,y2);
+  }
+  /* 보기마다 콘솔 쪽 한 마디 — 웹과 무엇이 같고 무엇이 다른지 */
+  var tag=["","같은 예측을 콘솔도 한다","콘솔도 같은 묶음을 풀어 쓴다","콘솔은 TCP 직결 · 릴레이 없음"][MODE];
+  if(tag){
+    g.font="700 "+(rowh*.6).toFixed(1)+"px "+SANS;
+    var tw=g.measureText(tag).width;
+    g.fillStyle="rgba(8,12,20,.86)"; g.fillRect(cw-tw-16,6,tw+11,rowh*1.15);
+    g.fillStyle="#8496b3"; g.fillText(tag,cw-tw-10,6+rowh*.58);
+  }
+}
+
+/* ═══ 웹 화면 ═══ */
+/* 나무·풀 얼룩은 결정적 목록으로 한 번만 뽑는다 — 프레임마다 난수를 굴리면 숲이 춤을 춘다 */
+var PROPS=[]; for(var p=0;p<420;p++){ var px=2+rnd()*(MAP-4), py=2+rnd()*(MAP-4); PROPS.push({x:px,y:py,t:rnd()<.72?0:1,s:.8+rnd()*.5}); }
+PROPS.sort(function(a,b){ return a.y-b.y; });
+
+function drawWeb(){
+  var g=ctxW; g.setTransform(DPR,0,0,DPR,0,0);
+  /* 62 유닛이 보이게 — 시야(3섹터=60유닛)보다 조금 넓어야 시야 점선의 좌우 변이 화면에 들어온다.
+     56 으로 두면 점선이 화면 밖으로 나가, 캡션이 말하는 '시야 점선' 이 정작 안 보인다. */
+  var PX=clamp(ww/62,9,20);
+  var halfU=ww/2/PX, halfV=wh/2/PX;
+  var camx=(halfU*2>=MAP)?MAP/2:clamp(me.kx,halfU,MAP-halfU);
+  var camy=(halfV*2>=MAP)?MAP/2:clamp(me.ky,halfV,MAP-halfV);
+  function X(u){ return (u-camx)*PX+ww/2; }
+  function Y(v){ return (v-camy)*PX+wh/2; }
+  var u0=camx-halfU, u1=camx+halfU, v0=camy-halfV, v1=camy+halfV;
+
+  /* ── 바닥: 잔디 두 톤 + 월드 밖 ── */
+  g.fillStyle="#0c1a12"; g.fillRect(0,0,ww,wh);
+  var t=4, a0=Math.floor(Math.max(0,u0)/t)*t, b0=Math.floor(Math.max(0,v0)/t)*t;
+  for(var u=a0;u<Math.min(MAP,u1)+t;u+=t) for(var v=b0;v<Math.min(MAP,v1)+t;v+=t){
+    g.fillStyle=(((u/t)+(v/t))%2)?"#12301f":"#0f2a1b";
+    g.fillRect(X(u),Y(v),PX*t+1,PX*t+1);
+    /* 잔디 결 — 이게 없으면 큼직한 체크판으로만 보인다.
+       자리를 u,v 해시로 정하므로 카메라가 움직여도 풀이 따라 흔들리지 않는다. */
+    var hs=((u*73856093)^(v*19349663))>>>0;
+    g.fillStyle="rgba(40,96,58,.5)";
+    for(var q=0;q<3;q++){
+      var hx=((hs>>>(q*5))&31)/31, hy=((hs>>>(q*7+3))&31)/31;
+      g.fillRect(X(u+hx*t),Y(v+hy*t),Math.max(1,PX*.2),Math.max(1,PX*.09));
+    }
+  }
+  /* 월드 밖은 어둡게 — 카메라가 경계에 붙으면 여기가 보인다 */
+  g.fillStyle="#070a10";
+  if(u0<0) g.fillRect(0,0,X(0),wh);
+  if(u1>MAP) g.fillRect(X(MAP),0,ww-X(MAP),wh);
+  if(v0<0) g.fillRect(0,0,ww,Y(0));
+  if(v1>MAP) g.fillRect(0,Y(MAP),ww,wh-Y(MAP));
+
+  /* ── 섹터 격자: 서버의 섹터 경계를 화면에 직접 그린다 ── */
+  var msx=sec(me.kx), msy=sec(me.ky);
+  g.save();
+  g.fillStyle="rgba(108,199,255,"+(0.05+0.022*Math.sin(now*2.2)).toFixed(3)+")";
+  g.fillRect(X(msx*SEC),Y(msy*SEC),PX*SEC,PX*SEC);
+  g.strokeStyle="rgba(108,199,255,.22)"; g.lineWidth=1;
+  for(var s=0;s<=GRID;s++){
+    var xx=Math.round(X(s*SEC))+.5, yy=Math.round(Y(s*SEC))+.5;
+    g.beginPath(); g.moveTo(xx,0); g.lineTo(xx,wh); g.stroke();
+    g.beginPath(); g.moveTo(0,yy); g.lineTo(ww,yy); g.stroke();
+  }
+  /* 내 섹터 테두리 + 좌표 라벨 */
+  g.strokeStyle="rgba(108,199,255,.6)"; g.lineWidth=1.6;
+  g.strokeRect(Math.round(X(msx*SEC))+.5,Math.round(Y(msy*SEC))+.5,PX*SEC,PX*SEC);
+  /* 라벨은 화면 안으로 눌러 둔다 — 내 섹터의 윗변이 화면 위로 나가 있으면 라벨만 사라져,
+     정작 강조된 칸이 무엇인지 못 읽는다(실제로 그 프레임이 나왔다) */
+  g.font="700 11px "+MONO; g.fillStyle="#6cc7ff";
+  g.fillText("SECTOR "+msx+","+msy,
+    clamp(X(msx*SEC)+7,8,ww-104), clamp(Y(msy*SEC)+15,16,wh-10));
+  /* 시야(AOI) 점선 — 이 밖의 사람은 화면에 아예 없다 */
+  g.setLineDash([7,5]); g.strokeStyle="rgba(108,199,255,.5)"; g.lineWidth=1.4;
+  g.strokeRect(X((msx-1)*SEC),Y((msy-1)*SEC),PX*SEC*3,PX*SEC*3);
+  g.setLineDash([]);
+  g.restore();
+
+  /* ── 나무·바위·사람을 한 줄에 놓고 y 로 깊이 정렬 ──
+     나무를 먼저 다 그리고 사람을 그리면, 나무 뒤로 지나가는 사람이 나무 위에 겹쳐 서서
+     바닥 관계가 뒤집힌다. 아래에 있는 것이 위에 있는 것을 가려야 화면이 평면으로 안 읽힌다. */
+  var layer=[];
+  for(var i2=0;i2<PROPS.length;i2++){
+    var pr=PROPS[i2];
+    if(pr.x<u0-2||pr.x>u1+2||pr.y<v0-3||pr.y>v1+2) continue;
+    layer.push(pr);
+  }
+  var vis=[]; for(var i3=0;i3<ENTS.length;i3++) if(ENTS[i3].seen) vis.push(ENTS[i3]);
+  vis.push(me);
+  for(var i9=0;i9<vis.length;i9++){
+    var ve=vis[i9];
+    if(ve.kx<u0-2||ve.kx>u1+2||ve.ky<v0-3||ve.ky>v1+2) continue;
+    layer.push(ve);
+  }
+  layer.sort(function(a,b){ return (a.y!==undefined?a.y:a.ky)-(b.y!==undefined?b.y:b.ky); });
+
+  for(var i4=0;i4<layer.length;i4++){
+    var e=layer[i4];
+    /* 나무·바위 — 사람과 달리 t(종류) 를 갖는다 */
+    if(e.t!==undefined){
+      var x2=X(e.x), y2=Y(e.y), sc=PX*e.s;
+      g.fillStyle="rgba(0,0,0,.28)"; g.beginPath(); g.ellipse(x2,y2,sc*.5,sc*.2,0,0,6.3); g.fill();
+      if(e.t===0){ g.fillStyle="#3b2a1c"; g.fillRect(x2-sc*.09,y2-sc*1.1,sc*.18,sc*1.1);
+        g.fillStyle="#1e4a2c"; g.beginPath(); g.arc(x2,y2-sc*1.35,sc*.62,0,6.3); g.fill();
+        g.fillStyle="#276139"; g.beginPath(); g.arc(x2-sc*.16,y2-sc*1.5,sc*.36,0,6.3); g.fill(); }
+      /* 바위 — 한때 남보라 원이라 잔디 위에 정체 모를 얼룩으로 떴다. 납작한 회녹색으로 눌러 둔다 */
+      else { g.fillStyle="#3f4c46"; g.beginPath(); g.ellipse(x2,y2-sc*.16,sc*.34,sc*.24,0,0,6.3); g.fill();
+        g.fillStyle="#4c5a52"; g.beginPath(); g.ellipse(x2-sc*.07,y2-sc*.24,sc*.19,sc*.12,0,0,6.3); g.fill(); }
+      continue;
+    }
+    /* 데드레커닝 보기 — 서버가 준 좌표를 마름모로 같이 찍고 지금 그리는 위치와 이어 준다.
+       벌어진 놈만 표시한다(내 캐릭터는 즉시 반영이라 애초에 안 벌어진다) */
+    /* 문턱 1.2 는 '틱 사이' 만큼의 차이를 걸러 내는 값이다: 서버는 40ms 마다 한 번에 1칸 남짓 옮기고
+       클라는 그 사이를 이어 그리므로, 어긋남이 없어도 최대 한 칸까지는 늘 벌어져 있다.
+       나는 즉시 반영이라 그 한 칸이 전부인데, 문턱이 낮으면 내 발밑에도 마름모가 붙어 설명과 어긋난다. */
+    if(MODE===1&&e!==me&&Math.abs(e.sx-e.kx)+Math.abs(e.sy-e.ky)>1.2){
+      var gx2=X(e.sx), gy2=Y(e.sy);
+      g.strokeStyle="rgba(255,182,72,.55)"; g.lineWidth=1;
+      g.beginPath(); g.moveTo(gx2,gy2); g.lineTo(X(e.kx),Y(e.ky)); g.stroke();
+      g.fillStyle="rgba(255,182,72,.85)";
+      g.beginPath(); g.moveTo(gx2,gy2-4); g.lineTo(gx2+4,gy2); g.lineTo(gx2,gy2+4); g.lineTo(gx2-4,gy2); g.closePath(); g.fill();
+    }
+    figure(g,X(e.kx),Y(e.ky),PX,e,e===me);
+  }
+  /* 말풍선 — 캐릭터별 1개, 사람을 다 그린 뒤에(앞사람 몸에 가리지 않게).
+     화면 밖 사람은 건너뛴다 — bubble 이 판 안으로 눌러 주므로, 안 걸러 내면 말한 사람이 없는
+     자리에 말풍선이 가장자리에 붙어 뜬다. */
+  for(var i5=0;i5<vis.length;i5++){
+    var e2=vis[i5]; if(!e2.chat||now-e2.chatT>4.2) continue;
+    if(e2.kx<u0||e2.kx>u1||e2.ky<v0||e2.ky>v1) continue;
+    bubble(g,X(e2.kx),Y(e2.ky)-PX*2.1,e2.chat);
+  }
+
+  /* ── 서버 내부 관측 패널 · 레이더 · 채팅 ── */
+  drawPanel(g);
+  drawRadar(g,PX);
+  drawChat(g);
+
+  /* ── 보기별 겹쳐 그리는 주석 ──
+     채팅보다 뒤에 그린다: 둘 다 화면 아래를 쓰는데, 채팅을 나중에 그리면 채팅 글자가 상자를 뚫고 올라온다. */
+  if(MODE===2) drawBundle(g);
+  if(MODE===3) drawRelay(g);
+}
+
+/* 캐릭터 한 명 — 부위를 겹쳐 그린다(원본은 LPC 스프라이트 4장을 미리 구워 캐시한다) */
+function figure(g,x,y,PX,e,isMe){
+  var s=PX*0.95;
+  var step=e.mv?Math.sin(e.ph+now*7.5):0;
+  g.fillStyle="rgba(0,0,0,.32)"; g.beginPath(); g.ellipse(x,y,s*.42,s*.16,0,0,6.3); g.fill();
+  if(isMe){ g.strokeStyle="rgba(108,199,255,.75)"; g.lineWidth=1.6;
+    g.beginPath(); g.ellipse(x,y,s*.52,s*.2,0,0,6.3); g.stroke(); }
+  var lk=e.lk, bob=step*s*.05;
+  /* 다리 */
+  g.fillStyle=lk.pa;
+  g.fillRect(x-s*.26,y-s*.62,s*.22,s*.62+step*s*.06);
+  g.fillRect(x+s*.04,y-s*.62,s*.22,s*.62-step*s*.06);
+  /* 몸 */
+  g.fillStyle=lk.sh; g.fillRect(x-s*.32,y-s*1.22+bob,s*.64,s*.62);
+  /* 얼굴·머리 */
+  g.fillStyle=lk.sk; g.beginPath(); g.arc(x,y-s*1.44+bob,s*.29,0,6.3); g.fill();
+  g.fillStyle=lk.ha; g.beginPath(); g.arc(x,y-s*1.50+bob,s*.30,Math.PI*1.03,Math.PI*1.97); g.fill();
+  /* 방향 표시 — 뒤를 보면 얼굴이 없다(4방향이라 이 정도로 충분히 읽힌다) */
+  if(e.dir!==0){ g.fillStyle="rgba(20,24,32,.8)";
+    var ex=(e.dir===2?-s*.1:(e.dir===3?s*.1:0));
+    g.fillRect(x-s*.13+ex,y-s*1.47+bob,s*.06,s*.06);
+    g.fillRect(x+s*.07+ex,y-s*1.47+bob,s*.06,s*.06); }
+  /* 나는 머리 위에 화살표를 하나 더 얹는다 — 발밑 고리만으로는 예순 명 중에서 나를 바로 못 찾는다 */
+  if(isMe){
+    var ay=y-s*1.95+bob-Math.abs(Math.sin(now*2.6))*s*.1;
+    g.fillStyle="#6cc7ff";
+    g.beginPath(); g.moveTo(x,ay+s*.22); g.lineTo(x-s*.17,ay); g.lineTo(x+s*.17,ay); g.closePath(); g.fill();
+  }
+}
+function bubble(g,x,y,msg){
+  g.font="600 11.5px "+SANS;
+  var w=g.measureText(msg).width+16, h=20;
+  x=clamp(x,w/2+4,ww-w/2-4);          /* 판 밖으로 나가면 글자가 잘려 나간다 */
+  /* 아래로도 눌러 둔다 — 판 밑변에 걸린 사람은 말풍선이 반쯤 잘려 있었다.
+     좌하단은 채팅 로그 자리라 거기까지는 내려보내지 않는다(로그 글자와 겹쳐 둘 다 못 읽었다). */
+  var floorY=(CHATLOG.length&&x<290) ? wh-20-Math.min(4,CHATLOG.length)*16 : wh-6;
+  y=clamp(y,h+4,Math.max(h+4,floorY));
+  g.fillStyle="rgba(12,18,28,.92)"; g.strokeStyle="rgba(108,199,255,.35)"; g.lineWidth=1;
+  roundRect(g,x-w/2,y-h,w,h,6); g.fill(); g.stroke();
+  g.beginPath(); g.moveTo(x-4,y); g.lineTo(x+4,y); g.lineTo(x,y+5); g.closePath();
+  g.fillStyle="rgba(12,18,28,.92)"; g.fill();
+  g.fillStyle="#d3ddee"; g.textAlign="center"; g.fillText(msg,x,y-6); g.textAlign="left";
+}
+function roundRect(g,x,y,w,h,r){
+  g.beginPath(); g.moveTo(x+r,y); g.arcTo(x+w,y,x+w,y+h,r); g.arcTo(x+w,y+h,x,y+h,r);
+  g.arcTo(x,y+h,x,y,r); g.arcTo(x,y,x+w,y,r); g.closePath();
+}
+
+/* 서버 내부 관측 패널 — 이 클라이언트의 존재 이유. 게임 화면 위에 서버가 보고 있는 것을 겹친다 */
+function drawPanel(g){
+  /* 판이 낮아지면 줄 간격을 좁힌다 — 고정 15.5 로 두면 좁은 창(캔버스 266px)에서
+     패널 아래끝이 레이더 위끝을 넘어가 '수신 KB/s' 줄이 레이더에 가려진다. */
+  var w=176, x=ww-w-12, y=12, lh=clamp((wh-140)/10,11.8,15.5);
+  var rows=[["내 좌표",me.kx.toFixed(1)+", "+me.ky.toFixed(1),0],
+            ["내 섹터",sec(me.kx)+", "+sec(me.ky),0],
+            ["유효 섹터",String(validSec()),validSec()<9?2:0],
+            ["시야 인원",String(ENTS.reduce(function(a,b){return a+(b.seen?1:0);},0)),0],
+            null,
+            ["SECTOR_UPD",RATE.sup+"/s",1],
+            ["CREATE/DEL",RATE.cre+" / "+RATE.del,1],
+            ["CHAT",RATE.chat+"/s",1],
+            ["수신",RATE.kb.toFixed(1)+" KB/s",1]];
+  var h=22+rows.length*lh+8;
+  g.fillStyle="rgba(9,13,21,.86)"; g.strokeStyle="rgba(108,199,255,.28)"; g.lineWidth=1;
+  roundRect(g,x,y,w,h,9); g.fill(); g.stroke();
+  g.font="800 9.5px "+MONO; g.fillStyle="#6cc7ff";
+  g.fillText("SERVER INTERNALS",x+11,y+16);
+  g.fillStyle="#57d694"; g.beginPath(); g.arc(x+w-14,y+12,3.2,0,6.3); g.fill();
+  for(var i=0;i<rows.length;i++){
+    var r=rows[i], yy=y+30+i*lh;
+    if(!r){ g.fillStyle="rgba(108,199,255,.14)"; g.fillRect(x+10,yy-5,w-20,1); continue; }
+    g.font="600 9.5px "+SANS; g.fillStyle=r[2]===1?"#5d6c85":"#8496b3"; g.fillText(r[0],x+11,yy);
+    g.font="700 10.5px "+MONO; g.fillStyle=r[2]===2?"#ffb648":(r[2]===1?"#9ad4ff":"#eef2fb");
+    g.textAlign="right"; g.fillText(r[1],x+w-11,yy); g.textAlign="left";
+  }
+}
+/* 레이더 — 전체 맵이 아니라 내 주변만(±2.5섹터). 클라가 실제로 그만큼만 알기 때문이다 */
+function drawRadar(g,PX){
+  var R=clamp(wh*0.255,72,104), x=ww-R-14, y=wh-R-14, half=SEC*2.5;
+  g.fillStyle="rgba(9,13,21,.84)"; g.strokeStyle="rgba(108,199,255,.28)"; g.lineWidth=1;
+  roundRect(g,x,y,R,R,9); g.fill(); g.stroke();
+  function rx(u){ return x+R/2+(u-me.kx)/half*(R/2-6); }
+  function ry(v){ return y+R/2+(v-me.ky)/half*(R/2-6); }
+  g.save(); roundRect(g,x+3,y+3,R-6,R-6,7); g.clip();
+  g.setLineDash([4,3]); g.strokeStyle="rgba(108,199,255,.42)"; g.lineWidth=1;
+  var sx0=(sec(me.kx)-1)*SEC, sy0=(sec(me.ky)-1)*SEC;
+  g.strokeRect(rx(sx0),ry(sy0),(R/2-6)/half*SEC*3,(R/2-6)/half*SEC*3);
+  g.beginPath(); g.arc(x+R/2,y+R/2,(R/2-6)/half*SEC*1.5,0,6.3); g.stroke();
+  g.setLineDash([]);
+  for(var i=0;i<ENTS.length;i++){ var e=ENTS[i]; if(!e.seen) continue;
+    g.fillStyle="#6cc7ff"; g.beginPath(); g.arc(rx(e.kx),ry(e.ky),1.7,0,6.3); g.fill(); }
+  g.fillStyle="#ffb648"; g.beginPath(); g.arc(x+R/2,y+R/2,3,0,6.3); g.fill();
+  g.restore();
+  /* 한글은 mono 에 넣지 않는다 — 글꼴이 갈려 자폭이 어긋난다(±2.5 만 mono) */
+  g.font="700 9px "+SANS; g.fillStyle="#5d6c85"; g.fillText("주변 ±2.5 섹터",x+7,y+R-6);
+}
+function drawChat(g){
+  var n=Math.min(4,CHATLOG.length); if(!n) return;
+  var x=13, y=wh-13-n*16;
+  for(var i=0;i<n;i++){
+    var it=CHATLOG[CHATLOG.length-n+i], yy=y+i*16+11;
+    g.font="700 10px "+MONO; g.fillStyle=it.col;
+    var tag="["+it.ch+"]"; g.fillText(tag,x,yy);
+    g.font="600 11px "+SANS; g.fillStyle="rgba(211,221,238,.86)";
+    g.fillText(it.msg,x+g.measureText("[X]").width+16,yy);
+  }
+}
+/* 묶음 되풀기 — 한 통이 낱개 이벤트 N 개로 풀리는 모습 */
+function drawBundle(g){
+  /* 한 통은 '한 섹터의 이번 틱 최종 위치' 다 — 시야 아홉 칸을 다 세면 아홉 통을 한 통처럼 말하게 된다.
+     그래서 내 섹터에서 방금 사건이 난 사람만 센다. */
+  var msx=sec(me.kx), msy=sec(me.ky), cnt=0;
+  for(var i=0;i<ENTS.length;i++){ var b=ENTS[i];
+    if(b.seen&&now-b.evT<0.6&&sec(b.sx)===msx&&sec(b.sy)===msy) cnt++; }
+  /* 화면 위는 관측 패널과 섹터 라벨 자리다 — 여기에 두면 라벨을 덮는다(실제로 덮였다) */
+  var w=286, h=70, x=(ww-w)/2, y=wh-h-14;
+  g.fillStyle="rgba(9,13,21,.9)"; g.strokeStyle="rgba(255,182,72,.5)"; g.lineWidth=1.2;
+  roundRect(g,x,y,w,h,9); g.fill(); g.stroke();
+  g.font="800 10px "+MONO; g.fillStyle="#ffb648"; g.fillText("S2C_SECTOR_UPDATES",x+12,y+18);
+  g.font="700 9.5px "+MONO; g.fillStyle="#8496b3";
+  g.fillText("count = "+cnt+"  ·  엔트리 14B",x+12,y+33);
+  for(var k=0;k<Math.min(cnt,14);k++){
+    g.fillStyle="rgba(255,182,72,"+(0.35+0.5*Math.abs(Math.sin(now*3+k))).toFixed(2)+")";
+    g.fillRect(x+12+k*10,y+40,7,6);
+  }
+  /* 한 통에 두세 개뿐인 이유를 밝혀 둔다 — 이 재현은 맵 전체 260명이라 한 칸에 예닐곱 명이다.
+     실제 부하는 동접 5,000 이고, 그때 한 통에 실리는 엔트리 수는 ③ 부하 검증 탭에서 다룬다. */
+  g.font="600 9px "+SANS; g.fillStyle="#5d6c85";
+  g.fillText("이 재현은 맵 전체 260명 — 동접 5,000에서는 한 통이 이보다 훨씬 두껍다",x+12,y+62);
+  /* 설명은 통 위에 가운데로 — 옆에 붙이면 좁은 폭에서 판을 넘어가 잘린다 */
+  g.font="600 10px "+SANS; g.fillStyle="#8496b3"; g.textAlign="center";
+  g.fillText("낱개 MOVE_START / MOVE_STOP 으로 되풀어 기존 경로에 흘린다",x+w/2,y-7);
+  g.textAlign="left";
+}
+/* 릴레이 — 브라우저는 TCP 를 못 연다. 봉투만 벗기는 43줄이 서버 밖에 있다 */
+function drawRelay(g){
+  /* 상자 세 개 + 사이 표식이 다 들어가는 폭. 430 으로 두면 'IOCP_Server 무수정' 이 상자를 넘어가 잘렸다.
+     자리도 아래로 내린다 — 위는 관측 패널·섹터 라벨 자리다. */
+  var GAP=30, w=Math.min(660,ww-24), h=46, x=(ww-w)/2, y=wh-h-16;
+  g.fillStyle="rgba(9,13,21,.92)"; g.strokeStyle="rgba(108,199,255,.34)"; g.lineWidth=1.2;
+  roundRect(g,x,y,w,h,9); g.fill(); g.stroke();
+  var box=[["브라우저","#6cc7ff","WS"],["relay.js  43줄","#ffb648","TCP"],["IOCP_Server  무수정","#57d694",""]];
+  var bw=(w-24-GAP*2)/3;
+  for(var i=0;i<3;i++){
+    var bx=x+12+i*(bw+GAP);
+    g.fillStyle="rgba(20,28,42,.9)"; g.strokeStyle=box[i][1]; g.lineWidth=1;
+    roundRect(g,bx,y+12,bw,23,6); g.fill(); g.stroke();
+    g.font="700 9.5px "+SANS; g.fillStyle=box[i][1]; g.textAlign="center";
+    g.fillText(box[i][0],bx+bw/2,y+27);
+    /* 사이 표식은 두 상자 틈의 가운데 — 상자에 붙여 두면 테두리에 겹쳐 안 읽힌다 */
+    if(box[i][2]){ g.font="700 8.5px "+MONO; g.fillStyle="#8496b3";
+      g.fillText(box[i][2],bx+bw+GAP/2,y+21);
+      g.strokeStyle="#3c4a63"; g.lineWidth=1; g.beginPath();
+      g.moveTo(bx+bw+4,y+27); g.lineTo(bx+bw+GAP-4,y+27); g.stroke(); }
+    g.textAlign="left";
+  }
+  /* 지나가는 바이트 한 덩이 — 릴레이는 봉투를 벗기는 것 말고 아무 일도 안 한다 */
+  var t=(now*0.5)%1, px=x+12+t*(w-24);
+  g.fillStyle="#eaf3ff"; g.fillRect(px,y+h-7,4,4);
+}
+
+/* ═══ 칩 · 설명 한 줄 ═══ */
+(function(){
+  var box=document.getElementById("ch-render"), note=document.getElementById("cr-note");
+  function sel(i){
+    MODE=i;
+    [].forEach.call(box.querySelectorAll("button"),function(b,k){ b.classList.toggle("act",k===i); });
+    note.innerHTML="";
+    var em=document.createElement("i"); em.textContent="보기 "+(i+1);
+    var p=document.createElement("p"); p.textContent=VIEWS[i].n;
+    note.appendChild(em); note.appendChild(p);
+    if(!running&&cw) draw();  /* 정지 상태(reduced motion)에서도 칩은 먹어야 한다. 판 크기 전이면 건너뛴다 */
+  }
+  VIEWS.forEach(function(v,i){
+    var b=document.createElement("button");
+    var ic=document.createElement("i"); ic.textContent=String(i+1);
+    b.appendChild(ic); b.appendChild(document.createTextNode(v.k));
+    b.addEventListener("click",function(){ sel(i); });
+    box.appendChild(b);
+  });
+  var more=document.createElement("a");
+  more.className="cr-more"; more.target="_blank"; more.rel="noopener";
+  more.href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46";
+  more.innerHTML='자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em>';
+  box.appendChild(more);
+  sel(0);
+})();
+
+/* ═══ 돌리기 ═══ */
+var running=false, last=0, drawAcc=0;
+function draw(){ drawCon(); drawWeb(); }
+function frame(ts){
+  if(pane.hidden){ running=false; return; }
+  var dt=last?Math.min(.05,(ts-last)/1000):0; last=ts;
+  var sdt=dt*SLOW; now+=sdt;
+  tickAcc+=sdt; var guard=0;
+  while(tickAcc>=TICK&&guard++<8){ tickAcc-=TICK; serverTick(); }
+  applyDue(); predict(sdt);
+  rateAcc+=sdt;
+  if(rateAcc>=1){ rateAcc-=1;
+    RATE={sup:CNT.sup,cre:CNT.cre,del:CNT.del,chat:CNT.chat,kb:CNT.by/1024};
+    CNT={sup:0,cre:0,del:0,chat:0,by:0}; }
+  /* 30fps 로 그린다 — 캔버스 두 장을 60번 다시 그릴 만큼 달라지는 화면이 아니다 */
+  drawAcc+=dt; if(drawAcc>=1/30){ drawAcc=0; draw(); }
+  requestAnimationFrame(frame);
+}
+/* 첫 화면이 텅 비지 않게 미리 돌려 둔다 — 시작하자마자 사람들이 흩어져 있고 채팅도 몇 줄 있어야 한다 */
+function warm(sec2){ var n=Math.round(sec2/TICK); for(var i=0;i<n;i++){ now+=TICK; serverTick(); applyDue(); predict(TICK); }
+  RATE={sup:CNT.sup,cre:CNT.cre,del:CNT.del,chat:CNT.chat,kb:CNT.by/1024}; CNT={sup:0,cre:0,del:0,chat:0,by:0}; }
+window.__crenderPlay=function(){
+  if(RM||running) return;
+  running=true; last=0; requestAnimationFrame(frame);
+};
+/* 첫 화면은 맵 가운데에서 시작하게 맞춘다 — 미리 돌리는 동안 내가 어디로 걸어갔는지는 씨앗에 달려 있어서,
+   그대로 두면 방문자가 처음 보는 그림이 하필 구석일 수 있다. 사람들이 흩어진 상태는 그대로 쓰고 나만 되돌린다. */
+function boot(){
+  layout(); warm(6);
+  me.sx=me.kx=60.5; me.sy=me.ky=60.5; me.dir=3; me.mv=true;
+  warm(0.4);                        /* 되돌린 자리 기준으로 시야 진입·이탈을 다시 잡는다 */
+  draw(); if(!pane.hidden) window.__crenderPlay();
+}
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ layout(); draw(); });
+if(window.ResizeObserver) new ResizeObserver(function(){ layout(); draw(); }).observe(cvW.parentNode);
+else window.addEventListener("resize",function(){ layout(); draw(); });
+boot();
+})();
+
 /* ═══════════ 클라이언트 탭 — 그림·계기판·카드 ═══════════ */
 (function(){
 "use strict";
@@ -2892,124 +3580,8 @@ function el(t,a,txt){ var e=document.createElementNS(NS,t); for(var k in a) e.se
 function h(t,a,txt){ var e=document.createElement(t); for(var k in a) e.setAttribute(k,a[k]);
   if(txt!=null) e.textContent=txt; return e; }
 
-/* ══ 아이소 블록 하나 ══ */
-function cube(g,x,y,w,d,ht,top,left,right,cls){
-  var p=el("g",cls?{class:cls}:{});
-  p.appendChild(el("polygon",{points:[x,y-ht, x+w,y-ht-d*.5, x+w+w,y-ht, x+w,y-ht+d*.5].join(" "),fill:top}));
-  p.appendChild(el("polygon",{points:[x,y-ht, x+w,y-ht+d*.5, x+w,y+d*.5, x,y].join(" "),fill:left}));
-  p.appendChild(el("polygon",{points:[x+w,y-ht+d*.5, x+w+w,y-ht, x+w+w,y, x+w,y+d*.5].join(" "),fill:right}));
-  g.appendChild(p); return p;
-}
-
-/* ═══════════ ① 테스트 환경 그림 ═══════════ */
-var ENV={
-  dash:[["서버 PC","10","코어 / 20 스레드","i9-10900 · 32GB",0],
-        ["부하 클라 PC","4","코어 / 8 스레드","i7-6700 · 16GB",0],
-        ["지금 쓰는 경로","loopback","","회선 개입 0",1],
-        ["코어 분리","0–5","서버 / 6–9 클라","물리코어 단위",0]],
-  items:{
-    srv:{k:"자리 1",t:"서버 프로세스",why:"물리코어 0–5 여섯 칸을 쓴다. 하이퍼스레딩 형제까지 함께 잡히므로 논리코어로는 열두 개다.",
-      rv:"게임 1 + 송신 3 + IOCP 4",
-      tbl:[["게임 루프","1개","단일 코어"],["송신 워커","3개","uniqueId%3"],["IOCP 워커","4개","완료 처리"],["그 외","4개","accept·DB·타이머·모니터"]],
-      note:"코어를 나눠 두지 않으면 부하 클라가 서버 코어를 뺏어 간다. 그러면 서버가 느려진 게 아니라 측정이 느려진 것인데, 지표만 봐서는 구분이 안 된다."},
-    cli:{k:"자리 2",t:"부하 클라 프로세스",why:"물리코어 6–9 네 칸. 여기서 동접 5,000을 만든다.",
-      rv:"스레드당 1,000명",
-      tbl:[["스레드 수","5개","ceil(5000/1000)"],["담당 소켓","1,000개","스레드당"],["루프 p99","3.9 ms","예산 40ms"],["코어당 한계","~1,375","실측"]],
-      note:"스레드를 늘리는 대신 담당 인원을 늘렸다. 스레드가 많아지면 서버 코어를 침범해 측정이 오염된다."},
-    loop:{k:"자리 3",t:"loopback",why:"127.0.0.1 — 랜선도 공유기도 타지 않고 메모리 복사로 오간다.",
-      rv:"회선 변수 0",
-      tbl:[["왕복 지연","≈0","실측 불가 수준"],["대역 상한","없음","메모리 복사"],["NIC 인터럽트","안 잡힘","한계"]],
-      note:"덕분에 서버 자체 성능만 남지만, 실제 회선 지연과 NIC 포화는 이 환경에서 절대 안 나온다. 그건 따로 재야 한다."},
-    wan:{k:"자리 4",t:"여기까지 온 길",why:"회선이 천장이면 서버를 잴 수 없다. 변수를 하나씩 걷어내며 네 번 옮겼다.",
-      rv:"474 Mbps → 회선 없음",
-      tbl:[["v1 공인IP 브릿지","474 Mbps","폐기"],["v2 사설LAN 정적IP","940 Mbps","폐기"],["v3 공유기 NAT","940 Mbps","폐기"],["v4 한 PC loopback","—","현재"]],
-      note:"동접 1,500에서 무너졌을 때 틱은 예산 안이었다. 서버가 한가한데 왕복만 1초였고, 원인은 회선 업로드 상한 473.94 Mbps였다."},
-    kinds:{k:"자리 5",t:"클라이언트 세 벌",why:"같은 서버에 세 종류가 붙는다. 사람이 보는 둘과, 사람 없이 도는 하나다.",
-      rv:"보는 것 2 · 만드는 것 1",
-      tbl:[["웹","브라우저","서버 내부 관측"],["콘솔","80×21 문자","기능 검증 원본"],["부하 더미","5,000개","성능 수치 출처"]],
-      note:"웹 클라는 서버를 한 줄도 고치지 않고 붙였다 — 브라우저가 TCP 를 못 여니 둘 사이에 봉투만 벗기는 43줄짜리 중계기를 뒀다. 성능 수치는 그 중계기를 지나지 않는 더미에서만 뽑는다."}
-  }
-};
-function drawEnv(){
-  var s=document.getElementById("sc-env"), g=el("g",{});
-  s.appendChild(g);
-  /* ── 위: 서버에 붙는 클라이언트 세 벌 ── */
-  var kg=el("g",{class:"cl-hit","data-it":"kinds"}); g.appendChild(kg);
-  kg.appendChild(el("rect",{class:"cl-plate",x:36,y:16,width:688,height:92,rx:12}));
-  var kinds=[["웹","브라우저에서 실서버 접속","서버 내부를 화면에 얹는다","#6cc7ff","#1f4f74"],
-             ["콘솔","80×21 문자 격자","기능 검증의 원본","#8496b3","#2b3a52"],
-             ["부하 더미","동접 5,000을 만든다","성능 수치는 전부 여기서","#ffb648","#6b4718"]];
-  kinds.forEach(function(kd,i){
-    var x=48+i*228, on=(i!==1);
-    kg.appendChild(el("rect",{x:x,y:26,width:212,height:72,rx:10,fill:"#0f1522",
-      stroke:on?"rgba(108,199,255,.22)":"#1e2739"}));
-    kg.appendChild(el("rect",{x:x,y:26,width:4,height:72,rx:2,fill:kd[3],opacity:on?".9":".45"}));
-    kg.appendChild(el("text",{x:x+16,y:48,"font-size":"13.5","font-weight":"800",
-      fill:on?"#eef2fb":"#7d8ca4","font-family":"var(--sans)"},kd[0]));
-    kg.appendChild(el("text",{x:x+16,y:68,"font-size":"10.5",
-      fill:"#8496b3","font-family":"var(--sans)"},kd[1]));
-    kg.appendChild(el("text",{x:x+16,y:85,"font-size":"10",
-      fill:"#5d6c85","font-family":"var(--sans)"},kd[2]));
-  });
-  /* 더미 상자에서 아래 주황 코어로 — 같은 것이라는 표시 */
-  g.appendChild(el("path",{d:"M 610 100 L 610 132",stroke:"#6b4718","stroke-width":"1.4",
-    "stroke-dasharray":"4 4",fill:"none"}));
-
-  var BX=70, BY=286, W=28, D=26, HT=26;
-  /* 코어 열 개 */
-  var hits={};
-  for(var i=0;i<10;i++){
-    var srv=i<6, x=BX+i*58, y=BY;
-    var col=srv?["#3a7fb5","#1f4f74","#173d5c"]:["#c98a34","#8a5c1f","#6b4718"];
-    var grp=el("g",{class:"cl-hit","data-it":srv?"srv":"cli"});
-    g.appendChild(grp);
-    cube(grp,x,y,W,D,HT,col[0],col[1],col[2]);
-    grp.appendChild(el("polygon",{class:"cl-plate",
-      points:[x,y-HT, x+W,y-HT-D*.5, x+W+W,y-HT, x+W,y-HT+D*.5].join(" ")}));
-    grp.appendChild(el("text",{x:x+W,y:y-HT+3,"text-anchor":"middle","font-size":"12","font-weight":"800",
-      fill:"#eaf3ff","font-family":"var(--mono)"},String(i)));
-    hits[i]=grp;
-  }
-  /* 두 무리 라벨 */
-  g.appendChild(el("text",{x:BX+3*58,y:BY-90,"text-anchor":"middle","font-size":"15","font-weight":"800",
-    fill:"#9ad4ff","font-family":"var(--sans)"},"서버 프로세스"));
-  g.appendChild(el("text",{x:BX+3*58,y:BY-72,"text-anchor":"middle","font-size":"11","font-weight":"600",
-    fill:"#5d6c85","font-family":"var(--mono)"},"ServerCores = 0-5"));
-  g.appendChild(el("text",{x:BX+7.7*58,y:BY-90,"text-anchor":"middle","font-size":"15","font-weight":"800",
-    fill:"#ffcf8a","font-family":"var(--sans)"},"부하 클라"));
-  g.appendChild(el("text",{x:BX+7.7*58,y:BY-72,"text-anchor":"middle","font-size":"11","font-weight":"600",
-    fill:"#5d6c85","font-family":"var(--mono)"},"ClientCores = 6-9"));
-  /* loopback 화살표 */
-  var lg=el("g",{class:"cl-hit","data-it":"loop"}); g.appendChild(lg);
-  lg.appendChild(el("rect",{class:"cl-plate",x:BX+120,y:BY+56,width:300,height:44,rx:10,fill:"none"}));
-  lg.appendChild(el("path",{d:"M "+(BX+150)+" "+(BY+78)+" L "+(BX+390)+" "+(BY+78),
-    stroke:"#6cc7ff","stroke-width":"2",fill:"none","stroke-dasharray":"7 5"}));
-  lg.appendChild(el("polygon",{points:(BX+390)+","+(BY+78)+" "+(BX+380)+","+(BY+73)+" "+(BX+380)+","+(BY+83),fill:"#6cc7ff"}));
-  lg.appendChild(el("polygon",{points:(BX+150)+","+(BY+78)+" "+(BX+160)+","+(BY+73)+" "+(BX+160)+","+(BY+83),fill:"#ffb648"}));
-  lg.appendChild(el("text",{x:BX+270,y:BY+70,"text-anchor":"middle","font-size":"12","font-weight":"800",
-    fill:"#8496b3","font-family":"var(--mono)"},"127.0.0.1"));
-  lg.appendChild(el("text",{x:BX+270,y:BY+97,"text-anchor":"middle","font-size":"10.5",
-    fill:"#5d6c85","font-family":"var(--sans)"},"랜선도 공유기도 타지 않는다"));
-  /* 지나온 길 — 작은 타임라인 */
-  var wg=el("g",{class:"cl-hit","data-it":"wan"}); g.appendChild(wg);
-  wg.appendChild(el("rect",{class:"cl-plate",x:56,y:BY+126,width:648,height:62,rx:10,fill:"none"}));
-  var steps=[["v1","공인 IP","474"],["v2","사설 LAN","940"],["v3","NAT","940"],["v4","한 PC","—"]];
-  steps.forEach(function(st,i){
-    var x=86+i*162, live=(i===3);
-    wg.appendChild(el("rect",{x:x,y:BY+136,width:132,height:42,rx:8,
-      fill:live?"#111f31":"#0f1522",stroke:live?"#2c5f85":"#1e2739"}));
-    wg.appendChild(el("text",{x:x+11,y:BY+153,"font-size":"9.5","font-weight":"800",
-      fill:live?"#6cc7ff":"#4a5költ".slice(0,7)||"#4a5568","font-family":"var(--mono)"},st[0]));
-    wg.appendChild(el("text",{x:x+11,y:BY+170,"font-size":"11.5","font-weight":"700",
-      fill:live?"#eef2fb":"#6f7f99","font-family":"var(--sans)"},st[1]));
-    wg.appendChild(el("text",{x:x+121,y:BY+170,"text-anchor":"end","font-size":"12","font-weight":"800",
-      fill:live?"#57d694":"#5d6c85","font-family":"var(--mono)"},st[2]));
-    if(i<3) wg.appendChild(el("text",{x:x+143,y:BY+164,"font-size":"13",fill:"#28324a"},"›"));
-  });
-  wg.appendChild(el("text",{x:380,y:BY+128,"text-anchor":"middle","font-size":"10",
-    fill:"#5d6c85","font-family":"var(--sans)"},"측정 환경이 지나온 길 — 숫자는 그때의 천장(Mbps)"));
-  return hits;
-}
+/* ※ 아이소 블록(cube) 헬퍼는 여기 있었다. 두 그림이 다 평면 도식으로 바뀌면서 부르는 곳이 없어졌다 —
+   서버 탭 구조도의 아이소 블록은 그쪽 스크립트가 따로 갖고 있으므로 이것과 무관하다. */
 
 /* ═══════════ ② 안전성 그림 ═══════════ */
 var SAFE={
@@ -3018,75 +3590,129 @@ var SAFE={
         ["무결성 위반","0","건","9,478만 건 중",1],
         ["접속 · 해제","6,777","회","서버발 끊김 0",0]],
   items:{
-    dummy:{k:"자리 1",t:"에코 더미 두 벌",why:"내가 만들지 않은 도구로 먼저 재고, 그다음 내가 만든 것으로 다시 잰다. 내 코드와 내 테스트가 같이 틀리는 상황을 막는 유일한 방법이다.",
-      rv:"남의 자 → 내 자",
-      tbl:[["1차","프로카데미 제공","접속·에코 일치"],["2차","직접 만든 하네스","+무결성·공격"],["동시 접속","1,000개",""],["패킷 크기","12~256 B","매번 랜덤"]],
-      note:"2차 하네스는 select 로 소켓을 훑는다. 서버가 아니라 부하를 만드는 쪽이라 IOCP 를 쓸 이유가 없다."},
-    echo:{k:"자리 2",t:"보낸 값이 그대로 오는가",why:"패킷마다 순차 번호를 싣고, 남는 자리는 정해진 규칙으로 채운다. 받을 때 같은 규칙으로 다시 만들어 통째로 비교한다.",
-      rv:"바이트 하나까지",
-      tbl:[["헤더","4 B",""],["에코 값","8 B","1부터 순차"],["패딩","0~244 B","같은 씨앗=같은 바이트"],["검사","memcmp","오프셋까지 기록"]],
-      note:"틀리면 카운터만 올리지 않고 그 자리에서 멈춘다. 계속 돌리면 링버퍼가 덮이면서 증거가 사라지고, 그 뒤의 처리량·지연은 이미 못 믿을 수치다."},
-    gate:{k:"자리 3",t:"0이어야 하는 넷",why:"이 넷 중 하나라도 0이 아니면 부하가 아니라 라이브러리 결함 신호로 본다.",
-      rv:"9,478만 건 중 0",
-      tbl:[["서버발 끊김","0","세션 관리"],["바이트 훼손","0","링버퍼·묶음 경계"],["순서 역전","0","유실·뒤섞임"],["에코 타임아웃","0","500ms 기준"]],
-      note:"탐지기가 진짜 잡는지도 확인했다. 패딩 씨앗을 한 칸 밀어 결함을 일부러 넣었더니 첫 패킷에서 걸렸고, 같은 조건의 정상 실행이 앞뒤로 있어 대조군까지 갖춰졌다."},
-    atk:{k:"자리 4",t:"일부러 이상하게 보내기",why:"비정상 패킷에 서버가 어떻게 반응하는지 본다. 통과 기준은 하나 — 그 세션만 끊고 서버는 살아 있을 것.",
-      rv:"넷 다 세션만 끊김",
-      tbl:[["크기 조작","0·3·4097·65535","즉시 끊김"],["패킷 폭주","상한 해제","지연만 상승"],["접속 후 침묵","무송신","60초 타임아웃"],["큐 압박","안 받고 보내기","큐 넘침 끊김"]],
-      note:"안 끊으면 방어가 작동하지 않은 것이라 실패로 본다. 끊는 게 정답인 시험이다."}
+    step:{t:"남의 자 → 내 자",
+      n:"내가 만들지 않은 도구로 먼저 재고, 그다음 내가 만든 것으로 다시 잰다. 내 코드와 내 테스트가 같이 틀리는 상황을 막는 유일한 방법이다."},
+    echo:{t:"보낸 값이 그대로 오는가",
+      n:"패킷마다 순차 번호를 싣고 남는 자리는 정해진 규칙으로 채운다. 받을 때 같은 규칙으로 다시 만들어 통째로 비교한다 — 틀리면 카운터만 올리고 지나가지 않고 그 자리에서 멈춘다. 계속 돌리면 링버퍼가 덮이면서 증거가 사라진다."},
+    gate:{t:"0이어야 하는 넷",
+      n:"이 넷 중 하나라도 0이 아니면 부하가 아니라 라이브러리 결함 신호로 본다. 탐지기가 진짜 잡는지도 확인했다 — 패딩 씨앗을 한 칸 밀어 결함을 일부러 넣었더니 첫 패킷에서 걸렸다."},
+    atk:{t:"일부러 이상하게 보내기",
+      n:"비정상 패킷에 서버가 어떻게 반응하는지 본다. 통과 기준은 하나 — 그 세션만 끊고 서버는 살아 있을 것. 안 끊으면 방어가 작동하지 않은 것이라 실패로 본다. 끊는 게 정답인 시험이다."}
   }
 };
+/* ── 전폭 그림에서 되풀어 쓰는 조각들 ── */
+function tx(p,x,y,t,size,col,w,anc,fam){
+  p.appendChild(el("text",{x:x,y:y,"font-size":String(size),fill:col,"font-weight":w||"600",
+    "text-anchor":anc||"start","font-family":fam||"var(--sans)"},t));
+}
+function bx(p,x,y,w,ht,fill,stroke,rx){
+  p.appendChild(el("rect",{x:x,y:y,width:w,height:ht,rx:(rx==null?9:rx),
+    fill:fill||"none",stroke:stroke||"none"}));
+}
+function plate(p,x,y,w,ht){ p.appendChild(el("rect",{class:"cl-plate",x:x,y:y,width:w,height:ht,rx:12})); }
+/* 오른쪽을 가리키는 화살표 하나 */
+function arrow(p,x1,x2,y,col,wd){
+  p.appendChild(el("path",{d:"M "+x1+" "+y+" L "+(x2-7)+" "+y,stroke:col,"stroke-width":String(wd||2),fill:"none"}));
+  p.appendChild(el("polygon",{points:x2+","+y+" "+(x2-8)+","+(y-5)+" "+(x2-8)+","+(y+5),fill:col}));
+}
+
 function drawSafe(){
   var s=document.getElementById("sc-safe"), g=el("g",{}); s.appendChild(g);
-  /* 왼쪽 더미 무리 */
-  var dg=el("g",{class:"cl-hit","data-it":"dummy"}); g.appendChild(dg);
-  dg.appendChild(el("rect",{class:"cl-plate",x:30,y:60,width:210,height:210,rx:12,fill:"none"}));
-  for(var r=0;r<10;r++) for(var c=0;c<10;c++){
-    dg.appendChild(el("rect",{x:52+c*19,y:82+r*19,width:13,height:13,rx:2.5,
-      fill:"#1f4f74",stroke:"#3a7fb5","stroke-width":".8"}));
-  }
-  dg.appendChild(el("text",{x:135,y:52,"text-anchor":"middle","font-size":"14","font-weight":"800",
-    fill:"#9ad4ff","font-family":"var(--sans)"},"에코 더미 ×1,000"));
-  dg.appendChild(el("text",{x:135,y:292,"text-anchor":"middle","font-size":"10.5",
-    fill:"#5d6c85","font-family":"var(--sans)"},"남의 자 1차 → 내 자 2차"));
-  /* 오른쪽 서버 */
-  var svg2=el("g",{}); g.appendChild(svg2);
-  cube(svg2,540,215,52,46,58,"#2f6d4d","#1c4632","#153525");
-  svg2.appendChild(el("text",{x:592,y:150,"text-anchor":"middle","font-size":"14","font-weight":"800",
-    fill:"#8ff0c0","font-family":"var(--sans)"},"IOCP 서버"));
-  /* 오가는 화살표 */
-  var eg=el("g",{class:"cl-hit","data-it":"echo"}); g.appendChild(eg);
-  eg.appendChild(el("rect",{class:"cl-plate",x:250,y:120,width:280,height:120,rx:12,fill:"none"}));
-  eg.appendChild(el("path",{d:"M 262 152 L 520 152",stroke:"#6cc7ff","stroke-width":"2.2",fill:"none"}));
-  eg.appendChild(el("polygon",{points:"530,152 518,146 518,158",fill:"#6cc7ff"}));
-  eg.appendChild(el("text",{x:392,y:143,"text-anchor":"middle","font-size":"11.5","font-weight":"700",
-    fill:"#9ad4ff","font-family":"var(--mono)"},"12~256 B · 순차 번호"));
-  eg.appendChild(el("path",{d:"M 520 208 L 262 208",stroke:"#57d694","stroke-width":"2.2",fill:"none"}));
-  eg.appendChild(el("polygon",{points:"252,208 264,202 264,214",fill:"#57d694"}));
-  eg.appendChild(el("text",{x:392,y:228,"text-anchor":"middle","font-size":"11.5","font-weight":"700",
-    fill:"#8ff0c0","font-family":"var(--mono)"},"같은 값이 그대로"));
-  /* 0 네 개 */
-  var gg=el("g",{class:"cl-hit","data-it":"gate"}); g.appendChild(gg);
-  gg.appendChild(el("rect",{class:"cl-plate",x:30,y:318,width:700,height:118,rx:12,fill:"none"}));
-  var gates=[["서버가 먼저 끊음"],["바이트 훼손"],["순서 역전"],["에코 타임아웃"]];
-  gates.forEach(function(t,i){
-    var x=44+i*174;
-    gg.appendChild(el("rect",{x:x,y:334,width:158,height:86,rx:11,fill:"#0f1a15",stroke:"rgba(87,214,148,.3)"}));
-    gg.appendChild(el("text",{x:x+79,y:388,"text-anchor":"middle","font-size":"38","font-weight":"800",
-      fill:"#57d694","font-family":"var(--mono)"},"0"));
-    gg.appendChild(el("text",{x:x+79,y:409,"text-anchor":"middle","font-size":"10.5","font-weight":"700",
-      fill:"#8496b3","font-family":"var(--sans)"},t[0]));
+
+  /* ═══ 띠 1 — 검증 사다리 두 칸. 위아래로 놓아 '1 다음 2' 가 위치로 읽히게 ═══ */
+  var sg=el("g",{class:"cl-hit","data-it":"step"}); g.appendChild(sg);
+  plate(sg,6,8,1168,140);
+  var LADDER=[
+    {y:22,tag:"STEP 1",col:"#6cc7ff",dim:"#1f4f74",
+     who:"게임코디 제공 Echo 더미",wsub:"남의 자 — 내가 만들지 않은 도구",
+     tgt:"네트워크 라이브러리",tsub:"내가 만든 것",ok:"부하 통과"},
+    {y:88,tag:"STEP 2",col:"#ffb648",dim:"#6b4718",
+     who:"직접 만든 에코 하네스",wsub:"내 자 — 무결성 검사·공격까지 얹었다",
+     tgt:"Step 1 을 통과한 라이브러리",tsub:"같은 것을 다시",ok:"정상 동작"}
+  ];
+  LADDER.forEach(function(L){
+    /* 단계 이름표 */
+    bx(sg,14,L.y,74,54,"#0f1522",L.col,8);
+    tx(sg,51,L.y+23,L.tag,10.5,L.col,"800","middle","var(--mono)");
+    tx(sg,51,L.y+40,"검증",10,"#5d6c85","600","middle");
+    /* 재는 쪽 */
+    bx(sg,98,L.y,296,54,"#0f1522","#1e2739",9);
+    bx(sg,98,L.y,4,54,L.col,null,2);
+    tx(sg,114,L.y+22,L.who,12.5,"#eef2fb","800");
+    tx(sg,114,L.y+40,L.wsub,10,"#8496b3","600");
+    /* 에코 — 갔다가 그대로 온다 */
+    arrow(sg,406,586,L.y+18,"#6cc7ff",2);
+    tx(sg,496,L.y+13,"보낸다",9.5,"#9ad4ff","700","middle","var(--mono)");
+    arrow(sg,586,406,L.y+40,"#57d694",2);
+    tx(sg,496,L.y+53,"그대로 온다",9.5,"#8ff0c0","700","middle","var(--mono)");
+    /* 재는 대상 */
+    bx(sg,598,L.y,296,54,"#0f1522","#1e2739",9);
+    bx(sg,598,L.y,4,54,"#57d694",null,2);
+    tx(sg,614,L.y+22,L.tgt,12.5,"#eef2fb","800");
+    tx(sg,614,L.y+40,L.tsub,10,"#8496b3","600");
+    /* 판정 */
+    arrow(sg,902,932,L.y+27,"#3c4a63",1.6);
+    bx(sg,940,L.y+8,120,38,"#0f1a15","rgba(87,214,148,.4)",9);
+    tx(sg,1000,L.y+32,"✔ "+L.ok,11.5,"#57d694","800","middle");
   });
-  gg.appendChild(el("text",{x:380,y:328,"text-anchor":"middle","font-size":"10",
-    fill:"#5d6c85","font-family":"var(--sans)"},"하나라도 0이 아니면 즉시 멈추고 증거를 남긴다"));
-  /* 공격 4종 */
+  /* 두 칸을 잇는 세로 레일 — 위 칸을 통과해야 아래 칸이 시작된다 */
+  sg.appendChild(el("path",{d:"M 51 76 L 51 88",stroke:"#3c4a63","stroke-width":"1.6",fill:"none"}));
+  tx(sg,1090,52,"동시 접속",9.5,"#5d6c85","600","middle");
+  tx(sg,1090,68,"1,000",15,"#eef2fb","800","middle","var(--mono)");
+  tx(sg,1090,112,"패킷 크기",9.5,"#5d6c85","600","middle");
+  tx(sg,1090,128,"12~256 B",12,"#9ad4ff","800","middle","var(--mono)");
+
+  /* ═══ 띠 2 — 에코 한 통의 구성을 띠로 ═══
+     폭은 실제 바이트 비율이 아니다(4B 를 비율대로 그리면 9px 라 라벨이 안 들어간다).
+     패딩이 압도적으로 길다는 것만 폭으로 말하고, 정확한 값은 상자 안 숫자가 갖는다. */
+  var eg=el("g",{class:"cl-hit","data-it":"echo"}); g.appendChild(eg);
+  plate(eg,6,156,1168,62);
+  var SEG=[["헤더","4 B","#2b3a52","#c3cfe0",48],
+           ["에코 값","8 B","#1f4f74","#9ad4ff",92],
+           ["패딩  0~244 B","같은 씨앗 = 같은 바이트","#3a2c14","#ffcf8a",560]];
+  var sx0=98;
+  SEG.forEach(function(sgm){
+    bx(eg,sx0,170,sgm[4],34,sgm[2],null,4);
+    tx(eg,sx0+sgm[4]/2,185,sgm[0],10,sgm[3],"800","middle");
+    tx(eg,sx0+sgm[4]/2,198,sgm[1],8.5,"#8496b3","600","middle","var(--mono)");
+    sx0+=sgm[4]+3;
+  });
+  tx(eg,98,164,"보내는 한 통",9.5,"#5d6c85","600");
+  arrow(eg,812,872,187,"#57d694",2);
+  bx(eg,880,170,190,34,"#0f1a15","rgba(87,214,148,.4)",8);
+  tx(eg,975,185,"memcmp 통째로 비교",10,"#8ff0c0","800","middle");
+  tx(eg,975,198,"틀리면 그 자리에서 멈춘다",8.5,"#8496b3","600","middle");
+  tx(eg,1090,190,"오프셋까지 기록",9,"#5d6c85","600","middle");
+
+  /* ═══ 띠 3 — 0이어야 하는 넷 ═══ */
+  var gg=el("g",{class:"cl-hit","data-it":"gate"}); g.appendChild(gg);
+  plate(gg,6,226,1168,74);
+  tx(gg,98,240,"하나라도 0이 아니면 부하가 아니라 라이브러리 결함 신호로 본다",9.5,"#5d6c85","600");
+  var GATES=[["서버발 끊김","세션 관리"],["바이트 훼손","링버퍼·묶음 경계"],
+             ["순서 역전","유실·뒤섞임"],["에코 타임아웃","500ms 기준"]];
+  GATES.forEach(function(t,i){
+    var x=98+i*245;
+    bx(gg,x,246,228,46,"#0f1a15","rgba(87,214,148,.3)",10);
+    tx(gg,x+30,280,"0",30,"#57d694","800","middle","var(--mono)");
+    tx(gg,x+56,268,t[0],11.5,"#eef2fb","800");
+    tx(gg,x+56,283,t[1],9,"#8496b3","600");
+  });
+
+  /* ═══ 띠 4 — 일부러 이상하게 보내기 ═══ */
   var ag=el("g",{class:"cl-hit","data-it":"atk"}); g.appendChild(ag);
-  ag.appendChild(el("rect",{class:"cl-plate",x:540,y:250,width:190,height:56,rx:11,fill:"none"}));
-  ag.appendChild(el("rect",{x:548,y:258,width:174,height:40,rx:9,fill:"#1a1113",stroke:"rgba(255,107,82,.3)"}));
-  ag.appendChild(el("text",{x:635,y:275,"text-anchor":"middle","font-size":"11","font-weight":"800",
-    fill:"#ff9a8d","font-family":"var(--sans)"},"일부러 이상하게 보내기"));
-  ag.appendChild(el("text",{x:635,y:290,"text-anchor":"middle","font-size":"9.5",
-    fill:"#8496b3","font-family":"var(--mono)"},"4가지 · 세션만 끊기면 통과"));
+  plate(ag,6,306,1168,58);
+  tx(ag,98,320,"통과 기준은 하나 — 그 세션만 끊고 서버는 살아 있을 것",9.5,"#5d6c85","600");
+  var ATK=[["크기 조작","0 · 3 · 4097 · 65535","즉시 끊김"],
+           ["패킷 폭주","상한 해제","지연만 상승"],
+           ["접속 후 침묵","무송신","60초 타임아웃"],
+           ["큐 압박","안 받고 보내기","큐 넘침 끊김"]];
+  ATK.forEach(function(t,i){
+    var x=98+i*245;
+    bx(ag,x,326,228,32,"#1a1113","rgba(255,107,82,.3)",8);
+    tx(ag,x+12,340,t[0],10.5,"#ff9a8d","800");
+    tx(ag,x+12,352,t[1],8.5,"#8496b3","600","start","var(--mono)");
+    tx(ag,x+216,347,t[2],9,"#c3cfe0","700","end");
+  });
 }
 
 /* ═══════════ ③ 부하 그림 ═══════════ */
@@ -3096,97 +3722,140 @@ var LOAD={
         ["더미 루프 p99","3.9","ms","예산 40ms의 10%",1],
         ["송신 버퍼 넘침","0","건","더미가 밀리지 않음",1]],
   items:{
-    bot:{k:"자리 1",t:"봇 한 마리가 하는 일",why:"매 틱 1~100 중 하나를 굴려 행동을 정한다. 확률이 따로 도는 게 아니라 구간을 나눠 갖는다.",
-      rv:"40ms마다 주사위 하나",
-      tbl:[["서 있을 때 이동","75%","4방향 랜덤"],["서 있을 때 채팅","20%","2~66글자"],["서 있을 때 존이동","5%","다른 맵"],["걷는 중 정지","20%","나머지는 계속"]],
-      note:"하트비트는 20초 고정이고 서버 타임아웃은 60초다. 끊기면 1초 뒤 다시 붙는다."},
-    map:{k:"자리 2",t:"맵과 시야",why:"120×120 맵을 20칸짜리 섹터 36개로 나눈다. 내 섹터와 이웃 여덟 칸, 그 안의 사람에게만 보낸다.",
-      rv:"시야 = 3×3 섹터",
-      tbl:[["맵","120×120",""],["섹터","20칸","6×6 = 36개"],["시야","60×60","맵의 25%"],["팬아웃","922","동접 5,000 기준"]],
-      note:"시야가 넓은 건 의도다. 실제 게임보다 밀도가 높아야 적은 동접으로 서버 병목이 빨리 드러난다."},
-    thr:{k:"자리 3",t:"측정기가 병목이면 안 된다",why:"서버가 5,000에서 막힌 게 아니라 더미가 5,000을 못 만든 것일 수 있다. 그래서 더미는 자기가 밀리는지를 먼저 잰다.",
-      rv:"루프 p99 3.9 ms",
-      tbl:[["더미 루프 p99","< 40 ms","3.9 실측"],["송신 버퍼 넘침","0","0"],["접속 수","목표치","정확"],["밀린 송신량","선형","선형"]],
-      note:"스레드당 인원을 절반으로 줄여 스레드를 두 배로 만들어도 왕복 지연이 그대로면, 더미는 병목이 아니다. 그걸로 교차 확인한다."}
+    env:{t:"어디서 재는가",
+      n:"코어를 나눠 두지 않으면 부하 클라가 서버 코어를 뺏어 간다. 그러면 서버가 느려진 게 아니라 측정이 느려진 것인데, 지표만 봐서는 구분이 안 된다. 회선도 같은 이유로 걷어냈다 — 동접 1,500에서 무너졌을 때 틱은 예산 안이었고, 원인은 회선 업로드 상한 473.94 Mbps였다."},
+    bot:{t:"봇 한 마리가 하는 일",
+      n:"매 틱 1~100 중 하나를 굴려 행동을 정한다. 확률이 따로 도는 게 아니라 한 주사위의 구간을 나눠 갖는다. 하트비트는 20초 고정이고 서버 타임아웃은 60초다."},
+    map:{t:"맵과 시야",
+      n:"내 섹터와 이웃 여덟 칸, 그 안의 사람에게만 보낸다. 시야가 맵의 25%나 되는 건 의도다 — 실제 게임보다 밀도가 높아야 적은 동접으로 서버 병목이 빨리 드러난다."},
+    thr:{t:"측정기가 병목이면 안 된다",
+      n:"서버가 5,000에서 막힌 게 아니라 더미가 5,000을 못 만든 것일 수 있다. 그래서 더미는 자기가 밀리는지를 먼저 잰다. 스레드당 인원을 절반으로 줄여 스레드를 두 배로 만들어도 왕복 지연이 그대로면, 더미는 병목이 아니다."}
   }
 };
 function drawLoad(){
   var s=document.getElementById("sc-load"), g=el("g",{}); s.appendChild(g);
-  /* 맵 격자 */
-  var MX=44, MY=40, MS=54;   /* 6×6 */
-  var mg=el("g",{class:"cl-hit","data-it":"map"}); g.appendChild(mg);
-  mg.appendChild(el("rect",{class:"cl-plate",x:MX-12,y:MY-12,width:MS*6+24,height:MS*6+24,rx:12,fill:"none"}));
-  mg.appendChild(el("rect",{x:MX,y:MY,width:MS*6,height:MS*6,rx:4,fill:"#0f1522",stroke:"#233047"}));
-  for(var i=1;i<6;i++){
-    mg.appendChild(el("line",{x1:MX+i*MS,y1:MY,x2:MX+i*MS,y2:MY+MS*6,stroke:"#1c2942","stroke-width":"1"}));
-    mg.appendChild(el("line",{x1:MX,y1:MY+i*MS,x2:MX+MS*6,y2:MY+i*MS,stroke:"#1c2942","stroke-width":"1"}));
+
+  /* ═══ 자리 0 — 어디서 재는가. 옛 ④ 테스트 환경 탭이 이 띠로 들어왔다 ═══ */
+  var vg=el("g",{class:"cl-hit","data-it":"env"}); g.appendChild(vg);
+  plate(vg,6,8,1168,164);
+  /* 한 PC 안에서 코어를 갈랐다 */
+  bx(vg,24,36,600,124,"#0f1522","#1e2739",10);
+  tx(vg,40,54,"서버 PC 한 대 · i9-10900 · 10코어 20스레드",10.5,"#8496b3","700");
+  tx(vg,208,74,"서버 프로세스",11,"#9ad4ff","800","middle");
+  tx(vg,484,74,"부하 클라 프로세스",11,"#ffcf8a","800","middle");
+  for(var i=0;i<10;i++){
+    var srv=(i<6), cx0=40+i*56;
+    bx(vg,cx0,80,48,36,srv?"#1f4f74":"#6b4718",srv?"#3a7fb5":"#c98a34",6);
+    tx(vg,cx0+24,104,String(i),12.5,"#eaf3ff","800","middle","var(--mono)");
   }
-  /* 시야 3×3 강조 */
+  tx(vg,208,132,"ServerCores = 0-5",9.5,"#5d6c85","600","middle","var(--mono)");
+  tx(vg,484,132,"ClientCores = 6-9",9.5,"#5d6c85","600","middle","var(--mono)");
+  /* loopback — 두 무리가 메모리 복사로 오간다 */
+  vg.appendChild(el("path",{d:"M 214 148 L 470 148",stroke:"#6cc7ff","stroke-width":"1.6",
+    fill:"none","stroke-dasharray":"6 4"}));
+  vg.appendChild(el("polygon",{points:"478,148 466,143 466,153",fill:"#6cc7ff"}));
+  vg.appendChild(el("polygon",{points:"206,148 218,143 218,153",fill:"#ffb648"}));
+  tx(vg,342,144,"loopback 127.0.0.1 · 랜선도 공유기도 안 탄다",9.5,"#8496b3","700","middle","var(--mono)");
+  /* 여기까지 온 길 — 회선을 걷어내며 네 번 옮겼다 */
+  tx(vg,648,54,"여기까지 온 길 — 회선이 천장이면 서버를 잴 수 없다",10.5,"#8496b3","700");
+  var HOP=[["v1","공인 IP 브릿지","474","Mbps","폐기"],
+           ["v2","사설 LAN 정적IP","940","Mbps","폐기"],
+           ["v3","공유기 NAT","940","Mbps","폐기"],
+           ["v4","한 PC loopback","—","","현재"]];
+  HOP.forEach(function(hp,j){
+    var x=648+j*130, live=(j===3);
+    bx(vg,x,68,118,64,live?"#111f31":"#0f1522",live?"#2c5f85":"#1e2739",9);
+    tx(vg,x+11,85,hp[0],9.5,live?"#6cc7ff":"#4a5568","800",null,"var(--mono)");
+    tx(vg,x+11,101,hp[1],9.5,live?"#eef2fb":"#6f7f99","700");
+    tx(vg,x+11,120,hp[2]+(hp[3]?" "+hp[3]:""),11,live?"#6cc7ff":"#8496b3","800",null,"var(--mono)");
+    tx(vg,x+107,120,hp[4],9,live?"#57d694":"#5d6c85","700","end");
+    if(j<3) tx(vg,x+123,101,"›",11,"#3c4a63","800","middle");
+  });
+  tx(vg,648,152,"동접 1,500에서 무너졌을 때 틱은 예산 안이었다 — 서버가 한가한데 왕복만 1초였다",9.5,"#5d6c85","600");
+
+  /* ═══ 맵과 시야 ═══ */
+  var mg=el("g",{class:"cl-hit","data-it":"map"}); g.appendChild(mg);
+  plate(mg,6,180,384,246);
+  var MX=34, MY=214, MS=30;                       /* 6×6 → 180px */
+  tx(mg,MX+MS*3,204,"맵 120×120 · 섹터 20 → 6×6 = 36칸",10,"#8496b3","700","middle");
+  bx(mg,MX,MY,MS*6,MS*6,"#0f1522","#233047",4);
+  for(var q=1;q<6;q++){
+    mg.appendChild(el("line",{x1:MX+q*MS,y1:MY,x2:MX+q*MS,y2:MY+MS*6,stroke:"#1c2942","stroke-width":"1"}));
+    mg.appendChild(el("line",{x1:MX,y1:MY+q*MS,x2:MX+MS*6,y2:MY+q*MS,stroke:"#1c2942","stroke-width":"1"}));
+  }
   mg.appendChild(el("rect",{x:MX+2*MS,y:MY+2*MS,width:MS*3,height:MS*3,fill:"rgba(108,199,255,.07)",
     stroke:"#6cc7ff","stroke-width":"1.4","stroke-dasharray":"6 4"}));
-  /* 봇 점 — 결정적 배치(랜덤 금지) */
+  /* 봇 점 — 결정적 배치(프레임마다 흔들리면 안 된다) */
   var seed=7;
-  function rnd(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; }
-  var bg=el("g",{class:"cl-hit","data-it":"bot"}); g.appendChild(bg);
-  for(var k=0;k<210;k++){
-    var bx=MX+6+rnd()*(MS*6-12), by=MY+6+rnd()*(MS*6-12);
-    var inView=(bx>MX+2*MS&&bx<MX+5*MS&&by>MY+2*MS&&by<MY+5*MS);
-    bg.appendChild(el("circle",{cx:bx.toFixed(1),cy:by.toFixed(1),r:inView?2.6:2,
-      fill:inView?"#6cc7ff":"#33507a",opacity:inView?".95":".6"}));
-    if(k%9===0){ var a=rnd()*6.28;
-      bg.appendChild(el("line",{x1:bx.toFixed(1),y1:by.toFixed(1),
-        x2:(bx+Math.cos(a)*9).toFixed(1),y2:(by+Math.sin(a)*9).toFixed(1),
-        stroke:inView?"#6cc7ff":"#33507a","stroke-width":"1.1",opacity:".7"})); }
+  function rr(){ seed=(seed*1103515245+12345)&0x7fffffff; return seed/0x7fffffff; }
+  for(var k=0;k<150;k++){
+    var px2=MX+4+rr()*(MS*6-8), py2=MY+4+rr()*(MS*6-8);
+    var inView=(px2>MX+2*MS&&px2<MX+5*MS&&py2>MY+2*MS&&py2<MY+5*MS);
+    mg.appendChild(el("circle",{cx:px2.toFixed(1),cy:py2.toFixed(1),r:inView?2.2:1.7,
+      fill:inView?"#6cc7ff":"#33507a",opacity:inView?".95":".55"}));
   }
-  /* 나 */
-  var me=MX+3.5*MS, mey=MY+3.5*MS;
-  bg.appendChild(el("circle",{cx:me,cy:mey,r:5.5,fill:"#ffb648",stroke:"#0d1220","stroke-width":"1.5"}));
-  mg.appendChild(el("text",{x:MX+MS*3,y:MY-18,"text-anchor":"middle","font-size":"13","font-weight":"800",
-    fill:"#8496b3","font-family":"var(--sans)"},"맵 120×120 · 섹터 36칸"));
-  /* 시야 설명은 맵 아래로 — 오른쪽에 두면 주사위 막대와 부딪힌다 */
-  mg.appendChild(el("text",{x:MX+MS*3,y:MY+MS*6+22,"text-anchor":"middle","font-size":"10.5","font-weight":"700",
-    fill:"#6cc7ff","font-family":"var(--sans)"},"점선 안 = 내 시야 3×3"));
-  mg.appendChild(el("text",{x:MX+MS*3,y:MY+MS*6+38,"text-anchor":"middle","font-size":"9.5",
-    fill:"#5d6c85","font-family":"var(--sans)"},"여기 있는 사람끼리만 서로를 안다 · 밖은 보내지도 받지도 않는다"));
-  /* 주사위 막대 */
+  mg.appendChild(el("circle",{cx:MX+3.5*MS,cy:MY+3.5*MS,r:4.6,fill:"#ffb648",
+    stroke:"#0d1220","stroke-width":"1.4"}));
+  tx(mg,MX+MS*3,MY+MS*6+20,"점선 안 = 내 시야 3×3 · 밖은 보내지도 받지도 않는다",9.5,"#6cc7ff","700","middle");
+  /* 시야가 넓다는 사실을 숫자로 — 표 대신 큰 값 둘 */
+  bx(mg,238,236,140,58,"#0f1522","#1e2739",9);
+  tx(mg,308,256,"시야가 맵의",9,"#5d6c85","600","middle");
+  tx(mg,308,280,"25%",21,"#6cc7ff","800","middle","var(--mono)");
+  bx(mg,238,302,140,58,"#0f1522","#1e2739",9);
+  tx(mg,308,322,"한 사람이 받는 팬아웃",9,"#5d6c85","600","middle");
+  tx(mg,308,346,"922",21,"#ffb648","800","middle","var(--mono)");
+  tx(mg,308,372,"동접 5,000 기준 실측",8.5,"#5d6c85","600","middle");
+
+  /* ═══ 봇 한 마리 — 매 틱 주사위 하나 ═══ */
   var dg2=el("g",{class:"cl-hit","data-it":"bot"}); g.appendChild(dg2);
-  var RX=424, RY=64;
-  dg2.appendChild(el("rect",{class:"cl-plate",x:RX-14,y:RY-24,width:314,height:150,rx:12,fill:"none"}));
-  dg2.appendChild(el("text",{x:RX,y:RY-8,"font-size":"12.5","font-weight":"800",
-    fill:"#eef2fb","font-family":"var(--sans)"},"매 틱 주사위 하나"));
+  plate(dg2,398,180,384,120);
+  tx(dg2,418,200,"매 틱 주사위 하나 — 40ms 마다",11,"#eef2fb","800");
   function bar(y,label,segs){
-    dg2.appendChild(el("text",{x:RX,y:y-6,"font-size":"10.5","font-weight":"700",
-      fill:"#8496b3","font-family":"var(--sans)"},label));
-    var x=RX, W=288;
+    tx(dg2,418,y-5,label,9.5,"#8496b3","700");
+    var x=418, W=344;
     segs.forEach(function(sg){
       var w=W*sg[0]/100;
-      dg2.appendChild(el("rect",{x:x,y:y,width:w,height:24,fill:sg[1],
-        rx:(x===RX||x+w>=RX+W-1)?3:0}));
-      if(w>34) dg2.appendChild(el("text",{x:x+w/2,y:y+16,"text-anchor":"middle","font-size":"10",
-        "font-weight":"800",fill:sg[2]||"#0d1220","font-family":"var(--mono)"},sg[3]));
+      dg2.appendChild(el("rect",{x:x,y:y,width:w,height:22,fill:sg[1],
+        rx:(x===418||x+w>=418+W-1)?3:0}));
+      if(w>40) tx(dg2,x+w/2,y+15,sg[3],9.5,sg[2]||"#0d1220","800","middle","var(--mono)");
       x+=w;
     });
   }
-  bar(RY+12,"서 있을 때",[[75,"#6cc7ff",null,"이동 75"],[20,"#ffb648",null,"채팅 20"],[5,"#57d694",null,"5"]]);
-  bar(RY+74,"걷고 있을 때",[[20,"#ff6b52",null,"정지 20"],[80,"#2b3a52","#c3cfe0","계속 이동 80"]]);
-  /* 스레드 분배 */
+  bar(222,"서 있을 때",[[75,"#6cc7ff",null,"이동 75"],[20,"#ffb648",null,"채팅 20"],[5,"#57d694",null,"5"]]);
+  /* 5% 조각은 폭이 17px 라 이름이 안 들어간다 — 초록이 무엇인지 라벨 줄 오른쪽에서 밝혀 준다 */
+  tx(dg2,762,217,"끝 초록 5% = 존 이동",8.5,"#57d694","700","end");
+  bar(268,"걷고 있을 때",[[20,"#ff6b52",null,"정지 20"],[80,"#2b3a52","#c3cfe0","계속 이동 80"]]);
+
+  /* ═══ 측정기가 병목이면 안 된다 — 5,000을 만드는 쪽과 그 자기검사 ═══ */
   var tg=el("g",{class:"cl-hit","data-it":"thr"}); g.appendChild(tg);
-  var TX=424, TY=250;
-  tg.appendChild(el("rect",{class:"cl-plate",x:TX-14,y:TY-26,width:314,height:186,rx:12,fill:"none"}));
-  tg.appendChild(el("text",{x:TX,y:TY-10,"font-size":"12.5","font-weight":"800",
-    fill:"#eef2fb","font-family":"var(--sans)"},"5,000명을 다섯 스레드가 나눠 든다"));
+  plate(tg,398,306,384,120);
+  tx(tg,418,326,"5,000명을 다섯 스레드가 나눠 든다",11,"#eef2fb","800");
+  /* 간격 16 · 시작 330 — 17 로 두면 마지막 줄(#4)의 '1,000명' 이 아래 각주와 붙어 겹쳤다 */
   for(var t=0;t<5;t++){
-    var ty=TY+t*30;
-    tg.appendChild(el("rect",{x:TX,y:ty,width:22,height:22,rx:5,fill:"#3a2c14",stroke:"rgba(255,182,72,.45)"}));
-    tg.appendChild(el("text",{x:TX+11,y:ty+15,"text-anchor":"middle","font-size":"9.5","font-weight":"800",
-      fill:"#ffcf8a","font-family":"var(--mono)"},"#"+t));
-    for(var q=0;q<10;q++) tg.appendChild(el("rect",{x:TX+34+q*13,y:ty+6,width:9,height:10,rx:2,
-      fill:"#1f4f74",opacity:(q<10?".85":".3")}));
-    tg.appendChild(el("text",{x:TX+178,y:ty+15,"font-size":"10","font-weight":"700",
-      fill:"#8496b3","font-family":"var(--mono)"},"1,000명"));
+    var ty=330+t*16;
+    bx(tg,418,ty,20,13,"#3a2c14","rgba(255,182,72,.45)",4);
+    tx(tg,428,ty+10,"#"+t,8.5,"#ffcf8a","800","middle","var(--mono)");
+    for(var w2=0;w2<10;w2++) bx(tg,446+w2*12,ty+3,9,7,"#1f4f74",null,2);
+    tx(tg,586,ty+10,"1,000명",9,"#8496b3","700",null,"var(--mono)");
+    tx(tg,762,ty+10,"소켓 1,000",8.5,"#5d6c85","600","end","var(--mono)");
   }
-  tg.appendChild(el("text",{x:TX,y:TY+160,"font-size":"9.5",
-    fill:"#5d6c85","font-family":"var(--sans)"},"스레드를 늘리면 서버 코어를 뺏는다 — 담당 인원을 늘리는 쪽을 택했다"));
+  tx(tg,418,421,"스레드를 늘리면 서버 코어를 뺏는다 — 담당 인원을 늘리는 쪽을 택했다",8.5,"#5d6c85","600");
+
+  var ng=el("g",{class:"cl-hit","data-it":"thr"}); g.appendChild(ng);
+  plate(ng,790,180,384,246);
+  tx(ng,810,202,"측정기가 병목이면 안 된다",12,"#eef2fb","800");
+  tx(ng,810,218,"5,000에서 막힌 게 서버인지 더미인지 먼저 가른다",9,"#5d6c85","600");
+  var GUARD=[["더미 루프 p99","3.9 ms","예산 40ms 의 10%",1],
+             ["송신 버퍼 넘침","0 건","더미가 밀리지 않았다",1],
+             ["만든 접속 수","목표치 그대로","모자라면 부하가 거짓",0],
+             ["교차 확인","스레드 ×2 → 왕복 그대로","더미는 병목이 아니다",1]];
+  GUARD.forEach(function(gd,j){
+    var y=230+j*48;
+    bx(ng,810,y,344,40,gd[3]?"#0f1a15":"#0f1522",gd[3]?"rgba(87,214,148,.3)":"#1e2739",9);
+    tx(ng,824,y+18,gd[0],10.5,"#eef2fb","800");
+    tx(ng,824,y+32,gd[2],8.5,"#8496b3","600");
+    tx(ng,1140,y+24,gd[1],11,gd[3]?"#57d694":"#9ad4ff","800","end","var(--mono)");
+  });
 }
 
 /* ═══════════ 공통: 계기판·카드·칩 ═══════════ */
@@ -3201,47 +3870,43 @@ function paintDash(id,rows){
     d.appendChild(t);
   });
 }
-function paintCard(sd,it){
-  sd.innerHTML="";
-  sd.appendChild(h("div",{class:"k"},it.k));
-  sd.appendChild(h("h3",{},it.t));
-  sd.appendChild(h("div",{class:"why"},it.why));
-  var body=h("div",{class:"body"});
-  body.appendChild(h("div",{class:"rv"},it.rv));
-  var tb=h("table",{class:"cl-t"});
-  tb.innerHTML='<colgroup><col class="a"><col class="b"><col class="c"></colgroup>'+
-    "<tbody>"+it.tbl.map(function(r){
-      return "<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+(r[2]||"")+"</td></tr>"; }).join("")+"</tbody>";
-  body.appendChild(tb);
-  if(it.note){ var n=h("div",{}); n.style.cssText="margin-top:11px;font-size:.74rem;color:#7d8ca4;line-height:1.6";
-    n.textContent=it.note; body.appendChild(n); }
-  sd.appendChild(body);
-}
-function wire(paneId,scId,sdId,chId,DATA,order){
-  var sd=document.getElementById(sdId), ch=document.getElementById(chId);
-  var keys=order, cur=keys[0];
-  function sel(k){
-    cur=k; paintCard(sd,DATA.items[k]);
-    [].forEach.call(document.querySelectorAll("#"+scId+" .cl-hit"),function(g){
-      g.classList.toggle("on", g.getAttribute("data-it")===k); });
+
+/* 옆 카드를 안 쓰는 탭의 배선 — 고른 것이 그림에서 켜지고, 설명은 아래 한 줄로만 나온다.
+   카드(표 + 긴 글)를 없앤 자리를 그림이 가져갔으므로 여기서 할 일은 강조와 한 줄 교체뿐이다.
+   맨 끝에 노션으로 보내는 문을 하나 달아 둔다 — 자세한 것은 전부 그쪽에 있다. */
+var NOTION_HUB="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46";
+function wireWide(scId,chId,noteId,DATA,order,linkLabel){
+  var ch=document.getElementById(chId), note=document.getElementById(noteId);
+  function sel(k,i){
+    note.innerHTML="";
+    var em=h("i",{},"보기 "+(i+1)), p=h("p",{},DATA.items[k].n);
+    note.appendChild(em); note.appendChild(p);
+    [].forEach.call(document.querySelectorAll("#"+scId+" .cl-hit"),function(gg){
+      gg.classList.toggle("on", gg.getAttribute("data-it")===k); });
     [].forEach.call(ch.querySelectorAll("button"),function(b){
       b.classList.toggle("act", b.getAttribute("data-it")===k); });
   }
-  keys.forEach(function(k,i){
+  order.forEach(function(k,i){
     var b=h("button",{"data-it":k}); b.appendChild(h("i",{},String(i+1)));
     b.appendChild(document.createTextNode(DATA.items[k].t));
-    b.addEventListener("click",function(){ sel(k); });
+    b.addEventListener("click",function(){ sel(k,i); });
     ch.appendChild(b);
   });
-  [].forEach.call(document.querySelectorAll("#"+scId+" .cl-hit"),function(g){
-    g.addEventListener("click",function(){ sel(g.getAttribute("data-it")); }); });
-  sel(cur);
+  [].forEach.call(document.querySelectorAll("#"+scId+" .cl-hit"),function(gg){
+    gg.addEventListener("click",function(){
+      var k=gg.getAttribute("data-it"); sel(k,order.indexOf(k)); }); });
+  var a=document.createElement("a");
+  a.className="cr-more"; a.target="_blank"; a.rel="noopener"; a.href=NOTION_HUB;
+  a.innerHTML="자세히 — "+linkLabel+' <em>노션 ↗</em>';
+  ch.appendChild(a);
+  sel(order[0],0);
 }
 
 /* 기동 */
-drawEnv();  paintDash("d-env", ENV.dash);  wire("p-env","sc-env","sd-env","ch-env",ENV,["kinds","srv","cli","loop","wan"]);
-drawSafe(); paintDash("d-safe",SAFE.dash); wire("p-safe","sc-safe","sd-safe","ch-safe",SAFE,["dummy","echo","gate","atk"]);
-drawLoad(); paintDash("d-load",LOAD.dash); wire("p-load","sc-load","sd-load","ch-load",LOAD,["bot","map","thr"]);
+drawSafe(); paintDash("d-safe",SAFE.dash);
+wireWide("sc-safe","ch-safe","nt-safe",SAFE,["step","echo","gate","atk"],"에코 더미 · 스트레스 테스트");
+drawLoad(); paintDash("d-load",LOAD.dash);
+wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");
 
 document.querySelectorAll(".subtab").forEach(function(b){
   b.addEventListener("click",function(){
