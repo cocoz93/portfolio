@@ -747,8 +747,8 @@ body.pop-hold #scene .chips{opacity:0}
   padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
 .cr-hd{display:flex; align-items:baseline; gap:9px; margin:0 12px 8px; flex-wrap:wrap}
 /* 화면 이름은 이 판이 무엇인지 말하는 유일한 글자다 — 곁의 메타(픽셀로 그린다 · 더미 250명)는
-   그대로 두고 이름만 키워서 크기 차이를 벌린다(.95 → 1.16 → 1.34rem) */
-.cr-hd b{font-size:1.34rem; font-weight:800; letter-spacing:-.015em}
+   그대로 두고 이름만 키워서 크기 차이를 벌린다(.95 → 1.16 → 1.34 → 1.56rem) */
+.cr-hd b{font-size:1.56rem; font-weight:800; letter-spacing:-.02em}
 .cr-hd span{font-family:var(--mono); font-size:.66rem; color:var(--dim)}
 /* 영상은 카드 좌우 끝까지 채운다 — 화면을 담은 판이라 테두리에 붙는 쪽이 '기계 화면' 으로 읽힌다.
    눌러서 멈출 수 있으므로 손가락 커서를 준다(컨트롤 바는 화면을 어지럽혀서 안 쓴다). */
@@ -766,15 +766,15 @@ body.pop-hold #scene .chips{opacity:0}
    증거라 가리면 안 된다. 그 아래로 내리고(10.5% = 640×496 에서 상태줄이 차지하는 약 8% + 여유),
    폭도 글자만큼만 쓴다. 통짜 덮개는 격자를 지운다. */
 .cr-ref .pill{position:absolute; left:9px; top:10.5%; display:inline-flex; align-items:baseline; gap:8px;
-  padding:6px 13px 7px; border-radius:9px; font-size:1.14rem; font-weight:800; color:#fff;
+  padding:6px 13px 7px; border-radius:9px; font-size:1.32rem; font-weight:800; color:#fff;
   letter-spacing:-.015em; background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
-.cr-ref .pill span{font-size:.72rem; font-weight:600; color:#a9b8cf}
+.cr-ref .pill span{font-size:.76rem; font-weight:600; color:#a9b8cf}
 /* 덮임 컷은 왼쪽 위에 '시야 1,118명' 이 떠 있다 — 이 컷의 핵심 숫자다. 그래서 위는 비워 두고
    이름표와 수치를 아래 한 줄에 합쳤다(덮개 하나). */
 .cr-ref>i{position:absolute; left:0; right:0; bottom:0; box-sizing:border-box; display:block;
   padding:26px 12px 9px; font-style:normal; font-size:.68rem; font-weight:600; color:#cfe0f5;
   background:linear-gradient(to top, rgba(8,11,19,.94) 0%, rgba(8,11,19,.72) 52%, rgba(8,11,19,0) 100%)}
-.cr-ref>i>b{display:block; margin-bottom:5px; font-size:1.2rem; font-weight:800; color:#fff;
+.cr-ref>i>b{display:block; margin-bottom:5px; font-size:1.4rem; font-weight:800; color:#fff;
   letter-spacing:-.015em}
 .cr-ref>i>b .hot{color:var(--game); font-weight:800}
 /* 규격·녹화 조건은 여기 한 줄로 모은다. 글을 판 사이에 흘리면 그림 셋의 리듬이 끊긴다 */
@@ -819,9 +819,9 @@ body.pop-hold #scene .chips{opacity:0}
   .cr-side>.cr-ref.lim img{height:auto; object-fit:fill}
   /* 참조컷이 반 폭으로 줄면 알약이 두 줄로 감싸며 작은 컷을 덮는다(700px 에서 확인).
      이름표는 컷 크기에 맞춰 같이 줄어야 한다 — 이름은 남기고 크기만 내린다. */
-  .cr-ref .pill{font-size:.88rem; padding:5px 10px 6px; flex-wrap:wrap}
+  .cr-ref .pill{font-size:1rem; padding:5px 11px 6px; flex-wrap:wrap}
   .cr-ref .pill span{font-size:.64rem}
-  .cr-ref>i>b{font-size:.98rem}
+  .cr-ref>i>b{font-size:1.12rem}
 }
 /* 세로 레일은 옆에 두 칸이 더 있어야 성립한다. 카드가 지도 밑으로 내려가는 폭(1080)부터는
    레일도 같이 풀어 예전처럼 가로 줄로 눕힌다 — 셋이 한 번에 바뀌어야 중간 모양이 안 생긴다.
