@@ -728,20 +728,36 @@ body.pop-hold #scene .chips{opacity:0}
    판·칸이 열넷이 되어 시선이 흩어졌다. 그래서 웹 화면 하나를 크게 두고 나머지 둘을 종속시킨다 —
    오른쪽 둘은 판이 아니라 '이름표만 얹은 참조컷' 이라 머리줄·캡션줄이 없다. 초점이 하나로 모인다.
 
-   ── 두 칸의 아래 선은 CSS 가 스스로 맞춘다 ──
-   한동안 히어로 폭을 손으로 풀어서 맞췄다. 왼쪽 높이(=폭÷종횡비 + 머리·캡션)와 오른쪽 높이
-   (=콘솔 + 덮임컷 + 틈)가 같아지는 폭을 구하는 식이었는데, 세 번 연달아 틀렸다:
+   ── 두 칸짜리 격자 · 아래 선은 CSS 가 스스로 맞춘다 ──
+   왼쪽 칸에 규격과 큰 화면을 두 줄로 쌓고, 오른쪽 칸(참조컷 둘)이 그 두 줄을 통째로 마주 본다.
+   규격의 오른쪽 끝이 히어로 판의 오른쪽 끝과 같은 세로선에 떨어지고, 참조컷은 규격 높이(+틈)
+   만큼 위로 올라와 세로가 길어진다.
+
+   한동안 히어로 폭을 손으로 풀어서 아래 선을 맞췄다. 왼쪽 높이(=폭÷종횡비 + 머리·캡션)와
+   오른쪽 높이(=콘솔 + 덮임컷 + 틈)가 같아지는 폭을 구하는 식이었는데 세 번 연달아 틀렸다:
      68%(오른쪽이 42px 짧음) → 66.6%(칸 사이 틈 14 를 빼먹어 16px) → 66%(제목을 키우자 5px)
    원인은 식이 머리줄 높이에 매달려 있던 것이다. 제목 크기를 건드릴 때마다 다시 풀어야 했다.
-   그래서 계산을 걷고, 덮임컷이 남는 높이를 그대로 먹게 했다(flex:1 1 0 · min-height:0).
-   그림은 cover 로 채우며 아래를 조금 자르는데(1512px 에서 9px · 3%), 그 자리는 이미 아래
-   이름표 띠가 덮고 있어서 잘려도 보이지 않는다. 이제 제목·캡션을 키워도 바닥선이 안 어긋난다.
+   그래서 계산을 걷고, 두 참조컷이 남는 높이를 종횡비 비율대로 나눠 먹게 했다(flex 값 = 종횡비).
+   남는 높이를 그림에 어떻게 얹느냐가 컷마다 다르다:
+     · 덮임컷 = cover. 가장자리가 흰 말풍선 덩어리라 좌우가 잘려도 안 보인다.
+     · 콘솔   = contain. 80칸 문자판이라 좌우를 자르면 맵 끝 칸이 사라진다. 대신 남는 높이를
+                위아래 여백으로 두고, 그 여백 색을 녹화 바탕색(#0C0C0C · 실제로 찍어 확인)에
+                맞춰 '콘솔 화면이 조금 더 큰 것' 으로 보이게 한다.
    ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 폭 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
-.cr-hero{display:flex; gap:14px; align-items:stretch}
-.cr-hero .big{flex:0 0 66%}
-.cr-side{flex:1 1 0; display:flex; flex-direction:column; gap:12px}
-.cr-side>.cr-ref.con{flex:0 0 auto}
-.cr-side>.cr-ref.lim{flex:1 1 0; min-height:0}
+.cr-hero{display:grid; grid-template-columns:66% minmax(0,1fr);
+  grid-template-areas:"dash side" "hero side"; gap:10px 14px}
+.cr-hero>.cl-dash{grid-area:dash; margin:0}
+.cr-hero .big{grid-area:hero}
+.cr-side{grid-area:side; display:flex; flex-direction:column; gap:12px}
+/* 세로로 쌓으면 flex 는 폭이 아니라 높이를 나눈다 — 그래서 종횡비가 아니라 그 역수를 넣어야
+   두 컷이 원래 비율(=자기 자연 높이)대로 함께 커진다. 종횡비를 그대로 넣었더니 콘솔이 375→335px
+   로 오히려 줄고 덮임컷만 304→414 로 불었다. 아래 가로로 눕히는 분기에서는 반대로 종횡비 그대로. */
+.cr-side>.cr-ref.con{flex:0.7750 1 0; min-height:0; background:#0c0c0c}   /* 1/1.2903 */
+.cr-side>.cr-ref.lim{flex:0.6281 1 0; min-height:0}                      /* 1/1.5921 */
+/* 영상을 칸 위쪽에 붙인다(남는 여백은 전부 아래로) — 가운데 두면 영상이 여백만큼 내려앉아서
+   알약(top:10.5%)이 다시 상태줄을 덮는다. 위로 붙이면 칸이 영상보다 높을수록 알약이 상태줄에서
+   멀어지기만 하므로, 창 폭이 바뀌어도 가릴 일이 없다. */
+.cr-side>.cr-ref.con video{height:100%; object-fit:contain; object-position:center top}
 .cr-side>.cr-ref.lim img{height:100%; object-fit:cover; object-position:center top}
 .cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px;
   padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
@@ -806,16 +822,19 @@ body.pop-hold #scene .chips{opacity:0}
   /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
      내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어
      문자 격자가 회색 띠로 보이므로, 참조컷 상태로 반씩 나눠 갖는 편이 낫다. */
-  .cr-hero{flex-wrap:wrap}
-  .cr-hero .big{flex:1 1 100%}
+  /* 두 칸 격자를 한 칸으로 풀어 규격 · 히어로 · 참조컷을 세로로 쌓는다 */
+  .cr-hero{grid-template-columns:minmax(0,1fr); grid-template-areas:"dash" "hero" "side"; gap:10px}
   .cr-side{flex-direction:row; align-items:flex-start}
   /* 여기서도 폭을 종횡비에 비례해 나눈다(= 두 컷의 높이가 같아진다). 반씩 균등하게 주면
      덮임컷(1.5921)이 콘솔(1.2903)보다 75px 낮아지고, 그 빈 자리 때문에 아래 이름표 띠가
      그림에서 떨어져 뜬다(bottom:0 은 그림 바닥이 아니라 칸 바닥이다). */
-  .cr-side>.cr-ref.con{flex:1.2903 1 0}
+  /* 가로로 눕히면 flex 가 높이가 아니라 폭을 나눈다 — 그래서 위(세로)에서 쓴 역수를 종횡비
+     그대로로 되돌린다. 안 되돌리면 폭이 55:45 로 갈려 두 컷 높이가 어긋난다(700px 에서 확인). */
+  .cr-side>.cr-ref.con{flex:1.2903 1 0; min-height:auto; background:#070a10}
   .cr-side>.cr-ref.lim{flex:1.5921 1 0; min-height:auto}
-  /* 세로로 쌓였을 때 덮임컷이 남는 높이를 먹으라고 준 cover 를 되돌린다 — 가로로 눕히면
-     'flex 값 = 종횡비' 만으로 두 컷 높이가 맞으므로 자를 이유가 없다 */
+  /* 세로로 쌓였을 때 남는 높이를 먹으라고 준 contain·cover 를 되돌린다 — 가로로 눕히면
+     'flex 값 = 종횡비' 만으로 두 컷 높이가 맞으므로 자르거나 여백을 둘 이유가 없다 */
+  .cr-side>.cr-ref.con video{height:auto; object-fit:fill}
   .cr-side>.cr-ref.lim img{height:auto; object-fit:fill}
   /* 참조컷이 반 폭으로 줄면 알약이 두 줄로 감싸며 작은 컷을 덮는다(700px 에서 확인).
      이름표는 컷 크기에 맞춰 같이 줄어야 한다 — 이름은 남기고 크기만 내린다. */
@@ -1009,8 +1028,11 @@ body.pop-hold #scene .chips{opacity:0}
        못 나가 멈추는 바람에 화면 한쪽에 시야 밖 영역이 들어오고, 그쪽만 텅 비어 "렌더가 깨졌나"로 읽힌다.
        원본은 MMO/WebClient/screenshots/aoi-flood-5000.png (1296×814) — 참조컷은 2배 해상도만 남겨 줄였다. -->
   <section class="panel cl-pane" id="p-crender" role="tabpanel" hidden>
-    <div class="cl-dash spec" id="d-render"></div>
+    <!-- 규격 칸을 히어로 위에 넣어 두 줄 한 칸으로 묶는다 — 규격의 오른쪽 끝이 히어로 판의
+         오른쪽 끝과 같은 세로선에 떨어지고, 참조컷 칸은 그만큼 위로 올라와 세로가 길어진다.
+         그래서 이 판은 '왼쪽 = 규격 + 큰 화면 / 오른쪽 = 참조컷 둘' 두 칸짜리 격자다. -->
     <div class="cr-hero">
+      <div class="cl-dash spec" id="d-render"></div>
       <div class="cr-screen web big">
         <div class="cr-hd"><b>웹 클라이언트</b><span>픽셀로 그린다</span><span>더미 250명</span></div>
         <video id="vd-web" muted loop playsinline preload="metadata" width="1296" height="814"
