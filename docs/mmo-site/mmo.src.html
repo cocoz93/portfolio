@@ -728,25 +728,27 @@ body.pop-hold #scene .chips{opacity:0}
    판·칸이 열넷이 되어 시선이 흩어졌다. 그래서 웹 화면 하나를 크게 두고 나머지 둘을 종속시킨다 —
    오른쪽 둘은 판이 아니라 '이름표만 얹은 참조컷' 이라 머리줄·캡션줄이 없다. 초점이 하나로 모인다.
 
-   ── 히어로 폭 66% 는 계산값이다 ──
+   ── 히어로 폭 66.13% 는 계산값이다 ──
    눈대중이 아니라 두 칸의 아래 선이 맞는 지점이다. 칸 폭 C, 히어로 비율 f, 칸 사이 틈 14:
-     히어로 = C·f              오른쪽 = C·(1−f) − 14      (flex-basis 의 % 는 틈을 뺀 값이 아니라 C 기준)
-     왼쪽 높이  = C·f/1.5921 + 87                (87 = 머리 30 + 캡션 28 + 안쪽 여백 20 + 테두리 2 · 실측)
-     오른쪽 높이 = 오른쪽·(1/1.2903 + 1/1.5921) + 16      (콘솔 + 덮임컷 + 틈 12 + 테두리 4)
-   1.5921=1296/814(웹·덮임컷) · 1.2903=640/496(콘솔). C=1472 로 풀면 f≈0.660 이다.
-   틈 14 를 빼먹고 풀면 66.6% 가 나오는데, 그러면 오른쪽 칸이 16px 짧다(실제로 그렇게 났다).
-   그 앞서 68% 로 뒀을 때는 42px 짧았다 — align-items:stretch 는 칸만 늘리고,
-   종횡비로 높이가 정해진 그림은 안 늘어나므로 그 차이가 그대로 빈 자리로 남는다.
-   머리·캡션 줄을 고치면 87 이 달라지므로 이 식으로 f 를 다시 풀 것.
+     히어로 폭 = C·f          오른쪽 폭 = C·(1−f) − 14   (flex-basis 의 % 는 틈을 뺀 값이 아니라 C 기준)
+     왼쪽 높이  = (히어로폭 − 2)/1.5921 + 78              (78 = 머리 36 + 캡션 22 + 안쪽 여백 20 · 실측)
+     오른쪽 높이 = (오른쪽폭 − 2)·(1/1.2903 + 1/1.5921) + 16   (콘솔 + 덮임컷 + 틈 12 + 테두리 4)
+   1.5921=1296/814(웹·덮임컷) · 1.2903=640/496(콘솔). −2 는 판 좌우 테두리다.
+   C=1472 로 풀면 f≈0.663 이다. 틀리게 풀었던 값과 그때 벌어진 차이를 남겨 둔다:
+     68%(오른쪽이 42px 짧음) → 66.6%(틈 14 를 빼먹어 16px) → 66%(머리줄을 키우기 전 값이라 4px)
+   align-items:stretch 는 칸만 늘리고 종횡비로 높이가 정해진 그림은 안 늘어나므로,
+   그 차이가 그대로 빈 자리로 남는다. 머리·캡션 줄을 고치면 78 이 달라지니 이 식으로 다시 풀 것.
    ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 이 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
 .cr-hero{display:flex; gap:14px; align-items:stretch}
-.cr-hero .big{flex:0 0 66%}
+.cr-hero .big{flex:0 0 66.13%}
 .cr-side{flex:1 1 0; display:flex; flex-direction:column; gap:12px}
 .cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px;
   padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
 .cr-hd{display:flex; align-items:baseline; gap:9px; margin:0 12px 8px; flex-wrap:wrap}
-.cr-hd b{font-size:.95rem; font-weight:800}
-.cr-hd span{font-family:var(--mono); font-size:.63rem; color:var(--dim)}
+/* 화면 이름은 이 판이 무엇인지 말하는 유일한 글자다 — 곁의 메타(픽셀로 그린다 · 더미 250명)와
+   크기 차이를 벌려서 이름이 먼저 읽히게 한다(.95→1.16rem) */
+.cr-hd b{font-size:1.16rem; font-weight:800; letter-spacing:-.01em}
+.cr-hd span{font-family:var(--mono); font-size:.66rem; color:var(--dim)}
 /* 영상은 카드 좌우 끝까지 채운다 — 화면을 담은 판이라 테두리에 붙는 쪽이 '기계 화면' 으로 읽힌다.
    눌러서 멈출 수 있으므로 손가락 커서를 준다(컨트롤 바는 화면을 어지럽혀서 안 쓴다). */
 .cr-screen video{display:block; width:100%; height:auto; background:#070a10; cursor:pointer}
@@ -762,16 +764,17 @@ body.pop-hold #scene .chips{opacity:0}
 /* 알약 이름표(콘솔) — 맨 위 두 줄이 상태줄(Zone · Player · Pos · Speed)이다. 실서버에 붙어 있다는
    증거라 가리면 안 된다. 그 아래로 내리고(10.5% = 640×496 에서 상태줄이 차지하는 약 8% + 여유),
    폭도 글자만큼만 쓴다. 통짜 덮개는 격자를 지운다. */
-.cr-ref .pill{position:absolute; left:9px; top:10.5%; display:inline-flex; align-items:baseline; gap:7px;
-  padding:5px 11px; border-radius:8px; font-size:.78rem; font-weight:800; color:#fff;
-  background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
-.cr-ref .pill span{font-size:.66rem; font-weight:600; color:#a9b8cf}
+.cr-ref .pill{position:absolute; left:9px; top:10.5%; display:inline-flex; align-items:baseline; gap:8px;
+  padding:6px 12px; border-radius:8px; font-size:.96rem; font-weight:800; color:#fff;
+  letter-spacing:-.01em; background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
+.cr-ref .pill span{font-size:.7rem; font-weight:600; color:#a9b8cf}
 /* 덮임 컷은 왼쪽 위에 '시야 1,118명' 이 떠 있다 — 이 컷의 핵심 숫자다. 그래서 위는 비워 두고
    이름표와 수치를 아래 한 줄에 합쳤다(덮개 하나). */
 .cr-ref>i{position:absolute; left:0; right:0; bottom:0; box-sizing:border-box; display:block;
   padding:26px 12px 9px; font-style:normal; font-size:.68rem; font-weight:600; color:#cfe0f5;
   background:linear-gradient(to top, rgba(8,11,19,.94) 0%, rgba(8,11,19,.72) 52%, rgba(8,11,19,0) 100%)}
-.cr-ref>i>b{display:block; margin-bottom:3px; font-size:.82rem; font-weight:800; color:#fff}
+.cr-ref>i>b{display:block; margin-bottom:4px; font-size:1rem; font-weight:800; color:#fff;
+  letter-spacing:-.01em}
 .cr-ref>i>b .hot{color:var(--game); font-weight:800}
 /* 규격·녹화 조건은 여기 한 줄로 모은다. 글을 판 사이에 흘리면 그림 셋의 리듬이 끊긴다 */
 .cr-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:11px 2px 0;
@@ -855,6 +858,10 @@ body.pop-hold #scene .chips{opacity:0}
 /* 레일 240px + 카드가 한 줄에 서기를 포기하는 폭. 여기서는 셋을 세로로 쌓고 레일을 눕힌다
    (카드가 레일 아래로 가므로 꼭지는 가리킬 곳이 없어져 끈다). */
 @media (max-width:760px){
+  /* 규격 여섯 칸은 창 760px 까지 한 줄로 버틴다(실측 — 마지막 칸까지 안 넘친다).
+     그 아래는 칸이 100px 밑으로 내려가 '20 칸 · 36개' 가 줄바꿈되므로 두 줄로 접는다.
+     2-2·2-3 의 네 칸 계기판(.cl-dash)은 건드리지 않는다 — 저쪽은 값이 넷뿐이다. */
+  .cl-dash.spec{ grid-template-columns:repeat(3,1fr) }
   .bn-stage{ grid-template-columns:1fr; grid-template-areas:"map" "rail" "card"; row-gap:12px }
   .bn-stage .bnnav{ flex-direction:row; flex-wrap:wrap; justify-content:flex-start; align-items:center; gap:6px }
   .bn-stage .bnnav .t{ margin:0 4px 0 0 }
