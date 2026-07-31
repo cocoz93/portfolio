@@ -103,8 +103,8 @@ function prism(g,u,v,w,d,z0,h,c,rim){ const t=z0+h;
    칩 레이어 2장은 일부러 id를 안 준다 = 등장 웨이브 대상에서 제외(구조가 먼저 서고 데이터가 흐름).
    대신 class="chips" 를 준다 — 웨이브가 도는 동안 이 두 장을 통째로 감추는 데 쓴다(CSS 의 .pop-hold).
    gChipBack=건물 뒤(레일 위를 달리다 건물에 가림) / gChip=건물 앞(적재·묶음 등 '얹히는' 것) */
-const gZone=el("g"), gShad=el("g"), gLane=el("g"), gChipBack=el("g"), gBuild=el("g"), gChip=el("g"), gLbl=el("g"), gHit=el("g");
-[gZone,gShad,gLane,gChipBack,gBuild,gChip,gLbl,gHit].forEach(g=>svg.appendChild(g));
+const gZone=el("g"), gShad=el("g"), gLane=el("g"), gChipBack=el("g"), gBuild=el("g"), gChip=el("g"), gLbl=el("g");
+[gZone,gShad,gLane,gChipBack,gBuild,gChip,gLbl].forEach(g=>svg.appendChild(g));
 gZone.id="lyr-plat"; gShad.id="lyr-shad"; gLane.id="lyr-lane"; gBuild.id="lyr-build"; gLbl.id="lyr-lbl";
 gChipBack.setAttribute("class","chips"); gChip.setAttribute("class","chips");
 /* 정적 레이어(구역·그림자·레일·몸통·라벨)를 어느 그룹에 그릴지 — 병목 지도가 같은 코드를 다른 SVG 로 재사용한다 */
@@ -698,15 +698,10 @@ if(card){ card.addEventListener("click",function(e){
     if(go){ openCard(go.getAttribute("data-go")); return; }   /* 개요의 노드 줄 = 상세로 가는 입구 */
     if(e.target.closest("[data-close]")) backCard(); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape") backCard(); }); }
-/* 히트박스(투명, 최상위) */
-NODES.forEach(function(n){ if(!n.card) return; const L=LAYOUT[n.name], h=n.hit;
-  const pts=[[L.u+h[0],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]+h[3]],[L.u+h[0],L.v+h[1]+h[3]]].map(p=>P(p[0],p[1],h[4])).join(" ");
-  const g=el("g",{class:"hit",tabindex:"0",role:"button","aria-label":ND[n.card].nm,"data-z":zoneOf(n.name)});
-  g.appendChild(el("polygon",{points:pts,fill:"transparent"}));
-  g.appendChild(el("polygon",{class:"halo",points:pts,fill:"none",stroke:"#cfe0f2","stroke-width":1.6,"stroke-dasharray":"4 4"}));
-  g.addEventListener("click",function(){ openCard(n.card); });
-  g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); openCard(n.card); } });
-  gHit.appendChild(g); });
+/* 도형 위 투명 히트박스(gHit)는 걷어냈다. 노드 상세로 가는 입구는 구역 개요의 노드 줄 하나뿐이다 —
+   들어오는 길이 하나면 '구역을 고르고 그 안에서 노드를 고른다' 는 순서가 그림 자체로 읽힌다.
+   NODES[].hit 는 남는다: 클릭 판정이 아니라 노드의 상자 크기라서, 중심점(center)·라벨 위치·
+   BODY 축소가 전부 이 값을 쓴다. */
 
 /* ═══════════════ Stage 2 — 칩 흐름 (경로는 전부 RAILS에서 뽑아 씀) ═══════════════
    수신 : 클라 → Accept → IOCP 워커 → SwapQ 공유 큐에 적재
@@ -1547,7 +1542,8 @@ window.__flowReset=function(){
      방향은 CSS 마스크가 갖고 있으므로(bnGrow) 여기서 잡을 좌표가 없다.
      ※ 한때 원형이었고, 그 중심을 병목 1번지(게임 루프)에 뒀다가 클라이언트로 옮긴 적이 있다.
        지금은 방향이 대각선 하나로 고정돼 그 선택 자체가 사라졌다. */
-  const VX=329, VY=190, VW=835, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로 */
+  const VX=359, VY=190, VW=805, VH=500;          /* 이 SVG 의 viewBox = 그림이 차지하는 칸 그대로.
+                                                    panel-bneck.html 의 viewBox 세 개와 반드시 같은 값 */
 
   const gPins=el("g",{class:"pins"}); bp.appendChild(gPins);
   PINS.forEach(function(p,i){
@@ -1724,15 +1720,10 @@ window.__flowReset=function(){
 (function(){
   const bar=document.querySelector(".zonebar"); if(!bar||!svg) return;
   const btns=[].slice.call(bar.querySelectorAll(".zb"));
-  const hits=[].slice.call(gHit.children);
   function apply(z){
     if(z) svg.setAttribute("data-zone",z); else svg.removeAttribute("data-zone");
     btns.forEach(function(b){ const on=(b.getAttribute("data-z")||"")===z;
       b.classList.toggle("act",on); b.setAttribute("aria-pressed",on?"true":"false"); });
-    /* 죽은 노드는 마우스뿐 아니라 키보드에서도 빠져야 한다 — tab 이동은 pointer-events 로 못 막는다 */
-    hits.forEach(function(h){ const live=!z||(" "+h.getAttribute("data-z")+" ").indexOf(" "+z+" ")>=0;
-      h.setAttribute("tabindex",live?"0":"-1");
-      if(live) h.removeAttribute("aria-hidden"); else h.setAttribute("aria-hidden","true"); });
     closeCard();   /* 열려 있던 상세 카드가 죽은 노드의 것일 수 있다 — 강조를 바꿀 때는 접는다 */
     /* 구역을 골랐으면 그 개요를 같은 자리에 띄운다. '전체'(z="")는 강조 해제라 아무것도 안 띄운다 —
        네 버튼 중 하나만 다른 성격의 글을 갖는 것을 피한다.
@@ -1754,9 +1745,9 @@ window.__flowReset=function(){
      순회도 반드시 apply() 를 그대로 탄다: 버튼의 .act 가 같이 옮겨 다녀야 '저 버튼이 이 화면을 만든다' 로
      읽힌다. 씬만 바꾸면 화면이 저절로 깜빡이는 것으로 보이고, 그러면 어포던스는 하나도 전달되지 않는다.
 
-     끊는 조건을 넉넉히 둔 이유가 따로 있다: 구역이 켜져 있는 동안은 죽은 구역의 노드가 pointer-events
-     로 막혀 있다(#scene[data-zone] .hit). 순회 중에 누가 노드를 누르려다 안 눌리면 그 순간 '고장난
-     페이지' 가 된다. 그래서 사용자 입력 한 번이면 끝낸다 — 이미 돌고 있었으면 전체로 되돌리고,
+     끊는 조건을 넉넉히 둔 이유가 따로 있다: 순회가 도는 동안은 구역 버튼이 저절로 옮겨 다니므로,
+     사용자가 누르려던 버튼이 손끝에서 바뀌어 버린다. 그래서 사용자 입력 한 번이면 끝낸다 —
+     이미 돌고 있었으면 전체로 되돌리고,
      아직 예약뿐이었으면 예약만 버린다(화면은 손댄 적이 없으니 되돌릴 것도 없다).
      받는 곳은 capture 라 클릭보다 먼저다. 구역 버튼을 눌러 끝난 경우에도 순서가 맞는다 —
      먼저 순회가 풀리고, 뒤이어 그 버튼의 click 이 얹힌다. */

@@ -11,37 +11,51 @@
        못 나가 멈추는 바람에 화면 한쪽에 시야 밖 영역이 들어오고, 그쪽만 텅 비어 "렌더가 깨졌나"로 읽힌다.
        원본은 MMO/WebClient/screenshots/aoi-flood-5000.png (1296×814) — 참조컷은 2배 해상도만 남겨 줄였다. -->
   <section class="panel cl-pane" id="p-crender" role="tabpanel" hidden>
-    <!-- 규격 칸을 히어로 위에 넣어 두 줄 한 칸으로 묶는다 — 규격의 오른쪽 끝이 히어로 판의
-         오른쪽 끝과 같은 세로선에 떨어지고, 참조컷 칸은 그만큼 위로 올라와 세로가 길어진다.
-         그래서 이 판은 '왼쪽 = 규격 + 큰 화면 / 오른쪽 = 참조컷 둘' 두 칸짜리 격자다. -->
-    <div class="cr-hero">
-      <div class="cl-dash spec" id="d-render"></div>
-      <div class="cr-screen web big">
-        <div class="cr-hd"><b>웹 클라이언트</b><span>픽셀로 그린다</span><span>더미 250명</span></div>
-        <video id="vd-web" muted loop playsinline preload="metadata" width="1296" height="814"
-          poster="media/client-web.jpg" title="눌러서 멈추기 / 다시 재생"
-          aria-label="웹 클라이언트 실행 화면 녹화 — 더미 250명이 붙은 서버에서 픽셀 캐릭터들이 섹터 격자 위를 움직이고 말풍선이 뜨며, 오른쪽 위 서버 내부 관측 패널의 값이 실시간으로 바뀐다">
-          <source src="media/client-web.mp4" type="video/mp4"></video>
-        <div class="cr-cap">섹터 격자와 내 섹터가 화면에 있고, 오른쪽 위는 서버가 보고 있는 값(좌표 · 섹터 · 시야 인원 · 초당 패킷 · 수신량), 오른쪽 아래는 주변 사람 레이더다.</div>
-      </div>
-      <div class="cr-side">
-        <div class="cr-ref con">
-          <video id="vd-con" muted loop playsinline preload="metadata" width="640" height="496"
-            poster="media/client-console.jpg" title="눌러서 멈추기 / 다시 재생"
-            aria-label="콘솔 클라이언트 실행 화면 녹화 — 더미 1,000명이 붙은 서버에서 문자 격자 위 알파벳 예순 몇 개가 움직이고 아래로 채팅이 쏟아진다">
-            <source src="media/client-console.mp4" type="video/mp4"></video>
-          <b class="pill">콘솔 클라이언트<span>문자로 그린다 · 더미 1,000명</span></b>
+    <!-- 규격 칸은 두 칸에 걸쳐 맨 윗줄을 통째로 쓴다. 한때는 왼쪽 칸만 차지했는데(규격의 오른쪽 끝이
+         히어로 판의 오른쪽 끝과 같은 세로선에 떨어지게), 그러면 참조컷 칸이 규격 높이만큼 위에서
+         시작해 ① 과 ② 의 머리줄이 서로 다른 높이에 놓인다. 셋을 같은 문법으로 맞춘 뒤로는
+         그 어긋남이 눈에 걸린다 — 규격을 윗줄로 빼면 ①②③ 의 머리줄과 그림 윗변이 한 선에 선다. -->
+    <!-- 액자 — 셋을 한 판에 넣고 머리줄을 얹는다. 액자가 없을 때는 규격 칸과 컷 셋이 배경 위에
+         따로 놓여 '같은 서버의 세 화면' 이라는 관계가 화면에 안 나와 있었다(글로만 있었다).
+         셋 다 같은 문법으로 쓴다: [번호 + 이름 + 메타] 머리줄 → 그림 → (필요하면) 캡션.
+         한때 ②③ 은 그림 위에 이름표를 얹었는데(콘솔은 알약, 덮임컷은 아래 띠), 액자로 묶고 나니
+         ① 만 머리줄이고 둘만 덮개라 통일이 안 된 것으로 읽혔다. 머리줄로 올리면서 덤으로
+         콘솔 상태줄(Zone · Player · Pos)과 덮임컷 오른쪽 아래 레이더가 안 가려지게 됐다. -->
+    <div class="cr-frame">
+      <div class="cr-fhd"><b>같은 서버에 붙은 세 화면</b><span>같은 규격 · 붙인 더미 수만 다르다</span>
+        <em>전부 실제 실행 화면</em></div>
+      <div class="cr-hero">
+        <div class="cl-dash spec" id="d-render"></div>
+        <div class="cr-screen web big">
+          <div class="cr-hd"><b><i class="cr-num">1</i>웹 클라이언트</b><span>픽셀로 그린다</span><span>더미 250명</span></div>
+          <video id="vd-web" muted loop playsinline preload="metadata" width="1296" height="814"
+            poster="media/client-web.jpg" title="눌러서 멈추기 / 다시 재생"
+            aria-label="웹 클라이언트 실행 화면 녹화 — 더미 250명이 붙은 서버에서 픽셀 캐릭터들이 섹터 격자 위를 움직이고 말풍선이 뜨며, 오른쪽 위 서버 내부 관측 패널의 값이 실시간으로 바뀐다">
+            <source src="media/client-web.mp4" type="video/mp4"></video>
+          <div class="cr-cap">섹터 격자와 내 섹터가 화면에 있고, 오른쪽 위는 서버가 보고 있는 값(좌표 · 섹터 · 시야 인원 · 초당 패킷 · 수신량), 오른쪽 아래는 주변 사람 레이더다.</div>
         </div>
-        <div class="cr-ref lim">
-          <img src="media/client-flood-5000.jpg" width="980" height="616" loading="lazy"
-            alt="더미 5,000명이 붙은 서버에 웹 클라로 접속한 화면 — 시야 안 1,118명이 한꺼번에 말풍선을 띄워 흰 판이 화면을 덮었고, 오른쪽 아래 레이더는 점이 꽉 차 노란 사각형이 됐다">
-          <i><b>같은 웹 화면 <span class="hot">더미 5,000명</span></b>시야 1,118명 · 채팅 1,427건/초 · 수신 223.9KB/초 — 서버는 버텼고 화면이 덮였다</i>
+        <div class="cr-side">
+          <div class="cr-ref con">
+            <div class="cr-hd"><b><i class="cr-num">2</i>콘솔 클라이언트</b><span>문자로 그린다</span><span>더미 1,000명</span></div>
+            <video id="vd-con" muted loop playsinline preload="metadata" width="640" height="496"
+              poster="media/client-console.jpg" title="눌러서 멈추기 / 다시 재생"
+              aria-label="콘솔 클라이언트 실행 화면 녹화 — 더미 1,000명이 붙은 서버에서 문자 격자 위 알파벳 예순 몇 개가 움직이고 아래로 채팅이 쏟아진다">
+              <source src="media/client-console.mp4" type="video/mp4"></video>
+            <div class="cr-cap">알파벳 한 글자가 한 사람이고, 맨 위 두 줄은 내 좌표 · 섹터 · 속도, 아래는 주변에서 오는 채팅이다.</div>
+          </div>
+          <div class="cr-ref lim">
+            <div class="cr-hd"><b><i class="cr-num">3</i>같은 웹 화면 <em class="hot">더미 5,000명</em></b></div>
+            <img src="media/client-flood-5000.jpg" width="980" height="616" loading="lazy"
+              alt="더미 5,000명이 붙은 서버에 웹 클라로 접속한 화면 — 시야 안 1,118명이 한꺼번에 말풍선을 띄워 흰 판이 화면을 덮었고, 오른쪽 아래 레이더는 점이 꽉 차 노란 사각형이 됐다">
+            <div class="cr-cap">시야 1,118명 · 채팅 1,427건/초 · 수신 223.9KB/초 — 서버는 버텼고 화면이 덮였다</div>
+          </div>
         </div>
       </div>
     </div>
-    <!-- '실제 녹화' 라고 못 박는 자리 — 앞의 재현 시절 문구가 그대로 남으면 정반대 뜻이 된다 -->
+    <!-- '실제 녹화' 라고 못 박는 일은 액자 머리줄의 배지가 맡는다 — 여기는 셋이 각각 무엇인지와
+         녹화 조건이다. ③ 은 녹화가 아니라 캡처라서 셋을 '녹화' 로 묶을 수 없다. -->
     <div class="cr-foot">
-      <span><b>앞 둘은 실제 실행 화면 녹화</b>(같은 서버에 부하 더미를 붙이고 각각 접속한 20초 · 창 테두리만 잘라냈고 배속·편집 없음)</span>
+      <span><b>앞 둘은 20초 녹화 · 오른쪽 아래는 캡처</b>(같은 서버에 부하 더미를 붙이고 각각 접속했다 · 창 테두리만 잘라냈고 배속·편집 없음)</span>
       <a class="cr-more" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
         target="_blank" rel="noopener">자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em></a>
     </div>

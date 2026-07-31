@@ -15,7 +15,7 @@
     <div class="row recv"><i></i>수신 recv<span class="cap">client → 게임</span></div>
     <div class="row send"><i></i>응답 send<span class="cap">게임 → client</span></div>
     <div class="row store"><i></i>데이터베이스<span class="cap">게임 → MySQL</span></div>
-    <div class="lhint">▸ 구역 = 개요 · 노드 = 상세</div>
+    <div class="lhint">▸ 왼쪽 위 구역 버튼 → 개요 → 노드 상세</div>
   </div>
   <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
        ※ 클라 판을 72 로 좁히면서 내용 왼쪽이 48칸 들어왔지만, 여기는 안 당긴다.
@@ -26,8 +26,15 @@
        ※ 병목 탭 #bnscene 은 카드가 없으므로 옛 946 프레이밍 유지.
        ※ 요각 YAW=−12 를 준 뒤 시작점을 259,172 → 311,190 으로 옮겼다. 그림이 통째로 오른쪽·아래로
          밀렸을 뿐(폭 767→776, 높이 442→423) 크기는 그대로라, 창을 같은 만큼 따라 옮기면
-         여백 배분이 그대로 유지된다. 각도를 되돌리려면 이 값도 함께 되돌릴 것. -->
-  <svg id="scene" viewBox="311 190 1042 500" role="img"
+         여백 배분이 그대로 유지된다. 각도를 되돌리려면 이 값도 함께 되돌릴 것.
+       ※ 311,1042 → 341,1082 (2026-07-31). 위에서 비워 뒀다는 오른쪽 열이 실제로는 모자랐다 —
+         내용 오른쪽 끝이 1106칸이라 남는 칸이 247뿐이고, .card 는 최소 318px+여백 18px 을 요구한다.
+         1230~1760px 창에서 카드가 그림 위로 44~1px 올라타 있었다(실측).
+         왼쪽 여백(83칸) 안에서만 밀면 12칸까지 깎여야 해서, 30칸 밀고 40칸 넓혔다.
+         대가는 씬이 3.7% 작아지는 것 하나뿐이고(그만큼 세로도 여유가 는다), 얻는 것은
+         카드와의 간격 24~133px 이다. 병목 전환은 #scene 의 viewBox 를 실행 중에 읽으므로
+         (scene.js 의 svb) 따라 고칠 값이 없다. -->
+  <svg id="scene" viewBox="341 190 1082 500" role="img"
        aria-label="IOCP 기반 MMO 게임 서버의 아이소메트릭 아키텍처 다이어그램"></svg>
   <div class="card" id="card"><button class="x" data-close aria-label="닫기">✕</button><div id="cardbd"></div></div>
 </div>

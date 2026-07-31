@@ -4,7 +4,11 @@
      패널을 그룹 div 로 감싸면 p-build.hidden 이 false 인 채 부모만 숨어서
      칩 애니(pBuild.hidden 검사)가 안 보이는 화면에서 계속 돈다. */
   const tabs=[].slice.call(document.querySelectorAll(".tab"));
-  const subs=[].slice.call(document.querySelectorAll(".subtab"));
+  /* 반드시 [data-sub] 로 좁힌다 — 클라 하위 줄도 같은 .subtab 클래스라, 안 좁히면 2-1~2-3 을
+     누를 때 아래 subs 클릭 핸들러까지 함께 돌아 sub = getAttribute("data-sub") = null 이 된다.
+     그 순간 화면은 클라 탭이라 멀쩡해 보이지만, MMO 탭으로 돌아오면 1-1·1-2 어느 쪽도 아니어서
+     두 패널이 다 숨은 빈 화면이 뜬다. */
+  const subs=[].slice.call(document.querySelectorAll(".subtab[data-sub]"));
   const subbar=document.getElementById("subtabs");
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");

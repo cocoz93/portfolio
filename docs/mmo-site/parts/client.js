@@ -335,11 +335,8 @@ wireWide("sc-safe","ch-safe","nt-safe",SAFE,["step","echo","gate","atk"],"에코
 drawLoad(); paintDash("d-load",LOAD.dash);
 wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");
 
-document.querySelectorAll(".subtab").forEach(function(b){
-  b.addEventListener("click",function(){
-    document.querySelectorAll(".subtab").forEach(function(x){x.classList.toggle("act",x===b)});
-    var id=b.getAttribute("data-p");
-    document.querySelectorAll(".pane").forEach(function(p){p.classList.toggle("act",p.id==="p-"+id)});
-  });
-});
+/* 하위 탭 전환은 tabs.js 하나만 맡는다 — 여기에 있던 옛 핸들러(data-p/.pane)는 지웠다.
+   그 코드는 이미 죽어 있었고(data-p·.pane 둘 다 페이지에 없다) 살아 있던 한 줄은
+   .subtab 전체의 act 를 갈아치웠다. paint() 보다 뒤에 돌아 클래스의 최종 결정권을 쥔 채
+   aria-selected 는 안 건드리는 자리라, 하위 탭을 늘리면 조용히 어긋난다. */
 })();

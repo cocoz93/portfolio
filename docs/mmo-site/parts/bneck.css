@@ -17,11 +17,16 @@
    카드 왼쪽 모서리에 닿는다(.bnnav button.act::after 의 border-left 18px 과 같은 값).
    그래서 틈은 % 가 아니라 px 로 고정한다 — 창 폭이 변해도 꼭지 길이와 어긋나지 않게. */
 .bn-shift{ max-width:1860px }
-.bn-stage{ display:grid; grid-template-columns:49fr 12fr 36fr; column-gap:18px }
-.bn-tilt{ width:100% }                /* 폭은 이제 그리드 칸이 정한다. 1860 → 지도 ≈ 921px · 세로 ≈ 552px */
+/* 49fr 12fr 36fr → 52fr 9fr 36fr (2026-07-31). 지도를 키우되 카드에서는 한 칸도 안 가져온다 —
+   폭은 레일에서 뺀다. 레일 글자가 요구하는 최소는 153px 인데 226px 을 쓰고 있었다(실측).
+   9fr = 169px 라 16px 여유가 남는다. 이 값은 세 칸 배치 전용이고, 1600px 이하의 접힌 배치는
+   bneck-tail.css 의 미디어쿼리가 뒤에서 덮는다 — 그쪽 240px 고정폭은 건드리지 않는다. */
+.bn-stage{ display:grid; grid-template-columns:52fr 9fr 36fr; column-gap:18px }
+.bn-tilt{ width:100% }                /* 폭은 이제 그리드 칸이 정한다. 1860 → 지도 ≈ 978px · 세로 ≈ 607px */
 .bncard{ position:static; width:auto; min-width:0; max-width:none }
-/* 캡션은 지도 칸과 같은 폭 — 그리드가 아니라 형제라서 같은 셈을 직접 한다(틈 2칸 36px 을 뺀 뒤 49/97) */
-.bn-cap{ max-width:calc((100% - 36px) * 49 / 97) }
+/* 캡션은 지도 칸과 같은 폭 — 그리드가 아니라 형제라서 같은 셈을 직접 한다(틈 2칸 36px 을 뺀 뒤 52/97).
+   위 grid-template-columns 를 고치면 이 분자도 같이 고쳐야 한다(합 97 은 그대로다). */
+.bn-cap{ max-width:calc((100% - 36px) * 52 / 97) }
 
 /* ── 계기판 — 카드 안, 실험 목록 바로 아래 ──
    네 칸은 고른 실험의 끄고→켜고 값이라(paintDash) 카드 밖에 두면 무엇의 값인지 짚이지 않는다.
