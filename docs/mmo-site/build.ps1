@@ -15,15 +15,25 @@ $html  = [IO.File]::ReadAllText($src, [Text.Encoding]::UTF8)
 # -replace 를 안 쓰는 까닭: 치환문자열의 $1 ${x} $& 를 해석하므로 조각에 JS 템플릿 리터럴이
 # 한 줄만 들어와도 조용히 깨진다. MatchEvaluator 는 그런 해석을 하지 않는다.
 $used = @{}
+$want = ([regex]::Matches($html, '(?m)^[ \t]*<!--#include')).Count
+$got  = 0
 $html = [regex]::Replace($html, '(?m)^[ \t]*<!--#include[ \t]+(\S+)[ \t]*-->\r?\n', {
   param($m)
   $name = $m.Groups[1].Value
   $p = Join-Path $parts $name
   if (-not (Test-Path $p)) { throw "part not found: $p" }
+  # 마커를 복붙해 같은 조각을 두 번 부르면 IIFE 가 두 번 돌아 타이머·리스너가 이중 등록된다
+  if ($used.ContainsKey($name)) { throw "part included twice: $name" }
   $used[$name] = $true
-  [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)
+  $script:got++
+  $c = [IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)
+  # 조각이 통째로 비면 그 화면만 조용히 사라진다 - 빌드는 성공한 채로
+  if ($c.Trim().Length -eq 0) { throw "empty part: $name" }
+  $c
 })
-if ($html -match '<!--#include') { throw 'unreplaced include marker' }
+# 미치환 검사는 '셸의 마커 수' 로만 한다. 합친 결과를 훑으면 조각 안에 든 문자열까지 걸려
+# (이 페이지가 자기 빌드 방식을 코드로 보여주면 실제로 걸린다) 엉뚱한 진단이 나온다.
+if ($got -ne $want) { throw "shell has $want include markers but only $got matched" }
 # 조각은 고쳤는데 셸에 마커를 안 넣어 반영이 안 되는 사고를 여기서 잡는다
 $orphan = @(Get-ChildItem $parts -File | Where-Object { $_.Extension -in '.css','.js','.html' } |
             Select-Object -ExpandProperty Name | Where-Object { -not $used.ContainsKey($_) })

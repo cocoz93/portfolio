@@ -55,7 +55,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .seg button{font-family:var(--mono); font-size:.74rem; color:var(--mut); background:none; border:none; padding:6px 10px; cursor:pointer}
 .seg button.on{background:#173049; color:#cfe6ff}
 /* ── 구역 강조: 고른 구역만 남기고 나머지를 죽인다 ──
-   죽이는 값은 본편 parts/scene.js 과 같다(같은 그림을 같은 세기로 봐야 판단이 옮겨간다).
+   죽이는 값은 본편 parts/common.css 의 --zdim 과 같다(같은 그림을 같은 세기로 봐야 판단이 옮겨간다).
    다만 뷰어와 달리 여기서는 클릭을 막지 않는다 — 죽은 것도 계속 집어서 편집할 수 있어야 한다.
    본편은 구역이 넷뿐이라 색 이름으로 걸렀지만, 에디터는 구역을 더 만들 수 있어(색이 겹칠 수 있다)
    구역 id 로 가른다. id 는 정해진 목록이 아니라서 CSS 선택자로는 못 거르고 JS 가 class 를 붙인다. */

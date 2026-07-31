@@ -4,3 +4,6 @@
 # 다음 체크아웃에서 통째로 CRLF 가 되어 엉뚱한 대량 diff 가 난다.
 mmo.src.html text eol=crlf
 parts/**     text eol=crlf
+# 산출물도 같이 걸어야 한다. 소스만 CRLF 로 못박고 index.html 을 빼 두면, autocrlf=false 로
+# 클론한 사람이 아무것도 안 고치고 재빌드만 해도 3,713줄이 통째로 diff 로 뜬다(실측).
+index.html   text eol=crlf

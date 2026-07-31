@@ -3142,7 +3142,8 @@ window.__flowReset=function(){
      ① 계기판: 고른 실험의 before → after
      ② 카드 안 상세: 결과 · 한 일 · 부연
    위 코드의 IIFE 안으로 들어가지 않는다. 연결은 DOM 델리게이션 하나뿐이고,
-   실험 배열(window.__EXPS)과 자리 정의(window.__PINS)는 위 코드가 그대로 내준 것이다. */
+   실험 배열(window.__EXPS)은 위 코드가 그대로 내준 것이다. 핀과 레일 버튼은 전역이 아니라
+   위 코드가 만들어 둔 마크업(#bnpins .pin[data-loc], #bnc-nav button[data-loc])으로 잡는다. */
 (function(){
 "use strict";
 var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;

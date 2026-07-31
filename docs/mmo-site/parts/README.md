@@ -15,8 +15,11 @@
 (`paintZones` `PJ` `wireify` 등)를 그대로 쓰고, `#p-bneck` 안을 채우고 지우는 것도 `scene.js` 다.
 실험 수치(`EXPS`)와 핀 정의(`PINS`)도 `scene.js` 에 있어서, 병목 수치 한 줄을 고치려 해도 씬 파일을 연다.
 
-`bneck-tail.css` 는 병목 규칙인데 `client.css` **뒤**에 온다. 순서가 곧 우선순위라서 그렇다
-(원문 주석: "되돌리는 쪽도 그 뒤여야 이긴다"). 위로 올리면 화면이 깨진다. 그 안 `.cl-dash.spec` 한 줄만 클라 것이다.
+`bneck-tail.css` 는 병목 규칙인데 `client.css` **뒤**에 온다. 순서가 곧 우선순위라서 그렇다 —
+같은 특이도로 겹치는 짝이 앞뒤 양쪽에 있다: `.bn-stage` grid(bneck.css ↔ bneck-tail.css, 근거는
+common.css 의 "여기 두면 grid 선언보다 먼저 와서 못 이긴다") · `.cl-dash.spec`(client.css 는 6열,
+bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규격 칸이 6열로 남는다.
+그 안 `.cl-dash.spec` 한 줄만 클라 것이다.
 
 ## 병렬 중에는 못 바꾸는 것
 
@@ -24,13 +27,15 @@
    순서 의존이 있어서, 마커 순서를 바꾸면 첫 로드 애니가 조용히 깨진다.
 2. **window 훅** — `__flowStart` `__flowStop` `__flowReset` `__scenePlay` `__zoneTourArm`
    `resetZone` `playBneckIntro` `__EXPS` `__crenderPlay`. 이름·인자를 바꾸려면 단독 작업으로.
-3. **DOM id** — `#p-build` `#p-bneck` `#p-crender` `#p-csafe` `#p-cload` `#p-misc` `#scene`.
-   `tabs.js` 가 전부 하드코딩한다.
+3. **DOM id** — `#p-build` `#p-bneck` `#p-crender` `#p-csafe` `#p-cload` `#p-misc` `#scene`
+   `#subtabs` `#subtabs2`. `tabs.js` 가 전부 하드코딩한다.
 4. **마크업 계약** — `scene.js` 가 만들고 `bneck.js` 가 읽는다:
    `button.exp[data-s]` · `.pin[data-loc]` · `#bnc-nav button[data-loc]` · `#bncard[hidden]`.
-5. **양쪽에 적힌 같은 값** — 한쪽만 고치면 어긋난다:
-   `1.34s`(scene.js ↔ bneck.css ↔ common.css) · `190ms`(common.css ↔ wave.js `SPAN+190+100`) ·
-   `380ms` 구역순회(scene.js ↔ common.css `.22s`) · `300ms` fillCard ↔ `400ms` 재적용(bneck.js).
+5. **두 파일이 함께 지켜야 하는 수치** — 둘로 나뉜다.
+   - *같은 값이라 한쪽만 고치면 어긋나는 것*: `1.34s`(scene.js 초 1560 · 밀리초 1671 ↔ bneck.css 145
+     — scene.js 안에서도 두 벌이다) · `190ms`(common.css `.19s` ↔ wave.js `SPAN+190+100`)
+   - *크기 관계라 같이 조정해야 하는 것*: 구역순회 `TOUR_HOLD 380ms`(scene.js) **>** 페이드 `.22s`(common.css) ·
+     `fillCard 300ms`(scene.js) **<** 재적용 `400ms`(bneck.js)
 6. **클래스 접두어** — 병목 `.bn-*` `.bx-*` / 클라 `.cl-*` `.cr-*`.
    `.exp .rs .nm .card .stage .hit .cap .panel` 은 이미 공유 중이니 새로 만들지 말 것.
 
@@ -43,5 +48,7 @@
 ## 조각을 옮겼을 때 확인법
 
 순수 이동(내용 무변경)이라면 재빌드한 `index.html` 의 sha256 이 이동 전과 **같아야 한다.**
+재빌드는 `-NoSync` 로 — 풀 빌드는 `sync-scene.ps1` 까지 불러 `portfolio.html` 을 건드리는데,
+그쪽은 렌더 결과라 같은 입력에도 값이 흔들린다.
 폰트 서브셋은 결정적이라 이 비교가 성립한다(같은 입력 → 같은 woff2 바이트, 실측 확인).
 해시가 달라졌다면 줄이 새거나 줄바꿈이 바뀐 것이다 — 조각은 BOM 없는 UTF-8 · CRLF 를 지킨다.
