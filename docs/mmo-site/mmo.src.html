@@ -44,18 +44,21 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 #scene .rim, #bnscene .rim, #bnsolid .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
 
 /* legend */
+/* 크기를 한 단 줄였다. 이 판은 같은 열을 상세 글과 나눠 쓰는데, 글이 이 판 위에서 멈춰야 해서
+   여기서 먹는 세로가 곧 글이 쓸 수 있는 높이를 깎는다(.card 의 max-height 가 이 높이를 빼고 있다).
+   읽는 데 필요한 것은 '색 세 개가 무슨 흐름인가' 뿐이라 글자를 키워 둘 이유가 없다. */
 .legend{position:absolute; right:18px; bottom:18px; z-index:4;
-  display:flex; flex-direction:column; gap:11px;
-  background:rgba(16,22,34,.72); border:1px solid var(--line); border-radius:12px;
-  padding:16px 20px; backdrop-filter:blur(3px)}
-.legend .row{display:flex; align-items:center; gap:9px; font-size:16px; color:var(--mut); font-weight:600}
+  display:flex; flex-direction:column; gap:7px;
+  background:rgba(16,22,34,.72); border:1px solid var(--line); border-radius:11px;
+  padding:11px 14px; backdrop-filter:blur(3px)}
+.legend .row{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--mut); font-weight:600}
 /* 표식은 레일이 아니라 '흐르는 칩' 모양 — 색을 내는 게 칩이라서 */
-.legend .row i{width:24px; height:13px; flex:0 0 auto;
+.legend .row i{width:18px; height:10px; flex:0 0 auto;
   clip-path:polygon(50% 0, 100% 50%, 50% 100%, 0 50%)}
-.legend .row .cap{font-family:var(--mono); font-size:13px; color:var(--dim); font-weight:400; margin-left:3px}
+.legend .row .cap{font-family:var(--mono); font-size:11px; color:var(--dim); font-weight:400; margin-left:2px}
 .legend .row.recv i{background:var(--recv)} .legend .row.send i{background:var(--send)} .legend .row.store i{background:var(--store)}
-.legend .hd{font-family:var(--mono); font-size:12px; letter-spacing:.16em; color:var(--dim);
-  text-transform:uppercase; margin-bottom:2px}
+/* 한글이라 mono 를 안 쓴다 — 폰트 폴백으로 '데 이 터  흐 름' 처럼 자간이 벌어진다(.lhint 와 같은 이유) */
+.legend .hd{font-size:11px; font-weight:700; letter-spacing:.1em; color:var(--dim); margin-bottom:1px}
 /* 옛 그림 이름표(.tag "IOCP MMO SERVER / 단일 게임 스레드 병목")는 뺐다 —
    같은 말을 게임 루프 노드가 이미 하고 있었다(옆 라벨 "단일 코어 · 25fps 틱" + 주황 BOTTLENECK).
    그 자리가 비면서 구역 필터를 오른쪽 위로 보낼 수 있게 됐다. */
@@ -387,41 +390,63 @@ body.subdetach .subtabs{margin-left:16px; min-width:0}
 .links a{font-family:var(--mono); font-size:.82rem; color:var(--net); border:1px solid var(--line); border-radius:10px; padding:9px 14px; text-decoration:none; transition:border-color .15s}
 .links a:hover{border-color:var(--net)}
 
-/* node detail card */
-/* 폭은 viewBox 오른쪽에 비워 둔 열(전체의 24.9%)을 따라간다 — 고정 420px 이면 화면이 좁아질 때 씬을 덮는다 */
-.card{position:absolute; right:18px; bottom:18px; width:22%; min-width:318px; max-width:430px;
-  max-height:calc(100% - 40px); overflow-y:auto; z-index:8;
-  background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:15px 16px; color:#dbe4f2;
-  box-shadow:0 30px 60px -28px rgba(0,0,0,.7); display:none}
-.card.on{display:block}
-.card .x{position:absolute; top:11px; right:11px; width:27px; height:27px; border:1px solid #33405a; border-radius:8px;
-  color:#9fb0cc; display:grid; place-items:center; font-size:.85rem; background:#1a2333; cursor:pointer}
-.card .x:hover{border-color:var(--recv)}
-.card .k{font-family:var(--mono); font-size:.62rem; letter-spacing:.11em; color:var(--mut); text-transform:uppercase}
-.card h3{margin:7px 0 0; font-size:1.24rem; font-weight:800}
-.card h3 span{color:var(--mut); font-weight:700; font-size:.9rem; margin-left:5px}
-.card .cl{margin:10px 0 0; font-size:.9rem; color:#c3cfe0; line-height:1.66}
-.card .lb{font-family:var(--mono); font-size:.6rem; letter-spacing:.1em; color:var(--mut); margin:13px 0 4px; text-transform:uppercase}
-.card .it{border-top:1px solid #232e42; padding:6px 1px; font-size:.79rem; font-weight:600; display:flex; gap:8px; align-items:baseline}
-/* 실험 이름과 결론을 구분자(—)로 잇지 않는다 — 이름 자체에 이미 '—' 가 든 실험이 있어 겹친다.
-   굵기·색으로 가르면 어느 쪽이 이름인지 한눈에 보인다. */
-.card .it .en{font-weight:800; color:var(--ink); flex:0 0 auto}
-.card .it .er{color:var(--mut); font-weight:600; font-size:.94em}
-.card .rs{font-family:var(--mono); font-size:.57rem; font-weight:800; padding:1px 6px; border-radius:999px; border:1.4px solid; flex:0 0 auto}
-.card .rs.ok{color:var(--store); border-color:#2e7d54}
-.card .rs.rj{color:#ff9a8d; border-color:#8d4a42}
-/* 병목 탭과 같은 네 가지 판정을 쓴다 — 배지가 두 화면에서 다르면 같은 실험으로 안 읽힌다 */
-.card .rs.dg,.card .rs.fix{color:#e0b45c; border-color:#7a6127}
-.card .rs.na{color:#69788f; border-color:#33415a}
-.card .rs.now{color:#6cc7ff; border-color:#2c5f85}
-.card .rs.sum{color:#a99aff; border-color:#4b3f8d}
-.card .none{font-size:.8rem; color:var(--dim)}
-.legend .lhint{font-family:var(--mono); font-size:12px; color:var(--dim); margin-top:2px}
+/* node detail — 상자가 없다 */
+/* 판을 깔지 않는 이유: 씬 쪽에서 이미 고른 노드만 남기고 나머지를 죽이므로(#scene[data-focus]),
+   그 위에 다시 불투명한 카드를 얹으면 같은 말을 두 번 하면서 그림만 가린다.
+   대신 왼쪽 세로선 하나만 두고 글을 바로 쓴다. 선 색(--ac)은 그 노드의 구역 색을 JS 가 넣는다.
+   자리: 오른쪽 열은 원래 카드 몫으로 비워 둔 곳이다(viewBox 주석 참조). 위아래를 함께 못 박아
+   범례(오른쪽 아래)와 절대 겹치지 않게 하고, 넘치면 이 열 안에서만 스크롤한다. */
+/* bottom 을 못 박지 않고 max-height 로 막는 이유: 세로선이 곧 글의 길이다.
+   위아래를 다 고정하면 짧은 노드(MySQL)에서 선만 한참 더 내려가 허공에 걸린다. */
+.card{position:absolute; right:18px; top:13%; width:23%; min-width:318px; max-width:400px;
+  max-height:calc(87% - 186px); overflow-y:auto; z-index:8;
+  padding-left:16px; border-left:2px solid var(--ac,var(--net));
+  color:#dbe4f2; display:none; flex-direction:column}
+.card.on{display:flex}
+/* 닫기는 글 맨 아래 한 줄로 — 상자가 없으니 오른쪽 위 ✕ 는 허공에 뜬 것으로 보인다 */
+.card .x{order:2; margin:20px 0 0; padding:0; border:none; background:none; text-align:left;
+  color:#4d5a70; font-family:var(--sans); font-size:.74rem; font-weight:700; cursor:pointer}
+.card .x::after{content:" 닫기 · 다른 노드를 바로 눌러도 됩니다"}
+.card .x:hover{color:var(--mut)}
+/* 한글이라 mono 를 쓰지 않는다 — mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.zb 와 같은 이유).
+   uppercase 도 뺐다: 한글에는 걸리는 것이 없어 선언만 남아 있었다. */
+.card .k{font-size:.7rem; font-weight:700; letter-spacing:.08em; color:var(--ac,var(--net))}
+.card h3{margin:7px 0 0; font-size:1.6rem; font-weight:800; letter-spacing:-.012em; line-height:1.16}
+.card h3 span{font-family:var(--mono); font-weight:700; font-size:.9rem; color:var(--ac,var(--net)); margin-left:9px}
+.card .cl{margin:12px 0 0; font-size:.9rem; color:#c8d4e6; line-height:1.72}
+.card .cl b{color:#fff; font-weight:800}
+.card .lb{margin:20px 0 3px; font-size:.68rem; font-weight:700; letter-spacing:.09em; color:var(--mut)}
+.card .it{display:flex; align-items:center; gap:10px; padding:7px 0; font-size:.86rem; font-weight:700;
+  color:#e6edf8; border-bottom:1px solid rgba(255,255,255,.06)}
+.card .it .ic{color:var(--ac,var(--net)); font-size:.64rem; opacity:.85}
+/* 이 자리에서 잰 실험은 1-2 탭이 통째로 맡는다. 여기서 결론까지 늘어놓으면 같은 목록이 두 화면에 산다. */
+.card .fo{margin-top:16px; font-size:.76rem; color:var(--dim)}
+.card .fo b{color:#9fb0cc; font-weight:700}
+.card .none{font-size:.82rem; color:var(--dim)}
+/* 구역 개요의 노드 줄 — 이게 상세로 가는 입구다. 목록처럼 보이되 눌리는 것으로 읽혀야 해서
+   테두리 대신 hover 바탕과 오른쪽 '상세 ▸' 로만 표시한다(카드 안에 상자를 또 만들지 않는다). */
+.card .zn-it{display:block; width:100%; text-align:left; background:none; border:none; cursor:pointer;
+  font-family:var(--sans); padding:9px 8px; margin-left:-8px; border-radius:8px;
+  border-bottom:1px solid rgba(255,255,255,.06)}
+.card .zn-it:hover{background:rgba(255,255,255,.05)}
+.card .zn-it:focus-visible{outline:2px solid var(--ac,var(--net)); outline-offset:-2px}
+.card .zn-it .t{display:flex; align-items:baseline; gap:8px; font-size:.92rem; font-weight:800; color:#e6edf8}
+.card .zn-it .t em{font-style:normal; font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--ac,var(--net))}
+.card .zn-it .t .go{margin-left:auto; font-size:.66rem; font-weight:700; color:var(--ac,var(--net)); opacity:.75}
+.card .zn-it .d{display:block; margin-top:3px; font-size:.79rem; font-weight:600; color:#93a3bd}
+/* 구역 개요에서 '닫기' 는 노드를 접는 게 아니라 강조를 푸는 것이다 — 말을 바꿔 준다 */
+.card.zone .x::after{content:" 전체로 돌아가기"}
+/* 한글이라 mono 를 안 쓴다(자간이 벌어진다). 이 한 줄이 화면 전체의 유일한 조작 안내다 */
+.legend .lhint{font-size:11.5px; font-weight:600; color:var(--dim); margin-top:1px}
 #scene .hit{cursor:pointer}
 #scene .hit .halo{opacity:0; transition:opacity .12s}
 #scene .hit:hover .halo, #scene .hit:focus-visible .halo{opacity:1}
 #scene .hit:focus-visible{outline:none}
-@media(max-width:680px){ .legend{right:12px; bottom:12px; padding:10px 12px} .card{width:auto; right:12px; left:12px} }
+/* 좁은 화면에서는 오른쪽에 비워 둘 열이 없다 — 글이 그림 위에 바로 얹히면 읽히지 않으므로 판을 되돌린다 */
+@media(max-width:680px){ .legend{right:12px; bottom:12px; padding:10px 12px}
+  .card{width:auto; right:12px; left:12px; top:auto; bottom:12px; max-width:none; max-height:calc(100% - 24px);
+    padding:14px 15px; background:rgba(16,22,34,.95); border:1px solid var(--line);
+    border-left:2px solid var(--ac,var(--net)); border-radius:12px} }
 
 /* ═══ 등장 웨이브(factory-v3식 · 2.6배속): 좌하 클라 → 우상 MySQL 대각선 팝인. 칩 레이어는 제외 ═══ */
 #scene #lyr-plat>*, #scene #lyr-shad>*, #scene #lyr-lane>*, #scene #lyr-build>*, #scene #lyr-lbl>*{
@@ -469,6 +494,29 @@ body.pop-hold #scene .chips{opacity:0}
 #scene[data-zone="net"]     .hit[data-z~="net"],
 #scene[data-zone="game"]    .hit[data-z~="game"],
 #scene[data-zone="store"]   .hit[data-z~="store"]{pointer-events:auto}
+
+/* ═══ 노드 강조 — 같은 장치를 구역에서 노드로 한 칸 내린 것 ═══
+   고른 노드의 상세를 여는 동안 나머지를 죽인다. 죽이는 수단도 살리는 수단도 위와 똑같고,
+   보는 표만 data-z(구역) → data-node(카드) 로 바뀐다.
+   요소마다 자기 filter 가 걸리므로 잘리는 면이 없다 — 살아 있는 도형과 죽은 도형 사이에
+   경계선 같은 것이 생기지 않는다(씬을 통째로 흐리게 하고 한 조각만 오려 얹으면 그 자국이 남는다).
+   순서가 중요하다: 구역 규칙보다 뒤에 둬야, 구역을 켜 둔 채 노드를 골랐을 때 노드 쪽이 이긴다
+   (선택자 무게가 같아 나중 것이 이긴다). */
+#scene[data-focus] [data-z]{filter:var(--zdim)}
+#scene[data-focus="client"] [data-node="client"],
+#scene[data-focus="accept"] [data-node="accept"],
+#scene[data-focus="iocp"]   [data-node="iocp"],
+#scene[data-focus="send"]   [data-node="send"],
+#scene[data-focus="loop"]   [data-node="loop"],
+#scene[data-focus="dbw"]    [data-node="dbw"],
+#scene[data-focus="mysql"]  [data-node="mysql"],
+/* MySQL 만 예외로 한 짝 더 켠다 — 그 상세가 "저장소 자체라 구현 노트가 없다, 설계는 DB 워커에 있다" 고
+   말하는데 정작 가리키는 노드가 꺼져 있으면 어디를 보라는 말인지 화면에 안 남는다.
+   반대 방향(DB 워커 → MySQL)은 켜지 않는다. DB 워커는 자기 설계 문서를 갖고 있어 혼자 서는 노드다. */
+#scene[data-focus="mysql"]  [data-node="dbw"]{filter:none}
+/* 히트박스는 죽이지 않는다 — 구역 강조와 다른 점이다. 저기서는 죽은 구역을 못 누르게 막지만,
+   여기서는 '다른 노드를 바로 누르는' 것이 닫기 다음으로 흔한 행동이라 hover 테두리가 살아 있어야 한다. */
+#scene[data-focus] .hit{filter:none}
 
 /* 구역 버튼 줄 — 씬 왼쪽 위. 생김새는 '다시 재생' 버튼과 같은 어휘.
    씬의 내용 대각선이 좌하(클라이언트) → 우상(게임 루프·MySQL) 이라 비는 코너는 좌상·우하다.
@@ -943,7 +991,7 @@ body.pop-hold #scene .chips{opacity:0}
     <div class="row recv"><i></i>수신 recv<span class="cap">client → 게임</span></div>
     <div class="row send"><i></i>응답 send<span class="cap">게임 → client</span></div>
     <div class="row store"><i></i>데이터베이스<span class="cap">게임 → MySQL</span></div>
-    <div class="lhint">▸ 노드 클릭 = 상세</div>
+    <div class="lhint">▸ 구역 = 개요 · 노드 = 상세</div>
   </div>
   <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
        ※ 클라 판을 72 로 좁히면서 내용 왼쪽이 48칸 들어왔지만, 여기는 안 당긴다.
@@ -1692,6 +1740,9 @@ function paintBodies(){
 NODES.slice().sort((a,b)=>{ const A=LAYOUT[a.name],B=LAYOUT[b.name]; return DEPTH(A.u,A.v)-DEPTH(B.u,B.v); })
   .forEach(n=>{ const L=LAYOUT[n.name], g=el("g");
     drawZone=zoneOf(n.name); if(drawZone) g.setAttribute("data-z",drawZone);   /* 몸통 안에서 부르는 shadow() 도 이 값을 물려받는다 */
+    /* 노드 하나만 남기는 강조(#scene[data-focus])가 보는 표. 값은 구역이 아니라 '어느 카드의 것인가' 다 —
+       Timing Wheel·SwapQ 는 card:"iocp" 라 IOCP 워커를 고르면 셋이 같이 켜진다(누르는 자리가 셋인 것과 짝이 맞는다). */
+    if(n.card) g.setAttribute("data-node",n.card);
     n.draw(g,L.u,L.v); TB.appendChild(g); });
 drawZone=""; }   /* 노드 그리기가 끝났으므로 되돌린다 — 뒤에서 addShad 를 부르는 곳은 없지만 상태를 남기지 않는다 */
 paintBodies();
@@ -1701,43 +1752,106 @@ function paintLabels(){
 NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, base=LABELS[n.name]||{dx:0,dy:0},
     fo=FLAT&&FLABELS[n.name], off=fo?{dx:fo.dx,dy:fo.dy,texts:base.texts}:base;
   const ax=px(c[0],c[1])+off.dx, ay=py(c[0],c[1],az)+off.dy, z=zoneOf(n.name);
-  n.lab.lines.forEach((ln,i)=> TL.appendChild(el("text",{x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
+  /* 이름표에도 같은 표를 붙인다 — 도형만 살리면 이름이 죽은 채로 남아 무엇이 켜진 건지 안 읽힌다 */
+  n.lab.lines.forEach((ln,i)=> TL.appendChild(el("text",Object.assign({x:ax.toFixed(1),y:(ay+ln[4]).toFixed(1),
     "text-anchor":n.lab.anch||"middle","font-size":ln[1],"font-weight":ln[3]||"800",fill:ln[2],"font-family":"var(--sans)",
-    "data-z":z},
+    "data-z":z}, n.card?{"data-node":n.card}:null),
     (off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0]))); }); }
 paintLabels();
 
 /* ═══ 노드 클릭 → 상세 카드 ═══ */
+/* sum = 구역 개요에 한 줄로 접힐 때 쓰는 요약. impl 을 잘라 쓰지 않고 따로 적는 이유는,
+   개요에서는 '무엇을 하는가' 만 필요하고 '왜 그렇게 했는가' 는 상세가 맡기 때문이다. */
 const ND={
-  client:{nm:"클라이언트",x:"×5,000",zone:"네트워크",impl:"세션은 인덱스 슬롯으로 관리합니다. 슬롯 재사용 시 sessionId 검사로 옛 세션(ABA)을 차단합니다.",
+  client:{nm:"클라이언트",x:"×5,000",zone:"네트워크",sum:"인덱스 슬롯 세션 · sessionId 로 ABA 차단",impl:"세션은 인덱스 슬롯으로 관리합니다. 슬롯 재사용 시 sessionId 검사로 옛 세션(ABA)을 차단합니다.",
     docs:["세션 관리 방식과 세션 ABA 문제 해결"],bns:[]},
-  accept:{nm:"Accept",x:"×1",zone:"네트워크",impl:"수락 전담 스레드 1개. AcceptEx 대신 blocking accept를 택한 근거를 문서로 정리했습니다.",
+  accept:{nm:"Accept",x:"×1",zone:"네트워크",sum:"수락 전담 1개 · AcceptEx 미사용",impl:"수락 전담 스레드 1개. AcceptEx 대신 blocking accept를 택한 근거를 문서로 정리했습니다.",
     docs:["AcceptThread 분리 (AcceptEx 미사용)"],bns:[]},
-  iocp:{nm:"IOCP 워커",x:"×4",zone:"네트워크",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */impl:"완료 통지 처리와 패킷 파싱. 워커는 파싱한 이벤트를 공유 큐에 쌓고, 게임 루프는 틱마다 std::queue::swap 한 번으로 큐를 통째로 로컬에 넘겨받아(락 1회·무복사) 락 없이 소비합니다. 세션당 I/O 1회 제한·Timing Wheel 타임아웃도 여기서 얽힙니다.",
+  iocp:{nm:"IOCP 워커",x:"×4",zone:"네트워크",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */sum:"완료 통지 파싱 → 공유 큐 · 틱마다 swap 1회",impl:"완료 통지 처리와 패킷 파싱. 워커는 파싱한 이벤트를 공유 큐에 쌓고, 게임 루프는 틱마다 std::queue::swap 한 번으로 큐를 통째로 로컬에 넘겨받아(락 1회·무복사) 락 없이 소비합니다. 세션당 I/O 1회 제한·Timing Wheel 타임아웃도 여기서 얽힙니다.",
     docs:["세션당 Recv/Send 1회 제한","Timing Wheel (타임아웃)","Worker→Game SwapQ"],bns:[]},
-  send:{nm:"Send 워커",x:"×3",zone:"네트워크",impl:"송신 제출을 게임 틱에서 떼어 3개 워커로 분산합니다. uniqueId%3 고정 배분(sessionId 상위 인덱스 비트 누수 방지).",
+  send:{nm:"Send 워커",x:"×3",zone:"네트워크",sum:"uniqueId%3 고정 배분 → WSASend",impl:"송신 제출을 게임 틱에서 떼어 3개 워커로 분산합니다. uniqueId%3 고정 배분(sessionId 상위 인덱스 비트 누수 방지).",
     docs:["SendThread 분리 유무와 이슈"],bns:[]},
-  loop:{nm:"게임 루프",x:"×1",zone:"게임",impl:"모든 게임 로직이 도는 단일 코어. 섹터 격자 관심영역(AOI), per-player viewlist 미채택 근거가 핵심입니다.",
+  loop:{nm:"게임 루프",x:"×1",zone:"게임",sum:"단일 코어 · 섹터 격자 AOI · viewlist 미채택",impl:"모든 게임 로직이 도는 단일 코어. 섹터 격자 관심영역(AOI), per-player viewlist 미채택 근거가 핵심입니다.",
     docs:["섹터/맵 크기 · viewlist 미채택 이유"],bns:[]},
-  dbw:{nm:"DB 워커",x:"×1",zone:"데이터베이스",impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). 워커는 쌓인 큐를 swap 한 번으로 통째 인출해 UPSERT 합니다 — SwapQ·Send 워커와 같은 패턴입니다. accountId%K 풀로 확장 가능하며 현재 1개 운영.",
+  dbw:{nm:"DB 워커",x:"×1",zone:"데이터베이스",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능",impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). 워커는 쌓인 큐를 swap 한 번으로 통째 인출해 UPSERT 합니다 — SwapQ·Send 워커와 같은 패턴입니다. accountId%K 풀로 확장 가능하며 현재 1개 운영.",
     docs:["dirty 선별·주기 batch 저장","DB Thread 분리 및 저장 설계"],bns:[]},
-  mysql:{nm:"MySQL",x:"",zone:"데이터베이스",impl:"주기적 스냅샷 UPSERT로 영속화합니다.",docs:[],bns:[]}
+  mysql:{nm:"MySQL",x:"",zone:"데이터베이스",sum:"주기적 스냅샷 UPSERT 로 영속화",impl:"주기적 스냅샷 UPSERT로 영속화합니다.",docs:[],bns:[]}
 };
-/* 노드 상세에 붙는 '병목 실험' 줄은 병목 탭 배열(EXPS)에서 그대로 가져온다.
+/* ═══ 구역 개요 — 구역 버튼을 누르면 상세와 같은 자리에 뜬다 ═══
+   구역 버튼은 원래 '강조만' 하는 버튼이었다. 무엇이 밝아졌는지는 보이는데 그게 무슨 구역인지는
+   안 알려 주고 있었다. 노드를 눌러야만 글이 나왔는데, 노드는 눌러야 한다는 것 자체가 안 보인다.
+   그래서 이미 보이는 버튼(구역)에 개요를 달고, 그 개요 안의 노드 줄이 상세로 가는 입구가 된다.
+   → 씬을 한 번도 안 눌러도 모든 상세에 닿는다. 노드 클릭은 아는 사람을 위한 지름길로 남는다.
+   키는 씬의 구역 키(data-z)와 같은 문자열이라 CSS·강조 코드와 같은 말을 쓴다. */
+const ZI={
+  outside:{nm:"클라이언트",ac:"#93a5c2",sub:"동시 5,000",
+    lead:"서버 밖입니다. 부하 클라이언트가 동시 <b>5,000명</b>까지 붙어 이동 · 채팅을 보냅니다. 서버가 지는 부담이 어디서 갈리는지는 아래 세 구역이 정합니다.",
+    nodes:["client"]},
+  net:{nm:"네트워크",ac:"var(--net)",sub:"스레드 8",
+    lead:"수락 · 수신 · 송신을 <b>세 갈래 전담 스레드</b>로 나눕니다. 게임 스레드는 네트워크 일을 하지 않습니다 — 워커가 파싱해 둔 이벤트만 큐로 받고, 송신 제출도 Send 워커가 대신합니다.",
+    nodes:["accept","iocp","send"]},
+  game:{nm:"게임",ac:"var(--game)",sub:"스레드 1",
+    lead:"게임 로직 전부가 도는 <b>한 코어</b>입니다. 25fps 틱마다 받은 요청을 처리하고 주변에 뿌립니다. 이 서버의 병목이 이 자리입니다.",
+    nodes:["loop"]},
+  store:{nm:"데이터베이스",ac:"var(--store)",sub:"스레드 1",
+    lead:"저장이 게임 스레드를 막지 않게 합니다. 변경분(dirty)만 골라 주기마다 batch 로 넘기고(fire-and-forget), 전담 워커가 쌓인 큐를 <b>swap 한 번</b>으로 통째 인출해 UPSERT 합니다.",
+    nodes:["dbw","mysql"]}
+};
+/* 노드 상세의 '이 자리에서 잰 실험 N건' 은 병목 탭 배열(EXPS)이 세어 넣는다(아래 __NODE_PINS 로 짝을 짓는다).
    한때 여기에 같은 목록을 손으로 한 벌 더 적어 뒀는데, 병목 탭에 실험을 넣고도 이쪽을 잊어
    두 화면이 서로 다른 실험 목록을 보여 주고 있었다. 여기 두는 것은 '어느 노드가 어느 자리인가' 뿐이다. */
 window.__ND=ND;
 window.__NODE_PINS={ send:["1"], loop:["2","3"], iocp:["4","5"], dbw:["6"] };
-const card=document.getElementById("card"), cbd=document.getElementById("cardbd"), legendEl=document.querySelector(".legend");
-function closeCard(){ if(card) card.classList.remove("on"); if(legendEl) legendEl.style.display=""; }
+const card=document.getElementById("card"), cbd=document.getElementById("cardbd");
+/* 상세를 여는 동안 씬은 그 노드만 남긴다 — 카드에 판이 없으므로 이 강조가 곧 '어디를 눌렀는가' 다.
+   범례는 더 이상 숨기지 않는다: 옛 카드가 범례와 같은 코너(오른쪽 아래)를 썼기 때문에 비켰던 것인데,
+   글이 오른쪽 위 열로 올라가면서 자리가 겹치지 않는다(.card 가 bottom 을 못 박아 둔다). */
+function closeCard(){ if(card) card.classList.remove("on"); if(svg) svg.removeAttribute("data-focus"); }
+/* 왼쪽 세로선 색 = 그 노드의 구역 색. 씬에서 살아남은 도형 색과 같아야 둘이 한 덩어리로 읽힌다. */
+const CARD_AC={"네트워크":"var(--net)","게임":"var(--game)","데이터베이스":"var(--store)"};
 function openCard(k){ const n=ND[k]; if(!n) return;
   let h='<span class="k">'+n.zone+' 스레드</span><h3>'+n.nm+'<span>'+(n.x||"")+'</span></h3><p class="cl">'+n.impl+'</p>';
-  if(n.docs.length) h+='<div class="lb">설계 문서 '+n.docs.length+'</div>'+n.docs.map(function(d){return '<div class="it"><span>'+d+'</span></div>';}).join("");
-  if(n.bns.length) h+='<div class="lb">병목 실험 '+n.bns.length+'</div>'+n.bns.map(function(x){return '<div class="it"><span class="rs '+x[0]+'">'+x[1]+'</span><span class="en">'+x[2]+'</span><span class="er">'+x[3]+'</span></div>';}).join("");
-  if(!n.docs.length&&!n.bns.length) h+='<div class="lb">연결 문서</div><div class="none">저장소 자체라 별도 구현 노트가 없습니다 — 설계는 DB Worker 노드에 있습니다.</div>';
-  cbd.innerHTML=h; card.classList.add("on"); if(legendEl) legendEl.style.display="none"; }
-if(card){ card.addEventListener("click",function(e){ if(e.target.closest("[data-close]")) closeCard(); });
-  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closeCard(); }); }
+  if(n.docs.length) h+='<div class="lb">설계 문서 '+n.docs.length+'</div>'+n.docs.map(function(d){return '<div class="it"><span class="ic">▸</span><span>'+d+'</span></div>';}).join("");
+  else h+='<div class="lb">연결 문서</div><div class="none">저장소 자체라 별도 구현 노트가 없습니다 — 설계는 DB Worker 노드에 있습니다.</div>';
+  /* 실험은 목록 대신 건수와 행선지만. 결론까지 여기 늘어놓으면 1-2 탭과 같은 목록이 두 벌이 된다.
+     건수는 병목 탭 배열(EXPS)에서 채워진 것이라 두 화면이 어긋날 수 없다. */
+  if(n.bns&&n.bns.length) h+='<div class="fo">이 자리에서 잰 실험 <b>'+n.bns.length+'건</b>은 <b>1-2 병목 · 실험</b>에 있습니다</div>';
+  cbd.innerHTML=h;
+  card.classList.remove("zone");
+  card.style.setProperty("--ac", CARD_AC[n.zone]||"var(--net)");
+  card.classList.add("on"); if(svg) svg.setAttribute("data-focus",k); }
+
+/* 구역 개요. 씬 강조는 구역 버튼(apply)이 이미 걸어 놨으므로 여기서는 글만 채운다 —
+   data-focus 는 건드리지 않는다(그건 노드 하나로 좁힐 때 쓰는 표다). */
+function openZone(z){ const Z=ZI[z]; if(!Z||!card) return;
+  let h='<span class="k">구역 개요</span><h3>'+Z.nm+'<span>'+Z.sub+'</span></h3>'+
+        '<p class="cl">'+Z.lead+'</p>'+
+        '<div class="lb">이 구역의 노드 '+Z.nodes.length+'</div>';
+  h+=Z.nodes.map(function(k){ const n=ND[k]; if(!n) return "";
+    return '<button class="zn-it" data-go="'+k+'"><span class="t">'+n.nm+
+      (n.x?'<em>'+n.x+'</em>':'')+'<span class="go">상세 ▸</span></span>'+
+      '<span class="d">'+n.sum+' · 설계 문서 '+(n.docs.length||"—")+'</span></button>'; }).join("");
+  /* 실험 건수는 그 구역 노드들의 합 — 노드 상세와 같은 배열(EXPS)에서 온 값이라 어긋날 수 없다 */
+  const ex=Z.nodes.reduce(function(s,k){ return s+((ND[k]&&ND[k].bns)?ND[k].bns.length:0); },0);
+  if(ex) h+='<div class="fo">이 구역에서 잰 실험 <b>'+ex+'건</b>은 <b>1-2 병목 · 실험</b>에 있습니다</div>';
+  cbd.innerHTML=h;
+  card.classList.add("zone");
+  card.style.setProperty("--ac", Z.ac);
+  card.classList.add("on"); if(svg) svg.removeAttribute("data-focus"); }
+
+/* 닫기는 한 단계씩 물러난다: 노드 상세 → (구역이 켜져 있으면) 그 구역 개요 → 전체.
+   한 번에 전체로 튀면, 구역 개요에서 상세로 들어온 사람이 되돌아갈 자리를 잃는다. */
+function backCard(){
+  if(svg && svg.getAttribute("data-focus")){
+    const z=svg.getAttribute("data-zone");
+    closeCard(); if(z) openZone(z); return; }
+  if(svg && svg.getAttribute("data-zone") && window.resetZone){ window.resetZone(); return; }
+  closeCard(); }
+if(card){ card.addEventListener("click",function(e){
+    const go=e.target.closest("[data-go]");
+    if(go){ openCard(go.getAttribute("data-go")); return; }   /* 개요의 노드 줄 = 상세로 가는 입구 */
+    if(e.target.closest("[data-close]")) backCard(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") backCard(); }); }
 /* 히트박스(투명, 최상위) */
 NODES.forEach(function(n){ if(!n.card) return; const L=LAYOUT[n.name], h=n.hit;
   const pts=[[L.u+h[0],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]],[L.u+h[0]+h[2],L.v+h[1]+h[3]],[L.u+h[0],L.v+h[1]+h[3]]].map(p=>P(p[0],p[1],h[4])).join(" ");
@@ -2349,7 +2463,8 @@ window.__flowReset=function(){
   ];
   window.__EXPS=EXPS;   /* 아래층(계기판·상세)이 같은 배열을 그대로 본다 — 수치를 두 벌 두지 않는다 */
   const ST={ok:"채택", rj:"기각", dg:"진단", na:"미측정", now:"현재", sum:"결론", fix:"정정"};
-  /* 설계 탭 노드 카드의 '병목 실험' 줄도 이 배열에서 만든다 — 같은 목록을 두 곳에 적지 않는다 */
+  /* 설계 탭 상세의 '이 자리에서 잰 실험 N건' 도 이 배열이 센다 — 건수를 손으로 적어 두면 어긋난다.
+     한때는 실험 목록 자체를 저기에 한 벌 더 그렸는데, 지금은 1-2 탭이 통째로 맡고 건수만 넘긴다. */
   (function(){
     const ND=window.__ND, MAP=window.__NODE_PINS; if(!ND||!MAP) return;
     for(const key in MAP){ if(!ND[key]) continue;
@@ -2773,6 +2888,11 @@ window.__flowReset=function(){
       h.setAttribute("tabindex",live?"0":"-1");
       if(live) h.removeAttribute("aria-hidden"); else h.setAttribute("aria-hidden","true"); });
     closeCard();   /* 열려 있던 상세 카드가 죽은 노드의 것일 수 있다 — 강조를 바꿀 때는 접는다 */
+    /* 구역을 골랐으면 그 개요를 같은 자리에 띄운다. '전체'(z="")는 강조 해제라 아무것도 안 띄운다 —
+       네 버튼 중 하나만 다른 성격의 글을 갖는 것을 피한다.
+       진입 순회 중에는 띄우지 않는다: 한 칸이 TOUR_HOLD(380ms)라 글이 1.5초 사이 네 번 갈리며 깜빡인다.
+       읽기엔 짧고 산만하기만 하다 — 순회는 씬만 바꾸고, 끝나면 전체로 돌아가 빈 상태가 된다. */
+    if(z&&!tourOn&&!tourArmed) openZone(z);
   }
   btns.forEach(function(b){ b.addEventListener("click",function(){
     const z=b.getAttribute("data-z")||"";
