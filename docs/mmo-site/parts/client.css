@@ -19,20 +19,30 @@
 .cl-tile.ok .n{color:var(--ok)}
 
 /* ── 규격 칸(.spec) — 2-1 만 쓴다 ──
-   2-2·2-3 의 계기판은 실측 성과(에코 3,791,301건/초 · 무결성 위반 0건)라 큼직한 게 맞다.
-   2-1 에는 자랑할 성과 수치가 없다 — 여기 값은 전부 '규격' 이라 성격이 다르다.
-   네 칸을 크게 두고 억지로 채우는 대신, 각주 줄(.f)을 걷어 높이를 90px → 72px 로 낮추고
-   여섯 칸을 담는다. 각주가 없으니 라벨이 뜻을 다 져야 한다(맵 · 섹터 · 시야 …). */
+   각주 줄(.f)이 없는 여섯 칸이다. 각주가 없으니 라벨이 뜻을 다 져야 한다(맵 · 섹터 · 시야 …).
+
+   ── 한때 값을 1.14rem 으로 작게 뒀다. 왜 되돌렸나 ──
+   '2-2·2-3 의 계기판은 실측 성과(에코 3,791,301건/초)라 큼직한 게 맞고, 여기 값은 규격이라
+   성격이 다르다' 는 이유로 높이를 72px 까지 낮췄던 것인데, 넓은 화면(1664px)에서 재 보니 그 띠가
+   58px 로 눌려 액자 머리줄과 ① 사이에 낀 얇은 줄이 됐다 — 규격이 안 읽힌다.
+   값을 2-2 와 같은 1.5rem 으로 올린다. 탭이 갈려 둘이 나란히 보일 일이 없고, 세로가 늘어도
+   아래가 손해를 안 본다: 액자만 928 → 950px 이고 ①(771px)·참조컷(411 · 348px)은 그대로다(실측).
+
+   ── 가운데 정렬 ──
+   넓은 화면에서 칸은 255px 인데 글자는 왼쪽 100px 만 쓴다. 왼쪽 정렬이면 오른쪽 6할이 빈 채로
+   남아 '규격표' 가 아니라 '구석에 글자 붙은 빈 상자 여섯' 으로 읽힌다. 가운데로 모으면 남는 폭이
+   양쪽으로 갈려 빈 자리가 안 보인다(세로만 늘리면 그 빈 면적이 같이 커진다 — 렌더로 확인했다). */
 .cl-dash.spec{grid-template-columns:repeat(6,1fr); gap:9px}
-.cl-dash.spec .cl-tile{padding:7px 12px 8px}
-.cl-dash.spec .cl-tile .l{font-size:.68rem}
-.cl-dash.spec .cl-tile .v{margin-top:2px; gap:5px}
-.cl-dash.spec .cl-tile .n{font-size:1.14rem}
+.cl-dash.spec .cl-tile{padding:13px 15px 15px; text-align:center}
+.cl-dash.spec .cl-tile .l{font-size:.7rem}
+/* .v 는 flex 라 text-align 이 안 듣는다 — 가운데로 모으는 일은 justify-content 가 한다 */
+.cl-dash.spec .cl-tile .v{margin-top:7px; gap:5px; justify-content:center}
+.cl-dash.spec .cl-tile .n{font-size:1.5rem}
 /* 단위는 sans 로 되돌린다 — .cl-tile .u 는 mono 라서 '칸 · 36개' 처럼 한글이 섞이면 글꼴이
    폴백돼 자간이 벌어진다(확대해서 확인했다). 여섯 칸 중 셋이 한글 단위다 */
-.cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.66rem; font-weight:600}
+.cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.7rem; font-weight:600}
 /* 숫자가 없는 칸(더미 부하) — 값 자리가 비면 칸이 무너져 보이므로 같은 높이의 글자로 채운다 */
-.cl-dash.spec .cl-tile .t{font-size:.86rem; font-weight:700; color:var(--ink); line-height:1.5}
+.cl-dash.spec .cl-tile .t{font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.5}
 
 /* ── 그림 안에서 누를 수 있는 것 ──
    한때 선택 표시를 반투명 흰 판으로 덮었는데, 그 판이 격자·막대 위에 얹혀 내용을 회색으로 지웠다.
