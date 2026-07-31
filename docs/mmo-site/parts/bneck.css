@@ -163,12 +163,15 @@
    20px 짜리 배지('병목 ②')였는데, 글줄 안의 작은 원이라 지도 핀·레일 배지와 같은 표시라는 것이
    한눈에 안 걸렸다. 기둥으로 세우면 카드 아래쪽 표를 읽는 동안에도 번호가 시야에 남는다.
    마크업은 그대로 둔다 — fillCard 가 #bnc-n 만 갈아 끼우므로 여기서는 자리와 크기만 바꾼다.
-   ※ 붉은색은 번호 밑 16×3 막대 하나로 끝낸다. 기둥까지 붉게 칠한 시안이 먼저 있었는데,
-     카드에서 제일 먼저 눈에 들어오는 것이 실측값이 아니라 기둥이 됐다. 기둥은 파인 홈(--sunk)이고
-     주황은 '이 자리가 병목' 이라는 표시만 맡는다. */
+   ※ 기둥의 면은 안 칠한다 — 통째로 붉게 칠한 시안이 먼저 있었는데, 카드에서 제일 먼저 눈에
+     들어오는 것이 실측값이 아니라 기둥이 됐다. 기둥은 파인 홈(--sunk)이고 주황은 선과 막대,
+     그러니까 1px 과 3px 로만 쓴다.
+   ※ 오른쪽 경계선(기둥과 본문 사이)이 주황인 이유는 그 선이 레일 꼭지가 가리키는 끝이라서다 —
+     꼭지 → 기둥 → 본문이 한 선에서 만난다. 막대 하나만 붉게 뒀을 때는 그 점이 너무 국소적이라
+     카드 왼쪽이 통째로 밋밋했다. */
 .bncard{ padding-left:74px }                  /* 기둥 58 + 본문까지 16 */
 .bncard .k{ position:absolute; left:1px; top:1px; bottom:1px; width:58px;
-  border-radius:13px 0 0 13px; background:var(--sunk); border-right:1px solid var(--line2);
+  border-radius:13px 0 0 13px; background:var(--sunk); border-right:1px solid var(--hot);
   display:flex; flex-direction:column; align-items:center; padding-top:17px;
   font-size:0; letter-spacing:0 }             /* '병목' 글자는 기둥에 안 넣는다 — 번호만 남긴다 */
 .bncard .k #bnc-n{ font-family:var(--mono); font-size:1.9rem; font-weight:800; line-height:1;
