@@ -23,8 +23,8 @@
    카드는 접힌 배치에서 첫 화면 아래로 내려간다. 그래서 눌렀을 때 아무 일도 안 일어난 것처럼
    보이지 않도록, 카드가 화면 밖이면 JS 가 카드를 끌어올린다(아래 bnScrollIntoView).
    꼭지는 이 배치에서 끈다 — 레일 오른쪽에 카드가 없으니 가리킬 곳이 없다.
-   어느 자리에서 열린 카드인지는 카드 왼쪽의 번호 기둥이 그대로 잇는다(꼭지가 없는 배치라
-   여기서는 그 기둥이 유일한 표시다). */
+   어느 자리에서 열린 카드인지는 카드 머리에 옮겨 온 판(.bnhead)이 그대로 잇는다 —
+   세 칸 배치에서도 꼭지는 이미 떼어 뒀으므로 이 배치에서 달라지는 것은 없다. */
 @media (max-width:1600px){
   .bn-stage{ grid-template-columns:minmax(0,1fr) 240px;
     grid-template-areas:"map rail" "card card"; row-gap:14px }
@@ -52,9 +52,4 @@
   .bn-stage .bnnav .t{ margin:0 4px 0 0 }
   .bn-stage .bnnav button{ width:auto; padding:6px 11px 6px 7px }
   .bn-stage .bnnav button.act::after{ display:none }
-  /* 번호 기둥은 여기서 몸집을 줄인다 — 카드 안쪽이 380px 남짓이라 58px 를 그대로 두면
-     실험 목록 두 열이 한 열 185px 로 눌려 이름이 세 줄로 접힌다(실측 500px). */
-  .bncard{ padding-left:56px }
-  .bncard .k{ width:44px; padding-top:13px }
-  .bncard .k #bnc-n{ font-size:1.5rem }
 }
