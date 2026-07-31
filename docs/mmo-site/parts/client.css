@@ -92,7 +92,8 @@
 .cr-hero{display:grid; grid-template-columns:73% minmax(0,1fr);
   grid-template-areas:"dash dash" "hero side"; gap:10px 14px}
 .cr-hero>.cl-dash{grid-area:dash; margin:0}
-.cr-hero .big{grid-area:hero}
+/* 격자 자리는 ① 을 감싼 띠가 가져간다(진입 애니가 ① 을 그 안에서 움직인다 — 아래 .cr-heroclip) */
+.cr-hero .cr-heroclip{grid-area:hero}
 .cr-side{grid-area:side; display:flex; flex-direction:column; gap:12px}
 /* 세로로 쌓으면 flex 는 폭이 아니라 높이를 나눈다 — 그래서 종횡비가 아니라 그 역수를 넣어야
    두 컷이 원래 비율(=자기 자연 높이)대로 함께 커진다. 종횡비를 그대로 넣었더니 콘솔이 375→335px
@@ -215,17 +216,21 @@
    들어오면 60fps 에서도 빠른 구간이 예닐곱 프레임뿐이라 '튀어 들어온' 것으로 보인다.
    easeOutCubic 로 눕히고 길이를 판 크기만큼 늘렸다(① 860ms).
 
-   ── 잘라 주는 세 곳 ──
-   액자(.cr-frame)는 좌우, 규격 띠(.cr-specclip)는 위, 꼬리 띠(.cr-footclip)는 좌우.
-   셋 다 애니 도는 동안만 자른다 — 상시로 두면 컷의 그림자(0 20px 42px -22px)가 액자 밑변에서
-   잘린다. .cr-in 이 붙어 있는 동안만이라 애니가 끝나면 원래대로다. */
+   ── 잘라 주는 네 곳 ──
+   액자(.cr-frame)는 ②③ 의 좌우, 규격 띠(.cr-specclip)와 ① 의 띠(.cr-heroclip)는 위,
+   꼬리 띠(.cr-footclip)는 좌우. 세로로 들어오는 둘에 제 칸짜리 띠를 따로 주는 이유는,
+   액자 하나만 믿으면 위에서 오는 것이 아래 있는 것들을 덮고 지나가기 때문이다 —
+   ① 은 세로가 액자를 거의 다 써서 내려오는 내내 머리줄과 규격 줄을 가린다.
+   넷 다 애니 도는 동안만 자른다. 상시로 두면 컷의 그림자(0 20px 42px -22px)가 잘린다. */
 .cr-specclip{grid-area:dash; overflow:visible}
 .cr-specclip>.cl-dash{margin:0}
+.cr-heroclip{overflow:visible; min-height:0}
 /* 껍데기가 원래 .cr-foot 이 갖던 위 여백을 물려받는다. 좌우 2px 는 그대로 안쪽에 남긴다 —
    껍데기로 옮기면 잘라 주는 폭까지 2px 씩 좁아져서 판이 다 안 나가고 걸린다. */
 .cr-footclip{margin-top:11px; overflow:visible}
 .cr-footclip>.cr-foot{margin:0 2px}
-#p-crender.cr-in .cr-frame, #p-crender.cr-in .cr-specclip, #p-crender.cr-in .cr-footclip{overflow:hidden}
+#p-crender.cr-in .cr-frame, #p-crender.cr-in .cr-specclip,
+#p-crender.cr-in .cr-heroclip, #p-crender.cr-in .cr-footclip{overflow:hidden}
 /* 움직이는 것에만, 움직이는 동안만 레이어를 띄운다 — 상시로 걸면 영상 판 둘이 GPU 메모리를 계속 문다 */
 #p-crender.cr-in .cl-tile, #p-crender.cr-in .cr-hero .big,
 #p-crender.cr-in .cr-side>.cr-ref, #p-crender.cr-in .cr-foot{
@@ -241,8 +246,10 @@
 #p-crender.cr-in .cl-tile:nth-child(4){animation-delay:.174s}
 #p-crender.cr-in .cl-tile:nth-child(5){animation-delay:.232s}
 #p-crender.cr-in .cl-tile:nth-child(6){animation-delay:.29s}
-/* 판 셋 — ① 은 왼쪽에서, ②③ 은 오른쪽에서. 방향이 곧 배치다(②③ 은 오른쪽 칸에 딸린 참조컷). */
-#p-crender.cr-in .cr-hero .big     {animation:crInL .86s cubic-bezier(.33,1,.68,1) .23s both}
+/* 판 셋 — ① 은 규격 줄과 같이 위에서 내려오고, ②③ 은 오른쪽에서. ②③ 이 오른쪽 칸에 딸린
+   참조컷이라는 배치가 방향으로 나온다. ① 이 규격과 같은 축인 것은 그 둘이 왼쪽 기둥이라서다 —
+   위에서 내려오는 한 줄기가 규격을 지나 ① 로 이어지고, 오른쪽 둘만 옆에서 붙는다. */
+#p-crender.cr-in .cr-hero .big     {animation:crInD .86s cubic-bezier(.33,1,.68,1) .23s both}
 #p-crender.cr-in .cr-side>.cr-ref.con{animation:crInR .78s cubic-bezier(.33,1,.68,1) .36s both}
 #p-crender.cr-in .cr-side>.cr-ref.lim{animation:crInR .78s cubic-bezier(.33,1,.68,1) .47s both}
 #p-crender.cr-in .cr-foot          {animation:crInL .62s cubic-bezier(.33,1,.68,1) .64s both}
@@ -280,6 +287,8 @@
      ③ 자리를 가로질러 지나간다(둘의 등장 시각이 겹친다) — ② 만 왼쪽에서 들어오게 돌린다.
      그러면 둘 다 자기 바깥 모서리에서 출발해 빈 자리만 지난다. */
   #p-crender.cr-in .cr-side>.cr-ref.con{animation-name:crInL}
+  /* ① 은 이 폭에서도 그대로 위에서 내려온다 — 제 칸짜리 띠 안에서 움직이므로,
+     참조컷 둘이 ① 밑으로 내려와도 쓸고 지나갈 일이 없다. */
 }
 /* 규격이 두 줄로 접히는 폭. 두 줄이면 아랫줄 칸이 제 높이만큼 올라가 봐야 띠 밖이 아니라
    윗줄 위다 — 칸이 서로를 지나간다. 이 폭부터는 여섯 칸을 한 덩어리로 내린다. */
