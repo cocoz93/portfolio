@@ -54,14 +54,10 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* 탭 이름에는 기술 약어(IOCP·RIO)를 넣지 않는다 — 탭 축은 '만든 서버'고, 전송 방식은 그 안에서 바뀌는 것이다.
    대신 스택은 탭 줄 오른쪽 끝 메타 텍스트로 뺐다(RIO 가 붙으면 이 줄만 늘리면 된다).
    밑선은 .tabs 가 아니라 이 줄이 갖는다 — 탭의 margin-bottom:-1px 이 덮는 대상이 여기로 옮겨왔다.
-   단 그 밑선을 border 로 한 줄에 긋지 않고 두 토막(::before·::after)으로 나눈다:
-   활성 탭 구간만 비워 두고, 그 자리는 아래 하위 줄 상자가 잇는다(하위 탭 주석 참고).
-   활성 탭의 파란 밑줄이 정확히 그 빈 구간에 놓여 상자의 열린 위쪽이 된다. */
-.tabrow{position:relative; display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap}
-.tabrow::before{content:""; position:absolute; left:0; bottom:0;
-  width:var(--tabx,0px); height:1px; background:var(--line)}
-.tabrow::after{content:""; position:absolute; right:0; bottom:0;
-  left:calc(var(--tabx,0px) + var(--tabw,0px)); height:1px; background:var(--line)}
+   한 줄로 화면 끝까지 긋는다. 활성 탭의 파란 밑줄(3px)이 그 자리를 덮어,
+   '끝까지 이어지는 한 줄인데 켜진 구간만 파랗다' 로 읽힌다. 아래 하위 줄도 같은 짜임이다. */
+.tabrow{position:relative; display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap;
+  border-bottom:1px solid var(--line)}
 .tabmeta{margin-left:auto; padding-bottom:15px; font-family:var(--mono); font-size:.78rem;
   letter-spacing:.06em; color:var(--dim); white-space:nowrap}
 /* ※ 좁은 화면 규칙은 이 파일 아래쪽, 탭 규칙을 다 쓴 뒤에 있다.
@@ -82,60 +78,66 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .tab:focus-visible{outline:2px solid var(--net); outline-offset:-2px; border-radius:6px}
 /* 하위 탭 — 상위 탭(MMO 서버) 안에서만 뜬다. 이 둘은 나란한 선택지가 아니라 순서다:
    만들었다(설계·구현) → 재서 고쳤다(병목·실험).
-   하위가 하위로 안 보이던 진짜 원인은 표식이 아니라 둘 사이에 탭줄 밑선이 가로로 끼어 있던 것이다.
-   그래서 그 선을 활성 탭 구간에서만 한 칸 아래로 내려앉힌다: 위(.tabrow)의 밑선은 두 토막이 되어
-   활성 탭 아래를 비우고, 이 줄이 좌·우·아래 테두리를 갖는 상자가 되어 그 자리를 잇는다.
-   위가 열려 있으니 '활성 탭에서 아래로 열린 칸' 으로 읽힌다 — 소속을 새로 그리지 않고 있던 선만 옮긴 것이다.
-   지금 보는 단계는 굵기와 밝기로만 낸다 — 글자 크기는 항목마다 같게 둔다.
+   두 층은 같은 말을 쓴다: '화면 끝까지 가는 가로선 한 줄 + 켜진 항목 아래만 파랗게'.
+   층은 굵기로만 낸다 — 위 3px, 아래 2px. 글자 크기는 항목마다 같게 둔다.
    (활성만 키우는 안을 한 번 넣었다가 껐다: 전환할 때 옆 항목이 밀려 줄 전체가 움직인다.)
+   하위가 하위로 안 보이던 옛 원인은 둘 사이에 탭줄 밑선이 '혼자' 끼어 있던 것이었다.
+   지금은 그 선이 양쪽 층에 하나씩 있어 층의 바닥으로 읽히고, 소속은 들여쓰기가 낸다:
+   줄 전체는 화면 폭을 다 쓰되(그래야 바닥선이 끝까지 간다) 글자만 활성 탭 왼쪽 끝에 맞춘다.
+   --tabx 는 스크립트가 채우고, 26px 은 .tab 의 좌우 안쪽 여백이다(글자끼리 맞물리는 값).
    ※ 여기까지 오면서 기각된 모양들. 되돌리지 않기 위해 남긴다:
+     · 아래로 열린 상자(좌·우·아래 테두리 + 위 탭 밑선을 두 토막으로): 탭 두 층만 도형을 갖게 돼
+       '위는 선, 아래는 상자' 로 말이 갈렸다. 화면 전체로 보면 이 판 하나가 씬과 시선을 다툰다.
      · 알약 + ㄴ자 레일(정거장 은유): 알약이 아래 구역 필터 줄(.zonebar)과 같은 급으로 보여
        화면 위쪽이 '비슷한 버튼 줄 셋' 이 됐다. 하위 줄만 다듬어도 그 셋째 줄이 그대로 남는다.
      · 번호를 씌운 동그라미: 위와 같은 이유로 도형이 하나 더 늘어난다. 번호는 맨 숫자로 남긴다.
-     · 위층과 똑같은 밑줄 탭: 층이 안 나뉘는 데다 짧은 세로 구간에 가로선이 4줄 겹쳤다.
      · '열린 탭' 은유(회색 띠 + 활성만 --bg 로 뚫기): 띠가 화면 폭 끝까지 이어져
        내용보다 배경이 먼저 보였다.
-   상자의 왼쪽은 활성 탭의 왼쪽 끝에 맞추고 최소 폭도 그 탭 폭이다 — 그래야 정확히 그 탭 아래를
-   덮고, 항목이 더 길면 그만큼 오른쪽으로만 늘어난다. --tabx·--tabw 는 스크립트가 채운다.
+     · 하위를 화면 제목으로 승격(켜진 항목만 1.66rem): 층은 시원하게 갈리지만 전환할 때
+       제목이 자리를 바꾸며 줄 전체가 움직인다.
    정렬은 baseline 이다 — 이름(sans)과 번호(mono)의 크기가 달라 center 로 두면 밑선이 어긋난다. */
-.subtabs{display:flex; align-items:baseline; gap:28px;
-  margin:0 0 0 var(--tabx,0px); min-width:var(--tabw,0px); width:fit-content;
-  padding:13px 22px 14px 26px;
-  border-left:1px solid var(--line); border-right:1px solid var(--line);
-  border-bottom:1px solid var(--line); border-radius:0 0 9px 9px}
+.subtabs{display:flex; align-items:baseline; gap:30px;
+  margin:0; width:100%;
+  padding:14px 0 13px calc(var(--tabx,0px) + 26px);
+  border-bottom:1px solid var(--line)}
 .subtabs[hidden]{display:none}
 /* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
-   줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다. */
+   줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다.
+   밑줄이 줄의 바닥선 '위에' 정확히 얹히도록 아래 여백만큼 도로 끌어내린다:
+   margin-bottom = -(.subtabs 아래 여백 13 + 그 선 1). 두 값은 항상 같이 움직인다. */
 .subtab{position:relative; flex:0 0 auto; display:flex; align-items:baseline; gap:10px;
-  padding:0; font-size:1.15rem; font-weight:600; color:var(--mut);
-  background:none; border:0; cursor:pointer; transition:color .15s}
+  padding:0 1px 13px; margin-bottom:-14px; font-size:1.15rem; font-weight:600; color:var(--mut);
+  background:none; border:0; border-bottom:2px solid transparent; cursor:pointer;
+  transition:color .15s, border-color .15s}
 /* 상단 탭 이름은 1.3rem 이다 — 하위는 그보다 확실히 작게 두어야 층이 갈린다.
-   1.25rem 까지 올리면 두 줄의 무게가 비슷해져 계단 상자만으로 층을 버티게 된다. */
+   1.25rem 까지 올리면 두 줄의 무게가 비슷해져 굵기 차이만으로 층을 버티게 된다. */
 .subtab em{font-style:normal; font-family:var(--mono); font-size:.92rem; font-weight:400;
   color:#54627d; transition:color .15s}
 .subtab:hover{color:var(--ink)}
-.subtab.act{font-weight:700; color:#fff}
+.subtab.act{font-weight:700; color:#fff; border-bottom-color:var(--net)}
 .subtab.act em{color:var(--net)}
 /* 담는 도형이 없으니 초점 테두리는 글자에서 조금 띄운다 */
 .subtab:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:4px}
-/* 창이 좁아 탭줄이 두 줄로 접히면 활성 탭의 x·폭을 따라가는 게 뜻을 잃는다(둘째 줄 기준이 된다).
-   그때는 계단을 포기하고 밑선을 통째로 되돌린다 — 어긋난 자리가 열린 상자보다 낫다. */
-body.subdetach .tabrow::before{width:auto; right:0}
-body.subdetach .tabrow::after{display:none}
-body.subdetach .subtabs{margin-left:16px; min-width:0}
+/* 창이 좁아 탭줄이 두 줄로 접히면 활성 탭의 x 를 따라가는 게 뜻을 잃는다(둘째 줄 기준이 된다).
+   그때는 들여쓰기를 포기하고 고정값으로 눕힌다 — 어긋난 자리보다 낫다. */
+body.subdetach .subtabs{padding-left:16px}
 
 /* ═══ 좁은 화면 — 탭 두 층 ═══
    반드시 위 규칙들 '뒤' 에 온다. 특정도가 같으므로 순서로만 이긴다(앞에 두면 한 줄도 안 먹는다).
    메타 텍스트는 탭이 줄바꿈되며 탭처럼 얹히므로 숨긴다.
-   하위 탭은 줄바꿈시키지 않는다 — 두 단계가 위아래로 갈리면 상자가 헛돈다. 대신 값을 줄인다.
-   상자의 안쪽 여백만 줄이고 margin-left·min-width 는 그대로 둔다(활성 탭에 물려 있어야 한다). */
+   하위 탭은 줄바꿈시키지 않는다 — 두 단계가 위아래로 갈리면 층이 헛돈다. 대신 값을 줄인다.
+   들여쓰기(calc)는 그대로 두고 .tab 의 좌우 여백에 맞춰 26 → 14 → 12 로 따라 내린다.
+   ※ .subtabs 아래 여백을 줄이면 .subtab 의 margin-bottom 도 같이 줄여야 한다
+     (= -(아래 여백 + 1)). 안 맞추면 파란 밑줄이 바닥선에서 떠오르거나 파고든다. */
 @media(max-width:680px){ .tabmeta{display:none}
   .tab{padding:11px 14px 12px} .tab b{font-size:1.05rem} .tab span{font-size:.7rem}
-  .subtabs{gap:18px; padding:10px 14px 11px 18px}
-  .subtab{font-size:1.02rem; gap:8px} .subtab em{font-size:.82rem} }
+  .subtabs{gap:20px; padding:11px 0 10px calc(var(--tabx,0px) + 14px)}
+  .subtab{font-size:1.02rem; gap:8px; padding-bottom:10px; margin-bottom:-11px}
+  .subtab em{font-size:.82rem} }
 @media(max-width:430px){
-  .subtabs{gap:14px; padding:8px 12px 9px 14px}
-  .subtab{font-size:.92rem; gap:7px} .subtab em{font-size:.76rem} }
+  .subtabs{gap:16px; padding:9px 0 9px calc(var(--tabx,0px) + 12px)}
+  .subtab{font-size:.92rem; gap:7px; padding-bottom:9px; margin-bottom:-10px}
+  .subtab em{font-size:.76rem} }
 
 .panel{margin-top:8px}
 .panel[hidden]{display:none}

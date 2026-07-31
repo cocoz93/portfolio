@@ -13,11 +13,11 @@
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");
   let top="mmo", sub="build", csub="render";
-  /* 하위 줄 상자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)과 최소 폭(--tabw)이 그 탭과 같아야
-     '그 탭 아래가 열린 칸' 으로 보인다. 탭줄 밑선의 빈 구간도 같은 두 값으로 잡는다.
+  /* 하위 줄 글자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)이 그 탭과 같아야 소속이 보인다.
+     줄 자체는 화면 폭을 다 쓴다(바닥선이 끝까지 가야 하므로) — 움직이는 건 안쪽 여백뿐이다.
      offsetLeft 는 offsetParent 에 따라 기준이 흔들려서 탭줄과의 상대 좌표로 잰다.
      창이 좁아 탭줄이 두 줄로 접히면(활성 탭이 마지막 줄이 아니면) 그 좌표를 따라가는 게 뜻을
-     잃으므로 body.subdetach 로 계단을 포기한다. */
+     잃으므로 body.subdetach 로 들여쓰기를 포기한다. */
   const tabrow=document.querySelector(".tabrow"), tabsNav=document.querySelector(".tabs");
   const wrapEl=document.querySelector(".wrap");
   function alignSub(){
@@ -25,7 +25,6 @@
     if(!at||!tabrow||!tabsNav||!wrapEl) return;
     const ar=at.getBoundingClientRect();
     wrapEl.style.setProperty("--tabx", Math.round(ar.left-tabrow.getBoundingClientRect().left)+"px");
-    wrapEl.style.setProperty("--tabw", Math.round(ar.width)+"px");
     document.body.classList.toggle("subdetach",
       Math.abs(ar.bottom-tabsNav.getBoundingClientRect().bottom) > 2);
   }
