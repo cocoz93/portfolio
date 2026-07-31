@@ -4,9 +4,11 @@
    재현은 결국 그림이다. 그래서 실제로 서버를 띄우고 두 클라이언트로 접속해 녹화한 영상으로 바꿨다.
    재현 코드(서버 틱 · 도착 지연 · 데드레커닝 · 문자판 · 픽셀 렌더 약 650줄)는 통째로 걷어냈다.
 
-   ── 여기 남은 일 둘 ──
-   ① 규격 여섯 칸, ② 판이 보일 때만 재생 — 숨은 판에서 두 영상이 돌면 화면에 없는 그림에 디코딩을 쓴다.
-   판 크기·이름표 자리 계산은 전부 CSS 가 한다(히어로 66.6% 의 근거는 CSS 쪽 주석 참고). */
+   ── 여기 남은 일 셋 ──
+   ① 규격 여섯 칸, ② 판이 보일 때만 재생 — 숨은 판에서 두 영상이 돌면 화면에 없는 그림에 디코딩을 쓴다,
+   ③ 이 화면으로 들어올 때마다 진입 애니를 처음부터(1-1 이 웨이브를 다시 트는 것과 같은 자리).
+   판 크기·이름표 자리 계산은 전부 CSS 가 한다(히어로 66.6% 의 근거는 CSS 쪽 주석 참고).
+   진입 애니의 길이·방향·곡선도 전부 CSS 다 — 여기는 켜고 끄는 일만 한다. */
 (function(){
 "use strict";
 var pane=document.getElementById("p-crender");
@@ -48,7 +50,25 @@ var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 function kick(v){ var p=v.play(); if(p&&p["catch"]) p["catch"](function(){}); }
 function play(){ if(RM) return; vids.forEach(kick); }
 function stop(){ vids.forEach(function(v){ if(!v.paused) v.pause(); }); }
-window.__crenderPlay=play;
+
+/* ═══ 진입 — 판이 액자 밖에서 들어온다 ═══
+   ENTER 는 맨 뒤 요소가 끝나는 시각이다(CSS 의 .cr-foot 지연 .64s + 길이 .62s).
+   그 뒤에 .cr-in 을 떼는 이유는 두 가지다: 잘라 주던 overflow 를 원래대로 돌려 컷의 그림자를
+   되살리고, will-change 로 띄워 둔 레이어를 내린다(영상 판 둘이 GPU 메모리를 계속 물지 않게).
+   CSS 를 고쳐 길이를 바꾸면 이 숫자도 같이 고칠 것. */
+var ENTER=1260+140, enterTimer=0;
+function enter(){
+  if(RM) return;
+  pane.classList.remove("cr-in");
+  void pane.offsetWidth;          /* 뗐다 붙이는 것을 브라우저가 인식하도록 강제 리플로우 */
+  pane.classList.add("cr-in");
+  clearTimeout(enterTimer);
+  enterTimer=setTimeout(function(){ pane.classList.remove("cr-in"); }, ENTER);
+}
+/* 탭 전환 코드가 이 이름으로 부른다 — 영상 깨우기와 진입 애니가 한 창구를 쓴다.
+   판의 hidden 을 보는 아래 MutationObserver 에는 안 얹는다: 그쪽은 tabs.js 가 hidden 을
+   내리는 순간 따로 한 번 더 돌아서, 얹으면 같은 애니가 두 번 시작한다. */
+window.__crenderPlay=function(){ play(); enter(); };
 if(window.MutationObserver){
   new MutationObserver(function(){ if(pane.hidden) stop(); else play(); })
     .observe(pane,{attributes:true,attributeFilter:["hidden"]});
@@ -56,5 +76,8 @@ if(window.MutationObserver){
 /* 저절로 도는 영상은 멈출 방법이 있어야 한다 — 컨트롤 바는 화면을 어지럽히므로 화면 자체를 누르게 한다.
    (움직임을 줄이도록 설정한 방문자에게는 자동재생을 안 걸지만, 눌러서 보는 길은 남긴다) */
 vids.forEach(function(v){ v.addEventListener("click",function(){ if(v.paused) kick(v); else v.pause(); }); });
-if(!pane.hidden) play();
+/* 첫 로드에 이 탭이 열려 있는 경우(딥링크 #crender). tabs.js 는 이 조각보다 먼저라
+   그때의 paint() 는 __crenderPlay 를 아직 못 찾는다 — wave.js 가 같은 이유로 스스로 한 번
+   재생하는 것과 같은 자리다. */
+if(!pane.hidden){ play(); enter(); }
 })();

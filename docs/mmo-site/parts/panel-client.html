@@ -25,7 +25,10 @@
       <div class="cr-fhd"><b>같은 서버에 붙은 세 화면</b><span>같은 규격 · 붙인 더미 수만 다르다</span>
         <em>전부 실제 실행 화면</em></div>
       <div class="cr-hero">
-        <div class="cl-dash spec" id="d-render"></div>
+        <!-- 규격 줄을 제 높이만큼의 띠로 감싼다 — 진입 애니에서 여섯 칸이 이 띠의 윗 모서리에서
+             내려온다. 안 감싸면 칸이 액자 머리줄 위를 지나 올라간다. 격자 자리(grid-area:dash)는
+             껍데기가 가져간다: .cr-hero>.cl-dash 는 직계 자식 선택자라 감싸는 순간 안 걸린다. -->
+        <div class="cr-specclip"><div class="cl-dash spec" id="d-render"></div></div>
         <div class="cr-screen web big">
           <div class="cr-hd"><b><i class="cr-num">1</i>웹 클라이언트</b><span>픽셀로 그린다</span><span>더미 250명</span></div>
           <video id="vd-web" muted loop playsinline preload="metadata" width="1296" height="814"
@@ -54,10 +57,13 @@
     </div>
     <!-- '실제 녹화' 라고 못 박는 일은 액자 머리줄의 배지가 맡는다 — 여기는 셋이 각각 무엇인지와
          녹화 조건이다. ③ 은 녹화가 아니라 캡처라서 셋을 '녹화' 로 묶을 수 없다. -->
-    <div class="cr-foot">
-      <span><b>앞 둘은 20초 녹화 · 오른쪽 아래는 캡처</b>(같은 서버에 부하 더미를 붙이고 각각 접속했다 · 창 테두리만 잘라냈고 배속·편집 없음)</span>
-      <a class="cr-more" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
-        target="_blank" rel="noopener">자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em></a>
+    <!-- 꼬리줄도 왼쪽 밖에서 들어온다. 액자 밖이라 스스로 잘릴 데가 없어 껍데기를 하나 씌운다. -->
+    <div class="cr-footclip">
+      <div class="cr-foot">
+        <span><b>앞 둘은 20초 녹화 · 오른쪽 아래는 캡처</b>(같은 서버에 부하 더미를 붙이고 각각 접속했다 · 창 테두리만 잘라냈고 배속·편집 없음)</span>
+        <a class="cr-more" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
+          target="_blank" rel="noopener">자세히 — 콘솔·웹 클라이언트 <em>노션 ↗</em></a>
+      </div>
     </div>
   </section>
 
