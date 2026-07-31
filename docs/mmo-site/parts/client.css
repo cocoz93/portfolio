@@ -1,0 +1,181 @@
+/* ═══════════ 클라이언트 탭 — 그림이 먼저, 글은 고른 것 하나만 ═══════════
+   서버 탭과 같은 문법이다: 왼쪽 그림에서 무엇을 누르면 오른쪽 카드가 그것으로 바뀐다.
+   클래스에 cl- 을 붙인 이유는 .stage · .hit · .cap 이 이미 설계 탭에 있어서다. */
+/* ═══ 탭 줄 ═══ */
+
+/* ═══ 하위탭 ═══ */
+
+ .cl-pane.act{display:block}
+
+/* ═══ 계기판 ═══ */
+.cl-dash{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 10px}
+.cl-tile{background:var(--panel); border:1px solid var(--line2); border-radius:10px; padding:8px 15px 7px}
+.cl-tile .l{font-size:.72rem; letter-spacing:.04em; color:var(--mut); font-weight:700}
+.cl-tile .v{display:flex; align-items:baseline; gap:5px; margin-top:4px}
+.cl-tile .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:1.5rem;
+  font-weight:700; letter-spacing:-.02em; line-height:1; color:var(--ink)}
+.cl-tile .u{font-family:var(--mono); font-size:.64rem; color:var(--dim); font-weight:600}
+.cl-tile .f{margin-top:6px; font-family:var(--mono); font-size:.63rem; color:var(--dim)}
+.cl-tile.ok .n{color:var(--ok)}
+
+/* ── 규격 칸(.spec) — 2-1 만 쓴다 ──
+   2-2·2-3 의 계기판은 실측 성과(에코 3,791,301건/초 · 무결성 위반 0건)라 큼직한 게 맞다.
+   2-1 에는 자랑할 성과 수치가 없다 — 여기 값은 전부 '규격' 이라 성격이 다르다.
+   네 칸을 크게 두고 억지로 채우는 대신, 각주 줄(.f)을 걷어 높이를 90px → 72px 로 낮추고
+   여섯 칸을 담는다. 각주가 없으니 라벨이 뜻을 다 져야 한다(맵 · 섹터 · 시야 …). */
+.cl-dash.spec{grid-template-columns:repeat(6,1fr); gap:9px}
+.cl-dash.spec .cl-tile{padding:7px 12px 8px}
+.cl-dash.spec .cl-tile .l{font-size:.68rem}
+.cl-dash.spec .cl-tile .v{margin-top:2px; gap:5px}
+.cl-dash.spec .cl-tile .n{font-size:1.14rem}
+/* 단위는 sans 로 되돌린다 — .cl-tile .u 는 mono 라서 '칸 · 36개' 처럼 한글이 섞이면 글꼴이
+   폴백돼 자간이 벌어진다(확대해서 확인했다). 여섯 칸 중 셋이 한글 단위다 */
+.cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.66rem; font-weight:600}
+/* 숫자가 없는 칸(더미 부하) — 값 자리가 비면 칸이 무너져 보이므로 같은 높이의 글자로 채운다 */
+.cl-dash.spec .cl-tile .t{font-size:.86rem; font-weight:700; color:var(--ink); line-height:1.5}
+
+/* ── 그림 안에서 누를 수 있는 것 ──
+   한때 선택 표시를 반투명 흰 판으로 덮었는데, 그 판이 격자·막대 위에 얹혀 내용을 회색으로 지웠다.
+   테두리만 켠다 — 무엇이 골라졌는지는 알려 주되 그림은 가리지 않는다. */
+.cl-hit{cursor:pointer}
+.cl-hit .cl-plate{fill:none; stroke:#6cc7ff; stroke-width:1.6; opacity:0; transition:opacity .15s}
+.cl-hit:hover .cl-plate{opacity:.4}
+.cl-hit.on .cl-plate{opacity:.9}
+
+/* ※ 옆 카드(.cl-two / .cl-stage / .cl-side / table.cl-t)는 세 장이 다 전폭 그림으로 바뀌면서 없앴다.
+   카드가 하던 일(무엇을 골랐나 · 왜 그랬나)은 그림 안 라벨과 아래 한 줄(.cr-note)이 나눠 가졌다. */
+
+/* ── 아래 칩 줄 ── */
+.cl-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; max-width:57%}
+.cl-chips .t{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut); margin-right:2px}
+.cl-chips button{display:flex; align-items:center; gap:6px; cursor:pointer;
+  font-family:var(--sans); font-size:.8rem; font-weight:700; color:#8e9cb4;
+  background:transparent; border:1px solid #232e42; border-radius:9px; padding:5px 10px 5px 6px}
+.cl-chips button i{width:17px; height:17px; border-radius:50%; border:1.4px solid #55414a; color:#9b7a80;
+  font-family:var(--mono); font-size:.6rem; font-weight:800; display:grid; place-items:center; font-style:normal}
+.cl-chips button:hover{color:#d3ddee; border-color:#3c4a63}
+.cl-chips button.act{color:#fff; border-color:#2c5f85; background:rgba(20,40,60,.5)}
+.cl-chips button.act i{border-color:var(--net); color:var(--net); background:#0e2333}
+
+/* ═══════════ ① 클라이언트 — 큰 그림 하나 + 참조컷 둘 ═══════════
+   이 탭만 '그림 + 카드' 문법을 안 쓴다. 요지가 화면 그 자체이기 때문이다.
+
+   ── 한때 두 판을 나란히 뒀다(콘솔 · 웹). 왜 바꿨나 ──
+   같은 크기의 판을 늘어놓으면 눈이 갈 곳이 없다. 셋째 컷(더미 5,000명)까지 더하니 같은 무게의
+   판·칸이 열넷이 되어 시선이 흩어졌다. 그래서 웹 화면 하나를 크게 두고 나머지 둘을 종속시킨다 —
+   오른쪽 둘은 판이 아니라 '이름표만 얹은 참조컷' 이라 머리줄·캡션줄이 없다. 초점이 하나로 모인다.
+
+   ── 두 칸짜리 격자 · 아래 선은 CSS 가 스스로 맞춘다 ──
+   왼쪽 칸에 규격과 큰 화면을 두 줄로 쌓고, 오른쪽 칸(참조컷 둘)이 그 두 줄을 통째로 마주 본다.
+   규격의 오른쪽 끝이 히어로 판의 오른쪽 끝과 같은 세로선에 떨어지고, 참조컷은 규격 높이(+틈)
+   만큼 위로 올라와 세로가 길어진다.
+
+   한동안 히어로 폭을 손으로 풀어서 아래 선을 맞췄다. 왼쪽 높이(=폭÷종횡비 + 머리·캡션)와
+   오른쪽 높이(=콘솔 + 덮임컷 + 틈)가 같아지는 폭을 구하는 식이었는데 세 번 연달아 틀렸다:
+     68%(오른쪽이 42px 짧음) → 66.6%(칸 사이 틈 14 를 빼먹어 16px) → 66%(제목을 키우자 5px)
+   원인은 식이 머리줄 높이에 매달려 있던 것이다. 제목 크기를 건드릴 때마다 다시 풀어야 했다.
+   그래서 계산을 걷고, 두 참조컷이 남는 높이를 종횡비 비율대로 나눠 먹게 했다(flex 값 = 종횡비).
+   남는 높이를 그림에 어떻게 얹느냐가 컷마다 다르다:
+     · 덮임컷 = cover. 가장자리가 흰 말풍선 덩어리라 좌우가 잘려도 안 보인다.
+     · 콘솔   = contain. 80칸 문자판이라 좌우를 자르면 맵 끝 칸이 사라진다. 대신 남는 높이를
+                위아래 여백으로 두고, 그 여백 색을 녹화 바탕색(#0C0C0C · 실제로 찍어 확인)에
+                맞춰 '콘솔 화면이 조금 더 큰 것' 으로 보이게 한다.
+   ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 폭 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
+.cr-hero{display:grid; grid-template-columns:66% minmax(0,1fr);
+  grid-template-areas:"dash side" "hero side"; gap:10px 14px}
+.cr-hero>.cl-dash{grid-area:dash; margin:0}
+.cr-hero .big{grid-area:hero}
+.cr-side{grid-area:side; display:flex; flex-direction:column; gap:12px}
+/* 세로로 쌓으면 flex 는 폭이 아니라 높이를 나눈다 — 그래서 종횡비가 아니라 그 역수를 넣어야
+   두 컷이 원래 비율(=자기 자연 높이)대로 함께 커진다. 종횡비를 그대로 넣었더니 콘솔이 375→335px
+   로 오히려 줄고 덮임컷만 304→414 로 불었다. 아래 가로로 눕히는 분기에서는 반대로 종횡비 그대로. */
+.cr-side>.cr-ref.con{flex:0.7750 1 0; min-height:0; background:#0c0c0c}   /* 1/1.2903 */
+.cr-side>.cr-ref.lim{flex:0.6281 1 0; min-height:0}                      /* 1/1.5921 */
+/* 영상을 칸 위쪽에 붙인다(남는 여백은 전부 아래로) — 가운데 두면 영상이 여백만큼 내려앉아서
+   알약(top:10.5%)이 다시 상태줄을 덮는다. 위로 붙이면 칸이 영상보다 높을수록 알약이 상태줄에서
+   멀어지기만 하므로, 창 폭이 바뀌어도 가릴 일이 없다. */
+.cr-side>.cr-ref.con video{height:100%; object-fit:contain; object-position:center top}
+.cr-side>.cr-ref.lim img{height:100%; object-fit:cover; object-position:center top}
+.cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px;
+  padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
+.cr-hd{display:flex; align-items:baseline; gap:9px; margin:0 12px 8px; flex-wrap:wrap}
+/* 화면 이름은 이 판이 무엇인지 말하는 유일한 글자다 — 곁의 메타(픽셀로 그린다 · 더미 250명)는
+   그대로 두고 이름만 키워서 크기 차이를 벌린다(.95 → 1.16 → 1.34 → 1.56rem) */
+.cr-hd b{font-size:1.56rem; font-weight:800; letter-spacing:-.02em}
+.cr-hd span{font-family:var(--mono); font-size:.66rem; color:var(--dim)}
+/* 영상은 카드 좌우 끝까지 채운다 — 화면을 담은 판이라 테두리에 붙는 쪽이 '기계 화면' 으로 읽힌다.
+   눌러서 멈출 수 있으므로 손가락 커서를 준다(컨트롤 바는 화면을 어지럽혀서 안 쓴다). */
+.cr-screen video{display:block; width:100%; height:auto; background:#070a10; cursor:pointer}
+.cr-cap{margin:8px 13px 0; font-size:.72rem; color:var(--dim); line-height:1.5}
+
+/* ── 참조컷 — 판이 아니라 그림에 이름표만 얹은 것 ──
+   두 컷 다 네 귀퉁이가 다 쓰여 있어서, 덮개를 위에 통째로 깔면 내용을 지운다. 그래서 컷마다
+   비어 있는 자리를 찾아 하나씩만 얹는다. */
+.cr-ref{position:relative; border:1px solid var(--line2); border-radius:11px; overflow:hidden;
+  background:#070a10}
+.cr-ref img, .cr-ref video{display:block; width:100%; height:auto}
+.cr-ref video{cursor:pointer}
+/* 알약 이름표(콘솔) — 맨 위 두 줄이 상태줄(Zone · Player · Pos · Speed)이다. 실서버에 붙어 있다는
+   증거라 가리면 안 된다. 그 아래로 내리고(10.5% = 640×496 에서 상태줄이 차지하는 약 8% + 여유),
+   폭도 글자만큼만 쓴다. 통짜 덮개는 격자를 지운다. */
+.cr-ref .pill{position:absolute; left:9px; top:10.5%; display:inline-flex; align-items:baseline; gap:8px;
+  padding:6px 13px 7px; border-radius:9px; font-size:1.32rem; font-weight:800; color:#fff;
+  letter-spacing:-.015em; background:rgba(8,11,19,.86); border:1px solid rgba(120,150,190,.28)}
+.cr-ref .pill span{font-size:.76rem; font-weight:600; color:#a9b8cf}
+/* 덮임 컷은 왼쪽 위에 '시야 1,118명' 이 떠 있다 — 이 컷의 핵심 숫자다. 그래서 위는 비워 두고
+   이름표와 수치를 아래 한 줄에 합쳤다(덮개 하나). */
+.cr-ref>i{position:absolute; left:0; right:0; bottom:0; box-sizing:border-box; display:block;
+  padding:26px 12px 9px; font-style:normal; font-size:.68rem; font-weight:600; color:#cfe0f5;
+  background:linear-gradient(to top, rgba(8,11,19,.94) 0%, rgba(8,11,19,.72) 52%, rgba(8,11,19,0) 100%)}
+.cr-ref>i>b{display:block; margin-bottom:5px; font-size:1.4rem; font-weight:800; color:#fff;
+  letter-spacing:-.015em}
+.cr-ref>i>b .hot{color:var(--game); font-weight:800}
+/* 규격·녹화 조건은 여기 한 줄로 모은다. 글을 판 사이에 흘리면 그림 셋의 리듬이 끊긴다 */
+.cr-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:11px 2px 0;
+  font-size:.72rem; color:var(--dim); line-height:1.6}
+.cr-foot b{color:var(--mut); font-weight:700}
+.cr-foot .cr-more{margin-left:auto}
+/* 칩으로 고른 보기의 한 줄 설명. 자리를 미리 잡아 둬야 칩을 눌러도 아래 줄이 안 흔들린다 */
+.cr-note{display:flex; gap:11px; align-items:flex-start; margin:11px 0 0; min-height:42px;
+  background:var(--sunk); border:1px solid var(--line2); border-radius:10px; padding:9px 13px}
+.cr-note i{flex:0 0 auto; margin-top:1px; font-style:normal; font-family:var(--mono);
+  font-size:.63rem; font-weight:800; letter-spacing:.06em; color:var(--net)}
+.cr-note p{margin:0; font-size:.81rem; color:#93a3ba; line-height:1.6}
+/* 전폭 그림 한 장 — 옆에 카드를 세우지 않는 탭이 쓴다 */
+.cr-wide{background:var(--panel); border:1px solid var(--line2); border-radius:12px; padding:12px 14px}
+.cr-wide svg{display:block; width:100%; height:auto}
+/* ※ .cr-real(영상 아래 다섯 줄 문단)은 없앴다 — 그 문단이 글로 설명하던 '5,000명이면 시야가
+   1,118명이 되어 화면이 흰 판으로 덮인다' 를 실측 캡처 한 장이 대신한다(오른쪽 아래 참조컷). */
+.cr-chips{max-width:100%}
+/* 노션으로 보내는 문 — 칩 줄 오른쪽 끝. 칩과 같은 크기지만 눌리는 성격이 달라 색을 뺀다 */
+.cr-more{margin-left:auto; display:inline-flex; align-items:center; gap:7px; text-decoration:none;
+  font-size:.78rem; font-weight:700; color:var(--mut); border:1px dashed #2c3b55;
+  border-radius:9px; padding:5px 11px}
+.cr-more:hover{color:var(--ink); border-color:#3c4a63}
+.cr-more em{font-style:normal; font-family:var(--mono); font-size:.66rem; color:var(--dim)}
+
+@media (max-width:1200px){
+  /* 상세의 2단→1단은 여기가 아니라 카드 폭을 보는 @container 가 맡는다(위 .bx-det .cols 옆) */
+  /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
+     내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어
+     문자 격자가 회색 띠로 보이므로, 참조컷 상태로 반씩 나눠 갖는 편이 낫다. */
+  /* 두 칸 격자를 한 칸으로 풀어 규격 · 히어로 · 참조컷을 세로로 쌓는다 */
+  .cr-hero{grid-template-columns:minmax(0,1fr); grid-template-areas:"dash" "hero" "side"; gap:10px}
+  .cr-side{flex-direction:row; align-items:flex-start}
+  /* 여기서도 폭을 종횡비에 비례해 나눈다(= 두 컷의 높이가 같아진다). 반씩 균등하게 주면
+     덮임컷(1.5921)이 콘솔(1.2903)보다 75px 낮아지고, 그 빈 자리 때문에 아래 이름표 띠가
+     그림에서 떨어져 뜬다(bottom:0 은 그림 바닥이 아니라 칸 바닥이다). */
+  /* 가로로 눕히면 flex 가 높이가 아니라 폭을 나눈다 — 그래서 위(세로)에서 쓴 역수를 종횡비
+     그대로로 되돌린다. 안 되돌리면 폭이 55:45 로 갈려 두 컷 높이가 어긋난다(700px 에서 확인). */
+  .cr-side>.cr-ref.con{flex:1.2903 1 0; min-height:auto; background:#070a10}
+  .cr-side>.cr-ref.lim{flex:1.5921 1 0; min-height:auto}
+  /* 세로로 쌓였을 때 남는 높이를 먹으라고 준 contain·cover 를 되돌린다 — 가로로 눕히면
+     'flex 값 = 종횡비' 만으로 두 컷 높이가 맞으므로 자르거나 여백을 둘 이유가 없다 */
+  .cr-side>.cr-ref.con video{height:auto; object-fit:fill}
+  .cr-side>.cr-ref.lim img{height:auto; object-fit:fill}
+  /* 참조컷이 반 폭으로 줄면 알약이 두 줄로 감싸며 작은 컷을 덮는다(700px 에서 확인).
+     이름표는 컷 크기에 맞춰 같이 줄어야 한다 — 이름은 남기고 크기만 내린다. */
+  .cr-ref .pill{font-size:1rem; padding:5px 11px 6px; flex-wrap:wrap}
+  .cr-ref .pill span{font-size:.64rem}
+  .cr-ref>i>b{font-size:1.12rem}
+}

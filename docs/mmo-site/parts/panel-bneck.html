@@ -1,0 +1,52 @@
+<section class="panel" id="p-bneck" role="tabpanel" hidden>
+    <!-- 판 세 장을 겹친다. 아래부터 설계 모습 → 청사진(대각선 마스크 뒤) → 핀.
+         전환 애니는 이 요소들의 마스크/transform/opacity 만 건드린다(SVG 안은 그린 뒤 정지).
+         .bn-shift = 지도·레일·카드와 캡션을 한 덩어리로 묶는 껍데기. -->
+    <div class="bn-shift">
+      <div class="bn-stage">
+        <!-- viewBox 835 = 그림이 실제로 차지하는 칸 그대로다(내용 bbox x 321~1099 를 재서 잡았다 — 클라 판을 좁히기 전에는 256~1099·900 이었다).
+             한때는 여기를 1200·1420 으로 늘려 오른쪽에 빈 칸을 만들고 그 자리에 패널을 얹었는데,
+             그러면 패널이 지도 아래로 내려가는 좁은 화면에서 그 빈 칸이 갈 곳 없이 남는다
+             (그림이 판의 62% 만 쓰고 오른쪽 38% 가 빈 채로 그려진다).
+             그래서 자리 나누기는 CSS 폭(.bn-tilt 63% / .bncard 35%)이 맡고, viewBox 는 그림만 담는다.
+             ※ 요각 YAW=−12 로 아이소 그림이 오른쪽·아래로 밀려서 시작점을 277,172 → 329,190 으로 옮겼다.
+               평면 그림(FPJ)은 각도의 영향을 안 받으므로, 창을 옮긴 만큼 FPJ 의 원점도 같이 옮겨야
+               평소 보이는 평면도가 제자리에 남는다(cx +52 · cy +18). 둘은 항상 같이 움직인다. -->
+        <div class="bn-cam"><div class="bn-tilt">
+          <svg id="bnsolid" viewBox="329 190 835 500" aria-hidden="true"></svg>
+          <div class="bn-reveal">
+            <svg id="bnscene" viewBox="329 190 835 500" role="img"
+                 aria-label="병목 위치 3곳을 핀으로 표시한 서버 구조 평면도"></svg>
+          </div>
+          <!-- 핀은 키보드로 짚어 갈 수 있는 버튼이다. aria-hidden 을 걸면 스크린리더에서만 사라지고
+               tab 순서에는 그대로 남아, 읽히지 않는 것에 초점이 가는 상태가 된다. -->
+          <svg id="bnpins" viewBox="329 190 835 500" role="group" aria-label="병목 지점 핀 6개"></svg>
+        </div></div>
+        <!-- 병목 지점 목록 = 지도(어디)와 카드(무엇) 사이에 세우는 세로 레일.
+             한때 지도 아래 가로 칩 줄이었는데, 그러면 이 탭의 목차가 지도에 딸린 부속으로 읽혔다.
+             둘 사이에 세우면 왼쪽에서 고르고 오른쪽에서 읽는 방향이 화살표 없이 생기고,
+             여섯 자리가 세로로 쌓여 목록으로 한눈에 들어온다. -->
+        <div class="bnnav" id="bnc-nav"><div class="t">병목 지점</div></div>
+        <!-- 닫기 버튼이 없는 이유: 이제 이 패널이 실험을 볼 수 있는 유일한 자리다(지도 아래 목록을 걷어냈다).
+             닫아 버리면 화면에서 실험이 통째로 사라진다. 대신 왼쪽 레일로 자리를 갈아 끼운다. -->
+        <div class="bncard" id="bncard" role="region" aria-label="병목 상세" aria-live="polite" hidden>
+          <div class="k">병목 <span id="bnc-n"></span></div>
+          <h3 id="bnc-t"></h3>
+          <div class="cl" id="bnc-s"></div>
+          <div class="why" id="bnc-w"></div>
+          <!-- '이 자리에서 한 실험 N' 줄은 뺐다 — 바로 위 부제가 이미 '채택 4 · 기각 2 · 진단 1' 로
+               같은 것을 더 자세히 말한다. 그 30px 는 아래 실측 표가 쓴다. -->
+          <div id="bnc-b"></div>
+          <!-- 계기판 네 칸은 '고른 실험의 끄고 → 켜고' 다(paintDash). 한때 화면 맨 위 머리띠였는데,
+               그러면 무엇의 값인지 모르는 채로 숫자를 먼저 읽게 된다. 목록 바로 아래로 내려
+               고른다 → 그 값 → 상세 순서를 맞춘다. -->
+          <div class="bx"><div class="bx-dash" id="bx-dash"></div></div>
+          <!-- 상세는 JS(detEl)가 채운다. 여기 미리 두는 이유는 순서다 —
+               JS 가 만들면 목록 바로 뒤에 꽂혀 계기판 앞으로 끼어든다. -->
+          <div class="bx-det" id="bx-det"></div>
+        </div>
+      </div>
+      <!-- 두 줄이면 41px 를 먹는다. 한 화면(스크롤 없음)이 이 탭의 규칙이라 한 줄로 끊었다. -->
+      <div class="bn-cap">설계 · 구현과 같은 구조를 위에서 내려다본 평면도 · 붉은 핀 = 실측으로 확인한 병목 6곳, 핀이나 옆 목록을 누르면 오른쪽 카드가 바뀝니다</div>
+    </div>
+  </section>

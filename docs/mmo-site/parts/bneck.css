@@ -1,0 +1,155 @@
+/* ═══════════ 병목 탭 — 한 화면 ═══════════
+   세 칸으로 읽는다: 지도(어디) → 레일(무엇을 고를까) → 카드(고른 것). 스크롤 없이 끝난다.
+   클래스는 bx- 로 시작한다: 위 코드의 .exp · .rs · .nm 과 겹치지 않게. */
+/* ※ 여섯 색 변수(--hot·--ok·--rj·--panel2·--sunk·--line2)를 여기서 한 번 더 선언하고 있었는데,
+   같은 값이 :root 에 다 올라가 있어 죽은 선언이었다. 값이 두 곳에 있으면 언젠가 갈린다 — 지웠다. */
+
+/* ── 판 크기: 판 폭을 다 쓰고 셋으로 나눈다 ──
+   한때 1520px 로 묶여 있었는데, 그러면 넓은 화면(1900px 판)에서 오른쪽 340px 가 통째로 빈 검은 자리가 됐다.
+   위 탭줄·머리글과 같은 1860px 로 풀어 왼쪽 끝뿐 아니라 오른쪽 끝도 맞춘다.
+
+   자리 잡기를 '카드를 오른쪽에 절대배치' 에서 세 칸 그리드로 바꿨다. 절대배치일 때는
+   카드가 top:0/bottom:0 으로 지도 높이에 묶여 있어서, 카드 내용이 지도보다 길면
+   overflow:hidden 에 소리 없이 잘렸다(아래로 300px 넘게 비어 있는데도). 그리드면 줄 높이가
+   셋 중 가장 긴 것을 따라가므로 카드가 필요한 만큼 내려가고, 짧을 때만 지도 높이에 맞춰 늘어난다.
+
+   칸 사이 틈 18px 은 장식이 아니라 치수다: 고른 항목에서 뻗는 꼭지가 이 틈을 건너
+   카드 왼쪽 모서리에 닿는다(.bnnav button.act::after 의 border-left 18px 과 같은 값).
+   그래서 틈은 % 가 아니라 px 로 고정한다 — 창 폭이 변해도 꼭지 길이와 어긋나지 않게. */
+.bn-shift{ max-width:1860px }
+.bn-stage{ display:grid; grid-template-columns:49fr 12fr 36fr; column-gap:18px }
+.bn-tilt{ width:100% }                /* 폭은 이제 그리드 칸이 정한다. 1860 → 지도 ≈ 921px · 세로 ≈ 552px */
+.bncard{ position:static; width:auto; min-width:0; max-width:none }
+/* 캡션은 지도 칸과 같은 폭 — 그리드가 아니라 형제라서 같은 셈을 직접 한다(틈 2칸 36px 을 뺀 뒤 49/97) */
+.bn-cap{ max-width:calc((100% - 36px) * 49 / 97) }
+
+/* ── 계기판 — 카드 안, 실험 목록 바로 아래 ──
+   네 칸은 고른 실험의 끄고→켜고 값이라(paintDash) 카드 밖에 두면 무엇의 값인지 짚이지 않는다.
+   카드 폭(688)에 네 칸이면 한 칸 ≈ 163px — '1,013만 pkt/s' 가 한 줄에 들어가는 폭이다. */
+.bx-dash{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin:0 }
+#bncard > .bx{ flex:0 0 auto; margin:10px 0 0; padding-top:10px; border-top:1px solid #232e42 }
+.bx-tile{ background:var(--panel); border:1px solid var(--line2); border-radius:10px; padding:6px 10px 6px }
+.bx-tile .l{ font-size:.66rem; letter-spacing:.04em; color:var(--mut); font-weight:700 }
+.bx-tile .v{ display:flex; align-items:baseline; gap:5px; margin-top:5px }
+.bx-tile .n{ font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:1.12rem;
+  font-weight:700; letter-spacing:-.02em; line-height:1; color:var(--mut) }
+.bx-tile .u{ font-family:var(--mono); font-size:.64rem; color:var(--dim); font-weight:600 }
+.bx-tile .g{ height:3px; border-radius:99px; background:var(--sunk); margin-top:6px; position:relative; overflow:hidden }
+.bx-tile .g i{ position:absolute; inset:0 auto 0 0; border-radius:99px; transition:width .5s cubic-bezier(.22,.61,.36,1) }
+.bx-tile .g .w{ background:var(--line) }
+.bx-tile .g .a{ background:var(--dim) }
+.bx-tile .f{ display:flex; justify-content:space-between; align-items:center; margin-top:5px;
+  font-family:var(--mono); font-size:.6rem; color:var(--dim); font-variant-numeric:tabular-nums }
+.bx-chip{ font-family:var(--mono); font-size:.64rem; font-weight:800; padding:2px 6px; border-radius:5px }
+.bx-chip.up{ color:#8ff0c0; background:rgba(87,214,148,.13) }
+.bx-chip.dn{ color:#ffb9aa; background:rgba(255,107,82,.13) }
+.bx-chip.fl{ color:var(--dim); background:rgba(105,120,143,.14) }
+.bx-tile.good .n{ color:var(--ok) } .bx-tile.good .g .a{ background:var(--ok) }
+.bx-tile.bad .n{ color:var(--hot) }  .bx-tile.bad .g .a{ background:var(--hot) }
+/* 그 시점에 안 잰 지표 — 0 으로 그리면 '0 이었다' 로 읽힌다. 칸을 죽여 값이 없음을 보인다. */
+.bx-tile.none{ opacity:.42 }
+.bx-tile.none .n{ color:var(--line) }
+
+/* ── 카드 안: 실험 목록은 제목 버튼 ── */
+.bncard .exp{ width:100%; text-align:left; font:inherit; color:inherit;
+  background:none; border:0; cursor:pointer; border-radius:7px; transition:.14s }
+.bncard .exp:hover{ background:#172032 }
+.bncard .exp.selx{ background:#172032; box-shadow:inset 2px 0 0 #ff6b52 }
+.bncard .exp .top{ display:flex; align-items:center; gap:9px }
+/* 옛 PH(자리표시) 배지는 뺐다 — 실측이 없는 항목은 '미측정' 판정 배지 자체로 드러난다 */
+
+/* ── 카드 안: 고른 실험의 상세 ──
+   지도 옆 한 칸에서 끝내야 하므로 라벨 열을 좁게 잡고 두 줄로 담는다. */
+/* 위 경계선은 계기판(#bncard>.bx)이 갖는다 — 목록과 상세 사이에 이제 계기판이 끼어 있어서,
+   여기에도 선을 그으면 계기판이 위아래로 갇혀 별개 덩어리로 떨어져 나간다. */
+.bx-det{ flex:1 1 auto; min-height:0; overflow-y:auto; margin-top:9px;
+  scrollbar-width:thin; scrollbar-gutter:stable }
+/* 실험이 일곱 건인 자리(송신 경로)에서는 목록이 세로를 많이 가져가 상세가 한 화면에 다 안 들어간다.
+   잘린 자리를 흐려 둔다 — 스크롤바만으로는 '아래에 더 있다' 가 눈에 안 들어온다. */
+.bx-det::after{ content:""; display:block; position:sticky; bottom:-1px; height:20px; margin-top:-20px;
+  background:linear-gradient(transparent, var(--panel)); pointer-events:none }
+.bx-det .rv{ font-family:var(--mono); font-size:1.02rem; font-weight:700; color:var(--ok); margin-bottom:6px }
+.bx-det.rj .rv, .bx-det.na .rv{ color:var(--rj) }
+.bx-det.dg .rv, .bx-det.fix .rv{ color:#e0b45c }
+.bx-det.now .rv{ color:var(--net) }
+.bx-det.sum .rv{ color:#a99aff }
+/* 측정 조건 — 어느 부하에서 잰 값인지가 안 보이면 실험끼리 값을 잘못 이어 읽는다 */
+.bx-det .cd{ font-family:var(--mono); font-size:.66rem; color:var(--dim); margin:-4px 0 6px; line-height:1.5 }
+.bx-det .cols{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:15px; align-items:start }
+/* 두 단을 한 단으로 접는 자리 — 기준은 창 폭이 아니라 카드 안쪽 폭이다(.bncard 의 container-type).
+   545px 은 실측으로 잡았다: 한 단이 263px 이면 A/B 표 세 열이 한 줄에 들어가고, 253px 이면
+   세 칸이 두 줄로 접힌다. 그 사이가 카드 안쪽 ≈545px 다.
+   한때 이 분기가 @media(max-width:1200px) 였는데, 그건 카드가 늘 창 폭의 43% 이던 시절 값이다.
+   지금은 접힌 배치에서 창 1200px 에 카드가 902px 이라, 창으로 재면 902px 카드가 한 단이 되어
+   본문 한 줄이 63자까지 늘어났다(두 단일 때 28자). 실측으로 확인한 그 어긋남을 여기서 끊는다. */
+@container (max-width:545px){
+  .bx-det .cols{ grid-template-columns:1fr; gap:0 }
+}
+.bx-det .fd{ display:grid; grid-template-columns:58px 1fr; gap:8px; align-items:baseline; margin-top:4px }
+.bx-det .fd .l{ font-size:.66rem; font-weight:700; color:var(--dim); letter-spacing:.03em }
+.bx-det .fd .v{ font-size:.79rem; color:#93a3ba; line-height:1.55 }
+/* 그 실험에서만 의미 있는 지표 — 네 칸에 안 들어가는 것을 노션 표 그대로 */
+/* 열 폭을 고정한다 — 자동이면 지표 이름이 두 줄로 접혀 표가 배로 높아진다.
+   값 열은 '끄고 → 켜고' 를 한 칸에 담으므로 단위는 뒤에만 붙인다(2.59 → 2.82 ms). */
+.bx-ab{ width:100%; table-layout:fixed; border-collapse:collapse; margin-top:10px;
+  font-family:var(--mono); font-size:.64rem; font-variant-numeric:tabular-nums }
+/* 마지막 열은 '−94%' 같은 한 덩어리만 오는 줄 알고 18%만 줬는데, '송신 2.36' 처럼
+   두 낱말이 오면 거기서 줄바꿈이 나 표가 배로 높아졌다. 세 열 다 한 줄에 들어가는 폭으로 맞춘다. */
+.bx-ab col.a{ width:37% } .bx-ab col.b{ width:39% } .bx-ab col.c{ width:24% }
+.bx-ab th{ text-align:right; font-weight:700; color:var(--dim); padding:0 0 5px;
+  border-bottom:1px solid #232e42; letter-spacing:.02em }
+.bx-ab th:first-child{ text-align:left }
+.bx-ab td{ text-align:right; padding:3px 0; color:#93a3ba; border-bottom:1px solid #161f2e }
+.bx-ab tr:last-child td{ border-bottom:0 }   /* 마지막 줄 밑줄 1px 이 상세를 넘겨 스크롤바를 부른다 */
+.bx-ab td:first-child{ text-align:left; color:var(--mut); font-family:var(--sans); font-size:.72rem }
+/* Δ 는 한 실험 안에서도 방향이 갈린다 — SO_SNDBUF 는 틱이 −12% 로 좋아지고 CPU 가 +75% 로 나빠졌다.
+   기각이라고 전부 빨강으로 칠하면 그 갈림이 지워진다. 행마다 정한다. */
+.bx-ab td:last-child{ font-weight:700; color:var(--dim) }
+.bx-ab td.g{ color:var(--ok) }
+.bx-ab td.b{ color:#ffb9aa }
+.bx-ab th+th, .bx-ab td+td{ padding-left:9px }
+.bx-ab th:last-child, .bx-ab td:last-child{ padding-right:3px }  /* 스크롤 트랙에 값이 붙지 않게 */
+
+/* ── 가운데 칸: 병목 지점 레일 ──
+   지도와 카드 사이에 세운다. 여섯 자리가 세로로 쌓여야 '목차' 로 읽히고,
+   왼쪽에서 고르고 오른쪽에서 읽는 방향이 화살표 없이 생긴다.
+   세로를 다 쓰지 않고 가운데 정렬하는 이유: 항목 일곱 개는 지도 세로의 3/4 밖에 안 되는데
+   위로 붙이면 아래에 빈 기둥이 남아 레일이 잘린 것처럼 보인다. */
+.bn-stage .bnnav{ width:auto; max-width:none; margin:0;
+  display:flex; flex-direction:column; justify-content:center; align-items:stretch; gap:6px }
+.bn-stage .bnnav .t{ margin:0 0 5px 2px }
+/* 두 줄짜리 판 — ①배지는 두 줄에 걸치고, 오른쪽에 이름과 판정 부제가 쌓인다.
+   부제('채택 4 · 기각 2 · 진단 1')는 가로 칩이던 시절엔 줄을 넘겨서 감췄는데, 세로로 서면서 자리가 생겼다. */
+.bn-stage .bnnav button{ position:relative; display:grid; grid-template-columns:auto minmax(0,1fr);
+  gap:1px 9px; align-items:center; width:100%; padding:9px 11px; border-radius:10px }
+.bn-stage .bnnav button i{ grid-row:1/3; width:22px; height:22px; font-size:.68rem }
+.bn-stage .bnnav button b{ font-size:.87rem; font-weight:800; line-height:1.3 }
+.bn-stage .bnnav button span{ display:block; margin:0; font-size:.66rem; font-weight:600; line-height:1.3 }
+/* 고른 항목에서 오른쪽 카드로 뻗는 꼭지 — '이 항목을 눌러서 저 카드가 열렸다' 를 잇는 유일한 선이다.
+   폭이 창 크기에 따라 변하는 자리라 SVG marker 가 아니라 CSS 삼각형(border)으로 그린다.
+   색은 지도 핀과 같은 #ff6b52 — 핀 → 레일 → 카드가 한 색으로 이어진다.
+   길이 20px 은 틈(column-gap 18px)보다 2px 길다. 딱 18px 로 맞췄더니 확대해서 보면 꼭짓점이
+   카드 테두리에 닿을락 말락 해서 '가리키다 만' 모양이 됐다 — 2px 겹쳐 테두리를 물게 한다.
+   시작도 -1px 당겨 버튼 테두리 위에 올린다(밑변과 테두리 사이 1px 실틈이 보였다). */
+.bn-stage .bnnav button.act::after{ content:""; position:absolute; left:calc(100% - 1px); top:50%;
+  margin-top:-9px;
+  border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:20px solid #ff6b52 }
+/* 탭에 들어오는 동안 레일은 첫 프레임부터 완성된 채 떠 있었다. 지도가 아직 입체 덩어리인데
+   옆에 목록만 다 그려져 있고, 꼭지는 0.9초 동안 아무것도 없는 검은 자리를 가리켰다.
+   카드가 켜지는 시각(1.34s)에 레일도 같이 들여보낸다 — 지도 → 핀 → (레일 + 카드) 한 박자.
+   ※ 꼭지(::after)에만 애니를 걸면 안 된다. 그 자리는 .act 가 붙어야 생기는데 .act 는 fillCard 가
+     300ms 에 붙이므로, 애니 시계가 300ms 부터 돌아 1.64s 에야 나타난다(카드보다 300ms 늦음).
+     레일 자체는 탭에 들어오기 전에 이미 지어져 있어서(buildNav) 시계가 0 부터 정확히 돈다.
+   backwards 채우기(both)가 지연 구간을 opacity:0 으로 붙잡는다. 모션 끄기면 규칙째 꺼지는데,
+   그때는 카드도 0ms 에 열리므로 어긋나지 않는다. */
+.bn-stage.bn-enter .bnnav{ animation:bnRail .28s ease 1.34s both }
+@keyframes bnRail{ from{opacity:0} to{opacity:1} }
+.bn-stage .bnnav button.act{ border-color:#ff6b52; background:rgba(52,22,20,.72) }
+.bn-stage .bnnav button.act span{ color:#c08a80 }
+/* 카드 머리의 번호를 레일 배지와 똑같은 토큰으로 찍는다 — 같은 표시가 양쪽에 있으면
+   어느 항목에서 열린 카드인지 글을 안 읽어도 짚인다(꼭지와 같은 일을 글자로 한 번 더). */
+.bncard .k #bnc-n{ display:inline-grid; place-items:center; width:20px; height:20px; vertical-align:-5px;
+  margin-left:5px; border-radius:50%; border:1.4px solid #ff6b52; background:#241014;
+  color:#ff6b52; font-family:var(--mono); font-size:.66rem; font-weight:800 }
+
+

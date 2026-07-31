@@ -1,0 +1,34 @@
+  <section class="panel act" id="p-build" role="tabpanel">
+
+<div class="stage">
+  <!-- 구역 강조 — 누르면 그 구역만 남고 나머지는 죽는다. 같은 버튼을 다시 누르면 전체로 복귀.
+       data-z 값은 ZONES[].color(=ZPAL 키)와 같은 문자열이라 스크립트가 그대로 씬에 얹는다. -->
+  <div class="zonebar" role="group" aria-label="구역 강조">
+    <button type="button" class="zb all act" data-z="" aria-pressed="true">전체</button>
+    <button type="button" class="zb" data-z="outside" aria-pressed="false"><i></i>클라</button>
+    <button type="button" class="zb" data-z="net" aria-pressed="false"><i></i>네트워크</button>
+    <button type="button" class="zb" data-z="game" aria-pressed="false"><i></i>게임</button>
+    <button type="button" class="zb" data-z="store" aria-pressed="false"><i></i>데이터베이스</button>
+  </div>
+  <div class="legend">
+    <div class="hd">데이터 흐름</div>
+    <div class="row recv"><i></i>수신 recv<span class="cap">client → 게임</span></div>
+    <div class="row send"><i></i>응답 send<span class="cap">게임 → client</span></div>
+    <div class="row store"><i></i>데이터베이스<span class="cap">게임 → MySQL</span></div>
+    <div class="lhint">▸ 구역 = 개요 · 노드 = 상세</div>
+  </div>
+  <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
+       ※ 클라 판을 72 로 좁히면서 내용 왼쪽이 48칸 들어왔지만, 여기는 안 당긴다.
+         폭만 줄이면 세로는 그대로라(viewBox 높이 500 고정) 씬이 통째로 4.8% 커져서
+         1800×980 화면에서 범례와 '동시 접속' 줄이 첫 화면 밖으로 밀렸다. 왼쪽 여백은 그대로 두는 쪽이 낫다.
+         (병목 씬은 반대다 — 거기선 판이 커질수록 오른쪽 패널도 같이 세로가 늘어 이득이라 당겼다.)
+       내용 bbox=x285~1042 이므로 오른쪽 259칸(≈462px)이 상세카드(420px+여백) 전용 열이 된다.
+       ※ 병목 탭 #bnscene 은 카드가 없으므로 옛 946 프레이밍 유지.
+       ※ 요각 YAW=−12 를 준 뒤 시작점을 259,172 → 311,190 으로 옮겼다. 그림이 통째로 오른쪽·아래로
+         밀렸을 뿐(폭 767→776, 높이 442→423) 크기는 그대로라, 창을 같은 만큼 따라 옮기면
+         여백 배분이 그대로 유지된다. 각도를 되돌리려면 이 값도 함께 되돌릴 것. -->
+  <svg id="scene" viewBox="311 190 1042 500" role="img"
+       aria-label="IOCP 기반 MMO 게임 서버의 아이소메트릭 아키텍처 다이어그램"></svg>
+  <div class="card" id="card"><button class="x" data-close aria-label="닫기">✕</button><div id="cardbd"></div></div>
+</div>
+  </section>

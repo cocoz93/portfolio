@@ -1,7 +1,7 @@
 ﻿# mmo-site 서버 구조도(#scene)를 포폴 홈(portfolio.html)의 정지컷으로 옮긴다.
 #
 # 왜 필요한가:
-#   mmo.src.html 의 #scene 은 빈 SVG 이고, 실제 도형은 런타임에 JS 가 그린다.
+#   parts/panel-build.html 의 #scene 은 빈 SVG 이고, 실제 도형은 런타임에 parts/scene.js 가 그린다.
 #   반면 portfolio.html 에는 그 결과를 한 번 떠서 붙여넣은 정적 마크업이 박혀 있다.
 #   두 파일 사이에 연결이 없어, mmo-site 를 고쳐도 포폴 홈 그림은 따라오지 않는다.
 #   이 스크립트가 손으로 다시 뜨던 그 한 단계를 대신한다.
