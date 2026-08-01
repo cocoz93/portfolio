@@ -30,22 +30,12 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 #scene .top, #bnscene .top, #bnsolid .top{stroke:rgba(255,255,255,.18); stroke-width:1; stroke-linejoin:round}
 #scene .rim, #bnscene .rim, #bnsolid .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
 
-/* legend */
-/* 크기를 한 단 줄였다. 이 판은 같은 열을 상세 글과 나눠 쓰는데, 글이 이 판 위에서 멈춰야 해서
-   여기서 먹는 세로가 곧 글이 쓸 수 있는 높이를 깎는다(.card 의 max-height 가 이 높이를 빼고 있다).
-   읽는 데 필요한 것은 '색 세 개가 무슨 흐름인가' 뿐이라 글자를 키워 둘 이유가 없다. */
-.legend{position:absolute; right:18px; bottom:18px; z-index:4;
-  display:flex; flex-direction:column; gap:7px;
-  background:rgba(16,22,34,.72); border:1px solid var(--line); border-radius:11px;
-  padding:11px 14px; backdrop-filter:blur(3px)}
-.legend .row{display:flex; align-items:center; gap:8px; font-size:13px; color:var(--mut); font-weight:600}
-/* 표식은 레일이 아니라 '흐르는 칩' 모양 — 색을 내는 게 칩이라서 */
-.legend .row i{width:18px; height:10px; flex:0 0 auto;
-  clip-path:polygon(50% 0, 100% 50%, 50% 100%, 0 50%)}
-.legend .row .cap{font-family:var(--mono); font-size:11px; color:var(--dim); font-weight:400; margin-left:2px}
-.legend .row.recv i{background:var(--recv)} .legend .row.send i{background:var(--send)} .legend .row.store i{background:var(--store)}
-/* 한글이라 mono 를 안 쓴다 — 폰트 폴백으로 '데 이 터  흐 름' 처럼 자간이 벌어진다(.lhint 와 같은 이유) */
-.legend .hd{font-size:11px; font-weight:700; letter-spacing:.1em; color:var(--dim); margin-bottom:1px}
+/* 범례(데이터 흐름 · 수신/응답/저장 세 색)는 뺐다.
+   칩 색과 구역 색이 같은 값이기 때문이다 — RECV=#6cc7ff=--net · SEND=#ffb648=--game · STORE=#57d694=--store.
+   그래서 범례의 색 점 셋과 바로 위 구역 버튼의 색 점 셋이 같은 것을 두 번 말하고 있었다
+   (범례를 버튼 밑으로 옮기고 나서야 그게 눈에 보였다).
+   잃는 것은 '파랑 = 수신' 같은 이름 붙이기인데, 그건 씬의 레일 방향과 노드 이름이 이미 그림으로 말한다.
+   되살릴 일이 생기면 --recv/--send 변수가 :root 에 그대로 있다(값은 --net/--game 과 같다). */
 /* 옛 그림 이름표(.tag "IOCP MMO SERVER / 단일 게임 스레드 병목")는 뺐다 —
    같은 말을 게임 루프 노드가 이미 하고 있었다(옆 라벨 "단일 코어 · 25fps 틱" + 주황 BOTTLENECK).
    그 자리가 비면서 구역 필터를 오른쪽 위로 보낼 수 있게 됐다. */
@@ -386,9 +376,11 @@ body.subdetach .subtabs{padding-left:16px}
    자리: 오른쪽 열은 원래 카드 몫으로 비워 둔 곳이다(viewBox 주석 참조). 위아래를 함께 못 박아
    범례(오른쪽 아래)와 절대 겹치지 않게 하고, 넘치면 이 열 안에서만 스크롤한다. */
 /* bottom 을 못 박지 않고 max-height 로 막는 이유: 세로선이 곧 글의 길이다.
-   위아래를 다 고정하면 짧은 노드(MySQL)에서 선만 한참 더 내려가 허공에 걸린다. */
+   위아래를 다 고정하면 짧은 노드(MySQL)에서 선만 한참 더 내려가 허공에 걸린다.
+   빼는 값이 186 → 18 로 줄었다: 그 186 은 오른쪽 아래 범례 몫이었는데 범례가 왼쪽 위로 갔다.
+   남은 18 은 열 바닥 여백(범례가 쓰던 bottom:18px 과 같은 값)이다. */
 .card{position:absolute; right:18px; top:13%; width:23%; min-width:318px; max-width:400px;
-  max-height:calc(87% - 186px); overflow-y:auto; z-index:8;
+  max-height:calc(87% - 18px); overflow-y:auto; z-index:8;
   padding-left:16px; border-left:2px solid var(--ac,var(--net));
   color:#dbe4f2; display:none; flex-direction:column}
 .card.on{display:flex}
@@ -429,9 +421,9 @@ body.subdetach .subtabs{padding-left:16px}
 .card .zn-it .t em{font-style:normal; font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--ac,var(--net))}
 .card .zn-it .d{display:block; margin:3px 0 5px; font-size:.79rem; font-weight:600; color:#93a3bd}
 /* 한글이라 mono 를 안 쓴다(자간이 벌어진다). 이 한 줄이 화면 전체의 유일한 조작 안내다 */
-.legend .lhint{font-size:11.5px; font-weight:600; color:var(--dim); margin-top:1px}
+.lhint{font-size:11.5px; font-weight:600; color:var(--dim)}
 /* 좁은 화면에서는 오른쪽에 비워 둘 열이 없다 — 글이 그림 위에 바로 얹히면 읽히지 않으므로 판을 되돌린다 */
-@media(max-width:680px){ .legend{right:12px; bottom:12px; padding:10px 12px}
+@media(max-width:680px){
   .card{width:auto; right:12px; left:12px; top:auto; bottom:12px; max-width:none; max-height:calc(100% - 24px);
     padding:14px 15px; background:rgba(16,22,34,.95); border:1px solid var(--line);
     border-left:2px solid var(--ac,var(--net)); border-radius:12px} }
@@ -487,8 +479,11 @@ body.pop-hold #scene .chips{opacity:0}
    거기는 게임 루프·BOTTLENECK 바로 위라 주인공과 경쟁했다.
    top 을 14 가 아니라 46 으로 내리는 게 핵심이다: 왼쪽 정렬 탭 줄 바로 밑에 붙이면
    버튼 줄이 '탭 한 층 더' 로 읽힌다(그래서 예전에 오른쪽으로 도망갔던 것). 한 단 내리면 씬 안쪽 것이 된다. */
-.zonebar{position:absolute; left:16px; top:46px; z-index:6; display:flex; flex-wrap:wrap; gap:6px;
-  justify-content:flex-start}
+/* 자리는 .hud 가 잡고, 줄 셋(버튼·범례·안내)은 그 안에서 쌓인다 — 각 줄에 top 을 손으로 매기면
+   버튼 높이가 바뀔 때마다 아래 둘을 따라 고쳐야 한다. */
+.hud{position:absolute; left:16px; top:46px; z-index:6;
+  display:flex; flex-direction:column; align-items:flex-start; gap:9px}
+.zonebar{display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-start}
 /* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유).
    대신 배경·테두리·반경은 '다시 재생' 버튼과 똑같이 맞춰 같은 식구로 읽히게 한다. */
 /* 켜짐/꺼짐이 한눈에 갈리게 만든다 — 예전엔 두 상태가 밝기 한 단계 차이라 "누르면 바뀌는 버튼"으로 안 읽혔다.
@@ -514,6 +509,7 @@ body.pop-hold #scene .chips{opacity:0}
   box-shadow:inset 0 0 0 1px var(--zc), 0 0 9px -6px var(--zc)}
 .zb.act i{opacity:1; filter:none; box-shadow:0 0 5px -1px var(--zc)}
 .zb.all{--zc:#c3d3ec; margin-right:5px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
-@media(max-width:680px){ .zonebar{left:10px; top:30px; gap:4px} .zb{font-size:.72rem; padding:5px 9px; gap:5px} }
+@media(max-width:680px){ .hud{left:10px; top:30px; gap:6px} .zonebar{gap:4px}
+  .zb{font-size:.72rem; padding:5px 9px; gap:5px} .lhint{font-size:10.5px} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}

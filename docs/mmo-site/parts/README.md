@@ -37,7 +37,7 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    - *크기 관계라 같이 조정해야 하는 것*: 구역순회 `TOUR_HOLD 380ms`(scene.js) **>** 페이드 `.22s`(common.css) ·
      `fillCard 300ms`(scene.js) **<** 재적용 `400ms`(bneck.js)
 6. **클래스 접두어** — 병목 `.bn-*` `.bx-*` / 클라 `.cl-*` `.cr-*`.
-   `.exp .rs .nm .card .stage .hit .cap .panel` 은 이미 공유 중이니 새로 만들지 말 것.
+   `.exp .rs .nm .card .stage .hit .panel` 은 이미 공유 중이니 새로 만들지 말 것.
 
 ## 산출물은 병합 뒤 한 번만 빌드
 
