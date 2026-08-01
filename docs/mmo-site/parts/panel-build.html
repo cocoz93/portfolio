@@ -15,7 +15,8 @@
     <div class="row recv"><i></i>수신 recv<span class="cap">client → 게임</span></div>
     <div class="row send"><i></i>응답 send<span class="cap">게임 → client</span></div>
     <div class="row store"><i></i>데이터베이스<span class="cap">게임 → MySQL</span></div>
-    <div class="lhint">▸ 왼쪽 위 구역 버튼 → 개요 → 노드 상세</div>
+    <!-- 화면 전체에서 유일한 조작 안내다 — 흐름이 바뀌면 여기부터 고칠 것 -->
+    <div class="lhint">▸ 왼쪽 위 구역 버튼 → 설계 문서는 노션으로 ↗</div>
   </div>
   <!-- viewBox 오른쪽에 카드 자리를 비워 둔다: 폭 946→1042(+96), minX 212→259(내용 왼쪽 여백 회수).
        ※ 클라 판을 72 로 좁히면서 내용 왼쪽이 48칸 들어왔지만, 여기는 안 당긴다.
@@ -36,6 +37,7 @@
          (scene.js 의 svb) 따라 고칠 값이 없다. -->
   <svg id="scene" viewBox="341 190 1082 500" role="img"
        aria-label="IOCP 기반 MMO 게임 서버의 아이소메트릭 아키텍처 다이어그램"></svg>
-  <div class="card" id="card"><button class="x" data-close aria-label="닫기">✕</button><div id="cardbd"></div></div>
+  <!-- 닫기 버튼은 없다: 카드를 여는 구역 버튼이 토글이라 같은 일을 두 곳에서 하고 있었다(Esc 는 동작) -->
+  <div class="card" id="card"><div id="cardbd"></div></div>
 </div>
   </section>

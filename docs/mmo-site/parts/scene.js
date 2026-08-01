@@ -586,8 +586,9 @@ function paintBodies(){
 NODES.slice().sort((a,b)=>{ const A=LAYOUT[a.name],B=LAYOUT[b.name]; return DEPTH(A.u,A.v)-DEPTH(B.u,B.v); })
   .forEach(n=>{ const L=LAYOUT[n.name], g=el("g");
     drawZone=zoneOf(n.name); if(drawZone) g.setAttribute("data-z",drawZone);   /* 몸통 안에서 부르는 shadow() 도 이 값을 물려받는다 */
-    /* 노드 하나만 남기는 강조(#scene[data-focus])가 보는 표. 값은 구역이 아니라 '어느 카드의 것인가' 다 —
-       Timing Wheel·SwapQ 는 card:"iocp" 라 IOCP 워커를 고르면 셋이 같이 켜진다(누르는 자리가 셋인 것과 짝이 맞는다). */
+    /* 어느 조각이 어느 노드의 것인가를 적어 두는 표. 값은 구역이 아니라 노드다 —
+       Timing Wheel·SwapQ 는 card:"iocp" 라 IOCP 워커와 한 덩어리로 묶인다.
+       지금은 이 값을 보는 CSS 가 없다(노드 단위 강조는 노드 상세 카드와 함께 걷어냈다). 되살릴 때 쓴다. */
     if(n.card) g.setAttribute("data-node",n.card);
     n.draw(g,L.u,L.v); TB.appendChild(g); });
 drawZone=""; }   /* 노드 그리기가 끝났으므로 되돌린다 — 뒤에서 addShad 를 부르는 곳은 없지만 상태를 남기지 않는다 */
@@ -605,101 +606,104 @@ NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, base=LABELS[n.name]||{dx:0
     (off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0]))); }); }
 paintLabels();
 
-/* ═══ 노드 클릭 → 상세 카드 ═══ */
-/* sum = 구역 개요에 한 줄로 접힐 때 쓰는 요약. impl 을 잘라 쓰지 않고 따로 적는 이유는,
-   개요에서는 '무엇을 하는가' 만 필요하고 '왜 그렇게 했는가' 는 상세가 맡기 때문이다. */
+/* ═══ 노드와 그 설계 문서 ═══ */
+/* 이 페이지는 미끼다 — 여기서 다 설명하지 않고 노션 문서로 보낸다. 그래서 노드마다 남기는 것은
+   sum(한 줄로 '무엇을 하는가') 과 docs(그 노드의 설계 문서) 둘뿐이다. '왜 그렇게 했는가' 를 적던
+   impl 문단은 걷어냈다: 그 내용이 곧 문서의 내용이라, 여기 적으면 미끼를 미리 까먹는 셈이었다.
+
+   어느 구역인지는 여기 안 적는다 — ZI[].nodes 가 이미 갖고 있어서, 두 곳에 두면 어긋난다(옛 zone 필드를 지운 이유).
+   docs = [제목, 노션 페이지 id, (선택) 한 줄]. id 는 대시 없는 32자로, NOTION 앞에 붙여 공개 주소가 된다.
+   정본은 노션 DB "네트워크 라이브러리 설계&구현" — 페이지를 옮기거나 이름을 바꾸면 여기도 같이 고칠 것.
+   ※ 'dirty 선별·주기 batch 저장' 은 독립 페이지가 아니라 DB Thread 문서 안의 설계 결정 ②④ 다.
+     두 줄로 두면 같은 페이지로 가는 링크가 둘이 되므로 한 줄로 합치고, 무엇이 들었는지는 꼬리표로 적었다. */
+const NOTION="https://feline-vacation-d6d.notion.site/";
 const ND={
-  client:{nm:"클라이언트",x:"×5,000",zone:"네트워크",sum:"인덱스 슬롯 세션 · sessionId 로 ABA 차단",impl:"세션은 인덱스 슬롯으로 관리합니다. 슬롯 재사용 시 sessionId 검사로 옛 세션(ABA)을 차단합니다.",
-    docs:["세션 관리 방식과 세션 ABA 문제 해결"],bns:[]},
-  accept:{nm:"Accept",x:"×1",zone:"네트워크",sum:"수락 전담 1개 · AcceptEx 미사용",impl:"수락 전담 스레드 1개. AcceptEx 대신 blocking accept를 택한 근거를 문서로 정리했습니다.",
-    docs:["AcceptThread 분리 (AcceptEx 미사용)"],bns:[]},
-  iocp:{nm:"IOCP 워커",x:"×4",zone:"네트워크",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */sum:"완료 통지 파싱 → 공유 큐 · 틱마다 swap 1회",impl:"완료 통지 처리와 패킷 파싱. 워커는 파싱한 이벤트를 공유 큐에 쌓고, 게임 루프는 틱마다 std::queue::swap 한 번으로 큐를 통째로 로컬에 넘겨받아(락 1회·무복사) 락 없이 소비합니다. 세션당 I/O 1회 제한·Timing Wheel 타임아웃도 여기서 얽힙니다.",
-    docs:["세션당 Recv/Send 1회 제한","Timing Wheel (타임아웃)","Worker→Game SwapQ"],bns:[]},
-  send:{nm:"Send 워커",x:"×3",zone:"네트워크",sum:"uniqueId%3 고정 배분 → WSASend",impl:"송신 제출을 게임 틱에서 떼어 3개 워커로 분산합니다. uniqueId%3 고정 배분(sessionId 상위 인덱스 비트 누수 방지).",
-    docs:["SendThread 분리 유무와 이슈"],bns:[]},
-  loop:{nm:"게임 루프",x:"×1",zone:"게임",sum:"단일 코어 · 섹터 격자 AOI · viewlist 미채택",impl:"모든 게임 로직이 도는 단일 코어. 섹터 격자 관심영역(AOI), per-player viewlist 미채택 근거가 핵심입니다.",
-    docs:["섹터/맵 크기 · viewlist 미채택 이유"],bns:[]},
-  dbw:{nm:"DB 워커",x:"×1",zone:"데이터베이스",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능",impl:"저장은 게임 스레드를 막지 않게 비동기 전담 워커로 분리합니다. 변경분(dirty)만 골라 주기마다 batch로 한 번에 넘깁니다(fire-and-forget). 워커는 쌓인 큐를 swap 한 번으로 통째 인출해 UPSERT 합니다 — SwapQ·Send 워커와 같은 패턴입니다. accountId%K 풀로 확장 가능하며 현재 1개 운영.",
-    docs:["dirty 선별·주기 batch 저장","DB Thread 분리 및 저장 설계"],bns:[]},
-  mysql:{nm:"MySQL",x:"",zone:"데이터베이스",sum:"주기적 스냅샷 UPSERT 로 영속화",impl:"주기적 스냅샷 UPSERT로 영속화합니다.",docs:[],bns:[]}
+  client:{nm:"클라이언트",x:"×5,000",sum:"인덱스 슬롯 세션 · sessionId 로 ABA 차단",
+    docs:[["세션 관리 방식과 세션 ABA 문제 해결","34116a0b9f59805ca586d7c8c3597545"]],bns:[]},
+  accept:{nm:"Accept",x:"×1",sum:"수락 전담 1개 · AcceptEx 미사용",
+    docs:[["AcceptThread 분리 (AcceptEx 미사용)","34116a0b9f59802eaf47c3ff8e15e082"]],bns:[]},
+  iocp:{nm:"IOCP 워커",x:"×4",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */sum:"완료 통지 파싱 → 공유 큐 · 틱마다 swap 1회",
+    docs:[["세션당 Recv/Send 1회 제한","34116a0b9f5980839d4ad67dc23f9996"],
+          ["Timing Wheel (타임아웃)","35816a0b9f59804db9bff9d6679696bc"],
+          ["Worker→Game SwapQ","37316a0b9f5980429473c20365f71778"]],bns:[]},
+  send:{nm:"Send 워커",x:"×3",sum:"uniqueId%3 고정 배분 → WSASend",
+    docs:[["SendThread 분리 유무와 이슈","34116a0b9f5980cca5f2e65b5122a6fe"]],bns:[]},
+  loop:{nm:"게임 루프",x:"×1",sum:"단일 코어 · 섹터 격자 AOI · viewlist 미채택",
+    docs:[["섹터/맵 크기 · viewlist 미채택 이유","37b16a0b9f5980b9b4d5d0734909b4a9"]],bns:[]},
+  dbw:{nm:"DB 워커",x:"×1",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능",
+    /* 꼬리표에 sum 과 겹치는 'dirty 선별' 은 안 적는다 — 바로 윗줄이 이미 하는 말이라 두 줄이 같아 보인다.
+       그 문서에만 있는 것을 고른다(설계 결정 표 ④⑥⑦⑨). */
+    docs:[["DB Thread 분리 및 저장 설계","39516a0b9f59809fb782d3265404a0fa",
+           "설계 결정 10가지 — 배치 핸드오프 · 백프레셔 · prepared statement 수명주기"]],bns:[]},
+  mysql:{nm:"MySQL",x:"",sum:"주기적 스냅샷 UPSERT 로 영속화",docs:[],bns:[]}
 };
-/* ═══ 구역 개요 — 구역 버튼을 누르면 상세와 같은 자리에 뜬다 ═══
+/* ═══ 구역 개요 — 구역 버튼을 누르면 오른쪽 열에 뜨는 단 하나의 화면 ═══
    구역 버튼은 원래 '강조만' 하는 버튼이었다. 무엇이 밝아졌는지는 보이는데 그게 무슨 구역인지는
-   안 알려 주고 있었다. 노드를 눌러야만 글이 나왔는데, 노드는 눌러야 한다는 것 자체가 안 보인다.
-   그래서 이미 보이는 버튼(구역)에 개요를 달고, 그 개요 안의 노드 줄이 상세로 가는 입구가 된다.
-   → 씬을 한 번도 안 눌러도 모든 상세에 닿는다. 노드 클릭은 아는 사람을 위한 지름길로 남는다.
+   안 알려 주고 있었다. 그래서 이미 보이는 버튼(구역)에 개요를 달았고, 지금은 그 개요가 노드와
+   설계 문서 링크까지 한 화면에 담는다 — 씬은 한 번도 안 눌러도 된다.
    키는 씬의 구역 키(data-z)와 같은 문자열이라 CSS·강조 코드와 같은 말을 쓴다. */
 const ZI={
   outside:{nm:"클라이언트",ac:"#93a5c2",sub:"동시 5,000",
-    lead:"서버 밖입니다. 부하 클라이언트가 동시 <b>5,000명</b>까지 붙어 이동 · 채팅을 보냅니다. 서버가 지는 부담이 어디서 갈리는지는 아래 세 구역이 정합니다.",
+    lead:"서버 밖이다. 부하 클라이언트가 동시 <b>5,000명</b>까지 붙어 이동 · 채팅을 보낸다. 서버가 지는 부담이 어디서 갈리는지는 아래 세 구역이 정한다.",
     nodes:["client"]},
   net:{nm:"네트워크",ac:"var(--net)",sub:"스레드 8",
-    lead:"수락 · 수신 · 송신을 <b>세 갈래 전담 스레드</b>로 나눕니다. 게임 스레드는 네트워크 일을 하지 않습니다 — 워커가 파싱해 둔 이벤트만 큐로 받고, 송신 제출도 Send 워커가 대신합니다.",
+    /* 뒷문장("워커가 파싱해 둔 이벤트만 받고, 송신 제출도 Send 워커가 대신한다")은 걷어냈다 —
+       바로 아래 노드 세 줄이 같은 말을 하고, 이 구역은 문서가 5개라 세로가 가장 빠듯하다. */
+    lead:"수락 · 수신 · 송신을 <b>세 갈래 전담 스레드</b>로 나눈다. 게임 스레드는 네트워크 일을 하지 않는다.",
     nodes:["accept","iocp","send"]},
   game:{nm:"게임",ac:"var(--game)",sub:"스레드 1",
-    lead:"게임 로직 전부가 도는 <b>한 코어</b>입니다. 25fps 틱마다 받은 요청을 처리하고 주변에 뿌립니다. 이 서버의 병목이 이 자리입니다.",
+    lead:"게임 로직 전부가 도는 <b>한 코어</b>. 25fps 틱마다 받은 요청을 처리하고 주변에 뿌린다. 이 서버의 병목이 이 자리다.",
     nodes:["loop"]},
   store:{nm:"데이터베이스",ac:"var(--store)",sub:"스레드 1",
-    lead:"저장이 게임 스레드를 막지 않게 합니다. 변경분(dirty)만 골라 주기마다 batch 로 넘기고(fire-and-forget), 전담 워커가 쌓인 큐를 <b>swap 한 번</b>으로 통째 인출해 UPSERT 합니다.",
+    lead:"저장이 게임 스레드를 막지 않게 한다. 변경분(dirty)만 골라 주기마다 batch 로 넘기고(fire-and-forget), 전담 워커가 쌓인 큐를 <b>swap 한 번</b>으로 통째 인출해 UPSERT 한다.",
     nodes:["dbw","mysql"]}
 };
-/* 노드 상세의 '이 자리에서 잰 실험 N건' 은 병목 탭 배열(EXPS)이 세어 넣는다(아래 __NODE_PINS 로 짝을 짓는다).
+/* 구역 개요 맨 아래 '이 구역에서 잰 실험 N건' 은 병목 탭 배열(EXPS)이 bns 로 세어 넣는다
+   (아래 __NODE_PINS 로 노드와 병목 핀을 짝지운다).
    한때 여기에 같은 목록을 손으로 한 벌 더 적어 뒀는데, 병목 탭에 실험을 넣고도 이쪽을 잊어
    두 화면이 서로 다른 실험 목록을 보여 주고 있었다. 여기 두는 것은 '어느 노드가 어느 자리인가' 뿐이다. */
 window.__ND=ND;
 window.__NODE_PINS={ send:["1"], loop:["2","3"], iocp:["4","5"], dbw:["6"] };
 const card=document.getElementById("card"), cbd=document.getElementById("cardbd");
-/* 상세를 여는 동안 씬은 그 노드만 남긴다 — 카드에 판이 없으므로 이 강조가 곧 '어디를 눌렀는가' 다.
-   범례는 더 이상 숨기지 않는다: 옛 카드가 범례와 같은 코너(오른쪽 아래)를 썼기 때문에 비켰던 것인데,
-   글이 오른쪽 위 열로 올라가면서 자리가 겹치지 않는다(.card 가 bottom 을 못 박아 둔다). */
-function closeCard(){ if(card) card.classList.remove("on"); if(svg) svg.removeAttribute("data-focus"); }
-/* 왼쪽 세로선 색 = 그 노드의 구역 색. 씬에서 살아남은 도형 색과 같아야 둘이 한 덩어리로 읽힌다. */
-const CARD_AC={"네트워크":"var(--net)","게임":"var(--game)","데이터베이스":"var(--store)"};
-function openCard(k){ const n=ND[k]; if(!n) return;
-  let h='<span class="k">'+n.zone+' 스레드</span><h3>'+n.nm+'<span>'+(n.x||"")+'</span></h3><p class="cl">'+n.impl+'</p>';
-  if(n.docs.length) h+='<div class="lb">설계 문서 '+n.docs.length+'</div>'+n.docs.map(function(d){return '<div class="it"><span class="ic">▸</span><span>'+d+'</span></div>';}).join("");
-  else h+='<div class="lb">연결 문서</div><div class="none">저장소 자체라 별도 구현 노트가 없습니다 — 설계는 DB Worker 노드에 있습니다.</div>';
-  /* 실험은 목록 대신 건수와 행선지만. 결론까지 여기 늘어놓으면 1-2 탭과 같은 목록이 두 벌이 된다.
-     건수는 병목 탭 배열(EXPS)에서 채워진 것이라 두 화면이 어긋날 수 없다. */
-  if(n.bns&&n.bns.length) h+='<div class="fo">이 자리에서 잰 실험 <b>'+n.bns.length+'건</b>은 <b>1-2 병목 · 실험</b>에 있습니다</div>';
-  cbd.innerHTML=h;
-  card.classList.remove("zone");
-  card.style.setProperty("--ac", CARD_AC[n.zone]||"var(--net)");
-  card.classList.add("on"); if(svg) svg.setAttribute("data-focus",k); }
+function closeCard(){ if(card) card.classList.remove("on"); }
 
-/* 구역 개요. 씬 강조는 구역 버튼(apply)이 이미 걸어 놨으므로 여기서는 글만 채운다 —
-   data-focus 는 건드리지 않는다(그건 노드 하나로 좁힐 때 쓰는 표다). */
+/* 구역 개요 — 구역 버튼이 여는 단 하나의 화면이다. 씬 강조는 구역 버튼(apply)이 이미 걸어 놨으므로
+   여기서는 글만 채운다.
+   옛 구조는 여기서 '상세 ▸' 를 한 번 더 눌러야 노드 상세 카드가 떴고, 문서 제목은 그 안에 글자로만
+   있었다 — 두 번 눌러도 노션에 못 갔다. 이 페이지는 미끼이므로 그 반대가 맞다: 문서를 첫 화면으로
+   끌어올리고, 제목 자체를 노션으로 나가는 링크로 만든다. 클릭 두 번이 한 번이 되고, 도착지가 생긴다.
+   라벨(.k)도 안 붙인다 — '구역 개요' 는 바로 밑 제목('네트워크')과 '이 구역의 노드 3' 이 이미 하는 말이었다. */
 function openZone(z){ const Z=ZI[z]; if(!Z||!card) return;
-  let h='<span class="k">구역 개요</span><h3>'+Z.nm+'<span>'+Z.sub+'</span></h3>'+
+  /* 라벨에 문서 수까지 적는다 — 같은 한 줄로 '여기서 몇 개가 노션으로 나가는가' 를 먼저 알린다 */
+  const nd=Z.nodes.reduce(function(s,k){ return s+((ND[k]&&ND[k].docs)?ND[k].docs.length:0); },0);
+  let h='<h3>'+Z.nm+'<span>'+Z.sub+'</span></h3>'+
         '<p class="cl">'+Z.lead+'</p>'+
-        '<div class="lb">이 구역의 노드 '+Z.nodes.length+'</div>';
+        '<div class="lb">노드 '+Z.nodes.length+(nd?' · 설계 문서 '+nd:'')+'</div>';
   h+=Z.nodes.map(function(k){ const n=ND[k]; if(!n) return "";
-    return '<button class="zn-it" data-go="'+k+'"><span class="t">'+n.nm+
-      (n.x?'<em>'+n.x+'</em>':'')+'<span class="go">상세 ▸</span></span>'+
-      '<span class="d">'+n.sum+' · 설계 문서 '+(n.docs.length||"—")+'</span></button>'; }).join("");
-  /* 실험 건수는 그 구역 노드들의 합 — 노드 상세와 같은 배열(EXPS)에서 온 값이라 어긋날 수 없다 */
+    let s='<div class="zn-it"><span class="t">'+n.nm+(n.x?'<em>'+n.x+'</em>':'')+'</span>'+
+          '<span class="d">'+n.sum+'</span>';
+    /* 링크는 새 탭으로 — 미끼를 물어도 이 페이지는 뒤에 남아 있어야 다른 구역도 마저 본다 */
+    s+=n.docs.map(function(d){
+      return '<a class="dl" href="'+NOTION+d[1]+'" target="_blank" rel="noopener">'+
+             '<span class="ic">▸</span><span class="t2">'+d[0]+
+             (d[2]?'<span class="sd">'+d[2]+'</span>':'')+'</span><span class="go">↗</span></a>'; }).join("");
+    if(!n.docs.length) s+='<div class="dnone">저장소 자체라 별도 문서가 없다 — 설계는 DB 워커에</div>';
+    return s+'</div>'; }).join("");
+  /* 실험 건수는 그 구역 노드들의 합 — 1-2 탭 배열(EXPS)에서 온 값이라 두 화면이 어긋날 수 없다 */
   const ex=Z.nodes.reduce(function(s,k){ return s+((ND[k]&&ND[k].bns)?ND[k].bns.length:0); },0);
-  if(ex) h+='<div class="fo">이 구역에서 잰 실험 <b>'+ex+'건</b>은 <b>1-2 병목 · 실험</b>에 있습니다</div>';
+  if(ex) h+='<div class="fo">이 구역에서 잰 실험 <b>'+ex+'건</b> → <b>1-2 병목 · 실험</b></div>';
   cbd.innerHTML=h;
-  card.classList.add("zone");
-  card.style.setProperty("--ac", Z.ac);
-  card.classList.add("on"); if(svg) svg.removeAttribute("data-focus"); }
+  card.style.setProperty("--ac", Z.ac);   /* 왼쪽 세로선 색 = 씬에서 살아남은 도형 색 */
+  card.classList.add("on"); }
 
-/* 닫기는 한 단계씩 물러난다: 노드 상세 → (구역이 켜져 있으면) 그 구역 개요 → 전체.
-   한 번에 전체로 튀면, 구역 개요에서 상세로 들어온 사람이 되돌아갈 자리를 잃는다. */
+/* 닫기는 곧 강조 해제다. 옛날엔 '노드 상세 → 구역 개요 → 전체' 로 한 칸씩 물러났는데,
+   중간 단계가 사라져 물러날 곳이 하나뿐이다. 카드 안의 닫기 줄도 없앴으므로 입구는 Esc 와
+   구역 버튼(토글) 둘이다 — 그래서 키 리스너는 카드 유무와 무관하게 건다. */
 function backCard(){
-  if(svg && svg.getAttribute("data-focus")){
-    const z=svg.getAttribute("data-zone");
-    closeCard(); if(z) openZone(z); return; }
   if(svg && svg.getAttribute("data-zone") && window.resetZone){ window.resetZone(); return; }
   closeCard(); }
-if(card){ card.addEventListener("click",function(e){
-    const go=e.target.closest("[data-go]");
-    if(go){ openCard(go.getAttribute("data-go")); return; }   /* 개요의 노드 줄 = 상세로 가는 입구 */
-    if(e.target.closest("[data-close]")) backCard(); });
-  document.addEventListener("keydown",function(e){ if(e.key==="Escape") backCard(); }); }
-/* 도형 위 투명 히트박스(gHit)는 걷어냈다. 노드 상세로 가는 입구는 구역 개요의 노드 줄 하나뿐이다 —
-   들어오는 길이 하나면 '구역을 고르고 그 안에서 노드를 고른다' 는 순서가 그림 자체로 읽힌다.
+document.addEventListener("keydown",function(e){ if(e.key==="Escape") backCard(); });
+/* 도형 위 투명 히트박스(gHit)는 걷어냈다. 노드로 들어가는 입구는 구역 개요 하나뿐이다.
    NODES[].hit 는 남는다: 클릭 판정이 아니라 노드의 상자 크기라서, 중심점(center)·라벨 위치·
    BODY 축소가 전부 이 값을 쓴다. */
 
@@ -1126,7 +1130,7 @@ window.__flowReset=function(){
      m:"사람이 늘면 보낼 대상도 같이 늘어, 나가는 양은 사람 수의 제곱으로 자란다",
      ex:"5,500까지 제곱 예측과 오차 ±1%. 6,000부터 그 선을 못 따라가는 게 붕괴의 지문이다(평균 패킷도 93 → 77 B)",
      bm:null, am:{ccu:5000,pps:10020000,send:938,tick:null},
-     abh:"앱 패킷 · 송신량 MB/s",
+     abh:"송신 메시지 · 송신량 MB/s",
      ab:[["4,000","","644만 · 599","4.8 Gbps",0],
          ["4,500","","813만 · 759","6.1 Gbps",0],
          ["5,000 안정","","1,002만 · 938","7.5 Gbps",0],
@@ -1161,7 +1165,7 @@ window.__flowReset=function(){
 
     {s:1, loc:"1", n:"SendQ Lock-Free", st:"rj",
      r:"이득 없이 비용만 늘었다",
-     cond:"동접 200 · 맵 1 · 앱 패킷 82.6k/s · 틱 40ms",
+     cond:"동접 200 · 맵 1 · 송신 메시지 82.6k건/s · 틱 40ms",
      m:"락을 없애 보려 했으나, 애초에 기다리는 락이 없었다 — 한 쪽만 넣고 한 쪽만 빼는 큐라 경합 자체가 없다",
      ex:"일의 양은 통제됐고(위 네 칸이 그대로다) 오른 것은 비용뿐이다. 틱 p99 71 → 76ms 는 근사치 표기다",
      bm:{ccu:200,pps:82600,send:1.62,tick:71}, am:{ccu:200,pps:83000,send:1.63,tick:76},
@@ -1172,7 +1176,7 @@ window.__flowReset=function(){
 
     {s:2, loc:"1", n:"Send Coalescing", st:"ok",
      r:"송신 호출 −94% · 틱 p99 65→9ms",
-     cond:"동접 200 · 앱 패킷 ≈83k/s · 평균 19.7 B · 틱 40ms · Nagle On",
+     cond:"동접 200 · 송신 메시지 ≈83k건/s · 평균 19.7 B · 틱 40ms · Nagle On",
      m:"보낼 것이 생길 때마다 부르던 WSASend 를, 틱 끝에 세션별로 모아 한 번만 부른다",
      ex:"줄어든 틱의 83%가 송신 구간이다. 줄인 것은 호출 횟수지 보내는 양이 아니다",
      bm:{ccu:200,pps:83000,send:1.63,tick:65.3}, am:{ccu:200,pps:83000,send:1.63,tick:9.2},
@@ -1183,7 +1187,7 @@ window.__flowReset=function(){
 
     {s:3, loc:"1", n:"SendThread 분리", st:"ok",
      r:"틱 p99 −56% · 전체 CPU 는 그대로",
-     cond:"동접 1,000 · 별도 PC + WAN(상한 474 Mbps, 루프백 실험과 절대치 비교 불가) · 앱 패킷·송신량은 백업 지표에서 사후 역산",
+     cond:"동접 1,000 · 별도 PC + WAN(상한 474 Mbps, 루프백 실험과 절대치 비교 불가) · 송신 메시지·송신량은 백업 지표에서 사후 역산",
      m:"송신을 게임 틱에서 떼어 전용 스레드로 넘겼다 — 틱의 74%가 보내는 데 쓰이고 있었다",
      ex:"일을 옮긴 것이지 늘린 게 아니라는 근거가 전체 CPU 다. 게임 루프의 송신 비중은 74.5% → 0.08% 로 사라졌다",
      bm:{ccu:1000,pps:2080000,send:41,tick:39.18}, am:{ccu:1000,pps:2080000,send:41,tick:17.38},
@@ -1194,7 +1198,7 @@ window.__flowReset=function(){
 
     {s:4, loc:"1", n:"SO_SNDBUF=0", st:"rj",
      r:"전체 CPU +75% · 순손해",
-     cond:"동접 1,000 · 팬아웃 184 tgt/call · WAN(상한 474 Mbps, 루프백과 비교 불가) · 앱 패킷은 사후 역산",
+     cond:"동접 1,000 · 팬아웃 184 tgt/call · WAN(상한 474 Mbps, 루프백과 비교 불가) · 송신 메시지는 사후 역산",
      m:"커널 송신버퍼를 0으로 두면 복사가 없어지는 게 아니라 IOCP 워커 쪽으로 옮겨간다",
      ex:"틱만 보면 나아진 것처럼 보인다. 전체 CPU 를 합쳐 보고서야 손해가 드러났다 — 송신 실험은 워커 CPU 를 같이 봐야 한다",
      bm:{ccu:1000,pps:2080000,send:41,tick:37.42}, am:{ccu:1000,pps:2070000,send:41,tick:34.49},
@@ -1281,7 +1285,7 @@ window.__flowReset=function(){
      ab:[["접속 천장","~5,200","~5,200명","불변",-1],
          ["과부하(5,400) 틱 p99","57.6","97.8 ms","+70%",-1],
          ["게임루프 CPU","0.531","0.503 코어","−5%",1],
-         ["5,400 앱 패킷/s","1,171만","1,154만","−1.5%",-1],
+         ["5,400 송신 메시지/s","1,171만","1,154만","−1.5%",-1],
          ["5,400 평균 패킷","93.1","90.1 B","−3.2%",-1]]},
 
     {s:21, loc:"4", n:"Worker→Game SwapQ", st:"na",

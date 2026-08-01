@@ -13,13 +13,13 @@ var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* 네 칸은 실험마다 공통으로 잰 것만 둔다. 나머지(그 실험에서만 의미 있는 지표)는 아래 상세 표로 간다.
    dir −1 작을수록 좋음 · 0 좋고 나쁨을 여기서 정하지 않음.
 
-   동접·앱 패킷·송신량을 0 으로 둔 이유: 이 셋은 실험마다 성격이 다르다. Send Coalescing 에서는
-   양쪽을 같게 맞춘 통제값이고(변하면 실험이 틀린 것), 섹터 묶음에서는 앱 패킷이 −73% 인 게 성과다.
+   동접·송신 메시지·송신량을 0 으로 둔 이유: 이 셋은 실험마다 성격이 다르다. Send Coalescing 에서는
+   양쪽을 같게 맞춘 통제값이고(변하면 실험이 틀린 것), 섹터 묶음에서는 송신 메시지가 −73% 인 게 성과다.
    같은 칸을 어떤 실험에선 초록으로, 어떤 실험에선 빨강으로 칠할 근거가 계기판에는 없다 —
    좋고 나쁨은 아래 상세의 Δ 가 지표별로 말한다. 여기서는 변화량만 부호 그대로 적는다. */
 var MET = [
   {k:"ccu",  n:"동접",    u:"명",     dir:0},
-  {k:"pps",  n:"앱 패킷", u:"pkt/s",  dir:0},
+  {k:"pps",  n:"송신 메시지", u:"건/s", dir:0},
   {k:"send", n:"송신량",  u:"MB/s",   dir:0},
   {k:"tick", n:"틱 p99",  u:"ms",     dir:-1}
 ];
@@ -32,7 +32,7 @@ function $(s,r){ return (r||document).querySelector(s); }
    그래서 자릿수를 고정하지 않고 값이 원래 갖고 있는 소수 자릿수를 쓴다. */
 function decOf(v){ var s=String(v), i=s.indexOf("."); return i<0?0:s.length-i-1; }
 function fmt(v,d){ return v.toLocaleString("ko-KR",{minimumFractionDigits:d,maximumFractionDigits:d}); }
-/* 앱 패킷은 실험에 따라 8만/s 에서 1000만/s 까지 벌어진다. 노션도 그 폭에 맞춰
+/* 송신 메시지는 실험에 따라 8만/s 에서 1000만/s 까지 벌어진다. 노션도 그 폭에 맞춰
    초반은 k, 후반은 만 으로 적었으므로 같은 경계를 쓴다. */
 function fmtV(k,v,d){
   if(v==null) return "—";
