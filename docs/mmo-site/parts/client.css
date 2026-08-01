@@ -15,7 +15,9 @@
 .cl-tile .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:1.5rem;
   font-weight:700; letter-spacing:-.02em; line-height:1; color:var(--ink)}
 .cl-tile .u{font-family:var(--mono); font-size:.64rem; color:var(--dim); font-weight:600}
-.cl-tile .f{margin-top:6px; font-family:var(--mono); font-size:.63rem; color:var(--dim)}
+/* 각주는 sans 다 — mono 로 두면 한글이 폴백돼 자간이 벌어진다(.u 를 sans 로 되돌린 것과 같은 이유).
+   숫자만 있는 각주가 없어서 mono 로 얻는 것도 없다 */
+.cl-tile .f{margin-top:6px; font-family:var(--sans); font-size:.68rem; line-height:1.5; color:var(--dim)}
 .cl-tile.ok .n{color:var(--ok)}
 
 /* ── 규격 칸(.spec) — 2-1 만 쓴다 ──
@@ -51,6 +53,15 @@
 .cl-hit .cl-plate{fill:none; stroke:#6cc7ff; stroke-width:1.6; opacity:0; transition:opacity .15s}
 .cl-hit:hover .cl-plate{opacity:.4}
 .cl-hit.on .cl-plate{opacity:.9}
+/* 2-2 아이소 그림도 같은 문법을 쓴다 — 다만 판이 기울어 rect 가 아니라 polygon 이다.
+   fill 을 transparent 로 둬야 테두리가 꺼져 있을 때도 판 위 아무 데나 눌러진다. */
+.cl-hit .cl-safep{fill:transparent; stroke:#6cc7ff; stroke-width:2; opacity:0; transition:opacity .15s;
+  stroke-linejoin:round}
+.cl-hit:hover .cl-safep{opacity:.45}
+.cl-hit.on .cl-safep{opacity:.9}
+/* 왕복 통로는 테두리만으로는 약하다 — 바닥을 같이 밝힌다(안을 덮지는 않는다) */
+.cl-lane{transition:fill .15s}
+.cl-hit.on .cl-lane{fill:#1d3d63}
 
 /* ※ 옆 카드(.cl-two / .cl-stage / .cl-side / table.cl-t)는 세 장이 다 전폭 그림으로 바뀌면서 없앴다.
    카드가 하던 일(무엇을 골랐나 · 왜 그랬나)은 그림 안 라벨과 아래 한 줄(.cr-note)이 나눠 가졌다. */

@@ -7,24 +7,56 @@ function el(t,a,txt){ var e=document.createElementNS(NS,t); for(var k in a) e.se
 function h(t,a,txt){ var e=document.createElement(t); for(var k in a) e.setAttribute(k,a[k]);
   if(txt!=null) e.textContent=txt; return e; }
 
-/* ※ 아이소 블록(cube) 헬퍼는 여기 있었다. 두 그림이 다 평면 도식으로 바뀌면서 부르는 곳이 없어졌다 —
-   서버 탭 구조도의 아이소 블록은 그쪽 스크립트가 따로 갖고 있으므로 이것과 무관하다. */
+/* ═══════════ 아이소 투영 — 2-2 안전성 그림이 쓴다 ═══════════
+   투영 상수는 서버 탭 구조도(scene.js)와 같은 값이다. 1-1·1-2 가 아이소 3D 인데 2-2 만 평면
+   도식이면 같은 사이트로 안 읽힌다 — 평면 안에서 배치만 바꾼 시안이 셋 반려된 뒤 내린 결론이다.
+   ※ 여기 있던 옛 아이소 헬퍼는 두 그림이 평면으로 바뀌며 지웠던 것인데, 2-2 가 다시 쓴다. */
+var KX=.86, KY=.46, OX=560, OY=560, YAW=-12;
+var AXLEN=KX/Math.cos(Math.PI/4), ELEV=KY/(AXLEN*Math.sin(Math.PI/4));
+var YU=(45+YAW)*Math.PI/180, YV=(135+YAW)*Math.PI/180;
+var AX=AXLEN*Math.cos(YU), BX=AXLEN*Math.cos(YV);
+var AY=-AXLEN*Math.sin(YU)*ELEV, BY=-AXLEN*Math.sin(YV)*ELEV;
+function ipx(u,v){ return OX+AX*u+BX*v; }
+function ipy(u,v,z){ return OY+AY*u+BY*v-(z||0); }
+function ipt(u,v,z){ return ipx(u,v).toFixed(1)+","+ipy(u,v,z||0).toFixed(1); }
+function ipoly(p,pts,fill,extra){
+  var a={points:pts.map(function(q){ return ipt(q[0],q[1],q[2]||0); }).join(" ")};
+  if(fill) a.fill=fill;                       /* 색을 CSS 에 맡기는 폴리곤은 fill 을 아예 안 준다 */
+  if(extra) for(var k in extra) a[k]=extra[k];
+  var e=el("polygon",a); p.appendChild(e); return e;
+}
+/* 직육면체 하나 — 윗면·왼면·오른면 셋을 색만 달리해 세운다 */
+function iprism(p,u,v,w,d,z0,ht,c,rim){ var t=z0+ht;
+  ipoly(p,[[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],c[2]);
+  ipoly(p,[[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],c[1]);
+  ipoly(p,[[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],c[0]);
+  if(rim) p.appendChild(el("polyline",{points:[[u+w,v,t],[u+w,v+d,t],[u,v+d,t]]
+    .map(function(q){ return ipt(q[0],q[1],q[2]); }).join(" "),fill:"none",
+    stroke:"rgba(255,255,255,.14)","stroke-width":"1"}));
+}
+/* 바닥에 눕히는 변환 — 판 위 STEP 글씨가 판과 같은 평면에 누워야 3D 로 읽힌다 */
+function ifloor(u,v,z){ return "matrix("+AX.toFixed(4)+","+AY.toFixed(4)+","
+  +(-BX).toFixed(4)+","+(-BY).toFixed(4)+","+ipx(u,v).toFixed(2)+","+ipy(u,v,z||0).toFixed(2)+")"; }
+/* 화면 깊이 — 겹치는 작은 덩어리를 뒤에서부터 그리려고 쓴다 */
+function idepth(u,v){ return AY*u+BY*v; }
 
 /* ═══════════ ② 안전성 그림 ═══════════ */
+/* 계기판이 성과 수치가 아니라 PC 두 대인 이유 — 2-2 는 서버 PC 와 클라 PC 를 나눠 돌린 시험이고
+   2-3 은 한 PC loopback 이다. 조건이 다른데 머리에 안 적어 두면 두 탭의 수치를 같은 자로 읽는다. */
 var SAFE={
-  dash:[["에코 처리량","3,791,301","건/초","동접 1,000 · 25분",1],
-        ["왕복 평균","17","ms","최대 47ms",0],
-        ["무결성 위반","0","건","9,478만 건 중",1],
-        ["접속 · 해제","6,777","회","서버발 끊김 0",0]],
+  dash:[["서버 PC","i9-10900","10C / 20T","Windows 10 · RAM 32GB · NIC Intel I225-V",0],
+        ["부하 클라 PC","i7-6700","4C / 8T","Windows 10 · RAM 16GB · NIC Intel I219-V",0],
+        ["기가 인터넷의 업로드 상한","474","Mbps","이 시험은 여유 — 병목 실험에서 여기 막혀 회선을 걷어냈다 (2-3 은 한 PC loopback)",0],
+        ["무결성 위반 · 서버발 끊김","0","건","9,478만 통 중 · 결함을 심으면 첫 패킷에서 걸린다",1]],
   items:{
-    step:{t:"남의 자 → 내 자",
-      n:"내가 만들지 않은 도구로 먼저 재고, 그다음 내가 만든 것으로 다시 잰다. 내 코드와 내 테스트가 같이 틀리는 상황을 막는 유일한 방법이다."},
-    echo:{t:"보낸 값이 그대로 오는가",
-      n:"패킷마다 순차 번호를 싣고 남는 자리는 정해진 규칙으로 채운다. 받을 때 같은 규칙으로 다시 만들어 통째로 비교한다 — 틀리면 카운터만 올리고 지나가지 않고 그 자리에서 멈춘다. 계속 돌리면 링버퍼가 덮이면서 증거가 사라진다."},
-    gate:{t:"0이어야 하는 넷",
-      n:"이 넷 중 하나라도 0이 아니면 부하가 아니라 라이브러리 결함 신호로 본다. 탐지기가 진짜 잡는지도 확인했다 — 패딩 씨앗을 한 칸 밀어 결함을 일부러 넣었더니 첫 패킷에서 걸렸다."},
-    atk:{t:"일부러 이상하게 보내기",
-      n:"비정상 패킷에 서버가 어떻게 반응하는지 본다. 통과 기준은 하나 — 그 세션만 끊고 서버는 살아 있을 것. 안 끊으면 방어가 작동하지 않은 것이라 실패로 본다. 끊는 게 정답인 시험이다."}
+    s1:{t:"남이 만든 도구",
+      n:"먼저 남이 만든 도구로 잰다. 게임코디 Echo 더미는 10바이트 고정이라, 번호 하나를 보내고 그대로 돌아오는지만 본다. 접속이 되는가 · 서버가 먼저 끊지 않는가 · 보낸 값과 받은 값이 같은가. 이 셋이 합격선이고, 동접 1,000 으로 25분을 버텼다."},
+    s2:{t:"내가 만든 도구",
+      n:"①을 통과한 라이브러리 위에서 이번엔 내가 만든 더미를 검증한다. 패킷은 12~256바이트로 들쭉날쭉하고 남는 자리는 정해진 규칙으로 채운다 — 받을 때 같은 규칙으로 다시 만들어 통째로 비교한다. 어긋나면 어디서 틀렸는지 바이트까지 남기고 그 자리에서 멈춘다. 일부러 이상한 패킷을 보내는 공격 시험도 여기서 같이 한다."},
+    gate:{t:"합격 기준",
+      n:"넷 다 0이어야 한다. 서버가 먼저 끊음 · 바이트 훼손 · 순서 역전 · 왕복 시간 초과 — 하나라도 0이 아니면 부하 탓이 아니라 라이브러리 결함으로 본다. 검사기가 진짜 잡는지도 확인했다. 채우는 규칙을 한 칸 어긋나게 심었더니 첫 패킷에서 걸렸다."},
+    s3:{t:"다음은 2-3",
+      n:"검증이 끝난 더미에 게임 시나리오를 얹어 서버 전체를 잰다. 동접 5,000 · 이동 · 시야 · 채팅 — 이 단의 자세한 이야기는 2-3 부하 검증에 있다."}
   }
 };
 /* ── 전폭 그림에서 되풀어 쓰는 조각들 ── */
@@ -43,103 +75,127 @@ function arrow(p,x1,x2,y,col,wd){
   p.appendChild(el("polygon",{points:x2+","+y+" "+(x2-8)+","+(y-5)+" "+(x2-8)+","+(y+5),fill:col}));
 }
 
+/* 아이소 3단 계단 — 통과한 것만 다음 단의 도구가 된다는 순서를 판 높이로 말한다.
+   옛 그림은 네 띠짜리 평면 도식이었다. 정보는 다 있었지만 1-1·1-2 와 세계가 달라
+   무엇을 고쳐도 "그게 그거"로 보였다(평면 안에서 배치만 바꾼 시안 셋이 반려됐다). */
 function drawSafe(){
-  var s=document.getElementById("sc-safe"), g=el("g",{}); s.appendChild(g);
+  var s=document.getElementById("sc-safe");
+  var ZOUT={top:"#161d2b",side:"#0f1522",edge:"#93a5c2"};   /* 남의 도구가 선 판 — 무채 */
+  var ZNET={top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"};
+  var NETC =["#63afe6","#1b4870","#2b6597"];                /* 내 라이브러리 — 파랑 */
+  var DUMC =["#e0a04a","#6b4718","#a8752c"];                /* 내가 만든 더미 — 주황 */
+  var GRAYC=["#7d8ba3","#333d4e","#4d596e"];                /* 남이 만든 도구 — 무채 */
+  var CROWD=["#4f7cb4","#1e3a54","#2d5276"];
+  var RECV="#6cc7ff", SEND="#ffb648", FG="#eef2fb", SUB="#8496b3", GRN="#57d694";
+  var PV=-50, PW=262, PD=186;                               /* 판 — 세 단이 같은 크기 */
 
-  /* ═══ 띠 1 — 검증 사다리 두 칸. 위아래로 놓아 '1 다음 2' 가 위치로 읽히게 ═══ */
-  var sg=el("g",{class:"cl-hit","data-it":"step"}); g.appendChild(sg);
-  plate(sg,6,8,1168,140);
-  var LADDER=[
-    {y:22,tag:"STEP 1",col:"#6cc7ff",dim:"#1f4f74",
-     who:"게임코디 제공 Echo 더미",wsub:"남의 자 — 내가 만들지 않은 도구",
-     tgt:"네트워크 라이브러리",tsub:"내가 만든 것",ok:"부하 통과"},
-    {y:88,tag:"STEP 2",col:"#ffb648",dim:"#6b4718",
-     who:"직접 만든 에코 하네스",wsub:"내 자 — 무결성 검사·공격까지 얹었다",
-     tgt:"Step 1 을 통과한 라이브러리",tsub:"같은 것을 다시",ok:"정상 동작"}
+  var dfs=el("defs",{});
+  dfs.innerHTML='<filter id="sfShadow" x="-40%" y="-40%" width="180%" height="180%">'
+    +'<feGaussianBlur stdDeviation="6"/></filter>';
+  s.appendChild(dfs);
+  /* 레이어 — 판 · 그림자 · 경사로 · 덩어리 · 글자. 뒤에 그린 것이 위로 온다 */
+  var gZone=el("g",{}), gShad=el("g",{}), gRamp=el("g",{}), gBuild=el("g",{}), gLbl=el("g",{});
+  [gZone,gShad,gRamp,gBuild,gLbl].forEach(function(gg){ s.appendChild(gg); });
+  function shadow(u,v,w,d,z){ gShad.appendChild(el("ellipse",
+    {cx:ipx(u+w/2,v+d/2), cy:ipy(u+w/2,v+d/2,z||0)+5, rx:(w+d)*.36, ry:(w+d)*.12,
+     fill:"#04060c", opacity:".40", filter:"url(#sfShadow)"})); }
+  function lb(x,y,t,size,col,w,anc){
+    gLbl.appendChild(el("text",{x:x.toFixed(1),y:y.toFixed(1),"font-size":String(size),fill:col,
+      "font-weight":w||"700","text-anchor":anc||"middle","font-family":"var(--sans)"},t)); }
+
+  var STEP=[
+   {k:"s1", tag:"STEP 1", u:-150, z:0,
+    a:{t:"게임코디 Echo 더미", s:"남이 만든 도구", c:GRAYC},
+    b:{t:"내 네트워크 라이브러리", s:"이번에 잴 것", c:NETC},
+    j:"동접 1,000 · 25분 부하 통과"},
+   {k:"s2", tag:"STEP 2", u:128, z:54,
+    a:{t:"검증된 라이브러리", s:"STEP 1 을 통과한 것", c:NETC},
+    b:{t:"내가 만든 에코 더미", s:"무결성 검사 · 공격 시험", c:DUMC, crowd:1},
+    j:"결함을 넣었더니 첫 패킷에서 걸렸다"},
+   {k:"s3", tag:"STEP 3", u:406, z:108,
+    a:{t:"검증된 더미 + 시나리오", s:"STEP 2 를 통과한 것", c:DUMC},
+    b:{t:"서버 + 컨텐츠 전체", s:"이동 · 시야 · 채팅", c:NETC},
+    j:"동접 5,000 — 2-3 부하 검증"}
   ];
-  LADDER.forEach(function(L){
-    /* 단계 이름표 */
-    bx(sg,14,L.y,74,54,"#0f1522",L.col,8);
-    tx(sg,51,L.y+23,L.tag,10.5,L.col,"800","middle","var(--mono)");
-    tx(sg,51,L.y+40,"검증",10,"#5d6c85","600","middle");
-    /* 재는 쪽 */
-    bx(sg,98,L.y,296,54,"#0f1522","#1e2739",9);
-    bx(sg,98,L.y,4,54,L.col,null,2);
-    tx(sg,114,L.y+22,L.who,12.5,"#eef2fb","800");
-    tx(sg,114,L.y+40,L.wsub,10,"#8496b3","600");
-    /* 에코 — 갔다가 그대로 온다 */
-    arrow(sg,406,586,L.y+18,"#6cc7ff",2);
-    tx(sg,496,L.y+13,"보낸다",9.5,"#9ad4ff","700","middle","var(--mono)");
-    arrow(sg,586,406,L.y+40,"#57d694",2);
-    tx(sg,496,L.y+53,"그대로 온다",9.5,"#8ff0c0","700","middle","var(--mono)");
-    /* 재는 대상 */
-    bx(sg,598,L.y,296,54,"#0f1522","#1e2739",9);
-    bx(sg,598,L.y,4,54,"#57d694",null,2);
-    tx(sg,614,L.y+22,L.tgt,12.5,"#eef2fb","800");
-    tx(sg,614,L.y+40,L.tsub,10,"#8496b3","600");
-    /* 판정 */
-    arrow(sg,902,932,L.y+27,"#3c4a63",1.6);
-    bx(sg,940,L.y+8,120,38,"#0f1a15","rgba(87,214,148,.4)",9);
-    tx(sg,1000,L.y+32,"✔ "+L.ok,11.5,"#57d694","800","middle");
-  });
-  /* 두 칸을 잇는 세로 레일 — 위 칸을 통과해야 아래 칸이 시작된다 */
-  sg.appendChild(el("path",{d:"M 51 76 L 51 88",stroke:"#3c4a63","stroke-width":"1.6",fill:"none"}));
-  tx(sg,1090,52,"동시 접속",9.5,"#5d6c85","600","middle");
-  tx(sg,1090,68,"1,000",15,"#eef2fb","800","middle","var(--mono)");
-  tx(sg,1090,112,"패킷 크기",9.5,"#5d6c85","600","middle");
-  tx(sg,1090,128,"12~256 B",12,"#9ad4ff","800","middle","var(--mono)");
 
-  /* ═══ 띠 2 — 에코 한 통의 구성을 띠로 ═══
-     폭은 실제 바이트 비율이 아니다(4B 를 비율대로 그리면 9px 라 라벨이 안 들어간다).
-     패딩이 압도적으로 길다는 것만 폭으로 말하고, 정확한 값은 상자 안 숫자가 갖는다. */
-  var eg=el("g",{class:"cl-hit","data-it":"echo"}); g.appendChild(eg);
-  plate(eg,6,156,1168,62);
-  var SEG=[["헤더","4 B","#2b3a52","#c3cfe0",48],
-           ["에코 값","8 B","#1f4f74","#9ad4ff",92],
-           ["패딩  0~244 B","같은 씨앗 = 같은 바이트","#3a2c14","#ffcf8a",560]];
-  var sx0=98;
-  SEG.forEach(function(sgm){
-    bx(eg,sx0,170,sgm[4],34,sgm[2],null,4);
-    tx(eg,sx0+sgm[4]/2,185,sgm[0],10,sgm[3],"800","middle");
-    tx(eg,sx0+sgm[4]/2,198,sgm[1],8.5,"#8496b3","600","middle","var(--mono)");
-    sx0+=sgm[4]+3;
+  /* 판 — 뒤(높은 단)부터 그려야 앞 단이 위로 온다 */
+  for(var i=STEP.length-1;i>=0;i--){
+    var S=STEP[i], pal=(i===0)?ZOUT:ZNET, zg=el("g",{}); gZone.appendChild(zg);
+    iprism(zg,S.u,PV,PW,PD,S.z-14,14,[pal.top,pal.side,pal.side]);
+    zg.appendChild(el("line",{x1:ipx(S.u,PV+PD),y1:ipy(S.u,PV+PD,S.z),
+      x2:ipx(S.u+PW,PV+PD),y2:ipy(S.u+PW,PV+PD,S.z),stroke:pal.edge,"stroke-width":"1.6",opacity:".42"}));
+    zg.appendChild(el("line",{x1:ipx(S.u+PW,PV),y1:ipy(S.u+PW,PV,S.z),
+      x2:ipx(S.u+PW,PV+PD),y2:ipy(S.u+PW,PV+PD,S.z),stroke:pal.edge,"stroke-width":"1.6",opacity:".42"}));
+    var wg=el("g",{transform:ifloor(S.u+PW*.28,PV+13,S.z)});   /* 판에 누운 STEP 글씨 */
+    wg.appendChild(el("text",{x:"0",y:"8.8","text-anchor":"middle","font-size":"26",
+      "font-weight":"900","letter-spacing":"1.56","font-family":"var(--sans)",
+      fill:pal.edge,opacity:".34"},S.tag));
+    zg.appendChild(wg);
+  }
+  /* 칩이 켜는 자리 — 판 셋은 판 윗면, 합격 기준은 왕복 통로. 색은 client.css 가 쥔다 */
+  STEP.forEach(function(S){
+    var hg=el("g",{class:"cl-hit","data-it":S.k}); gZone.appendChild(hg);
+    ipoly(hg,[[S.u,PV,S.z],[S.u+PW,PV,S.z],[S.u+PW,PV+PD,S.z],[S.u,PV+PD,S.z]],null,{class:"cl-safep"});
   });
-  tx(eg,98,164,"보내는 한 통",9.5,"#5d6c85","600");
-  arrow(eg,812,872,187,"#57d694",2);
-  bx(eg,880,170,190,34,"#0f1a15","rgba(87,214,148,.4)",8);
-  tx(eg,975,185,"memcmp 통째로 비교",10,"#8ff0c0","800","middle");
-  tx(eg,975,198,"틀리면 그 자리에서 멈춘다",8.5,"#8496b3","600","middle");
-  tx(eg,1090,190,"오프셋까지 기록",9,"#5d6c85","600","middle");
+  /* 합격 기준은 판 하나가 아니라 세 단을 가로지르는 잣대다 — 그래서 판이 아니라 왕복 통로를 켠다.
+     통로 바닥은 덩어리보다 아래, 테두리는 맨 위라 층을 건너야 해서 같은 data-it 을 둘로 나눴다
+     (wireWide 가 .cl-hit 을 전부 순회하므로 둘이 같이 켜진다). */
+  var gateLow=el("g",{class:"cl-hit","data-it":"gate"}); gBuild.appendChild(gateLow);
+  var gateTop=el("g",{class:"cl-hit","data-it":"gate"});
 
-  /* ═══ 띠 3 — 0이어야 하는 넷 ═══ */
-  var gg=el("g",{class:"cl-hit","data-it":"gate"}); g.appendChild(gg);
-  plate(gg,6,226,1168,74);
-  tx(gg,98,240,"하나라도 0이 아니면 부하가 아니라 라이브러리 결함 신호로 본다",9.5,"#5d6c85","600");
-  var GATES=[["서버발 끊김","세션 관리"],["바이트 훼손","링버퍼·묶음 경계"],
-             ["순서 역전","유실·뒤섞임"],["에코 타임아웃","500ms 기준"]];
-  GATES.forEach(function(t,i){
-    var x=98+i*245;
-    bx(gg,x,246,228,46,"#0f1a15","rgba(87,214,148,.3)",10);
-    tx(gg,x+30,280,"0",30,"#57d694","800","middle","var(--mono)");
-    tx(gg,x+56,268,t[0],11.5,"#eef2fb","800");
-    tx(gg,x+56,283,t[1],9,"#8496b3","600");
+  STEP.forEach(function(S){
+    var bg=el("g",{}); gBuild.appendChild(bg);
+    var au=S.u+18, bu=S.u+PW-86, vv=PV+56;
+    shadow(au,vv,66,70,S.z);      iprism(bg,au,vv,66,70,S.z,28,S.a.c,true);
+    shadow(bu,vv-2,68,72,S.z);    iprism(bg,bu,vv-2,68,72,S.z,28,S.b.c,true);
+    if(S.b.crowd){                                  /* 한 대가 여러 명을 만든다 — 더미 5×5 */
+      var cu=[];
+      for(var c=0;c<5;c++) for(var r=0;r<5;r++) cu.push([bu+5+c*11, vv+3+r*11]);
+      cu.sort(function(p,q){ return idepth(p[0],p[1])-idepth(q[0],q[1]); });
+      cu.forEach(function(p){ iprism(bg,p[0],p[1],9,9,S.z+28,9,CROWD); });
+    }
+    /* 두 덩어리 사이를 통째로 쓰는 왕복 — 이 단이 무엇으로 재는지가 여기 있다 */
+    var u1=au+74, u2=bu-8, cv=vv+35, z=S.z, hw=9;
+    ipoly(gateLow,[[u1,cv-hw,z],[u2,cv-hw,z],[u2,cv+hw,z],[u1,cv+hw,z]],"#16243a",{class:"cl-lane"});
+    ipoly(bg,[[u2,cv-hw-4,z],[u2,cv+hw+4,z],[u2+15,cv,z]],RECV);
+    ipoly(bg,[[u1,cv-hw-4,z],[u1,cv+hw+4,z],[u1-15,cv,z]],SEND);
+    var n=Math.max(2,Math.round((u2-u1)/26));
+    for(var q=1;q<n;q++){ var qu=u1+(u2-u1)*q/n;
+      iprism(bg,qu-3.5,cv-3.5,7,7,z,5,[RECV,"#0b1726","#122238"]); }
+    /* 강조 테두리는 통로 바깥으로 띄운다 — 안을 덮으면 화살촉 색(보냄·받음)과
+       그 위 패킷이 탁해진다(2배로 확대해 확인했다). 안쪽은 바닥색만 밝힌다. */
+    ipoly(gateTop,[[u1-20,cv,z],[u1,cv-hw-9,z],[u2,cv-hw-9,z],
+                   [u2+20,cv,z],[u2,cv+hw+9,z],[u1,cv+hw+9,z]],null,{class:"cl-safep"});
+    var mx=ipx((u1+u2)/2,cv), my=ipy((u1+u2)/2,cv,z+46);
+    lb(mx,my,"에코",12,RECV,"800");
+    lb(mx,my+13,"보내고 그대로 받는다",9,SUB,"600");
   });
 
-  /* ═══ 띠 4 — 일부러 이상하게 보내기 ═══ */
-  var ag=el("g",{class:"cl-hit","data-it":"atk"}); g.appendChild(ag);
-  plate(ag,6,306,1168,58);
-  tx(ag,98,320,"통과 기준은 하나 — 그 세션만 끊고 서버는 살아 있을 것",9.5,"#5d6c85","600");
-  var ATK=[["크기 조작","0 · 3 · 4097 · 65535","즉시 끊김"],
-           ["패킷 폭주","상한 해제","지연만 상승"],
-           ["접속 후 침묵","무송신","60초 타임아웃"],
-           ["큐 압박","안 받고 보내기","큐 넘침 끊김"]];
-  ATK.forEach(function(t,i){
-    var x=98+i*245;
-    bx(ag,x,326,228,32,"#1a1113","rgba(255,107,82,.3)",8);
-    tx(ag,x+12,340,t[0],10.5,"#ff9a8d","800");
-    tx(ag,x+12,352,t[1],8.5,"#8496b3","600","start","var(--mono)");
-    tx(ag,x+216,347,t[2],9,"#c3cfe0","700","end");
+  /* 승계 — 통과한 대상이 경사로를 타고 올라가 다음 단의 도구가 된다 */
+  for(var r=0;r<2;r++){
+    var A=STEP[r], B=STEP[r+1], vA=PV+22;
+    var uA=(A.u+PW-86)+68, uB=(B.u+18)+6;
+    var du=(uB-14)-uA, dv=0, Ln=Math.hypot(du,dv), pv=du/Ln*13;
+    ipoly(gRamp,[[uA,vA+pv,A.z+7],[uB-14,vA+pv,B.z+7],[uB-14,vA-pv,B.z+7],[uA,vA-pv,A.z+7]],
+      (r===0)?"#2b6597":"#a8752c",{opacity:".55"});
+    ipoly(gRamp,[[uB-14,vA-12,B.z+7],[uB-14,vA+12,B.z+7],[uB,vA,B.z+7]],GRN);
+  }
+
+  /* 이름·판정 */
+  STEP.forEach(function(S,i){
+    var au=S.u+18, bu=S.u+PW-86, vv=PV+56;
+    var ax=ipx(au+33,vv+70), ay=ipy(au+33,vv+70,S.z+86);
+    lb(ax,ay,S.a.t,13.5,FG,"800");  lb(ax,ay+15,S.a.s,10.5,GRN,"700");
+    var bx2=ipx(bu+34,vv), by2=ipy(bu+34,vv,S.z)+34;
+    lb(bx2,by2,S.b.t,13.5,FG,"800"); lb(bx2,by2+15,S.b.s,10.5,SUB,"600");
+    lb(bx2,by2+33,"✔ "+S.j,11,i===2?RECV:GRN,"700");
   });
+  /* 왼쪽 위 — 이 그림이 무슨 말을 하는지 세 줄 */
+  [[338,168,"검증이 끝난 것만 다음 단의 도구가 된다",18],
+   [338,192,"그래서 첫 도구는 내가 만들지 않은 것이어야 한다.",11.5],
+   [338,210,"내 코드와 내 테스트가 같이 틀리는 상황을 막는 유일한 방법이다.",11.5]]
+  .forEach(function(l){ lb(l[0],l[1],l[2],l[3],l[3]>14?FG:SUB,l[3]>14?"800":"600","start"); });
+  gBuild.appendChild(gateTop);
 }
 
 /* ═══════════ ③ 부하 그림 ═══════════ */
@@ -331,7 +387,7 @@ function wireWide(scId,chId,noteId,DATA,order,linkLabel){
 
 /* 기동 */
 drawSafe(); paintDash("d-safe",SAFE.dash);
-wireWide("sc-safe","ch-safe","nt-safe",SAFE,["step","echo","gate","atk"],"에코 더미 · 스트레스 테스트");
+wireWide("sc-safe","ch-safe","nt-safe",SAFE,["s1","s2","gate","s3"],"에코 더미 · 스트레스 테스트");
 drawLoad(); paintDash("d-load",LOAD.dash);
 wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");
 
