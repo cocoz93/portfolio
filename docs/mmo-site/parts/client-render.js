@@ -16,15 +16,19 @@ if(!pane) return;
 var vids=[document.getElementById("vd-con"),document.getElementById("vd-web")];
 var RM=matchMedia("(prefers-reduced-motion:reduce)").matches;
 
-/* ═══ 규격 여섯 칸 ═══
+/* ═══ 규격 여섯 값 ═══
    ※ 한때 여기에 칩 넷(두 화면 한 서버 · 데드레커닝 · 묶음 되풀기 · 릴레이 43줄)과 그 설명 문단이
    있었다. 눌러야 보이는 글은 안 읽힌다 — 알맹이는 통째로 노션 쪽으로 넘겼다(맨 아래 링크).
    서버 무수정·릴레이 43줄도 각주에 한 줄로 남겨 뒀다가 걷어냈다. 이 탭이 보여줄 것은 화면이다.
-   값은 규격이라 각주 줄(.f)이 필요 없다. 마지막 칸만 숫자가 없어서 .t 로 넣는다. */
+   값은 규격이라 각주 줄(.f)이 필요 없다. 마지막 칸만 숫자가 없어서 .t 로 넣는다.
+   판이 놓이는 자리와 머리줄('규격 · 세 화면 공통')은 panel-client.html 이 들고 있다 —
+   여기는 값만 채운다.
+   시야는 '±1' 이 아니라 '3×3' 이다. 둘은 같은 말이지만(내 섹터와 이웃 여덟), ±1 은 무엇에
+   대한 ±1 인지를 라벨이 안 말해 준다. 웹 화면에 격자가 보이는 판이라 칸 수로 적는 편이 읽힌다. */
 (function(){
   var rows=[["맵","120×120",""],
             ["섹터","20","칸 · 36개"],
-            ["시야","±1","섹터"],
+            ["시야","3×3","섹터"],
             ["서버 틱","40","ms"],
             ["콘솔 화면","80×21","문자"],
             ["더미 부하",null,"이동 · 채팅"]];
@@ -51,12 +55,15 @@ function kick(v){ var p=v.play(); if(p&&p["catch"]) p["catch"](function(){}); }
 function play(){ if(RM) return; vids.forEach(kick); }
 function stop(){ vids.forEach(function(v){ if(!v.paused) v.pause(); }); }
 
-/* ═══ 진입 — 판이 액자 밖에서 들어온다 ═══
-   ENTER 는 맨 뒤 요소가 끝나는 시각이다(CSS 의 .cr-foot 지연 .64s + 길이 .62s).
-   그 뒤에 .cr-in 을 떼는 이유는 두 가지다: 잘라 주던 overflow 를 원래대로 돌려 컷의 그림자를
-   되살리고, will-change 로 띄워 둔 레이어를 내린다(영상 판 둘이 GPU 메모리를 계속 물지 않게).
+/* ═══ 진입 — 판이 제 자리에서 창처럼 열린다 ═══
+   ENTER 는 맨 뒤 요소가 끝나는 시각이다(CSS 의 .cr-foot 지연 .46s + 길이 .48s).
+   그 뒤에 .cr-in 을 떼는 것은 will-change 로 띄워 둔 레이어를 내리기 위해서다
+   (영상 판 둘이 GPU 메모리를 계속 물지 않게).
+   ※ 한때는 이유가 하나 더 있었다 — 판이 액자 밖에서 미끄러져 들어오던 시절에는 그동안
+     액자가 판을 잘라 줘야 해서, 애니가 끝나면 그 overflow 를 되돌려 컷의 그림자를 살렸다.
+     제자리에서 커지는 지금은 밖으로 나가는 것이 없어 자를 일 자체가 없다.
    CSS 를 고쳐 길이를 바꾸면 이 숫자도 같이 고칠 것. */
-var ENTER=1260+140, enterTimer=0;
+var ENTER=940+140, enterTimer=0;
 function enter(){
   if(RM) return;
   pane.classList.remove("cr-in");

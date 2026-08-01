@@ -20,31 +20,34 @@
 .cl-tile .f{margin-top:6px; font-family:var(--sans); font-size:.68rem; line-height:1.5; color:var(--dim)}
 .cl-tile.ok .n{color:var(--ok)}
 
-/* ── 규격 칸(.spec) — 2-1 만 쓴다 ──
-   각주 줄(.f)이 없는 여섯 칸이다. 각주가 없으니 라벨이 뜻을 다 져야 한다(맵 · 섹터 · 시야 …).
+/* ── 규격판(.cr-spec) — 2-1 만 쓴다. 오른쪽 참조컷 열 맨 위 ──
+   각주 줄(.f)이 없는 여섯 값이다. 각주가 없으니 라벨이 뜻을 다 져야 한다(맵 · 섹터 · 시야 …).
 
-   ── 한때 값을 1.14rem 으로 작게 뒀다. 왜 되돌렸나 ──
-   '2-2·2-3 의 계기판은 실측 성과(에코 3,791,301건/초)라 큼직한 게 맞고, 여기 값은 규격이라
-   성격이 다르다' 는 이유로 높이를 72px 까지 낮췄던 것인데, 넓은 화면(1664px)에서 재 보니 그 띠가
-   58px 로 눌려 액자 머리줄과 ① 사이에 낀 얇은 줄이 됐다 — 규격이 안 읽힌다.
-   값을 2-2 와 같은 1.5rem 으로 올린다. 탭이 갈려 둘이 나란히 보일 일이 없고, 세로가 늘어도
-   아래가 손해를 안 본다: 액자만 928 → 950px 이고 ①(771px)·참조컷(411 · 348px)은 그대로다(실측).
+   ── 상자 여섯을 판 하나로 바꿨다 ──
+   액자 윗줄에 가로로 놓였을 때는 칸마다 테두리를 둘렀다. 같은 무게의 상자 여섯이 나란한 배치라
+   눈이 갈 곳이 없었고, 넓은 화면에서는 칸이 255px 인데 글자가 100px 뿐이라 '구석에 글자 붙은
+   빈 상자' 로 읽혔다(그래서 가운데 정렬로 버티고 있었다). 열 안으로 들어오면서 폭이 332px 로
+   줄어 그 문제가 사라졌으므로, 칸 테두리를 걷고 판 하나에 두 열로 담는다.
 
-   ── 가운데 정렬 ──
-   넓은 화면에서 칸은 255px 인데 글자는 왼쪽 100px 만 쓴다. 왼쪽 정렬이면 오른쪽 6할이 빈 채로
-   남아 '규격표' 가 아니라 '구석에 글자 붙은 빈 상자 여섯' 으로 읽힌다. 가운데로 모으면 남는 폭이
-   양쪽으로 갈려 빈 자리가 안 보인다(세로만 늘리면 그 빈 면적이 같이 커진다 — 렌더로 확인했다). */
-.cl-dash.spec{grid-template-columns:repeat(6,1fr); gap:9px}
-.cl-dash.spec .cl-tile{padding:13px 15px 15px; text-align:center}
-.cl-dash.spec .cl-tile .l{font-size:.7rem}
-/* .v 는 flex 라 text-align 이 안 듣는다 — 가운데로 모으는 일은 justify-content 가 한다 */
-.cl-dash.spec .cl-tile .v{margin-top:7px; gap:5px; justify-content:center}
-.cl-dash.spec .cl-tile .n{font-size:1.5rem}
+   ── 값 크기는 1.5 → 1.14rem ──
+   윗줄에 있을 때는 띠가 58px 로 눌려 안 읽히는 것이 문제라 값을 키웠다. 여기서는 반대다 —
+   이 판이 두꺼운 만큼 아래 콘솔·덮임컷이 짧아진다(같은 열을 셋이 나눠 쓴다). */
+.cr-spec{flex:0 0 auto; background:var(--sunk); border:1px solid var(--line2);
+  border-radius:12px; padding:11px 14px 12px}
+.sp-hd{display:flex; align-items:baseline; gap:8px; margin-bottom:9px}
+.sp-hd b{font-size:.68rem; font-weight:800; letter-spacing:.1em; color:var(--net)}
+.sp-hd span{font-size:.68rem; color:var(--dim)}
+.cl-dash.spec{grid-template-columns:1fr 1fr; gap:9px 14px; margin:0}
+/* 칸은 이제 판이 아니다 — .cl-tile 의 배경·테두리·안쪽 여백을 전부 되돌린다 */
+.cl-dash.spec .cl-tile{background:none; border:0; border-radius:0; padding:0}
+.cl-dash.spec .cl-tile .l{font-size:.66rem}
+.cl-dash.spec .cl-tile .v{margin-top:2px; gap:5px}
+.cl-dash.spec .cl-tile .n{font-size:1.14rem; line-height:1.15}
 /* 단위는 sans 로 되돌린다 — .cl-tile .u 는 mono 라서 '칸 · 36개' 처럼 한글이 섞이면 글꼴이
    폴백돼 자간이 벌어진다(확대해서 확인했다). 여섯 칸 중 셋이 한글 단위다 */
-.cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.7rem; font-weight:600}
+.cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.66rem; font-weight:600}
 /* 숫자가 없는 칸(더미 부하) — 값 자리가 비면 칸이 무너져 보이므로 같은 높이의 글자로 채운다 */
-.cl-dash.spec .cl-tile .t{font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.5}
+.cl-dash.spec .cl-tile .t{font-size:.94rem; font-weight:700; color:var(--ink); line-height:1.4}
 
 /* ── 그림 안에서 누를 수 있는 것 ──
    한때 선택 표시를 반투명 흰 판으로 덮었는데, 그 판이 격자·막대 위에 얹혀 내용을 회색으로 지웠다.
@@ -104,15 +107,18 @@
                 위아래 여백으로 두고, 그 여백 색을 녹화 바탕색(#0C0C0C · 실제로 찍어 확인)에
                 맞춰 '콘솔 화면이 조금 더 큰 것' 으로 보이게 한다.
    ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 폭 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
-/* 66% -> 73%. 규격을 윗줄로 뺀 만큼 참조컷 칸이 짧아졌고, 이름줄·캡션이 붙으면서 그 칸이 써야 할
-   높이도 늘었다. 두 손해를 메우는 손잡이는 이 비율 하나다 — 히어로를 넓히면 참조컷은 좁아져서
+/* 66% -> 73%. 규격을 액자 윗줄로 뺀 만큼 참조컷 칸이 짧아졌고, 이름줄·캡션이 붙으면서 그 칸이
+   써야 할 높이도 늘었다. 두 손해를 메우는 손잡이는 이 비율 하나다 — 히어로를 넓히면 참조컷은 좁아져서
    필요한 높이가 줄고(폭÷종횡비), 히어로는 높아져서 줄 수 있는 높이가 는다. 양쪽이 같이 움직인다.
    값은 풀어서 구하지 않고 재서 골랐다(1560 · 1300 · 1210px 에서 0.68~0.74 를 훑어 남는/모자란
    픽셀이 0 에 가장 가까운 값). 이름줄 크기를 건드리면 다시 재야 한다 — 예전에 이 폭을 식으로
-   풀었다가 제목 크기를 바꿀 때마다 세 번 연달아 틀렸다. */
+   풀었다가 제목 크기를 바꿀 때마다 세 번 연달아 틀렸다.
+   ※ 규격판이 오른쪽 열로 들어온 뒤로 이 값의 근거는 한 단 약해졌다. 두 컷은 이제 규격판을 뺀
+      나머지를 나누느라 어차피 자연 높이보다 눌려 있어서, 73% 는 '두 컷이 제 높이를 갖는 폭' 이
+      아니라 그냥 히어로 폭이다. 실제 손잡이는 아래 콘솔 : 덮임 비다.
+      두 기둥의 아래 선은 그래도 정확히 맞는다(둘 다 921px · 1400px 창 실측). */
 .cr-hero{display:grid; grid-template-columns:73% minmax(0,1fr);
-  grid-template-areas:"dash dash" "hero side"; gap:10px 14px}
-.cr-hero>.cl-dash{grid-area:dash; margin:0}
+  grid-template-areas:"hero side"; gap:10px 14px}
 /* 격자 자리는 ① 을 감싼 띠가 가져간다(진입 애니가 ① 을 그 안에서 움직인다 — 아래 .cr-heroclip) */
 .cr-hero .cr-heroclip{grid-area:hero}
 .cr-side{grid-area:side; display:flex; flex-direction:column; gap:12px}
@@ -123,8 +129,22 @@
    0 으로 두면 이름줄까지 포함한 칸 전체를 종횡비로 나누게 되어, 글이 붙은 만큼 콘솔 쪽이 더
    가져간다. 그러면 한쪽이 먼저 남고 다른 쪽이 아직 모자라서 위 73% 하나로는 둘을 못 맞춘다.
    글 높이를 먼저 떼어 놓고 남는 높이만 나누면 두 컷이 같이 남고 같이 모자란다. */
-.cr-side>.cr-ref.con{flex:0.7750 1 82px; min-height:0}                   /* 1/1.2903 */
-.cr-side>.cr-ref.lim{flex:0.6281 1 82px; min-height:0}                   /* 1/1.5921 */
+/* ── 두 컷의 비 — 종횡비 그대로에서 콘솔 쪽으로 기울였다 ──
+   원래는 역종횡비(0.7750 : 0.6281)라 두 컷이 제 비율대로 함께 커졌다. 규격판이 이 열 맨 위로
+   들어오면서 셋이 같은 높이를 나눠 쓰게 됐고, 그대로 두면 콘솔 그림이 절반 밑으로 눌린다.
+   콘솔은 80×21 문자판이라 눌리면 글자가 뭉개져 '문자로 그린다' 는 이 컷의 요지가 죽는다.
+   덮임컷은 반대로 '흰 말풍선이 화면을 덮었다' 만 읽히면 되고 cover 라 잘려도 손해가 없다 —
+   그래서 콘솔에 더 준다.
+   값은 풀지 않고 재서 골랐다(1400px 창 · 오른쪽 열 702px · 규격판 195px 을 뺀 나머지를 나눈다):
+     0.7750 : 0.6281 (원래 · 역종횡비)  — 규격판이 없던 시절 값
+     1.24   : 0.44                      콘솔 그림 216 · 덮임 64  ← 덮임이 상단 한 줌만 남아 과함
+     1.15   : 0.52                      콘솔 그림 201 · 덮임 80  ← 채택(실측)
+   덮임컷은 80px 에서도 '흰 말풍선이 화면을 덮었다' 가 오히려 또렷하다 — 잘려 나가는 것은
+   가장자리 초록 지면이고 남는 것이 흰 덩어리다(object-position:center top). 수치는 캡션이 진다.
+   ※ 이 폭에서 콘솔은 세로가 먼저 막혀 좌우에 여백이 생긴다(contain). 그림이 폭에 꽉 차던
+      규격판 이전과 달라진 점인데, 여백 색이 녹화 바탕색(#0c0c0c)이라 화면 일부로 읽힌다. */
+.cr-side>.cr-ref.con{flex:1.15 1 82px; min-height:0}
+.cr-side>.cr-ref.lim{flex:0.52 1 82px; min-height:0}
 /* 칸 안에서는 머리줄·캡션이 먼저 자리를 잡고, 남는 높이를 그림이 먹는다(flex-basis 0 + grow).
    height:100% 로 두면 안 된다 — 머리줄까지 포함한 칸 높이의 100% 라서 그만큼 아래가 잘린다.
    위 두 줄의 비(0.7750 : 0.6281)는 머리줄을 뺀 나머지를 나누는 비가 됐다. 그림이 원래 종횡비보다
@@ -223,58 +243,57 @@
 .cr-more:hover{color:var(--ink); border-color:#3c4a63}
 .cr-more em{font-style:normal; font-family:var(--mono); font-size:.66rem; color:var(--dim)}
 
-/* ═══════════ 진입 애니 — 액자 밖에서 미끄러져 들어온다 ═══════════
+/* ═══════════ 진입 애니 — 창이 열린다 ═══════════
    1-1 설계 탭은 들어올 때마다 구조가 서는 걸 보여 주는데 이 탭만 처음부터 다 서 있었다.
 
-   ── 페이드를 안 쓴다 ──
-   opacity 0→1 은 '들어옴' 이 아니라 '생김' 으로 읽힌다. 이동 거리도 짧으면 안 된다 —
-   40~60px 로는 들어온 게 아니라 자리를 잡은 것으로 보인다. 그래서 판을 제 폭만큼 액자 밖으로
-   빼고(-100% - 26px), 액자가 그동안 잘라 준다. 밖에 있는 동안은 투명도를 안 건드려도 안 보인다.
+   ── 한때는 액자 밖에서 미끄러져 들어왔다. 왜 바꿨나 ──
+   그때 근거는 'opacity 0→1 은 들어옴이 아니라 생김으로 읽힌다' 였다. 그런데 이 판에서 들어오는
+   것들은 전부 실행 중인 화면, 곧 창이다 — 창은 미끄러져 오는 물건이 아니라 열리는 것이므로
+   여기서는 '생김' 이 맞는 말이었다. 실제 손해도 있었다: 판을 제 폭만큼 밖에 빼 두고 delay 를
+   .23~.64s 로 계단 지어서, 프레임을 떠 보니 앞 240ms 동안 액자가 통째로 비어 있었다(실측).
+   전체 길이도 1.26초여서 늘어졌다. 지금은 .04s 에 ① 이 뜨기 시작하고 .91초에 끝난다.
 
-   ── 곡선은 눕힌 것으로 ──
-   1-1 의 scenePop 이 쓰는 (.22,.9,.3,1) 이나 흔한 expo-out (.16,1,.3,1) 은 앞 1/8 시간에
-   거리의 8할을 써 버린다. 190ms 짜리 작은 팝에는 맞지만, 폭 1000px 짜리 판이 그 곡선으로
-   들어오면 60fps 에서도 빠른 구간이 예닐곱 프레임뿐이라 '튀어 들어온' 것으로 보인다.
-   easeOutCubic 로 눕히고 길이를 판 크기만큼 늘렸다(① 860ms).
+   ── 제자리에서 0.94배로 열리고, 18px 떠오른다 ──
+   창이 열리는 몸짓이되 가장 얌전한 쪽이다. 배율이 6% 뿐이라 영상 리샘플링이 눈에 안 띈다 —
+   0.52배로 아래에서 키우는 안(윈도우 최소화 복원)도 한동안 썼는데, 커지는 내내 GPU 가 레이어를
+   스케일해서 콘솔 문자판과 서버 관측 패널의 잔글씨가 그 구간 동안 흐렸다. 여기엔 그 구간이 없다.
+   대신 배율만으로는 변화가 약하므로 18px 이동을 같이 준다 — 눈은 크기보다 위치 변화를 먼저 읽는다.
+   (원안은 10px 이었는데, 0.94배와 겹치면 '떠올랐다' 가 잘 안 읽혀서 키웠다.)
 
-   ── 잘라 주는 네 곳 ──
-   액자(.cr-frame)는 ②③ 의 좌우, 규격 띠(.cr-specclip)와 ① 의 띠(.cr-heroclip)는 위,
-   꼬리 띠(.cr-footclip)는 좌우. 세로로 들어오는 둘에 제 칸짜리 띠를 따로 주는 이유는,
-   액자 하나만 믿으면 위에서 오는 것이 아래 있는 것들을 덮고 지나가기 때문이다 —
-   ① 은 세로가 액자를 거의 다 써서 내려오는 내내 머리줄과 규격 줄을 가린다.
-   넷 다 애니 도는 동안만 자른다. 상시로 두면 컷의 그림자(0 20px 42px -22px)가 잘린다. */
-.cr-specclip{grid-area:dash; overflow:visible}
-.cr-specclip>.cl-dash{margin:0}
+   ── 곡선을 눕힌 이유 (한 번 틀렸던 자리) ──
+   앞서 (.2,.8,.3,1) 로 넣었다가 '애니로 안 보인다' 는 말을 들었다. 배율 탓인 줄 알았는데
+   재 보니 곡선이었다 — 그 곡선은 48ms 에 37%, 96ms 에 63% 를 써 버려서 나머지 380ms 가
+   사실상 정지다. 체감 재생 시간이 100ms 남짓이라 '움직였다' 가 아니라 '그냥 떠 있다' 로 읽힌다.
+   프레임을 떠서 나란히 보면 140ms 에 이미 끝나 있었다. easeOutCubic(.33,1,.68,1)은 같은 시점에
+   15% · 49% 라 고르게 퍼진다. 이 함정은 옛 슬라이드 애니 주석에도 적혀 있던 것인데 또 밟았다 —
+   빠른 곡선은 작은 팝(190ms)에나 맞지, 판 하나가 통째로 움직이는 데는 안 맞는다.
+
+   ── 원점은 건드리지 않는다 ──
+   제자리에서 열리는 몸짓이라 기본값(center)이 맞다. 판마다 제 모서리를 원점으로 삼는 안과
+   넷 다 아래 한 자리를 쓰는 안(최소화 복원)도 거쳐 왔는데, 둘 다 '어디선가 온다' 를 만들려는
+   장치였다. 여기서는 오는 게 아니라 그 자리에서 열리므로 원점을 옮길 이유가 없다.
+
+   ── 잘라 줄 일이 없어졌다 ──
+   판이 액자 밖으로 나가지 않으므로 .cr-frame · .cr-heroclip · .cr-footclip 에 걸던
+   overflow:hidden 이 통째로 필요 없다. 덤으로 애니 도는 동안에도 컷의 그림자가 안 잘린다
+   (예전에는 그 그림자를 살리려고 애니가 끝나면 .cr-in 을 떼야 했다).
+   두 껍데기는 격자 자리(.cr-heroclip)와 위 여백(.cr-footclip) 때문에 남는다. */
 .cr-heroclip{overflow:visible; min-height:0}
-/* 껍데기가 원래 .cr-foot 이 갖던 위 여백을 물려받는다. 좌우 2px 는 그대로 안쪽에 남긴다 —
-   껍데기로 옮기면 잘라 주는 폭까지 2px 씩 좁아져서 판이 다 안 나가고 걸린다. */
+/* 껍데기가 원래 .cr-foot 이 갖던 위 여백을 물려받는다. 좌우 2px 는 그대로 안쪽에 남긴다 */
 .cr-footclip{margin-top:11px; overflow:visible}
 .cr-footclip>.cr-foot{margin:0 2px}
-#p-crender.cr-in .cr-frame, #p-crender.cr-in .cr-specclip,
-#p-crender.cr-in .cr-heroclip, #p-crender.cr-in .cr-footclip{overflow:hidden}
 /* 움직이는 것에만, 움직이는 동안만 레이어를 띄운다 — 상시로 걸면 영상 판 둘이 GPU 메모리를 계속 문다 */
-#p-crender.cr-in .cl-tile, #p-crender.cr-in .cr-hero .big,
+#p-crender.cr-in .cr-spec, #p-crender.cr-in .cr-hero .big,
 #p-crender.cr-in .cr-side>.cr-ref, #p-crender.cr-in .cr-foot{
-  will-change:transform; backface-visibility:hidden}
-@keyframes crInL{from{transform:translate3d(calc(-100% - 26px),0,0)} to{transform:translate3d(0,0,0)}}
-@keyframes crInR{from{transform:translate3d(calc(100% + 26px),0,0)}  to{transform:translate3d(0,0,0)}}
-@keyframes crInD{from{transform:translate3d(0,calc(-100% - 6px),0)}  to{transform:translate3d(0,0,0)}}
-/* 규격 여섯 칸이 왼쪽부터 한 칸씩 내려온다. 58ms 는 여섯 번이 이어진 한 동작으로 들리는 간격이다 —
-   더 벌리면 여섯 개의 따로 노는 동작이 되고, 더 붙이면 한 덩어리와 구분이 안 된다. */
-#p-crender.cr-in .cl-tile{animation:crInD .56s cubic-bezier(.33,1,.68,1) both}
-#p-crender.cr-in .cl-tile:nth-child(2){animation-delay:.058s}
-#p-crender.cr-in .cl-tile:nth-child(3){animation-delay:.116s}
-#p-crender.cr-in .cl-tile:nth-child(4){animation-delay:.174s}
-#p-crender.cr-in .cl-tile:nth-child(5){animation-delay:.232s}
-#p-crender.cr-in .cl-tile:nth-child(6){animation-delay:.29s}
-/* 판 셋 — ① 은 규격 줄과 같이 위에서 내려오고, ②③ 은 오른쪽에서. ②③ 이 오른쪽 칸에 딸린
-   참조컷이라는 배치가 방향으로 나온다. ① 이 규격과 같은 축인 것은 그 둘이 왼쪽 기둥이라서다 —
-   위에서 내려오는 한 줄기가 규격을 지나 ① 로 이어지고, 오른쪽 둘만 옆에서 붙는다. */
-#p-crender.cr-in .cr-hero .big     {animation:crInD .86s cubic-bezier(.33,1,.68,1) .23s both}
-#p-crender.cr-in .cr-side>.cr-ref.con{animation:crInR .78s cubic-bezier(.33,1,.68,1) .36s both}
-#p-crender.cr-in .cr-side>.cr-ref.lim{animation:crInR .78s cubic-bezier(.33,1,.68,1) .47s both}
-#p-crender.cr-in .cr-foot          {animation:crInL .62s cubic-bezier(.33,1,.68,1) .64s both}
-/* ※ 맨 뒤 요소가 끝나는 시각(.64+.62 = 1.26초)은 client-render.js 의 ENTER 에 숫자로 박혀 있다 */
+  will-change:transform,opacity; backface-visibility:hidden}
+@keyframes crOpen{from{transform:scale(.94) translate3d(0,18px,0); opacity:0}
+                  to  {transform:none; opacity:1}}
+#p-crender.cr-in .cr-hero .big     {animation:crOpen .52s cubic-bezier(.33,1,.68,1) .04s both}
+#p-crender.cr-in .cr-spec            {animation:crOpen .52s cubic-bezier(.33,1,.68,1) .16s both}
+#p-crender.cr-in .cr-side>.cr-ref.con{animation:crOpen .52s cubic-bezier(.33,1,.68,1) .26s both}
+#p-crender.cr-in .cr-side>.cr-ref.lim{animation:crOpen .52s cubic-bezier(.33,1,.68,1) .36s both}
+#p-crender.cr-in .cr-foot          {animation:crOpen .48s cubic-bezier(.33,1,.68,1) .46s both}
+/* ※ 맨 뒤 요소가 끝나는 시각(.46+.48 = 0.94초)은 client-render.js 의 ENTER 에 숫자로 박혀 있다 */
 @media (prefers-reduced-motion:reduce){ #p-crender.cr-in *{animation:none !important} }
 
 @media (max-width:1200px){
@@ -282,11 +301,16 @@
   /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
      내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어
      문자 격자가 회색 띠로 보이므로, 참조컷 상태로 반씩 나눠 갖는 편이 낫다. */
-  /* 두 칸 격자를 한 칸으로 풀어 규격 · 히어로 · 참조컷을 세로로 쌓는다 */
-  .cr-hero{grid-template-columns:minmax(0,1fr); grid-template-areas:"dash" "hero" "side"; gap:10px}
+  /* 두 칸 격자를 한 칸으로 풀어 히어로 · (규격 + 참조컷)을 세로로 쌓는다 */
+  .cr-hero{grid-template-columns:minmax(0,1fr); grid-template-areas:"hero" "side"; gap:10px}
   /* 액자 여백은 좁은 화면에서 그림이 먹을 폭이다 — 한 단 줄인다 */
   .cr-frame{padding:0 11px 12px}
-  .cr-side{flex-direction:row; align-items:flex-start}
+  .cr-side{flex-direction:row; flex-wrap:wrap; align-items:flex-start}
+  /* 이 폭부터 규격판은 참조컷과 나란히 서지 않고 제 줄을 통째로 쓴다 — 셋을 한 줄에 세우면
+     332px 짜리 판이 셋으로 갈려 콘솔 문자판이 먼저 죽는다. 전폭이 되면 두 열로 담을 이유도
+     없어져서 여섯을 한 줄로 편다(위에서 이 판이 두 열인 것은 열 폭이 332px 이기 때문이다). */
+  .cr-side>.cr-spec{flex:1 0 100%}
+  .cr-side>.cr-spec .cl-dash.spec{grid-template-columns:repeat(6,1fr); gap:9px 14px}
   /* 여기서도 폭을 종횡비에 비례해 나눈다(= 두 컷의 높이가 같아진다). 반씩 균등하게 주면
      덮임컷(1.5921)이 콘솔(1.2903)보다 75px 낮아지고, 그 빈 자리 때문에 아래 이름표 띠가
      그림에서 떨어져 뜬다(bottom:0 은 그림 바닥이 아니라 칸 바닥이다). */
@@ -304,16 +328,10 @@
      접히든 안 접히든 같은 높이를 쓰게 두고, 줄은 위로 붙인다. */
   .cr-ref .cr-hd{min-height:43px; align-content:flex-start}
   .cr-ref .cr-hd b{font-size:1rem}
-  /* 참조컷 둘이 가로로 눕는 폭부터는 ② 가 왼쪽 컷이다. 그대로 오른쪽에서 들여보내면 ② 가
-     ③ 자리를 가로질러 지나간다(둘의 등장 시각이 겹친다) — ② 만 왼쪽에서 들어오게 돌린다.
-     그러면 둘 다 자기 바깥 모서리에서 출발해 빈 자리만 지난다. */
-  #p-crender.cr-in .cr-side>.cr-ref.con{animation-name:crInL}
-  /* ① 은 이 폭에서도 그대로 위에서 내려온다 — 제 칸짜리 띠 안에서 움직이므로,
-     참조컷 둘이 ① 밑으로 내려와도 쓸고 지나갈 일이 없다. */
+  /* ※ 이 자리에 한때 원점을 좌우로 돌리는 규칙이 있었다 — 판이 제 모서리에서 펼쳐지던 시절,
+     이 폭부터는 규격판이 전폭이고 ② 가 왼쪽 컷이 되어 배치가 뒤집히기 때문이었다.
+     최소화 복원은 원점이 넷 다 아래 한 자리라 좌우 배치와 무관해졌다. */
 }
-/* 규격이 두 줄로 접히는 폭. 두 줄이면 아랫줄 칸이 제 높이만큼 올라가 봐야 띠 밖이 아니라
-   윗줄 위다 — 칸이 서로를 지나간다. 이 폭부터는 여섯 칸을 한 덩어리로 내린다. */
-@media (max-width:760px){
-  #p-crender.cr-in .cl-tile{animation:none}
-  #p-crender.cr-in .cl-dash.spec{animation:crInD .62s cubic-bezier(.33,1,.68,1) both}
-}
+/* ※ 한때 여기에 760px 분기가 있었다 — 규격 여섯 칸이 두 줄로 접히면 칸이 서로를 지나가므로
+   개별 낙하를 끄고 띠를 한 덩어리로 내리는 규칙이었다. 지금은 판이 통째로 하나의 동작이라
+   접히든 안 접히든 같다. 그 폭에서 여섯을 세 열로 접는 일만 bneck-tail.css 에 남아 있다. */
