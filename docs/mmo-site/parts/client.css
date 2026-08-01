@@ -29,20 +29,21 @@
    빈 상자' 로 읽혔다(그래서 가운데 정렬로 버티고 있었다). 열 안으로 들어오면서 폭이 332px 로
    줄어 그 문제가 사라졌으므로, 칸 테두리를 걷고 판 하나에 두 열로 담는다.
 
-   ── 값 크기는 1.5 → 1.14rem ──
-   윗줄에 있을 때는 띠가 58px 로 눌려 안 읽히는 것이 문제라 값을 키웠다. 여기서는 반대다 —
-   이 판이 두꺼운 만큼 아래 콘솔·덮임컷이 짧아진다(같은 열을 셋이 나눠 쓴다). */
+   ── 두 열 세 줄 → 세 열 두 줄 ──
+   값이 짧아서(40 · 3×3 · 20) 두 열로 두면 칸마다 오른쪽 절반이 빈다. 빈 자리가 여섯이면 판이
+   글자 몇 개 얹힌 빈 상자로 읽힌다 — 열을 늘려 그 여백을 없앤다.
+   덤이 둘이다: 줄이 셋에서 둘로 줄어 판이 41px 낮아지고(같은 열을 셋이 나눠 쓰니 그만큼
+   콘솔·덮임컷이 길어진다), 값을 1.14 → 1.32rem 으로 되키울 여유도 그 41px 에서 나온다.
+   ※ 폭이 빠듯하다. 열 하나가 100px 인데 가장 긴 칸이 '20 칸 · 36개'(81px) 다 —
+      값이나 단위 글자를 키우면 먼저 여기가 두 줄로 접힌다(1210px 창에서 확인). */
 .cr-spec{flex:0 0 auto; background:var(--sunk); border:1px solid var(--line2);
   border-radius:12px; padding:11px 14px 12px}
-.sp-hd{display:flex; align-items:baseline; gap:8px; margin-bottom:9px}
-.sp-hd b{font-size:.68rem; font-weight:800; letter-spacing:.1em; color:var(--net)}
-.sp-hd span{font-size:.68rem; color:var(--dim)}
-.cl-dash.spec{grid-template-columns:1fr 1fr; gap:9px 14px; margin:0}
+.cl-dash.spec{grid-template-columns:repeat(3,1fr); gap:10px 12px; margin:0}
 /* 칸은 이제 판이 아니다 — .cl-tile 의 배경·테두리·안쪽 여백을 전부 되돌린다 */
 .cl-dash.spec .cl-tile{background:none; border:0; border-radius:0; padding:0}
 .cl-dash.spec .cl-tile .l{font-size:.66rem}
 .cl-dash.spec .cl-tile .v{margin-top:2px; gap:5px}
-.cl-dash.spec .cl-tile .n{font-size:1.14rem; line-height:1.15}
+.cl-dash.spec .cl-tile .n{font-size:1.32rem; line-height:1.15}
 /* 단위는 sans 로 되돌린다 — .cl-tile .u 는 mono 라서 '칸 · 36개' 처럼 한글이 섞이면 글꼴이
    폴백돼 자간이 벌어진다(확대해서 확인했다). 여섯 칸 중 셋이 한글 단위다 */
 .cl-dash.spec .cl-tile .u{font-family:var(--sans); font-size:.66rem; font-weight:600}
@@ -103,9 +104,11 @@
    그래서 계산을 걷고, 두 참조컷이 남는 높이를 종횡비 비율대로 나눠 먹게 했다(flex 값 = 종횡비).
    남는 높이를 그림에 어떻게 얹느냐가 컷마다 다르다:
      · 덮임컷 = cover. 가장자리가 흰 말풍선 덩어리라 좌우가 잘려도 안 보인다.
-     · 콘솔   = contain. 80칸 문자판이라 좌우를 자르면 맵 끝 칸이 사라진다. 대신 남는 높이를
-                위아래 여백으로 두고, 그 여백 색을 녹화 바탕색(#0C0C0C · 실제로 찍어 확인)에
-                맞춰 '콘솔 화면이 조금 더 큰 것' 으로 보이게 한다.
+     · 콘솔   = cover. 좌우는 안 자른다(80칸 문자판이라 자르면 맵 끝 칸이 사라진다) — 폭을 꽉
+                채우고 대신 아래 채팅 줄을 잘라 낸다. 한때 contain 이었는데, 세로가 먼저 막혀
+                가로에 여백이 남는 바람에 글자가 3.2px 이 되어 문자판이 회색 띠로 보였다
+                (아래 1200px 분기가 피하려던 바로 그 상태다). cover 면 폭 기준으로 커져
+                상태줄 두 줄 + 문자판 21줄이 남고, 잘리는 것은 그 아래 채팅뿐이다.
    ※ 그림이 판 좌우 끝까지 닿아야(안쪽 여백 0) 폭 비례가 성립한다. 여백은 글줄이 각자 갖는다. */
 /* 66% -> 73%. 규격을 액자 윗줄로 뺀 만큼 참조컷 칸이 짧아졌고, 이름줄·캡션이 붙으면서 그 칸이
    써야 할 높이도 늘었다. 두 손해를 메우는 손잡이는 이 비율 하나다 — 히어로를 넓히면 참조컷은 좁아져서
@@ -141,22 +144,27 @@
      1.15   : 0.52                      콘솔 그림 201 · 덮임 80  ← 채택(실측)
    덮임컷은 80px 에서도 '흰 말풍선이 화면을 덮었다' 가 오히려 또렷하다 — 잘려 나가는 것은
    가장자리 초록 지면이고 남는 것이 흰 덩어리다(object-position:center top). 수치는 캡션이 진다.
-   ※ 이 폭에서 콘솔은 세로가 먼저 막혀 좌우에 여백이 생긴다(contain). 그림이 폭에 꽉 차던
-      규격판 이전과 달라진 점인데, 여백 색이 녹화 바탕색(#0c0c0c)이라 화면 일부로 읽힌다. */
+   ※ 콘솔에 더 주는 이 비는 cover 로 바꾼 뒤에도 그대로 뜻이 있다 — 칸이 높을수록 아래에서
+      잘려 나가는 채팅 줄이 줄어든다. 지금 값에서는 문자판 21줄이 딱 남는다. */
 .cr-side>.cr-ref.con{flex:1.15 1 82px; min-height:0}
 .cr-side>.cr-ref.lim{flex:0.52 1 82px; min-height:0}
 /* 칸 안에서는 머리줄·캡션이 먼저 자리를 잡고, 남는 높이를 그림이 먹는다(flex-basis 0 + grow).
    height:100% 로 두면 안 된다 — 머리줄까지 포함한 칸 높이의 100% 라서 그만큼 아래가 잘린다.
    위 두 줄의 비(0.7750 : 0.6281)는 머리줄을 뺀 나머지를 나누는 비가 됐다. 그림이 원래 종횡비보다
-   조금 낮아지는데, 콘솔은 contain 이라 위아래 여백(녹화 바탕색 #0c0c0c)으로, 덮임컷은 cover 라
-   아래가 조금 잘리는 것으로 흡수된다 — 둘 다 원래 그러라고 고른 값이다.
+   조금 낮아지는데, 둘 다 cover 라 아래가 잘리는 것으로 흡수된다 — 원래 그러라고 고른 값이다.
    그림을 칸 위쪽에 붙이는 것(object-position:center top)은 그대로 둔다: 콘솔은 맨 위 상태줄이,
    덮임컷은 왼쪽 위 '시야 1,118명' 이 이 컷의 요지라 아래가 아니라 위가 남으면 안 된다. */
-/* 녹화 바탕색(#0c0c0c · 실제로 찍어 확인)은 칸이 아니라 영상에 준다. contain 이 남긴 위아래 여백에
-   비치는 것은 영상 요소의 배경이라 이걸로 충분하고, 칸에 주면 머리줄 바탕까지 검게 물들어
+/* 녹화 바탕색(#0c0c0c · 실제로 찍어 확인)은 칸이 아니라 영상에 준다 — cover 로 바꾼 뒤 이 폭에서는
+   여백이 안 남지만, 좁은 화면(아래 1200px 분기)에서 fill 로 되돌아갈 때와 영상이 아직 안 그려진
+   첫 프레임에서 이 색이 화면 일부로 읽힌다. 칸에 주면 머리줄 바탕까지 검게 물들어
    덮임컷(③)의 머리줄과 색이 달라진다. */
+/* 바닥 한 줌을 흐린다 — cover 로 자르면 마지막 채팅 줄이 글자 한가운데서 썰린다. 자를 자리를
+   고를 수가 없어서(칸 높이가 창 폭에 따라 바뀐다) 잘린 티를 없애는 쪽으로 간다.
+   흐려진 줄은 '아래로 더 있다' 로 읽히고, 실제로도 채팅은 계속 흘러간다. */
 .cr-side>.cr-ref.con video{flex:1 1 0; min-height:0; height:auto; background:#0c0c0c;
-  object-fit:contain; object-position:center top}
+  object-fit:cover; object-position:center top;
+  -webkit-mask-image:linear-gradient(180deg,#000 94%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 94%,transparent 100%)}
 .cr-side>.cr-ref.lim img{flex:1 1 0; min-height:0; height:auto; object-fit:cover; object-position:center top}
 .cr-screen{background:var(--panel); border:1px solid var(--line2); border-radius:12px;
   padding:9px 0 11px; box-sizing:border-box; overflow:hidden}
@@ -164,11 +172,20 @@
 /* 화면 이름은 이 판이 무엇인지 말하는 유일한 글자다 — 곁의 메타(픽셀로 그린다 · 더미 250명)는
    그대로 두고 이름만 키워서 크기 차이를 벌린다(.95 → 1.16 → 1.34 → 1.56rem) */
 .cr-hd b{font-size:1.56rem; font-weight:800; letter-spacing:-.02em}
-.cr-hd span{font-family:var(--mono); font-size:.66rem; color:var(--dim)}
+/* 메타는 sans 다 — mono 로 두면 한글이 폴백돼 자간이 벌어지고, '더미 250명' 처럼 숫자와 한글이
+   붙은 자리는 한 단어 안에서 글꼴이 갈린다(이 파일 .cl-tile .u · .cr-fhd em 과 같은 함정).
+   폴백 글꼴이 크게 보이던 만큼(.66 → .7rem) 눈에 보이는 크기를 맞춘다 */
+.cr-hd span{font-family:var(--sans); font-size:.7rem; color:var(--dim)}
+/* 더미 수 — 셋 다 이름 옆 같은 크기로 고정한다. rem 이라 이름 크기(히어로 1.56 · 참조컷 1.16)를
+   안 따라간다: 따라가게 두면 ① 만 커져 사다리가 아니라 크기 차이로 읽힌다 */
+.cr-hd b .hot{font-style:normal; color:var(--game); font-size:1.16rem; margin-left:5px}
 /* 영상은 카드 좌우 끝까지 채운다 — 화면을 담은 판이라 테두리에 붙는 쪽이 '기계 화면' 으로 읽힌다.
    눌러서 멈출 수 있으므로 손가락 커서를 준다(컨트롤 바는 화면을 어지럽혀서 안 쓴다). */
 .cr-screen video{display:block; width:100%; height:auto; background:#070a10; cursor:pointer}
-.cr-cap{margin:8px 13px 0; font-size:.72rem; color:var(--dim); line-height:1.5}
+/* 캡션은 --mut 이다. --dim(#5d6c85)은 액자 바탕(#151d2d) 위에서 명암비 3.2:1 이라 11.5px 글자로는
+   기준(4.5:1) 미달이고, 하필 ③ 의 결정타(시야 1,118명 · 1,427건/초 · 223.9KB/초)가 이 줄에 있다.
+   --mut(#8496b3)이면 5.7:1 — 값은 그대로 두고 색만 한 단 올린 것이다 */
+.cr-cap{margin:8px 13px 0; font-size:.72rem; color:var(--mut); line-height:1.5}
 
 /* ── 참조컷 — 히어로와 같은 문법(머리줄 → 그림 → 캡션) ──
    한때 두 컷은 그림 위에 이름표만 얹었다(콘솔은 알약, 덮임컷은 아래 그라데이션 띠). 네 귀퉁이가
@@ -182,8 +199,8 @@
 /* 참조컷 이름은 히어로(1.56rem)보다 작아야 한다 — 같은 크기면 '큰 화면 하나에 초점' 이 사라진다 */
 .cr-ref .cr-hd{margin:9px 12px 8px}
 .cr-ref .cr-hd b{font-size:1.16rem; letter-spacing:-.015em}
-/* em 으로 쓴 이유는 .cr-hd span 이 mono·회색을 잡고 있어서다 — span 이면 그 규칙이 이겨 죽는다 */
-.cr-ref .cr-hd b .hot{font-style:normal; color:var(--game)}
+/* em 으로 쓴 이유는 .cr-hd span 이 작은 회색을 잡고 있어서다 — span 이면 그 규칙이 이겨 죽는다
+   (색·크기는 위 .cr-hd b .hot 이 셋 공통으로 잡는다) */
 .cr-ref .cr-cap{margin:8px 12px 10px}
 /* ── 액자 — 셋을 감싸는 판 ──
    액자가 없을 때는 규격 칸과 컷 셋이 페이지 배경 위에 그대로 놓여 있었다. 판(--panel #131a26)이
@@ -210,7 +227,7 @@
 /* ── 번호 ──
    셋 다 머리줄 맨 앞에 붙는다. 그림 위에 겹치지 않는다 — 콘솔 컷 맨 위 두 줄은 상태줄이라
    가리면 실서버에 붙어 있다는 증거가 사라지고, 덮임컷은 네 귀퉁이가 다 쓰여 있다.
-   태그를 span 이 아니라 i 로 쓰는 이유: .cr-hd span 이 이미 mono·작은 회색을 잡고 있어서
+   태그를 span 이 아니라 i 로 쓰는 이유: .cr-hd span 이 이미 작은 회색을 잡고 있어서
    span 으로 넣으면 그 규칙이 특이도로 이겨 번호가 회색 잔글씨가 된다. */
 .cr-num{display:inline-grid; place-items:center; width:21px; height:21px; border-radius:6px;
   margin-right:9px; vertical-align:middle; font-family:var(--mono); font-size:.68rem;
@@ -318,16 +335,20 @@
      그대로로 되돌린다. 안 되돌리면 폭이 55:45 로 갈려 두 컷 높이가 어긋난다(700px 에서 확인). */
   .cr-side>.cr-ref.con{flex:1.2903 1 0; min-height:auto}
   .cr-side>.cr-ref.lim{flex:1.5921 1 0; min-height:auto}
-  /* 세로로 쌓였을 때 남는 높이를 먹으라고 준 contain·cover 를 되돌린다 — 가로로 눕히면
+  /* 세로로 쌓였을 때 남는 높이를 먹으라고 준 cover 둘을 되돌린다 — 가로로 눕히면
      'flex 값 = 종횡비' 만으로 두 컷 높이가 맞으므로 자르거나 여백을 둘 이유가 없다 */
-  .cr-side>.cr-ref.con video{flex:0 0 auto; height:auto; object-fit:fill}
+  /* 통짜로 보이는 폭이라 바닥을 흐릴 이유도 없다(자르는 것이 없다) */
+  .cr-side>.cr-ref.con video{flex:0 0 auto; height:auto; object-fit:fill;
+    -webkit-mask-image:none; mask-image:none}
   .cr-side>.cr-ref.lim img{flex:0 0 auto; height:auto; object-fit:fill}
   /* 참조컷이 반 폭으로 줄면 이름줄도 같이 줄어야 한다 — 이름은 남기고 크기만 내린다.
-     높이를 두 줄로 고정하는 이유: 이 폭에서 ② 의 메타(문자로 그린다 · 더미 1,000명)만 다음 줄로
-     접히는데, 두 컷이 나란히 서 있어서 한쪽 이름줄만 높아지면 그림 시작선이 어긋난다(740px 에서 확인).
-     접히든 안 접히든 같은 높이를 쓰게 두고, 줄은 위로 붙인다. */
+     높이를 두 줄로 고정하는 이유: 이 폭에서는 이름줄이 한쪽만 먼저 접힌다(② 는 이름 + 더미 수가
+     길고 ③ 은 짧다). 두 컷이 나란히 서 있어서 한쪽 이름줄만 높아지면 그림 시작선이 어긋난다
+     (740px 에서 확인). 접히든 안 접히든 같은 높이를 쓰게 두고, 줄은 위로 붙인다.
+     더미 수도 이름과 같이 한 단 내린다 — 안 내리면 이름보다 커져 이름이 곁글씨로 읽힌다. */
   .cr-ref .cr-hd{min-height:43px; align-content:flex-start}
   .cr-ref .cr-hd b{font-size:1rem}
+  .cr-hd b .hot{font-size:1rem}
   /* ※ 이 자리에 한때 원점을 좌우로 돌리는 규칙이 있었다 — 판이 제 모서리에서 펼쳐지던 시절,
      이 폭부터는 규격판이 전폭이고 ② 가 왼쪽 컷이 되어 배치가 뒤집히기 때문이었다.
      최소화 복원은 원점이 넷 다 아래 한 자리라 좌우 배치와 무관해졌다. */

@@ -27,7 +27,7 @@
          ① 만 머리줄이고 둘만 덮개라 통일이 안 된 것으로 읽혔다. 머리줄로 올리면서 덤으로
          콘솔 상태줄(Zone · Player · Pos)과 덮임컷 오른쪽 아래 레이더가 안 가려지게 됐다. -->
     <div class="cr-frame">
-      <div class="cr-fhd"><b>같은 서버에 붙은 세 화면</b><span>같은 규격 · 붙인 더미 수만 다르다</span>
+      <div class="cr-fhd"><b>같은 서버에 붙은 세 화면</b><span>같은 규격 · 붙인 더미 수가 다르다</span>
         <em>전부 실제 실행 화면</em></div>
       <div class="cr-hero">
         <!-- ① 은 제 칸을 띠로 쓴다. ① 은 세로가 액자를 거의 다 써서, 액자만 믿고 위에서 내리면
@@ -35,7 +35,10 @@
              것으로 보이고 위쪽을 건드리지 않는다. 격자 자리(grid-area:hero)는 여기가 가져간다. -->
         <div class="cr-heroclip">
         <div class="cr-screen web big">
-          <div class="cr-hd"><b><i class="cr-num">1</i>웹 클라이언트</b><span>픽셀로 그린다</span><span>더미 250명</span></div>
+          <!-- 더미 수는 이름 옆(.hot)에 둔다 — 이 판이 내건 것이 250 → 1,000 → 5,000 사다리인데,
+               한때 셋 중 ③ 만 이름줄이고 ①② 는 곁의 회색 메타라 그 사다리가 눈에 안 잡혔다.
+               셋 다 같은 자리·같은 크기(.cr-hd b .hot 이 크기를 고정한다)로 두면 훑기만 해도 읽힌다. -->
+          <div class="cr-hd"><b><i class="cr-num">1</i>웹 클라이언트 <em class="hot">더미 250명</em></b><span>픽셀로 그린다</span></div>
           <video id="vd-web" muted loop playsinline preload="metadata" width="1296" height="814"
             poster="media/client-web.jpg" title="눌러서 멈추기 / 다시 재생"
             aria-label="웹 클라이언트 실행 화면 녹화 — 더미 250명이 붙은 서버에서 픽셀 캐릭터들이 섹터 격자 위를 움직이고 말풍선이 뜨며, 오른쪽 위 서버 내부 관측 패널의 값이 실시간으로 바뀐다">
@@ -44,18 +47,21 @@
         </div>
         </div>
         <div class="cr-side">
-          <!-- 머리줄은 여기 정적으로 둔다 — 아래 칸 여섯만 client-render.js 가 채운다.
-               '세 화면 공통' 이 없으면 이 판이 오른쪽 열에 있다는 이유로 ②③ 만의 규격으로 읽힌다. -->
+          <!-- 머리줄('규격 · 세 화면 공통')을 걷었다 — 액자 머리줄이 이미 폭을 다 쓰며
+               '같은 규격 · 붙인 더미 수가 다르다' 라고 말한다. 그 말을 판이 한 번 더 하던 것이다.
+               (이 판이 오른쪽 열에 있어 ②③ 만의 규격으로 읽힐까 봐 붙여 뒀던 줄인데,
+                액자 머리줄이 그 걱정을 이미 덮는다.) 칸 여섯은 client-render.js 가 채운다. -->
           <div class="cr-spec">
-            <div class="sp-hd"><b>규격</b><span>세 화면 공통</span></div>
             <div class="cl-dash spec" id="d-render"></div>
           </div>
           <div class="cr-ref con">
-            <div class="cr-hd"><b><i class="cr-num">2</i>콘솔 클라이언트</b><span>문자로 그린다</span><span>더미 1,000명</span></div>
+            <div class="cr-hd"><b><i class="cr-num">2</i>콘솔 클라이언트 <em class="hot">더미 1,000명</em></b><span>문자로 그린다</span></div>
             <video id="vd-con" muted loop playsinline preload="metadata" width="640" height="496"
               poster="media/client-console.jpg" title="눌러서 멈추기 / 다시 재생"
               aria-label="콘솔 클라이언트 실행 화면 녹화 — 더미 1,000명이 붙은 서버에서 문자 격자 위 알파벳 예순 몇 개가 움직이고 아래로 채팅이 쏟아진다">
               <source src="media/client-console.mp4" type="video/mp4"></video>
+            <!-- 넓은 화면에서는 채팅 줄이 아래에서 잘린다(client.css 의 cover) — 마지막 줄은 흐려
+                 '아래로 더 있다' 로 보이므로, 캡션은 통짜로 보이는 좁은 화면과 같은 말을 그대로 쓴다. -->
             <div class="cr-cap">알파벳 한 글자가 한 사람이고, 맨 위 두 줄은 내 좌표 · 섹터 · 속도, 아래는 주변에서 오는 채팅이다.</div>
           </div>
           <div class="cr-ref lim">
