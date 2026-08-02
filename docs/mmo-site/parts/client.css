@@ -70,6 +70,62 @@
 /* ※ 옆 카드(.cl-two / .cl-stage / .cl-side / table.cl-t)는 세 장이 다 전폭 그림으로 바뀌면서 없앴다.
    카드가 하던 일(무엇을 골랐나 · 왜 그랬나)은 그림 안 라벨과 아래 한 줄(.cr-note)이 나눠 가졌다. */
 
+/* ═══════════ 2-2 무대 — 그림 한 장 위에 글을 얹는다 ═══════════
+   계단이 대각선이라 왼쪽 위와 오른쪽 아래에 큰 삼각형이 통째로 빈다(오른쪽 아래만 viewBox 의 16%).
+   액자 밖 위·아래에 따로 놓여 있던 계기판·보기 칩·설명 줄을 그 빈 구석으로 들이면, 액자가 차면서
+   페이지는 오히려 짧아진다. 자세한 경위와 실측은 panel-client.html 의 ② 머리 주석에 있다.
+
+   ── 치수를 rem 이 아니라 cqw(무대 폭의 1%)로 재는 이유 ──
+   크기 손잡이는 아래 .sf-stage 의 width 하나뿐이다. 그림만 줄이고 글자를 rem 으로 두면 줄일수록
+   글자가 그림보다 커져서, 80% 에서 결과 카드가 STEP 1 라벨('게임코디 Echo 더미')을 덮었다(실측).
+   무대를 컨테이너로 선언하고 글자·여백을 cqw 로 잡으면 어떤 폭에서도 둘의 비율이 그대로다.
+   환산 기준은 창 1600px 일 때의 무대 폭 1514px — 곧 1cqw ≒ 15.14px 이다.
+   ※ 좁은 화면에서는 이 비례가 글자를 못 읽을 만큼 줄인다. 그 폭은 맨 아래 분기에서 겹침을 풀고
+     예전처럼 위아래로 쌓는다. */
+.sf-stage{position:relative; width:90%; margin:0 auto; container-type:inline-size}
+.sf-stage>svg{display:block; width:100%; height:auto}
+/* 얹는 것 넷의 자리는 client.js 의 drawSafe 가 넣는다(left · margin-top · width).
+   margin-top 을 쓰는 까닭은 그 % 가 높이가 아니라 폭 기준이라서다 — 그림 높이가 폭을 따라간다. */
+#p-csafe .sf-stage>#d-safe,
+#p-csafe .sf-stage>#ch-safe,
+#p-csafe .sf-stage>#nt-safe,
+#p-csafe .sf-stage>#rs-safe{position:absolute; top:0; margin:0; z-index:2}
+
+/* 잰 자리 셋 — 판을 벗기고 기둥 하나로 묶는다(성과 하나는 아래 .sf-res 로 떼어 냈다) */
+#p-csafe #d-safe{display:block; border-left:.13cqw solid var(--line2); padding-left:.86cqw}
+#p-csafe #d-safe .cl-tile{background:none; border:0; border-radius:0; padding:0}
+#p-csafe #d-safe .cl-tile+.cl-tile{margin-top:.86cqw}
+#p-csafe #d-safe .cl-tile .l{font-size:.703cqw}
+#p-csafe #d-safe .cl-tile .v{gap:.33cqw; margin-top:.13cqw}
+#p-csafe #d-safe .cl-tile .n{font-size:1.268cqw}
+#p-csafe #d-safe .cl-tile .u{font-family:var(--sans); font-size:.698cqw}
+#p-csafe #d-safe .cl-tile .f{margin-top:.2cqw; font-size:.682cqw; line-height:1.45}
+
+/* 성과 하나 — 잰 자리에서 떼어 판으로 세운다. 이 탭에서 유일하게 결과를 말하는 칸이라
+   기둥에 같은 급으로 끼워 두면 전제(어디서 쟀나) 넷 중 하나로 읽힌다. */
+#p-csafe .sf-res{background:linear-gradient(180deg,#132a20,#101a19); border:1px solid #2f6b4d;
+  border-radius:.66cqw; padding:.53cqw .92cqw .66cqw}
+#p-csafe .sf-res .l{font-size:.703cqw; letter-spacing:.04em; font-weight:700; color:#79b598}
+#p-csafe .sf-res .v{display:flex; align-items:baseline; gap:.33cqw; margin-top:.07cqw}
+#p-csafe .sf-res .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:2.219cqw;
+  font-weight:700; color:var(--ok); letter-spacing:-.03em; line-height:1.05}
+#p-csafe .sf-res .u{font-size:.802cqw; font-weight:700; color:#79b598}
+#p-csafe .sf-res .f{margin-top:.13cqw; font-size:.682cqw; line-height:1.45; color:#6d8a7e}
+
+/* 설명 줄과 칩 줄도 같은 자로 잰다 — 상자 폭은 백분율이라 그림을 따라 줄어드는데 글자만 고정이면
+   줄 수가 폭마다 달라져, 아래 결과 판과의 간격(106 단위)이 어떤 폭에서는 모자란다. */
+#p-csafe .cr-note{min-height:0; gap:.727cqw; border-radius:.661cqw; padding:.594cqw .859cqw;
+  background:rgba(15,21,34,.72)}
+#p-csafe .cr-note i{font-size:.666cqw}
+#p-csafe .cr-note p{font-size:.856cqw}
+#p-csafe .cl-chips{gap:.396cqw; max-width:100%}
+#p-csafe .cl-chips .t{font-size:.698cqw; margin-right:.132cqw}
+#p-csafe .cl-chips button{gap:.396cqw; font-size:.845cqw; border-radius:.594cqw;
+  padding:.33cqw .661cqw .33cqw .396cqw}
+#p-csafe .cl-chips button i{width:1.123cqw; height:1.123cqw; font-size:.634cqw}
+#p-csafe .cr-more{gap:.462cqw; font-size:.825cqw; border-radius:.594cqw; padding:.33cqw .727cqw}
+#p-csafe .cr-more em{font-size:.698cqw}
+
 /* ── 아래 칩 줄 ── */
 .cl-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; max-width:57%}
 .cl-chips .t{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut); margin-right:2px}
@@ -314,6 +370,45 @@
 @media (prefers-reduced-motion:reduce){ #p-crender.cr-in *{animation:none !important} }
 
 @media (max-width:1200px){
+  /* ── 2-2 는 이 폭부터 겹침을 푼다 ──
+     그림 위에 얹은 글은 치수가 무대 폭에 매여 있어서(cqw), 무대가 좁아지면 계기판 각주가 7px
+     밑으로 내려가 못 읽는다. 겹침을 풀고 예전처럼 위아래로 쌓되, 순서는 마크업 순서를 따르지 않고
+     order 로 되돌린다 — 그림 안에서는 계기판이 왼쪽 위, 칩·설명·성과가 오른쪽 아래라 마크업이
+     그 순서인데, 세로로 쌓을 때는 계기판 → 그림 → 성과 → 설명 → 칩이 읽는 순서다. */
+  #p-csafe .sf-stage{display:flex; flex-direction:column; width:100%; container-type:normal}
+  #p-csafe .sf-stage>svg{order:2}
+  #p-csafe .sf-stage>#d-safe,
+  #p-csafe .sf-stage>#ch-safe,
+  #p-csafe .sf-stage>#nt-safe,
+  #p-csafe .sf-stage>#rs-safe{position:static; left:auto !important; width:auto !important;
+    margin-left:0 !important; margin-top:0 !important}
+  #p-csafe .sf-stage>#d-safe{order:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px; border-left:0; padding-left:0; margin-bottom:10px !important}
+  #p-csafe #d-safe .cl-tile{background:var(--panel); border:1px solid var(--line2);
+    border-radius:10px; padding:8px 15px 7px}
+  #p-csafe #d-safe .cl-tile+.cl-tile{margin-top:0}
+  /* 무대 폭을 벗어났으니 글자는 고정 크기로 되돌린다 */
+  #p-csafe #d-safe .cl-tile .l{font-size:.72rem}
+  #p-csafe #d-safe .cl-tile .v{gap:5px; margin-top:4px}
+  #p-csafe #d-safe .cl-tile .n{font-size:1.5rem}
+  #p-csafe #d-safe .cl-tile .u{font-size:.64rem}
+  #p-csafe #d-safe .cl-tile .f{margin-top:6px; font-size:.68rem}
+  #p-csafe .sf-res{order:3; margin-top:11px !important; border-radius:10px; padding:9px 15px 11px}
+  #p-csafe .sf-res .l{font-size:.72rem}
+  #p-csafe .sf-res .v{gap:6px; margin-top:2px}
+  #p-csafe .sf-res .n{font-size:2rem}
+  #p-csafe .sf-res .u{font-size:.76rem}
+  #p-csafe .sf-res .f{margin-top:3px; font-size:.68rem}
+  #p-csafe .cr-note{order:4; gap:11px; margin-top:11px !important; border-radius:10px;
+    padding:9px 13px; background:var(--sunk)}
+  #p-csafe .cr-note i{font-size:.63rem}
+  #p-csafe .cr-note p{font-size:.81rem}
+  #p-csafe .cl-chips{order:5; gap:6px; margin-top:9px !important}
+  #p-csafe .cl-chips .t{font-size:.66rem; margin-right:2px}
+  #p-csafe .cl-chips button{gap:6px; font-size:.8rem; border-radius:9px; padding:5px 10px 5px 6px}
+  #p-csafe .cl-chips button i{width:17px; height:17px; font-size:.6rem}
+  #p-csafe .cr-more{gap:7px; font-size:.78rem; border-radius:9px; padding:5px 11px}
+  #p-csafe .cr-more em{font-size:.66rem}
   /* 상세의 2단→1단은 여기가 아니라 카드 폭을 보는 @container 가 맡는다(위 .bx-det .cols 옆) */
   /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
      내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어

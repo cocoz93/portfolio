@@ -43,11 +43,13 @@ function idepth(u,v){ return AY*u+BY*v; }
 /* ═══════════ ② 안전성 그림 ═══════════ */
 /* 계기판이 성과 수치가 아니라 PC 두 대인 이유 — 2-2 는 서버 PC 와 클라 PC 를 나눠 돌린 시험이고
    2-3 은 한 PC loopback 이다. 조건이 다른데 머리에 안 적어 두면 두 탭의 수치를 같은 자로 읽는다. */
+/* 넷 중 앞 셋만 계기판(잰 자리)이고, 마지막 하나는 성과라 판으로 떼어 그림 오른쪽 아래에 세운다.
+   넷을 한 줄에 늘어놓던 시절에는 유일한 결과인 '0건' 이 전제 셋과 같은 무게로 끝에 묻혔다. */
 var SAFE={
   dash:[["서버 PC","i9-10900","10C / 20T","Windows 10 · RAM 32GB · NIC Intel I225-V",0],
         ["부하 클라 PC","i7-6700","4C / 8T","Windows 10 · RAM 16GB · NIC Intel I219-V",0],
-        ["기가 인터넷의 업로드 상한","474","Mbps","이 시험은 여유 — 병목 실험에서 여기 막혀 회선을 걷어냈다 (2-3 은 한 PC loopback)",0],
-        ["무결성 위반 · 서버발 끊김","0","건","9,478만 통 중 · 결함을 심으면 첫 패킷에서 걸린다",1]],
+        ["기가 인터넷의 업로드 상한","474","Mbps","이 시험은 여유 — 병목 실험에서 여기 막혀 회선을 걷어냈다 (2-3 은 한 PC loopback)",0]],
+  res:["무결성 위반 · 서버발 끊김","0","건","9,478만 통 중 · 결함을 심으면 첫 패킷에서 걸린다"],
   items:{
     s1:{t:"남이 만든 도구",
       n:"먼저 남이 만든 도구로 잰다. 게임코디 Echo 더미는 10바이트 고정이라, 번호 하나를 보내고 그대로 돌아오는지만 본다. 접속이 되는가 · 서버가 먼저 끊지 않는가 · 보낸 값과 받은 값이 같은가. 이 셋이 합격선이고, 동접 1,000 으로 25분을 버텼다."},
@@ -190,12 +192,49 @@ function drawSafe(){
     lb(bx2,by2,S.b.t,13.5,FG,"800"); lb(bx2,by2+15,S.b.s,10.5,SUB,"600");
     lb(bx2,by2+33,"✔ "+S.j,11,i===2?RECV:GRN,"700");
   });
-  /* 왼쪽 위 — 이 그림이 무슨 말을 하는지 세 줄 */
-  [[338,168,"검증이 끝난 것만 다음 단의 도구가 된다",18],
-   [338,192,"그래서 첫 도구는 내가 만들지 않은 것이어야 한다.",11.5],
-   [338,210,"내 코드와 내 테스트가 같이 틀리는 상황을 막는 유일한 방법이다.",11.5]]
-  .forEach(function(l){ lb(l[0],l[1],l[2],l[3],l[3]>14?FG:SUB,l[3]>14?"800":"600","start"); });
   gBuild.appendChild(gateTop);
+
+  /* ── 왼쪽 위 — 이 그림이 무슨 말을 하는지 한 줄 ──
+     한때 아래에 설명 두 줄('그래서 첫 도구는 내가 만들지 않은 것이어야 한다' 외)이 더 있었다.
+     제목이 이미 그 말을 하고 있어서 걷어냈고, 대신 남은 한 줄을 18 → 30 으로 키웠다.
+     크기를 올릴 때 같이 손봐야 하는 것이 셋이다 — 안 맞추면 커진 만큼 어색해진다:
+       · 자간을 죈다(-0.02em). 페이지의 다른 큰 제목(.cr-hd b)이 쓰는 값이다.
+       · 기준선을 (TS-18)*.55 만큼 내린다. 글자는 기준선 위로 자라므로 그냥 키우면 위 여백을 판다.
+       · 아래 계기판이 시작하는 높이도 같은 비율로 민다(TITLE_DROP). 안 밀면 제목에 달라붙는다.
+     자리는 그림 bbox 기준이다 — 원본에서 제목이 (338,168) 이고 bbox 가 (316.9,141.1) 이었으니
+     왼쪽에서 21, 위에서 27 이다. */
+  var TS=30, b0=s.getBBox();
+  var tx=b0.x+21, ty0=b0.y+27;
+  var ttl=el("text",{x:tx.toFixed(1),y:(ty0+(TS-18)*.55).toFixed(1),"font-size":String(TS),
+    fill:FG,"font-weight":"800","text-anchor":"start","font-family":"var(--sans)",
+    "letter-spacing":(-0.02*TS).toFixed(2)},"검증이 끝난 것만 다음 단의 도구가 된다");
+  gLbl.appendChild(ttl);
+  var TITLE_DROP=32*TS/18+(TS-18)*.55;
+
+  /* ── viewBox 는 그린 것 전체를 재서 잡는다 ──
+     그림 요소는 이미 원본 viewBox(300 96 972 580)에 거의 꽉 차 있다(bbox 316.9 141.1 957.6 513.3
+     — 좌 16.9 · 상 45.1 · 우 -2.5 · 하 21.6 만 남는다). 그 여백을 그대로 유지하되, 제목 크기를
+     바꾸면 bbox 가 움직이므로 숫자를 박아 두지 않고 매번 다시 잰다. */
+  var b=s.getBBox();
+  var vx=b.x-16.9, vy=b.y-45.1, vw=b.width+14.4, vh=b.height+66.7;
+  s.setAttribute("viewBox",vx.toFixed(1)+" "+vy.toFixed(1)+" "+vw.toFixed(1)+" "+vh.toFixed(1));
+
+  /* ── 그림 위에 얹는 글 넷의 자리 ──
+     그림 좌표를 백분율로 옮긴다. 왼쪽 위에는 잰 자리 셋, 오른쪽 아래 빈 삼각형에는 보기 칩 ·
+     설명 · 성과를 세로로 쌓는다. 오른쪽 값 928 은 STEP 2 이름표(x 852~1080)를 피해 잡은 것이고,
+     세로 486 · 530 · 636 은 그 이름표 아래부터 액자 바닥까지를 셋이 나눠 쓴 것이다.
+     계기판만 왼쪽으로 15px(=.99cqw) 당긴다 — 기둥 선과 안여백을 빼야 글자 왼쪽이 제목과 한 선에 선다. */
+  function put(id,x,y,w,lpad){
+    var e=document.getElementById(id); if(!e) return;
+    var L=((x-vx)/vw*100).toFixed(3)+"%";
+    e.style.left=lpad?("calc("+L+" - .99cqw)"):L;
+    e.style.marginTop=((y-vy)/vw*100).toFixed(3)+"%";
+    e.style.width=(w/vw*100).toFixed(3)+"%";
+  }
+  put("d-safe",tx,ty0+TITLE_DROP,248,1);
+  put("ch-safe",928,486,336);
+  put("nt-safe",928,530,336);
+  put("rs-safe",928,636,336);
 }
 
 /* ═══════════ ③ 부하 그림 ═══════════ */
@@ -385,8 +424,19 @@ function wireWide(scId,chId,noteId,DATA,order,linkLabel){
   sel(order[0],0);
 }
 
+/* 성과 한 칸 — 계기판과 같은 문법(라벨 · 값 · 각주)을 쓰되 판으로 세운다.
+   .cl-tile 을 재활용하지 않는 이유는 저쪽이 판을 벗은 기둥 칸이기 때문이다(client.css). */
+function paintRes(id,r){
+  var d=document.getElementById(id); if(!d) return;
+  d.innerHTML="";
+  d.appendChild(h("div",{class:"l"},r[0]));
+  var v=h("div",{class:"v"}); v.appendChild(h("span",{class:"n"},r[1]));
+  if(r[2]) v.appendChild(h("span",{class:"u"},r[2]));
+  d.appendChild(v); d.appendChild(h("div",{class:"f"},r[3]));
+}
+
 /* 기동 */
-drawSafe(); paintDash("d-safe",SAFE.dash);
+drawSafe(); paintDash("d-safe",SAFE.dash); paintRes("rs-safe",SAFE.res);
 wireWide("sc-safe","ch-safe","nt-safe",SAFE,["s1","s2","gate","s3"],"에코 더미 · 스트레스 테스트");
 drawLoad(); paintDash("d-load",LOAD.dash);
 wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");
