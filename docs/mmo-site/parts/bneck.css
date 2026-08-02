@@ -13,22 +13,26 @@
    overflow:hidden 에 소리 없이 잘렸다(아래로 300px 넘게 비어 있는데도). 그리드면 줄 높이가
    셋 중 가장 긴 것을 따라가므로 카드가 필요한 만큼 내려가고, 짧을 때만 지도 높이에 맞춰 늘어난다.
 
-   칸 사이 틈 18px 은 장식이 아니라 치수다: 고른 항목에서 뻗는 꼭지가 이 틈을 건너
-   카드 왼쪽 모서리에 닿는다(.bnnav button.act::after 의 border-left 18px 과 같은 값).
-   그래서 틈은 % 가 아니라 px 로 고정한다 — 창 폭이 변해도 꼭지 길이와 어긋나지 않게. */
+   레일과 카드 사이에는 틈이 없다. 한때 그 자리에 18px 틈을 두고 고른 항목에서 꼭지(삼각형)를
+   뻗어 카드를 가리켰는데, 가리키는 선이 하나 더 필요했다는 것 자체가 둘이 떨어져 있었다는 뜻이다.
+   붙이면 고른 항목의 판이 그대로 카드로 이어져 선이 필요 없다.
+   틈은 지도와 레일 사이에만 남는다 — grid 의 column-gap 이 아니라 지도 칸의 padding 이 맡는다
+   (gap 은 두 틈에 다 걸려서 한쪽만 없앨 수가 없다). */
 .bn-shift{ max-width:1860px }
 /* 49fr 12fr 36fr → 52fr 9fr 36fr (2026-07-31). 지도를 키우되 카드에서는 한 칸도 안 가져온다 —
    폭은 레일에서 뺀다. 레일 글자가 요구하는 최소는 153px 인데 226px 을 쓰고 있었다(실측).
    9fr = 169px 라 16px 여유가 남는다. 이 값은 세 칸 배치 전용이고, 1600px 이하의 접힌 배치는
    bneck-tail.css 의 미디어쿼리가 뒤에서 덮는다 — 그쪽 240px 고정폭은 건드리지 않는다. */
-.bn-stage{ display:grid; grid-template-columns:52fr 9fr 36fr; column-gap:18px }
+.bn-stage{ display:grid; grid-template-columns:52fr 9fr 36fr; column-gap:0 }
+.bn-cam{ padding-right:18px }         /* 지도와 레일 사이 틈. 레일과 카드는 붙는다 */
 .bn-tilt{ width:100% }                /* 폭은 이제 그리드 칸이 정한다. 1860 → 지도 ≈ 978px · 세로 ≈ 607px */
-/* static 이 아니라 relative 인 것은 아래 번호 기둥(.bncard .k) 때문이다 — 절대배치를 푸는 것이
-   목적이므로 그리드 안에서 하는 일은 static 과 같고, 기둥이 잡을 기준만 생긴다. */
+/* 절대배치를 푸는 것이 목적이라 그리드 안에서 하는 일은 static 과 같다.
+   relative 로 두는 것은 카드 안에서 자리를 절대배치로 잡는 것이 생길 때의 기준을 남겨 두는 것뿐이다. */
 .bncard{ position:relative; width:auto; min-width:0; max-width:none }
-/* 캡션은 지도 칸과 같은 폭 — 그리드가 아니라 형제라서 같은 셈을 직접 한다(틈 2칸 36px 을 뺀 뒤 52/97).
+/* 캡션은 지도 칸과 같은 폭 — 그리드가 아니라 형제라서 같은 셈을 직접 한다.
+   이제 칸을 나누기 전에 빼는 틈이 없으므로 52/97 을 먼저 잡고, 지도 칸 안쪽 패딩 18px 을 뺀다.
    위 grid-template-columns 를 고치면 이 분자도 같이 고쳐야 한다(합 97 은 그대로다). */
-.bn-cap{ max-width:calc((100% - 36px) * 52 / 97) }
+.bn-cap{ max-width:calc(100% * 52 / 97 - 18px) }
 
 /* ── 계기판 — 카드 안, 실험 목록 바로 아래 ──
    네 칸은 고른 실험의 끄고→켜고 값이라(paintDash) 카드 밖에 두면 무엇의 값인지 짚이지 않는다.
@@ -122,61 +126,57 @@
    왼쪽에서 고르고 오른쪽에서 읽는 방향이 화살표 없이 생긴다.
    세로를 다 쓰지 않고 가운데 정렬하는 이유: 항목 일곱 개는 지도 세로의 3/4 밖에 안 되는데
    위로 붙이면 아래에 빈 기둥이 남아 레일이 잘린 것처럼 보인다. */
-.bn-stage .bnnav{ width:auto; max-width:none; margin:0;
-  display:flex; flex-direction:column; justify-content:center; align-items:stretch; gap:6px }
+/* z-index 는 고른 항목이 카드 테두리를 1px 덮기 위한 것이다(.act 의 margin-right:-1px).
+   카드가 z-index:8 이라(common.css) 그보다 위여야 덮은 자리가 보인다. */
+.bn-stage .bnnav{ width:auto; max-width:none; margin:0; position:relative; z-index:9;
+  display:flex; flex-direction:column; justify-content:center; align-items:stretch; gap:2px }
 .bn-stage .bnnav .t{ margin:0 0 5px 2px }
 /* 두 줄짜리 판 — ①배지는 두 줄에 걸치고, 오른쪽에 이름과 판정 부제가 쌓인다.
-   부제('채택 4 · 기각 2 · 진단 1')는 가로 칩이던 시절엔 줄을 넘겨서 감췄는데, 세로로 서면서 자리가 생겼다. */
+   ※ 부제는 고른 자리에서만 편다(아래 :not(.act) span). 테두리도 고른 자리에만 있다 —
+     여섯이 다 테두리 상자면 어느 것이 열려 있는지 형태로는 구분되지 않고 색만 조금 다른 상태가 된다. */
 .bn-stage .bnnav button{ position:relative; display:grid; grid-template-columns:auto minmax(0,1fr);
-  gap:1px 9px; align-items:center; width:100%; padding:9px 11px; border-radius:10px }
+  gap:1px 9px; align-items:center; width:100%; padding:8px 10px; border-radius:9px;
+  border-color:transparent; background:transparent }
 .bn-stage .bnnav button i{ grid-row:1/3; width:22px; height:22px; font-size:.68rem }
 .bn-stage .bnnav button b{ font-size:.87rem; font-weight:800; line-height:1.3 }
 .bn-stage .bnnav button span{ display:block; margin:0; font-size:.66rem; font-weight:600; line-height:1.3 }
-/* 고른 항목에서 오른쪽 카드로 뻗는 꼭지 — '이 항목을 눌러서 저 카드가 열렸다' 를 잇는 유일한 선이다.
-   폭이 창 크기에 따라 변하는 자리라 SVG marker 가 아니라 CSS 삼각형(border)으로 그린다.
-   색은 지도 핀과 같은 #ff6b52 — 핀 → 레일 → 카드가 한 색으로 이어진다.
-   길이 20px 은 틈(column-gap 18px)보다 2px 길다. 딱 18px 로 맞췄더니 확대해서 보면 꼭짓점이
-   카드 테두리에 닿을락 말락 해서 '가리키다 만' 모양이 됐다 — 2px 겹쳐 테두리를 물게 한다.
-   시작도 -1px 당겨 버튼 테두리 위에 올린다(밑변과 테두리 사이 1px 실틈이 보였다). */
-.bn-stage .bnnav button.act::after{ content:""; position:absolute; left:calc(100% - 1px); top:50%;
-  margin-top:-9px;
-  border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:20px solid #ff6b52 }
 /* 탭에 들어오는 동안 레일은 첫 프레임부터 완성된 채 떠 있었다. 지도가 아직 입체 덩어리인데
-   옆에 목록만 다 그려져 있고, 꼭지는 0.9초 동안 아무것도 없는 검은 자리를 가리켰다.
-   카드가 켜지는 시각(1.34s)에 레일도 같이 들여보낸다 — 지도 → 핀 → (레일 + 카드) 한 박자.
-   ※ 꼭지(::after)에만 애니를 걸면 안 된다. 그 자리는 .act 가 붙어야 생기는데 .act 는 fillCard 가
-     300ms 에 붙이므로, 애니 시계가 300ms 부터 돌아 1.64s 에야 나타난다(카드보다 300ms 늦음).
+   옆에 목록만 다 그려져 있었다. 카드가 켜지는 시각(1.34s)에 레일도 같이 들여보낸다 —
+   지도 → 핀 → (레일 + 카드) 한 박자.
+   ※ 애니는 레일 통째로 건다. 고른 항목(.act)에만 걸면 안 된다 — .act 는 fillCard 가 300ms 에
+     붙이므로 시계가 300ms 부터 돌아 카드보다 300ms 늦게 나타난다.
      레일 자체는 탭에 들어오기 전에 이미 지어져 있어서(buildNav) 시계가 0 부터 정확히 돈다.
    backwards 채우기(both)가 지연 구간을 opacity:0 으로 붙잡는다. 모션 끄기면 규칙째 꺼지는데,
    그때는 카드도 0ms 에 열리므로 어긋나지 않는다. */
 .bn-stage.bn-enter .bnnav{ animation:bnRail .28s ease 1.34s both }
 @keyframes bnRail{ from{opacity:0} to{opacity:1} }
-.bn-stage .bnnav button.act{ border-color:#ff6b52; background:rgba(52,22,20,.72) }
-.bn-stage .bnnav button.act span{ color:#c08a80 }
-/* 안 고른 자리는 물러난다 — 일곱이 같은 밝기면 목록만 봐서는 어느 것이 열려 있는지 안 짚인다.
+/* ── 고른 자리 ──
+   판이 서고 · 자리가 벌어지고 · 부제가 펴진다. 셋 다 형태라서 색을 못 봐도 짚인다.
+   배경을 카드와 같은 --panel 로 두는 것은 재질을 맞추기 위해서다 — 이 판이 오른쪽 카드로
+   그대로 이어져 보여야 '이 자리를 눌러서 저 카드가 열렸다' 가 선 없이 성립한다.
+   오른쪽 테두리를 지우고 -1px 당기는 것이 그 이음이다(카드 왼쪽 테두리를 이 판이 덮는다).
+   붉은색은 번호 배지 하나에만 남긴다. 지도 핀과 같은 색·같은 채움이라 핀 ① 과 목록 ① 이 짝이 된다. */
+.bn-stage .bnnav button.act{ background:var(--panel); border:1px solid var(--line); border-right:0;
+  margin:8px -1px 8px 0; padding:14px 12px; border-radius:12px 0 0 12px;
+  box-shadow:0 12px 26px -12px #000 }
+.bn-stage .bnnav button.act b{ color:#fff; font-size:1.06rem }
+.bn-stage .bnnav button.act span{ color:#93a3ba }
+.bn-stage .bnnav button.act i{ width:28px; height:28px; font-size:.82rem;
+  background:var(--hot); border-color:var(--hot); color:#25100c }
+/* 안 고른 자리는 이름 한 줄로 접는다. 판정 수(‘채택 4 · 기각 2’)는 고르면 바로 위에서 다시 말하고
+   카드 부제에도 있다 — 목록이 목차라면 여기 여섯 줄이 다 두 줄일 이유가 없다.
    마우스를 올리면 제 밝기로 돌아온다: 고를 수 있는 것이 흐린 채로 있으면 꺼진 것으로 읽힌다. */
-.bn-stage .bnnav button:not(.act){ opacity:.55; transition:opacity .15s, border-color .15s, color .15s, background .15s }
+.bn-stage .bnnav button:not(.act) span{ display:none }
+.bn-stage .bnnav button:not(.act){ opacity:.5; transition:opacity .15s, border-color .15s, color .15s, background .15s }
 .bn-stage .bnnav button:not(.act):hover,
-.bn-stage .bnnav button:not(.act):focus-visible{ opacity:1 }
-/* ── 카드 왼쪽 번호 기둥 ──
-   어느 자리에서 열린 카드인지를 카드가 제 왼쪽에 통째로 새겨 둔다. 한때 이 자리는 머리줄에 섞인
-   20px 짜리 배지('병목 ②')였는데, 글줄 안의 작은 원이라 지도 핀·레일 배지와 같은 표시라는 것이
-   한눈에 안 걸렸다. 기둥으로 세우면 카드 아래쪽 표를 읽는 동안에도 번호가 시야에 남는다.
-   마크업은 그대로 둔다 — fillCard 가 #bnc-n 만 갈아 끼우므로 여기서는 자리와 크기만 바꾼다.
-   ※ 기둥에는 색을 안 쓴다 — 통째로 붉게 칠한 시안, 경계선만 붉게 한 시안을 거쳐 무채(--mut)로 왔다.
-     붉은색이 '이 자리가 병목' 을 말하는 일은 지도 핀 · 레일 테두리 · 카드 배지가 이미 셋이나 맡고
-     있어서, 기둥까지 붉으면 넷째가 된다. 기둥이 말하는 것은 '몇 번 자리인가' 지 '병목인가' 가 아니다.
-     선과 막대를 같은 무채로 묶어 두 조각이 한 표시로 읽히게 한다(파인 홈 --sunk 위의 밝은 회청).
-   ※ 그래도 경계선을 남기는 이유는 그 선이 레일 꼭지가 가리키는 끝이라서다 —
-     꼭지 → 기둥 → 본문이 한 선에서 만난다. 원래 여기는 --line2 라 거의 안 보였다. */
-.bncard{ padding-left:74px }                  /* 기둥 58 + 본문까지 16 */
-.bncard .k{ position:absolute; left:1px; top:1px; bottom:1px; width:58px;
-  border-radius:13px 0 0 13px; background:var(--sunk); border-right:1px solid var(--mut);
-  display:flex; flex-direction:column; align-items:center; padding-top:17px;
-  font-size:0; letter-spacing:0 }             /* '병목' 글자는 기둥에 안 넣는다 — 번호만 남긴다 */
-.bncard .k #bnc-n{ font-family:var(--mono); font-size:1.9rem; font-weight:800; line-height:1;
-  color:#7f8ea6; letter-spacing:-.04em }
-.bncard .k::after{ content:""; width:16px; height:3px; border-radius:2px;
-  background:var(--mut); margin-top:9px }
+.bn-stage .bnnav button:not(.act):focus-visible{ opacity:.9; background:rgba(24,32,47,.7) }
+/* ── 카드 왼쪽 ──
+   레일에 붙는 쪽이라 모서리를 각지게 편다. 한때 이 자리에는 58px 짜리 번호 기둥이 있었는데,
+   그 기둥이 하던 일('몇 번 자리에서 열린 카드인가')은 이제 왼쪽에 붙은 레일 판이 그대로 한다 —
+   같은 번호를 두 뼘 거리에서 두 번 말할 이유가 없다. 걷어낸 74px 는 실험 목록이 쓴다.
+   ※ 마크업(.k > #bnc-n)은 남겨 둔다. fillCard 가 #bnc-n 을 갈아 끼우고 있어서,
+     지우려면 JS 쪽까지 함께 손봐야 한다. 여기서는 감추기만 한다. */
+.bncard{ border-radius:0 14px 14px 0; padding-left:20px }
+.bncard .k{ display:none }
 
 
