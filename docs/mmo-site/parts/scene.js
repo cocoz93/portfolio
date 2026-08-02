@@ -1715,7 +1715,7 @@ window.__flowReset=function(){
     closeCard();   /* 열려 있던 상세 카드가 죽은 노드의 것일 수 있다 — 강조를 바꿀 때는 접는다 */
     /* 구역을 골랐으면 그 개요를 같은 자리에 띄운다. '전체'(z="")는 강조 해제라 아무것도 안 띄운다 —
        네 버튼 중 하나만 다른 성격의 글을 갖는 것을 피한다.
-       진입 순회 중에는 띄우지 않는다: 한 칸이 TOUR_HOLD(380ms)라 글이 1.5초 사이 네 번 갈리며 깜빡인다.
+       진입 순회 중에는 띄우지 않는다: 한 칸이 TOUR_HOLD(620ms)라 글이 2.5초 사이 네 번 갈리며 깜빡인다.
        읽기엔 짧고 산만하기만 하다 — 순회는 씬만 바꾸고, 끝나면 전체로 돌아가 빈 상태가 된다. */
     if(z&&!tourOn&&!tourArmed) openZone(z);
   }
@@ -1739,9 +1739,13 @@ window.__flowReset=function(){
      아직 예약뿐이었으면 예약만 버린다(화면은 손댄 적이 없으니 되돌릴 것도 없다).
      받는 곳은 capture 라 클릭보다 먼저다. 구역 버튼을 눌러 끝난 경우에도 순서가 맞는다 —
      먼저 순회가 풀리고, 뒤이어 그 버튼의 click 이 얹힌다. */
-  /* TOUR_HOLD = 한 구역에 머무는 시간. 페이드(#scene [data-z] 의 transition)와 한 쌍으로 움직인다 —
-     머무는 시간이 페이드보다 넉넉해야 칸마다 '다 켜진 화면' 이 한 박자 보인다. */
-  const TOUR=["outside","net","game","store"], TOUR_HOLD=380;
+  /* TOUR_HOLD = 한 구역에 머무는 시간. 페이드(#scene [data-z] 의 transition, .22s)와 한 쌍으로 움직인다 —
+     머무는 시간이 페이드보다 넉넉해야 칸마다 '다 켜진 화면' 이 한 박자 보인다.
+     380 → 620 (전체 1.5초 → 2.5초). 380 일 때는 페이드 220 을 빼고 '다 켜진 화면' 이 160ms 뿐이라,
+     씬이 저 혼자 깜빡이는 것으로 보이고 정작 알리려던 것 — 오른쪽 끝 구역 버튼이 같이 옮겨 다닌다는 사실 —
+     을 따라갈 틈이 없었다. 620 이면 그 틈이 400ms 로 늘어 눈이 씬에서 버튼으로 한 번 건너갈 수 있다.
+     더 늘리지 않는 이유: 순회는 사용자가 아직 아무것도 안 한 시간이라, 길어질수록 '멈춘 페이지' 가 된다. */
+  const TOUR=["outside","net","game","store"], TOUR_HOLD=620;
   const TOUR_EV=["pointerdown","keydown","wheel","touchstart"];
   const tourRM=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const pBuild=document.getElementById("p-build");

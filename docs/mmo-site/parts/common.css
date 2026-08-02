@@ -86,11 +86,16 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
      · 하위를 화면 제목으로 승격(켜진 항목만 1.66rem): 층은 시원하게 갈리지만 전환할 때
        제목이 자리를 바꾸며 줄 전체가 움직인다.
    정렬은 baseline 이다 — 이름(sans)과 번호(mono)의 크기가 달라 center 로 두면 밑선이 어긋난다. */
+/* min-height 는 구역 필터가 없는 화면(1-2 · 클라이언트)에서 줄이 쪼그라들지 않게 못 박는 값이다.
+   없으면 탭을 옮길 때마다 줄 높이가 오르내려 아래 그림까지 통째로 튄다. */
 .subtabs{display:flex; align-items:baseline; gap:30px;
-  margin:0; width:100%;
+  margin:0; width:100%; min-height:62px;
   padding:14px 0 13px calc(var(--tabx,0px) + 26px);
   border-bottom:1px solid var(--line)}
 .subtabs[hidden]{display:none}
+/* 탭 목록은 한 겹 안에 모은다 — 위 .tabrow 가 .tabs + .tabmeta 로 갈리는 것과 같은 짜임이고,
+   줄의 오른쪽 끝은 그 줄의 부가물(여기서는 구역 필터) 자리로 비워 둔다. */
+.subnav{display:flex; align-items:baseline; gap:30px}
 /* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
    줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다.
    밑줄이 줄의 바닥선 '위에' 정확히 얹히도록 아래 여백만큼 도로 끌어내린다:
@@ -121,11 +126,13 @@ body.subdetach .subtabs{padding-left:16px}
      (= -(아래 여백 + 1)). 안 맞추면 파란 밑줄이 바닥선에서 떠오르거나 파고든다. */
 @media(max-width:680px){ .tabmeta{display:none}
   .tab{padding:11px 14px 12px} .tab b{font-size:1.05rem} .tab span{font-size:.7rem}
-  .subtabs{gap:20px; padding:11px 0 10px calc(var(--tabx,0px) + 14px)}
+  .subtabs{gap:20px; min-height:54px; padding:11px 0 10px calc(var(--tabx,0px) + 14px)}
+  .subnav{gap:20px}
   .subtab{font-size:1.02rem; gap:8px; padding-bottom:10px; margin-bottom:-11px}
   .subtab em{font-size:.82rem} }
 @media(max-width:430px){
-  .subtabs{gap:16px; padding:9px 0 9px calc(var(--tabx,0px) + 12px)}
+  .subtabs{gap:16px; min-height:48px; padding:9px 0 9px calc(var(--tabx,0px) + 12px)}
+  .subnav{gap:16px}
   .subtab{font-size:.92rem; gap:7px; padding-bottom:9px; margin-bottom:-10px}
   .subtab em{font-size:.76rem} }
 
@@ -471,43 +478,47 @@ body.pop-hold #scene .chips{opacity:0}
    도형·이름표의 data-node 는 남는다: 어느 조각이 어느 노드인지 표시해 두는 값이고,
    나중에 노드 단위 강조를 되살릴 때 다시 쓸 자리다. */
 
-/* 구역 버튼 줄 — 씬 왼쪽 위. 생김새는 '다시 재생' 버튼과 같은 어휘.
-   씬의 내용 대각선이 좌하(클라이언트) → 우상(게임 루프·MySQL) 이라 비는 코너는 좌상·우하다.
-   우하는 범례가 쓰고 있으니 조작(구역 버튼)은 좌상이 짝 — 한때 오른쪽 위에 뒀지만
-   거기는 게임 루프·BOTTLENECK 바로 위라 주인공과 경쟁했다.
-   top 을 14 가 아니라 46 으로 내리는 게 핵심이다: 왼쪽 정렬 탭 줄 바로 밑에 붙이면
-   버튼 줄이 '탭 한 층 더' 로 읽힌다(그래서 예전에 오른쪽으로 도망갔던 것). 한 단 내리면 씬 안쪽 것이 된다. */
-/* 자리는 .hud 가 잡는다. 한때 줄 셋(버튼·범례·안내)이 여기 쌓였고 지금은 버튼 줄만 남았지만,
-   좌표를 버튼에 직접 매기지 않는 이유는 그대로다 — 줄이 다시 늘어도 top 을 손으로 안 고친다. */
-.hud{position:absolute; left:16px; top:46px; z-index:6;
-  display:flex; flex-direction:column; align-items:flex-start; gap:9px}
-.zonebar{display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-start}
-/* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유).
-   대신 배경·테두리·반경은 '다시 재생' 버튼과 똑같이 맞춰 같은 식구로 읽히게 한다. */
-/* 켜짐/꺼짐이 한눈에 갈리게 만든다 — 예전엔 두 상태가 밝기 한 단계 차이라 "누르면 바뀌는 버튼"으로 안 읽혔다.
-   꺼진 것은 글자·테두리를 눌러 두고 점의 채도를 뺀다(=불 꺼짐), 켜진 것만 그 구역 색으로 테두리와 빛이 들어온다. */
-/* 씬에서 누를 수 있는 것이 이 줄뿐이다(도형 히트박스를 걷어냈다) — 유일한 조작이면 그만큼 커야 한다.
-   글씨 .88→.96rem · 패딩 7/12→9/15. 다섯 개가 한 줄에 남는 선까지만 키웠다. */
-.zb{--zc:#93a5c2;   /* 켜졌을 때 테두리·불빛이 쓰는 색. 버튼마다 자기 구역 색으로 덮어쓴다 */
-  display:flex; align-items:center; gap:8px; font-family:var(--sans); font-size:.96rem; font-weight:700;
-  cursor:pointer; color:#727f96; background:rgba(19,26,38,.34); border:1px solid rgba(120,140,175,.20);
-  border-radius:10px; padding:9px 15px; backdrop-filter:blur(4px);
-  transition:border-color .15s, color .15s, background .15s, box-shadow .15s}
-/* 점 색 = 구역 바닥판 테두리 색(ZPAL.edge)과 같은 값 — 버튼과 판이 같은 것을 가리킨다는 표시 */
-.zb i{width:10px; height:10px; border-radius:50%; flex:0 0 auto; background:var(--zc);
-  opacity:.38; filter:grayscale(.75); transition:opacity .15s, filter .15s, box-shadow .15s}
+/* 구역 필터 — 1-1 하위 탭 줄의 오른쪽 끝. 위 탭 줄이 오른쪽 끝에 스택 메타를 두는 것과 같은 자리다.
+   ※ 씬 왼쪽 위(.hud, position:absolute)에 띄워 두던 것을 여기로 올렸다. 그때는 탭 두 줄 바로 아래에
+     세 번째 가로 줄이 생겨 '비슷한 버튼 줄 셋' 으로 읽혔고, 씬 내용과는 280px 떨어져 붕 떠 있었다.
+   ※ 생김새도 알약(배경·테두리·radius:10)에서 탭과 같은 어휘로 갈아탔다 — 한 줄 안에 버튼 문법이
+     둘(밑줄 탭 + 알약)이면 조화가 아니라 동거다. 지금은 세 층이 모두 '글자 + 켜진 것만 밑줄' 이다.
+   ※ 알약을 버리며 잃은 켜짐/꺼짐 대비는 두 가지로 메웠다: 꺼진 글자를 --mut 에서 --dim 으로 한 단 더
+     누르고, 켜진 것에만 구역 색 밑줄 + 점 번짐을 준다. 예전 기록('밝기 한 단계 차이라 버튼으로
+     안 읽힌다')은 이 줄이 씬 위에 떠 있던 시절 얘기다 — 탭 줄에 앉은 지금은 바로 위 두 층이
+     같은 규칙(흰 글자 + 밑줄 = 켜짐)을 이미 가르쳐 준다. */
+.zonebar{display:flex; flex-wrap:wrap; align-items:baseline; gap:22px;
+  margin-left:auto; align-self:center}
+.zonebar[hidden]{display:none}
+/* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유). */
+/* 씬에서 누를 수 있는 것이 이 줄뿐이다(도형 히트박스를 걷어냈다). 크기는 하위 탭(1.15rem)보다는
+   확실히 작게 둔다 — 그래야 '탭 한 층 더' 가 아니라 그 줄의 부가물로 읽힌다. */
+.zb{--zc:#93a5c2;   /* 켜졌을 때 밑줄·점이 쓰는 색. 버튼마다 자기 구역 색으로 덮어쓴다 */
+  display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:1.02rem; font-weight:600;
+  cursor:pointer; color:var(--dim); background:none; border:0; border-radius:0;
+  border-bottom:2px solid transparent; padding:0 1px 6px;
+  transition:color .15s, border-color .15s, opacity .15s}
+/* 점 색 = 구역 바닥판 테두리 색(ZPAL.edge)과 같은 값 — 버튼과 판이 같은 것을 가리킨다는 표시.
+   꺼져 있어도 색을 빼지 않는다(옛 grayscale(.75) 를 걷어냈다): 네 점이 전부 회색이면 파랑·주황·초록이
+   무슨 구역인지 알려 주는 대응표가 죽는다. 꺼짐은 색이 아니라 투명도로만 낸다.
+   한때 따로 있다가 '구역 버튼과 같은 말을 두 번 한다' 며 지웠던 범례가, 이 한 줄로 돌아온 셈이다. */
+.zb i{width:9px; height:9px; border-radius:50%; flex:0 0 auto; background:var(--zc);
+  opacity:.5; transition:opacity .15s, box-shadow .15s}
 .zb[data-z="outside"]{--zc:#93a5c2}  .zb[data-z="net"]{--zc:var(--net)}
 .zb[data-z="game"]   {--zc:var(--game)} .zb[data-z="store"]{--zc:var(--store)}
-.zb:focus-visible{outline:2px solid var(--net); outline-offset:2px}
-.zb:hover{color:#d3ddee; background:rgba(24,32,47,.68); border-color:rgba(160,180,215,.52)}
-.zb:hover i{opacity:.8; filter:none}
-/* 켜짐 — 흰 글자 + 구역 색 테두리(안쪽 한 겹 더) + 점 복구. 번짐은 테두리 두께감 정도만 남긴다
-   (한때 15px 로 퍼뜨렸더니 버튼이 아니라 광고 배너처럼 떴다 — 대비는 꺼진 쪽을 눌러서 만든다) */
-.zb.act{color:#fff; background:rgba(33,45,66,.94); border-color:var(--zc);
-  box-shadow:inset 0 0 0 1px var(--zc), 0 0 9px -6px var(--zc)}
-.zb.act i{opacity:1; filter:none; box-shadow:0 0 5px -1px var(--zc)}
-.zb.all{--zc:#c3d3ec; margin-right:5px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
-@media(max-width:680px){ .hud{left:10px; top:30px; gap:6px} .zonebar{gap:4px}
-  .zb{font-size:.72rem; padding:5px 9px; gap:5px} }
+.zb:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:4px}
+.zb:hover{color:var(--ink); border-bottom-color:rgba(160,180,215,.35)}
+.zb:hover i{opacity:.85}
+.zb.act{color:#fff; font-weight:700; border-bottom-color:var(--zc)}
+.zb.act i{opacity:1; box-shadow:0 0 6px -1px var(--zc)}
+.zb.all{--zc:#c3d3ec; margin-right:4px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
+/* 좁은 화면 — 탭 줄과 한 줄에 같이 앉아 있어야 하므로 줄바꿈 전에 값부터 줄인다 */
+@media(max-width:900px){ .zonebar{gap:13px} .zb{font-size:.82rem; gap:5px; padding-bottom:5px}
+  .zb i{width:7px; height:7px} }
+/* 여기부터는 탭 둘 + 필터 다섯이 한 줄에 물리적으로 안 들어간다(글자가 서로 올라탄다).
+   폭을 더 깎는 대신 줄을 접는다 — 모바일에서는 위아래로 쌓이는 편이 자연스럽고,
+   그래도 필터는 자기 탭 줄 '안' 이라 바닥선 하나를 탭과 같이 쓴다(줄이 셋으로 갈리지 않는다). */
+@media(max-width:760px){ .subtabs{flex-wrap:wrap; min-height:0}
+  .zonebar{gap:12px; width:100%; margin:9px 0 0} .zb{font-size:.78rem; gap:4px} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}

@@ -10,6 +10,10 @@
      두 패널이 다 숨은 빈 화면이 뜬다. */
   const subs=[].slice.call(document.querySelectorAll(".subtab[data-sub]"));
   const subbar=document.getElementById("subtabs");
+  /* 구역 필터는 이 줄의 오른쪽 끝에 살지만 1-1 화면 전용이다 —
+     1-2 나 다른 상위 탭에서는 눌러도 아무 일이 없는 버튼이 되므로 숨긴다.
+     줄 높이는 .subtabs 의 min-height 가 잡아 두어 숨겨도 화면이 튀지 않는다. */
+  const zonebar=document.getElementById("zonebar");
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");
   let top="mmo", sub="build", csub="render";
@@ -60,6 +64,7 @@
     subs2.forEach(function(t){ var on=(t.getAttribute("data-csub")===csub);
       t.className = on ? "subtab act" : "subtab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subbar.hidden  = (top!=="mmo");
+    if(zonebar) zonebar.hidden = !(top==="mmo" && sub==="build");
     subbar2.hidden = (top!=="dummy");
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
