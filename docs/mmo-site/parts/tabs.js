@@ -32,6 +32,22 @@
   /* 폰트가 늦게 얹히면 탭 폭이 바뀌어 좌표가 어긋난다 — 딥링크(#dummy 등)로 둘째·셋째 탭이
      처음부터 활성인 경우에 실제로 틀어진다. 글꼴이 준비된 뒤 한 번 더 잰다. */
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(alignSub);
+  /* 탭을 옮기면 주소창 끝도 같이 바뀐다 — 새로고침·즐겨찾기·링크 넘기기가 보던 화면으로 돌아온다.
+     아래 딥링크(읽기)의 짝이다. 읽기만 있고 쓰기가 없어서, 주소는 늘 첫 화면 하나뿐이었다.
+     첫 화면(1-1)만 표시가 없다 — 기본값을 주소에 적으면 같은 화면에 주소가 둘 생긴다
+     (포폴 홈에서 들어온 사람은 표시 없음, 탭 눌러 되돌아온 사람은 #build).
+     pushState 가 아니라 replaceState 인 까닭: 쌓으면 탭을 누른 횟수만큼 방문기록이 생겨
+     들어온 페이지로 나가려면 뒤로가기를 그만큼 눌러야 한다.
+     첫 paint() 에서는 부르지 않는다(booted) — 들고 들어온 주소를 그 자리에서 지우면
+     노션 등에 걸어 둔 #bneck 딥링크가 통째로 무의미해진다. */
+  let booted=false;
+  function syncHash(){
+    if(!booted) return;
+    const h = (top==="mmo")   ? (sub==="build" ? "" : sub)
+            : (top==="dummy") ? ("c"+csub)
+            :                   top;
+    history.replaceState(null, "", h ? "#"+h : location.pathname+location.search);
+  }
   function paint(){
     /* 숨기기 '전에' 설계 씬이 화면 어디에 얼마 크기로 있었는지 잰다 — 숨긴 뒤에는 0 이 나온다.
        병목 지도가 바로 이 자리에 겹쳐 시작해야 '그림이 그대로 있다가 변한다' 가 된다. */
@@ -70,6 +86,7 @@
     /* 두 실행 녹화는 숨은 동안 멈춰 있다(화면에 없는 그림을 디코딩할 이유가 없다).
        그래서 다시 들어올 때 여기서 깨워 준다 — 안 깨우면 멈춘 한 장이 남는다. */
     if(top==="dummy" && csub==="render" && window.__crenderPlay) window.__crenderPlay();
+    syncHash();
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });
   subs.forEach(function(t){ t.addEventListener("click",function(){ top="mmo"; sub=t.getAttribute("data-sub"); paint(); }); });
@@ -82,5 +99,6 @@
   /* #cenv 는 옛 ④ 테스트 환경 탭이었다. 그 내용이 ③ 부하 검증의 첫 띠로 들어갔으니 그쪽으로 보낸다 */
   else if(h0==="cenv"){ top="dummy"; csub="load"; }
   paint();
+  booted=true;   /* 여기서부터는 사람이 탭을 누른 것이므로 주소를 따라가게 한다 */
 
 })();
