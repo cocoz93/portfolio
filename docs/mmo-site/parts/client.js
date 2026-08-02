@@ -7,58 +7,33 @@ function el(t,a,txt){ var e=document.createElementNS(NS,t); for(var k in a) e.se
 function h(t,a,txt){ var e=document.createElement(t); for(var k in a) e.setAttribute(k,a[k]);
   if(txt!=null) e.textContent=txt; return e; }
 
-/* ═══════════ 아이소 투영 — 2-2 안전성 그림이 쓴다 ═══════════
-   투영 상수는 서버 탭 구조도(scene.js)와 같은 값이다. 1-1·1-2 가 아이소 3D 인데 2-2 만 평면
-   도식이면 같은 사이트로 안 읽힌다 — 평면 안에서 배치만 바꾼 시안이 셋 반려된 뒤 내린 결론이다.
-   ※ 여기 있던 옛 아이소 헬퍼는 두 그림이 평면으로 바뀌며 지웠던 것인데, 2-2 가 다시 쓴다. */
-var KX=.86, KY=.46, OX=560, OY=560, YAW=-12;
-var AXLEN=KX/Math.cos(Math.PI/4), ELEV=KY/(AXLEN*Math.sin(Math.PI/4));
-var YU=(45+YAW)*Math.PI/180, YV=(135+YAW)*Math.PI/180;
-var AX=AXLEN*Math.cos(YU), BX=AXLEN*Math.cos(YV);
-var AY=-AXLEN*Math.sin(YU)*ELEV, BY=-AXLEN*Math.sin(YV)*ELEV;
-function ipx(u,v){ return OX+AX*u+BX*v; }
-function ipy(u,v,z){ return OY+AY*u+BY*v-(z||0); }
-function ipt(u,v,z){ return ipx(u,v).toFixed(1)+","+ipy(u,v,z||0).toFixed(1); }
-function ipoly(p,pts,fill,extra){
-  var a={points:pts.map(function(q){ return ipt(q[0],q[1],q[2]||0); }).join(" ")};
-  if(fill) a.fill=fill;                       /* 색을 CSS 에 맡기는 폴리곤은 fill 을 아예 안 준다 */
-  if(extra) for(var k in extra) a[k]=extra[k];
-  var e=el("polygon",a); p.appendChild(e); return e;
-}
-/* 직육면체 하나 — 윗면·왼면·오른면 셋을 색만 달리해 세운다 */
-function iprism(p,u,v,w,d,z0,ht,c,rim){ var t=z0+ht;
-  ipoly(p,[[u,v,t],[u+w,v,t],[u+w,v,z0],[u,v,z0]],c[2]);
-  ipoly(p,[[u,v,t],[u,v+d,t],[u,v+d,z0],[u,v,z0]],c[1]);
-  ipoly(p,[[u,v,t],[u+w,v,t],[u+w,v+d,t],[u,v+d,t]],c[0]);
-  if(rim) p.appendChild(el("polyline",{points:[[u+w,v,t],[u+w,v+d,t],[u,v+d,t]]
-    .map(function(q){ return ipt(q[0],q[1],q[2]); }).join(" "),fill:"none",
-    stroke:"rgba(255,255,255,.14)","stroke-width":"1"}));
-}
-/* 바닥에 눕히는 변환 — 판 위 STEP 글씨가 판과 같은 평면에 누워야 3D 로 읽힌다 */
-function ifloor(u,v,z){ return "matrix("+AX.toFixed(4)+","+AY.toFixed(4)+","
-  +(-BX).toFixed(4)+","+(-BY).toFixed(4)+","+ipx(u,v).toFixed(2)+","+ipy(u,v,z||0).toFixed(2)+")"; }
-/* 화면 깊이 — 겹치는 작은 덩어리를 뒤에서부터 그리려고 쓴다 */
-function idepth(u,v){ return AY*u+BY*v; }
-
 /* ═══════════ ② 안전성 그림 ═══════════ */
 /* 계기판이 성과 수치가 아니라 PC 두 대인 이유 — 2-2 는 서버 PC 와 클라 PC 를 나눠 돌린 시험이고
    2-3 은 한 PC loopback 이다. 조건이 다른데 머리에 안 적어 두면 두 탭의 수치를 같은 자로 읽는다. */
-/* 넷 중 앞 셋만 계기판(잰 자리)이고, 마지막 하나는 성과라 판으로 떼어 그림 오른쪽 아래에 세운다.
-   넷을 한 줄에 늘어놓던 시절에는 유일한 결과인 '0건' 이 전제 셋과 같은 무게로 끝에 묻혔다. */
+/* 계기판은 잰 자리(전제)만 든다. 성과 '무결성 위반 0건' 을 판으로 떼어 오른쪽 아래에 세워 둔 적이
+   있는데, 같은 말이 이미 그림 안에 두 번 있어 걷어냈다 — STEP 2 의 '결함을 넣었더니 첫 패킷에서
+   걸렸다' 와 보기 ③ 합격 기준. */
 var SAFE={
   dash:[["서버 PC","i9-10900","10C / 20T","Windows 10 · RAM 32GB · NIC Intel I225-V",0],
         ["부하 클라 PC","i7-6700","4C / 8T","Windows 10 · RAM 16GB · NIC Intel I219-V",0],
         ["기가 인터넷의 업로드 상한","474","Mbps","이 시험은 여유 — 병목 실험에서 여기 막혀 회선을 걷어냈다 (2-3 은 한 PC loopback)",0]],
-  res:["무결성 위반 · 서버발 끊김","0","건","9,478만 통 중 · 결함을 심으면 첫 패킷에서 걸린다"],
+  /* ── 설명 넷은 두 줄로 맞춘다 ──
+     상자를 카드 오른쪽 아래 구석에 붙여 놨는데(safe-scene.js 의 overlay), 위를 고정하고 아래로
+     자라는 구조라 줄 수가 곧 아래 여백이다. 넷이 145·180·142·88자이던 때 아래 여백이 보기마다
+     60 → 18.6px 로 출렁였다(보기②가 4줄). 그래서 그림이 이미 하는 말을 걷어내 두 줄로 줄였다 —
+     걷어낸 것: '먼저 남이 만든 도구로 잰다'(칩 이름) · '동접 1,000 으로 25분'(STEP 1 판정줄) ·
+     '①을 통과한'(STEP 2 이름표) · '결함을 심었더니 첫 패킷에서 걸렸다'(STEP 2 판정줄) ·
+     '동접 5,000 · 이동 · 시야 · 채팅'(STEP 3 이름표와 판정줄).
+     ※ 여기 글을 늘릴 일이 생기면 세 줄째부터 카드 밑으로 밀린다. 늘리려면 상자 y 를 같이 올릴 것 */
   items:{
     s1:{t:"남이 만든 도구",
-      n:"먼저 남이 만든 도구로 잰다. 게임코디 Echo 더미는 10바이트 고정이라, 번호 하나를 보내고 그대로 돌아오는지만 본다. 접속이 되는가 · 서버가 먼저 끊지 않는가 · 보낸 값과 받은 값이 같은가. 이 셋이 합격선이고, 동접 1,000 으로 25분을 버텼다."},
+      n:"게임코디 Echo 더미는 10바이트 고정이다. 번호를 보내고 그대로 돌아오는지만 본다 — 접속이 되는가 · 서버가 먼저 끊지 않는가 · 보낸 값과 받은 값이 같은가."},
     s2:{t:"내가 만든 도구",
-      n:"①을 통과한 라이브러리 위에서 이번엔 내가 만든 더미를 검증한다. 패킷은 12~256바이트로 들쭉날쭉하고 남는 자리는 정해진 규칙으로 채운다 — 받을 때 같은 규칙으로 다시 만들어 통째로 비교한다. 어긋나면 어디서 틀렸는지 바이트까지 남기고 그 자리에서 멈춘다. 일부러 이상한 패킷을 보내는 공격 시험도 여기서 같이 한다."},
+      n:"패킷은 12~256바이트로 들쭉날쭉하고 남는 자리는 정해진 규칙으로 채운다. 받을 때 같은 규칙으로 다시 만들어 통째로 비교하고, 어긋나면 바이트 자리까지 남기고 멈춘다."},
     gate:{t:"합격 기준",
-      n:"넷 다 0이어야 한다. 서버가 먼저 끊음 · 바이트 훼손 · 순서 역전 · 왕복 시간 초과 — 하나라도 0이 아니면 부하 탓이 아니라 라이브러리 결함으로 본다. 검사기가 진짜 잡는지도 확인했다. 채우는 규칙을 한 칸 어긋나게 심었더니 첫 패킷에서 걸렸다."},
+      n:"넷 다 0이어야 한다 — 서버가 먼저 끊음 · 바이트 훼손 · 순서 역전 · 왕복 시간 초과. 하나라도 0이 아니면 부하 탓이 아니라 라이브러리 결함으로 본다."},
     s3:{t:"다음은 2-3",
-      n:"검증이 끝난 더미에 게임 시나리오를 얹어 서버 전체를 잰다. 동접 5,000 · 이동 · 시야 · 채팅 — 이 단의 자세한 이야기는 2-3 부하 검증에 있다."}
+      n:"검증이 끝난 더미에 게임 시나리오를 얹어 서버 전체를 잰다. 이 단의 자세한 이야기는 2-3 부하 검증에 있다."}
   }
 };
 /* ── 전폭 그림에서 되풀어 쓰는 조각들 ── */
@@ -79,164 +54,14 @@ function arrow(p,x1,x2,y,col,wd){
 
 /* 아이소 3단 계단 — 통과한 것만 다음 단의 도구가 된다는 순서를 판 높이로 말한다.
    옛 그림은 네 띠짜리 평면 도식이었다. 정보는 다 있었지만 1-1·1-2 와 세계가 달라
-   무엇을 고쳐도 "그게 그거"로 보였다(평면 안에서 배치만 바꾼 시안 셋이 반려됐다). */
+   무엇을 고쳐도 "그게 그거"로 보였다(평면 안에서 배치만 바꾼 시안 셋이 반려됐다).
+   ── 그리는 코드와 자리 숫자는 parts/safe-scene.js 에 있다 ──
+   편집기 mmo-safe-edit.html 이 그 파일을 그대로 읽어 같은 그림을 그린다. 배치를 고칠 일이
+   생기면 여기가 아니라 그쪽 SCENE 을 고친다(편집기의 Export 가 그 모양으로 나온다). */
 function drawSafe(){
-  var s=document.getElementById("sc-safe");
-  /* ── 액자와 그림이 차지하는 자리는 숫자로 둔다(재지 않는다) ──
-     예전에는 다 그린 뒤 getBBox() 로 재서 viewBox 를 다시 잡았다. 그런데 이 화면은 페이지가
-     열릴 때 숨어 있어서(1-1 이 첫 화면) 재면 0 이 나온다 — 액자가 14.4x66.7 로 뭉개지고,
-     가로에 맞추느라 세로가 6249px 로 늘어나 그림이 화면 밖으로 밀려났다. 2-2 를 탭으로 열면
-     빈 액자만 보이던 것이 이것이다(주소에 #csafe 를 달고 들어오면 먼저 켜진 뒤 그려서 멀쩡했다).
-     재서 나오던 값이 아래 VB 와 소수점까지 같았다 — 보정 상수들이 원본 viewBox 를 되돌려
-     놓도록 맞춰져 있었을 뿐이라, 재는 일 자체가 필요 없었다. 2-3(drawLoad)이 이미 이 방식이다.
-     대신 그림 도형을 고치면 여기 숫자도 같이 봐야 한다(액자가 따라오지 않는다). */
-  var VB={x:300, y:96, w:972};                  /* = panel-client.html 의 sc-safe viewBox */
-  var BB={x:316.9, y:141.1};                    /* 그림 요소 전체의 왼쪽 위 — 제목 자리의 기준 */
-  var ZOUT={top:"#161d2b",side:"#0f1522",edge:"#93a5c2"};   /* 남의 도구가 선 판 — 무채 */
-  var ZNET={top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"};
-  var NETC =["#63afe6","#1b4870","#2b6597"];                /* 내 라이브러리 — 파랑 */
-  var DUMC =["#e0a04a","#6b4718","#a8752c"];                /* 내가 만든 더미 — 주황 */
-  var GRAYC=["#7d8ba3","#333d4e","#4d596e"];                /* 남이 만든 도구 — 무채 */
-  var CROWD=["#4f7cb4","#1e3a54","#2d5276"];
-  var RECV="#6cc7ff", SEND="#ffb648", FG="#eef2fb", SUB="#8496b3", GRN="#57d694";
-  var PV=-50, PW=262, PD=186;                               /* 판 — 세 단이 같은 크기 */
-
-  var dfs=el("defs",{});
-  dfs.innerHTML='<filter id="sfShadow" x="-40%" y="-40%" width="180%" height="180%">'
-    +'<feGaussianBlur stdDeviation="6"/></filter>';
-  s.appendChild(dfs);
-  /* 레이어 — 판 · 그림자 · 경사로 · 덩어리 · 글자. 뒤에 그린 것이 위로 온다 */
-  var gZone=el("g",{}), gShad=el("g",{}), gRamp=el("g",{}), gBuild=el("g",{}), gLbl=el("g",{});
-  [gZone,gShad,gRamp,gBuild,gLbl].forEach(function(gg){ s.appendChild(gg); });
-  function shadow(u,v,w,d,z){ gShad.appendChild(el("ellipse",
-    {cx:ipx(u+w/2,v+d/2), cy:ipy(u+w/2,v+d/2,z||0)+5, rx:(w+d)*.36, ry:(w+d)*.12,
-     fill:"#04060c", opacity:".40", filter:"url(#sfShadow)"})); }
-  function lb(x,y,t,size,col,w,anc){
-    gLbl.appendChild(el("text",{x:x.toFixed(1),y:y.toFixed(1),"font-size":String(size),fill:col,
-      "font-weight":w||"700","text-anchor":anc||"middle","font-family":"var(--sans)"},t)); }
-
-  var STEP=[
-   {k:"s1", tag:"STEP 1", u:-150, z:0,
-    a:{t:"게임코디 Echo 더미", s:"남이 만든 도구", c:GRAYC},
-    b:{t:"내 네트워크 라이브러리", s:"이번에 잴 것", c:NETC},
-    j:"동접 1,000 · 25분 부하 통과"},
-   {k:"s2", tag:"STEP 2", u:128, z:54,
-    a:{t:"검증된 라이브러리", s:"STEP 1 을 통과한 것", c:NETC},
-    b:{t:"내가 만든 에코 더미", s:"무결성 검사 · 공격 시험", c:DUMC, crowd:1},
-    j:"결함을 넣었더니 첫 패킷에서 걸렸다"},
-   {k:"s3", tag:"STEP 3", u:406, z:108,
-    a:{t:"검증된 더미 + 시나리오", s:"STEP 2 를 통과한 것", c:DUMC},
-    b:{t:"서버 + 컨텐츠 전체", s:"이동 · 시야 · 채팅", c:NETC},
-    j:"동접 5,000 — 2-3 부하 검증"}
-  ];
-
-  /* 판 — 뒤(높은 단)부터 그려야 앞 단이 위로 온다 */
-  for(var i=STEP.length-1;i>=0;i--){
-    var S=STEP[i], pal=(i===0)?ZOUT:ZNET, zg=el("g",{}); gZone.appendChild(zg);
-    iprism(zg,S.u,PV,PW,PD,S.z-14,14,[pal.top,pal.side,pal.side]);
-    zg.appendChild(el("line",{x1:ipx(S.u,PV+PD),y1:ipy(S.u,PV+PD,S.z),
-      x2:ipx(S.u+PW,PV+PD),y2:ipy(S.u+PW,PV+PD,S.z),stroke:pal.edge,"stroke-width":"1.6",opacity:".42"}));
-    zg.appendChild(el("line",{x1:ipx(S.u+PW,PV),y1:ipy(S.u+PW,PV,S.z),
-      x2:ipx(S.u+PW,PV+PD),y2:ipy(S.u+PW,PV+PD,S.z),stroke:pal.edge,"stroke-width":"1.6",opacity:".42"}));
-    var wg=el("g",{transform:ifloor(S.u+PW*.28,PV+13,S.z)});   /* 판에 누운 STEP 글씨 */
-    wg.appendChild(el("text",{x:"0",y:"8.8","text-anchor":"middle","font-size":"26",
-      "font-weight":"900","letter-spacing":"1.56","font-family":"var(--sans)",
-      fill:pal.edge,opacity:".34"},S.tag));
-    zg.appendChild(wg);
-  }
-  /* 칩이 켜는 자리 — 판 셋은 판 윗면, 합격 기준은 왕복 통로. 색은 client.css 가 쥔다 */
-  STEP.forEach(function(S){
-    var hg=el("g",{class:"cl-hit","data-it":S.k}); gZone.appendChild(hg);
-    ipoly(hg,[[S.u,PV,S.z],[S.u+PW,PV,S.z],[S.u+PW,PV+PD,S.z],[S.u,PV+PD,S.z]],null,{class:"cl-safep"});
-  });
-  /* 합격 기준은 판 하나가 아니라 세 단을 가로지르는 잣대다 — 그래서 판이 아니라 왕복 통로를 켠다.
-     통로 바닥은 덩어리보다 아래, 테두리는 맨 위라 층을 건너야 해서 같은 data-it 을 둘로 나눴다
-     (wireWide 가 .cl-hit 을 전부 순회하므로 둘이 같이 켜진다). */
-  var gateLow=el("g",{class:"cl-hit","data-it":"gate"}); gBuild.appendChild(gateLow);
-  var gateTop=el("g",{class:"cl-hit","data-it":"gate"});
-
-  STEP.forEach(function(S){
-    var bg=el("g",{}); gBuild.appendChild(bg);
-    var au=S.u+18, bu=S.u+PW-86, vv=PV+56;
-    shadow(au,vv,66,70,S.z);      iprism(bg,au,vv,66,70,S.z,28,S.a.c,true);
-    shadow(bu,vv-2,68,72,S.z);    iprism(bg,bu,vv-2,68,72,S.z,28,S.b.c,true);
-    if(S.b.crowd){                                  /* 한 대가 여러 명을 만든다 — 더미 5×5 */
-      var cu=[];
-      for(var c=0;c<5;c++) for(var r=0;r<5;r++) cu.push([bu+5+c*11, vv+3+r*11]);
-      cu.sort(function(p,q){ return idepth(p[0],p[1])-idepth(q[0],q[1]); });
-      cu.forEach(function(p){ iprism(bg,p[0],p[1],9,9,S.z+28,9,CROWD); });
-    }
-    /* 두 덩어리 사이를 통째로 쓰는 왕복 — 이 단이 무엇으로 재는지가 여기 있다 */
-    var u1=au+74, u2=bu-8, cv=vv+35, z=S.z, hw=9;
-    ipoly(gateLow,[[u1,cv-hw,z],[u2,cv-hw,z],[u2,cv+hw,z],[u1,cv+hw,z]],"#16243a",{class:"cl-lane"});
-    ipoly(bg,[[u2,cv-hw-4,z],[u2,cv+hw+4,z],[u2+15,cv,z]],RECV);
-    ipoly(bg,[[u1,cv-hw-4,z],[u1,cv+hw+4,z],[u1-15,cv,z]],SEND);
-    var n=Math.max(2,Math.round((u2-u1)/26));
-    for(var q=1;q<n;q++){ var qu=u1+(u2-u1)*q/n;
-      iprism(bg,qu-3.5,cv-3.5,7,7,z,5,[RECV,"#0b1726","#122238"]); }
-    /* 강조 테두리는 통로 바깥으로 띄운다 — 안을 덮으면 화살촉 색(보냄·받음)과
-       그 위 패킷이 탁해진다(2배로 확대해 확인했다). 안쪽은 바닥색만 밝힌다. */
-    ipoly(gateTop,[[u1-20,cv,z],[u1,cv-hw-9,z],[u2,cv-hw-9,z],
-                   [u2+20,cv,z],[u2,cv+hw+9,z],[u1,cv+hw+9,z]],null,{class:"cl-safep"});
-    var mx=ipx((u1+u2)/2,cv), my=ipy((u1+u2)/2,cv,z+46);
-    lb(mx,my,"에코",12,RECV,"800");
-    lb(mx,my+13,"보내고 그대로 받는다",9,SUB,"600");
-  });
-
-  /* 승계 — 통과한 대상이 경사로를 타고 올라가 다음 단의 도구가 된다 */
-  for(var r=0;r<2;r++){
-    var A=STEP[r], B=STEP[r+1], vA=PV+22;
-    var uA=(A.u+PW-86)+68, uB=(B.u+18)+6;
-    var du=(uB-14)-uA, dv=0, Ln=Math.hypot(du,dv), pv=du/Ln*13;
-    ipoly(gRamp,[[uA,vA+pv,A.z+7],[uB-14,vA+pv,B.z+7],[uB-14,vA-pv,B.z+7],[uA,vA-pv,A.z+7]],
-      (r===0)?"#2b6597":"#a8752c",{opacity:".55"});
-    ipoly(gRamp,[[uB-14,vA-12,B.z+7],[uB-14,vA+12,B.z+7],[uB,vA,B.z+7]],GRN);
-  }
-
-  /* 이름·판정 */
-  STEP.forEach(function(S,i){
-    var au=S.u+18, bu=S.u+PW-86, vv=PV+56;
-    var ax=ipx(au+33,vv+70), ay=ipy(au+33,vv+70,S.z+86);
-    lb(ax,ay,S.a.t,13.5,FG,"800");  lb(ax,ay+15,S.a.s,10.5,GRN,"700");
-    var bx2=ipx(bu+34,vv), by2=ipy(bu+34,vv,S.z)+34;
-    lb(bx2,by2,S.b.t,13.5,FG,"800"); lb(bx2,by2+15,S.b.s,10.5,SUB,"600");
-    lb(bx2,by2+33,"✔ "+S.j,11,i===2?RECV:GRN,"700");
-  });
-  gBuild.appendChild(gateTop);
-
-  /* ── 왼쪽 위 — 이 그림이 무슨 말을 하는지 한 줄 ──
-     한때 아래에 설명 두 줄('그래서 첫 도구는 내가 만들지 않은 것이어야 한다' 외)이 더 있었다.
-     제목이 이미 그 말을 하고 있어서 걷어냈고, 대신 남은 한 줄을 18 → 30 으로 키웠다.
-     크기를 올릴 때 같이 손봐야 하는 것이 셋이다 — 안 맞추면 커진 만큼 어색해진다:
-       · 자간을 죈다(-0.02em). 페이지의 다른 큰 제목(.cr-hd b)이 쓰는 값이다.
-       · 기준선을 (TS-18)*.55 만큼 내린다. 글자는 기준선 위로 자라므로 그냥 키우면 위 여백을 판다.
-       · 아래 계기판이 시작하는 높이도 같은 비율로 민다(TITLE_DROP). 안 밀면 제목에 달라붙는다.
-     자리는 그림 bbox 기준이다 — 원본에서 제목이 (338,168) 이고 bbox 가 (316.9,141.1) 이었으니
-     왼쪽에서 21, 위에서 27 이다. */
-  var TS=30;
-  var tx=BB.x+21, ty0=BB.y+27;
-  var ttl=el("text",{x:tx.toFixed(1),y:(ty0+(TS-18)*.55).toFixed(1),"font-size":String(TS),
-    fill:FG,"font-weight":"800","text-anchor":"start","font-family":"var(--sans)",
-    "letter-spacing":(-0.02*TS).toFixed(2)},"검증이 끝난 것만 다음 단의 도구가 된다");
-  gLbl.appendChild(ttl);
-  var TITLE_DROP=32*TS/18+(TS-18)*.55;
-
-  /* ── 그림 위에 얹는 글 넷의 자리 ──
-     그림 좌표를 백분율로 옮긴다. 왼쪽 위에는 잰 자리 셋, 오른쪽 아래 빈 삼각형에는 보기 칩 ·
-     설명 · 성과를 세로로 쌓는다. 오른쪽 값 928 은 STEP 2 이름표(x 852~1080)를 피해 잡은 것이고,
-     세로 486 · 530 · 636 은 그 이름표 아래부터 액자 바닥까지를 셋이 나눠 쓴 것이다.
-     계기판만 왼쪽으로 15px(=.99cqw) 당긴다 — 기둥 선과 안여백을 빼야 글자 왼쪽이 제목과 한 선에 선다. */
-  function put(id,x,y,w,lpad){
-    var e=document.getElementById(id); if(!e) return;
-    var L=((x-VB.x)/VB.w*100).toFixed(3)+"%";
-    e.style.left=lpad?("calc("+L+" - .99cqw)"):L;
-    e.style.marginTop=((y-VB.y)/VB.w*100).toFixed(3)+"%";
-    e.style.width=(w/VB.w*100).toFixed(3)+"%";
-  }
-  put("d-safe",tx,ty0+TITLE_DROP,248,1);
-  put("ch-safe",928,486,336);
-  put("nt-safe",928,530,336);
-  put("rs-safe",928,636,336);
+  var S=window.SafeScene; if(!S) return;
+  S.draw(document.getElementById("sc-safe"), S.SCENE);
+  S.apply(S.SCENE);
 }
 
 /* ═══════════ ③ 부하 그림 ═══════════ */
@@ -397,9 +222,12 @@ function paintDash(id,rows){
 
 /* 옆 카드를 안 쓰는 탭의 배선 — 고른 것이 그림에서 켜지고, 설명은 아래 한 줄로만 나온다.
    카드(표 + 긴 글)를 없앤 자리를 그림이 가져갔으므로 여기서 할 일은 강조와 한 줄 교체뿐이다.
-   맨 끝에 노션으로 보내는 문을 하나 달아 둔다 — 자세한 것은 전부 그쪽에 있다. */
+   맨 끝에 노션으로 보내는 문을 하나 달아 둔다 — 자세한 것은 전부 그쪽에 있다.
+   moreId 를 주면 그 문을 칩 줄이 아니라 따로 받은 자리에 단다. 2-2 가 그렇다 — 거기서는 칩
+   상자가 좁아(406) 문이 둘째 줄로 밀려, 고르는 줄과 나가는 문이 한 덩어리로 보였다.
+   2-3 은 칩 줄이 전폭이라 같은 줄 오른쪽 끝에 붙는다(지금 그대로). */
 var NOTION_HUB="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46";
-function wireWide(scId,chId,noteId,DATA,order,linkLabel){
+function wireWide(scId,chId,noteId,DATA,order,linkLabel,moreId){
   var ch=document.getElementById(chId), note=document.getElementById(noteId);
   function sel(k,i){
     note.innerHTML="";
@@ -422,24 +250,13 @@ function wireWide(scId,chId,noteId,DATA,order,linkLabel){
   var a=document.createElement("a");
   a.className="cr-more"; a.target="_blank"; a.rel="noopener"; a.href=NOTION_HUB;
   a.innerHTML="자세히 — "+linkLabel+' <em>노션 ↗</em>';
-  ch.appendChild(a);
+  (moreId&&document.getElementById(moreId)||ch).appendChild(a);
   sel(order[0],0);
 }
 
-/* 성과 한 칸 — 계기판과 같은 문법(라벨 · 값 · 각주)을 쓰되 판으로 세운다.
-   .cl-tile 을 재활용하지 않는 이유는 저쪽이 판을 벗은 기둥 칸이기 때문이다(client.css). */
-function paintRes(id,r){
-  var d=document.getElementById(id); if(!d) return;
-  d.innerHTML="";
-  d.appendChild(h("div",{class:"l"},r[0]));
-  var v=h("div",{class:"v"}); v.appendChild(h("span",{class:"n"},r[1]));
-  if(r[2]) v.appendChild(h("span",{class:"u"},r[2]));
-  d.appendChild(v); d.appendChild(h("div",{class:"f"},r[3]));
-}
-
 /* 기동 */
-drawSafe(); paintDash("d-safe",SAFE.dash); paintRes("rs-safe",SAFE.res);
-wireWide("sc-safe","ch-safe","nt-safe",SAFE,["s1","s2","gate","s3"],"에코 더미 · 스트레스 테스트");
+drawSafe(); paintDash("d-safe",SAFE.dash);
+wireWide("sc-safe","ch-safe","nt-safe",SAFE,["s1","s2","gate","s3"],"에코 더미 · 스트레스 테스트","mo-safe");
 drawLoad(); paintDash("d-load",LOAD.dash);
 wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");
 

@@ -90,52 +90,56 @@
    크기 손잡이는 아래 .sf-stage 의 width 하나뿐이다. 그림만 줄이고 글자를 rem 으로 두면 줄일수록
    글자가 그림보다 커져서, 80% 에서 결과 카드가 STEP 1 라벨('게임코디 Echo 더미')을 덮었다(실측).
    무대를 컨테이너로 선언하고 글자·여백을 cqw 로 잡으면 어떤 폭에서도 둘의 비율이 그대로다.
-   환산 기준은 창 1600px 일 때의 무대 폭 1514px — 곧 1cqw ≒ 15.14px 이다.
+   환산 기준은 창 1600px 일 때의 무대 폭 1254.6px — 곧 1cqw ≒ 12.55px 이다.
    ※ 좁은 화면에서는 이 비례가 글자를 못 읽을 만큼 줄인다. 그 폭은 맨 아래 분기에서 겹침을 풀고
-     예전처럼 위아래로 쌓는다. */
-.sf-stage{position:relative; width:90%; margin:0 auto; container-type:inline-size}
+     예전처럼 위아래로 쌓는다.
+
+   ── 아래 cqw 값을 한 번 되돌린 적이 있다(2026-08 실측) ──
+   무대를 90% → 82% 로 줄일 때 글자도 같은 비율로 딸려 줄었는데, 그러다 넓은 화면 쪽이 좁은 화면
+   대비값보다 작아졌다. 창 1600 에서 계기판 각주 8.56px · 이름 8.82px · 숫자 15.91px 인데,
+   같은 글이 1200px 아래 분기에서는 10.88 · 11.52 · 24px 로 나왔다 — 데스크톱이 모바일보다 작다.
+   그림 속 이름표가 17.4px 이라 위계도 뒤집혀 있었다. 그래서 계단은 82% 그대로 두고 얹은 글만
+   설계 당시 크기로 돌렸다(전부 ×1.2067 = 1514/1254.6). 그러면 설명·칩은 아래 분기의 rem 값과
+   소수점까지 맞고, 계기판만 캡션이라 그보다 한 단 작다(각주 10.33 · 이름 10.65 · 숫자 19.2px). */
+/* 폭 82% — 액자는 그대로 두고 그 안의 계단만 한 단 줄인 값이다(90% 시절 무대 1363 → 1241px).
+   더 줄이는 쪽은 계기판 각주가 먼저 뭉개진다 — 하한은 무대 1030px(창 1200 에서 겹침을 푸는 그 폭)이다. */
+.sf-stage{position:relative; width:82%; margin:0 auto; container-type:inline-size}
 .sf-stage>svg{display:block; width:100%; height:auto}
-/* 얹는 것 넷의 자리는 client.js 의 drawSafe 가 넣는다(left · margin-top · width).
+/* 얹는 것 셋의 자리는 client.js 의 drawSafe 가 넣는다(left · margin-top · width).
    margin-top 을 쓰는 까닭은 그 % 가 높이가 아니라 폭 기준이라서다 — 그림 높이가 폭을 따라간다. */
 #p-csafe .sf-stage>#d-safe,
 #p-csafe .sf-stage>#ch-safe,
 #p-csafe .sf-stage>#nt-safe,
-#p-csafe .sf-stage>#rs-safe{position:absolute; top:0; margin:0; z-index:2}
+#p-csafe .sf-stage>#mo-safe{position:absolute; top:0; margin:0; z-index:2}
+/* 나가는 문 한 짝만 담는 자리 — .cr-more 는 margin-left:auto 로 오른쪽에 붙는데, 그건 담는
+   쪽이 flex 일 때만 듣는다. 설명 줄과 오른쪽 끝을 맞추려고 여기서 flex 로 만든다. */
+#p-csafe #mo-safe{display:flex; justify-content:flex-end}
 
-/* 잰 자리 셋 — 판을 벗기고 기둥 하나로 묶는다(성과 하나는 아래 .sf-res 로 떼어 냈다) */
-#p-csafe #d-safe{display:block; border-left:.13cqw solid var(--line2); padding-left:.86cqw}
+/* 잰 자리 셋 — 판을 벗기고 기둥 하나로 묶는다.
+   기둥 색은 --line 이다. 카드 바탕이 #131a26 이라 --line2(#1e2739)로는 확대해도 선이 안 보였고,
+   그러면 기둥이 할 일(이 셋은 한 묶음이고 본문이 아니라 곁글이다)을 못 한다. */
+#p-csafe #d-safe{display:block; border-left:.157cqw solid var(--line); padding-left:1.038cqw}
 #p-csafe #d-safe .cl-tile{background:none; border:0; border-radius:0; padding:0}
-#p-csafe #d-safe .cl-tile+.cl-tile{margin-top:.86cqw}
-#p-csafe #d-safe .cl-tile .l{font-size:.703cqw}
-#p-csafe #d-safe .cl-tile .v{gap:.33cqw; margin-top:.13cqw}
-#p-csafe #d-safe .cl-tile .n{font-size:1.268cqw}
-#p-csafe #d-safe .cl-tile .u{font-family:var(--sans); font-size:.698cqw}
-#p-csafe #d-safe .cl-tile .f{margin-top:.2cqw; font-size:.682cqw; line-height:1.45}
-
-/* 성과 하나 — 잰 자리에서 떼어 판으로 세운다. 이 탭에서 유일하게 결과를 말하는 칸이라
-   기둥에 같은 급으로 끼워 두면 전제(어디서 쟀나) 넷 중 하나로 읽힌다. */
-#p-csafe .sf-res{background:linear-gradient(180deg,#132a20,#101a19); border:1px solid #2f6b4d;
-  border-radius:.66cqw; padding:.53cqw .92cqw .66cqw}
-#p-csafe .sf-res .l{font-size:.703cqw; letter-spacing:.04em; font-weight:700; color:#79b598}
-#p-csafe .sf-res .v{display:flex; align-items:baseline; gap:.33cqw; margin-top:.07cqw}
-#p-csafe .sf-res .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:2.219cqw;
-  font-weight:700; color:var(--ok); letter-spacing:-.03em; line-height:1.05}
-#p-csafe .sf-res .u{font-size:.802cqw; font-weight:700; color:#79b598}
-#p-csafe .sf-res .f{margin-top:.13cqw; font-size:.682cqw; line-height:1.45; color:#6d8a7e}
+#p-csafe #d-safe .cl-tile+.cl-tile{margin-top:1.038cqw}
+#p-csafe #d-safe .cl-tile .l{font-size:.848cqw}
+#p-csafe #d-safe .cl-tile .v{gap:.398cqw; margin-top:.157cqw}
+#p-csafe #d-safe .cl-tile .n{font-size:1.530cqw}
+#p-csafe #d-safe .cl-tile .u{font-family:var(--sans); font-size:.842cqw}
+#p-csafe #d-safe .cl-tile .f{margin-top:.241cqw; font-size:.823cqw; line-height:1.45}
 
 /* 설명 줄과 칩 줄도 같은 자로 잰다 — 상자 폭은 백분율이라 그림을 따라 줄어드는데 글자만 고정이면
-   줄 수가 폭마다 달라져, 아래 결과 판과의 간격(106 단위)이 어떤 폭에서는 모자란다. */
-#p-csafe .cr-note{min-height:0; gap:.727cqw; border-radius:.661cqw; padding:.594cqw .859cqw;
+   줄 수가 폭마다 달라져, 그림 아래 여백이 어떤 폭에서는 모자란다. */
+#p-csafe .cr-note{min-height:0; gap:.877cqw; border-radius:.798cqw; padding:.717cqw 1.037cqw;
   background:rgba(15,21,34,.72)}
-#p-csafe .cr-note i{font-size:.666cqw}
-#p-csafe .cr-note p{font-size:.856cqw}
-#p-csafe .cl-chips{gap:.396cqw; max-width:100%}
-#p-csafe .cl-chips .t{font-size:.698cqw; margin-right:.132cqw}
-#p-csafe .cl-chips button{gap:.396cqw; font-size:.845cqw; border-radius:.594cqw;
-  padding:.33cqw .661cqw .33cqw .396cqw}
-#p-csafe .cl-chips button i{width:1.123cqw; height:1.123cqw; font-size:.634cqw}
-#p-csafe .cr-more{gap:.462cqw; font-size:.825cqw; border-radius:.594cqw; padding:.33cqw .727cqw}
-#p-csafe .cr-more em{font-size:.698cqw}
+#p-csafe .cr-note i{font-size:.804cqw}
+#p-csafe .cr-note p{font-size:1.033cqw}
+#p-csafe .cl-chips{gap:.478cqw; max-width:100%}
+#p-csafe .cl-chips .t{font-size:.842cqw; margin-right:.159cqw}
+#p-csafe .cl-chips button{gap:.478cqw; font-size:1.020cqw; border-radius:.717cqw;
+  padding:.398cqw .798cqw .398cqw .478cqw}
+#p-csafe .cl-chips button i{width:1.355cqw; height:1.355cqw; font-size:.765cqw}
+#p-csafe .cr-more{gap:.558cqw; font-size:.996cqw; border-radius:.717cqw; padding:.398cqw .877cqw}
+#p-csafe .cr-more em{font-size:.842cqw}
 
 /* ── 아래 칩 줄 ── */
 .cl-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; max-width:57%}
@@ -415,14 +419,17 @@
   /* ── 2-2 는 이 폭부터 겹침을 푼다 ──
      그림 위에 얹은 글은 치수가 무대 폭에 매여 있어서(cqw), 무대가 좁아지면 계기판 각주가 7px
      밑으로 내려가 못 읽는다. 겹침을 풀고 예전처럼 위아래로 쌓되, 순서는 마크업 순서를 따르지 않고
-     order 로 되돌린다 — 그림 안에서는 계기판이 왼쪽 위, 칩·설명·성과가 오른쪽 아래라 마크업이
-     그 순서인데, 세로로 쌓을 때는 계기판 → 그림 → 성과 → 설명 → 칩이 읽는 순서다. */
+     order 로 되돌린다 — 그림 안에서는 계기판이 왼쪽 위, 칩·설명이 오른쪽 아래라 마크업이
+     그 순서인데, 세로로 쌓을 때는 계기판 → 그림 → 설명 → 칩이 읽는 순서다. */
   #p-csafe .sf-stage{display:flex; flex-direction:column; width:100%; container-type:normal}
-  #p-csafe .sf-stage>svg{order:2}
+  /* 그림틀을 왼쪽으로 빼내는 것(safe-scene.js 의 pad.l)은 무대 양옆에 노는 여백이 있을 때만 성립한다.
+     여기서는 무대가 카드 전폭이라 뺄 자리가 없다 — 그대로 두면 제목이 카드 왼쪽 밖으로 나간다.
+     되돌리면 넓힌 액자만 남아 그림이 한 단 작아지는데, 세로로 쌓는 이 폭에서는 그편이 낫다. */
+  #p-csafe .sf-stage>svg{order:2; width:100% !important; margin-left:0 !important}
   #p-csafe .sf-stage>#d-safe,
   #p-csafe .sf-stage>#ch-safe,
   #p-csafe .sf-stage>#nt-safe,
-  #p-csafe .sf-stage>#rs-safe{position:static; left:auto !important; width:auto !important;
+  #p-csafe .sf-stage>#mo-safe{position:static; left:auto !important; width:auto !important;
     margin-left:0 !important; margin-top:0 !important}
   #p-csafe .sf-stage>#d-safe{order:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
     gap:10px; border-left:0; padding-left:0; margin-bottom:10px !important}
@@ -435,17 +442,14 @@
   #p-csafe #d-safe .cl-tile .n{font-size:1.5rem}
   #p-csafe #d-safe .cl-tile .u{font-size:.64rem}
   #p-csafe #d-safe .cl-tile .f{margin-top:6px; font-size:.68rem}
-  #p-csafe .sf-res{order:3; margin-top:11px !important; border-radius:10px; padding:9px 15px 11px}
-  #p-csafe .sf-res .l{font-size:.72rem}
-  #p-csafe .sf-res .v{gap:6px; margin-top:2px}
-  #p-csafe .sf-res .n{font-size:2rem}
-  #p-csafe .sf-res .u{font-size:.76rem}
-  #p-csafe .sf-res .f{margin-top:3px; font-size:.68rem}
-  #p-csafe .cr-note{order:4; gap:11px; margin-top:11px !important; border-radius:10px;
+  #p-csafe .cr-note{order:3; gap:11px; margin-top:11px !important; border-radius:10px;
     padding:9px 13px; background:var(--sunk)}
   #p-csafe .cr-note i{font-size:.63rem}
   #p-csafe .cr-note p{font-size:.81rem}
-  #p-csafe .cl-chips{order:5; gap:6px; margin-top:9px !important}
+  #p-csafe .cl-chips{order:4; gap:6px; margin-top:9px !important}
+  /* 넓은 화면에서 떼어 낸 문은 여기서도 제 줄을 쓴다. 칩 줄에 되붙이면 두 컨테이너를
+     한 줄에 세우는 셈이라 order 만으로는 안 되고, 그러자고 감싸는 판을 하나 더 두지 않는다. */
+  #p-csafe .sf-stage>#mo-safe{order:5; margin-top:9px !important}
   #p-csafe .cl-chips .t{font-size:.66rem; margin-right:2px}
   #p-csafe .cl-chips button{gap:6px; font-size:.8rem; border-radius:9px; padding:5px 10px 5px 6px}
   #p-csafe .cl-chips button i{width:17px; height:17px; font-size:.6rem}

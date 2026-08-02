@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2-2 안전성 그림 편집기 — 드래그로 계단 짜기</title>
+<style>
+:root{
+  --bg:#0d1220; --ink:#eef2fb; --mut:#8496b3; --dim:#5d6c85;
+  --panel:#131a26; --line:#28324a; --net:#6cc7ff; --ok:#57d694; --warn:#ffb648;
+  --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Consolas,"D2Coding",monospace;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.5;
+  -webkit-font-smoothing:antialiased; word-break:keep-all;
+  background-image:radial-gradient(rgba(108,199,255,.05) 1px, transparent 1px); background-size:26px 26px}
+.wrap{display:flex; gap:14px; padding:12px 16px; align-items:flex-start; max-width:1900px; margin:0 auto}
+.stage{position:relative; flex:1 1 auto; min-width:0; padding-right:96px}
+/* 본편은 액자를 왼쪽으로 넓힌 만큼 그림틀도 왼쪽으로 빼낸다(safe-scene.js 의 pad.l). 그 두 줄은
+   무대 양옆에 노는 여백이 있는 페이지 얘기다 — 편집기는 이 칸이 전부라 되돌리고, 넓어진 액자를
+   통째로 보여 준다. 그래야 제목을 왼쪽으로 얼마나 더 뺄 수 있는지가 이 칸에서 그대로 보인다. */
+#scene{display:block; width:100% !important; margin-left:0 !important; height:auto;
+  touch-action:none; user-select:none; overflow:visible;
+  background:#0b1017; border:1px solid var(--line); border-radius:12px}
+/* overflow 를 연 까닭 — 얹는 것(보기 칩 · 설명 줄)은 HTML 이라 페이지에서는 액자 밖에 놓여도
+   잘리지 않는다. 편집기는 그 자리를 SVG 사각형으로 그리므로, 안 열어 두면 액자 오른쪽 밖으로
+   나간 상자가 여기서만 잘려 끌 수가 없다. 자리는 위 .stage 의 오른쪽 여백으로 비워 둔다. */
+
+/* ── 그림이 페이지에서 기대는 규칙 ──
+   칩이 켜는 자리(.cl-safep)와 왕복 통로(.cl-lane)는 색을 CSS 에 맡긴 폴리곤이다. 이 규칙이 없으면
+   fill 기본값이 검정이라 그 폴리곤이 덩어리와 통로를 통째로 덮는다(처음 렌더에서 실제로 그랬다).
+   client.css 의 같은 줄을 그대로 옮겨 둔다 — 편집기는 그림만 그리므로 hover·on 상태는 뺀다. */
+.cl-hit .cl-safep{fill:transparent; stroke:#6cc7ff; stroke-width:2; opacity:0; stroke-linejoin:round}
+.cl-lane{fill:#16243a}
+
+/* 집을 수 있는 것들 — 평소엔 안 보이고, 위에 올리면 드러난다 */
+#scene .hit{fill:rgba(108,199,255,.001); cursor:grab}
+#scene .hit:hover{fill:rgba(108,199,255,.14)}
+#scene .hit.sel{fill:rgba(108,199,255,.20)}
+#scene .hit.dragging{cursor:grabbing}
+#scene .outl{fill:none; stroke:var(--net); stroke-width:1.6; stroke-dasharray:6 4; pointer-events:none}
+#scene .knob{fill:#0d1220; stroke:var(--warn); stroke-width:1.8; cursor:grab}
+#scene .knob:hover,#scene .knob.sel{fill:var(--warn)}
+#scene .obox{fill:rgba(87,214,148,.06); stroke:rgba(87,214,148,.55); stroke-width:1.3;
+  stroke-dasharray:5 4; cursor:grab}
+#scene .obox:hover{fill:rgba(87,214,148,.16)}
+#scene .obox.sel{fill:rgba(87,214,148,.22); stroke-dasharray:none}
+#scene .otag{fill:#8ce0b4; font-size:11px; font-family:var(--mono); pointer-events:none}
+#scene .gridlyr{pointer-events:none}
+#scene .frame{fill:none; stroke:rgba(255,255,255,.14); stroke-width:1; pointer-events:none}
+
+/* 사이드 패널 */
+.side{flex:0 0 336px; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:14px 15px}
+.side h1{font-size:1.02rem; margin:0 0 3px}
+.side .sub{font-size:.78rem; color:var(--mut); margin:0 0 12px; line-height:1.5}
+.side .grp{border-top:1px solid var(--line); padding:11px 0 3px}
+.side .lb{font-family:var(--mono); font-size:.62rem; letter-spacing:.1em; color:var(--dim);
+  text-transform:uppercase; margin-bottom:7px}
+.row{display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap}
+.btn{font-family:var(--mono); font-size:.78rem; color:var(--ink); background:#1a2333; border:1px solid var(--line);
+  border-radius:8px; padding:5px 10px; cursor:pointer}
+.btn:hover{background:#243049}
+.btn.pri{background:#14324b; border-color:#2f5f86; color:#bfe6ff}
+.btn.dgr{background:#3a1c1c; border-color:#6b3030; color:#ffc9c9}
+.seg{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
+.seg button{font-family:var(--mono); font-size:.74rem; background:#161e2c; color:var(--mut);
+  border:0; padding:5px 9px; cursor:pointer}
+.seg button.on{background:#14324b; color:#bfe6ff}
+.name{font-size:.9rem; font-weight:700}
+.coord{font-family:var(--mono); font-size:.72rem; color:var(--mut); min-height:1.2em}
+.hint{font-size:.72rem; color:var(--dim); line-height:1.55}
+.fld{display:flex; align-items:center; gap:7px; margin-bottom:6px}
+.fld span{font-size:.72rem; color:var(--mut); flex:0 0 74px}
+.fld input,.fld select,.fld textarea{flex:1 1 auto; min-width:0; background:#0f1522; color:var(--ink);
+  border:1px solid var(--line); border-radius:6px; padding:4px 7px; font-size:.78rem; font-family:var(--sans)}
+.fld input[type=number]{font-family:var(--mono)}
+.fld textarea{resize:vertical; min-height:44px; line-height:1.45}
+.ck{display:inline-flex; align-items:center; gap:5px; font-size:.76rem; color:var(--mut); cursor:pointer}
+textarea#out{width:100%; height:190px; background:#0f1522; color:#cfe0f5; border:1px solid var(--line);
+  border-radius:8px; padding:9px 10px; font-family:var(--mono); font-size:.68rem; line-height:1.5}
+.tabs{display:flex; gap:6px; margin-bottom:9px}
+.tabs button{flex:1 1 0; font-size:.76rem; background:#161e2c; color:var(--mut);
+  border:1px solid var(--line); border-radius:8px; padding:5px 0; cursor:pointer}
+.tabs button.on{background:#14324b; border-color:#2f5f86; color:#bfe6ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage">
+    <svg id="scene" xmlns="http://www.w3.org/2000/svg"></svg>
+  </div>
+
+  <aside class="side">
+    <h1>2-2 안전성 그림 편집기</h1>
+    <p class="sub">계단·덩어리·이름표를 끌어서 배치합니다. 그림 코드는
+      <code>parts/safe-scene.js</code> 하나를 페이지와 같이 씁니다 — 여기서 본 것이 곧 페이지에서
+      보는 것입니다.<br>
+      <b>반영하는 순서</b> ① <b>Export</b> 로 복사 → ② <code>parts/safe-scene.js</code> 의
+      <code>var SCENE={…};</code> 를 통째로 붙여넣기 → ③ <code>build.ps1 -NoSync</code> 실행
+      (조각을 <code>index.html</code> 로 합치는 단계라, 빼면 페이지가 그대로입니다).</p>
+
+    <div class="grp">
+      <div class="lb">고른 것</div>
+      <div class="name" id="selName">— 없음 —</div>
+      <div class="coord" id="selCoord"></div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">속성</div>
+      <div id="propBox"></div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">단(계단)</div>
+      <div class="row">
+        <button class="btn pri" id="addStep">＋ 단 추가</button>
+        <button class="btn" id="dupStep">복제</button>
+        <button class="btn dgr" id="delStep">단 삭제</button>
+      </div>
+      <div class="hint">추가·복제는 고른 단 뒤에 붙습니다. 단이 하나뿐이면 삭제할 수 없습니다.</div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">전체 치수</div>
+      <div class="tabs">
+        <button data-gt="plate" class="on">판</button>
+        <button data-gt="lane">통로</button>
+        <button data-gt="ramp">경사로</button>
+        <button data-gt="frame">액자·제목</button>
+      </div>
+      <div id="globBox"></div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">격자 (스냅)</div>
+      <div class="row">
+        <div class="seg" id="snapSeg">
+          <button data-snap="1">1</button>
+          <button data-snap="2" class="on">2</button>
+          <button data-snap="5">5</button>
+          <button data-snap="10">10</button>
+          <button data-snap="0">off</button>
+        </div>
+      </div>
+      <div class="row">
+        <label class="ck"><input type="checkbox" id="showHelp" checked> 집는 자리 표시</label>
+        <label class="ck"><input type="checkbox" id="showOv" checked> 얹는 글자리</label>
+      </div>
+      <div class="hint">그림은 판 위에 얹혀 있습니다 — 판을 옮기면 그 위 덩어리·이름표가 따라옵니다.
+        판을 끌면 <b>가로·높이</b>가, 덩어리·이름표를 끌면 <b>판 위 자리</b>가 바뀝니다.</div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">조작</div>
+      <div class="row">
+        <button class="btn" id="reset">처음으로</button>
+        <button class="btn pri" id="export">Export ▸</button>
+      </div>
+      <div class="row" style="margin-top:2px">
+        <button class="btn" id="saveFile">💾 저장(.json)</button>
+        <label class="btn" for="loadFile" style="cursor:pointer; display:inline-block">📂 불러오기</label>
+        <input type="file" id="loadFile" accept=".json,application/json" style="display:none">
+      </div>
+      <div class="hint" id="msg" style="min-height:1.3em">Export = 클립보드 복사 · 저장(.json) = 내 PC 보관/재불러오기.</div>
+    </div>
+
+    <div class="grp">
+      <div class="lb">Export (safe-scene.js 의 SCENE)</div>
+      <textarea id="out" readonly spellcheck="false"></textarea>
+      <div class="hint" id="vbNote" style="margin-top:6px"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn" id="copy">복사</button>
+        <span class="hint" id="copyMsg"></span>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script src="parts/safe-scene.js" charset="utf-8"></script>
+<script>
+(function(){
+"use strict";
+var SS=window.SafeScene;
+if(!SS){ document.body.innerHTML='<p style="padding:40px;font:16px sans-serif;color:#ffb1b1">'
+  +'parts/safe-scene.js 를 못 읽었습니다. 이 파일은 docs/mmo-site/ 안에서 열어야 합니다.</p>'; return; }
+
+var NS="http://www.w3.org/2000/svg";
+function el(t,a,txt){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]);
+  if(txt!=null) e.textContent=txt; return e; }
+var iso=SS.iso, ipx=iso.ipx, ipy=iso.ipy;
+
+/* ── 화면 이동 → 장면 좌표 ──
+   투영이 x = OX + AX·u + BX·v, y = OY + AY·u + BY·v − z 이므로 되돌리는 식도 여기서 나온다.
+   두 가지를 쓴다: 판 위 평면 이동(u·v)과 판 자체의 이동(u·z).
+   상수는 SafeScene 안에 있으므로 원점 세 개를 찍어 기울기를 되재는 쪽이 안전하다 —
+   투영 값을 여기 베껴 두면 저쪽을 고칠 때 조용히 어긋난다. */
+var O=[ipx(0,0),ipy(0,0,0)];
+var AXv=[ipx(1,0)-O[0], ipy(1,0,0)-O[1]];      /* u 한 칸이 화면에서 가는 쪽 */
+var BXv=[ipx(0,1)-O[0], ipy(0,1,0)-O[1]];      /* v 한 칸 */
+var DET=AXv[0]*BXv[1]-BXv[0]*AXv[1];
+function toPlane(dx,dy){ return {du:( dx*BXv[1]-dy*BXv[0])/DET, dv:(-dx*AXv[1]+dy*AXv[0])/DET}; }
+function toUZ(dx,dy){ var du=dx/AXv[0]; return {du:du, dz:AXv[1]*du-dy}; }
+
+var D=SS.clone(SS.SCENE);
+var SNAP=2, sel=null, drag=null, showHelp=true, showOv=true, globTab="plate";
+var svg=document.getElementById("scene");
+var outEl=document.getElementById("out");
+
+function snap(v){ return SNAP>0 ? Math.round(v/SNAP)*SNAP : Math.round(v*10)/10; }
+function num(v){ return Math.round(v*1000)/1000; }
+function stepOf(i){ return D.steps[i]; }
+function selStep(){ return sel&&sel.si!=null ? D.steps[sel.si] : null; }
+
+/* 그림 위에 얹는 HTML 셋은 편집기에서 자리만 상자로 보여 준다 — 실제 내용(계기판 세 칸 ·
+   보기 칩 · 설명 줄)은 client.js 가 들고 있고, 높이는 글 줄 수에 따라 페이지에서 정해진다.
+   그래서 여기 높이는 '대략 이만큼 차지한다' 는 눈금일 뿐이다. */
+var OVH={dash:160, chips:27, note:48, more:25};
+var OVNAME={dash:"계기판", chips:"보기 칩", note:"설명 줄", more:"노션 문"};
+
+/* ═══ 그리기 ═══ */
+function render(){
+  SS.draw(svg,D);                       /* 본편과 같은 코드로 그림부터 */
+  var ui=el("g",{});
+  svg.appendChild(ui);
+  if(showOv) drawOverlayBoxes(ui);
+  if(showHelp) drawHandles(ui);
+  drawFrame(ui);
+  syncOut(); syncSel(); renderProp(); renderGlob();
+}
+/* 실선 = 액자 전체(왼쪽 pad.l 을 더한 것) · 점선 = 무대가 덮는 구간.
+   얹는 것 셋의 백분율은 점선을 기준으로 재므로, 점선 왼쪽으로 나간 자리는 음수 % 가 된다. */
+function drawFrame(ui){
+  var padL=(D.pad&&D.pad.l)||0;
+  ui.appendChild(el("rect",{class:"frame",x:D.vb.x-padL+.5,y:D.vb.y+.5,
+    width:D.vb.w+padL-1,height:D.vb.h-1,rx:6}));
+  if(padL) ui.appendChild(el("line",{class:"frame",x1:D.vb.x+.5,y1:D.vb.y+.5,
+    x2:D.vb.x+.5,y2:D.vb.y+D.vb.h-.5,"stroke-dasharray":"5 5"}));
+}
+function poly(ui,pts,cls,on){
+  var e=el("polygon",{class:cls,points:pts.map(function(q){
+    return ipx(q[0],q[1]).toFixed(1)+","+ipy(q[0],q[1],q[2]||0).toFixed(1); }).join(" ")});
+  ui.appendChild(e); if(on) e.addEventListener("pointerdown",on); return e;
+}
+function isSel(t,si,w){ return sel&&sel.type===t&&sel.si===si&&(w==null||sel.which===w); }
+
+function drawHandles(ui){
+  var P=D.plate;
+  D.steps.forEach(function(S,i){
+    /* 판 윗면 — 여기를 끌면 단 전체가 움직인다 */
+    poly(ui,[[S.u,P.v,S.z],[S.u+P.w,P.v,S.z],[S.u+P.w,P.v+P.d,S.z],[S.u,P.v+P.d,S.z]],
+      "hit"+(isSel("step",i)?" sel":""), function(e){ startDrag(e,{type:"step",si:i}); });
+    ["a","b"].forEach(function(w){
+      var B=S[w], u=S.u+B.du, v=P.v+B.dv, t=S.z+B.h;
+      /* 덩어리 윗면 */
+      poly(ui,[[u,v,t],[u+B.w,v,t],[u+B.w,v+B.d,t],[u,v+B.d,t]],
+        "hit"+(isSel("box",i,w)?" sel":""), function(e){ startDrag(e,{type:"box",si:i,which:w}); });
+      /* 이름표 손잡이 — 이름표는 가운데 맞춤이라 그 자리에 손잡이를 놓으면 글자 한복판을 가린다.
+         글자 폭의 절반쯤 왼쪽으로 빼서 첫 글자 앞에 세운다(HW). 이어 주는 실선이 어느 글자의
+         손잡이인지 말해 준다. */
+      var lx=ipx(S.u+B.lab.du,P.v+B.lab.dv), ly=ipy(S.u+B.lab.du,P.v+B.lab.dv,S.z+B.lab.dz)+(B.lab.dy||0);
+      var HW=Math.max(34,(B.t||"").length*7);
+      ui.appendChild(el("line",{x1:(lx-HW+5).toFixed(1),y1:(ly-5).toFixed(1),x2:(lx-6).toFixed(1),
+        y2:(ly-5).toFixed(1),stroke:"rgba(255,182,72,.45)","stroke-width":1,"stroke-dasharray":"3 3",
+        "pointer-events":"none"}));
+      var kn=el("circle",{class:"knob"+(isSel("label",i,w)?" sel":""),
+        cx:(lx-HW).toFixed(1),cy:(ly-5).toFixed(1),r:5});
+      ui.appendChild(kn);
+      kn.addEventListener("pointerdown",function(e){ startDrag(e,{type:"label",si:i,which:w}); });
+    });
+  });
+  /* 제목 손잡이 — 제목은 왼쪽 맞춤이라 그 앞에 세운다 */
+  var T=D.title, tx=D.bb.x+T.dx, ty=D.bb.y+T.dy;
+  var tk=el("circle",{class:"knob"+(isSel("title")?" sel":""),cx:(tx-13).toFixed(1),cy:(ty-4).toFixed(1),r:5});
+  ui.appendChild(tk);
+  tk.addEventListener("pointerdown",function(e){ startDrag(e,{type:"title"}); });
+}
+function drawOverlayBoxes(ui){
+  SS.place(D).forEach(function(p){
+    var g=el("g",{}); ui.appendChild(g);
+    var r=el("rect",{class:"obox"+(isSel("ov",null,p.key)?" sel":""),
+      x:p.x,y:p.y,width:p.w,height:OVH[p.key]||40,rx:5});
+    g.appendChild(r);
+    g.appendChild(el("text",{class:"otag",x:p.x+6,y:p.y+15},OVNAME[p.key]||p.key));
+    r.addEventListener("pointerdown",function(e){ startDrag(e,{type:"ov",which:p.key}); });
+  });
+}
+
+/* ═══ 집고 끌기 ═══ */
+/* 끄는 거리를 그림 좌표로 되돌리는 배율. 액자 폭은 vb.w 가 아니라 vb.w+pad.l 이다 —
+   pad 를 빼먹으면 끌던 것이 커서보다 10% 씩 덜 따라온다. */
+function svgScale(){ var r=svg.getBoundingClientRect();
+  return (D.vb.w+((D.pad&&D.pad.l)||0))/r.width; }
+function startDrag(e,what){
+  e.preventDefault(); e.stopPropagation();
+  sel=what; var k=svgScale();
+  var base={x:e.clientX, y:e.clientY, k:k};
+  var S=what.si!=null?D.steps[what.si]:null;
+  if(what.type==="step")  base.o={u:S.u, z:S.z};
+  if(what.type==="box")   base.o={du:S[what.which].du, dv:S[what.which].dv};
+  if(what.type==="label") base.o={du:S[what.which].lab.du, dv:S[what.which].lab.dv};
+  if(what.type==="title") base.o={dx:D.title.dx, dy:D.title.dy};
+  if(what.type==="ov"){ var p=SS.place(D).filter(function(q){return q.key===what.which;})[0];
+    base.o={x:p.x, y:p.y}; }
+  drag=base;
+  /* 끄는 동안 render() 가 집고 있던 도형을 다시 만든다 — 그래서 포인터를 창에 붙들어 두고,
+     움직임도 svg 가 아니라 window 에서 받는다. 캡처는 없어도 되게(합성 이벤트·터치에서 던진다). */
+  try{ svg.setPointerCapture(e.pointerId); }catch(err){}
+  render();
+}
+function onMove(e){
+  if(!drag) return;
+  var dx=(e.clientX-drag.x)*drag.k, dy=(e.clientY-drag.y)*drag.k, o=drag.o;
+  if(sel.type==="step"){ var m=toUZ(dx,dy); var S=D.steps[sel.si];
+    S.u=snap(o.u+m.du); S.z=snap(o.z+m.dz); }
+  else if(sel.type==="box"||sel.type==="label"){ var m2=toPlane(dx,dy);
+    var B=D.steps[sel.si][sel.which], tgt=(sel.type==="box")?B:B.lab;
+    tgt.du=snap(o.du+m2.du); tgt.dv=snap(o.dv+m2.dv); }
+  else if(sel.type==="title"){ D.title.dx=snap(o.dx+dx); D.title.dy=snap(o.dy+dy); }
+  else if(sel.type==="ov"){ var ov=D.overlay[sel.which];
+    ov.x=snap(o.x+dx); ov.y=snap(o.y+dy); }
+  render();
+}
+function endDrag(){ if(!drag) return; drag=null; render(); }
+window.addEventListener("pointermove",onMove);
+window.addEventListener("pointerup",endDrag);
+window.addEventListener("pointercancel",endDrag);
+svg.addEventListener("pointerdown",function(e){ if(e.target===svg){ sel=null; render(); } });
+
+/* ═══ 고른 것 표시 ═══ */
+function syncSel(){
+  var n=document.getElementById("selName"), c=document.getElementById("selCoord");
+  if(!sel){ n.textContent="— 없음 —"; c.textContent=""; return; }
+  var S=selStep();
+  if(sel.type==="step"){ n.textContent="단 "+S.tag; c.textContent="u="+S.u+"  z="+S.z; }
+  else if(sel.type==="box"){ var B=S[sel.which];
+    n.textContent=(sel.which==="a"?"왼쪽 — ":"오른쪽 — ")+B.t;
+    c.textContent="du="+B.du+"  dv="+B.dv+"   크기 "+B.w+"×"+B.d+"×"+B.h; }
+  else if(sel.type==="label"){ var B2=S[sel.which];
+    n.textContent="이름표 — "+B2.t; c.textContent="du="+B2.lab.du+"  dv="+B2.lab.dv
+      +"  dz="+B2.lab.dz+"  dy="+B2.lab.dy; }
+  else if(sel.type==="title"){ n.textContent="제목"; c.textContent="dx="+D.title.dx+"  dy="+D.title.dy; }
+  else if(sel.type==="ov"){ var ov=D.overlay[sel.which];
+    n.textContent="얹는 글 — "+(OVNAME[sel.which]||sel.which);
+    c.textContent=(ov.x==null?"x=자동(제목 밑)":"x="+ov.x)+"  "+(ov.y==null?"y=자동":"y="+ov.y)+"  폭="+ov.w; }
+}
+
+/* ═══ 속성 편집기 ═══ 선택이 바뀔 때만 다시 만든다(입력 포커스 유지) */
+var propKey="";
+function fld(label,inp){ var w=document.createElement("label"); w.className="fld";
+  var s=document.createElement("span"); s.textContent=label; w.appendChild(s); w.appendChild(inp); return w; }
+function inpText(get,set,area){
+  var i=document.createElement(area?"textarea":"input"); if(!area) i.type="text";
+  i.value=get()||""; i.oninput=function(){ set(i.value); render(); }; return i; }
+function inpNum(get,set,step){
+  var i=document.createElement("input"); i.type="number"; i.step=step||1; i.value=get();
+  i.oninput=function(){ var v=parseFloat(i.value); if(!isNaN(v)){ set(v); render(); } }; return i; }
+function inpSel(cur,keys,labels,set){
+  var s=document.createElement("select");
+  keys.forEach(function(k,j){ var o=document.createElement("option"); o.value=k;
+    o.textContent=labels?labels[j]:k; if(k===cur) o.selected=true; s.appendChild(o); });
+  s.onchange=function(){ set(s.value); render(); }; return s; }
+
+function renderProp(){
+  var key=sel?[sel.type,sel.si,sel.which].join("/"):"";
+  if(key===propKey) return;                 /* 값만 바뀐 것이면 다시 만들지 않는다 */
+  propKey=key;
+  var box=document.getElementById("propBox"); box.innerHTML="";
+  if(!sel){ var p=document.createElement("div"); p.className="hint";
+    p.textContent="그림에서 판·덩어리·이름표를 클릭하면 여기서 글자와 크기를 고칩니다.";
+    box.appendChild(p); return; }
+  var S=selStep();
+  if(sel.type==="step"){
+    box.appendChild(fld("단 이름",inpText(function(){return S.tag;},function(v){S.tag=v;})));
+    box.appendChild(fld("키(k)",inpText(function(){return S.k;},function(v){S.k=v;})));
+    box.appendChild(fld("가로 u",inpNum(function(){return S.u;},function(v){S.u=v;})));
+    box.appendChild(fld("높이 z",inpNum(function(){return S.z;},function(v){S.z=v;})));
+    box.appendChild(fld("판 색",inpSel(S.pal,["out","net"],["무채(남의 도구)","파랑(내 것)"],
+      function(v){S.pal=v;})));
+    box.appendChild(fld("판정 글",inpText(function(){return S.j;},function(v){S.j=v;},true)));
+    box.appendChild(fld("판정 색",inpSel(S.jc,["grn","recv","send","sub"],["초록","하늘","주황","회색"],
+      function(v){S.jc=v;})));
+    var h=document.createElement("div"); h.className="hint";
+    h.textContent="키(k)는 보기 칩이 이 단을 켤 때 쓰는 이름입니다 — client.js 의 SAFE.items 와 같아야 켜집니다.";
+    box.appendChild(h);
+  } else if(sel.type==="box"||sel.type==="label"){
+    var B=S[sel.which];
+    box.appendChild(fld("이름",inpText(function(){return B.t;},function(v){B.t=v;})));
+    box.appendChild(fld("부제",inpText(function(){return B.s;},function(v){B.s=v;})));
+    if(sel.type==="box"){
+      box.appendChild(fld("색",inpSel(B.c,["net","dum","gray","crowd"],
+        ["파랑(내 것)","주황(더미)","무채(남의 것)","군중"],function(v){B.c=v;})));
+      box.appendChild(fld("자리 du",inpNum(function(){return B.du;},function(v){B.du=v;})));
+      box.appendChild(fld("자리 dv",inpNum(function(){return B.dv;},function(v){B.dv=v;})));
+      box.appendChild(fld("가로 w",inpNum(function(){return B.w;},function(v){B.w=v;})));
+      box.appendChild(fld("세로 d",inpNum(function(){return B.d;},function(v){B.d=v;})));
+      box.appendChild(fld("높이 h",inpNum(function(){return B.h;},function(v){B.h=v;})));
+      var ck=document.createElement("label"); ck.className="ck";
+      var cb=document.createElement("input"); cb.type="checkbox"; cb.checked=!!B.crowd;
+      cb.onchange=function(){ if(cb.checked) B.crowd={n:5,gap:11,size:9,du:5,dv:5}; else delete B.crowd;
+        propKey=""; render(); };
+      ck.appendChild(cb); ck.appendChild(document.createTextNode(" 위에 여러 명 얹기"));
+      box.appendChild(ck);
+      if(B.crowd){
+        box.appendChild(fld("몇 줄 n",inpNum(function(){return B.crowd.n;},function(v){B.crowd.n=Math.max(1,v|0);})));
+        box.appendChild(fld("간격",inpNum(function(){return B.crowd.gap;},function(v){B.crowd.gap=v;})));
+        box.appendChild(fld("한 칸 크기",inpNum(function(){return B.crowd.size;},function(v){B.crowd.size=v;})));
+      }
+    } else {
+      box.appendChild(fld("자리 du",inpNum(function(){return B.lab.du;},function(v){B.lab.du=v;})));
+      box.appendChild(fld("자리 dv",inpNum(function(){return B.lab.dv;},function(v){B.lab.dv=v;})));
+      box.appendChild(fld("띄움 dz",inpNum(function(){return B.lab.dz;},function(v){B.lab.dz=v;})));
+      box.appendChild(fld("아래로 dy",inpNum(function(){return B.lab.dy;},function(v){B.lab.dy=v;})));
+    }
+  } else if(sel.type==="title"){
+    box.appendChild(fld("제목",inpText(function(){return D.title.t;},function(v){D.title.t=v;},true)));
+    box.appendChild(fld("크기",inpNum(function(){return D.title.size;},function(v){D.title.size=v;})));
+    box.appendChild(fld("오른쪽 dx",inpNum(function(){return D.title.dx;},function(v){D.title.dx=v;})));
+    box.appendChild(fld("아래 dy",inpNum(function(){return D.title.dy;},function(v){D.title.dy=v;})));
+    var h2=document.createElement("div"); h2.className="hint";
+    h2.textContent="제목을 키우면 계기판이 시작하는 높이도 따라 내려갑니다(자동).";
+    box.appendChild(h2);
+  } else if(sel.type==="ov"){
+    var ov=D.overlay[sel.which];
+    box.appendChild(fld("x",inpNum(function(){return ov.x==null?0:ov.x;},function(v){ov.x=v;})));
+    box.appendChild(fld("y",inpNum(function(){return ov.y==null?0:ov.y;},function(v){ov.y=v;})));
+    box.appendChild(fld("폭",inpNum(function(){return ov.w;},function(v){ov.w=v;})));
+    var b=document.createElement("button"); b.className="btn"; b.textContent="제목 밑으로 되돌리기";
+    b.onclick=function(){ ov.x=null; ov.y=null; render(); };
+    var r=document.createElement("div"); r.className="row"; r.appendChild(b); box.appendChild(r);
+    var h3=document.createElement("div"); h3.className="hint";
+    h3.textContent="상자 높이는 눈금일 뿐입니다 — 실제 높이는 글 줄 수에 따라 페이지에서 정해집니다.";
+    box.appendChild(h3);
+  }
+}
+
+/* ═══ 전체 치수 ═══ */
+var globKey="";
+function renderGlob(){
+  if(globKey===globTab) return;
+  globKey=globTab;
+  var box=document.getElementById("globBox"); box.innerHTML="";
+  function f(label,obj,key,step){ box.appendChild(fld(label,
+    inpNum(function(){return obj[key];},function(v){obj[key]=v;},step))); }
+  if(globTab==="plate"){
+    f("깊이 v",D.plate,"v"); f("가로 w",D.plate,"w"); f("세로 d",D.plate,"d"); f("두께 h",D.plate,"h");
+    f("글씨 자리",D.plate,"wordU",.01); f("글씨 깊이",D.plate,"wordV"); f("글씨 크기",D.plate,"wordSize");
+  } else if(globTab==="lane"){
+    f("덩어리 여백",D.lane,"gap"); f("통로 반폭",D.lane,"hw");
+    var h=document.createElement("div"); h.className="hint";
+    h.textContent="통로는 두 덩어리 사이를 채웁니다 — 덩어리를 옮기면 길이가 따라 바뀝니다.";
+    box.appendChild(h);
+  } else if(globTab==="ramp"){
+    f("깊이 dv",D.ramp,"dv"); f("판 위 dz",D.ramp,"dz"); f("화살촉",D.ramp,"tip"); f("띠 반폭",D.ramp,"hw");
+  } else {
+    f("액자 x",D.vb,"x"); f("액자 y",D.vb,"y"); f("액자 폭",D.vb,"w"); f("액자 높이",D.vb,"h");
+    f("기준 bb.x",D.bb,"x",.1); f("기준 bb.y",D.bb,"y",.1);
+    var h2=document.createElement("div"); h2.className="hint";
+    h2.textContent="액자를 바꾸면 panel-client.html 의 sc-safe viewBox 도 같은 값으로 고쳐야 합니다 — Export 끝에 그 줄을 같이 적어 둡니다.";
+    box.appendChild(h2);
+  }
+}
+Array.prototype.forEach.call(document.querySelectorAll(".tabs button"),function(b){
+  b.onclick=function(){ Array.prototype.forEach.call(document.querySelectorAll(".tabs button"),
+    function(x){ x.classList.remove("on"); }); b.classList.add("on");
+    globTab=b.getAttribute("data-gt"); renderGlob(); };
+});
+
+/* ═══ 단 추가·복제·삭제 ═══ */
+function newStep(src,after){
+  var s=SS.clone(src), last=D.steps[D.steps.length-1];
+  s.k="s"+(D.steps.length+1); s.tag="STEP "+(D.steps.length+1);
+  s.u=(after?after.u:last.u)+D.plate.w+16;
+  s.z=(after?after.z:last.z)+54;
+  return s;
+}
+document.getElementById("addStep").onclick=function(){
+  var i=(sel&&sel.si!=null)?sel.si:D.steps.length-1;
+  D.steps.splice(i+1,0,newStep(D.steps[i],D.steps[i])); sel={type:"step",si:i+1}; propKey=""; render(); };
+document.getElementById("dupStep").onclick=function(){
+  var i=(sel&&sel.si!=null)?sel.si:D.steps.length-1, c=SS.clone(D.steps[i]);
+  c.u+=D.plate.w+16; c.z+=54; c.k=c.k+"x";
+  D.steps.splice(i+1,0,c); sel={type:"step",si:i+1}; propKey=""; render(); };
+document.getElementById("delStep").onclick=function(){
+  if(D.steps.length<=1){ flash("단이 하나뿐이라 지울 수 없습니다"); return; }
+  var i=(sel&&sel.si!=null)?sel.si:D.steps.length-1;
+  D.steps.splice(i,1); sel=null; propKey=""; render(); };
+
+/* ═══ 스냅·표시 ═══ */
+Array.prototype.forEach.call(document.querySelectorAll("#snapSeg button"),function(b){
+  b.onclick=function(){ Array.prototype.forEach.call(document.querySelectorAll("#snapSeg button"),
+    function(x){ x.classList.remove("on"); }); b.classList.add("on");
+    SNAP=+b.getAttribute("data-snap"); };
+});
+document.getElementById("showHelp").onchange=function(e){ showHelp=e.target.checked; render(); };
+document.getElementById("showOv").onchange=function(e){ showOv=e.target.checked; render(); };
+
+/* ═══ Export ═══
+   safe-scene.js 의 var SCENE={…}; 를 통째로 바꿀 수 있는 모양으로 뽑는다.
+   값이 그대로 붙는 것이 중요하므로 손으로 짜지 않고 한 곳에서 찍어 낸다. */
+function q(s){ return '"'+String(s).replace(/\\/g,"\\\\").replace(/"/g,'\\"')+'"'; }
+function v(x){ if(x==null) return "null"; if(typeof x==="string") return q(x);
+  if(typeof x==="boolean") return x?"true":"false"; return String(num(x)); }
+function obj(o,keys){ return "{"+keys.filter(function(k){ return o[k]!==undefined; })
+  .map(function(k){ return k+":"+v(o[k]); }).join(", ")+"}"; }
+function boxStr(B,ind){
+  var L="lab:"+obj(B.lab,["du","dv","dz","dy"]);
+  var cr=B.crowd?(",\n"+ind+"   "+"crowd:"+obj(B.crowd,["n","gap","size","du","dv"])):"";
+  return "{t:"+q(B.t)+", s:"+q(B.s)+", c:"+q(B.c)+",\n"
+    +ind+"   du:"+num(B.du)+", dv:"+num(B.dv)+", w:"+num(B.w)+", d:"+num(B.d)+", h:"+num(B.h)+", "+L+cr+"}";
+}
+function sceneText(){
+  var t="var SCENE={\n";
+  t+="  vb:"+obj(D.vb,["x","y","w","h"])+",\n";
+  if(D.pad) t+="  pad:"+obj(D.pad,["l"])+",\n";
+  t+="  bb:"+obj(D.bb,["x","y"])+",\n";
+  t+="  title:"+obj(D.title,["t","size","dx","dy"])+",\n";
+  t+="  plate:"+obj(D.plate,["v","w","d","h","wordU","wordV","wordSize"])+",\n";
+  t+="  lane:"+obj(D.lane,["gap","hw"])+",\n";
+  t+="  ramp:"+obj(D.ramp,["dv","dz","tip","hw"])+",\n";
+  t+="  overlay:{\n";
+  t+=["dash","chips","note","more"].filter(function(k){ return D.overlay[k]; }).map(function(k){
+    return "    "+k+(k==="chips"?"":" ")+":"+obj(D.overlay[k],["id","x","y","w","lpad"]); }).join(",\n");
+  t+="\n  },\n  steps:[\n";
+  t+=D.steps.map(function(S){
+    return "   {k:"+q(S.k)+", tag:"+q(S.tag)+", u:"+num(S.u)+", z:"+num(S.z)
+      +", pal:"+q(S.pal)+", jc:"+q(S.jc)+",\n"
+      +"    a:"+boxStr(S.a,"    ")+",\n"
+      +"    b:"+boxStr(S.b,"    ")+",\n"
+      +"    j:"+q(S.j)+"}"; }).join(",\n");
+  t+="\n  ]\n};";
+  return t;
+}
+/* 붙여넣는 칸에는 SCENE 만 담는다 — 안내를 같이 넣으면 그것까지 딸려 가서
+   safe-scene.js 에 주석이 겹겹이 쌓인다(실제로 왕복 시험에서 그렇게 됐다).
+   액자를 건드렸을 때만 그 아래 줄로 따로 알린다. */
+function syncOut(){
+  outEl.value=sceneText();
+  var o=SS.SCENE.vb, n=D.vb, note=document.getElementById("vbNote");
+  if(!note) return;
+  if(n.x!==o.x||n.y!==o.y||n.w!==o.w||n.h!==o.h){
+    note.innerHTML='액자를 바꿨습니다 — <b>panel-client.html</b> 의 sc-safe 도 같이 고쳐야 합니다:'
+      +'<br><code>viewBox="'+n.x+" "+n.y+" "+n.w+" "+n.h+'"</code>';
+    note.style.color="#ffd08a";
+  } else { note.textContent="붙여넣을 곳: parts/safe-scene.js 의 var SCENE={…}; 블록 전체";
+    note.style.color=""; }
+}
+function flash(m){ var e=document.getElementById("msg"); e.textContent=m; e.style.color="#7fe0aa";
+  setTimeout(function(){ e.style.color=""; },2400); }
+function copyOut(msgId){
+  outEl.focus(); outEl.select();
+  var ok=false; try{ ok=document.execCommand("copy"); }catch(e){}
+  if(navigator.clipboard&&!ok) navigator.clipboard.writeText(outEl.value);
+  var m=document.getElementById(msgId); if(m){ m.textContent="복사됨 ✔"; m.style.color="#7fe0aa";
+    setTimeout(function(){ m.textContent=""; },2400); }
+}
+document.getElementById("export").onclick=function(){ copyOut("msg"); };
+document.getElementById("copy").onclick=function(){ copyOut("copyMsg"); };
+
+/* ═══ 저장·불러오기·되돌리기 ═══ */
+document.getElementById("saveFile").onclick=function(){
+  var b=new Blob([JSON.stringify({v:1,scene:D},null,1)],{type:"application/json"});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(b); a.download="safe-scene.json";
+  a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+  flash("💾 safe-scene.json 저장됨"); };
+document.getElementById("loadFile").onchange=function(e){
+  var f=e.target.files&&e.target.files[0]; if(!f) return;
+  var rd=new FileReader();
+  rd.onload=function(){ try{ var s=JSON.parse(rd.result);
+      D=s.scene||s; sel=null; propKey=""; globKey=""; render(); flash("📂 불러옴 ✔"); }
+    catch(err){ flash("불러오기 실패 — 형식 오류"); } };
+  rd.readAsText(f); e.target.value=""; };
+document.getElementById("reset").onclick=function(){
+  D=SS.clone(SS.SCENE); sel=null; propKey=""; globKey=""; render(); flash("처음 값으로 되돌렸습니다"); };
+
+render();
+})();
+</script>
+</body>
+</html>
