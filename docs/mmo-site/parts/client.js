@@ -82,6 +82,16 @@ function arrow(p,x1,x2,y,col,wd){
    무엇을 고쳐도 "그게 그거"로 보였다(평면 안에서 배치만 바꾼 시안 셋이 반려됐다). */
 function drawSafe(){
   var s=document.getElementById("sc-safe");
+  /* ── 액자와 그림이 차지하는 자리는 숫자로 둔다(재지 않는다) ──
+     예전에는 다 그린 뒤 getBBox() 로 재서 viewBox 를 다시 잡았다. 그런데 이 화면은 페이지가
+     열릴 때 숨어 있어서(1-1 이 첫 화면) 재면 0 이 나온다 — 액자가 14.4x66.7 로 뭉개지고,
+     가로에 맞추느라 세로가 6249px 로 늘어나 그림이 화면 밖으로 밀려났다. 2-2 를 탭으로 열면
+     빈 액자만 보이던 것이 이것이다(주소에 #csafe 를 달고 들어오면 먼저 켜진 뒤 그려서 멀쩡했다).
+     재서 나오던 값이 아래 VB 와 소수점까지 같았다 — 보정 상수들이 원본 viewBox 를 되돌려
+     놓도록 맞춰져 있었을 뿐이라, 재는 일 자체가 필요 없었다. 2-3(drawLoad)이 이미 이 방식이다.
+     대신 그림 도형을 고치면 여기 숫자도 같이 봐야 한다(액자가 따라오지 않는다). */
+  var VB={x:300, y:96, w:972};                  /* = panel-client.html 의 sc-safe viewBox */
+  var BB={x:316.9, y:141.1};                    /* 그림 요소 전체의 왼쪽 위 — 제목 자리의 기준 */
   var ZOUT={top:"#161d2b",side:"#0f1522",edge:"#93a5c2"};   /* 남의 도구가 선 판 — 무채 */
   var ZNET={top:"#111a2b",side:"#0b111d",edge:"#6cc7ff"};
   var NETC =["#63afe6","#1b4870","#2b6597"];                /* 내 라이브러리 — 파랑 */
@@ -203,21 +213,13 @@ function drawSafe(){
        · 아래 계기판이 시작하는 높이도 같은 비율로 민다(TITLE_DROP). 안 밀면 제목에 달라붙는다.
      자리는 그림 bbox 기준이다 — 원본에서 제목이 (338,168) 이고 bbox 가 (316.9,141.1) 이었으니
      왼쪽에서 21, 위에서 27 이다. */
-  var TS=30, b0=s.getBBox();
-  var tx=b0.x+21, ty0=b0.y+27;
+  var TS=30;
+  var tx=BB.x+21, ty0=BB.y+27;
   var ttl=el("text",{x:tx.toFixed(1),y:(ty0+(TS-18)*.55).toFixed(1),"font-size":String(TS),
     fill:FG,"font-weight":"800","text-anchor":"start","font-family":"var(--sans)",
     "letter-spacing":(-0.02*TS).toFixed(2)},"검증이 끝난 것만 다음 단의 도구가 된다");
   gLbl.appendChild(ttl);
   var TITLE_DROP=32*TS/18+(TS-18)*.55;
-
-  /* ── viewBox 는 그린 것 전체를 재서 잡는다 ──
-     그림 요소는 이미 원본 viewBox(300 96 972 580)에 거의 꽉 차 있다(bbox 316.9 141.1 957.6 513.3
-     — 좌 16.9 · 상 45.1 · 우 -2.5 · 하 21.6 만 남는다). 그 여백을 그대로 유지하되, 제목 크기를
-     바꾸면 bbox 가 움직이므로 숫자를 박아 두지 않고 매번 다시 잰다. */
-  var b=s.getBBox();
-  var vx=b.x-16.9, vy=b.y-45.1, vw=b.width+14.4, vh=b.height+66.7;
-  s.setAttribute("viewBox",vx.toFixed(1)+" "+vy.toFixed(1)+" "+vw.toFixed(1)+" "+vh.toFixed(1));
 
   /* ── 그림 위에 얹는 글 넷의 자리 ──
      그림 좌표를 백분율로 옮긴다. 왼쪽 위에는 잰 자리 셋, 오른쪽 아래 빈 삼각형에는 보기 칩 ·
@@ -226,10 +228,10 @@ function drawSafe(){
      계기판만 왼쪽으로 15px(=.99cqw) 당긴다 — 기둥 선과 안여백을 빼야 글자 왼쪽이 제목과 한 선에 선다. */
   function put(id,x,y,w,lpad){
     var e=document.getElementById(id); if(!e) return;
-    var L=((x-vx)/vw*100).toFixed(3)+"%";
+    var L=((x-VB.x)/VB.w*100).toFixed(3)+"%";
     e.style.left=lpad?("calc("+L+" - .99cqw)"):L;
-    e.style.marginTop=((y-vy)/vw*100).toFixed(3)+"%";
-    e.style.width=(w/vw*100).toFixed(3)+"%";
+    e.style.marginTop=((y-VB.y)/VB.w*100).toFixed(3)+"%";
+    e.style.width=(w/VB.w*100).toFixed(3)+"%";
   }
   put("d-safe",tx,ty0+TITLE_DROP,248,1);
   put("ch-safe",928,486,336);
