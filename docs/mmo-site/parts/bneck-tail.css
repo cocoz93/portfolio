@@ -41,10 +41,9 @@
 }
 /* 레일 240px + 카드가 한 줄에 서기를 포기하는 폭. 여기서는 셋을 세로로 쌓고 레일을 눕힌다. */
 @media (max-width:760px){
-  /* 규격 여섯 값은 1200px 아래에서 전폭 한 줄이 된다(client.css). 창이 760px 밑으로 내려가면
-     한 값이 100px 밑으로 눌려 '20 칸 · 36개' 가 줄바꿈되므로 세 열 두 줄로 접는다.
-     2-2·2-3 의 네 칸 계기판(.cl-dash)은 건드리지 않는다 — 저쪽은 값이 넷뿐이다. */
-  .cr-side>.cr-spec .cl-dash.spec{ grid-template-columns:repeat(3,1fr) }
+  /* ※ 여기에 있던 '규격 여섯을 세 열로 접는다' 규칙은 값이 셋으로 줄면서 없앴다 — 이제는
+     어느 폭에서든 세 열이라 접을 것이 없다(client.css 의 .cl-dash.spec). 값이 다시 늘면
+     이 자리를 되살릴 것: 760px 밑에서 칸 하나가 100px 아래로 눌리면 단위가 줄바꿈된다. */
   .bn-stage{ grid-template-columns:1fr; grid-template-areas:"map" "rail" "card"; row-gap:12px }
   .bn-stage .bnnav{ flex-direction:row; flex-wrap:wrap; justify-content:flex-start; align-items:center; gap:6px }
   .bn-stage .bnnav .t{ margin:0 4px 0 0 }
