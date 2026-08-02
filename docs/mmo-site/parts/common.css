@@ -410,18 +410,16 @@ body.subdetach .subtabs{padding-left:16px}
 /* 문서 제목 밑 한 줄 — 한 페이지가 여러 주제를 담을 때 무엇이 들었는지 미리 보여 준다(DB 워커) */
 .card .dl .sd{display:block; margin-top:2px; font-size:.75rem; font-weight:600; color:#8fa0ba; line-height:1.45}
 .card .dnone{padding:6px 0 2px; font-size:.78rem; color:var(--dim)}
-/* 이 자리에서 잰 실험은 1-2 탭이 통째로 맡는다. 여기서 결론까지 늘어놓으면 같은 목록이 두 화면에 산다. */
-.card .fo{margin-top:12px; font-size:.76rem; color:var(--dim)}
-.card .fo b{color:#9fb0cc; font-weight:700}
 /* 구역 개요의 노드 줄. 옛날엔 이게 버튼(상세로 가는 입구)이었지만 이제는 그 밑 문서 링크들을
    묶는 머리글이다 — 눌리지 않으므로 hover 바탕도 주지 않는다. 눌리는 것은 .dl 뿐이어야
    '어디를 눌러야 하는가' 가 하나로 읽힌다. */
 .card .zn-it{padding:7px 0 6px; border-bottom:1px solid rgba(255,255,255,.06)}
+/* 마지막 줄은 밑줄을 뗀다 — 이 선은 노드 사이를 나누는 것이지 카드를 닫는 선이 아니다.
+   꼬리('실험 N건')가 있을 땐 그 경계 노릇을 겸했지만, 꼬리를 걷어내자 허공에 뜬 마감선이 됐다. */
+.card .zn-it:last-child{border-bottom:0}
 .card .zn-it .t{display:flex; align-items:baseline; gap:8px; font-size:.92rem; font-weight:800; color:#e6edf8}
 .card .zn-it .t em{font-style:normal; font-family:var(--mono); font-size:.72rem; font-weight:700; color:var(--ac,var(--net))}
 .card .zn-it .d{display:block; margin:3px 0 5px; font-size:.79rem; font-weight:600; color:#93a3bd}
-/* 한글이라 mono 를 안 쓴다(자간이 벌어진다). 이 한 줄이 화면 전체의 유일한 조작 안내다 */
-.lhint{font-size:11.5px; font-weight:600; color:var(--dim)}
 /* 좁은 화면에서는 오른쪽에 비워 둘 열이 없다 — 글이 그림 위에 바로 얹히면 읽히지 않으므로 판을 되돌린다 */
 @media(max-width:680px){
   .card{width:auto; right:12px; left:12px; top:auto; bottom:12px; max-width:none; max-height:calc(100% - 24px);
@@ -479,8 +477,8 @@ body.pop-hold #scene .chips{opacity:0}
    거기는 게임 루프·BOTTLENECK 바로 위라 주인공과 경쟁했다.
    top 을 14 가 아니라 46 으로 내리는 게 핵심이다: 왼쪽 정렬 탭 줄 바로 밑에 붙이면
    버튼 줄이 '탭 한 층 더' 로 읽힌다(그래서 예전에 오른쪽으로 도망갔던 것). 한 단 내리면 씬 안쪽 것이 된다. */
-/* 자리는 .hud 가 잡고, 줄 셋(버튼·범례·안내)은 그 안에서 쌓인다 — 각 줄에 top 을 손으로 매기면
-   버튼 높이가 바뀔 때마다 아래 둘을 따라 고쳐야 한다. */
+/* 자리는 .hud 가 잡는다. 한때 줄 셋(버튼·범례·안내)이 여기 쌓였고 지금은 버튼 줄만 남았지만,
+   좌표를 버튼에 직접 매기지 않는 이유는 그대로다 — 줄이 다시 늘어도 top 을 손으로 안 고친다. */
 .hud{position:absolute; left:16px; top:46px; z-index:6;
   display:flex; flex-direction:column; align-items:flex-start; gap:9px}
 .zonebar{display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-start}
@@ -510,6 +508,6 @@ body.pop-hold #scene .chips{opacity:0}
 .zb.act i{opacity:1; filter:none; box-shadow:0 0 5px -1px var(--zc)}
 .zb.all{--zc:#c3d3ec; margin-right:5px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
 @media(max-width:680px){ .hud{left:10px; top:30px; gap:6px} .zonebar{gap:4px}
-  .zb{font-size:.72rem; padding:5px 9px; gap:5px} .lhint{font-size:10.5px} }
+  .zb{font-size:.72rem; padding:5px 9px; gap:5px} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}

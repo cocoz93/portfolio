@@ -619,23 +619,23 @@ paintLabels();
 const NOTION="https://feline-vacation-d6d.notion.site/";
 const ND={
   client:{nm:"클라이언트",x:"×5,000",sum:"인덱스 슬롯 세션 · sessionId 로 ABA 차단",
-    docs:[["세션 관리 방식과 세션 ABA 문제 해결","34116a0b9f59805ca586d7c8c3597545"]],bns:[]},
+    docs:[["세션 관리 방식과 세션 ABA 문제 해결","34116a0b9f59805ca586d7c8c3597545"]]},
   accept:{nm:"Accept",x:"×1",sum:"수락 전담 1개 · AcceptEx 미사용",
-    docs:[["AcceptThread 분리 (AcceptEx 미사용)","34116a0b9f59802eaf47c3ff8e15e082"]],bns:[]},
+    docs:[["AcceptThread 분리 (AcceptEx 미사용)","34116a0b9f59802eaf47c3ff8e15e082"]]},
   iocp:{nm:"IOCP 워커",x:"×4",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */sum:"완료 통지 파싱 → 공유 큐 · 틱마다 swap 1회",
     docs:[["세션당 Recv/Send 1회 제한","34116a0b9f5980839d4ad67dc23f9996"],
           ["Timing Wheel (타임아웃)","35816a0b9f59804db9bff9d6679696bc"],
-          ["Worker→Game SwapQ","37316a0b9f5980429473c20365f71778"]],bns:[]},
+          ["Worker→Game SwapQ","37316a0b9f5980429473c20365f71778"]]},
   send:{nm:"Send 워커",x:"×3",sum:"uniqueId%3 고정 배분 → WSASend",
-    docs:[["SendThread 분리 유무와 이슈","34116a0b9f5980cca5f2e65b5122a6fe"]],bns:[]},
+    docs:[["SendThread 분리 유무와 이슈","34116a0b9f5980cca5f2e65b5122a6fe"]]},
   loop:{nm:"게임 루프",x:"×1",sum:"단일 코어 · 섹터 격자 AOI · viewlist 미채택",
-    docs:[["섹터/맵 크기 · viewlist 미채택 이유","37b16a0b9f5980b9b4d5d0734909b4a9"]],bns:[]},
+    docs:[["섹터/맵 크기 · viewlist 미채택 이유","37b16a0b9f5980b9b4d5d0734909b4a9"]]},
   dbw:{nm:"DB 워커",x:"×1",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능",
     /* 꼬리표에 sum 과 겹치는 'dirty 선별' 은 안 적는다 — 바로 윗줄이 이미 하는 말이라 두 줄이 같아 보인다.
        그 문서에만 있는 것을 고른다(설계 결정 표 ④⑥⑦⑨). */
     docs:[["DB Thread 분리 및 저장 설계","39516a0b9f59809fb782d3265404a0fa",
-           "설계 결정 10가지 — 배치 핸드오프 · 백프레셔 · prepared statement 수명주기"]],bns:[]},
-  mysql:{nm:"MySQL",x:"",sum:"주기적 스냅샷 UPSERT 로 영속화",docs:[],bns:[]}
+           "설계 결정 10가지 — 배치 핸드오프 · 백프레셔 · prepared statement 수명주기"]]},
+  mysql:{nm:"MySQL",x:"",sum:"주기적 스냅샷 UPSERT 로 영속화",docs:[]}
 };
 /* ═══ 구역 개요 — 구역 버튼을 누르면 오른쪽 열에 뜨는 단 하나의 화면 ═══
    구역 버튼은 원래 '강조만' 하는 버튼이었다. 무엇이 밝아졌는지는 보이는데 그게 무슨 구역인지는
@@ -658,12 +658,6 @@ const ZI={
     lead:"저장이 게임 스레드를 막지 않게 한다. 변경분(dirty)만 골라 주기마다 batch 로 넘기고(fire-and-forget), 전담 워커가 쌓인 큐를 <b>swap 한 번</b>으로 통째 인출해 UPSERT 한다.",
     nodes:["dbw","mysql"]}
 };
-/* 구역 개요 맨 아래 '이 구역에서 잰 실험 N건' 은 병목 탭 배열(EXPS)이 bns 로 세어 넣는다
-   (아래 __NODE_PINS 로 노드와 병목 핀을 짝지운다).
-   한때 여기에 같은 목록을 손으로 한 벌 더 적어 뒀는데, 병목 탭에 실험을 넣고도 이쪽을 잊어
-   두 화면이 서로 다른 실험 목록을 보여 주고 있었다. 여기 두는 것은 '어느 노드가 어느 자리인가' 뿐이다. */
-window.__ND=ND;
-window.__NODE_PINS={ send:["1"], loop:["2","3"], iocp:["4","5"], dbw:["6"] };
 const card=document.getElementById("card"), cbd=document.getElementById("cardbd");
 function closeCard(){ if(card) card.classList.remove("on"); }
 
@@ -689,9 +683,8 @@ function openZone(z){ const Z=ZI[z]; if(!Z||!card) return;
              (d[2]?'<span class="sd">'+d[2]+'</span>':'')+'</span><span class="go">↗</span></a>'; }).join("");
     if(!n.docs.length) s+='<div class="dnone">저장소 자체라 별도 문서가 없다 — 설계는 DB 워커에</div>';
     return s+'</div>'; }).join("");
-  /* 실험 건수는 그 구역 노드들의 합 — 1-2 탭 배열(EXPS)에서 온 값이라 두 화면이 어긋날 수 없다 */
-  const ex=Z.nodes.reduce(function(s,k){ return s+((ND[k]&&ND[k].bns)?ND[k].bns.length:0); },0);
-  if(ex) h+='<div class="fo">이 구역에서 잰 실험 <b>'+ex+'건</b> → <b>1-2 병목 · 실험</b></div>';
+  /* 카드는 문서 링크에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목·실험' 을 달았는데,
+     누를 수 없는 글이면서 화살표로 이동을 흉내 냈다 — 실제 이동은 늘 보이는 1-2 탭이 맡는다. */
   cbd.innerHTML=h;
   card.style.setProperty("--ac", Z.ac);   /* 왼쪽 세로선 색 = 씬에서 살아남은 도형 색 */
   card.classList.add("on"); }
@@ -1308,15 +1301,6 @@ window.__flowReset=function(){
   ];
   window.__EXPS=EXPS;   /* 아래층(계기판·상세)이 같은 배열을 그대로 본다 — 수치를 두 벌 두지 않는다 */
   const ST={ok:"채택", rj:"기각", dg:"진단", na:"미측정", now:"현재", sum:"결론", fix:"정정"};
-  /* 설계 탭 상세의 '이 자리에서 잰 실험 N건' 도 이 배열이 센다 — 건수를 손으로 적어 두면 어긋난다.
-     한때는 실험 목록 자체를 저기에 한 벌 더 그렸는데, 지금은 1-2 탭이 통째로 맡고 건수만 넘긴다. */
-  (function(){
-    const ND=window.__ND, MAP=window.__NODE_PINS; if(!ND||!MAP) return;
-    for(const key in MAP){ if(!ND[key]) continue;
-      ND[key].bns=EXPS.filter(function(e){ return MAP[key].indexOf(e.loc)>=0; })
-                      .map(function(e){ return [e.st, ST[e.st], e.n, e.r]; });
-    }
-  })();
   function expHtml(e){
     return '<button type="button" class="exp '+e.st+'" data-s="'+e.s+'">'+
       '<div class="top"><span class="rs '+e.st+'">'+ST[e.st]+'</span>'+
