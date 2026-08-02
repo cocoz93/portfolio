@@ -1,11 +1,11 @@
-/* ═══════════ 등장 웨이브 — 좌하(클라) → 우상(MySQL) 대각선 팝인 (factory-v3식 · 2배속) ═══════════ */
+/* ═══════════ 등장 웨이브 — 좌하(클라) → 우상(MySQL) 대각선 팝인 (factory-v3식 · 3.9배속) ═══════════ */
 (function(){
   const RMx=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const scene=document.getElementById("scene");
   const stage=scene && scene.closest(".stage");
   /* 흐름 시작을 이제 이 IIFE 가 쥐고 있다 — 여기서 그냥 빠져나가면 데이터가 영영 안 흐른다 */
   if(!scene||!stage){ if(window.__flowStart) window.__flowStart(); return; }
-  const body=document.body, SPAN=692;   /* factory-v3의 1800ms → 2.6배속 (옛 900ms 에서 다시 1.3배) */
+  const body=document.body, SPAN=460;   /* factory-v3의 1800ms → 3.9배속 (900 → 692 → 460) */
   const sel="#lyr-plat>*,#lyr-shad>*,#lyr-lane>*,#lyr-build>*,#lyr-lbl>*";
   const els=[].slice.call(scene.querySelectorAll(sel));
   if(!els.length){ if(window.__flowStart) window.__flowStart(); return; }
@@ -18,10 +18,10 @@
   const replay=document.createElement("button");
   replay.type="button"; replay.className="stage-replay"; replay.textContent="↻ 다시 재생";
   stage.appendChild(replay);
-  /* 웨이브가 완전히 끝나는 시점 = 맨 뒤 요소의 지연(SPAN) + 요소 하나의 애니 길이(190ms = CSS 의 scenePop).
+  /* 웨이브가 완전히 끝나는 시점 = 맨 뒤 요소의 지연(SPAN) + 요소 하나의 애니 길이(160ms = CSS 의 scenePop).
      +100 은 마지막 칸이 자리를 잡은 걸 눈이 확인하는 짬 — 데이터는 그 뒤에 흐른다.
      이 짬은 속도를 올려도 그대로 둔다: 애니가 아니라 '눈이 따라잡는 시간' 이라 배속 대상이 아니다. */
-  const WAVE=SPAN+190+100;
+  const WAVE=SPAN+160+100;
   let holdTimer=0;
   function play(){
     if(RMx){ body.classList.remove("pop-armed","pop-run","pop-hold"); return; }

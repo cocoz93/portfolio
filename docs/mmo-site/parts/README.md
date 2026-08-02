@@ -33,7 +33,7 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    `button.exp[data-s]` · `.pin[data-loc]` · `#bnc-nav button[data-loc]` · `#bncard[hidden]`.
 5. **두 파일이 함께 지켜야 하는 수치** — 둘로 나뉜다.
    - *같은 값이라 한쪽만 고치면 어긋나는 것*: `1.34s`(scene.js 초 1560 · 밀리초 1671 ↔ bneck.css 145
-     — scene.js 안에서도 두 벌이다) · `190ms`(common.css `.19s` ↔ wave.js `SPAN+190+100`)
+     — scene.js 안에서도 두 벌이다) · `160ms`(common.css `.16s` ↔ wave.js `SPAN+160+100`)
    - *크기 관계라 같이 조정해야 하는 것*: 구역순회 `TOUR_HOLD 380ms`(scene.js) **>** 페이드 `.22s`(common.css) ·
      `fillCard 300ms`(scene.js) **<** 재적용 `400ms`(bneck.js)
 6. **클래스 접두어** — 병목 `.bn-*` `.bx-*` / 클라 `.cl-*` `.cr-*`.

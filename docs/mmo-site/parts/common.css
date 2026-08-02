@@ -433,7 +433,7 @@ body.subdetach .subtabs{padding-left:16px}
     padding:14px 15px; background:rgba(16,22,34,.95); border:1px solid var(--line);
     border-left:2px solid var(--ac,var(--net)); border-radius:12px} }
 
-/* ═══ 등장 웨이브(factory-v3식 · 2.6배속): 좌하 클라 → 우상 MySQL 대각선 팝인. 칩 레이어는 제외 ═══ */
+/* ═══ 등장 웨이브(factory-v3식 · 3.9배속): 좌하 클라 → 우상 MySQL 대각선 팝인. 칩 레이어는 제외 ═══ */
 #scene #lyr-plat>*, #scene #lyr-shad>*, #scene #lyr-lane>*, #scene #lyr-build>*, #scene #lyr-lbl>*{
   transform-box:fill-box; transform-origin:center}
 @keyframes scenePop{0%{opacity:0; transform:scale(.84)} 100%{opacity:1; transform:scale(1)}}
@@ -441,8 +441,8 @@ body.pop-armed #scene #lyr-plat>*, body.pop-armed #scene #lyr-shad>*, body.pop-a
 body.pop-armed #scene #lyr-build>*, body.pop-armed #scene #lyr-lbl>*{opacity:0}
 body.pop-run #scene #lyr-plat>*, body.pop-run #scene #lyr-shad>*, body.pop-run #scene #lyr-lane>*,
 body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
-  animation:scenePop .19s cubic-bezier(.22,.9,.3,1) both}
-/* ※ 이 .19s 는 스크립트의 WAVE(=SPAN+190+100) 안에 숫자로 박혀 있다. 길이를 바꾸면 거기도 같이 고칠 것 */
+  animation:scenePop .16s cubic-bezier(.22,.9,.3,1) both}
+/* ※ 이 .16s 는 스크립트의 WAVE(=SPAN+160+100) 안에 숫자로 박혀 있다. 길이를 바꾸면 거기도 같이 고칠 것 */
 /* 웨이브가 도는 동안은 데이터 흐름을 아예 감춘다 — 구조가 다 서고 나서 흐르기 시작한다.
    칩 레이어는 id 가 없어(웨이브 대상 제외) 클래스로 잡는다. 루프도 같이 멈추므로(__flowStop)
    이 규칙은 멈춘 순간 남아 있던 것(쌓인 칸·타이밍 휠 바늘)까지 덮는 몫이다. */

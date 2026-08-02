@@ -633,8 +633,10 @@ const ND={
   dbw:{nm:"DB 워커",x:"×1",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능",
     /* 꼬리표에 sum 과 겹치는 'dirty 선별' 은 안 적는다 — 바로 윗줄이 이미 하는 말이라 두 줄이 같아 보인다.
        그 문서에만 있는 것을 고른다(설계 결정 표 ④⑥⑦⑨). */
+    /* 꼬리표는 한 줄까지다 — 카드에서 부제가 달린 문서는 이것 하나뿐이라, 두 줄이 되면
+       그 자리만 문단처럼 보인다. 열 가지를 다 적을 자리가 아니라 맛보기 두 개면 된다. */
     docs:[["DB Thread 분리 및 저장 설계","39516a0b9f59809fb782d3265404a0fa",
-           "설계 결정 10가지 — 배치 핸드오프 · 백프레셔 · prepared statement 수명주기"]]},
+           "설계 결정 10가지 — 배치 핸드오프 · 백프레셔"]]},
   mysql:{nm:"MySQL",x:"",sum:"주기적 스냅샷 UPSERT 로 영속화",docs:[]}
 };
 /* ═══ 구역 개요 — 구역 버튼을 누르면 오른쪽 열에 뜨는 단 하나의 화면 ═══
@@ -642,20 +644,29 @@ const ND={
    안 알려 주고 있었다. 그래서 이미 보이는 버튼(구역)에 개요를 달았고, 지금은 그 개요가 노드와
    설계 문서 링크까지 한 화면에 담는다 — 씬은 한 번도 안 눌러도 된다.
    키는 씬의 구역 키(data-z)와 같은 문자열이라 CSS·강조 코드와 같은 말을 쓴다. */
+/* lead 는 한 줄이다(길어도 두 줄). 원래는 두세 문장이었는데, 뒷문장이 하는 말을 바로 아래
+   노드 줄이 다시 하고 있었다 — 문단을 읽고 목록을 또 읽는 셈이라 카드가 길어 보였다.
+   지운 뒷문장과 그 말을 이미 하고 있는 자리:
+     클라 "부담이 어디서 갈리는지는 아래 세 구역이 정한다" → 구역 버튼 넷이 그대로 보여 준다
+     네트워크 "게임 스레드는 네트워크 일을 하지 않는다"    → 씬의 구역 분리 + 게임 카드의 '한 코어'
+     DB   "dirty 만 골라 batch … swap 한 번으로 UPSERT"    → 노드 줄 'dirty 선별 · 주기 batch',
+                                                            'MySQL — 주기적 스냅샷 UPSERT 로 영속화'
+   숫자도 마찬가지다. 클라의 '5,000' 은 제목 옆(동시 5,000)과 노드(×5,000)가 이미 두 번 말한다. */
 const ZI={
   outside:{nm:"클라이언트",ac:"#93a5c2",sub:"동시 5,000",
-    lead:"서버 밖이다. 부하 클라이언트가 동시 <b>5,000명</b>까지 붙어 이동 · 채팅을 보낸다. 서버가 지는 부담이 어디서 갈리는지는 아래 세 구역이 정한다.",
+    lead:"서버 밖이다. 이동 · 채팅을 보내는 <b>부하 클라이언트</b>.",
     nodes:["client"]},
   net:{nm:"네트워크",ac:"var(--net)",sub:"스레드 8",
-    /* 뒷문장("워커가 파싱해 둔 이벤트만 받고, 송신 제출도 Send 워커가 대신한다")은 걷어냈다 —
-       바로 아래 노드 세 줄이 같은 말을 하고, 이 구역은 문서가 5개라 세로가 가장 빠듯하다. */
-    lead:"수락 · 수신 · 송신을 <b>세 갈래 전담 스레드</b>로 나눈다. 게임 스레드는 네트워크 일을 하지 않는다.",
+    lead:"수락 · 수신 · 송신을 <b>세 갈래 전담 스레드</b>로 나눈다.",
     nodes:["accept","iocp","send"]},
   game:{nm:"게임",ac:"var(--game)",sub:"스레드 1",
-    lead:"게임 로직 전부가 도는 <b>한 코어</b>. 25fps 틱마다 받은 요청을 처리하고 주변에 뿌린다. 이 서버의 병목이 이 자리다.",
+    /* '한 코어' '25fps' '병목' 셋 다 안 적는다 — 강조된 씬의 게임 루프 이름표가 세 줄로 그대로
+       말하고 있다("게임 루프 / 단일 코어 · 25fps 틱 / ◆ BOTTLENECK", scene.js NODES). 카드에는
+       그 이름표가 못 하는 말만 남긴다: 다른 스레드에는 게임 로직이 없다는 것. */
+    lead:"게임 로직 <b>전부</b>가 이 한 코어에서 돈다.",
     nodes:["loop"]},
   store:{nm:"데이터베이스",ac:"var(--store)",sub:"스레드 1",
-    lead:"저장이 게임 스레드를 막지 않게 한다. 변경분(dirty)만 골라 주기마다 batch 로 넘기고(fire-and-forget), 전담 워커가 쌓인 큐를 <b>swap 한 번</b>으로 통째 인출해 UPSERT 한다.",
+    lead:"저장이 게임 스레드를 <b>막지 않게</b> 한다.",
     nodes:["dbw","mysql"]}
 };
 const card=document.getElementById("card"), cbd=document.getElementById("cardbd");
@@ -667,12 +678,22 @@ function closeCard(){ if(card) card.classList.remove("on"); }
    있었다 — 두 번 눌러도 노션에 못 갔다. 이 페이지는 미끼이므로 그 반대가 맞다: 문서를 첫 화면으로
    끌어올리고, 제목 자체를 노션으로 나가는 링크로 만든다. 클릭 두 번이 한 번이 되고, 도착지가 생긴다.
    라벨(.k)도 안 붙인다 — '구역 개요' 는 바로 밑 제목('네트워크')과 '이 구역의 노드 3' 이 이미 하는 말이었다. */
-function openZone(z){ const Z=ZI[z]; if(!Z||!card) return;
+/* brief=true 는 진입 순회가 쓰는 미리보기다 — 제목과 한 줄까지만 짓고 멈춘다.
+   순회 중에 카드를 통째로 띄우면 두 가지가 깨진다: 카드 높이가 구역마다 199~437px 이라
+   2.5초 사이 240px 씩 늘었다 줄고(실측), 네트워크 칸에서는 문서 링크 다섯 개가 620ms 스쳐 간다.
+   못 읽고 못 누르는 링크는 어포던스가 아니라 소음이다. 제목+한 줄이면 네 칸 높이가 같아져
+   깜빡임이 없고, 알리려던 것('버튼을 누르면 오른쪽에 이 글이 뜬다')은 그대로 전해진다. */
+function openZone(z,brief){ const Z=ZI[z]; if(!Z||!card) return;
   /* 라벨에 문서 수까지 적는다 — 같은 한 줄로 '여기서 몇 개가 노션으로 나가는가' 를 먼저 알린다 */
   const nd=Z.nodes.reduce(function(s,k){ return s+((ND[k]&&ND[k].docs)?ND[k].docs.length:0); },0);
   let h='<h3>'+Z.nm+'<span>'+Z.sub+'</span></h3>'+
-        '<p class="cl">'+Z.lead+'</p>'+
-        '<div class="lb">노드 '+Z.nodes.length+(nd?' · 설계 문서 '+nd:'')+'</div>';
+        '<p class="cl">'+Z.lead+'</p>';
+  /* 순회본에도 이 라벨은 남긴다 — 목록을 안 펴도 '여기 문서가 다섯' 이 숫자로 먼저 간다.
+     '버튼을 누르면 펼쳐진다' 같은 안내는 붙이지 않는다. 순회가 버튼을 대신 눌러 보이는 것과
+     같은 말이라, 씬 위에 있던 안내 한 줄('구역을 고르면 …')을 지웠을 때와 같은 이유다. */
+  h+='<div class="lb">노드 '+Z.nodes.length+(nd?' · 설계 문서 '+nd:'')+'</div>';
+  if(brief){ cbd.innerHTML=h;
+    card.style.setProperty("--ac", Z.ac); card.classList.add("on"); return; }
   h+=Z.nodes.map(function(k){ const n=ND[k]; if(!n) return "";
     let s='<div class="zn-it"><span class="t">'+n.nm+(n.x?'<em>'+n.x+'</em>':'')+'</span>'+
           '<span class="d">'+n.sum+'</span>';
@@ -1708,6 +1729,8 @@ window.__flowReset=function(){
 (function(){
   const bar=document.querySelector(".zonebar"); if(!bar||!svg) return;
   const btns=[].slice.call(bar.querySelectorAll(".zb"));
+  /* 카드가 오른쪽 열이 아니라 씬 위에 얹히는 폭 — 기준값은 common.css 의 .card 미디어쿼리와 같은 680 이다 */
+  const cardOverlay=matchMedia("(max-width:680px)");
   function apply(z){
     if(z) svg.setAttribute("data-zone",z); else svg.removeAttribute("data-zone");
     btns.forEach(function(b){ const on=(b.getAttribute("data-z")||"")===z;
@@ -1715,9 +1738,13 @@ window.__flowReset=function(){
     closeCard();   /* 열려 있던 상세 카드가 죽은 노드의 것일 수 있다 — 강조를 바꿀 때는 접는다 */
     /* 구역을 골랐으면 그 개요를 같은 자리에 띄운다. '전체'(z="")는 강조 해제라 아무것도 안 띄운다 —
        네 버튼 중 하나만 다른 성격의 글을 갖는 것을 피한다.
-       진입 순회 중에는 띄우지 않는다: 한 칸이 TOUR_HOLD(620ms)라 글이 2.5초 사이 네 번 갈리며 깜빡인다.
-       읽기엔 짧고 산만하기만 하다 — 순회는 씬만 바꾸고, 끝나면 전체로 돌아가 빈 상태가 된다. */
-    if(z&&!tourOn&&!tourArmed) openZone(z);
+       진입 순회 중에도 띄운다. 한때 막아 뒀는데, 그러면 순회가 알리려던 것의 절반만 보여 준다 —
+       씬이 어두워지는 것만 보이고 정작 버튼의 결과물인 오른쪽 글은 2.5초 내내 빈칸이었다.
+       대신 순회본은 미리보기(brief)다: 620ms 에 다 읽힐 만큼만 짓는다(openZone 주석).
+       단 좁은 화면(≤680px)에서는 순회 중에 안 띄운다. 거기서는 카드가 오른쪽 열이 아니라
+       씬 위에 얹히는 판이라(common.css 의 max-width:680px), 씬 높이 162px 을 카드 138px 이
+       거의 덮는다(실측) — 순회가 보여 주려던 강조가 카드 뒤로 사라진다. 눌러서 여는 것은 그대로다. */
+    if(z && !(tourOn && cardOverlay.matches)) openZone(z,tourOn);
   }
   btns.forEach(function(b){ b.addEventListener("click",function(){
     const z=b.getAttribute("data-z")||"";
