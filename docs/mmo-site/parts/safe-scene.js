@@ -130,10 +130,15 @@ var INK={ recv:"#6cc7ff", send:"#ffb648", fg:"#eef2fb", sub:"#8496b3", grn:"#57d
              판 오른쪽 모서리 선이 글자 사이를 관통했다. 라벨 세 줄을 통째로 선 밑으로 내린 값이다
              (2 배 확대로 확인. 눈금 하나짜리 차이라 100% 렌더에서는 잘 안 보인다) */
 var SCENE={
-  vb:{x:300, y:138, w:972, h:538},
+  /* w 를 972 → 1024 로 넓혔다 — 글자를 1.3 배로 키우자 STEP 3 판정줄(‘✔ 동접 5,000 — 2-3 부하 검증’)이
+     무대 오른쪽 끝(1272)을 넘어가 잘렸다. 액자 밖은 잘린다. */
+  vb:{x:300, y:138, w:1024, h:538},
   pad:{l:107},
   bb:{x:316.9, y:141.1},
-  plate:{v:-50, w:262, d:186, h:14, wordU:.28, wordV:13, wordSize:26},
+    /* wordU 를 .28 → .13 으로 당겼다 — 글자를 1.3 배로 키우자 판정줄이 판 위 STEP 글씨를
+     관통했다(‘✔ 결함 주입…’ 이 STEP 2 의 2 를 덮음). 라벨을 더 올리면 위 덩어리와 붙으므로
+     덮이는 쪽인 STEP 글씨를 판 왼쪽 아래로 비켰다. */
+  plate:{v:-50, w:262, d:186, h:14, wordU:.13, wordV:13, wordSize:26},
   lane:{gap:8, hw:5, sep:14},
   ramp:{dv:22, dz:7, tip:14, hw:13},
   overlay:{
@@ -147,20 +152,20 @@ var SCENE={
     a:{t:"게임코디 Echo 더미", s:"이미 검증된 더미", c:"gray",
        du:18, dv:56, w:66, d:70, h:28, lab:{du:51, dv:126, dz:86, dy:0}},
     b:{t:"내 네트워크 라이브러리", s:"이번에 잴 것", c:"net",
-       du:176, dv:54, w:68, d:72, h:28, lab:{du:210, dv:56, dz:0, dy:34}},
+       du:176, dv:54, w:68, d:72, h:28, lab:{du:210, dv:56, dz:0, dy:20}},
     j:"동접 1,000, STEP1 통과"},
    {k:"s2", tag:"STEP 2", u:128, z:54, pal:"net", jc:"grn",
     a:{t:"내 네트워크 라이브러리", s:"STEP 1 을 통과한 것", c:"net",
        du:18, dv:56, w:66, d:70, h:28, lab:{du:51, dv:126, dz:86, dy:0}},
     b:{t:"커스텀 에코더미", s:"무결성 검사 · 공격 시험", c:"dum",
-       du:176, dv:54, w:68, d:72, h:28, lab:{du:210, dv:56, dz:0, dy:34},
+       du:176, dv:54, w:68, d:72, h:28, lab:{du:210, dv:56, dz:0, dy:20},
        crowd:{n:5, gap:11, size:9, du:5, dv:5}},
     j:"결함 주입, 첫 패킷에서 검출"},
    {k:"s3", tag:"STEP 3", u:406, z:108, pal:"net", jc:"recv",
     a:{t:"더미 클라이언트", s:"STEP 2 를 통과한 것", c:"dum",
        du:18, dv:56, w:66, d:70, h:28, lab:{du:51, dv:126, dz:86, dy:0}},
     b:{t:"서버 + 컨텐츠 전체", s:"이동 · 시야 · 채팅 · 존이동", c:"net",
-       du:176, dv:54, w:68, d:72, h:28, lab:{du:210, dv:56, dz:0, dy:48}},
+       du:176, dv:54, w:68, d:72, h:28, lab:{du:210, dv:56, dz:0, dy:34}},
     j:"동접 5,000 — 2-3 부하 검증"}
   ]
 };
@@ -193,8 +198,16 @@ function draw(s,D){
   function shadow(u,v,w,d,z,par){ (par||gShad).appendChild(el("ellipse",
     {cx:ipx(u+w/2,v+d/2), cy:ipy(u+w/2,v+d/2,z||0)+5, rx:(w+d)*.36, ry:(w+d)*.12,
      fill:"#04060c", opacity:".40", filter:"url(#sfShadow)"})); }
+  /* ── 글자 배율 ──
+     이 무대는 viewBox 1079 가 폭 1521 로 펴져 배율이 1.41 이다. 그래서 코드의 9 가 화면에서
+     12.7px 이 된다 — 1-1 씬은 최소 18 · 본문 19~25 이고 2-3 도 17~23 이라, 세 탭 중 여기만
+     잔글씨였다(실측 · 1920 창). 1.3 을 곱하면 9→16.5 · 10.5→19.3 · 13.5→24.8 로 같은 자가 된다.
+     ※ 자리(SCENE 의 x·y)는 안 건드린다 — 편집기 mmo-safe-edit.html 이 같은 값을 읽으므로
+       좌표를 여기서 손대면 편집기와 화면이 갈린다. 겹치는 자리는 SCENE 쪽에서 벌린다. */
+  var LB_FS=1.3;
   function lb(x,y,t,size,col,w,anc,par){
-    (par||gLbl).appendChild(el("text",{x:x.toFixed(1),y:y.toFixed(1),"font-size":String(size),fill:col,
+    (par||gLbl).appendChild(el("text",{x:x.toFixed(1),y:y.toFixed(1),
+      "font-size":String(Math.round(size*LB_FS*10)/10),fill:col,
       "font-weight":w||"700","text-anchor":anc||"middle","font-family":"var(--sans)"},t)); }
   var LG={};   /* 단별 글자 자루 — 덩어리 루프에서 만들고 이름·판정 루프에서 다시 쓴다 */
 
@@ -319,11 +332,11 @@ function draw(s,D){
   STEP.forEach(function(S){
     var A=S.a, B=S.b, lg=LG[S.k]||gLbl;
     var ax=ipx(S.u+A.lab.du,P.v+A.lab.dv), ay=ipy(S.u+A.lab.du,P.v+A.lab.dv,S.z+A.lab.dz)+(A.lab.dy||0);
-    lb(ax,ay,A.t,13.5,FG,"800",null,lg);  lb(ax,ay+15,A.s,10.5,GRN,"700",null,lg);
+    lb(ax,ay,A.t,13.5,FG,"800",null,lg);  lb(ax,ay+19,A.s,10.5,GRN,"700",null,lg);
     var bx=ipx(S.u+B.lab.du,P.v+B.lab.dv), by=ipy(S.u+B.lab.du,P.v+B.lab.dv,S.z+B.lab.dz)+(B.lab.dy||0);
-    lb(bx,by,B.t,13.5,FG,"800",null,lg); lb(bx,by+15,B.s,10.5,SUB,"600",null,lg);
+    lb(bx,by,B.t,13.5,FG,"800",null,lg); lb(bx,by+19,B.s,10.5,SUB,"600",null,lg);
     /* 판정줄만 따로 잡아 둔다 — 애니가 '단이 통과했다' 를 마지막에 찍는 자리다 */
-    lb(bx,by+33,"✔ "+S.j,11,INK[S.jc]||GRN,"700",null,lg);
+    lb(bx,by+42,"✔ "+S.j,11,INK[S.jc]||GRN,"700",null,lg);
     lg.lastChild.setAttribute("class","sf-judge");
   });
   gBuild.appendChild(gateTop);
