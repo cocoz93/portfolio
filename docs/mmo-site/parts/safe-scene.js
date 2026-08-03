@@ -125,7 +125,7 @@ var SCENE={
     dash :{id:"d-safe",  x:null, y:null, w:300, lpad:1},
     chips:{id:"ch-safe", x:953,  y:543,  w:406},
     note :{id:"nt-safe", x:953,  y:574,  w:406},
-    more :{id:"mo-safe", x:953,  y:630,  w:406}
+    more :{id:"mo-safe", x:953,  y:614,  w:406}
   },
   steps:[
    {k:"s1", tag:"STEP 1", u:-150, z:0, pal:"out", jc:"grn",
