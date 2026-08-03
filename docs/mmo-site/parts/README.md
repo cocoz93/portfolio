@@ -12,8 +12,9 @@
 | **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` |
 
 설계 탭과 병목 탭은 **갈래로 못 나눈다.** 병목 지도를 그리는 코드가 씬 IIFE 안에 중첩돼 바깥 스코프
-(`paintZones` `PJ` `wireify` 등)를 그대로 쓰고, `#p-bneck` 안을 채우고 지우는 것도 `scene.js` 다.
-실험 수치(`EXPS`)와 핀 정의(`PINS`)도 `scene.js` 에 있어서, 병목 수치 한 줄을 고치려 해도 씬 파일을 연다.
+(`paintZones` `PJ` `wireify` 등)를 그대로 쓰고, `#p-bneck` 안을 열고 닫는 것도 `scene.js` 다.
+실험 수치(`EXPS`)와 핀 정의(`PINS`), 노션 주소 표(`NOTION_EXP`)도 `scene.js` 에 있어서,
+병목 수치 한 줄을 고치려 해도 씬 파일을 연다.
 
 `bneck-tail.css` 는 병목 규칙인데 `client.css` **뒤**에 온다. 순서가 곧 우선순위라서 그렇다 —
 같은 특이도로 겹치는 짝이 앞뒤 양쪽에 있다: `.bn-stage` grid(bneck.css ↔ bneck-tail.css, 근거는
@@ -26,18 +27,23 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
 1. **조각 순서** — 셸이 들고 있다. `__scenePlay` 가 아직 없을 때 웨이브가 스스로 재생하는 식의
    순서 의존이 있어서, 마커 순서를 바꾸면 첫 로드 애니가 조용히 깨진다.
 2. **window 훅** — `__flowStart` `__flowStop` `__flowReset` `__scenePlay` `__zoneTourArm`
-   `resetZone` `playBneckIntro` `__EXPS` `__crenderPlay`. 이름·인자를 바꾸려면 단독 작업으로.
+   `resetZone` `playBneckIntro` `__EXPS` `__PINS` `__bnPickLoc` `__crenderPlay`.
+   이름·인자를 바꾸려면 단독 작업으로.
 3. **DOM id** — `#p-build` `#p-bneck` `#p-crender` `#p-csafe` `#p-cload` `#p-misc` `#scene`
    `#subtabs` `#subtabs2`. `tabs.js` 가 전부 하드코딩한다.
-4. **마크업 계약** — `scene.js` 가 만들고 `bneck.js` 가 읽는다:
-   `button.exp[data-s]` · `.pin[data-loc]` · `#bnc-nav button[data-loc]` · `#bncard[hidden]`.
+4. **마크업 계약** — 병목 탭은 셋이 물려 있다.
+   - `scene.js` 가 만들고 `bneck.js` 가 읽는다: `.pin[data-loc]` 과 그 안의 `text.pin-no`
+     (배지 번호는 비어 나오고, 고른 카드의 번호를 bneck.js 가 넣는다).
+   - `scene.js` 가 붙이고 `bneck.js` 가 쓴다: `EXPS[].no`(카드 번호) · `EXPS[].nt`(노션 주소).
+     둘 다 `NOTION_EXP` 표가 정본 — 이 표에 있는 실험만 카드로 선다.
+   - 셸이 두고 둘이 나눠 쓴다: `#bncard[hidden]`(scene.js 가 열고 닫음) · `#bnc-b`(bneck.js 가 채움).
 5. **두 파일이 함께 지켜야 하는 수치** — 둘로 나뉜다.
    - *같은 값이라 한쪽만 고치면 어긋나는 것*: `1.34s`(scene.js 초 1560 · 밀리초 1671 ↔ bneck.css 145
      — scene.js 안에서도 두 벌이다) · `160ms`(common.css `.16s` ↔ wave.js `SPAN+160+100`)
    - *크기 관계라 같이 조정해야 하는 것*: 구역순회 `TOUR_HOLD 380ms`(scene.js) **>** 페이드 `.22s`(common.css) ·
-     `fillCard 300ms`(scene.js) **<** 재적용 `400ms`(bneck.js)
-6. **클래스 접두어** — 병목 `.bn-*` `.bx-*` / 클라 `.cl-*` `.cr-*`.
-   `.exp .rs .nm .card .stage .hit .panel` 은 이미 공유 중이니 새로 만들지 말 것.
+     카드 짓기 `300ms`(scene.js `fillCard`) **<** 재적용 `400ms`(bneck.js)
+6. **클래스 접두어** — 병목 `.bn-*` `.bx-*`(카드 한 장은 `.rc`) / 클라 `.cl-*` `.cr-*`.
+   `.card .stage .hit .panel` 은 이미 공유 중이니 새로 만들지 말 것.
 
 ## 산출물은 병합 뒤 한 번만 빌드
 

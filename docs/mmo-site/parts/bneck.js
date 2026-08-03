@@ -1,31 +1,34 @@
-/* ═══════════ 병목 탭 — 계기판 + 카드 상세 ═══════════
-   한 화면에서 끝난다: 계기판(위) · 지도(왼쪽) · 카드(오른쪽).
-   지도와 카드는 위 코드가 이미 갖고 있다. 여기서 더하는 것은 둘뿐이다 —
-     ① 계기판: 고른 실험의 before → after
-     ② 카드 안 상세: 결과 · 한 일 · 부연
-   위 코드의 IIFE 안으로 들어가지 않는다. 연결은 DOM 델리게이션 하나뿐이고,
-   실험 배열(window.__EXPS)은 위 코드가 그대로 내준 것이다. 핀과 레일 버튼은 전역이 아니라
-   위 코드가 만들어 둔 마크업(#bnpins .pin[data-loc], #bnc-nav button[data-loc])으로 잡는다. */
+/* ═══════════ 병목 탭 — 실험 카드 열두 장 + 계기판 ═══════════
+   한 화면에서 끝난다: 지도(왼쪽) · 카드 열두 장과 계기판(오른쪽).
+   지도는 위 코드가 이미 갖고 있다. 여기서 더하는 것은 둘뿐이다 —
+     ① 카드 열두 장: 번호 · 판정 · 이름 · 성과 한 줄 (노션 실측 보고서와 1:1)
+     ② 계기판: 고른 카드의 before → after
+   위 코드의 IIFE 안으로 들어가지 않는다. 연결은 실험 배열(window.__EXPS)과
+   위 코드가 만들어 둔 핀 마크업(#bnpins .pin[data-loc])뿐이고,
+   핀 클릭이 이쪽으로 넘어오는 길만 훅 하나로 낸다(window.__bnPickLoc). */
 (function(){
 "use strict";
 var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* 네 칸은 실험마다 공통으로 잰 것만 둔다. 나머지(그 실험에서만 의미 있는 지표)는 아래 상세 표로 간다.
+/* 네 칸은 실험마다 공통으로 잰 것만 둔다.
    dir −1 작을수록 좋음 · 0 좋고 나쁨을 여기서 정하지 않음.
 
    동접·송신 메시지·송신량을 0 으로 둔 이유: 이 셋은 실험마다 성격이 다르다. Send Coalescing 에서는
    양쪽을 같게 맞춘 통제값이고(변하면 실험이 틀린 것), 섹터 묶음에서는 송신 메시지가 −73% 인 게 성과다.
    같은 칸을 어떤 실험에선 초록으로, 어떤 실험에선 빨강으로 칠할 근거가 계기판에는 없다 —
-   좋고 나쁨은 아래 상세의 Δ 가 지표별로 말한다. 여기서는 변화량만 부호 그대로 적는다. */
+   좋고 나쁨은 카드의 성과 한 줄이 말한다. 여기서는 변화량만 부호 그대로 적는다. */
 var MET = [
   {k:"ccu",  n:"동접",    u:"명",     dir:0},
   {k:"pps",  n:"송신 메시지", u:"건/s", dir:0},
   {k:"send", n:"송신량",  u:"MB/s",   dir:0},
   {k:"tick", n:"틱 p99",  u:"ms",     dir:-1}
 ];
-
-var EXPS = (window.__EXPS||[]).slice().sort(function(a,b){ return a.s-b.s; });
+/* 카드에 서는 것은 노션 실측 보고서가 있는 열둘뿐이다(scene.js 의 NOTION_EXP 가 no·nt 를 붙인다).
+   현황판 · 동접별 트래픽 · 정정 이력 · 미측정 3건은 배열에는 있으나 카드로 서지 않는다. */
+var EXPS = (window.__EXPS||[]).filter(function(e){ return e.no; })
+             .sort(function(a,b){ return a.no-b.no; });
 if(!EXPS.length) return;
+var ST={ok:"채택", rj:"기각", dg:"진단", sum:"결론"};
 
 function $(s,r){ return (r||document).querySelector(s); }
 /* 노션에 적힌 표기를 그대로 되살린다 — 반올림해서 다른 숫자로 만들지 않는다.
@@ -75,11 +78,10 @@ function paintDash(it){
     T.a.style.width=(av==null?0:av/top*100)+"%";
     /* 안 잰 지표는 단위까지 지운다 — 값이 '—' 인데 'MB/s' 만 남으면 0 을 잰 것처럼 보인다 */
     T.un.textContent=(av==null?"":M.u);
-    /* 왼쪽에 비교값이 없는 이유가 셋이라 말이 다르다 — 실험은 했는데 그 지표만 안 잡은 것,
-       실험 자체를 A/B 로 돌린 적이 없는 것, 그리고 애초에 A/B 가 아니라 한 부하에서 본 진단인 것. */
+    /* 왼쪽에 비교값이 없는 이유가 둘이라 말이 다르다 — 실험은 했는데 그 지표만 안 잡은 것,
+       그리고 애초에 A/B 가 아니라 한 부하에서 본 진단(또는 종합)인 것. */
     T.fr.textContent=(bv==null
-      ? (it.st==="na" ? "잰 적 없음" : it.st==="dg" ? "이 부하에서 관측"
-       : (it.st==="now"||it.st==="sum") ? "지금 값" : it.st==="fix" ? "" : "이 시기 미수집")
+      ? (it.st==="dg" ? "이 부하에서 관측" : it.st==="sum" ? "지금 값" : "이 시기 미수집")
       : fmtV(M.k,bv)+" →");
     T.c.textContent=pctTxt(p);
     /* 색은 방향이 정해진 지표(dir≠0)에만 붙는다 — 부호는 값 그대로, 좋고 나쁨은 dir 이 판단 */
@@ -89,78 +91,107 @@ function paintDash(it){
   });
 }
 
-/* ═══ 카드 안 상세 ═══
-   fillCard 는 #bnc-b 의 안쪽만 갈아 끼우므로, 형제로 끼워 두면 자리 이동에도 살아남는다.
-   자리 설명(why)은 카드가 이미 위에 갖고 있으니 여기서는 되풀이하지 않는다.
-   #bx-det 는 이제 HTML 에 미리 있다(계기판 뒤 순서를 지키려고) — 아래 만드는 가지는 안 탄다. */
-function detEl(){
-  var d=document.getElementById("bx-det");
-  if(!d){
-    var body=document.getElementById("bnc-b"); if(!body) return null;
-    d=document.createElement("div"); d.className="bx-det"; d.id="bx-det";
-    body.parentNode.insertBefore(d, body.nextSibling);
-  }
-  return d;
+/* ═══ 카드 열두 장 ═══
+   한 장에 네 가지만 적는다: 번호 · 판정 · 동접 · 이름 · 성과 한 줄.
+   측정 조건과 A/B 표는 카드에 없다 — 그 자리는 노션 원문(↗)이 맡는다.
+   색은 고른 카드에만 켠다. 열둘이 저마다 판정색을 띠고 있으면 어느 것이 열려 있는지가
+   색으로는 안 짚이고, 훑을 때도 초록·빨강 열두 덩어리가 먼저 들어와 이름이 뒤로 밀린다. */
+function build(){
+  var body=document.getElementById("bnc-b"); if(!body) return;
+  body.innerHTML=EXPS.map(function(e){
+    /* 성과 줄은 노션의 결론(r)에서 앞 조각만 쓴다 — 카드 폭 200px 에 한 줄로 들어가는 길이다.
+       한글이 섞이면 mono 에서 글자마다 글꼴이 폴백돼 자간이 벌어진다(범례·캡션과 같은 규칙). */
+    var hit=(e.r||"").split(" · ")[0];
+    var ccu=(e.am&&e.am.ccu) ? e.am.ccu.toLocaleString("ko-KR") : "5,000";
+    return '<div class="rc k-'+e.st+'" data-s="'+e.s+'" data-loc="'+e.loc+'"'+
+      ' tabindex="0" role="button" aria-pressed="false">'+
+      '<span class="r1"><span class="no">'+e.no+'</span>'+
+      '<span class="st">'+(ST[e.st]||"")+'</span>'+
+      '<span class="cc">'+ccu+'</span>'+
+      (e.nt ? '<a class="go" href="'+e.nt+'" target="_blank" rel="noopener"'+
+              ' aria-label="'+e.n+' 실측 보고서 — 노션에서 열기">↗</a>' : '')+
+      '</span>'+
+      '<span class="nm">'+e.n+'</span>'+
+      '<span class="hit'+(/[가-힣]/.test(hit)?' ko':'')+'">'+hit+'</span></div>';
+  }).join("");
 }
-var LB={ok:"한 일", rj:"접은 이유", dg:"본 것", na:"한 일", now:"판정 기준", sum:"내역", fix:"쓰는 법"};
-function paintDet(it){
-  var d=detEl(); if(!d) return;
-  function fld(l,v){ return v ? '<div class="fd"><span class="l">'+l+'</span><span class="v">'+v+'</span></div>' : ''; }
-  d.className="bx-det "+it.st;
-  var left=(it.cond?'<div class="cd">'+it.cond+'</div>':'')+fld(LB[it.st],it.m)+fld("부연",it.ex);
-  /* 네 칸에 안 들어가는 지표 — 실험마다 다르므로 표로 붙인다(노션 A/B 표 그대로).
-     끄고·켜고를 한 칸에 합친 것은 폭 때문이다: 카드가 지도 옆 310px 짜리 한 열이라
-     네 열로 벌리면 지표 이름이 두 줄로 접힌다. */
-  var right="";
-  if(it.ab && it.ab.length){
-    right='<table class="bx-ab"><colgroup><col class="a"><col class="b"><col class="c"></colgroup>'+
-       '<thead><tr><th>지표</th><th>'+(it.abh||"끄고 → 켜고")+
-       '</th><th>Δ</th></tr></thead><tbody>'+
-       it.ab.map(function(r){ var g=r[4]||0;   /* 좋고 나쁨은 지표마다 다르다 — 행이 직접 갖는다 */
-         /* 끄고 값이 비어 있으면 A/B 가 아니라 그냥 값 하나다 — 화살표를 붙이면 변화로 읽힌다 */
-         var mid = r[1]==="" ? r[2] : r[1]+" → "+r[2];
-         return '<tr><td>'+r[0]+'</td><td>'+mid+'</td>'+
-                '<td class="'+(g>0?"g":g<0?"b":"")+'">'+r[3]+'</td></tr>'; }).join("")+
-       '</tbody></table>';
-  }
-  /* 결론은 전폭, 그 아래를 둘로 나눈다 — 위아래로 쌓으면 표가 카드 밖으로 밀려 스크롤 뒤에 숨는다 */
-  d.innerHTML='<div class="rv">'+(it.r||"")+'</div>'+
-              '<div class="cols"><div>'+left+'</div><div>'+right+'</div></div>';
+build();
+
+/* ═══ 지도 핀 ═══
+   번호는 자리가 아니라 실험이 갖는다 — 고른 카드의 번호가 그 자리 핀에만 들어간다.
+   실측 카드가 없는 자리(큐 넘김 · 수신 길목 · 저장 경로)는 늘 흐리고 누를 수도 없다:
+   눌러도 갈 카드가 없는데 손가락 모양만 뜨면 눌러 본 사람이 고장으로 읽는다. */
+var FIRST={};   /* 자리 → 그 자리의 첫 카드 (핀을 눌렀을 때 가는 곳) */
+EXPS.forEach(function(e){ if(!FIRST[e.loc]) FIRST[e.loc]=e; });
+var curLoc=null, curNo="";
+function paintPins(){
+  var pins=document.querySelectorAll("#bnpins .pin");
+  [].forEach.call(pins,function(g){
+    var L=g.getAttribute("data-loc"), has=!!FIRST[L], on=has&&L===curLoc;
+    g.classList.toggle("lit",on);
+    g.classList.toggle("dim",!on);
+    if(!has){ g.classList.add("nodata"); g.removeAttribute("tabindex"); g.removeAttribute("role"); }
+    var t=g.querySelector(".pin-no"); if(t) t.textContent=on?curNo:"";
+  });
+}
+/* 핀은 병목 탭에 처음 들어올 때(scene.js 의 build) 꽂힌다 — 이 스크립트가 도는 시점에는 아직 없다.
+   그래서 꽂히는 것을 한 번만 기다렸다가 그때 칠한다(칠하고 나면 관찰을 끊는다). */
+var pinHost=document.getElementById("bnpins");
+if(pinHost && typeof MutationObserver==="function"){
+  var mo=new MutationObserver(function(){
+    if(pinHost.querySelector(".pin")){ mo.disconnect(); paintPins(); }
+  });
+  mo.observe(pinHost,{childList:true,subtree:true});
 }
 
+/* ═══ 고르기 ═══ */
 function show(it){
   if(!it) return;
-  paintDash(it); paintDet(it);
+  paintDash(it);
+  curLoc=it.loc; curNo=String(it.no);
   var body=document.getElementById("bnc-b");
-  if(body) [].forEach.call(body.querySelectorAll("[data-s]"), function(b){
-    b.classList.toggle("selx", +b.getAttribute("data-s")===it.s); });
+  if(body) [].forEach.call(body.querySelectorAll(".rc"), function(c){
+    var on = c.getAttribute("data-s")===String(it.s);
+    c.classList.toggle("on", on);
+    c.setAttribute("aria-pressed", on?"true":"false");
+  });
+  paintPins();
 }
-function byS(s){ return EXPS.filter(function(e){ return e.s===s; })[0]; }
-function firstOf(loc){ return EXPS.filter(function(e){ return e.loc===loc; })[0]; }
+function byS(s){ return EXPS.filter(function(e){ return String(e.s)===String(s); })[0]; }
 
 /* 접힌 배치(창 1600 이하)에서는 카드가 지도 아래로 내려가 첫 화면 밖에 있다.
-   그 상태로 핀이나 레일을 누르면 화면에서 아무 일도 안 일어난 것처럼 보인다 — 카드를 끌어올린다.
-   세 칸 배치에서는 카드가 이미 옆에 보이므로 아무것도 하지 않는다(판정은 화면 밖인지 하나로 한다,
+   그 상태로 핀을 누르면 화면에서 아무 일도 안 일어난 것처럼 보인다 — 카드를 끌어올린다.
+   두 칸 배치에서는 카드가 이미 옆에 보이므로 아무것도 하지 않는다(판정은 화면 밖인지 하나로 한다,
    창 폭을 다시 재서 분기점을 JS 에도 적어 두면 CSS 와 두 곳에서 갈린다). */
 function bnScrollIntoView(){
   var card=document.getElementById("bncard"); if(!card||card.hidden) return;
   var r=card.getBoundingClientRect();
   if(r.top < innerHeight-100) return;          /* 이미 보인다 */
-  /* scrollIntoView(block:"start") 는 카드 윗줄을 화면 맨 위에 붙여 레일까지 위로 밀어낸다.
-     90px 만 남겨 두면 레일 아랫줄이 걸쳐 보여서, 다른 자리로 옮길 길이 화면에 남는다. */
   scrollTo({top:scrollY+r.top-90, behavior:RM?"auto":"smooth"});
 }
 
-/* 한 화면이므로 지도·카드·계기판이 같은 선택을 본다 */
 document.addEventListener("click", function(e){
   if(!e.target.closest) return;
-  var ex=e.target.closest("#bnc-b [data-s]");
-  if(ex){ show(byS(+ex.getAttribute("data-s"))); return; }
-  var loc=e.target.closest("#bnc-nav button[data-loc], #bnpins .pin");
-  if(loc){ var L=loc.getAttribute("data-loc");
-    setTimeout(function(){ show(firstOf(L)); bnScrollIntoView(); }, 0); }   /* 카드가 다시 그려진 뒤에 */
+  /* 카드 안 ↗ 는 노션으로 나가는 링크다 — 고르기까지 같이 일어나면 새 탭이 열리는 동시에
+     뒤에 남은 화면이 바뀌어, 돌아왔을 때 무엇을 눌렀는지가 어긋난다. */
+  if(e.target.closest("#bnc-b .rc a")) return;
+  var c=e.target.closest("#bnc-b .rc");
+  if(c){ show(byS(c.getAttribute("data-s"))); }
+}, false);
+document.addEventListener("keydown", function(e){
+  if(e.key!=="Enter" && e.key!==" ") return;
+  if(!e.target.closest) return;
+  if(e.target.closest("#bnc-b .rc a")) return;
+  var c=e.target.closest("#bnc-b .rc");
+  if(c){ e.preventDefault(); show(byS(c.getAttribute("data-s"))); }
 }, false);
 
+/* 지도 핀 → 그 자리의 첫 카드. scene.js 가 핀 클릭에서 부른다(그쪽은 이 파일을 모른다). */
+window.__bnPickLoc=function(loc){
+  var it=FIRST[loc]; if(!it) return;
+  show(it); bnScrollIntoView();
+};
+
 show(EXPS[0]);
-setTimeout(function(){ show(EXPS[0]); }, 400);   /* 진입 애니가 카드를 연 뒤 한 번 더 */
+setTimeout(function(){ show(EXPS[0]); paintPins(); }, 400);   /* 진입 애니가 카드를 연 뒤 한 번 더 */
 })();

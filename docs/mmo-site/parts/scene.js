@@ -80,7 +80,9 @@ function wireify(host,isRail){
     e.setAttribute("stroke",isRail?"rgba(170,222,255,.5)":WF.grid);
     e.setAttribute("stroke-width",isRail?".8":".55");
     e.removeAttribute("opacity"); e.removeAttribute("filter"); });
-  [].slice.call(host.querySelectorAll("line")).forEach(function(e){
+  /* 레일에서만 polyline 까지 받는다 = 셰브론 이음선. 몸통 쪽(isRail=false)의 polyline 은
+     상자 윗면 모서리(class="rim") 라, 같이 받으면 청사진에서 상자가 무너진다. */
+  [].slice.call(host.querySelectorAll(isRail?"line,polyline":"line")).forEach(function(e){
     /* 레일 이음선·그루브 모서리는 채널 외곽선과 겹쳐 그냥 촘촘해 보인다 */
     if(isRail){ e.parentNode.removeChild(e); return; }
     e.setAttribute("stroke",WF.grid); e.removeAttribute("opacity"); }); }
@@ -535,6 +537,22 @@ const LANE_W=10, SEAM=22, SUB_W=10, SUB_GAP=4;   /* SUB_*: lanes>1(다중 파이
 /* 줄 하나가 중심선에서 벗어난 거리. 여기서 선언하는 이유는 클라 무리의 열 간격(grid())이 이 값을 쓰는데,
    그 grid() 가 바로 아래 paintRails()/paintBodies() 에서 불리기 때문 — 칩 쪽(R_*_L)에서 선언하면 늦다. */
 const LOFF=SUB_W+SUB_GAP;
+/* ── 이음선(셰브론) — 통로가 어느 쪽으로 흐르는지 ──
+   가로로 곧게 긋던 이음선을 진행 쪽으로 얕게 꺾은 것이다. 마커를 새로 얹지 않고 있던 선의
+   모양만 바꾼 것이라 도형 수가 안 늘고, 정지 상태의 조용함도 그대로다.
+   (cu,cv)=이음선 중심 · (eu,ev)=진행 단위 · (pu,pv)=진행 수직 단위 · offs=줄 중심들 · subW=줄 하나 폭
+   ※ 전체 폭을 한 번에 가로지르지 않고 '줄마다' 그린다. 한 줄로 그으면 3레인처럼 넓은 레일에서
+     꺾임이 그만큼 커져 지그재그 울타리로 보인다(실측). 줄마다면 폭이 달라도 각도가 같다.
+   ※ K(꺾임 깊이)는 줄 폭이 아니라 고정값이다 — 위와 같은 이유.
+   ※ line 이 아니라 polyline 인 것에 딸린 곳이 둘 있다:
+     - 병목 청사진의 wireify() 는 레일에서 line 을 지운다. 이 선도 같은 이유로 지워야 해서 거기서 polyline 도 받는다.
+     - 평면화 보간은 태그가 1:1 로 맞아야 도는데, 아이소·평면 두 벌을 같은 코드가 그리므로 그대로 맞는다. */
+function seamAt(g,cu,cv,eu,ev,pu,pv,offs,subW){
+  const h=subW/2, K=4.0;
+  offs.forEach(c=>{ const bu=cu+pu*c, bv=cv+pv*c;
+    g.appendChild(el("polyline",{points:[[bu+pu*h,bv+pv*h],[bu+eu*K,bv+ev*K],[bu-pu*h,bv-pv*h]]
+      .map(q=>P(q[0],q[1],0)).join(" "),fill:"none",stroke:"#4e6390","stroke-width":1,
+      "stroke-linejoin":"round",opacity:.42})); }); }
 function paintRails(){
 RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
     g=el("g",{"data-z":zonesOf(r.from,r.to)});
@@ -551,13 +569,12 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
      이음선은 교차 구간에선 건너뛴다 — 서로 지나가는 줄을 한 다발로 묶어 보이면 안 되니까. */
   if(r.cross && NL>1){
     const knee=path.slice(1,-1);
+    const skip=(cu,cv)=>knee.some(q=>Math.hypot(cu-q[0],cv-q[1])<totW);
     offs.forEach(c=>ribbon(g, offsetPath(path,c,true), subW, tint, knee));
-    const HT=totW/2-1;
-    segs.forEach(s=>{ const hu=s.pu*HT, hv=s.pv*HT;
+    segs.forEach(s=>{
       for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
-        if(knee.some(q=>Math.hypot(cu-q[0],cv-q[1])<totW)) continue;
-        g.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
-          x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
+        if(skip(cu,cv)) continue;
+        seamAt(g,cu,cv,s.du/s.L,s.dv/s.L,s.pu,s.pv,offs,subW); } });
     TR.appendChild(g); return; }
   /* 1) 통로 바닥 — 줄 수만큼 나란히 */
   segs.forEach(s=>offs.forEach(c=>{ const h=subW/2;
@@ -566,12 +583,10 @@ RAILS.forEach(r=>{ const path=railPath(r), tint=LTINT[r.color]||LTINT.recv,
   /* 2) 꺾이는 지점을 정사각 패치로 메움(안 그러면 바깥쪽에 홈이 생김) — 전체 폭 기준 */
   for(let i=1;i<path.length-1;i++){ const q=path[i], h=totW/2;
     g.appendChild(poly([[q[0]-h,q[1]-h],[q[0]+h,q[1]-h],[q[0]+h,q[1]+h],[q[0]-h,q[1]+h]],tint)); }
-  /* 3) 이음선(완화) — 전체 폭을 가로지르는 띠(다중이면 케이블 타이처럼 줄들을 묶어 보임) */
-  const H=totW/2-1;
-  segs.forEach(s=>{ const hu=s.pu*H, hv=s.pv*H;
+  /* 3) 이음선 — 줄마다 진행 쪽으로 꺾인 셰브론(seamAt) */
+  segs.forEach(s=>{
     for(let d=SEAM; d<s.L-2; d+=SEAM){ const t=d/s.L, cu=s.A[0]+s.du*t, cv=s.A[1]+s.dv*t;
-      g.appendChild(el("line",{x1:px(cu+hu,cv+hv),y1:py(cu+hu,cv+hv,0),
-        x2:px(cu-hu,cv-hv),y2:py(cu-hu,cv-hv,0),stroke:"#3a4864","stroke-width":1,opacity:.22})); } });
+      seamAt(g,cu,cv,s.du/s.L,s.dv/s.L,s.pu,s.pv,offs,subW); } });
   /* 4) 채널 모서리 음영(그루브) — 줄마다: 화면상 위 모서리=그림자·아래=빛 */
   segs.forEach(s=>{ const upSign = UPSIGN(s.pu,s.pv);
     offs.forEach(c=>{ [[1,true],[-1,false]].forEach(q=>{ const e=c+q[0]*upSign*subW/2, up=q[1];
@@ -1320,13 +1335,32 @@ window.__flowReset=function(){
      ex:"구현은 들어가 있으나 A/B 로 잰 적이 없다. 노션 [병목지점 개선] 에 해당 실측 페이지가 없고 Monitoring/metrics_out 에도 로그가 없다",
      bm:null, am:null},
   ];
-  window.__EXPS=EXPS;   /* 아래층(계기판·상세)이 같은 배열을 그대로 본다 — 수치를 두 벌 두지 않는다 */
-  const ST={ok:"채택", rj:"기각", dg:"진단", na:"미측정", now:"현재", sum:"결론", fix:"정정"};
-  function expHtml(e){
-    return '<button type="button" class="exp '+e.st+'" data-s="'+e.s+'">'+
-      '<div class="top"><span class="rs '+e.st+'">'+ST[e.st]+'</span>'+
-      '<span class="nm">'+e.n+'</span></div></button>';
-  }
+  /* ═══ 카드 열두 장 = 노션 실측 보고서 열두 편 ═══
+     이 순서가 곧 카드 번호(①~⑫)이고, 병목이 옮겨간 순서다 — 노션 DB "병목지점 개선" 의
+     작성 순서와 같다(동접 200 에서 5,200 까지 부하를 올리며 잰 차례).
+     id 는 대시 없는 32자로, NOTION 앞에 붙여 공개 주소가 된다(위 설계 문서와 같은 규칙).
+     EXPS 항목에 직접 적지 않고 여기서 붙이는 이유: 이 표가 '카드에 서는 열둘' 의 정본이라
+     한 곳만 보면 무엇이 서고 무엇이 안 서는지 알 수 있다. 여기 없는 항목(현황판 · 동접별 트래픽 ·
+     정정 이력 · 미측정 3건)은 노션에 대응 페이지가 없어 카드로 세우지 않는다. */
+  const NOTION_EXP=[
+    [1,   "37916a0b9f5980c5818cd8ac945907d1"],   /* SendQ Lock-Free */
+    [2,   "37a16a0b9f5980288727da59996693b1"],   /* Send Coalescing */
+    [3,   "37b16a0b9f5980ba9f6fc17c6ab0fb3b"],   /* SendThread 분리 */
+    [4,   "38016a0b9f5980fab79cfcbc29c60fa1"],   /* SO_SNDBUF=0 */
+    [5,   "38116a0b9f598158a563ffc13b1e0b5c"],   /* 1,500 동접 붕괴 */
+    [6,   "38316a0b9f598004ab16e8d64f3a7b9c"],   /* 섹터 묶음 패킷 */
+    [7,   "38a16a0b9f598130a9fcf0da9017798a"],   /* IOCP 워커 12 → 4 */
+    [8,   "39b16a0b9f5980548d14f2afe4cead7c"],   /* 멤버십 팬아웃 묶음 */
+    [9,   "39b16a0b9f59809b9155c081cd253537"],   /* 브로드캐스트 수신섹터 묶음 */
+    [10,  "3a016a0b9f5980af9f98d6e614ddb9a0"],   /* 송신 워커 K2 → K3 */
+    [11,  "3a116a0b9f5980f69c06c8a25aadf867"],   /* 게임스레드 코어 격리 */
+    [0.2, "3a516a0b9f5981639321d22af4aa2d38"]    /* 결론 — 수평 확장으로 */
+  ];
+  NOTION_EXP.forEach(function(r,i){
+    const e=EXPS.filter(function(x){ return x.s===r[0]; })[0];
+    if(e){ e.no=i+1; e.nt=NOTION+r[1]; }
+  });
+  window.__EXPS=EXPS;   /* 아래층(계기판·카드)이 같은 배열을 그대로 본다 — 수치를 두 벌 두지 않는다 */
 
   /* ═══ 핀 클릭 → 오른쪽 패널 교체 ═══
      예전에는 아래 실험 목록으로 스크롤해 카드를 번쩍이게 했다. 그건 '지도에서 눈을 떼게' 만든다 —
@@ -1335,43 +1369,10 @@ window.__flowReset=function(){
   let pinDefs=[];        /* buildBody 가 PINS 를 만들면서 채운다 — 아래 전환 줄이 이 배열을 쓴다 */
   /* 짓기와 켜기를 가른다: 전환 애니는 진입하는 프레임에 미리 짓고(fillCard) 1.34s 에 켜기만 한다.
      핀·전환줄 클릭은 예전처럼 openCard 하나로 둘 다 한다. */
-  function fillCard(p){
-    if(!bnCard) return;
-    document.getElementById("bnc-n").textContent=p.n;
-    document.getElementById("bnc-t").textContent=p.name;
-    document.getElementById("bnc-s").textContent=p.sub;
-    document.getElementById("bnc-w").textContent=p.why||"";
-    const mine=EXPS.filter(function(e){ return e.loc===p.n; });
-    /* 건수는 위 부제(bnc-s)가 '채택 4 · 기각 2 · 진단 1' 로 이미 말한다 — 따로 세지 않는다 */
-    const body=document.getElementById("bnc-b");
-    body.innerHTML=mine.map(expHtml).join("");
-    body.setAttribute("data-n",mine.length);   /* 실험이 적은 자리는 CSS 가 수치를 키운다 */
-    body.scrollTop=0;
-    const nav=document.getElementById("bnc-nav");
-    if(nav) [].slice.call(nav.querySelectorAll("button")).forEach(function(b){
-      b.classList.toggle("act", b.getAttribute("data-loc")===p.n); });
-    bnCard.hidden=false;
-    for(var k in pinEls) pinEls[k].classList.toggle("lit", k===p.n);
-  }
-  function openCard(p){
-    fillCard(p);
-    /* hidden 을 뗀 다음 프레임이라야 전이가 걸린다 — 이미 떼여 있으면 그 프레임에 바로 켜진다 */
-    requestAnimationFrame(function(){ if(bnCard) bnCard.classList.add("on"); });
-  }
-  /* 지도 옆 레일 — 핀을 못 찾은 사람도 여기서 자리를 옮길 수 있다.
-     이름을 <b> 로 감싸는 이유: 레일이 두 줄짜리 판이라 이름과 부제를 각자 칸에 넣어야 하는데,
-     맨 텍스트 노드는 grid 칸을 못 받는다. */
-  function buildNav(){
-    const nav=document.getElementById("bnc-nav"); if(!nav||nav.dataset.built) return;
-    nav.dataset.built="1";
-    pinDefs.forEach(function(p){
-      const b=document.createElement("button");
-      b.type="button"; b.setAttribute("data-loc",p.n);
-      b.innerHTML='<i>'+p.n+'</i><b>'+p.name+'</b><span>'+p.sub+'</span>';
-      b.addEventListener("click",function(){ openCard(p); });
-      nav.appendChild(b);
-    });
-  }
+  /* 카드 안을 채우는 일은 이제 없다 — 열두 장은 bneck.js 가 한 번 지어 두고 그대로 서 있는다.
+     여기서 하는 것은 자리 잡기뿐이다: hidden 을 떼면 이 프레임에 배치·래스터가 끝나고,
+     1.34s 의 '켜기' 는 합성 단계의 알파 한 값만 바꾼다(아래 진입 시계 주석 참조). */
+  function fillCard(){ if(bnCard) bnCard.hidden=false; }
   /* 사용자가 닫는 조작은 없다(닫으면 실험이 화면에서 사라진다). 이건 탭에 다시 들어올 때
      진입 애니 동안만 감춰 두는 용도 — 핀이 꽂히는 시점에 openCard 가 다시 켠다. */
   function closeCard(){
@@ -1544,7 +1545,7 @@ window.__flowReset=function(){
            c.now&&"현재 "+c.now, c.sum&&"결론 "+c.sum, c.fix&&"정정 "+c.fix]
           .filter(Boolean).join(" · ");
   });
-  pinDefs=PINS; window.__PINS=PINS; buildNav();
+  pinDefs=PINS; window.__PINS=PINS;
   /* 톤이 화면 전체에서 '한 번에' 바뀌면 두 그림을 겹쳐 놓고 밝기만 만진 것으로 보인다.
      좌하(클라) → 우상(MySQL) 대각선으로 번지게 한다 — 패킷이 들어오는 자리에서 시작해 흐름을 따라간다.
      설계 탭 등장 웨이브와 같은 축·같은 등속이라 두 화면이 같은 문법으로 읽힌다.
@@ -1559,7 +1560,7 @@ window.__flowReset=function(){
     if(p.nopin) return;              /* 자리 0(현재)은 지도에 꽂을 지점이 없다 — 칩 줄에만 선다 */
     const x=fx(p.u), yb=fy(p.v), yt=yb-p.h;
     const g=el("g",{class:"pin","data-loc":p.n,tabindex:"0",role:"button",
-      "aria-label":"병목 "+p.n+" "+p.name+" — 오른쪽 패널을 이 자리의 실험으로"});
+      "aria-label":"병목 자리 "+p.name+" — 이 자리에서 잰 첫 실험으로"});
     /* 땅이 다 펴진 뒤에 꽂는다 — 아직 기울어 있는 땅에 평면 좌표의 핀이 먼저 서면 자리가 어긋나 보인다.
        꽂는 순서는 배지 번호 순서다. 카드 1·2·3 과 짝이라 세는 순서가 먼저다. */
     g.style.animationDelay=(1.34+i*0.08)+"s";
@@ -1568,11 +1569,15 @@ window.__flowReset=function(){
     pulse.style.animationDelay=(i*0.55)+"s"; g.appendChild(pulse);
     g.appendChild(el("line",{x1:x,y1:yb-2,x2:x,y2:yt+11,stroke:HOT,"stroke-width":1.6,opacity:".7"}));
     g.appendChild(el("circle",{class:"pin-badge",cx:x,cy:yt,r:11,fill:"#241014",stroke:HOT,"stroke-width":1.8}));
-    g.appendChild(el("text",{x:x,y:yt+4.5,"text-anchor":"middle","font-size":13,"font-weight":"800",fill:HOT,"font-family":"var(--mono)"},p.n));
+    /* 배지 안은 비운 채로 꽂는다 — 번호는 자리가 아니라 실험이 갖는다.
+       오른쪽 카드를 고르면 그 자리 핀에만 그 카드 번호가 들어온다(bneck.js 가 이 text 를 갈아 끼운다). */
+    g.appendChild(el("text",{class:"pin-no",x:x,y:yt+4.5,"text-anchor":"middle","font-size":13,"font-weight":"800",fill:HOT,"font-family":"var(--mono)"},""));
     const tx=x+p.side*19, anch=p.side>0?"start":"end";
     g.appendChild(el("text",{x:tx,y:yt-1,"text-anchor":anch,"font-size":12.5,"font-weight":"800",fill:"#ffd9cf","font-family":"var(--sans)"},p.name));
     g.appendChild(el("text",{x:tx,y:yt+13,"text-anchor":anch,"font-size":10,"font-weight":"600",fill:"#9aa7bd","font-family":"var(--sans)"},p.sub));
-    function go(){ openCard(p); }
+    /* 핀은 이제 '이 자리에서 잰 첫 실험' 으로 가는 입구다 — 고르는 일 자체는 오른쪽 카드가 한다.
+       실측 카드가 없는 자리(미측정 3곳)는 bneck.js 가 이 핀을 흐리게 두고 아무 일도 하지 않는다. */
+    function go(){ if(window.__bnPickLoc) window.__bnPickLoc(p.n); }
     g.addEventListener("click",go);
     g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     gPins.appendChild(g); pinEls[p.n]=g;
@@ -1672,7 +1677,7 @@ window.__flowReset=function(){
            1.34s  켜기 — 남은 일은 합성 단계의 알파 한 값뿐. 핀 드랍과 같은 시각이다.
          한 박자로 1.34s 에 다 하면 그 프레임이 평면화·핀 드랍과 겹쳐 전환 한복판이 통째로 밀린다.
          반대로 진입 프레임에 몰아넣어도 안 된다 — 거기는 이미 도형 950개를 처음 그리는 프레임이다. */
-      bnFill=setTimeout(function(){ fillCard(PINS[0]); }, RMB?0:300);
+      bnFill=setTimeout(function(){ fillCard(); }, RMB?0:300);
       bnOpen=setTimeout(function(){ if(bnCard) bnCard.classList.add("on"); }, RMB?0:1340);
       /* 끝나면 클래스를 뗀다 — 그래야 핀 펄스(무한 반복)가 이 시점부터 처음 주기로 시작한다 */
       bnTimer=setTimeout(function(){ stage.classList.remove("bn-enter"); },BN_TOTAL);
