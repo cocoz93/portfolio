@@ -22,16 +22,10 @@
 body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); line-height:1.6;
   -webkit-font-smoothing:antialiased; word-break:keep-all; font-variant-numeric:tabular-nums;
   background-image:radial-gradient(rgba(108,199,255,.05) 1px, transparent 1px); background-size:26px 26px}
-/* 위 여백 4px — 구역 필터가 탭 줄의 둘째 단으로 내려가며 화면 위쪽이 32.5px 두꺼워졌다.
-   씬은 폭이 높이를 정해서 세로로 안 줄어드니, 그만큼을 위쪽 여백들에서 되찾지 않으면
-   1366×768 에서 씬 바닥의 버튼 두 개가 창 밖으로 나간다. 여기가 그 회수처 중 하나다. */
-.wrap{max-width:1900px; margin:0 auto; padding:4px 20px 22px}
+.wrap{max-width:1900px; margin:0 auto; padding:10px 20px 22px}
 
 /* stage (isometric diagram) */
-/* 위 여백이 0 인 까닭: 바로 위가 구역 필터 줄이고, 그 줄이 자기 아래 여백(.zonebar 의 padding-bottom)을
-   이미 갖고 있다. 14px 을 더 얹으면 씬이 그만큼 밀려 내려가는데, 씬 높이는 창 폭이 정해서
-   세로로는 안 줄어든다 — 1366×768 에서 씬 바닥이 그만큼 창 밖으로 나간다. */
-.stage{position:relative; width:100%; margin:0 auto}
+.stage{position:relative; width:100%; margin:14px auto 0}
 #scene{display:block; width:100%; height:auto}
 #scene .top, #bnscene .top, #bnsolid .top{stroke:rgba(255,255,255,.18); stroke-width:1; stroke-linejoin:round}
 #scene .rim, #bnscene .rim, #bnsolid .rim{fill:none; stroke:rgba(255,255,255,.30); stroke-width:1.1; stroke-linecap:round; opacity:.55}
@@ -63,10 +57,8 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* 탭은 두 줄이다: 이름 + 안에 뭐가 있는지 한 줄.
    이름만 두면 '부하 테스트' 가 뭘 보여주는 탭인지 눌러 보기 전엔 알 수 없다 —
    탭이 안 눌리는 원인은 생김새가 아니라 정보가 없는 것이었다. */
-/* 세로 여백 11/12 는 구역 필터가 아랫단으로 내려간 몫을 되찾는 값이다(옛 14/15).
-   .stage · .wrap · .subtabs 와 함께 넷이서 나눠 물었다 — 사정은 .zonebar 주석에 있다. */
 .tab{display:flex; flex-direction:column; align-items:flex-start; gap:3px; line-height:1.2;
-  padding:11px 26px 12px; font-weight:700; color:var(--mut); background:none; border:none;
+  padding:14px 26px 15px; font-weight:700; color:var(--mut); background:none; border:none;
   border-bottom:3px solid transparent; margin-bottom:-1px; cursor:pointer; transition:color .15s, border-color .15s}
 .tab b{font-size:1.3rem; font-weight:700}
 .tab span{font-size:.78rem; font-weight:600; color:var(--dim); transition:color .15s}
@@ -94,18 +86,15 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
      · 하위를 화면 제목으로 승격(켜진 항목만 1.66rem): 층은 시원하게 갈리지만 전환할 때
        제목이 자리를 바꾸며 줄 전체가 움직인다.
    정렬은 baseline 이다 — 이름(sans)과 번호(mono)의 크기가 달라 center 로 두면 밑선이 어긋난다. */
-/* min-height 는 구역 필터가 없는 화면(클라이언트)에서 줄이 쪼그라들지 않게 못 박는 값이다.
-   없으면 탭을 옮길 때마다 줄 높이가 오르내려 아래 그림까지 통째로 튄다.
-   flex-wrap 은 구역 필터를 아랫단으로 내리기 위한 것이다(그쪽 규칙의 width:100% 와 한 쌍).
-   탭 자체는 flex:0 0 auto 라 접히지 않으므로, 접히는 것은 필터뿐이다.
-   row-gap:0 — 세로 간격은 gap(30px)이 아니라 필터 쪽 margin 이 잡는다. */
-.subtabs{display:flex; flex-wrap:wrap; align-items:baseline; gap:30px; row-gap:0;
+/* min-height 는 구역 필터가 없는 화면(1-2 · 클라이언트)에서 줄이 쪼그라들지 않게 못 박는 값이다.
+   없으면 탭을 옮길 때마다 줄 높이가 오르내려 아래 그림까지 통째로 튄다. */
+.subtabs{display:flex; align-items:baseline; gap:30px;
   margin:0; width:100%; min-height:62px;
-  padding:11px 0 13px calc(var(--tabx,0px) + 26px);
+  padding:14px 0 13px calc(var(--tabx,0px) + 26px);
   border-bottom:1px solid var(--line)}
 .subtabs[hidden]{display:none}
 /* 탭 목록은 한 겹 안에 모은다 — 위 .tabrow 가 .tabs + .tabmeta 로 갈리는 것과 같은 짜임이고,
-   그 줄의 부가물(여기서는 구역 필터)은 이 겹 밖에서 오른쪽 끝에 선다. */
+   줄의 오른쪽 끝은 그 줄의 부가물(여기서는 구역 필터) 자리로 비워 둔다. */
 .subnav{display:flex; align-items:baseline; gap:30px}
 /* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
    줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다.
@@ -338,13 +327,10 @@ body.subdetach .subtabs{padding-left:16px}
    ※ 여기에 62 를 적고 '.panel 의 margin-top 8 과 더해 70' 을 기대하면 안 된다 — 더해지지 않는다.
      .panel 은 테두리도 안쪽 여백도 없어서 이 판의 위 마진이 부모 마진과 상쇄(margin collapsing)되고,
      둘 중 큰 값 하나만 남는다. 실제로 62 를 적었더니 화면에서도 62 였다. 그래서 여기 값이 곧 총 여백이다. */
-.lk-box{max-width:1280px; margin:70px 0 0; padding:6px 26px 12px;
+.lk-box{max-width:1280px; margin:70px 0 0; padding:10px 26px 12px;
   background:linear-gradient(180deg,#151d2d 0%,#101725 100%);
   border:1px solid #2a3550; border-radius:18px;
   box-shadow:0 26px 60px -30px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.045)}
-/* 머리줄 — 1-2 의 .bx-lb 와 같은 규격(sans .64rem/800/#7d90ad). 판마다 '무엇이 담겼나' 를 한 줄로 */
-.lk-lb{font-family:var(--sans); font-size:.64rem; font-weight:800; letter-spacing:.04em;
-  color:#7d90ad; margin:16px 0 2px}
 .lk-list{max-width:none}
 .lk-row{display:flex; align-items:center; gap:30px; text-decoration:none;
   padding:20px 2px; border-bottom:1px solid var(--line2)}
