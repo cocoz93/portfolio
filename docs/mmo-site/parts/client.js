@@ -11,8 +11,8 @@ function h(t,a,txt){ var e=document.createElement(t); for(var k in a) e.setAttri
 /* 계기판이 성과 수치가 아니라 PC 두 대인 이유 — 2-2 는 서버 PC 와 클라 PC 를 나눠 돌린 시험이고
    2-3 은 한 PC loopback 이다. 조건이 다른데 머리에 안 적어 두면 두 탭의 수치를 같은 자로 읽는다. */
 /* 계기판은 잰 자리(전제)만 든다. 성과 '무결성 위반 0건' 을 판으로 떼어 오른쪽 아래에 세워 둔 적이
-   있는데, 같은 말이 이미 그림 안에 두 번 있어 걷어냈다 — STEP 2 의 '결함을 넣었더니 첫 패킷에서
-   걸렸다' 와 보기 ③ 합격 기준. */
+   있는데, 같은 말이 이미 그림 안에 두 번 있어 걷어냈다 — STEP 2 의 '결함 주입, 첫 패킷에서
+   검출' 과 보기 ③ 합격 기준. */
 var SAFE={
   dash:[["서버 PC","i9-10900","10C / 20T","Windows 10 · RAM 32GB · NIC Intel I225-V",0],
         ["부하 클라 PC","i7-6700","4C / 8T","Windows 10 · RAM 16GB · NIC Intel I219-V",0],
@@ -21,14 +21,14 @@ var SAFE={
      상자를 카드 오른쪽 아래 구석에 붙여 놨는데(safe-scene.js 의 overlay), 위를 고정하고 아래로
      자라는 구조라 줄 수가 곧 아래 여백이다. 넷이 145·180·142·88자이던 때 아래 여백이 보기마다
      60 → 18.6px 로 출렁였다(보기②가 4줄). 그래서 그림이 이미 하는 말을 걷어내 두 줄로 줄였다 —
-     걷어낸 것: '먼저 남이 만든 도구로 잰다'(칩 이름) · '동접 1,000 으로 25분'(STEP 1 판정줄) ·
-     '①을 통과한'(STEP 2 이름표) · '결함을 심었더니 첫 패킷에서 걸렸다'(STEP 2 판정줄) ·
+     걷어낸 것: '먼저 검증된 더미로 잰다'(보기 버튼 이름) · '동접 1,000'(STEP 1 판정줄) ·
+     '①을 통과한'(STEP 2 이름표) · '결함 주입, 첫 패킷에서 검출'(STEP 2 판정줄) ·
      '동접 5,000 · 이동 · 시야 · 채팅'(STEP 3 이름표와 판정줄).
      ※ 여기 글을 늘릴 일이 생기면 세 줄째부터 카드 밑으로 밀린다. 늘리려면 상자 y 를 같이 올릴 것 */
   items:{
-    s1:{t:"남이 만든 도구",
+    s1:{t:"검증된 더미",
       n:"게임코디 Echo 더미는 10바이트 고정이다. 번호를 보내고 그대로 돌아오는지만 본다 — 접속이 되는가 · 서버가 먼저 끊지 않는가 · 보낸 값과 받은 값이 같은가."},
-    s2:{t:"내가 만든 도구",
+    s2:{t:"커스텀 더미",
       n:"패킷은 12~256바이트로 들쭉날쭉하고 남는 자리는 정해진 규칙으로 채운다. 받을 때 같은 규칙으로 다시 만들어 통째로 비교하고, 어긋나면 바이트 자리까지 남기고 멈춘다."},
     gate:{t:"합격 기준",
       n:"넷 다 0이어야 한다 — 서버가 먼저 끊음 · 바이트 훼손 · 순서 역전 · 왕복 시간 초과. 하나라도 0이 아니면 부하 탓이 아니라 라이브러리 결함으로 본다."},
@@ -62,6 +62,51 @@ function drawSafe(){
   var S=window.SafeScene; if(!S) return;
   S.draw(document.getElementById("sc-safe"), S.SCENE);
   S.apply(S.SCENE);
+}
+
+/* ── 계단 애니 ── 무대에 시안 클래스를 입히고 sfa-run 으로 재생한다(규칙은 client.css).
+   클래스를 뗐다 붙이는 것만으로는 다시 재생이 안 된다 — 한 프레임 안에서 떼고 붙이면
+   브라우저가 바뀐 것을 모른다. 사이에 리플로우를 한 번 강제한다(wave.js 와 같은 수법). */
+var SFA="c";                                     /* 고른 시안: a 차오름 · b 왕복 · c 둘 다 · d 결함검출 */
+var SFA_ALL=["a","b","c","d"];
+function safePlay(){
+  var st=document.querySelector("#p-csafe .sf-stage"); if(!st) return;
+  SFA_ALL.forEach(function(k){ st.classList.remove("sfa-"+k); });
+  st.classList.remove("sfa-run");
+  st.classList.add("sfa-"+SFA);
+  void st.offsetWidth;
+  st.classList.add("sfa-run");
+}
+/* 인자를 주면 시안을 바꿔 끼우고 재생한다(고르는 줄과 렌더 검증이 쓴다).
+   탭 전환은 인자 없이 부르므로 고른 시안 그대로 다시 돈다. */
+window.__safePlay=function(k){ if(k) SFA=k; safePlay(); };
+
+/* 시안 고르기 줄 — 주소 끝에 ?anim 을 붙였을 때만 뜬다. 시안을 정하면 이 블록째 지운다. */
+function safePicker(){
+  if(!/(^|[?&])anim(&|=|$)/.test(location.search)) return;
+  var NAME={a:"a 차오름", b:"b 왕복", c:"c 차오름→왕복", d:"d 결함 검출"};
+  var bar=h("div",{style:"position:fixed; z-index:99; left:50%; bottom:14px; transform:translateX(-50%);"
+    +"display:flex; gap:6px; align-items:center; background:#131a26; border:1px solid #28324a;"
+    +"border-radius:10px; padding:6px 9px; font-size:.8rem; box-shadow:0 8px 24px rgba(0,0,0,.5)"});
+  bar.appendChild(h("span",{style:"color:#8496b3; margin-right:2px"},"애니 시안"));
+  SFA_ALL.forEach(function(k){
+    var b=h("button",{type:"button",style:"font:inherit; cursor:pointer; border-radius:7px;"
+      +"padding:4px 9px; border:1px solid #28324a; background:#1a2333; color:#eef2fb"},NAME[k]);
+    b.addEventListener("click",function(){
+      SFA=k;
+      [].forEach.call(bar.querySelectorAll("button"),function(o){
+        o.style.background="#1a2333"; o.style.borderColor="#28324a"; });
+      b.style.background="#14324b"; b.style.borderColor="#2f5f86";
+      safePlay();
+    });
+    if(k===SFA){ b.style.background="#14324b"; b.style.borderColor="#2f5f86"; }
+    bar.appendChild(b);
+  });
+  var r=h("button",{type:"button",style:"font:inherit; cursor:pointer; border-radius:7px;"
+    +"padding:4px 9px; border:1px solid #28324a; background:#0f1522; color:#8496b3"},"↻ 다시");
+  r.addEventListener("click",safePlay);
+  bar.appendChild(r);
+  document.body.appendChild(bar);
 }
 
 /* ═══════════ ③ 부하 그림 ═══════════ */
@@ -256,6 +301,10 @@ function wireWide(scId,chId,noteId,DATA,order,linkLabel,moreId){
 
 /* 기동 */
 drawSafe(); paintDash("d-safe",SAFE.dash);
+safePicker();
+/* tabs.js 는 이 조각보다 먼저 돌아서 첫 paint() 때는 __safePlay 가 아직 없다 —
+   주소에 #csafe 를 달고 들어온 경우가 그렇다. 그때만 여기서 한 번 재생한다(이중 재생 없음). */
+if(!document.getElementById("p-csafe").hidden) safePlay();
 wireWide("sc-safe","ch-safe","nt-safe",SAFE,["s1","s2","gate","s3"],"에코 더미 · 스트레스 테스트","mo-safe");
 drawLoad(); paintDash("d-load",LOAD.dash);
 wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");

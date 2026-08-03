@@ -446,9 +446,9 @@ function renderGlob(){
     f("깊이 v",D.plate,"v"); f("가로 w",D.plate,"w"); f("세로 d",D.plate,"d"); f("두께 h",D.plate,"h");
     f("글씨 자리",D.plate,"wordU",.01); f("글씨 깊이",D.plate,"wordV"); f("글씨 크기",D.plate,"wordSize");
   } else if(globTab==="lane"){
-    f("덩어리 여백",D.lane,"gap"); f("통로 반폭",D.lane,"hw");
+    f("덩어리 여백",D.lane,"gap"); f("레일 반폭",D.lane,"hw"); f("레일 사이",D.lane,"sep");
     var h=document.createElement("div"); h.className="hint";
-    h.textContent="통로는 두 덩어리 사이를 채웁니다 — 덩어리를 옮기면 길이가 따라 바뀝니다.";
+    h.textContent="레일 둘은 두 덩어리 사이를 채웁니다 — 덩어리를 옮기면 길이가 따라 바뀝니다. 위가 보내는 길, 아래가 돌아오는 길입니다.";
     box.appendChild(h);
   } else if(globTab==="ramp"){
     f("깊이 dv",D.ramp,"dv"); f("판 위 dz",D.ramp,"dz"); f("화살촉",D.ramp,"tip"); f("띠 반폭",D.ramp,"hw");
@@ -516,7 +516,7 @@ function sceneText(){
   t+="  bb:"+obj(D.bb,["x","y"])+",\n";
   t+="  title:"+obj(D.title,["t","size","dx","dy"])+",\n";
   t+="  plate:"+obj(D.plate,["v","w","d","h","wordU","wordV","wordSize"])+",\n";
-  t+="  lane:"+obj(D.lane,["gap","hw"])+",\n";
+  t+="  lane:"+obj(D.lane,["gap","hw","sep"])+",\n";
   t+="  ramp:"+obj(D.ramp,["dv","dz","tip","hw"])+",\n";
   t+="  overlay:{\n";
   t+=["dash","chips","note","more"].filter(function(k){ return D.overlay[k]; }).map(function(k){

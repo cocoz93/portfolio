@@ -91,6 +91,9 @@
     /* 두 실행 녹화는 숨은 동안 멈춰 있다(화면에 없는 그림을 디코딩할 이유가 없다).
        그래서 다시 들어올 때 여기서 깨워 준다 — 안 깨우면 멈춘 한 장이 남는다. */
     if(top==="dummy" && csub==="render" && window.__crenderPlay) window.__crenderPlay();
+    /* 2-2 계단도 같다 — 이 화면에 들어올 때마다 처음부터. 첫 로드에서는 이 조각이 client.js 보다
+       먼저라 __safePlay 가 아직 없고, 그때는 client.js 가 스스로 한 번 재생한다. */
+    if(top==="dummy" && csub==="safe" && window.__safePlay) window.__safePlay();
     syncHash();
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });

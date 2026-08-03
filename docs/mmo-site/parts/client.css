@@ -77,6 +77,9 @@
 /* 왕복 통로는 테두리만으로는 약하다 — 바닥을 같이 밝힌다(안을 덮지는 않는다) */
 .cl-lane{transition:fill .15s}
 .cl-hit.on .cl-lane{fill:#1d3d63}
+/* 보내는 레일은 바닥색부터 다르다(1-1 의 send 레일과 같은 어두운 갈색) — 켤 때도 그 계열로 밝힌다.
+   이 줄이 없으면 '합격 기준' 을 켜는 순간 두 레일이 같은 파랑이 되어 방향 구분이 사라진다. */
+.cl-hit.on .cl-lane.sf-rsnd{fill:#4a3a15}
 
 /* ※ 옆 카드(.cl-two / .cl-stage / .cl-side / table.cl-t)는 세 장이 다 전폭 그림으로 바뀌면서 없앴다.
    카드가 하던 일(무엇을 골랐나 · 왜 그랬나)은 그림 안 라벨과 아래 한 줄(.cr-note)이 나눠 가졌다. */
@@ -114,6 +117,100 @@
 /* 나가는 문 한 짝만 담는 자리 — .cr-more 는 margin-left:auto 로 오른쪽에 붙는데, 그건 담는
    쪽이 flex 일 때만 듣는다. 설명 줄과 오른쪽 끝을 맞추려고 여기서 flex 로 만든다. */
 #p-csafe #mo-safe{display:flex; justify-content:flex-end}
+
+/* ═══ 계단 애니 — 시안 넷 중 하나를 무대에 입힌다(.sfa-a … .sfa-d) ═══
+   그리는 쪽(safe-scene.js)이 단마다 자루를 하나 달아 둔다. 층(판·그림자·덩어리·글자)은 그대로
+   두고 그 안에서 [data-st="s1"] 같은 자루로 한 겹 더 싼 것이다. 자루를 씌운 까닭은 둘이다 —
+   단위로 켜고 끄려면 자루가 있어야 하고, 반투명한 것(그림자 .40 · 경사로 .55 · 판 글씨 .34)은
+   자기 자신에 애니를 걸면 keyframes 끝의 opacity:1 이 그 값을 영영 덮어쓴다.
+   ※ 전부 CSS 애니라 common.css 맨 아래 prefers-reduced-motion 전역 규칙이 그대로 다 꺼 준다.
+   ※ 패킷만 data-pk 로 이름이 다르다 — [data-st] 로 잡히면 '단이 서는' 애니에 딸려 나온다.
+     시안                      한 줄
+     a 차오름   아래 단부터 판이 서고 경사로가 이어진다 (한 번)
+     b 왕복     그림은 그대로, 통로 위 패킷이 갔다가 그대로 돌아온다 (계속)
+     c 차오름→왕복  a 가 끝난 자리에서 b 가 이어 돈다
+     d 결함검출  b 와 같은데 STEP 2 의 돌아오는 패킷만 통로 중간에서 붉게 걸린다 (계속) */
+@keyframes sfRise{from{opacity:0; transform:translate(0,22px)} to{opacity:1; transform:translate(0,0)}}
+@keyframes sfPop {from{opacity:0; transform:translate(0,6px)}  to{opacity:1; transform:translate(0,0)}}
+/* 통로를 건너는 왕복 한 바퀴. 갈 때와 올 때가 한 몸이 아니라 패킷 둘(보냄 주황 · 받음 파랑)이고,
+   서로의 쉬는 구간에 상대가 뜬다 — 색이 바뀌는 게 아니라 '같은 것이 그대로 돌아온다' 를 말한다. */
+/* 뜨고 지는 것은 페이드가 아니라 딱 끊는다(0.01% = 0.28ms). 2%(56ms)로 줄여도 반쯤 투명한
+   프레임이 남아 어두운 레일과 섞여 먹빛 얼룩으로 찍혔다(확대해서 두 번 확인).
+   칩은 도착하면 사라지는 것이지 흐려지는 것이 아니라, 끊는 편이 뜻에도 맞는다.
+   한 바퀴 2.8s — 가는 구간 0~32%(896ms), 오는 구간 46~78%. 칩 셋이 100ms 씩 늦게 출발하니
+   맨 뒤 칩이 닿는 데 200ms 가 더 든다. 두 구간 사이 여백(32~46% = 392ms)이 그 몫이다. */
+@keyframes sfSnd{
+  0%     {opacity:0; transform:translate(0,0)}
+  .01%   {opacity:1; transform:translate(0,0)}
+  32%    {opacity:1; transform:translate(var(--dx),var(--dy))}
+  32.01% {opacity:0; transform:translate(var(--dx),var(--dy))}
+  100%   {opacity:0; transform:translate(var(--dx),var(--dy))}}
+@keyframes sfRcv{
+  0%,46% {opacity:0; transform:translate(var(--dx),var(--dy))}
+  46.01% {opacity:1; transform:translate(var(--dx),var(--dy))}
+  78%    {opacity:1; transform:translate(0,0)}
+  78.01% {opacity:0; transform:translate(0,0)}
+  100%   {opacity:0; transform:translate(0,0)}}
+/* 결함 검출 — 돌아오다 레일 한복판에서 멈추고 색이 돈다. 파랑(#6cc7ff, 색상각 203°)에
+   160° 를 더하면 3° 곧 빨강이다. 칠을 갈아 끼우지 않고 자루째 돌린다. */
+@keyframes sfRcvBad{
+  0%,46% {opacity:0; transform:translate(var(--dx),var(--dy)); filter:none}
+  46.01% {opacity:1; transform:translate(var(--dx),var(--dy)); filter:none}
+  62% {opacity:1; transform:translate(calc(var(--dx)*.46),calc(var(--dy)*.46)); filter:none}
+  67% {opacity:1; transform:translate(calc(var(--dx)*.46),calc(var(--dy)*.46));
+       filter:hue-rotate(160deg) saturate(1.7) brightness(1.1)}
+  90% {opacity:1; transform:translate(calc(var(--dx)*.46),calc(var(--dy)*.46));
+       filter:hue-rotate(160deg) saturate(1.7) brightness(1.1)}
+  100%{opacity:0; transform:translate(calc(var(--dx)*.46),calc(var(--dy)*.46));
+       filter:hue-rotate(160deg) saturate(1.7) brightness(1.1)}}
+@keyframes sfLaneBad{0%,62%{fill:#16243a} 67%,88%{fill:#4d1b22} 100%{fill:#16243a}}
+
+/* ── 언제 시작할지는 변수로 넘긴다 ──
+   animation 줄임표기는 안 적은 값을 초기값으로 되돌린다. 그래서 animation-delay 를 따로 한 줄
+   적어 두면, 특이도가 더 높은 animation 한 줄이 그 지연을 0 으로 되돌려 셋이 한꺼번에 튄다
+   (실제로 그렇게 짰다가 되돌렸다). 지연은 줄임표기 안(둘째 시간값)에 var 로 넣는다.
+   --d 는 단이 서는 시각, --pd 는 그 단의 패킷이 출발하는 시각. 사용자 정의 속성은 안으로
+   물려 내려가므로 자루에 한 번 적으면 그 안의 판정줄까지 같은 값을 쓴다. */
+#sc-safe [data-st="s1"]{--d:0ms}
+#sc-safe [data-st="s2"]{--d:340ms}
+#sc-safe [data-st="s3"]{--d:680ms}
+/* 경사로는 제 단보다 140 먼저 뻗는다 — 다리가 먼저 놓이고 그 위에 단이 선다 */
+#sc-safe .sf-ramp[data-st="s2"]{--d:200ms}
+#sc-safe .sf-ramp[data-st="s3"]{--d:540ms}
+/* --e 는 왕복이 시작하기까지 기다리는 시간. c 만 차오름이 끝나기를 기다린다.
+   --ci 는 줄 안에서 몇 번째 칩인가(그리는 쪽이 심는다) — 칩 하나가 아니라 셋이 줄지어 가도록
+   100ms 씩 늦춘다. 1-1 의 흐름은 rAF 로 칩을 계속 뿜지만, 여기는 CSS 라 개수를 미리 정해 둔다. */
+#sc-safe .sf-pk[data-pk="s1"]{--pd:calc(var(--e,0ms) + 0ms)}
+#sc-safe .sf-pk[data-pk="s2"]{--pd:calc(var(--e,0ms) + 260ms)}
+#sc-safe .sf-pk[data-pk="s3"]{--pd:calc(var(--e,0ms) + 520ms)}
+#sc-safe .sf-pk{--cd:calc(var(--pd,0ms) + var(--ci,0)*100ms)}
+.sfa-c{--e:1150ms}
+
+/* ── a·c : 아래 단부터 차오른다 ── 판정줄은 제 단이 다 서고 380 뒤에 찍힌다 */
+/* 시작 전 한 프레임 번쩍이는 것을 막는 줄인데, 반드시 '움직임을 마다하지 않는' 경우로 좁혀야 한다.
+   common.css 의 prefers-reduced-motion 규칙은 animation 만 끄므로, 이 줄을 밖에 두면 애니를 끈
+   사람에게는 그림이 통째로 안 보이는 화면이 남는다(opacity:0 은 애니가 아니라 그냥 선언이라서). */
+@media (prefers-reduced-motion:no-preference){
+  .sfa-a #sc-safe [data-st], .sfa-c #sc-safe [data-st]{opacity:0}
+}
+.sfa-a.sfa-run #sc-safe [data-st], .sfa-c.sfa-run #sc-safe [data-st]{
+  animation:sfRise .44s var(--d,0ms) cubic-bezier(.22,.9,.3,1) both}
+.sfa-a.sfa-run #sc-safe .sf-judge, .sfa-c.sfa-run #sc-safe .sf-judge{
+  animation:sfPop .3s calc(var(--d,0ms) + 380ms) cubic-bezier(.2,1.1,.35,1) both}
+
+/* ── b·c·d : 레일 왕복 ── 한 바퀴 2.8s, 단마다 260ms 씩 늦게 출발해 계단을 타고 흐른다 */
+.sfa-b.sfa-run #sc-safe .sf-snd, .sfa-c.sfa-run #sc-safe .sf-snd, .sfa-d.sfa-run #sc-safe .sf-snd{
+  animation:sfSnd 2.8s var(--cd,0ms) linear infinite}
+.sfa-b.sfa-run #sc-safe .sf-rcv, .sfa-c.sfa-run #sc-safe .sf-rcv,
+.sfa-d.sfa-run #sc-safe .sf-rcv:not([data-pk="s2"]){
+  animation:sfRcv 2.8s var(--cd,0ms) linear infinite}
+/* d 에서 STEP 2 는 '첫 패킷'(맨 앞 칩)만 돌아오다 걸리고, 뒤따르던 둘은 아예 안 온다 —
+   위 규칙이 s2 의 돌아오는 칩을 통째로 비켜 갔으므로 여기서 맨 앞 하나만 다시 켠다.
+   판정줄이 '첫 패킷에서 검출' 이라고 적힌 그대로다. */
+.sfa-d.sfa-run #sc-safe .sf-rcv[data-pk="s2"][data-ci="0"]{
+  animation:sfRcvBad 2.8s var(--cd,0ms) linear infinite}
+.sfa-d.sfa-run #sc-safe .cl-lane.sf-rrcv[data-st="s2"]{
+  animation:sfLaneBad 2.8s calc(var(--e,0ms) + 260ms) linear infinite}
 
 /* 잰 자리 셋 — 판을 벗기고 기둥 하나로 묶는다.
    기둥 색은 --line 이다. 카드 바탕이 #131a26 이라 --line2(#1e2739)로는 확대해도 선이 안 보였고,
