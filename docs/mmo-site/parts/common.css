@@ -187,19 +187,16 @@ body.subdetach .subtabs{padding-left:16px}
    168도 = 사이트가 이미 쓰는 --net(#6cc7ff) 계열 — 이 그림만 따로 놀지 않게.
    ※ 이 색변환은 여기 CSS filter 가 아니라 그릴 때 한 번 계산해 칠한다(스크립트의 blueprint 함수) —
      필터를 걸어 두면 프레임마다 그룹 전체를 다시 래스터라이즈해서 전환 애니가 끊겼다. */
-#bnpins .pin{cursor:pointer; transition:opacity .18s}
+/* 핀은 읽는 표시다 — 손가락 모양도 hover 반응도 없다. 누를 수 있게 보이면 눌러 보게 되고,
+   눌러도 아무 일이 없으면 고장으로 읽는다. 고르는 곳은 오른쪽 카드 한 군데다. */
+#bnpins .pin{transition:opacity .18s}
 /* 고른 카드의 자리만 밝다 — 여섯이 같은 밝기면 번호가 어느 배지에 떴는지가 안 짚인다.
-   실측 카드가 없는 자리(큐 넘김 · 수신 길목 · 저장 경로)는 늘 이쪽이고, 손가락 모양도 안 뜬다:
-   눌러도 갈 카드가 없는데 누를 수 있게 보이면 눌러 본 사람이 고장으로 읽는다.
    ※ 한때 .26 이었다. 그러면 붉은색(#ff6b52)이 남색 배경과 섞여 회갈색이 되어, 안 고른 다섯 자리가
      지도에서 아예 사라졌다('수신 길목' · '저장 경로' 는 있는 줄도 모른다). 고른 하나를 짚는 일은
      이제 배지 채움과 글로우가 맡으므로, 흐리기는 '덜 밝다' 정도만 하면 된다. */
 #bnpins .pin.dim{opacity:.55}
-#bnpins .pin.nodata{cursor:default}
-#bnpins .pin:focus-visible{outline:none}
 #bnpins .pin .pin-badge{transition:filter .15s}
-#bnpins .pin:hover .pin-badge, #bnpins .pin:focus-visible .pin-badge, #bnpins .pin.lit .pin-badge{
-  filter:drop-shadow(0 0 11px #ff6b52)}
+#bnpins .pin.lit .pin-badge{filter:drop-shadow(0 0 11px #ff6b52)}
 /* 핀 이름표는 지도 위 아무 데나 놓이므로 상자 선·구역 글자와 겹친다('멤버십 팬아웃' 이 게임 루프
    상자에 걸린다). 글자 둘레를 배경색으로 한 번 두르면 무엇과 겹치든 제 모양이 남는다.
    paint-order:stroke = 테두리를 먼저 칠하고 글자를 그 위에 — 없으면 테두리가 글자를 갉아먹는다.
@@ -291,7 +288,11 @@ body.subdetach .subtabs{padding-left:16px}
 @keyframes bnGrow{from{-webkit-mask-position:100% 0%; mask-position:100% 0%}
                     to{-webkit-mask-position:0% 100%;  mask-position:0% 100%}}
 @keyframes bnCam{from{transform:var(--bn-t0,none)} to{transform:none}}
-@keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{opacity:1; transform:none}}
+/* to 에 opacity 를 적지 않는다. 적으면 fill-mode:both 가 그 1 을 붙들고 있다가, 진입이 끝나
+   .bn-enter 가 떨어지는 순간 .pin.dim(.55) 으로 **계단처럼 떨어진다** — 안 고른 다섯이 한꺼번에
+   꺼지는 그 한 프레임이 '꽂히자마자 꺼진다' 로 보였다(1860ms 프레임에서 실측).
+   안 적으면 도착값이 그 핀의 제 값(고른 것 1 · 나머지 .55)이 되어 각자 제자리에 앉는다. */
+@keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{transform:none}}
 /* 폭을 지도 몫(.bn-tilt 63%)에 맞추는 이유: 캡션은 .bn-shift(지도+패널) 안에 있어서,
    그냥 가운데 정렬하면 지도가 아니라 '지도+패널' 의 한가운데로 밀린다. 한글이라 mono 금지(폴백 벌어짐) */
 .bn-cap{font-size:.8rem; color:var(--dim); text-align:center; margin:4px 0 0; max-width:63%}

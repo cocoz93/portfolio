@@ -27,8 +27,9 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
 1. **조각 순서** — 셸이 들고 있다. `__scenePlay` 가 아직 없을 때 웨이브가 스스로 재생하는 식의
    순서 의존이 있어서, 마커 순서를 바꾸면 첫 로드 애니가 조용히 깨진다.
 2. **window 훅** — `__flowStart` `__flowStop` `__flowReset` `__scenePlay` `__zoneTourArm`
-   `resetZone` `playBneckIntro` `__EXPS` `__PINS` `__bnPickLoc` `__crenderPlay`.
+   `resetZone` `playBneckIntro` `__EXPS` `__PINS` `__crenderPlay`.
    이름·인자를 바꾸려면 단독 작업으로.
+   (`__bnPickLoc` 은 2026-08-04 에 없앴다 — 핀에서 클릭을 걷어내면서 부를 곳이 사라졌다.)
 3. **DOM id** — `#p-build` `#p-bneck` `#p-crender` `#p-csafe` `#p-cload` `#p-misc` `#scene`
    `#subtabs` `#subtabs2`. `tabs.js` 가 전부 하드코딩한다.
 4. **마크업 계약** — 병목 탭은 셋이 물려 있다.
@@ -41,7 +42,10 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    - *같은 값이라 한쪽만 고치면 어긋나는 것*: `1.34s`(scene.js 초 1560 · 밀리초 1671 ↔ bneck.css 145
      — scene.js 안에서도 두 벌이다) · `160ms`(common.css `.16s` ↔ wave.js `SPAN+160+100`)
    - *크기 관계라 같이 조정해야 하는 것*: 구역순회 `TOUR_HOLD 380ms`(scene.js) **>** 페이드 `.22s`(common.css) ·
-     카드 짓기 `300ms`(scene.js `fillCard`) **<** 재적용 `400ms`(bneck.js)
+     카드 짓기 `300ms`(scene.js `fillCard`) **<** 재적용 `400ms`(bneck.js) ·
+     진입 끝 `BN_TOTAL 2140ms`(scene.js) **≥** 마지막 핀이 앉는 시각 `1.34s + 6×0.08s + 0.30s = 2.12s`
+     (핀 지연 간격은 scene.js `animationDelay`, 드롭 길이는 common.css `bnPinDrop`).
+     작으면 마지막 핀이 공중에서 규칙을 잃고 제자리로 점프한다 — 핀을 더 꽂거나 간격을 늘리면 여기부터 볼 것.
 6. **클래스 접두어** — 병목 `.bn-*` `.bx-*`(카드 한 장은 `.rc`) / 클라 `.cl-*` `.cr-*`.
    `.card .stage .hit .panel` 은 이미 공유 중이니 새로 만들지 말 것.
 

@@ -1559,8 +1559,12 @@ window.__flowReset=function(){
   PINS.forEach(function(p,i){
     if(p.nopin) return;              /* 자리 0(현재)은 지도에 꽂을 지점이 없다 — 칩 줄에만 선다 */
     const x=fx(p.u), yb=fy(p.v), yt=yb-p.h;
-    const g=el("g",{class:"pin","data-loc":p.n,tabindex:"0",role:"button",
-      "aria-label":"병목 자리 "+p.name+" — 이 자리에서 잰 첫 실험으로"});
+    /* 핀은 누르는 것이 아니다 — 자리를 짚는 표시일 뿐이다(2026-08-04).
+       한때 '이 자리에서 잰 첫 실험' 으로 가는 입구였는데, 그 실험 카드가 오른쪽에 열두 장 다 펼쳐져
+       있으므로 같은 일을 하는 입구가 둘이었다. 게다가 핀 쪽은 한 자리에 실험이 여럿일 때 첫 것만
+       열려 덜 정확했고, 여섯 중 셋(큐 넘김 · 수신 길목 · 저장 경로)은 실측 카드가 없어 눌러도
+       아무 일이 안 났다. 고르는 일은 카드가 혼자 맡는다. */
+    const g=el("g",{class:"pin","data-loc":p.n});
     /* 땅이 다 펴진 뒤에 꽂는다 — 아직 기울어 있는 땅에 평면 좌표의 핀이 먼저 서면 자리가 어긋나 보인다.
        꽂는 순서는 배지 번호 순서다. 카드 1·2·3 과 짝이라 세는 순서가 먼저다. */
     g.style.animationDelay=(1.34+i*0.08)+"s";
@@ -1568,18 +1572,21 @@ window.__flowReset=function(){
     const pulse=el("ellipse",{class:"pin-pulse",cx:x,cy:yb,rx:p.rx,ry:p.rx,fill:"none",stroke:HOT,"stroke-width":1.4});
     pulse.style.animationDelay=(i*0.55)+"s"; g.appendChild(pulse);
     g.appendChild(el("line",{x1:x,y1:yb-2,x2:x,y2:yt+11,stroke:HOT,"stroke-width":1.6,opacity:".7"}));
-    g.appendChild(el("circle",{class:"pin-badge",cx:x,cy:yt,r:11,fill:"#241014",stroke:HOT,"stroke-width":1.8}));
+    /* 배지 바깥에 한 겹 띄운 테. 채운 점만 있으면 지도 위의 여느 도형과 크기로만 다른데, 띄운 테가
+       있으면 '표시하려고 그린 것' 으로 읽힌다. 바닥의 파문(pin-pulse)과는 자리가 다르다 —
+       파문은 지면 테(cy:yb)에서 퍼지고 이 테는 막대 위 배지(cy:yt)를 두른다. */
+    g.appendChild(el("circle",{class:"pin-halo",cx:x,cy:yt,r:15,fill:"none",stroke:HOT,"stroke-width":1.2,opacity:".65"}));
+    /* 배지는 속을 채운다. 한때 어두운 속(#241014)에 붉은 테 1.8 이었는데, 그러면 핀이 지도와 같은
+       조형(가는 선으로 그린 원)이 되어 색만 다를 뿐 형태로는 안 갈렸다 — 지도에는 이미 원이 여럿이다
+       (타이밍 휠 · 게임 루프 · 송신 큐). 채운 점은 면적을 가지므로 선 그림 위에서 바로 이긴다. */
+    g.appendChild(el("circle",{class:"pin-badge",cx:x,cy:yt,r:11,fill:HOT,stroke:"#ffe0d6","stroke-width":1.4}));
     /* 배지 안은 비운 채로 꽂는다 — 번호는 자리가 아니라 실험이 갖는다.
-       오른쪽 카드를 고르면 그 자리 핀에만 그 카드 번호가 들어온다(bneck.js 가 이 text 를 갈아 끼운다). */
-    g.appendChild(el("text",{class:"pin-no",x:x,y:yt+4.5,"text-anchor":"middle","font-size":13,"font-weight":"800",fill:HOT,"font-family":"var(--mono)"},""));
+       오른쪽 카드를 고르면 그 자리 핀에만 그 카드 번호가 들어온다(bneck.js 가 이 text 를 갈아 끼운다).
+       글자는 채운 배지 위에 얹히므로 붉은색이 아니라 아주 어두운 색이라야 읽힌다. */
+    g.appendChild(el("text",{class:"pin-no",x:x,y:yt+4.5,"text-anchor":"middle","font-size":13,"font-weight":"800",fill:"#1b0a06","font-family":"var(--mono)"},""));
     const tx=x+p.side*19, anch=p.side>0?"start":"end";
     g.appendChild(el("text",{x:tx,y:yt-1,"text-anchor":anch,"font-size":12.5,"font-weight":"800",fill:"#ffd9cf","font-family":"var(--sans)"},p.name));
     g.appendChild(el("text",{x:tx,y:yt+13,"text-anchor":anch,"font-size":10,"font-weight":"600",fill:"#9aa7bd","font-family":"var(--sans)"},p.sub));
-    /* 핀은 이제 '이 자리에서 잰 첫 실험' 으로 가는 입구다 — 고르는 일 자체는 오른쪽 카드가 한다.
-       실측 카드가 없는 자리(미측정 3곳)는 bneck.js 가 이 핀을 흐리게 두고 아무 일도 하지 않는다. */
-    function go(){ if(window.__bnPickLoc) window.__bnPickLoc(p.n); }
-    g.addEventListener("click",go);
-    g.addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
     gPins.appendChild(g); pinEls[p.n]=g;
   });
   /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다.
@@ -1602,8 +1609,11 @@ window.__flowReset=function(){
        1.34s      핀 드랍·카드  ← 평면화가 거의 끝난 뒤. 핀 좌표가 '평면 기준' 이라 순서를 지켜야 한다
      ※ 끊김을 잡으려고 이 길이를 1200ms 로 늘려 본 적이 있는데, 원인은 길이가 아니라 카메라와 겹친 것이었다.
        카메라를 앞으로 뺀 뒤로는 720ms 로도 매끄럽다 — 원래 속도가 더 낫다고 판단해 되돌렸다.
-     FLAT_DUR 을 건드리면 핀 지연(1.34)·카드 켜기(1340)·BN_TOTAL 을 같은 폭으로 함께 옮길 것. */
-  const FLAT_AT=860, FLAT_DUR=720, BN_TOTAL=1860;
+     FLAT_DUR 을 건드리면 핀 지연(1.34)·카드 켜기(1340)·BN_TOTAL 을 같은 폭으로 함께 옮길 것.
+     ※ BN_TOTAL 1860 → 2140. 핀은 1.34s 부터 0.08s 간격으로 여섯이 차례로 떨어지고 한 개가 0.30s
+       걸리므로, 마지막 핀은 1.82s 에 시작해 2.12s 에 끝난다. 1860 에 .bn-enter 를 떼면 그 핀은
+       공중에서 규칙을 잃고 제자리로 점프했다(꽂히다 만다). 진입의 끝은 마지막 핀이 앉는 시각이다. */
+  const FLAT_AT=860, FLAT_DUR=720, BN_TOTAL=2140;
   const RMB=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const panel=document.getElementById("p-bneck");
   /* CSS 카메라 안착과 같은 곡선(cubic-bezier(.22,.61,.36,1))을 그대로 계산한다.

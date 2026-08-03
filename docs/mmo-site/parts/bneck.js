@@ -4,8 +4,8 @@
      ① 카드 열두 장: 번호 · 판정 · 이름 · 성과 한 줄 (노션 실측 보고서와 1:1)
      ② 계기판: 고른 카드의 before → after
    위 코드의 IIFE 안으로 들어가지 않는다. 연결은 실험 배열(window.__EXPS)과
-   위 코드가 만들어 둔 핀 마크업(#bnpins .pin[data-loc])뿐이고,
-   핀 클릭이 이쪽으로 넘어오는 길만 훅 하나로 낸다(window.__bnPickLoc). */
+   위 코드가 만들어 둔 핀 마크업(#bnpins .pin[data-loc]) 둘뿐이다 — 한 방향이라 훅이 없다.
+   (한때 핀 클릭을 이쪽으로 넘기는 window.__bnPickLoc 이 있었는데, 핀에서 클릭을 걷어내며 같이 지웠다.) */
 (function(){
 "use strict";
 var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -148,18 +148,15 @@ build();
 
 /* ═══ 지도 핀 ═══
    번호는 자리가 아니라 실험이 갖는다 — 고른 카드의 번호가 그 자리 핀에만 들어간다.
-   실측 카드가 없는 자리(큐 넘김 · 수신 길목 · 저장 경로)는 늘 흐리고 누를 수도 없다:
-   눌러도 갈 카드가 없는데 손가락 모양만 뜨면 눌러 본 사람이 고장으로 읽는다. */
-var FIRST={};   /* 자리 → 그 자리의 첫 카드 (핀을 눌렀을 때 가는 곳) */
-EXPS.forEach(function(e){ if(!FIRST[e.loc]) FIRST[e.loc]=e; });
+   핀은 읽는 표시일 뿐 누르는 것이 아니다(2026-08-04에 클릭을 걷어냈다 — 고르는 곳은 카드 한 군데다).
+   그래서 '실측 카드가 없는 자리' 를 따로 표시할 일도 없어졌다: 고른 자리만 밝고 나머지는 흐리다. */
 var curLoc=null, curNo="";
 function paintPins(){
   var pins=document.querySelectorAll("#bnpins .pin");
   [].forEach.call(pins,function(g){
-    var L=g.getAttribute("data-loc"), has=!!FIRST[L], on=has&&L===curLoc;
+    var on = g.getAttribute("data-loc")===curLoc;
     g.classList.toggle("lit",on);
     g.classList.toggle("dim",!on);
-    if(!has){ g.classList.add("nodata"); g.removeAttribute("tabindex"); g.removeAttribute("role"); }
     var t=g.querySelector(".pin-no"); if(t) t.textContent=on?curNo:"";
   });
 }
@@ -188,17 +185,6 @@ function show(it){
 }
 function byS(s){ return EXPS.filter(function(e){ return String(e.s)===String(s); })[0]; }
 
-/* 접힌 배치(창 1600 이하)에서는 카드가 지도 아래로 내려가 첫 화면 밖에 있다.
-   그 상태로 핀을 누르면 화면에서 아무 일도 안 일어난 것처럼 보인다 — 카드를 끌어올린다.
-   두 칸 배치에서는 카드가 이미 옆에 보이므로 아무것도 하지 않는다(판정은 화면 밖인지 하나로 한다,
-   창 폭을 다시 재서 분기점을 JS 에도 적어 두면 CSS 와 두 곳에서 갈린다). */
-function bnScrollIntoView(){
-  var card=document.getElementById("bncard"); if(!card||card.hidden) return;
-  var r=card.getBoundingClientRect();
-  if(r.top < innerHeight-100) return;          /* 이미 보인다 */
-  scrollTo({top:scrollY+r.top-90, behavior:RM?"auto":"smooth"});
-}
-
 document.addEventListener("click", function(e){
   if(!e.target.closest) return;
   /* 카드 안 ↗ 는 노션으로 나가는 링크다 — 고르기까지 같이 일어나면 새 탭이 열리는 동시에
@@ -214,12 +200,6 @@ document.addEventListener("keydown", function(e){
   var c=e.target.closest("#bnc-b .rc");
   if(c){ e.preventDefault(); show(byS(c.getAttribute("data-s"))); }
 }, false);
-
-/* 지도 핀 → 그 자리의 첫 카드. scene.js 가 핀 클릭에서 부른다(그쪽은 이 파일을 모른다). */
-window.__bnPickLoc=function(loc){
-  var it=FIRST[loc]; if(!it) return;
-  show(it); bnScrollIntoView();
-};
 
 show(EXPS[0]);
 setTimeout(function(){ show(EXPS[0]); paintPins(); }, 400);   /* 진입 애니가 카드를 연 뒤 한 번 더 */
