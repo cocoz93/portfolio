@@ -73,16 +73,54 @@
 
 <!--#include panel-client.html -->
 
+  <!-- 링크 모음 — 이 페이지 밖으로 나가는 문. 순서는 '이 프로젝트 것(소스·설계문서) 먼저, 그 밖은 뒤' 다.
+       한때 여기 스택 노트와 천장 수치가 같이 있었는데 둘 다 뺐다 — 스택은 탭줄 오른쪽 메타
+       (C++17 · Windows IOCP)와, 천장 5,000은 첫 탭 부제와 같은 말을 두 번 하고 있었다.
+       미리보기 그림은 media/link-*.jpg 로 외부 파일이다(2-1 실행 화면과 같은 방식). index.html 은
+       폰트를 base64 로 안고 있어 이미 690KB 라 여기에 그림까지 넣지 않는다.
+       그림은 노션 커버·GitHub 화면을 그대로 찍은 것이라 그쪽이 바뀌면 낡는다 — 다시 찍어 갈아끼우면 된다. -->
   <section class="panel" id="p-misc" role="tabpanel" hidden>
-    <p class="lead">스택과 링크.</p>
-    <div class="note-list">
-      <div class="note"><div class="h">스택 · 계측</div><div class="d">C++17 · Windows IOCP · MySQL(비동기 저장) · Prometheus + Grafana 상시 계측(tick · CPU · 송신 지표).</div></div>
-      <div class="note"><div class="h">천장</div><div class="d">단일 게임스레드가 병목. 안정 <b>동접 ~5,000</b> · 붕괴 직전 ~5,200 · 5,400에서 무너짐 — 그 위는 멀티프로세스 스케일아웃으로.</div></div>
-    </div>
-    <div class="links">
-      <a href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">GitHub — cocoz93/MMOServer</a>
-      <a href="https://cocoz93.github.io/portfolio/" target="_blank" rel="noopener">포트폴리오</a>
-      <a href="https://feline-vacation-d6d.notion.site/23316a0b9f59809db2e5d610a23a10a5" target="_blank" rel="noopener">기술경력서 — Notion</a>
+    <div class="lk-list">
+      <a class="lk-row" href="https://github.com/cocoz93/MMOServer" target="_blank" rel="noopener">
+        <span class="lk-sh"><img src="media/link-github.jpg" alt="" width="560" height="316" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-k">CODE</span>
+          <span class="lk-t">GitHub</span>
+          <span class="lk-d">이 페이지가 설명하는 서버의 전체 소스. IOCP 코어부터 부하 테스트 도구까지 한 저장소에 있습니다.</span>
+          <span class="lk-u">github.com/cocoz93/MMOServer ↗</span>
+        </span>
+      </a>
+      <a class="lk-row" href="https://feline-vacation-d6d.notion.site/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">
+        <span class="lk-sh"><img src="media/link-iocp.jpg" alt="" width="560" height="316" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-k">NOTION</span>
+          <span class="lk-t">IOCP MMO</span>
+          <span class="lk-d">왜 그렇게 만들었는지가 여기 있습니다. 채택한 것과 기각한 것을 실측 수치와 함께 실험별로 정리했습니다.</span>
+          <span class="lk-u">notion.site ↗</span>
+        </span>
+      </a>
+      <!-- DEV LOG 26 자리. 공개 주소를 아직 못 받아 비워 둔다 — 노션 최상위(notion.site/)는 404 이고
+           페이지 안 breadcrumb 은 자바스크립트로 그려져 초기 HTML 에서 주소를 못 뽑는다.
+           주소가 나오면 그 페이지를 찍어 media/link-devlog.jpg 로 넣고 이 자리에 한 줄 세우면 된다. -->
+      <a class="lk-row" href="https://cocoz93.github.io/portfolio/" target="_blank" rel="noopener">
+        <span class="lk-sh"><img src="media/link-profile.jpg" alt="" width="560" height="316" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-k">WEB</span>
+          <span class="lk-t">WEB PROFILE</span>
+          <span class="lk-d">포트폴리오 홈. 경력과 다른 프로젝트를 한 화면에서 볼 수 있습니다.</span>
+          <span class="lk-u">cocoz93.github.io/portfolio ↗</span>
+        </span>
+      </a>
+      <!-- 메일만 찍을 화면이 없다. 빈 그림을 만들어 넣지 않고 그 자리에 이모지를 크게 둔다. -->
+      <a class="lk-row" href="mailto:wndnwls7@gmail.com">
+        <span class="lk-sh lk-mail">📧</span>
+        <span class="lk-tx">
+          <span class="lk-k">MAIL</span>
+          <span class="lk-t">Email</span>
+          <span class="lk-d">연락은 이쪽으로 주세요.</span>
+          <span class="lk-u">wndnwls7@gmail.com ↗</span>
+        </span>
+      </a>
     </div>
   </section>
 </div>
