@@ -75,9 +75,16 @@
 .bx-tile.good .g .a{ background:linear-gradient(90deg,#3fbe7c,#7ff0b4); box-shadow:0 0 10px rgba(87,214,148,.4) }
 .bx-tile.bad .n{ color:var(--hot) }
 .bx-tile.bad .g .a{ background:linear-gradient(90deg,#e0705f,#ff9a8d); box-shadow:0 0 10px rgba(255,107,82,.4) }
-/* 그 시점에 안 잰 지표 — 0 으로 그리면 '0 이었다' 로 읽힌다. 칸을 죽여 값이 없음을 보인다. */
-.bx-tile.none{ opacity:.42 }
-.bx-tile.none .n{ color:var(--line) }
+/* 그 보고서가 안 적은 지표 — 0 으로 그리면 '0 이었다' 로 읽힌다. 칸을 죽여 값이 없음을 보인다.
+   값과 막대는 아예 뺀다. 흐린 '—' 만 남기면 빈 막대가 그대로 남는데, 옆 칸들이 다 차 있는 자리에서
+   텅 빈 홈 하나는 '없다' 가 아니라 '0 이다 · 너무 작아 안 보인다' 로 읽힌다(실측 비교).
+   라벨과 아래 한 줄('그 보고서에 없음')만 남으면 그 오해가 사라지고 이유까지 같이 말한다.
+   × 를 쓰지 않은 이유는 그 기호가 '버렸다 · 실패했다' 로 읽히기 때문이다 — ⑦ 의 평균 패킷은
+   버린 것이 아니라 그 페이지가 트래픽 대신 스레드별 CPU 를 부하로 적은 것뿐이다.
+   해당되는 칸은 둘이다: ⑤ 소켓 호출 · ⑦ 평균 패킷. */
+.bx-tile.none{ opacity:.5 }
+.bx-tile.none .v, .bx-tile.none .g{ display:none }
+.bx-tile.none .f{ margin-top:18px }
 
 /* ── 카드 안 라벨 두 줄 ──
    '무엇을 고르는 곳인가' 와 '이 숫자는 무엇인가' 를 각각 한 줄로 짚는다.
