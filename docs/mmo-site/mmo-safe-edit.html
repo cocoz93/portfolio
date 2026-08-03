@@ -215,8 +215,8 @@ function selStep(){ return sel&&sel.si!=null ? D.steps[sel.si] : null; }
 /* 그림 위에 얹는 HTML 셋은 편집기에서 자리만 상자로 보여 준다 — 실제 내용(계기판 세 칸 ·
    보기 칩 · 설명 줄)은 client.js 가 들고 있고, 높이는 글 줄 수에 따라 페이지에서 정해진다.
    그래서 여기 높이는 '대략 이만큼 차지한다' 는 눈금일 뿐이다. */
-var OVH={dash:160, chips:27, note:48, more:25};
-var OVNAME={dash:"계기판", chips:"보기 칩", note:"설명 줄", more:"노션 문"};
+var OVH={title:38, dash:160, chips:27, note:48, more:25};
+var OVNAME={title:"제목", dash:"계기판", chips:"보기 칩", note:"설명 줄", more:"노션 문"};
 
 /* ═══ 그리기 ═══ */
 function render(){
@@ -269,11 +269,8 @@ function drawHandles(ui){
       kn.addEventListener("pointerdown",function(e){ startDrag(e,{type:"label",si:i,which:w}); });
     });
   });
-  /* 제목 손잡이 — 제목은 왼쪽 맞춤이라 그 앞에 세운다 */
-  var T=D.title, tx=D.bb.x+T.dx, ty=D.bb.y+T.dy;
-  var tk=el("circle",{class:"knob"+(isSel("title")?" sel":""),cx:(tx-13).toFixed(1),cy:(ty-4).toFixed(1),r:5});
-  ui.appendChild(tk);
-  tk.addEventListener("pointerdown",function(e){ startDrag(e,{type:"title"}); });
+  /* ※ 제목 손잡이는 없다 — 제목은 그림 글자가 아니라 얹는 글이라(overlay.title) 아래
+     상자 쪽에서 끈다. 문구도 여기가 아니라 parts/panel-client.html 에 있다. */
 }
 function drawOverlayBoxes(ui){
   SS.place(D).forEach(function(p){
@@ -299,7 +296,6 @@ function startDrag(e,what){
   if(what.type==="step")  base.o={u:S.u, z:S.z};
   if(what.type==="box")   base.o={du:S[what.which].du, dv:S[what.which].dv};
   if(what.type==="label") base.o={du:S[what.which].lab.du, dv:S[what.which].lab.dv};
-  if(what.type==="title") base.o={dx:D.title.dx, dy:D.title.dy};
   if(what.type==="ov"){ var p=SS.place(D).filter(function(q){return q.key===what.which;})[0];
     base.o={x:p.x, y:p.y}; }
   drag=base;
@@ -316,7 +312,6 @@ function onMove(e){
   else if(sel.type==="box"||sel.type==="label"){ var m2=toPlane(dx,dy);
     var B=D.steps[sel.si][sel.which], tgt=(sel.type==="box")?B:B.lab;
     tgt.du=snap(o.du+m2.du); tgt.dv=snap(o.dv+m2.dv); }
-  else if(sel.type==="title"){ D.title.dx=snap(o.dx+dx); D.title.dy=snap(o.dy+dy); }
   else if(sel.type==="ov"){ var ov=D.overlay[sel.which];
     ov.x=snap(o.x+dx); ov.y=snap(o.y+dy); }
   render();
@@ -339,10 +334,9 @@ function syncSel(){
   else if(sel.type==="label"){ var B2=S[sel.which];
     n.textContent="이름표 — "+B2.t; c.textContent="du="+B2.lab.du+"  dv="+B2.lab.dv
       +"  dz="+B2.lab.dz+"  dy="+B2.lab.dy; }
-  else if(sel.type==="title"){ n.textContent="제목"; c.textContent="dx="+D.title.dx+"  dy="+D.title.dy; }
   else if(sel.type==="ov"){ var ov=D.overlay[sel.which];
     n.textContent="얹는 글 — "+(OVNAME[sel.which]||sel.which);
-    c.textContent=(ov.x==null?"x=자동(제목 밑)":"x="+ov.x)+"  "+(ov.y==null?"y=자동":"y="+ov.y)+"  폭="+ov.w; }
+    c.textContent="x="+ov.x+"  y="+ov.y+"  폭="+ov.w; }
 }
 
 /* ═══ 속성 편집기 ═══ 선택이 바뀔 때만 다시 만든다(입력 포커스 유지) */
@@ -412,24 +406,15 @@ function renderProp(){
       box.appendChild(fld("띄움 dz",inpNum(function(){return B.lab.dz;},function(v){B.lab.dz=v;})));
       box.appendChild(fld("아래로 dy",inpNum(function(){return B.lab.dy;},function(v){B.lab.dy=v;})));
     }
-  } else if(sel.type==="title"){
-    box.appendChild(fld("제목",inpText(function(){return D.title.t;},function(v){D.title.t=v;},true)));
-    box.appendChild(fld("크기",inpNum(function(){return D.title.size;},function(v){D.title.size=v;})));
-    box.appendChild(fld("오른쪽 dx",inpNum(function(){return D.title.dx;},function(v){D.title.dx=v;})));
-    box.appendChild(fld("아래 dy",inpNum(function(){return D.title.dy;},function(v){D.title.dy=v;})));
-    var h2=document.createElement("div"); h2.className="hint";
-    h2.textContent="제목을 키우면 계기판이 시작하는 높이도 따라 내려갑니다(자동).";
-    box.appendChild(h2);
   } else if(sel.type==="ov"){
     var ov=D.overlay[sel.which];
-    box.appendChild(fld("x",inpNum(function(){return ov.x==null?0:ov.x;},function(v){ov.x=v;})));
-    box.appendChild(fld("y",inpNum(function(){return ov.y==null?0:ov.y;},function(v){ov.y=v;})));
+    box.appendChild(fld("x",inpNum(function(){return ov.x;},function(v){ov.x=v;})));
+    box.appendChild(fld("y",inpNum(function(){return ov.y;},function(v){ov.y=v;})));
     box.appendChild(fld("폭",inpNum(function(){return ov.w;},function(v){ov.w=v;})));
-    var b=document.createElement("button"); b.className="btn"; b.textContent="제목 밑으로 되돌리기";
-    b.onclick=function(){ ov.x=null; ov.y=null; render(); };
-    var r=document.createElement("div"); r.className="row"; r.appendChild(b); box.appendChild(r);
     var h3=document.createElement("div"); h3.className="hint";
-    h3.textContent="상자 높이는 눈금일 뿐입니다 — 실제 높이는 글 줄 수에 따라 페이지에서 정해집니다.";
+    h3.textContent=(sel.which==="title")
+      ? "제목은 크기가 페이지 고정값이라(client.css 의 .cr-title) 여기서 잡는 것은 왼쪽 선과 윗선뿐입니다."
+      : "상자 높이는 눈금일 뿐입니다 — 실제 높이는 글 줄 수에 따라 페이지에서 정해집니다.";
     box.appendChild(h3);
   }
 }
@@ -514,13 +499,13 @@ function sceneText(){
   t+="  vb:"+obj(D.vb,["x","y","w","h"])+",\n";
   if(D.pad) t+="  pad:"+obj(D.pad,["l"])+",\n";
   t+="  bb:"+obj(D.bb,["x","y"])+",\n";
-  t+="  title:"+obj(D.title,["t","size","dx","dy"])+",\n";
   t+="  plate:"+obj(D.plate,["v","w","d","h","wordU","wordV","wordSize"])+",\n";
   t+="  lane:"+obj(D.lane,["gap","hw","sep"])+",\n";
   t+="  ramp:"+obj(D.ramp,["dv","dz","tip","hw"])+",\n";
   t+="  overlay:{\n";
-  t+=["dash","chips","note","more"].filter(function(k){ return D.overlay[k]; }).map(function(k){
-    return "    "+k+(k==="chips"?"":" ")+":"+obj(D.overlay[k],["id","x","y","w","lpad"]); }).join(",\n");
+  /* 이름 길이가 짧은 것만 한 칸 띄워 콜론을 세로로 맞춘다(가장 긴 이름이 다섯 자다) */
+  t+=["title","dash","chips","note","more"].filter(function(k){ return D.overlay[k]; }).map(function(k){
+    return "    "+k+(k.length===5?"":" ")+":"+obj(D.overlay[k],["id","x","y","w","lpad"]); }).join(",\n");
   t+="\n  },\n  steps:[\n";
   t+=D.steps.map(function(S){
     return "   {k:"+q(S.k)+", tag:"+q(S.tag)+", u:"+num(S.u)+", z:"+num(S.z)

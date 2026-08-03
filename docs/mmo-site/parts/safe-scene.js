@@ -89,16 +89,21 @@ var INK={ recv:"#6cc7ff", send:"#ffb648", fg:"#eef2fb", sub:"#8496b3", grn:"#57d
            draw 가 그림틀 자체도 같은 폭만큼 왼쪽으로 빼낸다 — 늘어난 액자와 늘어난 그림틀이
            맞물려 계단은 픽셀 하나 안 움직이고, 왼쪽에 그릴 자리만 생긴다.
            ※ 값을 바꾸면 panel-client.html 의 sc-safe viewBox 도 같이 고칠 것(= vb.x-pad.l, vb.w+pad.l)
-   bb      그림 요소 전체의 왼쪽 위 — 제목 자리의 기준
-   title   왼쪽 위 한 줄. dx·dy 는 bb 에서 잰 값
+   bb      그림 요소 전체의 왼쪽 위
    plate   판 하나의 크기(세 단이 같다). v=판이 시작하는 깊이 · h=판 두께
            wordU 는 판 폭 대비 STEP 글씨 자리(0~1), wordV 는 그 깊이
    lane    왕복 레일 둘. gap=덩어리에서 띄우는 여백 · hw=레일 하나의 반폭 · sep=두 레일 중심 사이
            위(먼 쪽)가 보내는 길, 아래(가까운 쪽)가 돌아오는 길이다 — v 가 클수록 화면 위로 간다
            hw 5 · sep 14 는 1-1 구조도의 다중 레일 치수 그대로다(줄 폭 10 · 줄 간격 4)
    ramp    승계 경사로. dv=판에서 잰 깊이 · dz=판 위 높이 · tip=화살촉 길이 · hw=띠 반폭
-   overlay 그림 위에 얹는 HTML 넷의 자리. x·y 가 null 이면 제목 밑에서 잰다.
-           네 값 다 카드 안쪽 40px 선에 맞춰 잡았다 — 제목·계기판이 왼쪽 위 40px,
+   overlay 그림 위에 얹는 HTML 넷의 자리.
+           ── 한때 제목도 여기 있었다 ──
+           처음에는 SVG 안에 그린 글자였고(size 30), 다음에는 이 목록의 다섯째였다. 지금은 카드
+           밖 HTML 제목이다(parts/panel-client.html 의 .cr-title) — 2-1 과 카드 윗변까지 맞추려면
+           제목이 카드 밖에 있어야 했다. 제목이 빠지면서 vb 위쪽도 그만큼 잘라 냈고(96 → 138),
+           계기판이 제목이 비운 자리로 올라왔다(y 200 → 148 · x 212.9 → 205.6). 두 값은 2-1 에
+           맞춘 것이다 — y 는 카드 안 첫 글줄 높이, x 는 계기판 기둥선을 카드 안여백 선에 세우는 값.
+           넷 다 카드 안쪽 40px 선에 맞춰 잡았다 — 계기판이 왼쪽 위 40px,
            보기 칩·설명 줄이 오른쪽 아래 40px. 두 묶음이 마주 보는 구석을 하나씩 잡고,
            그 사이 대각선을 계단이 지나간다.
            오른쪽 묶음(칩 → 설명 → 노션 문)을 대각선 바로 밑에 두는 시안과 렌더로 대 봤다.
@@ -114,15 +119,14 @@ var INK={ recv:"#6cc7ff", send:"#ffb648", fg:"#eef2fb", sub:"#8496b3", grn:"#57d
            a/b 의 du·dv 는 판 기준 자리, w·d·h 는 크기, lab 은 이름표 자리(dy 만 화면 픽셀)
            b.crowd 를 주면 그 위에 작은 덩어리를 n×n 으로 올린다(한 대가 여러 명을 만든다) */
 var SCENE={
-  vb:{x:300, y:96, w:972, h:580},
+  vb:{x:300, y:138, w:972, h:538},
   pad:{l:107},
   bb:{x:316.9, y:141.1},
-  title:{t:"시작은 검증된 더미로, 커스텀 더미까지", size:30, dx:-104, dy:-1},
   plate:{v:-50, w:262, d:186, h:14, wordU:.28, wordV:13, wordSize:26},
   lane:{gap:8, hw:5, sep:14},
   ramp:{dv:22, dz:7, tip:14, hw:13},
   overlay:{
-    dash :{id:"d-safe",  x:null, y:null, w:300, lpad:1},
+    dash :{id:"d-safe",  x:205.6, y:148, w:300, lpad:1},
     chips:{id:"ch-safe", x:953,  y:543,  w:406},
     note :{id:"nt-safe", x:953,  y:574,  w:406},
     more :{id:"mo-safe", x:953,  y:614,  w:406}
@@ -313,40 +317,24 @@ function draw(s,D){
   });
   gBuild.appendChild(gateTop);
 
-  /* ── 왼쪽 위 — 이 그림이 무슨 말을 하는지 한 줄 ──
-     한때 아래에 설명 두 줄('그래서 첫 도구는 내가 만들지 않은 것이어야 한다' 외)이 더 있었다.
-     당시 제목이 그 말을 하고 있어서 걷어냈고, 대신 남은 한 줄을 18 → 30 으로 키웠다.
-     ※ 지금 제목은 그 말을 하지 않는다. 옛 제목('검증이 끝난 것만 다음 단의 도구가 된다')은
-       오른쪽 열의 승계만 설명해서 STEP 1 왼쪽(밖에서 들여온 회색 더미)이 규칙 밖에 남았다.
-       그래서 출발점과 도착점을 직접 부르는 지금 문구로 바꿨다 — 승계 순서는 계단·경사로·✔ 가 말한다.
-     크기를 올릴 때 같이 손봐야 하는 것이 셋이다 — 안 맞추면 커진 만큼 어색해진다:
-       · 자간을 죈다(-0.02em). 페이지의 다른 큰 제목(.cr-hd b)이 쓰는 값이다.
-       · 기준선을 (size-18)*.55 만큼 내린다. 글자는 기준선 위로 자라므로 그냥 키우면 위 여백을 판다.
-       · 아래 계기판이 시작하는 높이도 같은 비율로 민다(titleDrop). 안 밀면 제목에 달라붙는다. */
-  var T=D.title, tx=D.bb.x+T.dx, ty0=D.bb.y+T.dy;
-  gLbl.appendChild(el("text",{x:tx.toFixed(1),y:(ty0+(T.size-18)*.55).toFixed(1),
-    "font-size":String(T.size), fill:FG,"font-weight":"800","text-anchor":"start",
-    "font-family":"var(--sans)","letter-spacing":(-0.02*T.size).toFixed(2)},T.t));
+  /* ※ 탭 제목은 여기서 그리지 않는다 — 2-1 과 카드 윗변까지 맞추려고 카드 밖 HTML 로 꺼냈다
+     (parts/panel-client.html 의 .cr-title). 위 SCENE.overlay 주석에 경위가 있다. */
   return s;
 }
-
-/* 계기판이 시작하는 높이 — 제목 크기를 따라 내려간다 */
-function titleDrop(D){ return 32*D.title.size/18+(D.title.size-18)*.55; }
 
 /* 얹는 것 넷의 자리를 잰다 → [{id, left, marginTop, width, lpad}] (백분율 문자열)
    얹는 것은 무대(.sf-stage) 안에 놓이므로 % 의 기준이 무대 폭이고, 무대가 덮는 액자 구간이
    vb 다(액자 전체가 아니다 — 왼쪽 pad.l 은 무대 밖이라 그쪽 자리는 % 가 음수로 나온다).
    marginTop 을 쓰는 까닭도 같다 — 그 % 는 높이가 아니라 폭 기준이라 그림 높이가 폭을 따라간다.
-   왼쪽 위에는 잰 자리 셋, 오른쪽 아래 빈 삼각형에는 보기 칩 · 설명을 세로로 쌓는다.
+   왼쪽 위에는 계기판, 오른쪽 아래 빈 삼각형에는 보기 칩 · 설명을 세로로 쌓는다.
    x 928 은 STEP 2 이름표(x 852~1080)를 피해 잡은 값이다. */
 function place(D){
-  var T=D.title, dx=D.bb.x+T.dx, dy=D.bb.y+T.dy+titleDrop(D), out=[];
+  var out=[];
   ["dash","chips","note","more"].forEach(function(k){
     var o=D.overlay[k]; if(!o) return;
-    var x=(o.x==null)?dx:o.x, y=(o.y==null)?dy:o.y;
-    out.push({id:o.id, key:k, x:x, y:y, w:o.w, lpad:!!o.lpad,
-      left:((x-D.vb.x)/D.vb.w*100).toFixed(3)+"%",
-      marginTop:((y-D.vb.y)/D.vb.w*100).toFixed(3)+"%",
+    out.push({id:o.id, key:k, x:o.x, y:o.y, w:o.w, lpad:!!o.lpad,
+      left:((o.x-D.vb.x)/D.vb.w*100).toFixed(3)+"%",
+      marginTop:((o.y-D.vb.y)/D.vb.w*100).toFixed(3)+"%",
       width:(o.w/D.vb.w*100).toFixed(3)+"%"});
   });
   return out;
@@ -367,7 +355,7 @@ function clone(o){ return JSON.parse(JSON.stringify(o)); }
 
 window.SafeScene={
   SCENE:SCENE, draw:draw, place:place, apply:apply, clone:clone,
-  titleDrop:titleDrop, PAL:PAL, ZPAL:ZPAL, INK:INK,
+  PAL:PAL, ZPAL:ZPAL, INK:INK,
   iso:{ipx:ipx, ipy:ipy, ipt:ipt, ipoly:ipoly, iprism:iprism, ifloor:ifloor, idepth:idepth, el:el}
 };
 })();
