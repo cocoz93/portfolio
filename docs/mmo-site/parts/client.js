@@ -48,8 +48,17 @@ var SAFE={
   }
 };
 /* ── 전폭 그림에서 되풀어 쓰는 조각들 ── */
+/* ── 글자 배율 ──
+   tx 를 쓰는 곳은 2-3 그림 넷뿐이라 크기를 여기 한 줄로 쥔다.
+   왜 필요했나: 이 그림은 viewBox 880 이 폭 1314 로 펴져 배율이 1.49 다. 그래서 코드에
+   적힌 10 이 화면에서는 14.9px 이 된다 — 1-1 씬은 **가장 작은 글자가 18px** 이고 본문이
+   19~25px 이라, 같은 사이트 안에서 이 탭만 잔글씨로 보였다(실측 · 1920 창).
+   1.25 를 곱하면 8.5→15.9 · 10→18.6 · 11.5→21.4 로 1-1 의 대역에 들어온다.
+   ※ 좌표는 안 건드린다. 글자만 커지므로 빽빽해지는 자리는 그때그때 y 를 벌린다. */
+var LOAD_FS=1.25;
 function tx(p,x,y,t,size,col,w,anc,fam){
-  p.appendChild(el("text",{x:x,y:y,"font-size":String(size),fill:col,"font-weight":w||"600",
+  p.appendChild(el("text",{x:x,y:y,"font-size":String(Math.round(size*LOAD_FS*10)/10),
+    fill:col,"font-weight":w||"600",
     "text-anchor":anc||"start","font-family":fam||"var(--sans)"},t));
 }
 function bx(p,x,y,w,ht,fill,stroke,rx){
@@ -172,7 +181,9 @@ function loadEnv(g){
      화살표를 코어 줄 *아래* 에 따로 그려야 하는데, 그 자리는 무엇과 무엇을 잇는지 안 보인다.
      사이를 96 벌리고 그 틈으로 화살표를 통과시키면 '갈라 놓은 둘이 여기로 오간다' 가
      설명 없이 읽힌다. 도형은 하나도 안 늘었다. */
-  var bw=64, st=76, xs=24, xc=564;                 /* 서버 24..468 · 틈 96 · 클라 564..856 */
+  /* 틈은 그 안에 들어갈 라벨('loopback 127.0.0.1' ≈ 114)보다 넓어야 한다 — 좁으면 라벨이
+     양옆 박스 밑으로 삐져나와 어느 한쪽에 딸린 글로 보인다(96 일 때 클라 쪽으로 걸쳤다) */
+  var bw=58, st=70, xs=24, xc=588;                 /* 서버 24..432 · 틈 156 · 클라 588..856 */
   for(var i=0;i<10;i++){
     var srv=(i<6), cx=srv?(xs+i*st):(xc+(i-6)*st);
     bx(g,cx,58,bw,46,srv?"#1f4f74":"#6b4718",srv?"#3a7fb5":"#c98a34",7);
@@ -184,14 +195,14 @@ function loadEnv(g){
   tx(g,c1,122,"ServerCores = 0-5",8.5,"#5d6c85","600","middle","var(--mono)");
   tx(g,c2,122,"ClientCores = 6-9",8.5,"#5d6c85","600","middle","var(--mono)");
   /* 틈 한가운데를 지나는 양방향 화살표 — 촉의 색이 향하는 쪽 무리의 색이다 */
-  g.appendChild(el("path",{d:"M 483 81 L 549 81",stroke:"#6cc7ff","stroke-width":"1.6",
+  g.appendChild(el("path",{d:"M 451 81 L 569 81",stroke:"#6cc7ff","stroke-width":"1.6",
     fill:"none","stroke-dasharray":"5 4"}));
-  g.appendChild(el("polygon",{points:"558,81 545,75 545,87",fill:"#c98a34"}));
-  g.appendChild(el("polygon",{points:"474,81 487,75 487,87",fill:"#6cc7ff"}));
+  g.appendChild(el("polygon",{points:"580,81 565,74 565,88",fill:"#c98a34"}));
+  g.appendChild(el("polygon",{points:"440,81 455,74 455,88",fill:"#6cc7ff"}));
   /* 코어 아래 라벨 셋(ServerCores · loopback · ClientCores)은 같은 y 에 선다 — 높이가
      어긋나면 가운데 것만 계단처럼 내려앉아 딴 층의 글로 읽힌다 */
-  tx(g,516,122,"loopback 127.0.0.1",8.5,"#8496b3","700","middle","var(--mono)");
-  tx(g,516,138,"랜선도 공유기도 안 탄다",8.5,"#5d6c85","600","middle");
+  tx(g,510,124,"loopback 127.0.0.1",8.5,"#8496b3","700","middle","var(--mono)");
+  tx(g,510,142,"랜선도 공유기도 안 탄다",8.5,"#5d6c85","600","middle");
   tx(g,24,190,"여기까지 온 길 — 회선이 천장이면 서버를 잴 수 없다",10,"#8496b3","700");
   LOAD_HOP.forEach(function(hp,j){
     var hx=24+j*209, live=(j===3);
