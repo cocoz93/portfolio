@@ -1,7 +1,7 @@
 /* ═══════════ 병목 탭 — 실험 카드 열두 장 + 계기판 ═══════════
    한 화면에서 끝난다: 지도(왼쪽) · 카드 열두 장과 계기판(오른쪽).
    지도는 위 코드가 이미 갖고 있다. 여기서 더하는 것은 둘뿐이다 —
-     ① 카드 열두 장: 번호 · 판정 · 이름 · 성과 한 줄 (노션 실측 보고서와 1:1)
+     ① 카드 열두 장: 번호 · 판정 · 이름 · 동접 고리 (노션 실측 보고서와 1:1)
      ② 계기판: 고른 카드의 before → after
    위 코드의 IIFE 안으로 들어가지 않는다. 연결은 실험 배열(window.__EXPS)과
    위 코드가 만들어 둔 핀 마크업(#bnpins .pin[data-loc]) 둘뿐이다 — 한 방향이라 훅이 없다.
@@ -221,24 +221,32 @@ function paintDash(it){
 }
 
 /* ═══ 카드 열두 장 ═══
-   한 장에 네 가지만 적는다: 번호 · 판정 · 동접 · 이름. 그리고 노션으로 나가는 ↗ 하나.
+   한 장에 셋만 적는다: 번호 · 판정 · 이름. 그리고 오른쪽 끝에 동접을 말하는 고리 하나.
    결과 수치는 카드에 없다 — 한때 '송신 호출 −94%' 같은 성과 한 줄을 넣었는데, 열두 장이
    저마다 다른 지표를 외치면 훑을 때 이름이 뒤로 밀리고 서로 견줄 수도 없었다(실험마다 잰 지표가 다르다).
    무엇이 얼마나 바뀌었나는 아래 계기판이 고른 한 장에 대해서만 말하고, 나머지는 노션 원문이 맡는다.
-   색도 고른 카드에만 켠다 — 열둘이 저마다 판정색을 띠면 어느 것이 열려 있는지가 색으로 안 짚인다. */
+   색도 고른 카드에만 켠다 — 열둘이 저마다 판정색을 띠면 어느 것이 열려 있는지가 색으로 안 짚인다.
+
+   ↗ 도 카드에서 걷어냈다 — 열두 장이 같은 기호를 하나씩 달고 있었는데 열리는 것은 고른 하나뿐이라,
+   판 아래 한 짝(#bn-more)으로 모으고 주소만 갈아 끼운다(아래 show).
+   고리의 눈금은 계기판 막대와 같은 SCALE.ccu(현황판) 다 — 같은 지표에 자를 두 벌 두지 않는다.
+   숫자를 지운 자리라 값은 aria-label 로 남긴다(화면에는 라벨 줄의 '200 → 5,200' 이 눈금을 말한다). */
+function ringPct(ccu){
+  var top = SCALE.ccu || 5000;
+  return Math.min(100, Math.round(ccu / top * 100));
+}
 function build(){
   var body=document.getElementById("bnc-b"); if(!body) return;
   body.innerHTML=EXPS.map(function(e){
-    var ccu=(e.am&&e.am.ccu) ? e.am.ccu.toLocaleString("ko-KR") : "5,000";
+    var ccu=(e.am&&e.am.ccu) ? e.am.ccu : null;
     return '<div class="rc k-'+e.st+'" data-s="'+e.s+'" data-loc="'+e.loc+'"'+
       ' tabindex="0" role="button" aria-pressed="false">'+
       '<span class="r1"><span class="no">'+e.no+'</span>'+
-      '<span class="st">'+(ST[e.st]||"")+'</span>'+
-      '<span class="cc">'+ccu+'</span>'+
-      (e.nt ? '<a class="go" href="'+e.nt+'" target="_blank" rel="noopener"'+
-              ' aria-label="'+e.n+' 실측 보고서 — 노션에서 열기">↗</a>' : '')+
-      '</span>'+
-      '<span class="nm">'+e.n+'</span></div>';
+      '<span class="st">'+(ST[e.st]||"")+'</span></span>'+
+      '<span class="nm">'+e.n+'</span>'+
+      (ccu!=null ? '<span class="cq" style="--p:'+ringPct(ccu)+'" role="img"'+
+                   ' aria-label="동접 '+ccu.toLocaleString("ko-KR")+'명"></span>' : '')+
+      '</div>';
   }).join("");
 }
 build();
@@ -283,11 +291,22 @@ function paintFan(it){
   el.textContent = s.join("  ·  ");
 }
 
+/* 판 아래 나가는 문 — 카드마다 있던 ↗ 를 한 짝으로 모은 것이라 고를 때마다 주소가 바뀐다.
+   실험 이름을 문구에 넣지 않는 이유는 폭이다. 이름이 긴 카드(⑤ ⑨)에서 줄이 접히면
+   계기판과의 간격이 그 카드에서만 벌어진다 — 무엇의 보고서인지는 바로 위 계기판 라벨이 말한다. */
+function paintMore(it){
+  var a=document.getElementById("bn-more"); if(!a) return;
+  if(it.nt){ a.href=it.nt; a.hidden=false;
+             a.setAttribute("aria-label", it.n+" 실측 보고서 — 노션에서 열기"); }
+  else { a.removeAttribute("href"); a.hidden=true; }
+}
+
 /* ═══ 고르기 ═══ */
 function show(it){
   if(!it) return;
   paintDash(it);
   paintFan(it);
+  paintMore(it);
   curLoc=it.loc; curNo=String(it.no);
   var body=document.getElementById("bnc-b");
   if(body) [].forEach.call(body.querySelectorAll(".rc"), function(c){
@@ -299,18 +318,16 @@ function show(it){
 }
 function byS(s){ return EXPS.filter(function(e){ return String(e.s)===String(s); })[0]; }
 
+/* 카드 안에는 이제 링크가 없다 — 노션으로 나가는 문은 판 아래 한 짝뿐이라, 새 탭을 여는
+   클릭과 카드를 고르는 클릭이 겹칠 일이 없어졌다(그것을 갈라 내던 예외 처리도 같이 지웠다). */
 document.addEventListener("click", function(e){
   if(!e.target.closest) return;
-  /* 카드 안 ↗ 는 노션으로 나가는 링크다 — 고르기까지 같이 일어나면 새 탭이 열리는 동시에
-     뒤에 남은 화면이 바뀌어, 돌아왔을 때 무엇을 눌렀는지가 어긋난다. */
-  if(e.target.closest("#bnc-b .rc a")) return;
   var c=e.target.closest("#bnc-b .rc");
   if(c){ show(byS(c.getAttribute("data-s"))); }
 }, false);
 document.addEventListener("keydown", function(e){
   if(e.key!=="Enter" && e.key!==" ") return;
   if(!e.target.closest) return;
-  if(e.target.closest("#bnc-b .rc a")) return;
   var c=e.target.closest("#bnc-b .rc");
   if(c){ e.preventDefault(); show(byS(c.getAttribute("data-s"))); }
 }, false);
