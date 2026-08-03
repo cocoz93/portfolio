@@ -230,7 +230,10 @@
    줄 수가 폭마다 달라져, 그림 아래 여백이 어떤 폭에서는 모자란다. */
 #p-csafe .cr-note{min-height:0; gap:.877cqw; border-radius:.798cqw; padding:.717cqw 1.037cqw;
   background:rgba(15,21,34,.72)}
-#p-csafe .cr-note i{font-size:.804cqw}
+/* 2-2 만 상자 안 '보기 N' 배지를 감춘다 — 같은 말이 세 번 나온다(칩 줄 앞의 '보기' 라벨 ·
+   칩 안의 번호 · 이 배지). 셋 중 이것만 없어도 되는 까닭은 고른 칩이 파랗게 켜져 있어서다.
+   배지가 빠지면 설명 두 줄이 상자 안여백에서 같이 시작한다. 2-3 은 그대로 둔다. */
+#p-csafe .cr-note i{display:none}
 #p-csafe .cr-note p{font-size:1.033cqw}
 #p-csafe .cl-chips{gap:.478cqw; max-width:100%}
 #p-csafe .cl-chips .t{font-size:.842cqw; margin-right:.159cqw}
@@ -583,7 +586,7 @@
   #p-csafe #d-safe .cl-tile .f{margin-top:6px; font-size:.68rem}
   #p-csafe .cr-note{order:3; gap:11px; margin-top:11px !important; border-radius:10px;
     padding:9px 13px; background:var(--sunk)}
-  #p-csafe .cr-note i{font-size:.63rem}
+  /* .cr-note i 는 위에서 display:none 이라 여기서 크기를 줄 것이 없다 */
   #p-csafe .cr-note p{font-size:.81rem}
   #p-csafe .cl-chips{order:4; gap:6px; margin-top:9px !important}
   /* 넓은 화면에서 떼어 낸 문은 여기서도 제 줄을 쓴다. 칩 줄에 되붙이면 두 컨테이너를
