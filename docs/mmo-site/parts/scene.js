@@ -1774,8 +1774,8 @@ window.__flowReset=function(){
      탭 전환 코드는 뒤의 IIFE(다른 스코프)에 있어 여기서 창에 걸어 준다. */
   window.resetZone=function(){ tourStop(false); apply(""); };
 
-  /* ── 진입 1회 구역 순회 ──
-     이 버튼들은 눌러 보기 전에는 무엇이 달라지는지 알 수 없다 — 처음 온 사람에게 한 바퀴만 대신 눌러 준다.
+  /* ── 진입 구역 순회 ──
+     이 버튼들은 눌러 보기 전에는 무엇이 달라지는지 알 수 없다 — 들어온 사람에게 한 바퀴만 대신 눌러 준다.
      순회도 반드시 apply() 를 그대로 탄다: 버튼의 .act 가 같이 옮겨 다녀야 '저 버튼이 이 화면을 만든다' 로
      읽힌다. 씬만 바꾸면 화면이 저절로 깜빡이는 것으로 보이고, 그러면 어포던스는 하나도 전달되지 않는다.
 
@@ -1795,7 +1795,7 @@ window.__flowReset=function(){
   const TOUR_EV=["pointerdown","keydown","wheel","touchstart"];
   const tourRM=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const pBuild=document.getElementById("p-build");
-  let tourTimer=0, tourOn=false, tourArmed=false, tourDone=false, tourWait=false;
+  let tourTimer=0, tourOn=false, tourArmed=false, tourWait=false;
   function onUser(){ tourStop(true); }
   function tourStop(restore){
     clearTimeout(tourTimer);
@@ -1810,7 +1810,7 @@ window.__flowReset=function(){
      예약을 웨이브가 끝난 뒤에 걸면 안 된다: 그러면 웨이브가 도는 동안 들어온 입력을 못 받아서,
      이미 노드를 누르며 화면을 쓰고 있는 사람에게 순회가 뒤늦게 화면을 뺏는다. 예약한 순간부터 듣는다. */
   window.__zoneTourArm=function(delay){
-    if(tourOn||tourArmed||tourDone||tourRM) return;
+    if(tourOn||tourArmed||tourRM) return;
     /* 지금 안 보이는 화면이면 소진하지 않는다 — 해시 딥링크(#bneck)로 열면 첫 play() 때 여기가 숨어 있다.
        나중에 '설계 · 구현' 으로 들어오면 그때 다시 불리므로, 여기서 표를 쓰지 않고 그냥 돌려보낸다. */
     if(pBuild&&pBuild.hidden) return;
@@ -1827,11 +1827,10 @@ window.__flowReset=function(){
       });
       return;
     }
-    tourDone=true;
-    /* 한 세션에 한 번 — 병목 탭을 갔다 오거나 '다시 재생' 을 눌렀다고 또 돌면 그때부터는 방해다.
-       sessionStorage 가 막힌 환경(file:// 등)이면 tourDone 이 페이지 단위로는 막아 준다. */
-    try{ if(sessionStorage.getItem("mmoZoneTour")) return;
-         sessionStorage.setItem("mmoZoneTour","1"); }catch(e){}
+    /* 한때 세션에 한 번이었다(sessionStorage "mmoZoneTour"). 지금은 이 화면에 들어올 때마다 돈다 —
+       순회가 알리려는 것은 '오른쪽 끝 버튼이 이 화면을 만든다' 인데, 첫 진입 한 번은 웨이브 직후라
+       그림에 눈이 팔려 놓치고 지나가기 쉽다. 매번 돌려도 방해가 크지 않은 근거는 바로 아래 TOUR_EV 다 —
+       입력 한 번이면 그 자리에서 끊기므로, 사람이 무언가 하려는 순간에는 알아서 비켜선다. */
     tourArmed=true;
     /* passive — 아무것도 막지 않고 순회만 끊는다. wheel 을 non-passive 로 걸면 스크롤이 한 박자 늦는다.
        (remove 는 capture 만 맞으면 되므로 해제 쪽은 그대로 true) */
