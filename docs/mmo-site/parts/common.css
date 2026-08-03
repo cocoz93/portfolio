@@ -417,12 +417,13 @@ body.pop-hold #scene .chips{opacity:0}
    그래서 반대편 '다시 재생' 과 글꼴·글자 크기·테두리 색·안여백·높이를 맞춰 한 줄의 양끝으로 세운다
    (글꼴은 재생 버튼 쪽을 mono 에서 sans 로 내려 맞췄다 — 그 주석 참조).
    line-height 1.32 는 둘의 높이를 34px 로 맞춘 값이다. 기본 줄 높이면 38px 이 된다(실측).
-   딱 하나 안 맞추는 것이 글자 굵기(700)와 글자색(#dce5f3 · 재생은 #b7c4da)이다 —
-   이 페이지에서 밖으로 나가는 곳은 여기 하나뿐이라, 화면 안 동작인 재생 버튼과 완전히 같은 무게가
-   되면 그 위계가 사라진다. */
+   글자 굵기도 재생 버튼과 같은 400 이다. 한때 700 이었는데 두 단계 차이라 나란히 놓으면
+   한 줄의 양끝이 아니라 '제목과 부속' 으로 읽혔다(굵기 400·600 둘 다 대비 렌더로 확인).
+   안 맞추는 것은 글자색 하나뿐이다(#dce5f3 · 재생은 #b7c4da) — 이 페이지에서 밖으로 나가는 곳은
+   여기뿐이라 위계는 남겨야 하는데, 밝기 한 단계면 옆의 '노션 ↗' 배지와 함께 충분히 선다. */
 .stage-more{position:absolute; right:18px; bottom:16px; z-index:6;
   display:inline-flex; align-items:center; gap:7px; text-decoration:none;
-  font-size:.85rem; font-weight:700; line-height:1.32; color:#dce5f3;
+  font-size:.85rem; font-weight:400; line-height:1.32; color:#dce5f3;
   border:1px solid rgba(120,140,175,.42); border-radius:9px; padding:7px 14px;
   background:rgba(19,26,38,.55); backdrop-filter:blur(4px); transition:border-color .15s, color .15s}
 .stage-more:hover{color:var(--ink); border-color:var(--net)}
