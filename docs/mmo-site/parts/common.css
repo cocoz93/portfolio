@@ -504,47 +504,30 @@ body.pop-hold #scene .chips{opacity:0}
    도형·이름표의 data-node 는 남는다: 어느 조각이 어느 노드인지 표시해 두는 값이고,
    나중에 노드 단위 강조를 되살릴 때 다시 쓸 자리다. */
 
-/* 구역 필터 — 1-1 하위 탭 줄의 오른쪽 끝, 탭보다 한 단 아래. 열(오른쪽 끝)은 위 탭 줄이 스택 메타를
-   두는 자리와 같고, 행만 한 칸 내려 씬 바로 위에 앉는다.
-   ※ 한 줄 안에서 탭과 나란히 앉혀 보았다(2026-08-02~08-04). 탭 둘 + 필터 다섯이 한 줄이라
-     '같은 급의 항목 일곱' 으로 붐볐다. 행을 가르면 위가 이동(탭) · 아래가 그 화면의 조작으로 층이 갈린다.
-   ※ 왼쪽 끝(탭과 같은 들여쓰기)으로 내리는 안은 렌더에서 반려했다 — 필터가 '1-1 의 하위 항목' 으로
-     읽히고, 활성 탭의 파란 밑줄 바로 아래에 구역 색 밑줄이 세로로 겹쳐 밑줄 줄이 셋이 된다.
-   ※ 대가는 세로다. 줄 높이가 62 → 94.5px 로 늘어 씬이 그만큼 밀리는데, 씬은 폭이 높이를 정해서
-     세로로 안 줄어든다 — 1366×768 에서 씬 바닥의 버튼 두 개가 창 밖으로 나갔다(실측 -28px).
-     그래서 늘어난 만큼을 위쪽 여백 넷에서 되찾았다: .stage 위 14 · .wrap 위 6 · 이 줄 위 3 ·
-     .tab 위아래 6. 여기에 필터 글자를 한 단 줄여(1.02 → .94rem) 줄 높이 자체를 94.5 → 81.5 로 낮췄다.
-     결과는 원래와 거의 같다 — 1366×768 첫 화면 넘침 28 → 29px, 씬 바닥 -5.7 → -7.2px(실측).
-     1600×900 은 오히려 좋아졌다(-4.3 → +16.7, 씬이 창 안에 완전히 들어온다).
+/* 구역 필터 — 1-1 하위 탭 줄의 오른쪽 끝. 위 탭 줄이 오른쪽 끝에 스택 메타를 두는 것과 같은 자리다.
    ※ 씬 왼쪽 위(.hud, position:absolute)에 띄워 두던 것을 여기로 올렸다. 그때는 탭 두 줄 바로 아래에
      세 번째 가로 줄이 생겨 '비슷한 버튼 줄 셋' 으로 읽혔고, 씬 내용과는 280px 떨어져 붕 떠 있었다.
-     지금 한 단 내린 것과 그 시절이 다른 점은 둘이다: 자기 도형(알약)이 없고, 바닥선을 탭과 같이 쓴다.
-     그래서 줄이 셋으로 갈리지 않고 한 줄의 둘째 단으로 읽힌다.
    ※ 생김새도 알약(배경·테두리·radius:10)에서 탭과 같은 어휘로 갈아탔다 — 한 줄 안에 버튼 문법이
      둘(밑줄 탭 + 알약)이면 조화가 아니라 동거다. 지금은 세 층이 모두 '글자 + 켜진 것만 밑줄' 이다.
    ※ 알약을 버리며 잃은 켜짐/꺼짐 대비는 두 가지로 메웠다: 꺼진 글자를 --mut 에서 --dim 으로 한 단 더
      누르고, 켜진 것에만 구역 색 밑줄 + 점 번짐을 준다. 예전 기록('밝기 한 단계 차이라 버튼으로
      안 읽힌다')은 이 줄이 씬 위에 떠 있던 시절 얘기다 — 탭 줄에 앉은 지금은 바로 위 두 층이
      같은 규칙(흰 글자 + 밑줄 = 켜짐)을 이미 가르쳐 준다. */
-/* width:100% 가 아랫단으로 내리는 장치다(.subtabs 의 flex-wrap 과 한 쌍) — 줄을 통째로 차지하니
-   탭 다음 항목인 이 줄이 반드시 접힌다. 오른쪽 끝 정렬은 그래서 margin-left:auto 가 아니라
-   justify-content 가 맡는다. 위 여백 6px 은 탭의 파란 밑줄과 이 줄 글자가 붙지 않을 만큼만. */
-.zonebar{display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:baseline; gap:22px;
-  width:100%; margin:4px 0 0}
-/* 1-2 에서는 자리만 남기고 감춘다(display:none 이 아니다). 지우면 줄 높이가 81.5 → 62px 로 줄어
-   탭을 옮길 때마다 아래 그림이 통째로 튄다 — 한 줄에 나란히 앉아 있던 시절엔 없던 문제다.
-   visibility 라 스크린리더·탭 이동에서도 빠진다. */
-.zonebar[hidden]{display:flex; visibility:hidden}
+/* top:10px — 탭과 같은 줄에 있되 글자만 한 칸 내려 앉힌다. 나란히 서면 탭과 같은 급으로 읽혀서,
+   탭 밑줄 아래로 내려 이 줄의 부가물임을 자리로 말한다.
+   ※ margin-top 이 아니라 position 인 이유: margin 은 줄 높이를 62 → 72px 로 늘려 씬을 그만큼
+     밀어낸다(1600×900 에서 씬 아래 여유 18.2 → 8.7px, 실측). relative 는 레이아웃을 안 건드린다.
+   ※ 좁은 화면에서 필터가 제 줄로 접히면(아래 @760px) 내릴 이유가 없어져 0 으로 되돌린다. */
+.zonebar{display:flex; flex-wrap:wrap; align-items:baseline; gap:22px;
+  position:relative; top:10px; margin-left:auto; align-self:center}
+.zonebar[hidden]{display:none}
 /* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유). */
 /* 씬에서 누를 수 있는 것이 이 줄뿐이다(도형 히트박스를 걷어냈다). 크기는 하위 탭(1.15rem)보다는
-   확실히 작게 둔다 — 그래야 '탭 한 층 더' 가 아니라 그 줄의 부가물로 읽힌다.
-   제 줄을 갖게 되면서 1.02 → .94rem 으로 한 단 더 내렸다. 한 줄에 나란히 앉았을 때는 옆 탭이
-   크기 대비를 만들어 줬는데, 단이 갈리자 그 대비가 세로로 멀어져 약해졌다.
-   줄 높이를 8px 줄여 씬을 그만큼 위로 당기는 몫도 겸한다. */
+   확실히 작게 둔다 — 그래야 '탭 한 층 더' 가 아니라 그 줄의 부가물로 읽힌다. */
 .zb{--zc:#93a5c2;   /* 켜졌을 때 밑줄·점이 쓰는 색. 버튼마다 자기 구역 색으로 덮어쓴다 */
-  display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:.94rem; font-weight:600;
+  display:flex; align-items:center; gap:7px; font-family:var(--sans); font-size:1.02rem; font-weight:600;
   cursor:pointer; color:var(--dim); background:none; border:0; border-radius:0;
-  border-bottom:2px solid transparent; padding:0 1px 5px;
+  border-bottom:2px solid transparent; padding:0 1px 6px;
   transition:color .15s, border-color .15s, opacity .15s}
 /* 점 색 = 구역 바닥판 테두리 색(ZPAL.edge)과 같은 값 — 버튼과 판이 같은 것을 가리킨다는 표시.
    꺼져 있어도 색을 빼지 않는다(옛 grayscale(.75) 를 걷어냈다): 네 점이 전부 회색이면 파랑·주황·초록이
@@ -560,12 +543,13 @@ body.pop-hold #scene .chips{opacity:0}
 .zb.act{color:#fff; font-weight:700; border-bottom-color:var(--zc)}
 .zb.act i{opacity:1; box-shadow:0 0 6px -1px var(--zc)}
 .zb.all{--zc:#c3d3ec; margin-right:4px}   /* '전체'는 구역이 아니라 해제 — 네 구역과 살짝 떼어 둔다 */
-/* 좁은 화면 — 자기 줄을 쓰지만 다섯 항목이 또 접히면 단이 셋이 되므로 값부터 줄인다 */
+/* 좁은 화면 — 탭 줄과 한 줄에 같이 앉아 있어야 하므로 줄바꿈 전에 값부터 줄인다 */
 @media(max-width:900px){ .zonebar{gap:13px} .zb{font-size:.82rem; gap:5px; padding-bottom:5px}
   .zb i{width:7px; height:7px} }
-/* 여기부터는 필터 다섯이 한 줄에 물리적으로 안 들어간다(글자가 서로 올라탄다).
-   min-height 는 0 으로 — 탭 한 단 + 필터 한 단이라 이미 62px 을 넘고, 남겨 두면 아래 여백만 는다. */
-@media(max-width:760px){ .subtabs{min-height:0}
-  .zonebar{gap:12px} .zb{font-size:.78rem; gap:4px} }
+/* 여기부터는 탭 둘 + 필터 다섯이 한 줄에 물리적으로 안 들어간다(글자가 서로 올라탄다).
+   폭을 더 깎는 대신 줄을 접는다 — 모바일에서는 위아래로 쌓이는 편이 자연스럽고,
+   그래도 필터는 자기 탭 줄 '안' 이라 바닥선 하나를 탭과 같이 쓴다(줄이 셋으로 갈리지 않는다). */
+@media(max-width:760px){ .subtabs{flex-wrap:wrap; min-height:0}
+  .zonebar{gap:12px; width:100%; margin:9px 0 0; top:0} .zb{font-size:.78rem; gap:4px} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
