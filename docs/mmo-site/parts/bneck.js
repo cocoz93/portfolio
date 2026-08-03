@@ -59,9 +59,10 @@ function fmtV(k,v,d,big){
   /* 소켓 호출은 2.4만~12.3만 사이에 다 들어간다. pps 처럼 1e6 에서 단위를 갈면 열둘이 전부 k 인데
      노션은 페이지마다 k 와 만 을 섞어 썼다 — 여기서는 k 하나로 통일한다(같은 칸을 세로로 훑는 곳이라
      단위가 바뀌면 크기 비교가 끊긴다).
-     소수 자리는 값이 요구할 때만 쓴다: 24.4k 는 넷째 자리가 있어야 하지만 55k·98k 에 .0 을 붙이면
-     없는 정밀도를 적은 것이 된다(노션도 '5만 5천' 이라 쓴다). */
-  if(k==="sock"){ var t=v/1e3; return fmt(t, v>=1e5?0:(d==null?1:d))+"k"; }
+     소수는 **한 자리로 못 박는다**. 원값이 24,386 처럼 정확값이면 그대로 세었다가 24.386k 가 되고,
+     10만을 넘으면 자리가 0 이 되어 같은 칸에서 98.2k → 100k 로 짝이 갈린다. 여기서 읽을 것은
+     '몇 만 번대인가' 뿐이라 한 자리면 충분하고, 그래야 열두 장을 세로로 훑을 때 자가 안 바뀐다. */
+  if(k==="sock") return fmt(v/1e3, 1)+"k";
   return fmt(v,d==null?decOf(v):d);
 }
 /* 부호는 값이 실제로 움직인 방향 그대로다 — 틱 p99 65.3 → 9.2ms 는 −86%.
@@ -183,8 +184,8 @@ function paintDash(it){
     /* 부하에서 온 두 칸만 자리를 맞춘다. 나머지 넷은 원래 데이터가 짝끼리 같은 자리로 적혀 있어
        손댈 것이 없고, 송신 메시지는 만/k 경계 때문에 도착값 기준이라는 제 규칙이 따로 있다. */
     var dFix=null;
-    if(M.ld && num){
-      var dOf=function(x){ return x==null ? 0 : decOf(M.k==="sock" ? x/1e3 : x); };
+    if(M.k==="pkt" && num){          /* 소켓 호출은 fmtV 가 한 자리로 못 박으므로 여기서 잴 것이 없다 */
+      var dOf=function(x){ return x==null ? 0 : decOf(x); };
       dFix=Math.max(dOf(bv), dOf(av));
     }
     roll(T,M.k,av,460,dFix);
@@ -269,10 +270,17 @@ if(pinHost && typeof MutationObserver==="function"){
 /* 팬아웃 = 한 번 보낼 때 대상이 몇 명인가. 열두 실험이 전부 OFF/ON 을 같게 맞추고 재는 통제
    지표라 '끄고 → 켜고' 가 없다 — 계기판에 칸으로 세우면 홀로 화살표가 없어 빈 칸으로 보인다.
    그래서 라벨 줄 오른쪽에 조건으로 적는다(동접이 그렇듯 이것도 '어떤 부하였나' 에 속한다). */
+/* hint = 이 카드의 여섯 칸을 곧이곧대로 읽으면 안 되는 사정. 넷뿐이라 상수로 두지 않고
+   그 카드에만 붙였다(scene.js EXPS). 화면에 자리를 새로 내지 않고 팬아웃 뒤에 이어 붙인다 —
+   둘 다 '이 값들이 어떤 조건에서 나온 것인가' 라 한 줄에 같이 서는 것이 맞다.
+     ⑤ 부하가 실측이 아니라 환산 · ⑦·⑪ 여섯 칸이 스윕의 어느 지점인지
+     ⑧ 틱만 P1 구간이고 나머지는 P1+P2 누적이라는 것 */
 function paintFan(it){
   var el=document.getElementById("bx-fan"); if(!el) return;
-  var f=it.ld&&it.ld.fan;
-  el.textContent = f ? ("팬아웃 "+f.toLocaleString("ko-KR")+" 대상/회") : "";
+  var f=it.ld&&it.ld.fan, s=[];
+  if(f) s.push("팬아웃 "+f.toLocaleString("ko-KR")+" 대상/회");
+  if(it.hint) s.push(it.hint);
+  el.textContent = s.join("  ·  ");
 }
 
 /* ═══ 고르기 ═══ */
