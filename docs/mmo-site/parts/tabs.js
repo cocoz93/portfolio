@@ -54,9 +54,15 @@
   }
   function paint(){
     /* 숨기기 '전에' 설계 씬이 화면 어디에 얼마 크기로 있었는지 잰다 — 숨긴 뒤에는 0 이 나온다.
-       병목 지도가 바로 이 자리에 겹쳐 시작해야 '그림이 그대로 있다가 변한다' 가 된다. */
+       병목 지도가 바로 이 자리에 겹쳐 시작해야 '그림이 그대로 있다가 변한다' 가 된다.
+       이 값은 곧 '1-1 에서 1-2 로 건너왔다' 는 표시이기도 하다 — 없으면 scene.js 가 전환 애니를
+       통째로 건너뛴다. 그래서 조건이 둘 더 붙는다:
+         booted  — 첫 paint(#bneck 딥링크로 곧장 들어온 경우)를 뺀다. 전환 애니가 하는 말은
+                   '방금 보던 그 구조가 이 지도로 변한다' 인데, 그 사람은 설계 화면을 본 적이 없다.
+                   남는 것은 1.9초 기다림뿐이라 지도를 바로 띄운다.
+         !pb.hidden — 직전 화면이 실제로 1-1 이었을 것(클라이언트·링크 탭에서 건너오면 false). */
     const pb=document.getElementById("p-build"), sc=document.getElementById("scene");
-    const fromRect=(!pb.hidden && top==="mmo" && sub==="bneck") ? sc.getBoundingClientRect() : null;
+    const fromRect=(booted && !pb.hidden && top==="mmo" && sub==="bneck") ? sc.getBoundingClientRect() : null;
     tabs.forEach(function(t){ var on=(t.getAttribute("data-tab")===top);
       t.className = on ? "tab act" : "tab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subs.forEach(function(t){ var on=(t.getAttribute("data-sub")===sub);
