@@ -515,13 +515,18 @@ body.pop-hold #scene .chips{opacity:0}
      누르고, 켜진 것에만 구역 색 밑줄 + 점 번짐을 준다. 예전 기록('밝기 한 단계 차이라 버튼으로
      안 읽힌다')은 이 줄이 씬 위에 떠 있던 시절 얘기다 — 탭 줄에 앉은 지금은 바로 위 두 층이
      같은 규칙(흰 글자 + 밑줄 = 켜짐)을 이미 가르쳐 준다. */
-/* top:10px — 탭과 같은 줄에 있되 글자만 한 칸 내려 앉힌다. 나란히 서면 탭과 같은 급으로 읽혀서,
-   탭 밑줄 아래로 내려 이 줄의 부가물임을 자리로 말한다.
-   ※ margin-top 이 아니라 position 인 이유: margin 은 줄 높이를 62 → 72px 로 늘려 씬을 그만큼
-     밀어낸다(1600×900 에서 씬 아래 여유 18.2 → 8.7px, 실측). relative 는 레이아웃을 안 건드린다.
+/* top:34px — 탭 줄의 바닥선 '아래' 로 내려 앉힌다. 마크업은 그대로 .subtabs 안에 있어서
+   오른쪽 끝(margin-left:auto)은 그 줄이 잡아 주고, 세로만 선 밖으로 빠져나온다.
+   26 · 34 · 42 를 렌더로 비교해 34 를 골랐다 — 26 은 선에 붙어 걸친 것처럼 보이고,
+   42 는 씬 쪽으로 붙는다.
+   ※ margin-top 이 아니라 position 인 이유: margin 은 줄 높이를 62 → 96px 로 늘려 씬을 그만큼
+     밀어낸다. 씬은 창 폭이 높이를 정해 세로로 안 줄어드니 그대로 창 밖으로 나간다.
+     relative 는 레이아웃을 안 건드린다 — 줄 62px · 씬 아래 여유 18.2px 그대로(실측).
+   ※ z-index:2 는 씬(.stage, position:relative) 보다 뒤에 그려지지 않게 하는 몫이다.
+     DOM 순서상 씬이 나중이라, 안 주면 겹치는 자리에서 필터가 씬 밑에 깔려 안 눌린다.
    ※ 좁은 화면에서 필터가 제 줄로 접히면(아래 @760px) 내릴 이유가 없어져 0 으로 되돌린다. */
 .zonebar{display:flex; flex-wrap:wrap; align-items:baseline; gap:22px;
-  position:relative; top:10px; margin-left:auto; align-self:center}
+  position:relative; top:34px; z-index:2; margin-left:auto; align-self:center}
 .zonebar[hidden]{display:none}
 /* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유). */
 /* 씬에서 누를 수 있는 것이 이 줄뿐이다(도형 히트박스를 걷어냈다). 크기는 하위 탭(1.15rem)보다는
