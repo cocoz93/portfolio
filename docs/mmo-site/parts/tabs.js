@@ -10,9 +10,10 @@
      두 패널이 다 숨은 빈 화면이 뜬다. */
   const subs=[].slice.call(document.querySelectorAll(".subtab[data-sub]"));
   const subbar=document.getElementById("subtabs");
-  /* 구역 필터는 이 줄의 오른쪽 끝에 살지만 1-1 화면 전용이다 —
+  /* 구역 필터는 이 줄의 오른쪽 끝, 탭보다 한 단 아래에 살지만 1-1 화면 전용이다 —
      1-2 나 다른 상위 탭에서는 눌러도 아무 일이 없는 버튼이 되므로 숨긴다.
-     줄 높이는 .subtabs 의 min-height 가 잡아 두어 숨겨도 화면이 튀지 않는다. */
+     hidden 을 받은 .zonebar 는 자리만 남기고 사라진다(common.css: display:flex + visibility:hidden).
+     display:none 이면 줄 높이가 한 단만큼 줄어 탭을 옮길 때마다 아래 그림이 통째로 튄다. */
   const zonebar=document.getElementById("zonebar");
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");

@@ -63,8 +63,8 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* 탭은 두 줄이다: 이름 + 안에 뭐가 있는지 한 줄.
    이름만 두면 '부하 테스트' 가 뭘 보여주는 탭인지 눌러 보기 전엔 알 수 없다 —
    탭이 안 눌리는 원인은 생김새가 아니라 정보가 없는 것이었다. */
-/* 세로 여백 11/12 는 구역 필터가 아랫단으로 내려간 몫을 되찾는 값이다(옛 14/15) —
-   .wrap · .subtabs · .zb 와 함께 넷이서 32.5px 을 나눠 물었다. 자세한 사정은 .zonebar 주석. */
+/* 세로 여백 11/12 는 구역 필터가 아랫단으로 내려간 몫을 되찾는 값이다(옛 14/15).
+   .stage · .wrap · .subtabs 와 함께 넷이서 나눠 물었다 — 사정은 .zonebar 주석에 있다. */
 .tab{display:flex; flex-direction:column; align-items:flex-start; gap:3px; line-height:1.2;
   padding:11px 26px 12px; font-weight:700; color:var(--mut); background:none; border:none;
   border-bottom:3px solid transparent; margin-bottom:-1px; cursor:pointer; transition:color .15s, border-color .15s}
@@ -524,8 +524,12 @@ body.pop-hold #scene .chips{opacity:0}
      '같은 급의 항목 일곱' 으로 붐볐다. 행을 가르면 위가 이동(탭) · 아래가 그 화면의 조작으로 층이 갈린다.
    ※ 왼쪽 끝(탭과 같은 들여쓰기)으로 내리는 안은 렌더에서 반려했다 — 필터가 '1-1 의 하위 항목' 으로
      읽히고, 활성 탭의 파란 밑줄 바로 아래에 구역 색 밑줄이 세로로 겹쳐 밑줄 줄이 셋이 된다.
-   ※ 대가는 세로다. 줄 높이 62 → 94.5px 로 늘어 씬이 그만큼 밀린다 —
-     .stage 의 위 여백 14px 을 걷어 되찾았고, 나머지는 감수한 값이다(1366×768 첫 화면 넘침 28 → 46px).
+   ※ 대가는 세로다. 줄 높이가 62 → 94.5px 로 늘어 씬이 그만큼 밀리는데, 씬은 폭이 높이를 정해서
+     세로로 안 줄어든다 — 1366×768 에서 씬 바닥의 버튼 두 개가 창 밖으로 나갔다(실측 -28px).
+     그래서 늘어난 만큼을 위쪽 여백 넷에서 되찾았다: .stage 위 14 · .wrap 위 6 · 이 줄 위 3 ·
+     .tab 위아래 6. 여기에 필터 글자를 한 단 줄여(1.02 → .94rem) 줄 높이 자체를 94.5 → 81.5 로 낮췄다.
+     결과는 원래와 거의 같다 — 1366×768 첫 화면 넘침 28 → 29px, 씬 바닥 -5.7 → -7.2px(실측).
+     1600×900 은 오히려 좋아졌다(-4.3 → +16.7, 씬이 창 안에 완전히 들어온다).
    ※ 씬 왼쪽 위(.hud, position:absolute)에 띄워 두던 것을 여기로 올렸다. 그때는 탭 두 줄 바로 아래에
      세 번째 가로 줄이 생겨 '비슷한 버튼 줄 셋' 으로 읽혔고, 씬 내용과는 280px 떨어져 붕 떠 있었다.
      지금 한 단 내린 것과 그 시절이 다른 점은 둘이다: 자기 도형(알약)이 없고, 바닥선을 탭과 같이 쓴다.
@@ -541,8 +545,8 @@ body.pop-hold #scene .chips{opacity:0}
    justify-content 가 맡는다. 위 여백 6px 은 탭의 파란 밑줄과 이 줄 글자가 붙지 않을 만큼만. */
 .zonebar{display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:baseline; gap:22px;
   width:100%; margin:4px 0 0}
-/* 1-2 에서는 자리만 남기고 감춘다(display:none 이 아니다). 지우면 줄 높이가 94.5 → 62px 로 줄어
-   탭을 옮길 때마다 아래 그림이 32.5px 튄다 — 한 줄에 나란히 앉아 있던 시절엔 없던 문제다.
+/* 1-2 에서는 자리만 남기고 감춘다(display:none 이 아니다). 지우면 줄 높이가 81.5 → 62px 로 줄어
+   탭을 옮길 때마다 아래 그림이 통째로 튄다 — 한 줄에 나란히 앉아 있던 시절엔 없던 문제다.
    visibility 라 스크린리더·탭 이동에서도 빠진다. */
 .zonebar[hidden]{display:flex; visibility:hidden}
 /* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유). */
