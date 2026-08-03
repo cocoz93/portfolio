@@ -17,10 +17,16 @@ var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
    양쪽을 같게 맞춘 통제값이고(변하면 실험이 틀린 것), 섹터 묶음에서는 송신 메시지가 −73% 인 게 성과다.
    같은 칸을 어떤 실험에선 초록으로, 어떤 실험에선 빨강으로 칠할 근거가 계기판에는 없다 —
    좋고 나쁨은 카드의 성과 한 줄이 말한다. 여기서는 변화량만 부호 그대로 적는다. */
+/* ld:1 인 둘은 값이 bm/am 이 아니라 e.ld 에서 온다(scene.js 의 LOAD 표 = 노션 '측정부하' 토글).
+   노션이 부하를 다섯 칸으로 적는데 그중 송신 메시지·송신량은 여기 이미 있었으므로,
+   빠져 있던 평균 패킷·소켓 호출을 데려와 여섯 칸이 되었다. 남은 하나(팬아웃)는 통제 지표라
+   끄고/켜고가 없다 — 이 판에 칸으로 세우지 않고 위 라벨 줄에 적는다. */
 var MET = [
   {k:"ccu",  n:"동접",    u:"명",     dir:0},
   {k:"pps",  n:"송신 메시지", u:"건/s", dir:0},
   {k:"send", n:"송신량",  u:"MB/s",   dir:0},
+  {k:"pkt",  n:"평균 패킷", u:"B",     dir:0,  ld:1},
+  {k:"sock", n:"소켓 호출", u:"회/s",  dir:-1, ld:1},
   {k:"tick", n:"틱 p99",  u:"ms",     dir:-1}
 ];
 /* 카드에 서는 것은 노션 실측 보고서가 있는 열둘뿐이다(scene.js 의 NOTION_EXP 가 no·nt 를 붙인다).
@@ -45,16 +51,27 @@ function fmt(v,d){ return v.toLocaleString("ko-KR",{minimumFractionDigits:d,maxi
      그대로 나와 '112.80547454814322k' 같은 것이 찍힌다(실측). */
 function fmtV(k,v,d,big){
   if(v==null) return "—";
+  if(typeof v==="string") return v;      /* ⑩ 소켓 호출처럼 범위로 적힌 값은 그대로 */
   if(k==="pps"){
     var man = (big==null) ? v>=1e6 : big;
     return man ? fmt(Math.round(v/1e4),0)+"만" : fmt(v/1e3,d==null?decOf(v/1e3):d)+"k";
   }
+  /* 소켓 호출은 2.4만~12.3만 사이에 다 들어간다. pps 처럼 1e6 에서 단위를 갈면 열둘이 전부 k 인데
+     노션은 페이지마다 k 와 만 을 섞어 썼다 — 여기서는 k 하나로 통일한다(같은 칸을 세로로 훑는 곳이라
+     단위가 바뀌면 크기 비교가 끊긴다).
+     소수 자리는 값이 요구할 때만 쓴다: 24.4k 는 넷째 자리가 있어야 하지만 55k·98k 에 .0 을 붙이면
+     없는 정밀도를 적은 것이 된다(노션도 '5만 5천' 이라 쓴다). */
+  if(k==="sock"){ var t=v/1e3; return fmt(t, v>=1e5?0:(d==null?1:d))+"k"; }
   return fmt(v,d==null?decOf(v):d);
 }
 /* 부호는 값이 실제로 움직인 방향 그대로다 — 틱 p99 65.3 → 9.2ms 는 −86%.
    한때 여기서 '좋아진 정도' 로 부호를 뒤집어 +86% 로 적었는데, 노션 표기(−86%)와 부호가 반대로
    갈려 같은 실험이 두 곳에서 다르게 읽혔다. 좋고 나쁨은 부호가 아니라 색이 맡는다. */
-function pct(b,a){ if(b==null||a==null||!b) return null; return (a-b)/b*100; }
+function pct(b,a){
+  if(b==null||a==null||!b) return null;
+  if(typeof b==="string"||typeof a==="string") return null;   /* 범위 값은 뺄 수가 없다 */
+  return (a-b)/b*100;
+}
 function pctTxt(p){ return p==null ? "—" : (Math.abs(p)<0.5 ? "±0%" : (p>0?"+":"−")+Math.round(Math.abs(p))+"%"); }
 /* 값 굴리기. 숫자가 튀던 두 가지를 여기서 막는다.
    ① q 를 [0,1] 로 가둔다. rAF 가 넘겨주는 now 는 '이 프레임이 시작한 시각' 이라,
@@ -65,13 +82,21 @@ function pctTxt(p){ return p==null ? "—" : (Math.abs(p)<0.5 ? "±0%" : (p>0?"+
       새 루프가 같은 칸에 번갈아 써서 숫자가 앞뒤로 왔다 갔다 한다.
    시작값은 목표값이 아니라 **지금 화면에 있는 값**에서 이어받는다(T.v 를 매 프레임 갱신) —
    구르는 도중에 눌러도 보이던 자리에서 이어져야 튀지 않는다. */
-function roll(T,k,to,dur){
+function roll(T,k,to,dur,dFix){
   var el=T.n, from=T.v;
   T.seq=(T.seq||0)+1;
   var my=T.seq;
   if(to==null){ el.textContent="—"; T.v=null; return; }
+  /* 범위로 적힌 값(⑩ 소켓 호출)은 굴릴 수가 없다 — 그대로 앉히고 다음 롤의 출발점도 없앤다 */
+  if(typeof to==="string"){ el.textContent=to; T.v=null; return; }
+  if(typeof from==="string") from=null;
   var big=(k==="pps") ? to>=1e6 : null;      /* 구르는 내내 도착값의 단위를 쓴다 */
-  var d=decOf(k==="pps"?(to>=1e6?Math.round(to/1e4):to/1e3):to);
+  /* dFix = 이 칸의 끄고·켜고가 함께 쓰기로 한 소수 자리(paintDash 가 정한다). 도착값만 보고 세면
+     짝이 갈린다 — 98.3k → 98k, 92.2 → 94 처럼 같은 칸 안에서 정밀도가 달라 보인다. */
+  var d=(dFix!=null) ? dFix
+        : decOf(k==="pps"  ? (to>=1e6?Math.round(to/1e4):to/1e3)
+              : k==="sock" ? to/1e3          /* 화면에 찍히는 것은 k 로 나눈 값이다 */
+              : to);
   if(RM || document.hidden || from==null || from===to){ el.textContent=fmtV(k,to,d,big); T.v=to; return; }
   var t0=performance.now();
   (function step(now){
@@ -98,28 +123,94 @@ var tiles = MET.map(function(M){
   $("#bx-dash").appendChild(t);
   return {el:t,n:$(".n",t),un:$(".u",t),w:$(".w",t),a:$(".a",t),fr:$(".fr",t),c:$(".bx-chip",t),M:M,v:0};
 });
-/* 막대는 절대 눈금이 아니라 그 실험 안에서의 대비다.
-   실험끼리 자릿수가 100배 벌어지므로(1.62 MB/s ↔ 947 MB/s) 공통 눈금으로는 아무것도 안 보인다.
-   둘 중 큰 쪽을 가득 채우고 나머지를 그 비율로 그린다 — 읽어야 할 것은 '끄고 대비 켜고' 뿐이다. */
+/* ═══ 막대의 눈금 = 지금 ═══
+   한때 '그 실험 안에서의 대비' 였다(둘 중 큰 쪽이 100%). 그러면 둘 중 하나는 무조건 꽉 차고,
+   안 변한 칸은 양쪽이 다 꽉 찬다 — 동접 200 짜리 실험도 막대가 가득해서 '최대' 로 보였다.
+   막대가 길이를 말하는데 그 길이가 아무 뜻도 없던 것이다.
+
+   이제 눈금은 하나다: **현황판(지금 참인 값)이 100%**. 열두 실험이 같은 자 위에 서므로
+   막대 길이가 곧 '이 실험이 어느 부하 지점이었나' 가 된다 — ① 은 거의 비어 있고 ⑪ 은 꽉 찬다.
+   그 자체가 이 탭의 이야기다(동접 200 에서 5,200 까지 부하를 올려온 순서).
+
+   두 가지만 예외다.
+   ① 틱 p99 는 현황판이 아니라 **예산 40ms** 가 100% 다. 다른 지표는 부하가 오르면 같이 오르지만
+      틱은 넘으면 안 되는 선이 따로 있다(노션도 '39.7/40 · 여유 1%' 로 적는다). 그래야 76ms 가
+      '예산의 190%' 로 읽힌다 — 현황판을 기준 삼으면 그냥 '현황판보다 크다' 가 되어 뜻이 약하다.
+   ② 눈금을 넘는 값은 100% 에서 자르되 칸에 over 를 붙여 끝을 막는다. 안 그러면 '딱 맞게 찼다' 와
+      '넘쳐서 잘렸다' 가 같은 그림이 된다.
+   값이 있는데 눈금 대비 1% 도 안 되는 칸(① 송신량 = 1.62/947)은 최소 폭을 남긴다. 0 으로 두면
+   값이 없는 칸(⑤ 소켓 호출)과 그림이 같아진다. */
+var NOWE=(window.__EXPS||[]).filter(function(e){ return e.s===0;   })[0];   /* 현황판 */
+var SUME=(window.__EXPS||[]).filter(function(e){ return e.s===0.2; })[0];   /* 결론 — 부하 두 칸의 지금 값 */
+var SCALE={
+  ccu : NOWE&&NOWE.am ? NOWE.am.ccu  : null,
+  pps : NOWE&&NOWE.am ? NOWE.am.pps  : null,
+  send: NOWE&&NOWE.am ? NOWE.am.send : null,
+  pkt : SUME&&SUME.ld ? SUME.ld.pkt  : null,
+  sock: SUME&&SUME.ld ? SUME.ld.sock : null,
+  tick: 40                       /* 게임 루프 예산 — 이 한 값만 상수다 */
+};
 function paintDash(it){
   tiles.forEach(function(T){
-    var M=T.M, bv=it.bm?it.bm[M.k]:null, av=it.am?it.am[M.k]:null, p=pct(bv,av);
-    roll(T,M.k,av,460);
-    var top=Math.max(bv||0,av||0)||1;
-    T.w.style.width=(bv==null?0:bv/top*100)+"%";
-    T.a.style.width=(av==null?0:av/top*100)+"%";
+    var M=T.M, bv, av;
+    if(M.ld){
+      /* 부하 표는 '끄고' 값 하나에 '켜고' 를 옵션으로 붙인 꼴이다(노션의 회색 괄호 표기).
+         ※ 켜고가 없을 때 같은 값을 양쪽에 넣어 '±0%' 로 그리면 안 된다. 노션의 괄호는 그 실험이
+           **새 정보를 줄 때만** 붙는 표기라(안 붙었다고 값이 안 변했다는 보장이 아니다),
+           ±0% 는 원문에 없는 주장이 된다. 그래서 켜고가 없으면 왼쪽을 비우고 값 하나만 세운다 —
+           화살표도 퍼센트도 없이 '이 실험을 돌린 부하는 이 값이었다' 까지만 말한다. */
+      var L=it.ld, has2 = !!(L && L[M.k+"2"]!=null);
+      av = L ? (has2 ? L[M.k+"2"] : L[M.k]) : null;
+      bv = (has2 && it.bm!=null) ? L[M.k] : null;
+    }else{
+      bv = it.bm?it.bm[M.k]:null;
+      av = it.am?it.am[M.k]:null;
+    }
+    var p=pct(bv,av);
+    /* 범위 문자열은 크기가 없으니 막대를 비운다 — 0 폭 막대가 '0 이다' 로 읽히지 않게
+       아래에서 칸 자체를 none 으로 죽이지는 않는다(값은 분명히 있다).
+       ※ 이 선언은 반드시 아래 dFix 보다 위에 있어야 한다. 한때 아래에 있었는데 호이스팅으로
+         undefined 인 채 읽혀 dFix 가 늘 null 이었고, 그 바람에 소수가 통째로 날아갔다(82.6k → 83k). */
+    var num = typeof bv!=="string" && typeof av!=="string";
+    /* 눈금은 위 SCALE(현황판·예산). 못 구한 지표만 예전처럼 그 실험 안에서 잰다. */
+    var top=(num && SCALE[M.k]) ? SCALE[M.k] : (num ? (Math.max(bv||0,av||0)||1) : 1);
+    function barW(v){
+      if(!num || v==null) return 0;
+      var r=v/top*100;
+      return r>100 ? 100 : (r<1.2 ? 1.2 : r);     /* 넘치면 자르고, 너무 작으면 흔적을 남긴다 */
+    }
+    var over = !!(num && av!=null && av/top>1.001);   /* 아래 className 재설정 뒤에 붙인다 */
+    /* 부하에서 온 두 칸만 자리를 맞춘다. 나머지 넷은 원래 데이터가 짝끼리 같은 자리로 적혀 있어
+       손댈 것이 없고, 송신 메시지는 만/k 경계 때문에 도착값 기준이라는 제 규칙이 따로 있다. */
+    var dFix=null;
+    if(M.ld && num){
+      var dOf=function(x){ return x==null ? 0 : decOf(M.k==="sock" ? x/1e3 : x); };
+      dFix=Math.max(dOf(bv), dOf(av));
+    }
+    roll(T,M.k,av,460,dFix);
+    T.w.style.width=barW(bv)+"%";
+    T.a.style.width=barW(av)+"%";
     /* 안 잰 지표는 단위까지 지운다 — 값이 '—' 인데 'MB/s' 만 남으면 0 을 잰 것처럼 보인다 */
     T.un.textContent=(av==null?"":M.u);
     /* 왼쪽에 비교값이 없는 이유가 둘이라 말이 다르다 — 실험은 했는데 그 지표만 안 잡은 것,
        그리고 애초에 A/B 가 아니라 한 부하에서 본 진단(또는 종합)인 것. */
-    T.fr.textContent=(bv==null
-      ? (it.st==="dg" ? "이 부하에서 관측" : it.st==="sum" ? "지금 값" : "이 시기 미수집")
-      : fmtV(M.k,bv)+" →");
+    T.fr.textContent=(!num ? ""            /* 범위 값 — 왼쪽에 또 같은 문자열을 적지 않는다 */
+      /* 부하 칸이 통째로 빈 것은 '안 쟀다' 가 아니라 '그 보고서가 그 값을 안 적었다' 이다.
+         ⑤는 그 런만 원본이 없어 부하가 환산이고, ⑦은 트래픽 대신 스레드별 CPU 를 부하로 적었다.
+         넷째 칸의 '이 시기 미수집' 을 여기 쓰면 없는 사실(장비가 못 쟀다)을 말하게 된다. */
+      : (M.ld && av==null) ? "그 보고서에 없음"
+      : bv!=null ? fmtV(M.k,bv,dFix)+" →"
+      : it.st==="dg" ? "이 부하에서 관측"
+      : it.st==="sum" ? "지금 값"
+      : M.ld ? "이 실험의 부하"          /* 켜고가 없는 부하 값 — 견줄 짝이 없다 */
+      : "이 시기 미수집");
     T.c.textContent=pctTxt(p);
     /* 색은 방향이 정해진 지표(dir≠0)에만 붙는다 — 부호는 값 그대로, 좋고 나쁨은 dir 이 판단 */
     var good = (p==null||M.dir===0||Math.abs(p)<0.5) ? 0 : (p*M.dir>0 ? 1 : -1);
     T.c.className="bx-chip "+(good>0?"up":good<0?"dn":"fl");
+    /* className 을 통째로 갈아 끼우므로 over 는 반드시 이 뒤에 붙인다 — 앞에 붙이면 여기서 지워진다 */
     T.el.className="bx-tile "+(av==null?"none":good>0?"good":good<0?"bad":"");
+    if(over) T.el.classList.add("over");
   });
 }
 
@@ -170,10 +261,20 @@ if(pinHost && typeof MutationObserver==="function"){
   mo.observe(pinHost,{childList:true,subtree:true});
 }
 
+/* 팬아웃 = 한 번 보낼 때 대상이 몇 명인가. 열두 실험이 전부 OFF/ON 을 같게 맞추고 재는 통제
+   지표라 '끄고 → 켜고' 가 없다 — 계기판에 칸으로 세우면 홀로 화살표가 없어 빈 칸으로 보인다.
+   그래서 라벨 줄 오른쪽에 조건으로 적는다(동접이 그렇듯 이것도 '어떤 부하였나' 에 속한다). */
+function paintFan(it){
+  var el=document.getElementById("bx-fan"); if(!el) return;
+  var f=it.ld&&it.ld.fan;
+  el.textContent = f ? ("팬아웃 "+f.toLocaleString("ko-KR")+" 대상/회") : "";
+}
+
 /* ═══ 고르기 ═══ */
 function show(it){
   if(!it) return;
   paintDash(it);
+  paintFan(it);
   curLoc=it.loc; curNo=String(it.no);
   var body=document.getElementById("bnc-b");
   if(body) [].forEach.call(body.querySelectorAll(".rc"), function(c){
