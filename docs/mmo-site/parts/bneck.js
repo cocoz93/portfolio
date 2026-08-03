@@ -36,10 +36,19 @@ function $(s,r){ return (r||document).querySelector(s); }
 function decOf(v){ var s=String(v), i=s.indexOf("."); return i<0?0:s.length-i-1; }
 function fmt(v,d){ return v.toLocaleString("ko-KR",{minimumFractionDigits:d,maximumFractionDigits:d}); }
 /* 송신 메시지는 실험에 따라 8만/s 에서 1000만/s 까지 벌어진다. 노션도 그 폭에 맞춰
-   초반은 k, 후반은 만 으로 적었으므로 같은 경계를 쓴다. */
-function fmtV(k,v,d){
+   초반은 k, 후반은 만 으로 적었으므로 같은 경계를 쓴다.
+   ※ big — 구르는 동안 단위를 바꾸지 않기 위한 못이다. 경계(1e6)를 값마다 따로 판단하면
+     83k → 1,005만 으로 굴러갈 때 852k 다음 프레임이 100만 이 되어 **숫자가 852 → 100 으로
+     뚝 떨어진다**(단위가 바뀌었으니 실제로는 계속 늘고 있는데도). 값이 거꾸로 가는 것처럼
+     보이는 그 한 프레임이 '음수로 튄다' 로 읽혔다. 도착값의 단위로 전 구간을 통일한다.
+   ※ d — 마찬가지로 도착값 기준 자릿수다. 여기서 v 의 자릿수를 세면 보간 중간값의 부동소수가
+     그대로 나와 '112.80547454814322k' 같은 것이 찍힌다(실측). */
+function fmtV(k,v,d,big){
   if(v==null) return "—";
-  if(k==="pps") return v>=1e6 ? fmt(Math.round(v/1e4),0)+"만" : fmt(v/1e3,decOf(v/1e3))+"k";
+  if(k==="pps"){
+    var man = (big==null) ? v>=1e6 : big;
+    return man ? fmt(Math.round(v/1e4),0)+"만" : fmt(v/1e3,d==null?decOf(v/1e3):d)+"k";
+  }
   return fmt(v,d==null?decOf(v):d);
 }
 /* 부호는 값이 실제로 움직인 방향 그대로다 — 틱 p99 65.3 → 9.2ms 는 −86%.
@@ -61,8 +70,9 @@ function roll(T,k,to,dur){
   T.seq=(T.seq||0)+1;
   var my=T.seq;
   if(to==null){ el.textContent="—"; T.v=null; return; }
+  var big=(k==="pps") ? to>=1e6 : null;      /* 구르는 내내 도착값의 단위를 쓴다 */
   var d=decOf(k==="pps"?(to>=1e6?Math.round(to/1e4):to/1e3):to);
-  if(RM || document.hidden || from==null || from===to){ el.textContent=fmtV(k,to,d); T.v=to; return; }
+  if(RM || document.hidden || from==null || from===to){ el.textContent=fmtV(k,to,d,big); T.v=to; return; }
   var t0=performance.now();
   (function step(now){
     if(T.seq!==my) return;                       /* 더 새 롤이 시작됐다 */
@@ -73,7 +83,7 @@ function roll(T,k,to,dur){
        구르는 중에 한 프레임이라도 −가 스치면 그 칸의 숫자를 다시 못 믿는다. */
     if(v<0) v=0;
     T.v=v;
-    el.textContent=fmtV(k,v,d);
+    el.textContent=fmtV(k,v,d,big);
     if(q<1) requestAnimationFrame(step); else T.v=to;
   })(t0);
 }
