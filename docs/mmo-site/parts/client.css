@@ -494,6 +494,28 @@
 /* 전폭 그림 한 장 — 옆에 카드를 세우지 않는 탭이 쓴다.
    판의 생김새는 위 .cr-frame 과 한 줄에서 같이 잡는다(탭을 오갈 때 판이 안 바뀌게). */
 .cr-wide svg{display:block; width:100%; height:auto}
+/* ── 2-3 은 넷을 늘어놓지 않고 목차로 고른다 ──
+   왼쪽 열이 읽는 축을 세로로 잡고, 오른쪽은 고른 하나가 다 쓴다(까닭은 panel-client.html).
+   목차 폭 296 은 가장 긴 이름('측정기가 병목이면 안 된다')이 한 줄에 떨어지는 값이다 —
+   여기서 줄이면 그 줄만 두 줄이 되어 넷의 높이가 어긋난다.
+   목차 넷은 오른쪽 판 높이를 나눠 갖는다(stretch + flex:1). 자연 높이로 두면 넷이 위쪽에만
+   몰리고 왼쪽 아래로 370px 짜리 빈 칸이 생겨 '덜 만든 자리' 로 보였다(실측 · 1920 창). */
+.cl-split{display:grid; grid-template-columns:296px minmax(0,1fr); gap:18px; align-items:stretch}
+.cl-idx{display:flex; flex-direction:column; gap:8px}
+.cl-idx button{display:grid; grid-template-columns:27px minmax(0,1fr); gap:3px 11px;
+  align-content:center; flex:1 1 0; min-height:0;
+  text-align:left; cursor:pointer; font:inherit; padding:12px 14px; border-radius:11px;
+  border:1px solid var(--line2); background:var(--sunk); transition:border-color .15s, background .15s}
+.cl-idx button i{grid-row:1/3; align-self:center; font-style:normal; font-family:var(--mono);
+  font-size:1.12rem; font-weight:800; color:#4a5568; text-align:center}
+.cl-idx button b{font-size:.94rem; font-weight:800; color:#9fb0c8; line-height:1.3}
+.cl-idx button span{font-size:.72rem; color:#4c5a73; line-height:1.5}
+.cl-idx button:hover{border-color:#3c4a63}
+.cl-idx button:hover b{color:#d3ddee}
+.cl-idx button.act{background:#14243a; border-color:#2c5f85}
+.cl-idx button.act i{color:var(--net)}
+.cl-idx button.act b{color:var(--ink)}
+.cl-idx button.act span{color:var(--mut)}
 /* ※ .cr-real(영상 아래 다섯 줄 문단)은 없앴다 — 그 문단이 글로 설명하던 '5,000명이면 시야가
    1,118명이 되어 화면이 흰 판으로 덮인다' 를 실측 캡처 한 장이 대신한다(오른쪽 아래 참조컷). */
 .cr-chips{max-width:100%}
@@ -602,6 +624,11 @@
      문자 격자가 회색 띠로 보이므로, 참조컷 상태로 반씩 나눠 갖는 편이 낫다. */
   /* 두 칸 격자를 한 칸으로 풀어 히어로 · (규격 + 참조컷)을 세로로 쌓는다 */
   .cr-hero{grid-template-columns:minmax(0,1fr); grid-template-areas:"hero" "side"; gap:10px}
+  /* 2-3 목차는 이 폭부터 위로 눕힌다 — 296px 열을 그대로 두면 그림이 먹을 폭이 그만큼 준다.
+     눕히면 읽는 축이 다시 가로가 되지만, 이 폭에서는 그림을 살리는 쪽이 낫다. */
+  #p-cload .cl-split{grid-template-columns:minmax(0,1fr); gap:12px}
+  #p-cload .cl-idx{flex-direction:row; flex-wrap:wrap}
+  #p-cload .cl-idx button{flex:1 1 44%}
   /* 카드 안여백은 좁은 화면에서 그림이 먹을 폭이다 — 한 단 줄인다(세 탭 같이) */
   .cr-frame, .cr-wide{padding:12px 11px}
   /* 머리줄도 같이 줄인다 — 2.42rem 은 이 폭에서 두 줄로 접히고, 접히는 순간 제목이 액자보다
