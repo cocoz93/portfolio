@@ -1662,6 +1662,20 @@ window.__flowReset=function(){
       } else st.setProperty("--bn-t0","none");
     }
     clearTimeout(bnTimer); clearTimeout(bnOpen); clearTimeout(bnFill); cancelAnimationFrame(bnRaf); cancelAnimationFrame(flatRaf);
+    /* ── 설계 탭에서 넘어온 것이 아니면 전환을 통째로 건너뛴다 ──
+       이 애니가 하는 말은 '방금 보던 그 구조가 이 지도로 변한다' 하나뿐이다. 그러려면 직전 화면이
+       1-1 이어야 성립한다 — 클라이언트 탭에서 건너오는 사람에게는 겹칠 그림이 없으니, 같은 1.86초가
+       '들어올 때마다 기다려야 하는 시간' 으로만 남는다.
+       판정은 fromRect 하나로 끝난다: tabs.js 가 '지금 설계 패널이 보이는 중일 때만' 그 씬의 자리를
+       재서 넘기므로(paint 의 !pb.hidden), 값이 있다는 것이 곧 1-1 → 1-2 다.
+       건너뛸 때는 평소 모습(평면·청사진 전체)으로 바로 앉힌다. bn-enter 를 안 붙였으므로
+       마스크·카메라·핀 드랍 애니는 규칙째 걸리지 않고, 핀 파문만 제 주기로 돈다. */
+    if(!fromRect){
+      setFlat(1);
+      fillCard();
+      if(bnCard) bnCard.classList.add("on");   /* 0.35s 페이드는 남긴다 — 없으면 판이 뚝 나타난다 */
+      return;
+    }
     /* 애니는 걸되 시계는 세워 둔다 — 지금 이 프레임이 패널을 처음 배치하고 그리는 비싼 프레임이다.
        그리기가 끝난 다음 프레임에 시계를 켜야 초반이 안 잘린다. */
     stage.classList.add("bn-enter","bn-hold");
