@@ -47,13 +47,35 @@ function fmtV(k,v,d){
    갈려 같은 실험이 두 곳에서 다르게 읽혔다. 좋고 나쁨은 부호가 아니라 색이 맡는다. */
 function pct(b,a){ if(b==null||a==null||!b) return null; return (a-b)/b*100; }
 function pctTxt(p){ return p==null ? "—" : (Math.abs(p)<0.5 ? "±0%" : (p>0?"+":"−")+Math.round(Math.abs(p))+"%"); }
-function roll(el,k,from,to,dur){
-  if(to==null){ el.textContent="—"; return; }
+/* 값 굴리기. 숫자가 튀던 두 가지를 여기서 막는다.
+   ① q 를 [0,1] 로 가둔다. rAF 가 넘겨주는 now 는 '이 프레임이 시작한 시각' 이라,
+      프레임 처리 도중에 찍은 t0 보다 **앞설 수 있다**. 하한이 없으면 q<0 → e=1-(1-q)³<0 이 되어
+      값이 출발점에서 목표 반대쪽으로 벗어난다 — 동접 200 → 5,000 처럼 폭이 큰 칸에서
+      한 프레임 동안 음수가 찍히던 것이 이것이다.
+   ② 새 롤이 시작되면 이전 루프를 세운다(T.seq). 카드를 연달아 누르면 멈추지 않은 옛 루프와
+      새 루프가 같은 칸에 번갈아 써서 숫자가 앞뒤로 왔다 갔다 한다.
+   시작값은 목표값이 아니라 **지금 화면에 있는 값**에서 이어받는다(T.v 를 매 프레임 갱신) —
+   구르는 도중에 눌러도 보이던 자리에서 이어져야 튀지 않는다. */
+function roll(T,k,to,dur){
+  var el=T.n, from=T.v;
+  T.seq=(T.seq||0)+1;
+  var my=T.seq;
+  if(to==null){ el.textContent="—"; T.v=null; return; }
   var d=decOf(k==="pps"?(to>=1e6?Math.round(to/1e4):to/1e3):to);
-  if(RM || document.hidden || from==null || from===to){ el.textContent=fmtV(k,to,d); return; }
+  if(RM || document.hidden || from==null || from===to){ el.textContent=fmtV(k,to,d); T.v=to; return; }
   var t0=performance.now();
-  (function step(now){ var q=Math.min(1,(now-t0)/dur), e=1-Math.pow(1-q,3);
-    el.textContent=fmtV(k,from+(to-from)*e,d); if(q<1) requestAnimationFrame(step); })(t0);
+  (function step(now){
+    if(T.seq!==my) return;                       /* 더 새 롤이 시작됐다 */
+    var q=Math.max(0,Math.min(1,(now-t0)/dur)), e=1-Math.pow(1-q,3);
+    var v=from+(to-from)*e;
+    /* 네 지표(동접·건/s·MB/s·ms)는 음수가 없는 값이다. 위 두 방어로 −가 나올 산술 경로는
+       막았지만, 굳이 바닥을 한 번 더 까는 것은 값이 아니라 화면을 지키기 위해서다 —
+       구르는 중에 한 프레임이라도 −가 스치면 그 칸의 숫자를 다시 못 믿는다. */
+    if(v<0) v=0;
+    T.v=v;
+    el.textContent=fmtV(k,v,d);
+    if(q<1) requestAnimationFrame(step); else T.v=to;
+  })(t0);
 }
 
 /* ═══ 계기판 ═══ */
@@ -72,7 +94,7 @@ var tiles = MET.map(function(M){
 function paintDash(it){
   tiles.forEach(function(T){
     var M=T.M, bv=it.bm?it.bm[M.k]:null, av=it.am?it.am[M.k]:null, p=pct(bv,av);
-    roll(T.n,M.k,T.v,av,460); T.v=av;
+    roll(T,M.k,av,460);
     var top=Math.max(bv||0,av||0)||1;
     T.w.style.width=(bv==null?0:bv/top*100)+"%";
     T.a.style.width=(av==null?0:av/top*100)+"%";
@@ -92,16 +114,14 @@ function paintDash(it){
 }
 
 /* ═══ 카드 열두 장 ═══
-   한 장에 네 가지만 적는다: 번호 · 판정 · 동접 · 이름 · 성과 한 줄.
-   측정 조건과 A/B 표는 카드에 없다 — 그 자리는 노션 원문(↗)이 맡는다.
-   색은 고른 카드에만 켠다. 열둘이 저마다 판정색을 띠고 있으면 어느 것이 열려 있는지가
-   색으로는 안 짚이고, 훑을 때도 초록·빨강 열두 덩어리가 먼저 들어와 이름이 뒤로 밀린다. */
+   한 장에 네 가지만 적는다: 번호 · 판정 · 동접 · 이름. 그리고 노션으로 나가는 ↗ 하나.
+   결과 수치는 카드에 없다 — 한때 '송신 호출 −94%' 같은 성과 한 줄을 넣었는데, 열두 장이
+   저마다 다른 지표를 외치면 훑을 때 이름이 뒤로 밀리고 서로 견줄 수도 없었다(실험마다 잰 지표가 다르다).
+   무엇이 얼마나 바뀌었나는 아래 계기판이 고른 한 장에 대해서만 말하고, 나머지는 노션 원문이 맡는다.
+   색도 고른 카드에만 켠다 — 열둘이 저마다 판정색을 띠면 어느 것이 열려 있는지가 색으로 안 짚인다. */
 function build(){
   var body=document.getElementById("bnc-b"); if(!body) return;
   body.innerHTML=EXPS.map(function(e){
-    /* 성과 줄은 노션의 결론(r)에서 앞 조각만 쓴다 — 카드 폭 200px 에 한 줄로 들어가는 길이다.
-       한글이 섞이면 mono 에서 글자마다 글꼴이 폴백돼 자간이 벌어진다(범례·캡션과 같은 규칙). */
-    var hit=(e.r||"").split(" · ")[0];
     var ccu=(e.am&&e.am.ccu) ? e.am.ccu.toLocaleString("ko-KR") : "5,000";
     return '<div class="rc k-'+e.st+'" data-s="'+e.s+'" data-loc="'+e.loc+'"'+
       ' tabindex="0" role="button" aria-pressed="false">'+
@@ -111,8 +131,7 @@ function build(){
       (e.nt ? '<a class="go" href="'+e.nt+'" target="_blank" rel="noopener"'+
               ' aria-label="'+e.n+' 실측 보고서 — 노션에서 열기">↗</a>' : '')+
       '</span>'+
-      '<span class="nm">'+e.n+'</span>'+
-      '<span class="hit'+(/[가-힣]/.test(hit)?' ko':'')+'">'+hit+'</span></div>';
+      '<span class="nm">'+e.n+'</span></div>';
   }).join("");
 }
 build();

@@ -77,16 +77,15 @@
 .rc:hover{ background:#151f33; border-left-color:#48597a }
 .rc:focus-visible{ outline:2px solid var(--net); outline-offset:2px }
 .rc .r1{ display:flex; align-items:baseline; gap:5px }
-.rc .no{ font-family:var(--mono); font-size:.6rem; font-weight:800; color:#66748c }
-.rc .st{ font-size:.54rem; font-weight:800; color:#66748c }
-.rc .cc{ font-family:var(--mono); font-size:.52rem; color:#4d5a70; margin-left:auto }
+.rc .no{ font-family:var(--mono); font-size:.65rem; font-weight:800; color:#66748c }
+.rc .st{ font-size:.58rem; font-weight:800; color:#66748c }
+.rc .cc{ font-family:var(--mono); font-size:.56rem; color:#4d5a70; margin-left:auto }
 /* 노션 원문으로 나가는 유일한 문 — 카드에는 측정 조건도 A/B 표도 없다(그 자리를 이것이 맡는다) */
-.rc .go{ font-family:var(--mono); font-size:.58rem; color:#4d5a70; margin-left:4px; text-decoration:none }
+.rc .go{ font-family:var(--mono); font-size:.62rem; color:#4d5a70; margin-left:4px; text-decoration:none }
 .rc .go:hover{ color:#cfe0ff }
-.rc .nm{ font-size:.73rem; font-weight:700; color:#8f9fb6; line-height:1.24 }
-.rc .hit{ font-family:var(--mono); font-size:.73rem; font-weight:800; line-height:1.22; color:#7b8ba3 }
-/* 한글이 섞인 줄은 mono 를 쓰면 글자마다 글꼴이 폴백돼 자간이 벌어진다(범례·캡션과 같은 규칙) */
-.rc .hit.ko{ font-family:var(--sans); font-size:.72rem; font-weight:700; letter-spacing:-.01em }
+/* 이름은 카드에서 유일하게 읽는 글이라 한 단계 크다. 칸 200px 에 한 줄로 들어가는 상한이 .79rem
+   — 긴 이름('브로드캐스트 수신섹터 묶음')이 여기서 딱 차고, 더 키우면 두 줄로 접힌다. */
+.rc .nm{ font-size:.79rem; font-weight:700; color:#8f9fb6; line-height:1.25 }
 
 /* ── 고른 카드에만 색이 켜진다 ──
    열둘이 저마다 판정색을 띠고 있으면 두 가지가 무너진다: 어느 것이 열려 있는지가 색으로는
@@ -96,7 +95,7 @@
 .rc.on{ background:#172032; border-top-color:#33415a; border-right-color:#33415a; border-bottom-color:#33415a }
 .rc.on .no{ color:#e8eefb } .rc.on .nm{ color:#fff }
 .rc.on .cc, .rc.on .go{ color:#8fa3c4 }
-.rc.on.k-ok{ border-left-color:#3fbe7c }  .rc.on.k-ok .st{ color:var(--store) } .rc.on.k-ok .hit{ color:#8fe3b0 }
-.rc.on.k-rj{ border-left-color:#e0705f }  .rc.on.k-rj .st{ color:#ff9a8d }      .rc.on.k-rj .hit{ color:#ff9a8d }
-.rc.on.k-dg{ border-left-color:#d8a94b }  .rc.on.k-dg .st{ color:#e0b45c }      .rc.on.k-dg .hit{ color:#e0b45c }
-.rc.on.k-sum{ border-left-color:#8b7ae0 } .rc.on.k-sum .st{ color:#a99aff }     .rc.on.k-sum .hit{ color:#a99aff }
+.rc.on.k-ok{ border-left-color:#3fbe7c }  .rc.on.k-ok .st{ color:var(--store) }
+.rc.on.k-rj{ border-left-color:#e0705f }  .rc.on.k-rj .st{ color:#ff9a8d }
+.rc.on.k-dg{ border-left-color:#d8a94b }  .rc.on.k-dg .st{ color:#e0b45c }
+.rc.on.k-sum{ border-left-color:#8b7ae0 } .rc.on.k-sum .st{ color:#a99aff }
