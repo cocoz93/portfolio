@@ -208,9 +208,18 @@
            SVG 글자는 액자 배율을 타서 창 1280 에서 잔글씨가 된다. -->
     <div class="cr-wide cl-split">
       <nav class="cl-idx" id="ix-load" aria-label="부하 검증 항목 고르기"></nav>
-      <!-- 그림은 고른 항목 하나만 그린다(client.js 의 drawLoad). aria-label 도 그때 갈아 끼운다 -->
-      <svg id="sc-load" viewBox="0 0 880 420" role="img" aria-label="고른 항목의 그림"></svg>
+      <!-- 오른쪽은 액자 위에 '얹힌 컷' 이다(2-1 의 .cr-screen 과 같은 층) — 목차는 가라앉은 판,
+           본문은 떠 있는 판. 한때 둘 다 가라앉은 판이라 액자 안에 얹힌 것이 하나도 없었다.
+           머리줄·설명은 HTML 이고 그림만 SVG 다. 번호 배지는 여기 안 붙인다 —
+           왼쪽에서 고른 것이 이미 켜져 있어 같은 말이 두 번 난다. -->
+      <div class="cl-body" id="bd-load">
+        <div class="cr-hd"><b></b><span></span></div>
+        <p class="cl-bd"></p>
+        <!-- 그림은 고른 항목 하나만 그린다(client.js 의 drawLoad). aria-label 도 그때 갈아 끼운다 -->
+        <svg id="sc-load" viewBox="0 0 880 320" role="img" aria-label="고른 항목의 그림"></svg>
+      </div>
     </div>
-    <!-- 노션으로 나가는 문 — 칩 줄이 없어졌으므로 액자 아래 제 줄을 쓴다(.cr-foot 이 오른쪽 끝으로 민다) -->
+    <!-- 노션으로 나가는 문 — 칩 줄이 없어졌으므로 액자 아래 제 줄을 쓴다(.cr-foot 이 오른쪽 끝으로 민다).
+         칩 줄 밖으로 나온 문은 점선 알약을 벗는다 — 2-2 가 같은 이유로 벗겼다(client.css). -->
     <div class="cr-foot" id="mo-load"></div>
   </section>

@@ -100,6 +100,10 @@
     /* 2-2 계단도 같다 — 이 화면에 들어올 때마다 처음부터. 첫 로드에서는 이 조각이 client.js 보다
        먼저라 __safePlay 가 아직 없고, 그때는 client.js 가 스스로 한 번 재생한다. */
     if(top==="dummy" && csub==="safe" && window.__safePlay) window.__safePlay();
+    /* 2-3 도 같다 — 목차 넷이 차례로 서고 판이 뒤따라 열린다. 이 탭만 애니가 없던 동안
+       다른 넷은 다 움직이는데 여기만 이미 다 서 있는 채로 나타나서 혼자 튀었다
+       (3번 탭에서 같은 진단으로 lkOpen 을 넣은 기록이 common.css 에 있다). */
+    if(top==="dummy" && csub==="load" && window.__loadPlay) window.__loadPlay();
     syncHash();
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });
