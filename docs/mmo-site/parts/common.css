@@ -346,7 +346,9 @@ body.subdetach .subtabs{padding-left:16px}
   color:#46536b; margin-bottom:4px}
 .lk-t{display:block; font-size:2.15rem; font-weight:800; letter-spacing:-.025em;
   color:var(--ink); line-height:1.1}
-.lk-d{display:block; font-size:.93rem; color:#b7c4da; margin-top:9px; max-width:62ch}
+/* 글 폭 52ch — 넓히면 둘째 줄에 한 단어만 떨어져 남는다(62ch 에서 '있습니다.' 만 남았다).
+   52 는 세 줄 모두 두 줄로 고르게 나뉘는 값이다. 글자를 키우면 이 값도 같이 봐야 한다. */
+.lk-d{display:block; font-size:1.02rem; color:#b7c4da; margin-top:9px; max-width:52ch}
 .lk-u{display:block; font-family:var(--mono); font-size:.75rem; color:#46536b; margin-top:9px;
   transition:color .15s}
 .lk-row:hover .lk-u{color:var(--net)}
@@ -357,7 +359,7 @@ body.subdetach .subtabs{padding-left:16px}
   .lk-row{flex-direction:column; align-items:flex-start; gap:14px; padding:18px 2px}
   .lk-sh{width:100%; height:auto; aspect-ratio:16/9}
   .lk-t{font-size:1.6rem}
-  .lk-d{font-size:.88rem}
+  .lk-d{font-size:.95rem; max-width:none}
 }
 
 /* 구역 개요 카드 — 상자가 없다 */
