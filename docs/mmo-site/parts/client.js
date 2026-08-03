@@ -27,16 +27,24 @@ var SAFE={
      그러고도 78·85·78·55자로 두 줄씩이라 읽기 전에 글 덩어리로 보였다. 그래서 한 번 더 죄었다:
      문장을 잇지 않고 끊고, 조사와 되풀이를 덜어내고, 셋씩 나열되는 것은 가운뎃점만 남겼다.
      ※ 여기 글을 늘릴 일이 생기면 넷의 줄 수가 어긋나는 순간 아래 여백이 다시 출렁인다.
-       늘릴 거면 넷을 같이 늘리고 overlay.more 의 y 도 같이 볼 것 */
+       늘릴 거면 넷을 같이 늘리고 overlay.more 의 y 도 같이 볼 것
+     ※ 지금은 넷 다 두 줄이다(보기를 '합격 기준 → 단계 셋' 으로 다시 짜면서 줄까지 맞췄다).
+       줄 수가 어긋나면 바로 밑의 노션 문(overlay.more, y 고정)과 글자가 겹친다 — 렌더로 확인했다.
+       한 줄에서 두 줄로 늘리면서 safe-scene.js 의 chips·note y 를 16 씩 올렸다(more 는 그대로) */
+  /* n 이 배열이면 줄을 그대로 나눠 찍는다(wireWide 가 <br> 로 잇는다). 2-3 은 문단 하나라 문자열이다 */
   items:{
-    s1:{t:"검증된 더미",
-      n:"10바이트 고정. 번호를 보내고 그대로 오는지만 본다 — 접속 · 먼저 끊김 · 값 일치."},
-    s2:{t:"커스텀 더미",
-      n:"12~256바이트 가변. 받아서 규칙대로 만들어 비교하고, 어긋난 바이트 자리를 찍는다."},
     gate:{t:"합격 기준",
-      n:"넷 다 0 — 먼저 끊김 · 바이트 훼손 · 순서 역전 · 왕복 초과. 남으면 부하 탓이 아니라 결함."},
-    s3:{t:"다음은 2-3",
-      n:"검증된 더미에 게임 시나리오를 얹어 서버 전체를 잰다. 자세한 것은 2-3 부하 검증에."}
+      n:["모든 더미에서 에러 0",
+         "바이트 훼손, 순서 역전, 왕복 초과, 비정상 끊김"]},
+    s1:{t:"검증된 더미",
+      n:["네트워크 라이브러리 검증 (멀티스레드 환경)",
+         "서버가 먼저 끊지 않는지 / 보낸 값이 그대로 오는지 / 접속 수가 맞는지"]},
+    s2:{t:"커스텀 더미",
+      n:["12~256바이트 가변으로 테스트",
+         "마찬가지로 네트워크 라이브러리 검증"]},
+    s3:{t:"더미 클라이언트",
+      n:["실제 컨텐츠 부하 (이동·시야·채팅·존이동)",
+         "성능 한계 측정 (tick·RTT·송신량)"]}
   }
 };
 /* ── 전폭 그림에서 되풀어 쓰는 조각들 ── */
@@ -279,7 +287,12 @@ function wireWide(scId,chId,noteId,DATA,order,linkLabel,moreId){
   var ch=document.getElementById(chId), note=document.getElementById(noteId);
   function sel(k,i){
     note.innerHTML="";
-    var em=h("i",{},"보기 "+(i+1)), p=h("p",{},DATA.items[k].n);
+    var em=h("i",{},"보기 "+(i+1)), p=h("p",{});
+    /* 줄을 배열로 준 항목은 그 줄 그대로 찍는다 — .cr-note 가 가로 flex 라 <p> 를 여럿 두면
+       옆으로 늘어선다. 그래서 한 <p> 안에서 <br> 로 잇는다. */
+    var nn=DATA.items[k].n, ln=(typeof nn==="string")?[nn]:nn;
+    ln.forEach(function(s,j){ if(j) p.appendChild(document.createElement("br"));
+      p.appendChild(document.createTextNode(s)); });
     note.appendChild(em); note.appendChild(p);
     [].forEach.call(document.querySelectorAll("#"+scId+" .cl-hit"),function(gg){
       gg.classList.toggle("on", gg.getAttribute("data-it")===k); });
@@ -308,7 +321,7 @@ safePicker();
 /* tabs.js 는 이 조각보다 먼저 돌아서 첫 paint() 때는 __safePlay 가 아직 없다 —
    주소에 #csafe 를 달고 들어온 경우가 그렇다. 그때만 여기서 한 번 재생한다(이중 재생 없음). */
 if(!document.getElementById("p-csafe").hidden) safePlay();
-wireWide("sc-safe","ch-safe","nt-safe",SAFE,["s1","s2","gate","s3"],"에코 더미 · 스트레스 테스트","mo-safe");
+wireWide("sc-safe","ch-safe","nt-safe",SAFE,["gate","s1","s2","s3"],"에코 더미 · 스트레스 테스트","mo-safe");
 drawLoad(); paintDash("d-load",LOAD.dash);
 wireWide("sc-load","ch-load","nt-load",LOAD,["env","bot","map","thr"],"테스트 환경 · 컨텐츠 부하 검증");
 
