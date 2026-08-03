@@ -236,7 +236,6 @@
 #p-csafe .cr-note i{display:none}
 #p-csafe .cr-note p{font-size:1.033cqw}
 #p-csafe .cl-chips{gap:.478cqw; max-width:100%}
-#p-csafe .cl-chips .t{font-size:.842cqw; margin-right:.159cqw}
 #p-csafe .cl-chips button{gap:.478cqw; font-size:1.020cqw; border-radius:.717cqw;
   padding:.398cqw .798cqw .398cqw .478cqw}
 #p-csafe .cl-chips button i{width:1.355cqw; height:1.355cqw; font-size:.765cqw}
@@ -248,9 +247,10 @@
 #p-csafe .cr-more{gap:.558cqw; font-size:.996cqw; border:0; padding:0}
 #p-csafe .cr-more em{font-size:.842cqw}
 
-/* ── 아래 칩 줄 ── */
+/* ── 아래 칩 줄 ──
+   줄 앞에 있던 '보기' 라벨은 걷어냈다(2-2·2-3 둘 다). 알약 넷 중 하나만 켜져 있어 고르는 줄인 것이
+   이미 읽히는데, 라벨이 칩을 오른쪽으로 밀어 첫 알약과 밑의 설명 상자 왼쪽 모서리가 어긋났다. */
 .cl-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; max-width:57%}
-.cl-chips .t{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut); margin-right:2px}
 .cl-chips button{display:flex; align-items:center; gap:6px; cursor:pointer;
   font-family:var(--sans); font-size:.8rem; font-weight:700; color:#8e9cb4;
   background:transparent; border:1px solid #232e42; border-radius:9px; padding:5px 10px 5px 6px}
@@ -592,7 +592,6 @@
   /* 넓은 화면에서 떼어 낸 문은 여기서도 제 줄을 쓴다. 칩 줄에 되붙이면 두 컨테이너를
      한 줄에 세우는 셈이라 order 만으로는 안 되고, 그러자고 감싸는 판을 하나 더 두지 않는다. */
   #p-csafe .sf-stage>#mo-safe{order:5; margin-top:9px !important}
-  #p-csafe .cl-chips .t{font-size:.66rem; margin-right:2px}
   #p-csafe .cl-chips button{gap:6px; font-size:.8rem; border-radius:9px; padding:5px 10px 5px 6px}
   #p-csafe .cl-chips button i{width:17px; height:17px; font-size:.6rem}
   #p-csafe .cr-more{gap:7px; font-size:.78rem; border:0; padding:0}

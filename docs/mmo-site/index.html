@@ -387,6 +387,26 @@ body.subdetach .subtabs{padding-left:16px}
 .lk-u{display:block; font-family:var(--mono); font-size:.75rem; color:#46536b; margin-top:10px;
   transition:color .15s}
 .lk-row:hover .lk-u{color:var(--net)}
+
+/* ── 진입 애니 — 줄이 제자리에서 열린다 ──
+   이 탭만 이미 다 서 있는 채로 나타나서 탭을 오갈 때 혼자 튀었다(1-1 은 구조가 서고, 2-1 은 창이 열리고,
+   1-2 는 지도가 눕는다). 몸짓은 2-1 의 말을 그대로 가져온다 — 제자리에서 0.94배로 열리고 18px 떠오름.
+   그쪽 주석에 왜 그 값인지가 남아 있다(0.52배는 확대 구간에 잔글씨가 흐려져 기각 · 10px 는 '떠올랐다'가
+   안 읽혀 18 로 키움). 새 몸짓을 만들지 않는 이유가 그것이다 — 보이는 결과가 같으면 어휘를 늘리지 않는다.
+   ── 2-1 보다 짧게 (0.91초 → 0.52초) ──
+   그 탭은 '볼 것' 이 목적이라 그 길이가 맞지만, 여기는 나가는 문이다. 링크를 누르러 온 사람을
+   그만큼 붙잡으면 안 된다. 줄 간격 60ms · 마지막 줄이 .20s 에 시작해 .54s 에 끝난다.
+   ── 되감기는 CSS 가 알아서 한다 ──
+   .panel[hidden] 이 display:none 이라, 탭에 들어올 때마다 display 가 none→flow 로 바뀌며 애니가
+   처음부터 다시 돈다. 그래서 tabs.js 에 훅을 하나도 안 붙였다(공통 조각이라 안 건드리는 편이 낫다).
+   ※ 끄는 규칙은 따로 안 둔다 — 이 파일 맨 아래 prefers-reduced-motion 전역 규칙이 그대로 덮는다. */
+@keyframes lkOpen{from{opacity:0; transform:translateY(18px) scale(.94)} to{opacity:1; transform:none}}
+.lk-row{animation:lkOpen .34s cubic-bezier(.22,.9,.3,1) both; transform-origin:center}
+.lk-row:nth-child(1){animation-delay:.02s}
+.lk-row:nth-child(2){animation-delay:.08s}
+.lk-row:nth-child(3){animation-delay:.14s}
+.lk-row:nth-child(4){animation-delay:.20s}
+
 /* 좁은 화면 — 그림을 폭 전체로 눕히고 제목을 줄인다. 280px 고정을 두면 글이 설 자리가 없다 */
 @media(max-width:860px){
   /* 좁은 화면에서는 하위 탭 줄도 54px 로 줄어든다(.subtabs @680px) — 여백도 같이 내린다 */
@@ -937,7 +957,6 @@ body.pop-hold #scene .chips{opacity:0}
 #p-csafe .cr-note i{display:none}
 #p-csafe .cr-note p{font-size:1.033cqw}
 #p-csafe .cl-chips{gap:.478cqw; max-width:100%}
-#p-csafe .cl-chips .t{font-size:.842cqw; margin-right:.159cqw}
 #p-csafe .cl-chips button{gap:.478cqw; font-size:1.020cqw; border-radius:.717cqw;
   padding:.398cqw .798cqw .398cqw .478cqw}
 #p-csafe .cl-chips button i{width:1.355cqw; height:1.355cqw; font-size:.765cqw}
@@ -949,9 +968,10 @@ body.pop-hold #scene .chips{opacity:0}
 #p-csafe .cr-more{gap:.558cqw; font-size:.996cqw; border:0; padding:0}
 #p-csafe .cr-more em{font-size:.842cqw}
 
-/* ── 아래 칩 줄 ── */
+/* ── 아래 칩 줄 ──
+   줄 앞에 있던 '보기' 라벨은 걷어냈다(2-2·2-3 둘 다). 알약 넷 중 하나만 켜져 있어 고르는 줄인 것이
+   이미 읽히는데, 라벨이 칩을 오른쪽으로 밀어 첫 알약과 밑의 설명 상자 왼쪽 모서리가 어긋났다. */
 .cl-chips{display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; max-width:57%}
-.cl-chips .t{font-family:var(--sans); font-size:.66rem; font-weight:700; letter-spacing:.08em; color:var(--mut); margin-right:2px}
 .cl-chips button{display:flex; align-items:center; gap:6px; cursor:pointer;
   font-family:var(--sans); font-size:.8rem; font-weight:700; color:#8e9cb4;
   background:transparent; border:1px solid #232e42; border-radius:9px; padding:5px 10px 5px 6px}
@@ -1293,7 +1313,6 @@ body.pop-hold #scene .chips{opacity:0}
   /* 넓은 화면에서 떼어 낸 문은 여기서도 제 줄을 쓴다. 칩 줄에 되붙이면 두 컨테이너를
      한 줄에 세우는 셈이라 order 만으로는 안 되고, 그러자고 감싸는 판을 하나 더 두지 않는다. */
   #p-csafe .sf-stage>#mo-safe{order:5; margin-top:9px !important}
-  #p-csafe .cl-chips .t{font-size:.66rem; margin-right:2px}
   #p-csafe .cl-chips button{gap:6px; font-size:.8rem; border-radius:9px; padding:5px 10px 5px 6px}
   #p-csafe .cl-chips button i{width:17px; height:17px; font-size:.6rem}
   #p-csafe .cr-more{gap:7px; font-size:.78rem; border:0; padding:0}
@@ -1699,7 +1718,7 @@ body.pop-hold #scene .chips{opacity:0}
         <svg id="sc-safe" viewBox="193 138 1079 538" role="img"
           aria-label="검증 3단계를 계단으로 그린 그림. 이미 검증된 더미로 내 네트워크 라이브러리를 재고, 통과한 라이브러리로 커스텀 에코더미를 재고, 통과한 더미로 서버 전체를 잰다. 단마다 보내고 그대로 받는 에코 왕복이 있다"></svg>
         <div class="cl-dash" id="d-safe"></div>
-        <div class="cl-chips cr-chips" id="ch-safe"><span class="t">보기</span></div>
+        <div class="cl-chips cr-chips" id="ch-safe"></div>
         <div class="cr-note" id="nt-safe"></div>
         <!-- 노션으로 나가는 문. 칩 줄에 얹혀 있던 것을 떼어 설명 아래로 내렸다 —
              고르기 → 읽기 → 더 읽기 순서라, 나가는 문은 읽는 끝에 있어야 한다. -->
@@ -1717,7 +1736,7 @@ body.pop-hold #scene .chips{opacity:0}
       aria-label="한 PC의 물리코어를 서버와 부하 클라로 나눈 그림, 회선을 네 번 옮긴 내역, 맵 36섹터와 시야 3x3, 봇의 매 틱 주사위, 5000명을 다섯 스레드가 나눠 든 그림"></svg>
     </div>
     <div class="cr-note" id="nt-load"></div>
-    <div class="cl-chips cr-chips" id="ch-load"><span class="t">보기</span></div>
+    <div class="cl-chips cr-chips" id="ch-load"></div>
   </section>
 
   <!-- 링크 모음 — 이 페이지 밖으로 나가는 문. 순서는 '이 프로젝트 것(소스·설계문서) 먼저, 그 밖은 뒤' 다.
@@ -3359,10 +3378,14 @@ window.__flowReset=function(){
     const pulse=el("ellipse",{class:"pin-pulse",cx:x,cy:yb,rx:p.rx,ry:p.rx,fill:"none",stroke:HOT,"stroke-width":1.4});
     pulse.style.animationDelay=(i*0.55)+"s"; g.appendChild(pulse);
     g.appendChild(el("line",{x1:x,y1:yb-2,x2:x,y2:yt+11,stroke:HOT,"stroke-width":1.6,opacity:".7"}));
-    g.appendChild(el("circle",{class:"pin-badge",cx:x,cy:yt,r:11,fill:"#241014",stroke:HOT,"stroke-width":1.8}));
+    /* 배지는 속을 채운다. 한때 어두운 속(#241014)에 붉은 테 1.8 이었는데, 그러면 핀이 지도와 같은
+       조형(가는 선으로 그린 원)이 되어 색만 다를 뿐 형태로는 안 갈렸다 — 지도에는 이미 원이 여럿이다
+       (타이밍 휠 · 게임 루프 · 송신 큐). 채운 점은 면적을 가지므로 선 그림 위에서 바로 이긴다. */
+    g.appendChild(el("circle",{class:"pin-badge",cx:x,cy:yt,r:11,fill:HOT,stroke:"#ffe0d6","stroke-width":1.4}));
     /* 배지 안은 비운 채로 꽂는다 — 번호는 자리가 아니라 실험이 갖는다.
-       오른쪽 카드를 고르면 그 자리 핀에만 그 카드 번호가 들어온다(bneck.js 가 이 text 를 갈아 끼운다). */
-    g.appendChild(el("text",{class:"pin-no",x:x,y:yt+4.5,"text-anchor":"middle","font-size":13,"font-weight":"800",fill:HOT,"font-family":"var(--mono)"},""));
+       오른쪽 카드를 고르면 그 자리 핀에만 그 카드 번호가 들어온다(bneck.js 가 이 text 를 갈아 끼운다).
+       글자는 채운 배지 위에 얹히므로 붉은색이 아니라 아주 어두운 색이라야 읽힌다. */
+    g.appendChild(el("text",{class:"pin-no",x:x,y:yt+4.5,"text-anchor":"middle","font-size":13,"font-weight":"800",fill:"#1b0a06","font-family":"var(--mono)"},""));
     const tx=x+p.side*19, anch=p.side>0?"start":"end";
     g.appendChild(el("text",{x:tx,y:yt-1,"text-anchor":anch,"font-size":12.5,"font-weight":"800",fill:"#ffd9cf","font-family":"var(--sans)"},p.name));
     g.appendChild(el("text",{x:tx,y:yt+13,"text-anchor":anch,"font-size":10,"font-weight":"600",fill:"#9aa7bd","font-family":"var(--sans)"},p.sub));
