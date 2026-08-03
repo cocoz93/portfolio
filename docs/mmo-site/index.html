@@ -304,7 +304,11 @@ body.subdetach .subtabs{padding-left:16px}
 @keyframes bnGrow{from{-webkit-mask-position:100% 0%; mask-position:100% 0%}
                     to{-webkit-mask-position:0% 100%;  mask-position:0% 100%}}
 @keyframes bnCam{from{transform:var(--bn-t0,none)} to{transform:none}}
-@keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{opacity:1; transform:none}}
+/* to 에 opacity 를 적지 않는다. 적으면 fill-mode:both 가 그 1 을 붙들고 있다가, 진입이 끝나
+   .bn-enter 가 떨어지는 순간 .pin.dim(.55) 으로 **계단처럼 떨어진다** — 안 고른 다섯이 한꺼번에
+   꺼지는 그 한 프레임이 '꽂히자마자 꺼진다' 로 보였다(1860ms 프레임에서 실측).
+   안 적으면 도착값이 그 핀의 제 값(고른 것 1 · 나머지 .55)이 되어 각자 제자리에 앉는다. */
+@keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{transform:none}}
 /* 폭을 지도 몫(.bn-tilt 63%)에 맞추는 이유: 캡션은 .bn-shift(지도+패널) 안에 있어서,
    그냥 가운데 정렬하면 지도가 아니라 '지도+패널' 의 한가운데로 밀린다. 한글이라 mono 금지(폴백 벌어짐) */
 .bn-cap{font-size:.8rem; color:var(--dim); text-align:center; margin:4px 0 0; max-width:63%}
@@ -3378,6 +3382,10 @@ window.__flowReset=function(){
     const pulse=el("ellipse",{class:"pin-pulse",cx:x,cy:yb,rx:p.rx,ry:p.rx,fill:"none",stroke:HOT,"stroke-width":1.4});
     pulse.style.animationDelay=(i*0.55)+"s"; g.appendChild(pulse);
     g.appendChild(el("line",{x1:x,y1:yb-2,x2:x,y2:yt+11,stroke:HOT,"stroke-width":1.6,opacity:".7"}));
+    /* 배지 바깥에 한 겹 띄운 테. 채운 점만 있으면 지도 위의 여느 도형과 크기로만 다른데, 띄운 테가
+       있으면 '표시하려고 그린 것' 으로 읽힌다. 바닥의 파문(pin-pulse)과는 자리가 다르다 —
+       파문은 지면 테(cy:yb)에서 퍼지고 이 테는 막대 위 배지(cy:yt)를 두른다. */
+    g.appendChild(el("circle",{class:"pin-halo",cx:x,cy:yt,r:15,fill:"none",stroke:HOT,"stroke-width":1.2,opacity:".65"}));
     /* 배지는 속을 채운다. 한때 어두운 속(#241014)에 붉은 테 1.8 이었는데, 그러면 핀이 지도와 같은
        조형(가는 선으로 그린 원)이 되어 색만 다를 뿐 형태로는 안 갈렸다 — 지도에는 이미 원이 여럿이다
        (타이밍 휠 · 게임 루프 · 송신 큐). 채운 점은 면적을 가지므로 선 그림 위에서 바로 이긴다. */
@@ -3416,8 +3424,11 @@ window.__flowReset=function(){
        1.34s      핀 드랍·카드  ← 평면화가 거의 끝난 뒤. 핀 좌표가 '평면 기준' 이라 순서를 지켜야 한다
      ※ 끊김을 잡으려고 이 길이를 1200ms 로 늘려 본 적이 있는데, 원인은 길이가 아니라 카메라와 겹친 것이었다.
        카메라를 앞으로 뺀 뒤로는 720ms 로도 매끄럽다 — 원래 속도가 더 낫다고 판단해 되돌렸다.
-     FLAT_DUR 을 건드리면 핀 지연(1.34)·카드 켜기(1340)·BN_TOTAL 을 같은 폭으로 함께 옮길 것. */
-  const FLAT_AT=860, FLAT_DUR=720, BN_TOTAL=1860;
+     FLAT_DUR 을 건드리면 핀 지연(1.34)·카드 켜기(1340)·BN_TOTAL 을 같은 폭으로 함께 옮길 것.
+     ※ BN_TOTAL 1860 → 2140. 핀은 1.34s 부터 0.08s 간격으로 여섯이 차례로 떨어지고 한 개가 0.30s
+       걸리므로, 마지막 핀은 1.82s 에 시작해 2.12s 에 끝난다. 1860 에 .bn-enter 를 떼면 그 핀은
+       공중에서 규칙을 잃고 제자리로 점프했다(꽂히다 만다). 진입의 끝은 마지막 핀이 앉는 시각이다. */
+  const FLAT_AT=860, FLAT_DUR=720, BN_TOTAL=2140;
   const RMB=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const panel=document.getElementById("p-bneck");
   /* CSS 카메라 안착과 같은 곡선(cubic-bezier(.22,.61,.36,1))을 그대로 계산한다.
@@ -4294,13 +4305,19 @@ var INK={ recv:"#6cc7ff", send:"#ffb648", fg:"#eef2fb", sub:"#8496b3", grn:"#57d
            제목이 카드 밖에 있어야 했다. 제목이 빠지면서 vb 위쪽도 그만큼 잘라 냈고(96 → 138),
            계기판이 제목이 비운 자리로 올라왔다(y 200 → 148 · x 212.9 → 205.6). 두 값은 2-1 에
            맞춘 것이다 — y 는 카드 안 첫 글줄 높이, x 는 계기판 기둥선을 카드 안여백 선에 세우는 값.
-           넷 다 카드 안쪽 40px 선에 맞춰 잡았다 — 계기판이 왼쪽 위 40px,
-           보기 칩·설명 줄이 오른쪽 아래 40px. 두 묶음이 마주 보는 구석을 하나씩 잡고,
-           그 사이 대각선을 계단이 지나간다.
+           넷 다 카드 안쪽 여백 선에 맞춰 잡았다 — 계기판이 왼쪽 위, 보기 칩·설명 줄이 오른쪽 아래.
+           두 묶음이 마주 보는 구석을 하나씩 잡고, 그 사이 대각선을 계단이 지나간다.
+           ※ 오른쪽 묶음의 x 1029 는 '오른쪽 끝을 카드 안여백 선에 붙인' 값이다(옛 953 에서 +76).
+             설명 상자 폭을 406 → 331 로 줄이면서 오른쪽 끝이 그만큼 왼쪽으로 당겨졌는데, x 를
+             안 옮기면 오른쪽 구석이 통째로 빈다. 폭을 다시 건드리면 이 x 도 같이 봐야 한다.
            오른쪽 묶음(칩 → 설명 → 노션 문)을 대각선 바로 밑에 두는 시안과 렌더로 대 봤다.
            아래 구석 쪽을 택한 까닭은 맨 아래 문의 밑선(889)이 STEP 1 판 밑선(889)과 같은 선에
            서기 때문이다 — 아래쪽 두 덩어리가 바닥을 나눠 가진다. 위로 올린 시안은 밑에 125px 이
            통째로 비어 떠 보였다. 셋 사이 간격은 11px 로 같다(y 로 맞춘 값이라 눈으로 확인할 것).
+           ※ 폭은 칩 줄이 406, 설명·문이 331 로 서로 다르다. 칩 줄은 알약 넷이 차지하는 만큼만
+             쓰고(406 안에서 남는다), 설명·문은 그 알약 줄의 오른쪽 끝에 맞춘 값이 331 이다 —
+             넷을 다 406 으로 두면 설명 상자만 칩 줄보다 오른쪽으로 삐져나온다.
+             더 줄이는 쪽은 290 에서 보기 ②(가장 긴 문구)가 세 줄이 되어 아래 문과 겹친다(실측).
            ※ 설명 줄 높이가 곧 아래 여백이다. 넷 다 두 줄이라 고정인데(client.js SAFE.items),
              한 줄만 늘어도 밑의 more 와 글자가 겹친다(more 의 y 는 고정이다).
              설명을 한 줄에서 두 줄로 늘렸을 때는 more 를 내리지 않고 chips·note 를 16 씩 올렸다
@@ -4323,9 +4340,9 @@ var SCENE={
   ramp:{dv:22, dz:7, tip:14, hw:13},
   overlay:{
     dash :{id:"d-safe",  x:205.6, y:148, w:300, lpad:1},
-    chips:{id:"ch-safe", x:953,  y:527,  w:406},
-    note :{id:"nt-safe", x:953,  y:558,  w:406},
-    more :{id:"mo-safe", x:953,  y:614,  w:406}
+    chips:{id:"ch-safe", x:1029, y:527,  w:406},
+    note :{id:"nt-safe", x:1029, y:558,  w:331},
+    more :{id:"mo-safe", x:1029, y:614,  w:331}
   },
   steps:[
    {k:"s1", tag:"STEP 1", u:-150, z:0, pal:"out", jc:"grn",
@@ -4523,7 +4540,8 @@ function draw(s,D){
    vb 다(액자 전체가 아니다 — 왼쪽 pad.l 은 무대 밖이라 그쪽 자리는 % 가 음수로 나온다).
    marginTop 을 쓰는 까닭도 같다 — 그 % 는 높이가 아니라 폭 기준이라 그림 높이가 폭을 따라간다.
    왼쪽 위에는 계기판, 오른쪽 아래 빈 삼각형에는 보기 칩 · 설명을 세로로 쌓는다.
-   x 928 은 STEP 2 이름표(x 852~1080)를 피해 잡은 값이다. */
+   오른쪽 묶음의 x 는 SCENE.overlay 에 있다(지금 1029). 세로로는 STEP 2 이름표보다 한참 아래라
+   가로로 겹칠 일이 없다 — 옛 928 시절의 '이름표를 피한 값' 이라는 제약은 지금은 안 걸린다. */
 function place(D){
   var out=[];
   ["dash","chips","note","more"].forEach(function(k){
