@@ -166,6 +166,14 @@ body.subdetach .subtabs{padding-left:16px}
    (없으면 기준이 .bn-cam(폭 100%)이 되어, 밑판만 63% 로 줄고 위 두 장은 100% 인 채 어긋난다). */
 .bn-tilt{position:relative; width:63%; transform:none}
 .bn-tilt>svg{display:block; width:100%; height:auto}
+/* 지도를 한 겹 눌러 배경으로 물린다 — 이 탭에서 밝아야 할 것은 붉은 핀 하나뿐이다.
+   두 판(#bnsolid·#bnscene)에 각각 opacity 를 거는 방법은 못 쓴다: 위 청사진이 투명해지면서
+   아래 설계 원색(게임 루프 노랑 · MySQL 초록)이 비쳐 올라와, 청사진으로 물드는 진입 애니가
+   덜 끝난 화면처럼 보인다. 두 판이 합쳐진 뒤 그 위를 덮어야 색이 새지 않고 고르게 눌린다.
+   핀은 막 위에 남긴다 — 막이 핀까지 누르면 배경과 같은 비율로 어두워져 대비가 그대로다. */
+.bn-tilt::after{content:""; position:absolute; inset:0; background:#0a0f1a; opacity:.45;
+  pointer-events:none; z-index:1}
+#bnpins{z-index:2}
 /* 설계 모습 사본은 계속 깔아 둔다. 청사진 474개 도형 중 167개가 밑을 비치므로(반투명 68 · 채움 없음 99,
    구역 판은 알파 0.13), 이 판을 껐다 켜면 지도 전체의 톤이 통째로 달라진다.
    예전엔 전환 애니 동안만 켰다가 끝나면서 껐는데, 그게 '다 끝난 뒤 색이 한 번 더 바뀐다' 로 보였다.
@@ -182,13 +190,22 @@ body.subdetach .subtabs{padding-left:16px}
 #bnpins .pin{cursor:pointer; transition:opacity .18s}
 /* 고른 카드의 자리만 밝다 — 여섯이 같은 밝기면 번호가 어느 배지에 떴는지가 안 짚인다.
    실측 카드가 없는 자리(큐 넘김 · 수신 길목 · 저장 경로)는 늘 이쪽이고, 손가락 모양도 안 뜬다:
-   눌러도 갈 카드가 없는데 누를 수 있게 보이면 눌러 본 사람이 고장으로 읽는다. */
-#bnpins .pin.dim{opacity:.26}
+   눌러도 갈 카드가 없는데 누를 수 있게 보이면 눌러 본 사람이 고장으로 읽는다.
+   ※ 한때 .26 이었다. 그러면 붉은색(#ff6b52)이 남색 배경과 섞여 회갈색이 되어, 안 고른 다섯 자리가
+     지도에서 아예 사라졌다('수신 길목' · '저장 경로' 는 있는 줄도 모른다). 고른 하나를 짚는 일은
+     이제 배지 채움과 글로우가 맡으므로, 흐리기는 '덜 밝다' 정도만 하면 된다. */
+#bnpins .pin.dim{opacity:.55}
 #bnpins .pin.nodata{cursor:default}
 #bnpins .pin:focus-visible{outline:none}
 #bnpins .pin .pin-badge{transition:filter .15s}
 #bnpins .pin:hover .pin-badge, #bnpins .pin:focus-visible .pin-badge, #bnpins .pin.lit .pin-badge{
-  filter:drop-shadow(0 0 7px #ff6b52)}
+  filter:drop-shadow(0 0 11px #ff6b52)}
+/* 핀 이름표는 지도 위 아무 데나 놓이므로 상자 선·구역 글자와 겹친다('멤버십 팬아웃' 이 게임 루프
+   상자에 걸린다). 글자 둘레를 배경색으로 한 번 두르면 무엇과 겹치든 제 모양이 남는다.
+   paint-order:stroke = 테두리를 먼저 칠하고 글자를 그 위에 — 없으면 테두리가 글자를 갉아먹는다.
+   배지 번호는 제외한다: 배지 안은 이미 채워져 있어 두를 배경이 없다. */
+#bnpins text{paint-order:stroke; stroke:#0a111e; stroke-width:3.2px; stroke-linejoin:round}
+#bnpins .pin-no{stroke:none}
 #bnpins .pin-pulse{opacity:0; transform-box:fill-box; transform-origin:center; animation:pinPulse 2.4s ease-out infinite}
 @keyframes pinPulse{0%{transform:scale(.55); opacity:.9} 70%,100%{transform:scale(2); opacity:0}}
 
@@ -357,6 +374,26 @@ body.subdetach .subtabs{padding-left:16px}
 .lk-u{display:block; font-family:var(--mono); font-size:.75rem; color:#46536b; margin-top:10px;
   transition:color .15s}
 .lk-row:hover .lk-u{color:var(--net)}
+
+/* ── 진입 애니 — 줄이 제자리에서 열린다 ──
+   이 탭만 이미 다 서 있는 채로 나타나서 탭을 오갈 때 혼자 튀었다(1-1 은 구조가 서고, 2-1 은 창이 열리고,
+   1-2 는 지도가 눕는다). 몸짓은 2-1 의 말을 그대로 가져온다 — 제자리에서 0.94배로 열리고 18px 떠오름.
+   그쪽 주석에 왜 그 값인지가 남아 있다(0.52배는 확대 구간에 잔글씨가 흐려져 기각 · 10px 는 '떠올랐다'가
+   안 읽혀 18 로 키움). 새 몸짓을 만들지 않는 이유가 그것이다 — 보이는 결과가 같으면 어휘를 늘리지 않는다.
+   ── 2-1 보다 짧게 (0.91초 → 0.52초) ──
+   그 탭은 '볼 것' 이 목적이라 그 길이가 맞지만, 여기는 나가는 문이다. 링크를 누르러 온 사람을
+   그만큼 붙잡으면 안 된다. 줄 간격 60ms · 마지막 줄이 .20s 에 시작해 .54s 에 끝난다.
+   ── 되감기는 CSS 가 알아서 한다 ──
+   .panel[hidden] 이 display:none 이라, 탭에 들어올 때마다 display 가 none→flow 로 바뀌며 애니가
+   처음부터 다시 돈다. 그래서 tabs.js 에 훅을 하나도 안 붙였다(공통 조각이라 안 건드리는 편이 낫다).
+   ※ 끄는 규칙은 따로 안 둔다 — 이 파일 맨 아래 prefers-reduced-motion 전역 규칙이 그대로 덮는다. */
+@keyframes lkOpen{from{opacity:0; transform:translateY(18px) scale(.94)} to{opacity:1; transform:none}}
+.lk-row{animation:lkOpen .34s cubic-bezier(.22,.9,.3,1) both; transform-origin:center}
+.lk-row:nth-child(1){animation-delay:.02s}
+.lk-row:nth-child(2){animation-delay:.08s}
+.lk-row:nth-child(3){animation-delay:.14s}
+.lk-row:nth-child(4){animation-delay:.20s}
+
 /* 좁은 화면 — 그림을 폭 전체로 눕히고 제목을 줄인다. 280px 고정을 두면 글이 설 자리가 없다 */
 @media(max-width:860px){
   /* 좁은 화면에서는 하위 탭 줄도 54px 로 줄어든다(.subtabs @680px) — 여백도 같이 내린다 */
