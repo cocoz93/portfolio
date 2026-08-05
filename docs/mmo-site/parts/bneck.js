@@ -256,14 +256,28 @@ build();
    핀은 읽는 표시일 뿐 누르는 것이 아니다(2026-08-04에 클릭을 걷어냈다 — 고르는 곳은 카드 한 군데다).
    그래서 '실측 카드가 없는 자리' 를 따로 표시할 일도 없어졌다: 고른 자리만 밝고 나머지는 흐리다. */
 var curLoc=null, curNo="";
+/* 튕기는 조건은 '자리가 바뀔 때' 가 아니라 '고른 실험이 바뀔 때' 다 — 한 자리에 실험이 여럿이라
+   (송신 경로에 넷) 자리로만 보면 그 넷 사이를 오갈 때 지도가 아무 반응도 안 한다.
+   배지 번호는 바뀌는데 정작 그 번호가 어디 떴는지를 눈이 못 따라가는 것이 원래 증상이었다. */
+var lastPop=null;
 function paintPins(){
-  var pins=document.querySelectorAll("#bnpins .pin");
+  var pins=document.querySelectorAll("#bnpins .pin"), lit=null;
   [].forEach.call(pins,function(g){
     var on = g.getAttribute("data-loc")===curLoc;
     g.classList.toggle("lit",on);
     g.classList.toggle("dim",!on);
+    if(on) lit=g;
     var t=g.querySelector(".pin-no"); if(t) t.textContent=on?curNo:"";
   });
+  var key=curLoc+"/"+curNo;
+  if(lit && key!==lastPop){
+    lastPop=key;
+    /* 클래스는 한 핀에만 남긴다 — 안 지우면 지나온 자리마다 쌓여, 다음에 그 자리를 고를 때
+       'remove 후 add' 가 같은 프레임에 묻혀 애니가 재시작되지 않는다. */
+    var prev=document.querySelector("#bnpins .pin.pop"); if(prev) prev.classList.remove("pop");
+    lit.getBoundingClientRect();   /* 강제 리플로우 — 없으면 같은 핀을 다시 고를 때 애니가 안 돈다 */
+    lit.classList.add("pop");
+  }
 }
 /* 핀은 병목 탭에 처음 들어올 때(scene.js 의 build) 꽂힌다 — 이 스크립트가 도는 시점에는 아직 없다.
    그래서 꽂히는 것을 한 번만 기다렸다가 그때 칠한다(칠하고 나면 관찰을 끊는다). */
