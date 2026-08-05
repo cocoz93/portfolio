@@ -725,6 +725,25 @@ function openZone(z,brief){ const Z=ZI[z]; if(!Z||!card) return;
   card.style.setProperty("--ac", Z.ac);   /* 왼쪽 세로선 색 = 씬에서 살아남은 도형 색 */
   card.classList.add("on"); }
 
+/* ═══ 전체(강조 해제) 화면 — 구역을 아직 안 골랐을 때 같은 자리에 뜬다 ═══
+   카드 자리는 늘 비워 둔 열인데 채워지는 것은 구역을 누른 뒤라, 들어온 사람이 처음 보는 화면
+   (그리고 진입 순회가 끝나고 돌아오는 화면)에서 오른쪽 460px 이 통째로 비어 있었다.
+   여기에 새로 쓰는 글은 없다 — 구역 넷의 이름과 수치(ZI[].nm/.sub)를 그대로 세운다.
+   lead 는 안 붙인다: 그건 그 구역을 눌렀을 때 카드가 하는 말이라, 미리 적으면 네 칸이 문단 넷이
+   되어 눌러 볼 것이 사라진다. 설명을 지우고 나면 남는 것이 수치 넷인데, 그게 구역 버튼에는
+   없는 값이다(버튼은 이름뿐) — 버튼을 세로로 다시 적은 것이 아니게 되는 지점이 여기다. */
+const ZORDER=["outside","net","game","store"];   /* 씬이 흐르는 순서 — 클라 → 네트워크 → 게임 → 저장 */
+function openAll(){ if(!card) return;
+  cbd.innerHTML='<h3>IOCP 서버</h3>'+
+    ZORDER.map(function(k){ const Z=ZI[k];
+      /* 줄마다 --ac 를 그 구역 색으로 — 수치 글자가 씬에서 그 구역이 쓰는 색과 같아진다 */
+      return '<div class="zn-it" style="--ac:'+Z.ac+'"><span class="t">'+Z.nm+
+             '<em>'+Z.sub+'</em></span></div>'; }).join("");
+  /* 왼쪽 세로선만 중립색이다. 구역 색 중 하나를 쓰면 그 구역만 켜진 화면으로 읽힌다. */
+  card.style.setProperty("--ac","#8fa8cc");
+  card.classList.add("on"); }
+window.__openAll=openAll;   /* 구역 강조 IIFE(뒤, 다른 스코프)가 apply("") 에서 부른다 */
+
 /* 닫기는 곧 강조 해제다. 옛날엔 '노드 상세 → 구역 개요 → 전체' 로 한 칸씩 물러났는데,
    중간 단계가 사라져 물러날 곳이 하나뿐이다. 카드 안의 닫기 줄도 없앴으므로 입구는 Esc 와
    구역 버튼(토글) 둘이다 — 그래서 키 리스너는 카드 유무와 무관하게 건다. */
@@ -1961,6 +1980,10 @@ window.__flowReset=function(){
        씬 위에 얹히는 판이라(common.css 의 max-width:680px), 씬 높이 162px 을 카드 138px 이
        거의 덮는다(실측) — 순회가 보여 주려던 강조가 카드 뒤로 사라진다. 눌러서 여는 것은 그대로다. */
     if(z && !(tourOn && cardOverlay.matches)) openZone(z,tourOn);
+    /* 전체('')면 구역 넷을 세운 화면을 띄운다 — 오른쪽 열이 비는 것을 없앤다(openAll 주석).
+       좁은 화면(≤680px)에서는 안 띄운다. 순회 때와 같은 이유인데 여기가 더 나쁘다 —
+       전체는 늘 머무는 상태라, 씬 위에 얹히는 카드가 그림을 상시로 덮는다. */
+    else if(!z && !cardOverlay.matches && window.__openAll) window.__openAll();
   }
   btns.forEach(function(b){ b.addEventListener("click",function(){
     const z=b.getAttribute("data-z")||"";
@@ -2046,5 +2069,17 @@ window.__flowReset=function(){
       })();
     }, delay);
   };
+
+  /* 첫 화면도 '전체' 다 — 여기서 한 번 불러 카드를 세운다.
+     웨이브가 도는 0.7초 동안 씬은 아직 서는 중이고 오른쪽 글은 이미 있는 셈인데, 그 편이 낫다:
+     이 카드를 띄우는 다른 길(순회의 마지막 apply(""))은 진입 4.4초 뒤라 그때까지 열이 비고,
+     동작 줄이기(prefers-reduced-motion)를 켠 사람에게는 웨이브도 순회도 안 돌아 영영 안 뜬다.
+     apply() 는 tourOn 을 보지만 z="" 에서는 단축 평가로 안 읽히므로 선언 전이어도 안전하다
+     — 그래도 값이 다 선 뒤에 부르는 편이 안전해서 이 IIFE 의 맨 끝에 둔다. */
+  apply("");
+  /* 창 폭이 카드 경계(680px)를 넘나들 때 — 넓히면 빈 열이 다시 생기고, 좁히면 카드가 그림을 덮는다.
+     구역을 골라 둔 상태는 건드리지 않는다(그 카드는 사용자가 연 것이다). */
+  cardOverlay.addEventListener("change",function(){
+    if(!svg.getAttribute("data-zone")) apply(""); });
 })();
 })();
