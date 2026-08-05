@@ -43,8 +43,9 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
      — scene.js 안에서도 두 벌이다) · `160ms`(common.css `.16s` ↔ wave.js `SPAN+160+100`)
    - *크기 관계라 같이 조정해야 하는 것*: 구역순회 `TOUR_HOLD 380ms`(scene.js) **>** 페이드 `.22s`(common.css) ·
      카드 짓기 `300ms`(scene.js `fillCard`) **<** 재적용 `400ms`(bneck.js) ·
-     진입 끝 `BN_TOTAL 2140ms`(scene.js) **≥** 마지막 핀이 앉는 시각 `1.34s + 6×0.08s + 0.30s = 2.12s`
+     진입 끝 `BN_TOTAL 2140ms`(scene.js) **≥** 마지막 핀이 앉는 시각 `1.34s + 5×0.08s + 0.30s = 2.04s`
      (핀 지연 간격은 scene.js `animationDelay`, 드롭 길이는 common.css `bnPinDrop`).
+     계수 5 는 `PINS` 배열의 마지막 인덱스다 — 자리가 여섯이던 시절엔 2.12s 였고 그때 2140 이 정해졌다.
      작으면 마지막 핀이 공중에서 규칙을 잃고 제자리로 점프한다 — 핀을 더 꽂거나 간격을 늘리면 여기부터 볼 것.
 6. **클래스 접두어** — 병목 `.bn-*` `.bx-*`(카드 한 장은 `.rc`) / 클라 `.cl-*` `.cr-*`.
    `.card .stage .hit .panel` 은 이미 공유 중이니 새로 만들지 말 것.

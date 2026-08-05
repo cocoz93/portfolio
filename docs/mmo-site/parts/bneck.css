@@ -16,17 +16,22 @@
 /* 52fr 9fr 36fr → 52fr 45fr (2026-08-03). 가운데 9fr 은 '병목 지점' 세로 레일 몫이었다.
    레일을 걷어내면서 그 폭은 카드 쪽으로 넘겼다 — 지도는 한 칸도 안 줄었고(52 그대로),
    카드가 684 → 855px 가 되어 열두 장이 네 열로 선다.
-   합 97 은 그대로 유지한다: 아래 .bn-cap 이 같은 분모로 지도 폭을 다시 계산한다. */
-.bn-stage{ display:grid; grid-template-columns:52fr 45fr; column-gap:0 }
+   ※ 두 값의 합(97)을 맞춰 두는 관습은 지도 아래 캡션(.bn-cap)이 같은 분모로 제 폭을 다시 계산하던
+     흔적이다. 캡션을 걷어냈으므로 이제 합을 지킬 이유는 없다 — 고칠 때 분모를 신경 쓰지 않아도 된다. */
+/* 지도 쪽을 52 → 58 로 넓혔다(2026-08-04). 카드는 이름이 짧아 가로가 남는데 지도는 라벨·핀이
+   작아서, 남는 쪽에서 덜어 모자란 쪽에 준 것이다.
+   ⚠ **여기서 더 넓히면 1-1 → 1-2 전환 애니가 죽는다.** 카메라는 '병목 지도를 설계 씬 크기에
+     맞추는' 배율에서 1.0 으로 가는데(아래 --bn-t0), 지도가 커질수록 그 시작값이 1 에 붙는다.
+     1920 실측: 52 → 지도 997px · 시작 1.39(39% 줄며 앉음) / 58 → 1112px · 1.24 /
+     64 → 1227px · 1.13(13% 뿐이라 카메라가 멈춘 듯 보이고 청사진·평면화만 도는 화면이 된다).
+     64 를 썼다가 "전환이 부자연스럽다"는 지적으로 58 로 내렸다. 폭을 만질 때 이 값을 같이 볼 것.
+   카드 말줄임 상한은 따로다(1920 에서 64 까지 0장) — 이 값은 그보다 앞서 걸리는 제약이다. */
+.bn-stage{ display:grid; grid-template-columns:58fr 39fr; column-gap:0 }
 .bn-cam{ padding-right:18px }         /* 지도와 카드 사이 틈 */
 .bn-tilt{ width:100% }                /* 폭은 이제 그리드 칸이 정한다. 1860 → 지도 ≈ 978px · 세로 ≈ 607px */
 /* 절대배치를 푸는 것이 목적이라 그리드 안에서 하는 일은 static 과 같다.
    relative 로 두는 것은 카드 안에서 자리를 절대배치로 잡는 것이 생길 때의 기준을 남겨 두는 것뿐이다. */
 .bncard{ position:relative; width:auto; min-width:0; max-width:none }
-/* 캡션은 지도 칸과 같은 폭 — 그리드가 아니라 형제라서 같은 셈을 직접 한다.
-   칸을 나누기 전에 빼는 틈이 없으므로 52/97 을 먼저 잡고, 지도 칸 안쪽 패딩 18px 을 뺀다.
-   위 grid-template-columns 를 고치면 이 분자도 같이 고쳐야 한다(합 97 은 그대로다). */
-.bn-cap{ max-width:calc(100% * 52 / 97 - 18px) }
 
 /* ── 계기판 — 카드 안, 카드 열두 장 바로 아래 ──
    여섯 칸은 고른 카드의 끄고→켜고 값이라(paintDash) 카드 밖에 두면 무엇의 값인지 짚이지 않는다.
@@ -108,8 +113,11 @@
      좁은 화면에서 열을 바꾸려면 bneck-tail.css 에서 **줄 수**를 고친다.
    판을 늘리지 않는다(align-content:start) — 카드가 세로로 늘어나면 열두 장이 저마다
    허공을 품게 되고, 그 여백은 어디에도 쓰이지 않는다. */
+/* ※ auto-columns 는 minmax(0,1fr) 이라야 한다. 그냥 1fr 이면 최소가 min-content 라,
+   칸이 좁아질 때 카드가 안 줄고 **판이 통째로 오른쪽으로 밀려나** 이름 끝과 고리가 화면 밖으로
+   나간다(1024 폭에서 실제로 그랬다). 0 을 최소로 열어 두면 그때는 아래 .nm 의 말줄임이 받는다. */
 #bnc-b{ flex:0 0 auto; display:grid; grid-template-rows:repeat(6,auto);
-  grid-auto-flow:column; grid-auto-columns:1fr; gap:5px; align-content:start }
+  grid-auto-flow:column; grid-auto-columns:minmax(0,1fr); gap:5px; align-content:start }
 /* justify-content 를 주면 안 된다 — 세로 배치 시절의 center 가 남아 있으면 눕힌 뒤에는
    줄 내용이 가운데로 몰려서 이름 시작점이 열두 줄 다 어긋난다. */
 .rc{ display:flex; flex-direction:row; align-items:center; gap:9px;
@@ -130,7 +138,9 @@
    칸은 창보다 빨리 줄어든다(판 좌우 여백과 칸 사이 틈이 고정이라) — 그래서 창이 좁아지면
    vw 자에 맡긴다. 세 열 시절과 같은 .95vw 를 쓰되 위쪽은 .95rem 에서 잘라 둔다 —
    두 열이라 칸이 넓어져서, 안 자르면 넓은 창에서 이름만 계기판 숫자보다 커진다. */
-.rc .nm{ font-size:.95rem; font-weight:700; color:#8f9fb6; line-height:1.25;
+/* min-width:0 이 있어야 말줄임이 실제로 돈다 — flex 아이템의 기본 min-width 는 auto 라
+   nowrap 글이 제 폭을 그대로 우겨서, 위 그리드가 minmax(0,1fr) 이어도 카드가 안 줄어든다. */
+.rc .nm{ font-size:.95rem; font-weight:700; color:#8f9fb6; line-height:1.25; min-width:0;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
 @media (max-width:1830px){ .rc .nm{ font-size:clamp(.72rem, .95vw, .95rem) } }
 /* ── 동접은 숫자가 아니라 고리다 ──
@@ -164,4 +174,14 @@
 .rc.on.k-ok{ border-left-color:#3fbe7c }  .rc.on.k-ok .st{ color:var(--store) }
 .rc.on.k-rj{ border-left-color:#e0705f }  .rc.on.k-rj .st{ color:#ff9a8d }
 .rc.on.k-dg{ border-left-color:#d8a94b }  .rc.on.k-dg .st{ color:#e0b45c }
-.rc.on.k-sum{ border-left-color:#8b7ae0 } .rc.on.k-sum .st{ color:#a99aff }
+/* ⑫ 결론만 색이 없다. 위 셋(채택·기각·진단)은 **판정**인데 ⑫ 는 판정이 아니라 종합이라,
+   색을 안 주는 것이 곧 '이 체계 밖' 이라는 뜻이 된다. 어두운 판에서 흰색이 가장 세다는 것도
+   마지막 한 장에 맞는다.
+   한때 보라(#8b7ae0)였다 — 페이지 팔레트(파랑·주황·초록·붉은 핀·노랑)에 없는 색이라
+   혼자 떴다. 채도를 낮춘 보라 · 파랑 · 청록 · 회색까지 렌더해 비교한 끝에 무채색으로 왔다.
+     · 파랑은 동접 고리(#a5dcff)와 같은 계열이라, 한 카드 안에서 결과와 동접이 같은 색이 된다
+     · 청록은 채택 초록(#3fbe7c)과 계열이 가까워 따로 볼 때 헷갈린다
+     · 회색(#9aa7bd)은 테두리가 흐려 '고른 카드' 로 안 읽힌다
+   배지만 한 단계 낮춘다(#cfdaea) — 테두리·이름과 같은 순백이면 배지와 이름이 안 갈린다.
+   다른 셋은 배지가 색을 가져 저절로 갈리는데, 여기만 그 장치가 없기 때문이다. */
+.rc.on.k-sum{ border-left-color:#e8eef7 } .rc.on.k-sum .st{ color:#cfdaea }

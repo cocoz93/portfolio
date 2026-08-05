@@ -170,8 +170,11 @@ body.subdetach .subtabs{padding-left:16px}
    두 판(#bnsolid·#bnscene)에 각각 opacity 를 거는 방법은 못 쓴다: 위 청사진이 투명해지면서
    아래 설계 원색(게임 루프 노랑 · MySQL 초록)이 비쳐 올라와, 청사진으로 물드는 진입 애니가
    덜 끝난 화면처럼 보인다. 두 판이 합쳐진 뒤 그 위를 덮어야 색이 새지 않고 고르게 눌린다.
-   핀은 막 위에 남긴다 — 막이 핀까지 누르면 배경과 같은 비율로 어두워져 대비가 그대로다. */
-.bn-tilt::after{content:""; position:absolute; inset:0; background:#0a0f1a; opacity:.45;
+   핀은 막 위에 남긴다 — 막이 핀까지 누르면 배경과 같은 비율로 어두워져 대비가 그대로다.
+   ※ .45 → .62 로 한 겹 더 눌렀다. 핀을 키우거나 더 붉게 하는 쪽은 전부 나빴다(여섯이 같이
+     커져 산만해질 뿐이다) — 배경이 물러나면 붉은 표시는 손대지 않아도 저절로 뜬다.
+     도형이 늘지 않는 것도 이 방법의 값이다(막은 이미 있는 한 겹이다). */
+.bn-tilt::after{content:""; position:absolute; inset:0; background:#0a0f1a; opacity:.62;
   pointer-events:none; z-index:1}
 #bnpins{z-index:2}
 /* 설계 모습 사본은 계속 깔아 둔다. 청사진 474개 도형 중 167개가 밑을 비치므로(반투명 68 · 채움 없음 99,
@@ -194,10 +197,31 @@ body.subdetach .subtabs{padding-left:16px}
    ※ 한때 .26 이었다. 그러면 붉은색(#ff6b52)이 남색 배경과 섞여 회갈색이 되어, 안 고른 다섯 자리가
      지도에서 아예 사라졌다('수신 길목' · '저장 경로' 는 있는 줄도 모른다). 고른 하나를 짚는 일은
      이제 배지 채움과 글로우가 맡으므로, 흐리기는 '덜 밝다' 정도만 하면 된다. */
-#bnpins .pin.dim{opacity:.55}
-#bnpins .pin .pin-badge{transition:filter .15s}
-#bnpins .pin.lit .pin-badge{filter:drop-shadow(0 0 11px #ff6b52)}
-/* 핀 이름표는 지도 위 아무 데나 놓이므로 상자 선·구역 글자와 겹친다('멤버십 팬아웃' 이 게임 루프
+   ※ 지금은 흐리기(opacity)가 아니라 색으로 가라앉힌다. 투명도로만 죽이면 배경이 비쳐 올라와
+     핀이 '덜 그려진 것' 처럼 보였다 — 채도를 낮춘 같은 붉은색으로 앉히면 '있지만 지금 얘기가
+     아닌 자리' 가 된다. 청회색까지 빼는 안도 만들어 봤는데(대비는 그쪽이 세다) 그러면
+     캡션의 '붉은 핀 = 실측으로 확인한 병목 자리' 가 깨진다 — 붉은 것이 하나만 남으므로. */
+#bnpins .pin.dim{opacity:1}
+#bnpins .pin.dim .pin-base, #bnpins .pin.dim line{stroke:#8d4a3c}
+#bnpins .pin.dim .pin-halo{stroke:#8d4a3c; opacity:.35}
+#bnpins .pin.dim .pin-badge{fill:#7b3a2f; stroke:#a8776c}
+#bnpins .pin.dim text{fill:#93a6bd}
+/* ── 고른 자리가 앉은 '부품' 을 밝힌다 ──
+   핀만 꾸미는 길은 여기서 끝났다: 배지를 키우든 발광을 걸든 점은 점이라 지도에서 면적을 못 가진다.
+   부품 발자국(scene.js 가 노드 hit 로 계산해 핀 그룹 맨 아래에 깐다)이 물들면 면적이 생기고,
+   덤으로 '무엇이 병목이었나' 가 지도에서 바로 읽힌다 — 핀은 점을 찍을 뿐 부품 이름을 못 말한다.
+   채움만으로는 경계가 없어 그림자처럼 번져서 테두리를 같이 둔다.
+   ※ 발광(drop-shadow)은 걷어냈다. 이 그림에서 유일하게 '빛나는' 요소라 단색 톤에서 혼자 떴다. */
+#bnpins .pin-slab{fill:#ff6b52; fill-opacity:.16; stroke:#ff6b52; stroke-width:1.6;
+  opacity:0; transition:opacity .22s}
+#bnpins .pin.lit .pin-slab{opacity:1}
+/* 고른 자리 — 크기·움직임은 여기 하나에 몰아준다.
+   r 을 고치지 않고 scale 로 키우는 까닭: 핀 좌표는 평면 기준으로 계산해 둔 값이라
+   반지름을 건드리면 배지·테·번호의 중심이 각자 따로 논다. fill-box 기준 확대는 제자리에서 커진다. */
+#bnpins .pin.lit .pin-badge{transform-box:fill-box; transform-origin:center; transform:scale(1.26)}
+#bnpins .pin.lit .pin-halo{transform-box:fill-box; transform-origin:center; transform:scale(1.18); opacity:.9}
+#bnpins .pin.lit .pin-no{font-size:15px}
+/* 핀 이름표는 지도 위 아무 데나 놓이므로 상자 선·구역 글자와 겹친다('틱 예산' 이 게임 루프
    상자에 걸린다). 글자 둘레를 배경색으로 한 번 두르면 무엇과 겹치든 제 모양이 남는다.
    paint-order:stroke = 테두리를 먼저 칠하고 글자를 그 위에 — 없으면 테두리가 글자를 갉아먹는다.
    배지 번호는 제외한다: 배지 안은 이미 채워져 있어 두를 배경이 없다. */
@@ -205,6 +229,15 @@ body.subdetach .subtabs{padding-left:16px}
 #bnpins .pin-no{stroke:none}
 #bnpins .pin-pulse{opacity:0; transform-box:fill-box; transform-origin:center; animation:pinPulse 2.4s ease-out infinite}
 @keyframes pinPulse{0%{transform:scale(.55); opacity:.9} 70%,100%{transform:scale(2); opacity:0}}
+/* 파문은 고른 자리에만 남긴다. 여섯이 다 뛰면 움직이는 곳이 여섯이라 눈이 갈 데를 못 고른다 —
+   화면에서 움직이는 것이 하나뿐이면 그것이 곧 '여기를 보라' 가 된다. */
+#bnpins .pin.dim .pin-pulse{animation:none; opacity:0}
+/* 고르는 순간 한 번 튕긴다. 카드를 눌렀는데 지도가 가만히 있으면 무엇이 바뀌었는지 눈이 못 따라간다.
+   fill-mode 를 안 준다 — 끝나면 위 .lit 규칙값(1.26)에 그대로 앉는다. */
+#bnpins .pin.pop .pin-badge{animation:pinPop .46s cubic-bezier(.3,1.3,.5,1)}
+@keyframes pinPop{0%{transform:scale(1)} 40%{transform:scale(1.62)} 100%{transform:scale(1.26)}}
+#bnpins .pin.pop .pin-halo{animation:pinHaloPop .58s ease-out}
+@keyframes pinHaloPop{0%{transform:scale(.9); opacity:1} 70%{transform:scale(2.2); opacity:0} 100%{transform:scale(1.18); opacity:.9}}
 
 /* ═══ 전환 애니 — '설계 · 구현' 화면이 병목 지도로 변한다 (총 1.86s) ═══
    세 단계를 겹치지 않는다. 같이 굴리면 무엇이 변하는지가 섞여 '그냥 뭔가 움직였다' 가 된다.
@@ -271,8 +304,22 @@ body.subdetach .subtabs{padding-left:16px}
    즉 JS 가 아니라 굽는 쪽이다 — 평면화가 매 프레임 도형 900여 개를 바꿔 SVG 두 판을 다시 굽는데,
    같은 프레임에 카메라가 배율까지 바꾸니 매번 '다른 배율로 처음부터' 굽는 꼴이 된다(캐시가 통째로 무효).
    시안 5종을 놓고 눈으로 고른 결과도 같았다: 배율 변화와 도형 변화를 떼어 놓은 쪽만 매끄러웠다.
-   ※ 카메라에 will-change:transform 을 거는 시안(합성 레이어로 올려 배율 재굽기를 피하는 쪽)은 효과가 없었다. */
-.bn-stage.bn-enter .bn-cam{animation:bnCam .72s var(--bn-ease) .14s both}
+
+   ═══ 그런데 떼어 놓아도 끊겼다 — **배율 애니 자체가 원인이다** (2026-08-05) ═══
+   범인 찾기: 동작을 하나씩 꺼서 눈으로 갈랐다. 카메라를 끄면 매끄럽고(S6), 번지기를 꺼도 여전히
+   끊긴다(S7). 평면화를 통째로 없애도 끊긴다(S4). 즉 배율 하나만 남아도 SVG 도형 1,700개를
+   매 프레임 다른 배율로 다시 굽는다. 계측으로는 안 잡힌다(3회 왕복에서 유실 1프레임 ·
+   전환 구간 long-animation-frame 0 · 메인 스레드는 놀고 있다).
+   ❌ 안 통한 것: 합성 레이어 승격(will-change·backface, 예전 기록대로 무효) · 순차 재배치(S2) ·
+      평면화 30fps(S3) · 지도 크기 되돌리기(원본 커밋 판도 똑같이 끊긴다).
+   ⭕ 통한 것 둘뿐이다 — **배율을 빼거나(끊김이 사라지지만 크기가 튀어 어색하다), 가리거나.**
+   그래서 가리는 쪽을 택했다: 배율이 도는 0.46s 동안 판을 **거의 검게 눌렀다 올린다**(bnCamDip).
+   끊기는 프레임이 어둠에 묻혀 안 보인다. 눈속임이지만, 이 씬을 통째로 비트맵으로 굽지 않는 한
+   배율 재굽기는 못 없앤다(그 방식은 폰트·CSS 의존 도형이 원본과 달라질 위험이 있어 보류).
+   ⚠ 값을 바꿀 때는 dip 이 배율보다 **길어야** 한다 — 배율이 끝나기 전에 밝아지면 끊김이 드러난다. */
+.bn-stage.bn-enter .bn-cam{animation:bnCam .46s var(--bn-ease) .04s both, bnCamDip .52s ease-in-out both;
+  will-change:transform,opacity}
+@keyframes bnCamDip{0%{opacity:1} 38%{opacity:.06} 100%{opacity:1}}
 .bn-stage.bn-enter .pin{animation:bnPinDrop .30s cubic-bezier(.3,1.25,.5,1) both}
 /* 진입 동안만 오른쪽 패널을 제 레이어로 띄운다. opacity:0 인 서브트리는 배치는 해도 '그리기'는 통째로 건너뛰므로,
    미리 지어 두기만 하면 켜지는 1.34s 에 첫 페인트가 그대로 남는다 — 옮긴 것이 배치뿐이라 절반만 고친 셈이 된다.
@@ -293,9 +340,8 @@ body.subdetach .subtabs{padding-left:16px}
    꺼지는 그 한 프레임이 '꽂히자마자 꺼진다' 로 보였다(1860ms 프레임에서 실측).
    안 적으면 도착값이 그 핀의 제 값(고른 것 1 · 나머지 .55)이 되어 각자 제자리에 앉는다. */
 @keyframes bnPinDrop{from{opacity:0; transform:translateY(-16px)} to{transform:none}}
-/* 폭을 지도 몫(.bn-tilt 63%)에 맞추는 이유: 캡션은 .bn-shift(지도+패널) 안에 있어서,
-   그냥 가운데 정렬하면 지도가 아니라 '지도+패널' 의 한가운데로 밀린다. 한글이라 mono 금지(폴백 벌어짐) */
-.bn-cap{font-size:.8rem; color:var(--dim); text-align:center; margin:4px 0 0; max-width:63%}
+/* 지도 아래 설명 줄(.bn-cap)은 걷어냈다 — 그림이 스스로 말하는 것을 글로 한 번 더 말하고 있었다.
+   폭 계산(지도 몫 52/97 에서 패딩 18 을 뺀 값)이 bneck.css·bneck-tail.css 에 세 벌 있었는데 같이 뺐다. */
 /* ═══ 병목 상세 — 지도 오른쪽 열에 늘 떠 있는 패널 ═══
    한때는 눌러야 열리는 카드였고, 실험 목록은 지도 아래에 따로 한 벌 더 있었다. 그 구성은 두 가지가 나빴다:
    ① 안 누르고 지나가면 오른쪽 26%가 그냥 빈 검은 자리 ② 눌러 봐야 아래에 있는 카드가 위로 올라올 뿐이라
@@ -332,7 +378,17 @@ body.subdetach .subtabs{padding-left:16px}
    접두어를 lk- 로 두는 것은 parts/README 규칙이다(병목 bn-/bx- · 클라 cl-/cr-).
    여기서 줄을 끄는 것은 그림이 아니라 제목이다. 한때 썸네일을 키우고 제목을 줄여 봤는데,
    이 탭에서 사람이 찾는 것은 '어디로 가는 문인가' 라서 이름이 먼저 읽혀야 했다.
-   그래서 그림은 280×158 로 고정하고 제목을 2.15rem 까지 올렸다.
+   그래서 그림은 199×112 로 고정하고 제목을 1.46rem 에 둔다 — 그림보다 제목이 먼저 읽히는 관계는
+   그대로 두고 한 벌을 통째로 0.70배 줄인 값이다(옛 280×158 · 2.15rem).
+   ── 줄인 이유 ──
+   넷을 다 담은 판이 816px 이라 1080 화면(브라우저 창 ~900px)에서 마지막 줄이 잘렸다. 지금은 537px 이다.
+   ── 199px 이 하한이 아니라 하한 한 칸 위인 근거 ──
+   여기 그림은 장식이 아니라 '어떤 화면인가' 를 미리 보여 주는 것이라 판독이 하한선이다.
+   그래서 썸네일만 따로 222·210·199·188·176 다섯 폭으로 나란히 찍어 봤다. 노션 커버의 큰 제목
+   ('IOCP 서버 설계')은 176 까지도 남지만, 그 아래 줄('IOCP 서버 구현(MMO)')은 188 에서 흐려지고
+   176 에서 무너진다. 199 는 그 바로 위가 아니라 한 칸 위다.
+   (줄 사이 여백만 9px 로 좁혀 그림을 지키는 안도 재 봤는데, 버는 높이가 절반(−54px)인데다
+    구분선이 그림 가장자리에서 9px 까지 붙어 답답해져 기각했다.)
    주소(.lk-u)를 오른쪽 끝이 아니라 설명 바로 아래 두는 이유도 같다 — 오른쪽에 붙이면
    눈이 제목 → 설명 → 화면 반대편으로 한 번 꺾인다.
    ※ 옛 .note-list / .note / .links 는 이 패널 전용이었고 여기 들어오며 쓸 곳이 없어져 걷어냈다. */
@@ -345,34 +401,61 @@ body.subdetach .subtabs{padding-left:16px}
    ※ 여기에 62 를 적고 '.panel 의 margin-top 8 과 더해 70' 을 기대하면 안 된다 — 더해지지 않는다.
      .panel 은 테두리도 안쪽 여백도 없어서 이 판의 위 마진이 부모 마진과 상쇄(margin collapsing)되고,
      둘 중 큰 값 하나만 남는다. 실제로 62 를 적었더니 화면에서도 62 였다. 그래서 여기 값이 곧 총 여백이다. */
-.lk-box{max-width:1280px; margin:70px 0 0; padding:10px 26px 12px;
+/* 판 폭 740 — 안에 든 것에 맞춘 값이지 화면에 맞춘 값이 아니다.
+   ── 재는 법 ──
+   한 줄이 쓰는 폭 = 그림 199 + 24 + 제목칸 196 + 24 + 설명칸 안쪽여백 24 + 가장 긴 설명 211 = 678.
+   여기에 좌우 안쪽 여백 24(판 padding 22 + 줄 padding 2)를 더하면 726 이고, 740 은 그 위 여유 14px.
+   설명이나 제목 문구를 고치면 이 계산을 다시 할 것 — 남는 여유가 14px 뿐이라 조금만 길어져도 접힌다.
+   ── 넓게 두면 안 되는 이유 (두 번 겪었다) ──
+   1120 일 때는 안쪽 여백이 왼쪽 24 : 오른쪽 198, 960 으로 줄인 뒤 설명을 문장에서 짧은 이름으로
+   바꾸자 다시 왼쪽 25 : 오른쪽 256 이 됐다. 눈에 걸리는 것은 여백보다 **줄 사이 구분선**이다 —
+   글이 끝난 자리에서 계속 뻗어 나가 빈 곳을 가리킨다. 그게 '판이 넓다' 는 판정 신호다.
+   ※ 다른 탭(설계·병목·클라)은 오른쪽 끝이 1549 로 같은데 여기만 짧다 — 신경 쓸 것 없다.
+     그 셋은 폭 상한이 없거나(.stage · .cr-frame) 1860(.bn-shift)이라 화면 폭에 눌려 우연히
+     같아진 것이지, 맞춘 규칙이 아니다. 이 탭은 목록이라 화면을 다 쓸 이유가 없다. */
+.lk-box{max-width:740px; margin:70px 0 0; padding:6px 22px 8px;
   background:linear-gradient(180deg,#151d2d 0%,#101725 100%);
-  border:1px solid #2a3550; border-radius:18px;
+  border:1px solid #2a3550; border-radius:16px;
   box-shadow:0 26px 60px -30px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.045)}
 .lk-list{max-width:none}
-.lk-row{display:flex; align-items:center; gap:30px; text-decoration:none;
-  padding:20px 2px; border-bottom:1px solid var(--line2)}
+.lk-row{display:flex; align-items:center; gap:24px; text-decoration:none;
+  padding:9px 2px; border-bottom:1px solid var(--line2)}
 /* 판이 이미 위아래를 닫으므로 첫 줄 위·끝 줄 아래 선은 두지 않는다 — 두면 선이 겹쳐 두 줄로 보인다 */
 .lk-row:last-child{border-bottom:0}
-.lk-sh{flex:0 0 auto; width:280px; height:158px; border-radius:11px; overflow:hidden;
+.lk-sh{flex:0 0 auto; width:199px; height:112px; border-radius:9px; overflow:hidden;
   border:1px solid #3f4d6b; background:#0b111d; transition:border-color .15s;
   box-shadow:0 18px 38px -22px rgba(0,0,0,.95)}
 .lk-row:hover .lk-sh{border-color:var(--net)}
 .lk-sh img{display:block; width:100%; height:100%; object-fit:cover; object-position:top left}
 /* 제목 칸과 설명 칸을 가른다 — 한 열에 쌓으면 제목 바로 밑에 설명이 붙어 둘이 한 덩어리로 읽혔다.
    제목 칸을 고정폭으로 두는 것이 요점이다: 줄이 여럿이어도 설명 시작점이 한 기둥으로 맞아떨어진다.
-   270px 은 가장 긴 제목(WEB PROFILE)이 오른쪽에 여유를 남기는 값이다(250 에서는 꽉 찼다). */
-.lk-tt{flex:0 0 270px; min-width:0}
-.lk-dd{flex:1 1 auto; min-width:0; padding-left:30px; border-left:1px solid var(--line2)}
-.lk-k{display:block; font-family:var(--mono); font-size:.66rem; letter-spacing:.15em;
-  color:#46536b; margin-bottom:4px}
-.lk-t{display:block; font-size:2.15rem; font-weight:800; letter-spacing:-.025em;
+   196px 은 가장 긴 제목이 오른쪽에 여유를 남기는 값이다. 실측(1.46rem·w800):
+   GitHub 76 · IOCP MMO 116 · DEV LOG 26 131 · WEB PROFILE 145(가장 긺, 여유 51px).
+   ※ 제목을 새로 지을 때 196 을 넘기면 두 줄로 접힌다. 칸을 넓히는 쪽은 그만한 대가가 있다:
+     짧은 제목 셋이 넓은 칸에서 길을 잃고, 설명 칸까지 밀려 판이 같이 커진다. 두 줄을 허용하려면
+     셸에서 끊는 자리를 손으로 잡을 것 — 자동으로 두면 마지막 낱말만 홀로 떨어진다
+     ('MMO Server GitHub page'(272px)로 확인했다).
+   ※ 넷째 제목을 WEB PORTFOLIO 로 바꿨다가 되돌렸다. 그 사이트는 성과·경력·장애·R&D·기술·소개로
+     짜인 이력 사이트지 프로젝트 갤러리가 아니다(프로젝트는 이 MMO 하나뿐이고 그게 이 페이지다).
+     주소가 /portfolio 인 것만 보고 정하지 말 것. 노션 DEV LOG 26 의 INDEX 도 WEB PROFILE 이다. */
+.lk-tt{flex:0 0 196px; min-width:0}
+.lk-dd{flex:1 1 auto; min-width:0; padding-left:24px; border-left:1px solid var(--line2)}
+.lk-k{display:block; font-family:var(--mono); font-size:.62rem; letter-spacing:.15em;
+  color:#46536b; margin-bottom:3px}
+.lk-t{display:block; font-size:1.46rem; font-weight:800; letter-spacing:-.025em;
   color:var(--ink); line-height:1.1}
-/* 글 폭 46ch — 넓히면 둘째 줄에 한 단어만 떨어져 남는다(예전 62ch 에서 '있습니다.' 만 남았다).
-   제목을 옆 칸으로 뺀 뒤로 설명 칸이 넓어졌으므로 값도 52 → 46 으로 함께 내렸다.
-   글자 크기를 건드리면 이 값도 같이 봐야 한다. */
-.lk-d{display:block; font-size:1.02rem; color:#b7c4da; max-width:46ch}
-.lk-u{display:block; font-family:var(--mono); font-size:.75rem; color:#46536b; margin-top:10px;
+/* 설명은 문장이 아니라 '이게 무엇인가' 를 짧게 적는 자리다(2026-08-04 에 문장에서 바꿨다).
+   한 줄 폭 실측(.9rem): 166 · 128 · 211 · 78 — 넷 다 한 줄이다.
+   글 폭을 여기서 따로 막지 않는다. 판을 내용에 맞춰 좁혔으므로(740) 설명 칸이 225px 이고,
+   그 칸이 곧 글 폭이다. 옛 max-width:50ch(=429px)는 판이 넓던 시절의 안전장치라 지금은
+   걸릴 일이 없어 걷어냈다 — 판을 다시 넓히면 그때 이 자리를 다시 볼 것.
+   ── 두 줄이 되면 끊는 자리를 손으로 잡을 것 (셸의 <br>) ──
+   브라우저에 맡기면 낱말이 갈린다. 실제로 그랬다: 기본값은 '부하 테스트 / 도구까지' 로 끊었고,
+   text-wrap:balance 를 걸었더니 줄 길이는 고르게(257/299) 맞췄지만 이번엔 'IOCP / 코어부터' 로
+   끊었다. balance 는 길이만 보지 뜻을 안 본다 — 한국어 짧은 문구에는 쓰지 말 것.
+   답은 **마침표에서 끊기** 다. 두 줄이 각각 완결된 문장이 되고 낱말도 안 갈린다. */
+.lk-d{display:block; font-size:.9rem; color:#b7c4da}
+.lk-u{display:block; font-family:var(--mono); font-size:.68rem; color:#46536b; margin-top:8px;
   transition:color .15s}
 .lk-row:hover .lk-u{color:var(--net)}
 
@@ -404,8 +487,11 @@ body.subdetach .subtabs{padding-left:16px}
   /* 세로로 쌓이면 두 칸을 가르던 세로선이 뜻을 잃는다 — 선을 떼고 들여쓰기도 푼다 */
   .lk-tt{flex:0 0 auto; width:100%}
   .lk-dd{width:100%; padding-left:0; border-left:0; margin-top:-4px}
-  .lk-t{font-size:1.6rem}
-  .lk-d{font-size:.95rem; max-width:none}
+  /* 넓은 화면 값을 0.70배로 내리면서 이 두 줄도 같이 내렸다 — 옛 값(1.6rem/.95rem)은 새 기본값과
+     거의 같아져 규칙이 있으나 마나 했다. 좁은 화면에서 한 단 더 작아지는 관계를 되살린 값이다.
+     넓은 화면 값을 또 건드리면 여기도 같이 봐야 한다(간격이 좁아지면 이 규칙이 다시 죽는다). */
+  .lk-t{font-size:1.3rem}
+  .lk-d{font-size:.86rem; max-width:none}
 }
 
 /* 구역 개요 카드 — 상자가 없다 */
