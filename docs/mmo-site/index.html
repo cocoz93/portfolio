@@ -749,7 +749,9 @@ body.pop-hold #scene .chips{opacity:0}
 .bx-dash{ display:grid; grid-template-columns:repeat(3,1fr); gap:7px; margin:0 }
 #bncard > .bx{ flex:0 0 auto; margin:10px 0 0; padding-top:10px; border-top:1px solid #232e42 }
 .bx-tile{ background:var(--panel); border:1px solid var(--line2); border-radius:10px; padding:6px 10px 6px }
-.bx-tile .l{ font-size:.66rem; letter-spacing:.04em; color:var(--mut); font-weight:700 }
+/* 칸 이름이 .66rem(10.6px) 이었다. 카드를 눌러 수치를 확인하는 자리인데 '이게 무슨 값인가' 를
+   말하는 글이 판에서 가장 작았다 — .75rem(12px)로 올린다. 값(1.12rem)과의 위계는 그대로다. */
+.bx-tile .l{ font-size:.75rem; letter-spacing:.04em; color:var(--mut); font-weight:700 }
 .bx-tile .v{ display:flex; align-items:baseline; gap:5px; margin-top:5px }
 /* 값은 여섯 칸 다 밝다. 한때 기본이 흐린 회색(--mut)이고 판정색이 붙는 칸만 밝았는데,
    방향이 정해진 지표는 둘뿐이라(소켓 호출 · 틱 p99) 나머지 넷이 늘 죽어 보였다.
@@ -806,7 +808,7 @@ body.pop-hold #scene .chips{opacity:0}
    '무엇을 고르는 곳인가' 와 '이 숫자는 무엇인가' 를 각각 한 줄로 짚는다.
    계기판 위 경계선은 아래 #bncard>.bx 가 갖는다 — 라벨과 값 사이를 긋는 선이라야
    '이 라벨이 저 네 칸을 가리킨다' 로 읽힌다. */
-.bx-lb{ flex:0 0 auto; font-family:var(--sans); font-size:.64rem; font-weight:800;
+.bx-lb{ flex:0 0 auto; font-family:var(--sans); font-size:.72rem; font-weight:800;
   letter-spacing:.04em; color:#7d90ad; margin:0 0 5px }
 .bx-lb.sp{ margin-top:10px; display:flex; align-items:baseline; gap:10px }
 /* 팬아웃은 라벨과 같은 줄 오른쪽 끝. 라벨보다 흐리게 둔다 — 이 줄의 주인은 왼쪽 라벨이고
@@ -844,17 +846,20 @@ body.pop-hold #scene .chips{opacity:0}
 .rc .st{ font-size:.72rem; font-weight:800; color:#66748c }
 /* 이름은 카드에서 유일하게 읽는 글이다. 한 줄로 못 박는다 — 열두 줄이 같은 높이라야
    오른쪽 끝 고리가 세로로 한 자에 서고, 그래야 차오르는 것이 보인다.
-   폭이 모자라면 줄바꿈이 아니라 말줄임(…)이다. 가장 긴 이름은 '결론 — 수평 확장으로'(112px)이다
-   — 한때 '1,500 동접 붕괴 — 회선 상한'(157px)이 가장 길었는데, 이름을 '회선 상한 — 1,500' 으로
-   줄이면서 열두 장이 112px 아래로 모였다.
+   폭이 모자라면 줄바꿈이 아니라 말줄임(…)이다. 가장 긴 이름은 '결론 — 수평 확장으로' 다
+   — 한때 '1,500 동접 붕괴 — 회선 상한'(157px · .95rem 기준)이 가장 길었는데, 이름을
+   '회선 상한 — 1,500' 으로 줄이면서 열두 장이 그 아래로 모였다.
    칸은 창보다 빨리 줄어든다(판 좌우 여백과 칸 사이 틈이 고정이라) — 그래서 창이 좁아지면
-   vw 자에 맡긴다. 세 열 시절과 같은 .95vw 를 쓰되 위쪽은 .95rem 에서 잘라 둔다 —
-   두 열이라 칸이 넓어져서, 안 자르면 넓은 창에서 이름만 계기판 숫자보다 커진다. */
+   vw 자에 맡긴다. 세 열 시절과 같은 .95vw 를 쓰되 위쪽은 1.05rem 에서 잘라 둔다 —
+   두 열이라 칸이 넓어져서, 안 자르면 넓은 창에서 이름만 계기판 숫자보다 커진다.
+   ※ .95rem 이었다. 판에서 정작 작은 글은 이름이 아니라 계기판 칸 이름(.66rem)과 이 머리줄
+     (.64rem)이었다 — 셋을 같이 올렸다(이름 1.05 · 칸 이름 .75 · 머리줄 .72). 계기판 값이
+     1.12rem 이므로 이름이 그보다 커지지 않는 선이 1.05rem 이다. */
 /* min-width:0 이 있어야 말줄임이 실제로 돈다 — flex 아이템의 기본 min-width 는 auto 라
    nowrap 글이 제 폭을 그대로 우겨서, 위 그리드가 minmax(0,1fr) 이어도 카드가 안 줄어든다. */
-.rc .nm{ font-size:.95rem; font-weight:700; color:#8f9fb6; line-height:1.25; min-width:0;
+.rc .nm{ font-size:1.05rem; font-weight:700; color:#8f9fb6; line-height:1.25; min-width:0;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
-@media (max-width:1830px){ .rc .nm{ font-size:clamp(.72rem, .95vw, .95rem) } }
+@media (max-width:1830px){ .rc .nm{ font-size:clamp(.8rem, .95vw, 1.05rem) } }
 /* ── 동접은 숫자가 아니라 고리다 ──
    한때 카드마다 동접 숫자가 박혀 있었다. 그 값은 아래 계기판 첫 칸이 이미 같은 자리에서
    말하고(카드도 계기판도 e.am.ccu 하나를 본다), 열두 장에 흩어져 있으면 사다리로도 안 읽혔다.
