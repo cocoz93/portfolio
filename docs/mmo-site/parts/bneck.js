@@ -129,7 +129,8 @@ var tiles = MET.map(function(M){
     '<div class="g"><i class="w"></i><i class="a"></i></div>'+
     '<div class="f"><span class="fr">—</span><span class="bx-chip fl">±0%</span></div>';
   $("#bx-dash").appendChild(t);
-  return {el:t,n:$(".n",t),un:$(".u",t),w:$(".w",t),a:$(".a",t),fr:$(".fr",t),c:$(".bx-chip",t),M:M,v:0};
+  return {el:t,n:$(".n",t),un:$(".u",t),g:$(".g",t),w:$(".w",t),a:$(".a",t),
+          fr:$(".fr",t),c:$(".bx-chip",t),M:M,v:0};
 });
 /* ═══ 막대의 눈금 = 지금 ═══
    한때 '그 실험 안에서의 대비' 였다(둘 중 큰 쪽이 100%). 그러면 둘 중 하나는 무조건 꽉 차고,
@@ -198,6 +199,15 @@ function paintDash(it){
     roll(T,M.k,av,460,dFix);
     T.w.style.width=barW(bv)+"%";
     T.a.style.width=barW(av)+"%";
+    /* 두 막대는 같은 홈에서 왼쪽 끝을 공유하고 켜고(.a)가 뒤 DOM 이라 위에 그려진다. 값이 줄어든
+       실험은 끄고(.w)의 꼬리가 뒤로 남아 두 겹이 보이지만, **늘어난 실험은 켜고가 끄고를 통째로
+       덮어** 한 겹으로 보인다 — ⑩ 소켓 호출 99,000 → 122,000(+23%)이 그랬다. 그때만 끄고를
+       위로 올려 '끄고는 여기까지였다' 를 남긴다(줄어드는 쪽은 지금 그림이 이미 맞으므로 안 건드린다).
+       ※ 1.5%p 문턱을 두는 이유: 조금이라도 크면 올리게 했더니 ⑩ 의 틱 p99(39.6 → 39.7 · +0.3%)
+         까지 회색이 덮어 **막대가 통째로 회색으로 죽었다**. 그 정도 차이는 어차피 막대에 안
+         나타나므로(칸 폭 ≈ 276px 에서 0.25%p = 0.7px) % 배지에 맡기고 색을 지키는 편이 낫다. */
+    var wpc=barW(bv), apc=barW(av);
+    T.g.classList.toggle("up", !!(num && bv!=null && av!=null && apc-wpc>1.5));
     /* 안 잰 지표는 단위까지 지운다 — 값이 '—' 인데 'MB/s' 만 남으면 0 을 잰 것처럼 보인다 */
     T.un.textContent=(av==null?"":M.u);
     /* 왼쪽에 비교값이 없는 이유가 둘이라 말이 다르다 — 실험은 했는데 그 지표만 안 잡은 것,
