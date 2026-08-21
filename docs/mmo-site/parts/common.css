@@ -370,7 +370,7 @@ body.subdetach .subtabs{padding-left:16px}
   opacity:0; pointer-events:none; transition:opacity .35s ease}
 .bncard.on{opacity:1; pointer-events:auto}
 .bncard[hidden]{display:none}
-/* 카드 안(라벨 두 줄 · 카드 열두 장 · 계기판) 규칙은 전부 병목 탭 스타일시트에 있다.
+/* 카드 안(라벨 두 줄 · 카드 열여섯 장 · 계기판) 규칙은 전부 병목 탭 스타일시트에 있다.
    여기 두면 .bn-stage 의 grid 선언보다 먼저 와서 못 이기는 짝이 생긴다 —
    좁은 폭에서 두 칸을 한 칸으로 접는 규칙(@media max-width:1600px)도 같은 이유로 그쪽이다. */
 
