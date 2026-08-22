@@ -586,7 +586,11 @@ body.pop-hold #scene .chips{opacity:0}
    문이 소탭 줄로 올라가면서 그 보정도 걷어냈다. */
 @media(max-width:680px){
   .card{bottom:10px; max-height:calc(100% - 22px)}
-  .stage-replay{bottom:16px} }
+  .stage-replay{bottom:16px}
+  /* 이 폭에서는 카드가 씬 위를 통째로 덮는다 — 씬에 붙어 있는 '다시 재생' 이 카드 밑에 깔려
+     보이지도 눌리지도 않는다(카드 z-index 8 · 재생 6). 열려 있는 동안만 감춘다.
+     카드를 닫으면(같은 구역 버튼 다시 누르기) 그대로 돌아온다. */
+  .stage:has(#card.on) .stage-replay{display:none} }
 
 /* ═══ 구역 강조 — 고른 구역만 남기고 나머지를 죽인다 ═══
    opacity 로는 못 죽인다: 등장 웨이브(scenePop)가 fill both 로 opacity:1 을 영구히 덮어쓴다.
