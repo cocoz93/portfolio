@@ -719,7 +719,7 @@ function openZone(z,brief){ const Z=ZI[z]; if(!Z||!card) return;
              (d[2]?'<span class="sd">'+d[2]+'</span>':'')+'</span><span class="go">↗</span></a>'; }).join("");
     if(!n.docs.length) s+='<div class="dnone">저장소 자체라 별도 문서가 없다 — 설계는 DB 워커에</div>';
     return s+'</div>'; }).join("");
-  /* 카드는 문서 링크에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목·실험' 을 달았는데,
+  /* 카드는 문서 링크에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목 개선' 을 달았는데,
      누를 수 없는 글이면서 화살표로 이동을 흉내 냈다 — 실제 이동은 늘 보이는 1-2 탭이 맡는다. */
   cbd.innerHTML=h;
   card.style.setProperty("--ac", Z.ac);   /* 왼쪽 세로선 색 = 씬에서 살아남은 도형 색 */
@@ -1135,7 +1135,7 @@ window.__flowReset=function(){
   const stage=document.querySelector(".bn-stage");
   /* ═══ 이 판은 첫 화면에 안 보인다 → 첫 페인트 뒤로 미룬다 ═══
      지도 두 벌(보이는 것)과 평면 사본 두 벌, 값 추출까지 합쳐 20ms 이고 도형이 1,077개다.
-     그런데 처음 열리는 것은 '설계 · 구현' 탭이라 이 판은 그때 단 한 픽셀도 안 그려진다.
+     그런데 처음 열리는 것은 '전체 구조' 탭이라 이 판은 그때 단 한 픽셀도 안 그려진다.
      그래서 브라우저가 한가해질 때 짓고, 그 전에 사용자가 병목 탭을 누르면 그 자리에서 바로 짓는다.
      (미리 짓기가 먼저 끝나는 게 보통이라, 누르는 순간에 짓는 일은 거의 없다.) */
   let built=false, setFlat=function(){}, MORPHABLE=false, realIntro=function(){};
@@ -2015,7 +2015,7 @@ window.__flowReset=function(){
     g.appendChild(el("text",{x:tx,y:yt+13,"text-anchor":anch,"font-size":10,"font-weight":"600",fill:"#9aa7bd","font-family":"var(--sans)"},p.sub));
     gPins.appendChild(g); pinEls[p.n]=g;
   });
-  /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다.
+  /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 개선' 으로 들어올 때마다 부른다.
      클래스를 뺐다가 강제 리플로우 뒤 다시 걸어야 두 번째 진입부터도 처음부터 재생된다.
 
      여기서 재는 값은 카메라 하나뿐이다 — fromRect(방금까지 보이던 설계 탭 씬의 위치·크기)에
@@ -2139,7 +2139,7 @@ window.__flowReset=function(){
   };
   }   /* ← buildBody 끝 */
 
-  /* 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다. 아직 안 지었으면 여기서 짓는다. */
+  /* 탭 코드(다른 스코프)가 '병목 개선' 으로 들어올 때마다 부른다. 아직 안 지었으면 여기서 짓는다. */
   window.playBneckIntro=function(fromRect){ build(); closeCard(); realIntro(fromRect); };
   /* ═══ 첫 전환이 유독 한 번 멈칫하던 이유 = '지어 두기' 만으로는 모자랐다 ═══
      실측(창 1584×905 · dpr 1 · 새 프로필): 첫 전환에서 프레임 하나가 83ms(=5프레임 유실).
@@ -2227,7 +2227,7 @@ window.__flowReset=function(){
     const z=b.getAttribute("data-z")||"";
     /* 같은 버튼을 다시 누르면 전체로 — 따로 '해제' 조작을 두지 않는다 */
     apply(svg.getAttribute("data-zone")===z?"":z); }); });
-  /* 탭을 옮겼다 '설계 · 구현' 으로 돌아오면 강조는 항상 전체로 되돌린다.
+  /* 탭을 옮겼다 '전체 구조' 로 돌아오면 강조는 항상 전체로 되돌린다.
      구역 하나만 켜 둔 채 나갔다 오면 다시 왔을 때 '그림이 반쯤 꺼진 화면' 부터 보게 된다.
      탭 전환 코드는 뒤의 IIFE(다른 스코프)에 있어 여기서 창에 걸어 준다. */
   window.resetZone=function(){ tourStop(false); apply(""); };
@@ -2270,7 +2270,7 @@ window.__flowReset=function(){
   window.__zoneTourArm=function(delay){
     if(tourOn||tourArmed||tourRM) return;
     /* 지금 안 보이는 화면이면 소진하지 않는다 — 해시 딥링크(#bneck)로 열면 첫 play() 때 여기가 숨어 있다.
-       나중에 '설계 · 구현' 으로 들어오면 그때 다시 불리므로, 여기서 표를 쓰지 않고 그냥 돌려보낸다. */
+       나중에 '전체 구조' 로 들어오면 그때 다시 불리므로, 여기서 표를 쓰지 않고 그냥 돌려보낸다. */
     if(pBuild&&pBuild.hidden) return;
     /* 배경 탭으로 열린 경우 — 이력서·메일의 링크를 ctrl+클릭 하면 흔하다. 지금 돌리면 아무도 못 보고
        표만 날아간다. 여기는 탭 전환처럼 다시 불러 주는 쪽이 없으므로(play() 는 진입할 때만 돈다)

@@ -47,7 +47,7 @@
     }, WAVE);
   }
   replay.addEventListener("click", play);
-  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '설계 · 구현' 으로 돌아올 때마다 이걸 부른다.
+  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '전체 구조' 로 돌아올 때마다 이걸 부른다.
      '다시 재생' 버튼과 완전히 같은 길을 타야 두 경우의 순서가 어긋나지 않는다. */
   window.__scenePlay=play;
   play();

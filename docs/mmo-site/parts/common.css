@@ -67,7 +67,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .tab.act span{color:var(--mut)}
 .tab:focus-visible{outline:2px solid var(--net); outline-offset:-2px; border-radius:6px}
 /* 하위 탭 — 상위 탭(MMO 서버) 안에서만 뜬다. 이 둘은 나란한 선택지가 아니라 순서다:
-   만들었다(설계·구현) → 재서 고쳤다(병목·실험).
+   만들었다(전체 구조) → 재서 고쳤다(병목 개선).
    두 층은 같은 말을 쓴다: '화면 끝까지 가는 가로선 한 줄 + 켜진 항목 아래만 파랗게'.
    층은 굵기로만 낸다 — 위 3px, 아래 2px. 글자 크기는 항목마다 같게 둔다.
    (활성만 키우는 안을 한 번 넣었다가 껐다: 전환할 때 옆 항목이 밀려 줄 전체가 움직인다.)
@@ -96,7 +96,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* 탭 목록은 한 겹 안에 모은다 — 위 .tabrow 가 .tabs + .tabmeta 로 갈리는 것과 같은 짜임이고,
    줄의 오른쪽 끝은 그 줄의 부가물(여기서는 구역 필터) 자리로 비워 둔다. */
 .subnav{display:flex; align-items:baseline; gap:30px}
-/* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
+/* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('전체 구조' → '전체').
    줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다.
    밑줄이 줄의 바닥선 '위에' 정확히 얹히도록 아래 여백만큼 도로 끌어내린다:
    margin-bottom = -(.subtabs 아래 여백 13 + 그 선 1). 두 값은 항상 같이 움직인다. */
@@ -239,7 +239,7 @@ body.subdetach .subtabs{padding-left:16px}
 #bnpins .pin.pop .pin-halo{animation:pinHaloPop .58s ease-out}
 @keyframes pinHaloPop{0%{transform:scale(.9); opacity:1} 70%{transform:scale(2.2); opacity:0} 100%{transform:scale(1.18); opacity:.9}}
 
-/* ═══ 전환 애니 — '설계 · 구현' 화면이 병목 지도로 변한다 (총 1.86s) ═══
+/* ═══ 전환 애니 — '전체 구조' 화면이 병목 지도로 변한다 (총 1.86s) ═══
    세 단계를 겹치지 않는다. 같이 굴리면 무엇이 변하는지가 섞여 '그냥 뭔가 움직였다' 가 된다.
 
    1단계 0.00–0.86  카메라 완전 고정 — 설계 탭 씬이 있던 자리에, 있던 크기 그대로 겹쳐 있다

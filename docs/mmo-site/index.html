@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MMO 서버 R&D · 주우진 — 병목 개선</title>
-<meta name="description" content="IOCP 기반 MMO 서버 R&D. 단일 게임 스레드 동접 5,000(서버 총량), 실측(Prometheus/Grafana)으로 채택·기각한 병목 개선. MMO 서버(설계 · 구현 / 병목 · 실험), 부하 테스트, 링크 모음.">
+<meta name="description" content="IOCP 기반 MMO 서버 R&D. 단일 게임 스레드 동접 5,000(서버 총량), 실측(Prometheus/Grafana)으로 채택·기각한 병목 개선. MMO 서버(전체 구조 / 병목 개선), 부하 테스트, 링크 모음.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="MMO 서버 R&D · 주우진">
 <meta property="og:description" content="IOCP MMO 서버, 동접 5,000. 실측 기반 병목 개선 R&D.">
@@ -80,7 +80,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 .tab.act span{color:var(--mut)}
 .tab:focus-visible{outline:2px solid var(--net); outline-offset:-2px; border-radius:6px}
 /* 하위 탭 — 상위 탭(MMO 서버) 안에서만 뜬다. 이 둘은 나란한 선택지가 아니라 순서다:
-   만들었다(설계·구현) → 재서 고쳤다(병목·실험).
+   만들었다(전체 구조) → 재서 고쳤다(병목 개선).
    두 층은 같은 말을 쓴다: '화면 끝까지 가는 가로선 한 줄 + 켜진 항목 아래만 파랗게'.
    층은 굵기로만 낸다 — 위 3px, 아래 2px. 글자 크기는 항목마다 같게 둔다.
    (활성만 키우는 안을 한 번 넣었다가 껐다: 전환할 때 옆 항목이 밀려 줄 전체가 움직인다.)
@@ -109,7 +109,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
 /* 탭 목록은 한 겹 안에 모은다 — 위 .tabrow 가 .tabs + .tabmeta 로 갈리는 것과 같은 짜임이고,
    줄의 오른쪽 끝은 그 줄의 부가물(여기서는 구역 필터) 자리로 비워 둔다. */
 .subnav{display:flex; align-items:baseline; gap:30px}
-/* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('설계 · 구현' → '설계').
+/* flex:0 0 auto — 자리가 모자랄 때 항목이 쪼그라들면 글자가 소리 없이 잘린다('전체 구조' → '전체').
    줄이는 것은 좁은 화면 규칙이 값으로 하고, 여기서는 안 줄어들게 못 박는다.
    밑줄이 줄의 바닥선 '위에' 정확히 얹히도록 아래 여백만큼 도로 끌어내린다:
    margin-bottom = -(.subtabs 아래 여백 13 + 그 선 1). 두 값은 항상 같이 움직인다. */
@@ -252,7 +252,7 @@ body.subdetach .subtabs{padding-left:16px}
 #bnpins .pin.pop .pin-halo{animation:pinHaloPop .58s ease-out}
 @keyframes pinHaloPop{0%{transform:scale(.9); opacity:1} 70%{transform:scale(2.2); opacity:0} 100%{transform:scale(1.18); opacity:.9}}
 
-/* ═══ 전환 애니 — '설계 · 구현' 화면이 병목 지도로 변한다 (총 1.86s) ═══
+/* ═══ 전환 애니 — '전체 구조' 화면이 병목 지도로 변한다 (총 1.86s) ═══
    세 단계를 겹치지 않는다. 같이 굴리면 무엇이 변하는지가 섞여 '그냥 뭔가 움직였다' 가 된다.
 
    1단계 0.00–0.86  카메라 완전 고정 — 설계 탭 씬이 있던 자리에, 있던 크기 그대로 겹쳐 있다
@@ -1733,8 +1733,8 @@ body.pop-hold #scene .chips{opacity:0}
        role="tablist" 는 탭만 담은 안쪽이 갖는다(탭 목록 안에 버튼 그룹을 섞으면 안 된다). -->
   <div class="subtabs" id="subtabs">
     <nav class="subnav" role="tablist" aria-label="MMO 서버 하위 섹션">
-      <button class="subtab act" data-sub="build" role="tab" aria-selected="true"><em>1-1</em>설계 · 구현</button>
-      <button class="subtab" data-sub="bneck" role="tab" aria-selected="false"><em>1-2</em>병목 · 실험</button>
+      <button class="subtab act" data-sub="build" role="tab" aria-selected="true"><em>1-1</em>전체 구조</button>
+      <button class="subtab" data-sub="bneck" role="tab" aria-selected="false"><em>1-2</em>병목 개선</button>
     </nav>
     <!-- 구역 강조 — 누르면 그 구역만 남고 나머지는 죽는다. 같은 버튼을 다시 누르면 전체로 복귀.
          data-z 값은 ZONES[].color(=ZPAL 키)와 같은 문자열이라 스크립트가 그대로 씬에 얹는다.
@@ -1794,8 +1794,8 @@ body.pop-hold #scene .chips{opacity:0}
        전부 구역 카드 안이라, 구역을 누르기 전(=첫 화면)에는 밖으로 나가는 곳이 하나도 없었다.
        진입 순회가 카드를 열어 주기는 하지만 그건 미리보기라 문서 목록을 짓지 않는다(scene.js openZone brief).
        도착지는 2-1 이 '클라 · 더미' 로 가는 것과 같은 층이다: 설계 문서 DB 와 병목 실험 DB 를 함께 품은 상위.
-       라벨에 'IOCP 서버 설계 · 구현'(도착지 페이지 이름)을 쓰지 않는다 — 뒷말이 바로 왼쪽 위 하위 탭
-       '1-1 설계 · 구현' 과 같은 말이 된다. 대신 그 페이지에 실제로 들어 있는 두 가지를 적는다. -->
+       라벨에 'IOCP 서버 설계 · 구현'(도착지 페이지 이름)을 쓰지 않는다 — 그 이름만으로는 안에 무엇이
+       들어 있는지 알 수 없다. 대신 그 페이지에 실제로 들어 있는 두 가지를 적는다. -->
   <a class="stage-more" href="https://feline-vacation-d6d.notion.site/33616a0b9f5980e5a220c3e1928c2fe5"
     target="_blank" rel="noopener">자세히 — 설계 문서 · 병목 실험 <em>노션 ↗</em></a>
 </div>
@@ -2884,7 +2884,7 @@ function openZone(z,brief){ const Z=ZI[z]; if(!Z||!card) return;
              (d[2]?'<span class="sd">'+d[2]+'</span>':'')+'</span><span class="go">↗</span></a>'; }).join("");
     if(!n.docs.length) s+='<div class="dnone">저장소 자체라 별도 문서가 없다 — 설계는 DB 워커에</div>';
     return s+'</div>'; }).join("");
-  /* 카드는 문서 링크에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목·실험' 을 달았는데,
+  /* 카드는 문서 링크에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목 개선' 을 달았는데,
      누를 수 없는 글이면서 화살표로 이동을 흉내 냈다 — 실제 이동은 늘 보이는 1-2 탭이 맡는다. */
   cbd.innerHTML=h;
   card.style.setProperty("--ac", Z.ac);   /* 왼쪽 세로선 색 = 씬에서 살아남은 도형 색 */
@@ -3300,7 +3300,7 @@ window.__flowReset=function(){
   const stage=document.querySelector(".bn-stage");
   /* ═══ 이 판은 첫 화면에 안 보인다 → 첫 페인트 뒤로 미룬다 ═══
      지도 두 벌(보이는 것)과 평면 사본 두 벌, 값 추출까지 합쳐 20ms 이고 도형이 1,077개다.
-     그런데 처음 열리는 것은 '설계 · 구현' 탭이라 이 판은 그때 단 한 픽셀도 안 그려진다.
+     그런데 처음 열리는 것은 '전체 구조' 탭이라 이 판은 그때 단 한 픽셀도 안 그려진다.
      그래서 브라우저가 한가해질 때 짓고, 그 전에 사용자가 병목 탭을 누르면 그 자리에서 바로 짓는다.
      (미리 짓기가 먼저 끝나는 게 보통이라, 누르는 순간에 짓는 일은 거의 없다.) */
   let built=false, setFlat=function(){}, MORPHABLE=false, realIntro=function(){};
@@ -4180,7 +4180,7 @@ window.__flowReset=function(){
     g.appendChild(el("text",{x:tx,y:yt+13,"text-anchor":anch,"font-size":10,"font-weight":"600",fill:"#9aa7bd","font-family":"var(--sans)"},p.sub));
     gPins.appendChild(g); pinEls[p.n]=g;
   });
-  /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다.
+  /* 전환 애니 재생 — 탭 코드(다른 스코프)가 '병목 개선' 으로 들어올 때마다 부른다.
      클래스를 뺐다가 강제 리플로우 뒤 다시 걸어야 두 번째 진입부터도 처음부터 재생된다.
 
      여기서 재는 값은 카메라 하나뿐이다 — fromRect(방금까지 보이던 설계 탭 씬의 위치·크기)에
@@ -4304,7 +4304,7 @@ window.__flowReset=function(){
   };
   }   /* ← buildBody 끝 */
 
-  /* 탭 코드(다른 스코프)가 '병목 · 실험' 으로 들어올 때마다 부른다. 아직 안 지었으면 여기서 짓는다. */
+  /* 탭 코드(다른 스코프)가 '병목 개선' 으로 들어올 때마다 부른다. 아직 안 지었으면 여기서 짓는다. */
   window.playBneckIntro=function(fromRect){ build(); closeCard(); realIntro(fromRect); };
   /* ═══ 첫 전환이 유독 한 번 멈칫하던 이유 = '지어 두기' 만으로는 모자랐다 ═══
      실측(창 1584×905 · dpr 1 · 새 프로필): 첫 전환에서 프레임 하나가 83ms(=5프레임 유실).
@@ -4392,7 +4392,7 @@ window.__flowReset=function(){
     const z=b.getAttribute("data-z")||"";
     /* 같은 버튼을 다시 누르면 전체로 — 따로 '해제' 조작을 두지 않는다 */
     apply(svg.getAttribute("data-zone")===z?"":z); }); });
-  /* 탭을 옮겼다 '설계 · 구현' 으로 돌아오면 강조는 항상 전체로 되돌린다.
+  /* 탭을 옮겼다 '전체 구조' 로 돌아오면 강조는 항상 전체로 되돌린다.
      구역 하나만 켜 둔 채 나갔다 오면 다시 왔을 때 '그림이 반쯤 꺼진 화면' 부터 보게 된다.
      탭 전환 코드는 뒤의 IIFE(다른 스코프)에 있어 여기서 창에 걸어 준다. */
   window.resetZone=function(){ tourStop(false); apply(""); };
@@ -4435,7 +4435,7 @@ window.__flowReset=function(){
   window.__zoneTourArm=function(delay){
     if(tourOn||tourArmed||tourRM) return;
     /* 지금 안 보이는 화면이면 소진하지 않는다 — 해시 딥링크(#bneck)로 열면 첫 play() 때 여기가 숨어 있다.
-       나중에 '설계 · 구현' 으로 들어오면 그때 다시 불리므로, 여기서 표를 쓰지 않고 그냥 돌려보낸다. */
+       나중에 '전체 구조' 로 들어오면 그때 다시 불리므로, 여기서 표를 쓰지 않고 그냥 돌려보낸다. */
     if(pBuild&&pBuild.hidden) return;
     /* 배경 탭으로 열린 경우 — 이력서·메일의 링크를 ctrl+클릭 하면 흔하다. 지금 돌리면 아무도 못 보고
        표만 날아간다. 여기는 탭 전환처럼 다시 불러 주는 쪽이 없으므로(play() 는 진입할 때만 돈다)
@@ -4659,7 +4659,7 @@ window.__flowReset=function(){
     }, WAVE);
   }
   replay.addEventListener("click", play);
-  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '설계 · 구현' 으로 돌아올 때마다 이걸 부른다.
+  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '전체 구조' 로 돌아올 때마다 이걸 부른다.
      '다시 재생' 버튼과 완전히 같은 길을 타야 두 경우의 순서가 어긋나지 않는다. */
   window.__scenePlay=play;
   play();
