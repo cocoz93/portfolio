@@ -1621,7 +1621,7 @@ window.__flowReset=function(){
     [0.2, "3a516a0b9f5981639321d22af4aa2d38"]    /* 결론 — 세트 복제로 */
   ];
   /* 작은 창을 얹을 바닥 = "IOCP 서버 구현(MMO)" — 설계 문서 DB 와 병목 실험 DB 를 함께 품은 상위.
-     1-1 의 나가는 문(panel-build.html 의 .stage-more)이 가는 곳과 같은 페이지다.
+     1-1 의 나가는 문(소탭 줄 오른쪽 끝 #builddoor)이 가는 곳과 같은 페이지다.
      pm=s(오른쪽 패널)로도 열리지만 폭이 좁아 실측 표가 잘린다 — 가운데(pm=c)로 둔다. */
   const NOTION_HOME="33616a0b9f5980e5a220c3e1928c2fe5";
   NOTION_EXP.forEach(function(r,i){

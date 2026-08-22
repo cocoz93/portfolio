@@ -98,7 +98,8 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
    정렬은 baseline 이다 — 이름(sans)과 번호(mono)의 크기가 달라 center 로 두면 밑선이 어긋난다. */
 /* min-height 는 구역 필터가 없는 화면(1-2 · 클라이언트)에서 줄이 쪼그라들지 않게 못 박는 값이다.
    없으면 탭을 옮길 때마다 줄 높이가 오르내려 아래 그림까지 통째로 튄다. */
-.subtabs{display:flex; align-items:baseline; gap:30px;
+.subtabs{position:relative;   /* 구역 필터가 이 줄 아래에 absolute 로 걸린다 */
+  display:flex; align-items:baseline; gap:30px;
   margin:0; width:100%; min-height:62px;
   padding:14px 0 13px calc(var(--tabx,0px) + 26px);
   border-bottom:1px solid var(--line)}
@@ -576,7 +577,7 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
    이 규칙은 멈춘 순간 남아 있던 것(쌓인 칸·타이밍 휠 바늘)까지 덮는 몫이다. */
 body.pop-hold #scene .chips{opacity:0}
 /* 글꼴은 sans 다. 한때 mono 였는데 '다시 재생' 네 글자가 mono 에 없어 폴백으로 빠지면서 자간이 벌어져
-   있었다(같은 줄 오른쪽 끝에 .stage-more 를 세우고 나서야 눈에 띄었다 — 그쪽은 sans 라 계열이 어긋난다).
+   있었다(같은 줄 오른쪽 끝에 나가는 문을 세우고 나서야 눈에 띄었다 — 그쪽은 sans 라 계열이 어긋났다).
    ↻ 는 sans 에서도 그대로 나온다. 바꾼 대가는 버튼 폭 113 → 96px 하나뿐이다(실측).
    ※ var(--sans) 를 반드시 적어 줄 것. button 은 글꼴을 상속하지 않아서, 이 줄을 지우면 body 의 sans 가
      내려오는 게 아니라 브라우저 기본 글꼴로 떨어진다(이 저장소에는 button{font:inherit} 같은 규칙이 없다). */
@@ -587,41 +588,18 @@ body.pop-hold #scene .chips{opacity:0}
 .stage-replay:hover{border-color:var(--net); color:var(--ink)}
 .stage-replay:focus-visible{outline:2px solid var(--net); outline-offset:2px}
 
-/* 노션으로 나가는 문 — 오른쪽 카드 열의 바닥.
-   씬 아래 꼬리줄로 두지 않은 까닭은 세로다. 씬 높이는 창 폭이 정하므로(viewBox 비율 고정) 세로가 좁아져도
-   줄지 않고, 씬 아래 남는 여백은 1600×900 에서 25px · 1366×768 에서 1px 뿐이다(실측) —
-   한 줄을 얹으면 그 두 크기에서 첫 화면에 스크롤이 생긴다.
-   카드 열은 반대로 넉넉하다: 가장 큰 카드(네트워크 437px)를 열어도 아래로 90px 이상 남는다.
-   왼쪽 아래는 '다시 재생'(.stage-replay)이 쓰고 있어 오른쪽이다.
+/* 한때 노션으로 나가는 문이 씬 오른쪽 아래에 얹혀 있었다(테두리 있는 버튼 모양, .stage-more).
+   지금은 소탭 줄 오른쪽 끝이다 — 클라이언트 탭과 같은 자리라 '나가는 문은 늘 그 줄 끝' 이 된다.
+   씬 아래로 못 내렸던 까닭은 세로였다: 씬 높이는 창 폭이 정하므로 세로가 좁아져도 안 줄고,
+   씬 아래 여백은 1600×900 에서 18px · 1366×768 에서 이미 −6px 이다(실측). 한 줄을 얹으면 스크롤이
+   생긴다 — 소탭 줄로 올린 것은 줄을 늘리지 않는 유일한 자리여서다. */
 
-   ── 점선이 아니라 실선인 이유 ──
-   한때 클라이언트 탭의 문들이 점선 알약이었다. 그 점선은 문이 칩 줄 안에 있을 때 '칩과 다른 것'
-   이라는 뜻을 가졌는데, 홀로 서면 그 대비가 성립하지 않고 어두운 점선(#2c3b55)이 배경에 묻혀
-   덜 만든 버튼으로 보였다(그 문들은 지금 소탭 줄로 합쳐졌다 — client.css 의 .subdoor).
-   그래서 반대편 '다시 재생' 과 글꼴·글자 크기·테두리 색·안여백·높이를 맞춰 한 줄의 양끝으로 세운다
-   (글꼴은 재생 버튼 쪽을 mono 에서 sans 로 내려 맞췄다 — 그 주석 참조).
-   line-height 1.32 는 둘의 높이를 34px 로 맞춘 값이다. 기본 줄 높이면 38px 이 된다(실측).
-   글자 굵기도 재생 버튼과 같은 400 이다. 한때 700 이었는데 두 단계 차이라 나란히 놓으면
-   한 줄의 양끝이 아니라 '제목과 부속' 으로 읽혔다(굵기 400·600 둘 다 대비 렌더로 확인).
-   안 맞추는 것은 글자색 하나뿐이다(#dce5f3 · 재생은 #b7c4da) — 이 페이지에서 밖으로 나가는 곳은
-   여기뿐이라 위계는 남겨야 하는데, 밝기 한 단계면 옆의 '노션 ↗' 배지와 함께 충분히 선다. */
-.stage-more{position:absolute; right:18px; bottom:16px; z-index:6;
-  display:inline-flex; align-items:center; gap:7px; text-decoration:none;
-  font-size:.85rem; font-weight:400; line-height:1.32; color:#dce5f3;
-  border:1px solid rgba(120,140,175,.42); border-radius:9px; padding:7px 14px;
-  background:rgba(19,26,38,.55); backdrop-filter:blur(4px); transition:border-color .15s, color .15s}
-.stage-more:hover{color:var(--ink); border-color:var(--net)}
-.stage-more:focus-visible{outline:2px solid var(--net); outline-offset:2px}
-.stage-more em{font-style:normal; font-family:var(--mono); font-size:.66rem; color:var(--dim)}
-/* 좁은 화면에서는 카드가 오른쪽 열이 아니라 씬 아래쪽에 얹힌다(위 .card 의 max-width:680px 규칙) —
-   그 자리가 곧 이 문 자리라 겹친다. 문은 절대배치를 풀어 씬 아래 제 줄로 내리고,
-   카드와 '다시 재생'(.stage-replay)은 그 줄만큼 올린다 — 둘 다 같은 stage 바닥 기준이라 안 올리면 문 위에 앉는다.
-   문 34 + 문 위 여백 10 = 44 가 기준선이고, 카드는 +10, 재생 버튼은 원래 여백 +16 을 얹은 값이다.
-   (재생 버튼은 이 덕에 씬 바닥 기준으로는 문이 없던 때와 같은 자리에 남는다) */
+/* 좁은 화면에서는 카드가 오른쪽 열이 아니라 씬 아래쪽에 얹힌다(위 .card 의 max-width:680px 규칙).
+   한때 이 자리에 씬 위 나가는 문이 같이 있어 카드와 재생 버튼을 그 줄만큼 올려 뒀는데,
+   문이 소탭 줄로 올라가면서 그 보정도 걷어냈다. */
 @media(max-width:680px){
-  .stage-more{position:static; margin:10px 0 0}
-  .card{bottom:54px; max-height:calc(100% - 66px)}
-  .stage-replay{bottom:60px} }
+  .card{bottom:10px; max-height:calc(100% - 22px)}
+  .stage-replay{bottom:16px} }
 
 /* ═══ 구역 강조 — 고른 구역만 남기고 나머지를 죽인다 ═══
    opacity 로는 못 죽인다: 등장 웨이브(scenePop)가 fill both 로 opacity:1 을 영구히 덮어쓴다.
@@ -657,16 +635,20 @@ body.pop-hold #scene .chips{opacity:0}
      누르고, 켜진 것에만 구역 색 밑줄 + 점 번짐을 준다. 예전 기록('밝기 한 단계 차이라 버튼으로
      안 읽힌다')은 이 줄이 씬 위에 떠 있던 시절 얘기다 — 탭 줄에 앉은 지금은 바로 위 두 층이
      같은 규칙(흰 글자 + 밑줄 = 켜짐)을 이미 가르쳐 준다. */
-/* ※ 탭 줄의 바닥선 '아래' 로 빼 보았다가 되돌렸다(2026-08-04). 선 밖으로 나오면 바닥선을 탭과
-     공유하지 못해 어느 층에도 안 속한 상태가 되고, 켜진 항목의 밑줄이 탭과 같은 어휘라
-     '탭 줄 밖에 있는데 탭처럼 생긴 것' 이 된다. .hud 시절을 오른쪽으로 옮긴 셈.
-     그때 잰 값은 남겨 둔다 — 줄 84.9~146.9(바닥선) · 이 줄 101.2~130.7(높이 29.5) · 씬 상단 160.9
-     (1600×900). 선 밑으로 완전히 빼려면 이동량 ≥45.7px 이고, 그러면 씬 상단에 25.8px 겹친다
-     (겹쳐도 그림은 안 가린다 — 씬 그림 최상단은 폭 960~1920 에서 201.8~243.9px 이라 항상 아래).
-     내리는 수단은 margin 이 아니라 position:relative + z-index:2 여야 한다: margin 은 줄 높이를
-     62 → 96px 로 늘려 씬을 창 밖으로 밀어내고, z-index 가 없으면 DOM 상 나중인 씬 밑에 깔려 안 눌린다. */
+/* ※ 탭 줄의 바닥선 '아래' 로 뺐다(2026-08-22). 한 번 빼 봤다가 되돌린 적이 있는데(2026-08-04)
+     그때 되돌린 까닭은 '어느 층에도 안 속한 상태' 였다 — 바닥선을 탭과 공유하지 못하는데
+     켜진 항목의 밑줄은 탭과 같은 어휘라, 탭 줄 밖에 있으면서 탭처럼 생긴 것이 됐다.
+     지금 다시 뺀 것은 같은 줄 오른쪽 끝을 나가는 문(#builddoor)이 쓰게 됐기 때문이다.
+     한 줄에 탭 둘 + 필터 다섯 + 문까지 서면 그 줄만 세 종류의 버튼을 갖는다.
+
+     자리를 안 먹게 absolute 로 뺀다(right:0 · top:100%). relative 로 내리면 원래 자리를 그대로
+     차지해서 같은 줄의 문이 그만큼 왼쪽으로 밀린다 — 문과 필터가 세로로 나란히 서야 한다.
+     margin 으로 내리는 것은 특히 안 된다: 줄 높이를 62 → 96px 로 늘려 씬을 창 밖으로 민다.
+     z-index 가 없으면 DOM 상 나중인 씬 밑에 깔려 안 눌린다.
+     씬 상단과 25px 남짓 겹치지만 그림은 안 가린다 — 씬 그림 최상단은 폭 960~1920 에서
+     201.8~243.9px 이라 항상 이 줄 아래다(2026-08-04 실측). */
 .zonebar{display:flex; flex-wrap:wrap; align-items:baseline; gap:22px;
-  margin-left:auto; align-self:center}
+  position:absolute; right:0; top:100%; margin-top:10px; z-index:2}
 .zonebar[hidden]{display:none}
 /* 글자는 sans — 버튼이 전부 한글이다. mono 에 한글을 넣으면 폰트 폴백으로 자간이 벌어진다(.bn-cap 과 같은 이유). */
 /* 씬에서 누를 수 있는 것이 이 줄뿐이다(도형 히트박스를 걷어냈다). 크기는 하위 탭(1.15rem)보다는
@@ -693,11 +675,10 @@ body.pop-hold #scene .chips{opacity:0}
 /* 좁은 화면 — 탭 줄과 한 줄에 같이 앉아 있어야 하므로 줄바꿈 전에 값부터 줄인다 */
 @media(max-width:900px){ .zonebar{gap:13px} .zb{font-size:.82rem; gap:5px; padding-bottom:5px}
   .zb i{width:7px; height:7px} }
-/* 여기부터는 탭 둘 + 필터 다섯이 한 줄에 물리적으로 안 들어간다(글자가 서로 올라탄다).
-   폭을 더 깎는 대신 줄을 접는다 — 모바일에서는 위아래로 쌓이는 편이 자연스럽고,
-   그래도 필터는 자기 탭 줄 '안' 이라 바닥선 하나를 탭과 같이 쓴다(줄이 셋으로 갈리지 않는다). */
+/* 좁은 화면에서는 필터를 줄 밑에 띄우지 않고 줄 안으로 되돌려 접는다 — 폭이 좁으면 문과
+   필터가 세로로 겹치고, 씬도 같이 낮아져 걸칠 자리가 없다. 접힌 둘째 줄이 곧 제 자리다. */
 @media(max-width:760px){ .subtabs{flex-wrap:wrap; min-height:0}
-  .zonebar{gap:12px; width:100%; margin:9px 0 0} .zb{font-size:.78rem; gap:4px} }
+  .zonebar{position:static; gap:12px; width:100%; margin:9px 0 0} .zb{font-size:.78rem; gap:4px} }
 
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
 </style>
@@ -939,6 +920,7 @@ body.pop-hold #scene .chips{opacity:0}
   font-family:var(--sans); font-size:1.02rem; font-weight:600; color:var(--dim);
   padding:0 1px 6px; border-bottom:2px solid transparent; transition:color .15s}
 .subdoor:hover{color:var(--ink)}
+
 .subdoor em{font-style:normal; font-size:.72rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
 @media(max-width:900px){ .subdoor{font-size:.82rem; gap:6px} }
 /* 760 이하에서는 .subtabs 가 줄을 접는다(common.css) — 문은 접힌 둘째 줄 오른쪽 끝에 선다 */
@@ -1740,6 +1722,11 @@ body.pop-hold #scene .chips{opacity:0}
       <button type="button" class="zb" data-z="game" aria-pressed="false"><i></i>게임</button>
       <button type="button" class="zb" data-z="store" aria-pressed="false"><i></i>데이터베이스</button>
     </div>
+    <!-- 나가는 문 — 클라이언트 소탭 줄과 같은 자리(줄 오른쪽 끝)다. 씬 오른쪽 아래에 얹혀 있던
+         것을 여기로 올렸다. 1-2 에는 고른 실험으로 가는 제 문이 따로 있으므로 구역 필터와
+         같은 조건으로 숨긴다(tabs.js). -->
+    <a class="subdoor" id="builddoor" href="https://feline-vacation-d6d.notion.site/33616a0b9f5980e5a220c3e1928c2fe5"
+      target="_blank" rel="noopener"><em>↗</em> 자세히 보기</a>
   </div>
   <!-- 클라이언트 탭의 하위 줄. MMO 쪽과 같은 생김새를 쓰되 상태는 따로 갖는다(csub) -->
   <!-- 세 단계는 나란한 선택지가 아니라 검증 순서다: 무엇을 만들었나 → 믿을 수 있나 → 어디까지 버티나.
@@ -1759,7 +1746,7 @@ body.pop-hold #scene .chips{opacity:0}
          줄 오른쪽 끝은 1-1 이 구역 필터에 쓰는 자리다 — 여기 두면 소탭을 옮겨도 문 자리가 안 변한다.
          role="tablist" 를 안쪽 nav 로 내린 것도 그래서다(탭 목록 안에 탭 아닌 것을 섞지 않는다). -->
     <a class="subdoor" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
-      target="_blank" rel="noopener">자세히 — 클라이언트 · 부하 검증 <em>노션 ↗</em></a>
+      target="_blank" rel="noopener"><em>↗</em> 자세히 보기</a>
   </div>
 
   <section class="panel act" id="p-build" role="tabpanel">
@@ -1798,8 +1785,7 @@ body.pop-hold #scene .chips{opacity:0}
        도착지는 2-1 이 '클라 · 더미' 로 가는 것과 같은 층이다: 설계 문서 DB 와 병목 실험 DB 를 함께 품은 상위.
        라벨에 'IOCP 서버 설계 · 구현'(도착지 페이지 이름)을 쓰지 않는다 — 그 이름만으로는 안에 무엇이
        들어 있는지 알 수 없다. 대신 그 페이지에 실제로 들어 있는 두 가지를 적는다. -->
-  <a class="stage-more" href="https://feline-vacation-d6d.notion.site/33616a0b9f5980e5a220c3e1928c2fe5"
-    target="_blank" rel="noopener">자세히 — 설계 문서 · 병목 실험 <em>노션 ↗</em></a>
+
 </div>
   </section>
 
@@ -3780,7 +3766,7 @@ window.__flowReset=function(){
     [0.2, "3a516a0b9f5981639321d22af4aa2d38"]    /* 결론 — 세트 복제로 */
   ];
   /* 작은 창을 얹을 바닥 = "IOCP 서버 구현(MMO)" — 설계 문서 DB 와 병목 실험 DB 를 함께 품은 상위.
-     1-1 의 나가는 문(panel-build.html 의 .stage-more)이 가는 곳과 같은 페이지다.
+     1-1 의 나가는 문(소탭 줄 오른쪽 끝 #builddoor)이 가는 곳과 같은 페이지다.
      pm=s(오른쪽 패널)로도 열리지만 폭이 좁아 실측 표가 잘린다 — 가운데(pm=c)로 둔다. */
   const NOTION_HOME="33616a0b9f5980e5a220c3e1928c2fe5";
   NOTION_EXP.forEach(function(r,i){
@@ -4497,6 +4483,7 @@ window.__flowReset=function(){
      1-2 나 다른 상위 탭에서는 눌러도 아무 일이 없는 버튼이 되므로 숨긴다.
      줄 높이는 .subtabs 의 min-height 가 잡아 두어 숨겨도 화면이 튀지 않는다. */
   const zonebar=document.getElementById("zonebar");
+  const builddoor=document.getElementById("builddoor");
   const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
   const subbar2=document.getElementById("subtabs2");
   let top="mmo", sub="build", csub="render";
@@ -4554,6 +4541,8 @@ window.__flowReset=function(){
       t.className = on ? "subtab act" : "subtab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subbar.hidden  = (top!=="mmo");
     if(zonebar) zonebar.hidden = !(top==="mmo" && sub==="build");
+    /* 나가는 문도 구역 필터와 같은 자리·같은 조건이다 — 1-2 는 고른 실험으로 가는 제 문을 쓴다 */
+    if(builddoor) builddoor.hidden = !(top==="mmo" && sub==="build");
     subbar2.hidden = (top!=="dummy");
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");

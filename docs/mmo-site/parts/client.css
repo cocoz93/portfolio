@@ -13,6 +13,7 @@
   font-family:var(--sans); font-size:1.02rem; font-weight:600; color:var(--dim);
   padding:0 1px 6px; border-bottom:2px solid transparent; transition:color .15s}
 .subdoor:hover{color:var(--ink)}
+
 .subdoor em{font-style:normal; font-size:.72rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
 @media(max-width:900px){ .subdoor{font-size:.82rem; gap:6px} }
 /* 760 이하에서는 .subtabs 가 줄을 접는다(common.css) — 문은 접힌 둘째 줄 오른쪽 끝에 선다 */
