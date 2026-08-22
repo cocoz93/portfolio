@@ -29,7 +29,10 @@
       <button class="tab" data-tab="dummy" role="tab" aria-selected="false"><b>클라이언트</b><span>실행 화면 · 검증</span></button>
       <button class="tab" data-tab="misc" role="tab" aria-selected="false"><b>링크 모음</b><span>GitHub · Notion</span></button>
     </nav>
-    <span class="tabmeta">C++17 · Windows IOCP</span>
+    <!-- 스택 한 줄(C++17 · Windows IOCP)이 여기 있었다. 뺀 까닭은 줄이 안 맞아서다 —
+         이 줄은 페이지 폭(.wrap)을 쓰고 바로 아래 소탭 줄의 문은 클라 판 폭(1700)에 묶여 있어,
+         붙어 있는 두 줄의 오른쪽 끝이 80px 어긋났다(1920 창). 셋을 한 선에 세울 방법이 없어
+         가장 덜 잃는 쪽을 뺐다. 스택은 GitHub 저장소와 노션 설계 문서가 첫 줄에서 말한다. -->
   </div>
 
   <!-- MMO 서버 하위 탭 줄. 상위 탭이 MMO 서버일 때만 보인다.
@@ -60,10 +63,18 @@
        ※ 2-2 는 한때 '검증 · 부하' 였다. ④ 를 ③ 으로 흡수하기 전, 2-2 가 안전성과 부하를 같이 이던
           시절의 이름이다. 지금 2-2 에 부하는 없는데 이름만 남아 옆칸 '부하 검증' 과 두 글자 순서만
           다른 라벨이 됐다 — 나란히 놓고 보면 어느 쪽이 무엇인지 못 고른다. '안전성 검증' 으로 바꾼다. -->
-  <div class="subtabs" id="subtabs2" role="tablist" aria-label="클라이언트 하위 섹션" hidden>
-    <button class="subtab act" data-csub="render" role="tab" aria-selected="true"><em>2-1</em>실행 화면</button>
-    <button class="subtab" data-csub="safe" role="tab" aria-selected="false"><em>2-2</em>안전성 검증</button>
-    <button class="subtab" data-csub="load" role="tab" aria-selected="false"><em>2-3</em>부하 검증</button>
+  <div class="subtabs" id="subtabs2" hidden>
+    <nav class="subnav" role="tablist" aria-label="클라이언트 하위 섹션">
+      <button class="subtab act" data-csub="render" role="tab" aria-selected="true"><em>2-1</em>실행 화면</button>
+      <button class="subtab" data-csub="safe" role="tab" aria-selected="false"><em>2-2</em>안전성 검증</button>
+      <button class="subtab" data-csub="load" role="tab" aria-selected="false"><em>2-3</em>부하 검증</button>
+    </nav>
+    <!-- 나가는 문 하나. 한때 2-1·2-2·2-3 판 아래에 각각 있었는데 셋 다 같은 노션 페이지로 갔고,
+         라벨만 셋이었다. 2-1 은 그 문이 첫 화면 밖(1093px / 화면 1000px)이라 스크롤을 내려야 닿았다.
+         줄 오른쪽 끝은 1-1 이 구역 필터에 쓰는 자리다 — 여기 두면 소탭을 옮겨도 문 자리가 안 변한다.
+         role="tablist" 를 안쪽 nav 로 내린 것도 그래서다(탭 목록 안에 탭 아닌 것을 섞지 않는다). -->
+    <a class="subdoor" href="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46"
+      target="_blank" rel="noopener">자세히 — 클라이언트 · 부하 검증 <em>노션 ↗</em></a>
   </div>
 
 <!--#include panel-build.html -->

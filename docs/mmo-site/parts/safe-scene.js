@@ -108,7 +108,7 @@ var INK={ recv:"#6cc7ff", send:"#ffb648", fg:"#eef2fb", sub:"#8496b3", grn:"#57d
            ※ 오른쪽 묶음의 x 1029 는 '오른쪽 끝을 카드 안여백 선에 붙인' 값이다(옛 953 에서 +76).
              설명 상자 폭을 406 → 331 로 줄이면서 오른쪽 끝이 그만큼 왼쪽으로 당겨졌는데, x 를
              안 옮기면 오른쪽 구석이 통째로 빈다. 폭을 다시 건드리면 이 x 도 같이 봐야 한다.
-           오른쪽 묶음(칩 → 설명 → 노션 문)을 대각선 바로 밑에 두는 시안과 렌더로 대 봤다.
+           오른쪽 묶음(칩 → 설명)을 대각선 바로 밑에 두는 시안과 렌더로 대 봤다.
            아래 구석 쪽을 택한 까닭은 맨 아래 문의 밑선(889)이 STEP 1 판 밑선(889)과 같은 선에
            서기 때문이다 — 아래쪽 두 덩어리가 바닥을 나눠 가진다. 위로 올린 시안은 밑에 125px 이
            통째로 비어 떠 보였다. 셋 사이 간격은 11px 로 같다(y 로 맞춘 값이라 눈으로 확인할 것).
@@ -144,8 +144,7 @@ var SCENE={
   overlay:{
     dash :{id:"d-safe",  x:205.6, y:148, w:300, lpad:1},
     chips:{id:"ch-safe", x:1029, y:527,  w:406},
-    note :{id:"nt-safe", x:1029, y:558,  w:331},
-    more :{id:"mo-safe", x:1029, y:614,  w:331}
+    note :{id:"nt-safe", x:1029, y:558,  w:331}
   },
   steps:[
    {k:"s1", tag:"STEP 1", u:-150, z:0, pal:"out", jc:"grn",
@@ -355,7 +354,7 @@ function draw(s,D){
    가로로 겹칠 일이 없다 — 옛 928 시절의 '이름표를 피한 값' 이라는 제약은 지금은 안 걸린다. */
 function place(D){
   var out=[];
-  ["dash","chips","note","more"].forEach(function(k){
+  ["dash","chips","note"].forEach(function(k){
     var o=D.overlay[k]; if(!o) return;
     out.push({id:o.id, key:k, x:o.x, y:o.y, w:o.w, lpad:!!o.lpad,
       left:((o.x-D.vb.x)/D.vb.w*100).toFixed(3)+"%",

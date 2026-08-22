@@ -4,6 +4,19 @@
 /* ═══ 탭 줄 ═══ */
 
 /* ═══ 하위탭 ═══ */
+/* 소탭 줄 오른쪽 끝의 나가는 문(mmo.src.html 의 .subdoor) — 2-1·2-2·2-3 판 아래에 각각 있던
+   문 셋을 합친 자리다. 셋 다 같은 노션 페이지로 갔고, 2-1 은 첫 화면 밖이라 스크롤해야 닿았다.
+   크기·색은 1-1 구역 버튼(.zb: 1.02rem / --dim)과 같은 값으로 둔다 — 같은 줄의 같은 자리에
+   서는 것이라 다른 값을 쓰면 층이 하나 더 있는 것처럼 읽힌다.
+   바닥선도 탭과 같이 쓴다(투명 테두리 2px + 아래 여백 6). */
+.subdoor{margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none;
+  font-family:var(--sans); font-size:1.02rem; font-weight:600; color:var(--dim);
+  padding:0 1px 6px; border-bottom:2px solid transparent; transition:color .15s}
+.subdoor:hover{color:var(--ink)}
+.subdoor em{font-style:normal; font-size:.72rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
+@media(max-width:900px){ .subdoor{font-size:.82rem; gap:6px} }
+/* 760 이하에서는 .subtabs 가 줄을 접는다(common.css) — 문은 접힌 둘째 줄 오른쪽 끝에 선다 */
+@media(max-width:760px){ .subdoor{font-size:.78rem; padding-top:4px} }
 
  .cl-pane.act{display:block}
 
@@ -18,6 +31,11 @@
    ※ 위 탭 줄과 왼쪽 끝이 안 맞는 것은 그대로 둔다. 지금도 안 맞고(하위탭이 안쪽으로
       225px 들어와 있다) 어색하지 않았다 — 좁히면 그 간격이 135px 로 오히려 줄어든다. */
 #p-crender, #p-csafe, #p-cload{max-width:1700px; margin-inline:auto}
+/* 소탭 줄 오른쪽 끝의 문도 같은 1700 에 묶는다 — 줄 자체는 페이지 폭(.wrap 1900)을 쓰므로,
+   묶지 않으면 창이 1700 을 넘는 순간부터 문만 판 밖으로 나간다(1920 창에서 80px, 실측).
+   여백을 문이 아니라 줄에 주는 까닭: 여백 % 의 기준은 자기 부모라, 문에 주면 줄의 왼쪽
+   안여백(--tabx)만큼 어긋난 값이 나온다. 줄에 주면 기준이 .wrap 이라 판과 같은 식이 된다. */
+#subtabs2{padding-right:max(0px, calc((100% - 1700px) / 2))}
 
 /* ═══ 계기판 ═══ */
 .cl-dash{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 10px}
@@ -114,11 +132,7 @@
    margin-top 을 쓰는 까닭은 그 % 가 높이가 아니라 폭 기준이라서다 — 그림 높이가 폭을 따라간다. */
 #p-csafe .sf-stage>#d-safe,
 #p-csafe .sf-stage>#ch-safe,
-#p-csafe .sf-stage>#nt-safe,
-#p-csafe .sf-stage>#mo-safe{position:absolute; top:0; margin:0; z-index:2}
-/* 나가는 문 한 짝만 담는 자리 — .cr-more 는 margin-left:auto 로 오른쪽에 붙는데, 그건 담는
-   쪽이 flex 일 때만 듣는다. 설명 줄과 오른쪽 끝을 맞추려고 여기서 flex 로 만든다. */
-#p-csafe #mo-safe{display:flex; justify-content:flex-end}
+#p-csafe .sf-stage>#nt-safe{position:absolute; top:0; margin:0; z-index:2}
 
 /* ═══ 계단 애니 — 시안 넷 중 하나를 무대에 입힌다(.sfa-a … .sfa-d) ═══
    그리는 쪽(safe-scene.js)이 단마다 자루를 하나 달아 둔다. 층(판·그림자·덩어리·글자)은 그대로
@@ -240,14 +254,6 @@
 #p-csafe .cl-chips button{gap:.478cqw; font-size:1.020cqw; border-radius:.717cqw;
   padding:.398cqw .798cqw .398cqw .478cqw}
 #p-csafe .cl-chips button i{width:1.355cqw; height:1.355cqw; font-size:.765cqw}
-/* 2-2 만 나가는 문에서 알약(점선 테두리 + 안여백)을 걷어낸다.
-   그 알약은 '칩 줄 오른쪽 끝에 칩과 같은 크기로 끼어 있으라' 고 만든 모양인데(.cr-more 원본 주석),
-   2-2 는 칩 상자가 좁아 문을 그 줄 밖으로 빼냈다. 모양만 따라오지 않아 빈 줄에 알약 하나가
-   덩그러니 남았고, 덜 만든 버튼처럼 보였다. 테두리를 지우면 그림 위에 얹힌 곁글로 읽힌다.
-   2-1 은 문이 아직 칩 줄 안에 있어 알약이 제 역할을 한다 — 그대로 둔다.
-   2-3 은 칩 줄이 없어졌으므로 2-2 와 같은 처지다 — 아래 #mo-load 에서 같이 벗긴다. */
-#p-csafe .cr-more{gap:.558cqw; font-size:.996cqw; border:0; padding:0}
-#p-csafe .cr-more em{font-size:.842cqw}
 
 /* ── 아래 칩 줄 ──
    줄 앞에 있던 '보기' 라벨은 걷어냈다(2-2·2-3 둘 다). 알약 넷 중 하나만 켜져 있어 고르는 줄인 것이
@@ -486,7 +492,6 @@
 .cr-foot{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:11px 2px 0;
   font-size:.72rem; color:var(--dim); line-height:1.6}
 .cr-foot b{color:var(--mut); font-weight:700}
-.cr-foot .cr-more{margin-left:auto}
 /* 칩으로 고른 보기의 한 줄 설명. 자리를 미리 잡아 둬야 칩을 눌러도 아래 줄이 안 흔들린다 */
 .cr-note{display:flex; gap:11px; align-items:flex-start; margin:11px 0 0; min-height:42px;
   background:var(--sunk); border:1px solid var(--line2); border-radius:10px; padding:9px 13px}
@@ -563,17 +568,10 @@
    뗐다 붙이는데 적용되는 규칙은 .cl-in 쪽이라 브라우저가 바뀐 것을 모른다). */
 #p-cload .cl-body.cl-sw{animation:clSwap .30s cubic-bezier(.33,1,.68,1) both}
 @media (prefers-reduced-motion:reduce){ #p-cload.cl-in *, .cl-body.cl-sw{animation:none !important} }
-/* 나가는 문도 2-2 와 같이 알약을 벗는다 — 칩 줄 밖에 홀로 선 점선 테두리는 '덜 만든 버튼' 이다 */
-#mo-load .cr-more{border:0; padding:0}
+
 /* ※ .cr-real(영상 아래 다섯 줄 문단)은 없앴다 — 그 문단이 글로 설명하던 '5,000명이면 시야가
    1,118명이 되어 화면이 흰 판으로 덮인다' 를 실측 캡처 한 장이 대신한다(오른쪽 아래 참조컷). */
 .cr-chips{max-width:100%}
-/* 노션으로 보내는 문 — 칩 줄 오른쪽 끝. 칩과 같은 크기지만 눌리는 성격이 달라 색을 뺀다 */
-.cr-more{margin-left:auto; display:inline-flex; align-items:center; gap:7px; text-decoration:none;
-  font-size:.78rem; font-weight:700; color:var(--mut); border:1px dashed #2c3b55;
-  border-radius:9px; padding:5px 11px}
-.cr-more:hover{color:var(--ink); border-color:#3c4a63}
-.cr-more em{font-style:normal; font-family:var(--mono); font-size:.66rem; color:var(--dim)}
 
 /* ═══════════ 진입 애니 — 창이 열린다 ═══════════
    1-1 설계 탭은 들어올 때마다 구조가 서는 걸 보여 주는데 이 탭만 처음부터 다 서 있었다.
@@ -641,8 +639,7 @@
   #p-csafe .sf-stage>svg{order:2; width:100% !important; margin-left:0 !important}
   #p-csafe .sf-stage>#d-safe,
   #p-csafe .sf-stage>#ch-safe,
-  #p-csafe .sf-stage>#nt-safe,
-  #p-csafe .sf-stage>#mo-safe{position:static; left:auto !important; width:auto !important;
+  #p-csafe .sf-stage>#nt-safe{position:static; left:auto !important; width:auto !important;
     margin-left:0 !important; margin-top:0 !important}
   #p-csafe .sf-stage>#d-safe{order:1; display:grid; grid-template-columns:repeat(3,minmax(0,1fr));
     gap:10px; border-left:0; padding-left:0; margin-bottom:10px !important}
@@ -660,13 +657,10 @@
   /* .cr-note i 는 위에서 display:none 이라 여기서 크기를 줄 것이 없다 */
   #p-csafe .cr-note p{font-size:.81rem}
   #p-csafe .cl-chips{order:4; gap:6px; margin-top:9px !important}
-  /* 넓은 화면에서 떼어 낸 문은 여기서도 제 줄을 쓴다. 칩 줄에 되붙이면 두 컨테이너를
-     한 줄에 세우는 셈이라 order 만으로는 안 되고, 그러자고 감싸는 판을 하나 더 두지 않는다. */
-  #p-csafe .sf-stage>#mo-safe{order:5; margin-top:9px !important}
+
   #p-csafe .cl-chips button{gap:6px; font-size:.8rem; border-radius:9px; padding:5px 10px 5px 6px}
   #p-csafe .cl-chips button i{width:17px; height:17px; font-size:.6rem}
-  #p-csafe .cr-more{gap:7px; font-size:.78rem; border:0; padding:0}
-  #p-csafe .cr-more em{font-size:.66rem}
+
   /* 상세의 2단→1단은 여기가 아니라 카드 폭을 보는 @container 가 맡는다(위 .bx-det .cols 옆) */
   /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
      내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어

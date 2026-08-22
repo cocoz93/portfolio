@@ -27,10 +27,10 @@ var SAFE={
      그러고도 78·85·78·55자로 두 줄씩이라 읽기 전에 글 덩어리로 보였다. 그래서 한 번 더 죄었다:
      문장을 잇지 않고 끊고, 조사와 되풀이를 덜어내고, 셋씩 나열되는 것은 가운뎃점만 남겼다.
      ※ 여기 글을 늘릴 일이 생기면 넷의 줄 수가 어긋나는 순간 아래 여백이 다시 출렁인다.
-       늘릴 거면 넷을 같이 늘리고 overlay.more 의 y 도 같이 볼 것
+       늘릴 거면 넷을 같이 늘릴 것
      ※ 지금은 넷 다 두 줄이다(보기를 '합격 기준 → 단계 셋' 으로 다시 짜면서 줄까지 맞췄다).
-       줄 수가 어긋나면 바로 밑의 노션 문(overlay.more, y 고정)과 글자가 겹친다 — 렌더로 확인했다.
-       한 줄에서 두 줄로 늘리면서 safe-scene.js 의 chips·note y 를 16 씩 올렸다(more 는 그대로) */
+       한 줄에서 두 줄로 늘리면서 safe-scene.js 의 chips·note y 를 16 씩 올렸다.
+       (아래에 있던 노션 문은 소탭 줄로 옮겨 갔다 — 이제 이 글 밑에서 겹칠 것은 없다) */
   /* n 이 배열이면 줄을 그대로 나눠 찍는다(wireWide 가 <br> 로 잇는다). 2-3 은 문단 하나라 문자열이다 */
   items:{
     gate:{t:"합격 기준",
@@ -826,10 +826,6 @@ function wireLoadIndex(){
     ix.appendChild(b);
   });
   sel(LOAD_ORDER[0],1);
-  var a=document.createElement("a");
-  a.className="cr-more"; a.target="_blank"; a.rel="noopener"; a.href=NOTION_HUB;
-  a.innerHTML="자세히 — 테스트 환경 · 컨텐츠 부하 검증 <em>노션 ↗</em>";
-  document.getElementById("mo-load").appendChild(a);
 }
 /* 탭에 들어올 때마다 목차 넷이 차례로 서고 판이 뒤따라 열린다(tabs.js 가 부른다).
    2-2 와 같은 수법 — 클래스를 떼고 리플로우를 한 번 강제한 뒤 다시 붙인다. */
@@ -855,12 +851,10 @@ function paintDash(id,rows){
 
 /* 옆 카드를 안 쓰는 탭의 배선 — 고른 것이 그림에서 켜지고, 설명은 아래 한 줄로만 나온다.
    카드(표 + 긴 글)를 없앤 자리를 그림이 가져갔으므로 여기서 할 일은 강조와 한 줄 교체뿐이다.
-   맨 끝에 노션으로 보내는 문을 하나 달아 둔다 — 자세한 것은 전부 그쪽에 있다.
-   moreId 를 주면 그 문을 칩 줄이 아니라 따로 받은 자리에 단다. 2-2 가 그렇다 — 거기서는 칩
-   상자가 좁아(406) 문이 둘째 줄로 밀려, 고르는 줄과 나가는 문이 한 덩어리로 보였다.
+   노션으로 보내는 문은 여기서 안 만든다 — 셋이 같은 페이지로 가던 것을 소탭 줄 오른쪽 끝
+   한 짝으로 합쳤다(mmo.src.html 의 .subdoor).
    ※ 지금 이 함수를 쓰는 곳은 2-2 하나다. 2-3 은 목차형으로 바뀌면서 wireLoadIndex 로 갈라졌다. */
-var NOTION_HUB="https://feline-vacation-d6d.notion.site/36216a0b9f59801e9508dc51b4863f46";
-function wireWide(scId,chId,noteId,DATA,order,linkLabel,moreId){
+function wireWide(scId,chId,noteId,DATA,order){
   var ch=document.getElementById(chId), note=document.getElementById(noteId);
   function sel(k,i){
     note.innerHTML="";
@@ -885,10 +879,6 @@ function wireWide(scId,chId,noteId,DATA,order,linkLabel,moreId){
   [].forEach.call(document.querySelectorAll("#"+scId+" .cl-hit"),function(gg){
     gg.addEventListener("click",function(){
       var k=gg.getAttribute("data-it"); sel(k,order.indexOf(k)); }); });
-  var a=document.createElement("a");
-  a.className="cr-more"; a.target="_blank"; a.rel="noopener"; a.href=NOTION_HUB;
-  a.innerHTML="자세히 — "+linkLabel+' <em>노션 ↗</em>';
-  (moreId&&document.getElementById(moreId)||ch).appendChild(a);
   sel(order[0],0);
 }
 
@@ -898,7 +888,7 @@ safePicker();
 /* tabs.js 는 이 조각보다 먼저 돌아서 첫 paint() 때는 __safePlay 가 아직 없다 —
    주소에 #csafe 를 달고 들어온 경우가 그렇다. 그때만 여기서 한 번 재생한다(이중 재생 없음). */
 if(!document.getElementById("p-csafe").hidden) safePlay();
-wireWide("sc-safe","ch-safe","nt-safe",SAFE,["gate","s1","s2","s3"],"에코 더미 · 스트레스 테스트","mo-safe");
+wireWide("sc-safe","ch-safe","nt-safe",SAFE,["gate","s1","s2","s3"]);
 /* 2-3 은 wireWide 를 안 쓴다 — 그쪽은 '그림 하나 + 칩으로 강조 갈아끼우기' 인데,
    여기서는 고른 것에 따라 오른쪽 판을 통째로 다시 그린다. 첫 그림도 wireLoadIndex 가 그린다. */
 wireLoadIndex();
