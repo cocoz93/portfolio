@@ -6,3 +6,8 @@ art/
 _lab_*
 entries.local.txt
 career/
+
+# AI 작업 지침 — 이 리포용 규칙 파일. 공개 리포라 올리지 않는다
+# (지금까지는 전역 무시 목록에만 기대고 있어서 다른 PC에서 클론하면 안 막혔다)
+CLAUDE.md
+**/CLAUDE.md
