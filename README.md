@@ -21,22 +21,3 @@ Windows·Linux 라이브 3년 · 라그나로크 · 던전앤파이터 · 신규
 | [ServerCore](https://github.com/cocoz93/ServerCore) | 계층 분리된 C++17 서버 코어 — IOCP · RIO · epoll |
 | [MO_Belt](https://github.com/cocoz93/MO_Belt) | 벨트스크롤 액션 MO 서버 — Linux epoll |
 | [LockFree](https://github.com/cocoz93/LockFree) | 락프리 큐·스택 + 2계층 메모리풀 |
-
----
-
-## 이 저장소를 고칠 때
-
-백엔드 없는 정적 단일 페이지입니다.
-
-| 파일 | 역할 |
-|------|------|
-| `docs/portfolio.html` | 편집용 소스 — 폰트·사진이 base64 자리표시자 |
-| `docs/build.ps1` | 폰트·사진을 base64 로 묻어 자체 완결형 `index.html` 생성 |
-| `docs/index.html` | 배포본 — GitHub Pages 진입점 |
-| `docs/fonts/` · `docs/photo.png` | 본문 폰트(Pretendard, OFL) · 프로필 사진 |
-
-```powershell
-powershell -ExecutionPolicy Bypass -File docs/build.ps1
-```
-
-`portfolio.html` 수정 → 위 명령으로 `index.html` 재생성 → 커밋·푸시하면 Pages 갱신.
