@@ -25,5 +25,4 @@ Windows·Linux 라이브 3년 · 라그나로크 · 던전앤파이터 · 신규
 |--------|------|
 | [MMO_Zone](https://github.com/cocoz93/MMO_Zone) | Windows IOCP MMO 게임서버 — 동접 200 → ~5,000 병목 추적 |
 | [ServerCore](https://github.com/cocoz93/ServerCore) | 계층 분리된 C++17 서버 코어 — IOCP · RIO · epoll |
-| [MO_Belt](https://github.com/cocoz93/MO_Belt) | 벨트스크롤 액션 MO 서버 — Linux epoll |
 | [LockFree](https://github.com/cocoz93/LockFree) | 락프리 큐·스택 + 2계층 메모리풀 |
