@@ -11,7 +11,7 @@ IOCP 기반 MMO 서버 R&D 페이지 — 맵당 동접 5,000, 실측 기반 병�
   (폰트 자리표시자 `__PRETENDARD_WOFF2_BASE64__` / `__JBMONO_WOFF2_BASE64__` 는 `parts/common.css`)
 - `build.ps1` — 조각을 합친 뒤 Pretendard/JetBrains Mono를 사용 글리프만 서브셋해 base64 인라인 → `index.html`
 - `index.html` — 배포 산출물(자체 완결, GitHub Pages 진입점)
-- `fonts/` — 원본 woff2
+- 원본 woff2 는 포폴 홈과 같이 쓰는 `../fonts/` 에 있다
 
 ## 재빌드
 ```

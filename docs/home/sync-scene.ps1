@@ -19,7 +19,7 @@
 param([switch]$NoBuild)
 $ErrorActionPreference = 'Stop'
 $here      = Split-Path -Parent $MyInvocation.MyCommand.Path
-$siteBuilt = Join-Path $here 'mmo-site\index.html'
+$siteBuilt = Join-Path $here '..\mmo-site\index.html'
 $target    = Join-Path $here 'portfolio.html'
 foreach ($f in @($siteBuilt, $target)) { if (-not (Test-Path $f)) { throw "not found: $f" } }
 

@@ -55,9 +55,10 @@ function Get-FontB64([string]$full) {
   return [Convert]::ToBase64String([IO.File]::ReadAllBytes($full))
 }
 
+# 원본 폰트는 포폴 홈 빌드(docs/home/build.ps1)와 같은 docs/fonts/ 를 쓴다 — 바이트까지 같은 사본을 따로 두지 않는다.
 $map = [ordered]@{
-  '__PRETENDARD_WOFF2_BASE64__' = (Join-Path $here 'fonts\PretendardVariable.woff2')
-  '__JBMONO_WOFF2_BASE64__'     = (Join-Path $here 'fonts\JetBrainsMono.woff2')
+  '__PRETENDARD_WOFF2_BASE64__' = (Join-Path $here '..\fonts\PretendardVariable.woff2')
+  '__JBMONO_WOFF2_BASE64__'     = (Join-Path $here '..\fonts\JetBrainsMono.woff2')
 }
 # 서브셋에 넘길 텍스트는 '합쳐진 전체 HTML' 이다. 셸만 넘기면 본문이 없어 한글 글리프가 통째로 빠진다.
 # 반드시 UTF-8 로 쓸 것 — Out-File/Set-Content 는 UTF-16LE 나 CP949 로 쓰고, 그러면 fontTools 가
@@ -87,7 +88,7 @@ if (-not $Fast -and (Get-Item $outPath).Length -gt 900kb) {
 # 두 산출물이 어긋난 채 커밋되면 같은 사이트에 같은 그림이 두 버전으로 남는다 (실제로 한 커밋 밀려 있었다).
 # -Fast 는 _preview.html 만 만드는 반복 확인용이라 건드리지 않는다. -NoSync 로 이번만 건너뛸 수 있다.
 if (-not $Fast -and -not $NoSync) {
-  $sync = Join-Path $here '..\sync-scene.ps1'
+  $sync = Join-Path $here '..\home\sync-scene.ps1'
   if (Test-Path $sync) {
     Write-Host '[build] syncing portfolio home cut ...'
     & powershell -ExecutionPolicy Bypass -File $sync

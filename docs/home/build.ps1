@@ -2,7 +2,8 @@
 # Fonts are subset to only the glyphs used in portfolio.html (Pretendard 2MB -> ~85KB) via fonttools.
 # Falls back to the full font automatically if python/fonttools is unavailable.
 # Usage:  powershell -ExecutionPolicy Bypass -File build.ps1
-# Output: index.html — GitHub Pages entry point and Claude artifact source.
+# Output: ../index.html (docs/index.html) — GitHub Pages entry point and Claude artifact source.
+#         It stays at the docs root because the public URL /portfolio/ points there; only the sources live in home/.
 $ErrorActionPreference = 'Stop'
 $here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $srcPath = Join-Path $here 'portfolio.html'
@@ -25,8 +26,8 @@ function Get-FontBytes([string]$fullPath) {
 
 # Fonts (base64 data URIs, subset)
 $fonts = [ordered]@{
-  '__PRETENDARD_WOFF2_BASE64__' = 'fonts\PretendardVariable.woff2'
-  '__JBMONO_WOFF2_BASE64__'     = 'fonts\JetBrainsMono.woff2'
+  '__PRETENDARD_WOFF2_BASE64__' = '..\fonts\PretendardVariable.woff2'
+  '__JBMONO_WOFF2_BASE64__'     = '..\fonts\JetBrainsMono.woff2'
 }
 foreach ($ph in $fonts.Keys) {
   $b64 = [Convert]::ToBase64String((Get-FontBytes (Join-Path $here $fonts[$ph])))
@@ -36,9 +37,9 @@ foreach ($ph in $fonts.Keys) {
 
 # Career card background art (resized JPEGs) — data URI mime prefix is already in the HTML
 $artFiles = [ordered]@{
-  '__ART_RAG__'      = 'art\rag.jpg'
-  '__ART_DNF__'      = 'art\dnf.jpg'
-  '__ART_PROJECTR__' = 'art\projectr.jpg'
+  '__ART_RAG__'      = 'image\rag.jpg'
+  '__ART_DNF__'      = 'image\dnf.jpg'
+  '__ART_PROJECTR__' = 'image\projectr.jpg'
 }
 foreach ($ph in $artFiles.Keys) {
   $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes((Join-Path $here $artFiles[$ph])))
@@ -46,6 +47,6 @@ foreach ($ph in $artFiles.Keys) {
   if ($html.Contains($ph)) { throw "$ph not replaced" }
 }
 
-$dst = Join-Path $here 'index.html'
+$dst = Join-Path $here '..\index.html'
 [IO.File]::WriteAllText($dst, $html, (New-Object System.Text.UTF8Encoding($false)))
 Write-Host ('built: ' + $dst + '  (' + [math]::Round((Get-Item $dst).Length/1KB,0) + ' KB)')
