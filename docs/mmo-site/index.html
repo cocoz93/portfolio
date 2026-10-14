@@ -71,7 +71,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
   padding:14px 26px 15px; font-weight:700; color:var(--mut); background:none; border:none;
   border-bottom:3px solid transparent; margin-bottom:-1px; cursor:pointer; transition:color .15s, border-color .15s}
 .tab b{font-size:1.3rem; font-weight:700}
-.tab span{font-size:.78rem; font-weight:600; color:var(--dim); transition:color .15s}
+.tab span{font-size:.78rem; font-weight:600; color:#788aa6; transition:color .15s}
 .tab:hover{color:var(--ink)}
 .tab.act{color:#fff; border-bottom-color:var(--net)}
 .tab.act span{color:var(--mut)}
@@ -921,11 +921,11 @@ body.pop-hold #scene .chips{opacity:0}
    서는 것이라 다른 값을 쓰면 층이 하나 더 있는 것처럼 읽힌다.
    바닥선도 탭과 같이 쓴다(투명 테두리 2px + 아래 여백 6). */
 .subdoor{margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none;
-  font-family:var(--sans); font-size:1.02rem; font-weight:600; color:var(--dim);
+  font-family:var(--sans); font-size:1.02rem; font-weight:600; color:#8fa3c1;
   padding:0 1px 6px; border-bottom:2px solid transparent; transition:color .15s}
 .subdoor:hover{color:var(--ink)}
 
-.subdoor em{font-style:normal; font-size:.72rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
+.subdoor em{font-style:normal; font-size:.82rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
 @media(max-width:900px){ .subdoor{font-size:.82rem; gap:6px} }
 /* 760 이하에서는 .subtabs 가 줄을 접는다(common.css) — 문은 접힌 둘째 줄 오른쪽 끝에 선다 */
 @media(max-width:760px){ .subdoor{font-size:.78rem; padding-top:4px} }
@@ -2309,8 +2309,8 @@ const RAILS=[
 ];
 /* dbw·game 오프셋은 BODY(몸통 확대) 를 올리면서 다시 잡은 값 — 커진 몸통에 글자가 얹히지 않게.
    BODY 를 더 키우면 이 둘부터 다시 확인할 것(가장 먼저 부딪히는 라벨이다). */
-const LABELS={ mysql:{dx:5,dy:-32}, dbw:{dx:2,dy:-62}, game:{dx:50,dy:-32}, sector:{dx:41,dy:-18},
-  swapq:{dx:49,dy:6}, iocp:{dx:20,dy:39}, send:{dx:52,dy:43}, accept:{dx:-52,dy:-26}, clients:{dx:0,dy:78}, timer:{dx:41,dy:-44} };
+const LABELS={ mysql:{dx:5,dy:-32}, dbw:{dx:2,dy:-62}, game:{dx:56,dy:-36}, sector:{dx:41,dy:-18},
+  swapq:{dx:49,dy:6}, iocp:{dx:0,dy:36}, send:{dx:52,dy:43}, accept:{dx:-52,dy:-26}, clients:{dx:0,dy:78}, timer:{dx:41,dy:-56} };
 /* 평면에서만 다시 잡는 라벨.
    아이소에서는 라벨을 '몸통 높이만큼 띄운 자리' 에 놓는데, 평면에서는 그 높이가 없어서
    대부분이 자기 발자국 위로 주저앉는다. 게다가 아이소에서 비어 있던 옆자리가
@@ -2448,7 +2448,7 @@ const bo=(u,w)=>u-w*(BODY-1)/2;          /* 중심을 유지하려면 시작 좌
 const NODES=[
   /* 외부 저장소라 주변부인데 덩치가 3위였다(게임 루프 앵커와 경쟁) → 54×44×34 에서 한 단계 낮춤 */
   { name:"mysql", card:"mysql", hit:[0,0,48,40,24],
-    lab:{anch:"middle",lines:[["MySQL",14,"#eef2fb","800",0],["주기 UPSERT",11,"#8496b3","600",15]]},
+    lab:{anch:"middle",lines:[["MySQL",14,"#eef2fb","800",0],["주기 UPSERT",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const x=bo(u,48), y=bo(v,40), W=bw(48), D=bw(40), H=bw(8); shadow(x,y,W,D);
       prism(g,x,y,W,D,0,H,DBBOX,true); prism(g,x,y,W,D,H,H,DBBOX,true); prism(g,x,y,W,D,H*2,H,DBBOX,true); } },
   /* SwapQ·송신 큐와 같은 양식(판 + 파인 홈 + 가운데 칸막이 + 쌓이는 칸), 색만 저장 계열.
@@ -2457,7 +2457,7 @@ const NODES=[
      홈 축 = MySQL 로 나가는 축(+u), 쌓이는 칸은 그 반대쪽(-u) = 게임에서 오는 쪽.
      워커 큐브는 홈 '뒤'(+v)에 세운다 — 앞(-v)에 두면 높이가 홈을 덮어 큐가 안 보인다. */
   { name:"dbw", card:"dbw", hit:[37-DBQ_HW,11,2*DBQ_HW,22,4],
-    lab:{anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["통째 인출 · 배치 UPSERT",10.5,"#8496b3","600",15]]},
+    lab:{anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["통째 인출 · 배치 UPSERT",11,"#9bb0cf","600",15]]},
     draw(g,u,v){ const CU=u+37, HW=DBQ_HW, GD=5, Z=3.4, cy=v+22;   /* CU,cy = 노드 중심(레일 끝점) */
       const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
       shadow(CU-HW,cy-11,2*HW,22);
@@ -2479,21 +2479,21 @@ const NODES=[
       prism(g,sx,sy,bw(29),bw(23),-bw(2),bw(3),DBPLATE);
       prism(g,sx+bw(6),sy+bw(6),bw(17),bw(11),bw(1),bw(14),DBW,true); } },
   { name:"game", card:"loop", hit:[0,0,60,60,58],
-    lab:{anch:"start",lines:[["게임 루프",18,"#ffe0a0","800",0],["단일 코어 · 25fps 틱",12,"#c9b48c","600",19],["◆ BOTTLENECK",11,"#ffb648","800",40]]},
+    lab:{anch:"start",lines:[["게임 루프 (단일 코어)",17,"#ffffff","800",0],["25fps 틱 방어",13,"#ffb648","700",20],["◆ BOTTLENECK",11.5,"#ff9d2e","800",39]]},
     draw(g,u,v){ const w=bw(60),d=bw(60),h=bw(58), x=bo(u,60), y=bo(v,60); shadow(x,y,w,d);
       prism(g,x,y,w,d,0,h,GAME,true);
       g.appendChild(el("polygon",{points:[[x,y],[x+w,y],[x+w,y+d],[x,y+d]].map(p=>P(p[0],p[1],h)).join(" "),
-        fill:"none",stroke:"#ffe0a0","stroke-width":1.6,opacity:.9}));
+        fill:"none",stroke:"#ffe8b0","stroke-width":2.2,opacity:1}));
       const tx=px(x+w/2,y+d/2), ty=py(x+w/2,y+d/2,h);
-      g.appendChild(el("line",{class:"beacon",x1:tx,y1:ty,x2:tx,y2:ty-bw(24),stroke:"#ffb648","stroke-width":2.4}));
-      gameBeacon=el("circle",{class:"beacon",cx:tx,cy:ty-bw(29),r:bw(5),fill:"#ffd88a"}); g.appendChild(gameBeacon); } },
+      g.appendChild(el("line",{class:"beacon",x1:tx,y1:ty,x2:tx,y2:ty-bw(26),stroke:"#ffb648","stroke-width":2.8}));
+      gameBeacon=el("circle",{class:"beacon",cx:tx,cy:ty-bw(31),r:bw(5.5),fill:"#ffe29a",stroke:"#ff9d2e","stroke-width":1.4}); g.appendChild(gameBeacon); } },
   /* 송신 핸드오프 = SwapQ 와 같은 '통째 스왑' 큐가 워커 수(3)만큼.
        게임: perWorker[uniqueId%K] 로 나눠 담고 워커별 락 1회로 append
        워커: local.swap(worker.queue) 로 락 1회에 통째 인출
      홈 3개를 레인 3줄과 같은 간격(SUB_W+SUB_GAP=14)에 파서 파이프와 1:1로 물린다.
      색은 이 구간 레인(응답 send)에 맞춘 주황 계열 — 칸 색 #1d1409/#c98c2e 는 애니가 그대로 쓴다. */
   { name:"sector", card:"send", hit:[-21,-22,42,44,4],
-    lab:{anch:"start",lines:[["송신 큐 ×3",12.5,"#eef2fb","800",0],["워커별 통째 스왑",10.5,"#8496b3","600",15]]},
+    lab:{anch:"start",lines:[["송신 큐 ×3",12.5,"#eef2fb","800",0],["워커별 통째 스왑",11,"#9bb0cf","600",15]]},
     draw(g,u,v){ const HW=21, HD=22, LANE=14, GD=5, Z=3.4; sectorCells=[];
       const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
       shadow(u-HW,v-HD,2*HW,2*HD);
@@ -2513,7 +2513,7 @@ const NODES=[
      홈은 1개 — 공유 큐(칸막이 왼쪽, IOCP가 쌓음) ↔ 로컬 큐(오른쪽, 게임이 빼감).
      판 중심 v = 노드 v+8 이라 IOCP·게임과 같은 축선에 놓인다(레일이 안 기운다). */
   { name:"swapq", card:"iocp", hit:[-SQ_HW,-3,2*SQ_HW,22,4],
-    lab:{anch:"middle",lines:[["SwapQ",13.5,"#cfe0f2","800",0],["통째 스왑 · 락 1회",10.5,"#93a9cd","600",14]]},
+    lab:{anch:"middle",lines:[["SwapQ",13.5,"#eef5ff","800",0],["락 1회 통째 스왑 ➜",11,"#6cc7ff","700",15]]},
     draw(g,u,v){ const HW=SQ_HW, GD=5, Z=3.4, cy=v+8;
       const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
       shadow(u-HW,cy-11,2*HW,22);
@@ -2527,7 +2527,7 @@ const NODES=[
           points:PT([[cu-SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy+4,Z+0.35],[cu-SLOT/2,cy+4,Z+0.35]])});
         g.appendChild(e); swapqLit.push([e,"#16223a"]); } } },
   { name:"iocp", card:"iocp", hit:[-23,-22,46,44,16],
-    lab:{anch:"middle",lines:[["IOCP 워커",14.5,"#eef2fb","800",0],["×4 · 병렬 파싱",11,"#6cc7ff","700",16]]},
+    lab:{anch:"middle",lines:[["IOCP 워커",14.5,"#eef2fb","800",0],["×4 · 병렬 파싱",11.5,"#6cc7ff","700",16]]},
     draw(g,u,v){ prism(g,u-bw(23),v-bw(22),bw(46),bw(44),-bw(2),bw(3),["#1c2b45","#0e1626","#152238"]);
       const cells=[[-17,-16],[1,-16],[-17,1],[1,1]].map(c=>[u+bw(c[0]), v+bw(c[1])])
         .sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
@@ -2536,16 +2536,16 @@ const NODES=[
   /* IOCP 워커 큐브(16×15×16)와 같은 급이어야 하는데 혼자 작았다 → 17×11×14.
      높이만 올리면 앞 상자가 뒤를 덮어 한 덩어리로 보이므로 간격도 같이 벌린다(8/22/36 → 6/21/36) */
   { name:"send", card:"send", hit:[0,0,44,44,17],
-    lab:{anch:"middle",lines:[["Send 워커 ×3",14.5,"#eef2fb","800",0],["uniqueId%3 · WSASend",11,"#8496b3","600",15]]},
+    lab:{anch:"middle",lines:[["Send 워커 ×3",14.5,"#eef2fb","800",0],["uniqueId%3 · WSASend",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const x=bo(u,44), y=bo(v,44); prism(g,x,y,bw(44),bw(44),-bw(2),bw(3),["#20304e","#101a2c","#16233b"]);
       /* 뒤(v큰 것)부터 — 앞 상자가 가리게 */
       [36,21,6].forEach(dv=>prism(g,x+bw(6),y+bw(dv-3),bw(17),bw(11),bw(3),bw(14),NET,true)); } },
   { name:"accept", card:"accept", hit:[0,0,30,28,20],
-    lab:{anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",10.5,"#8496b3","600",15]]},
+    lab:{anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",11,"#9bb0cf","600",15]]},
     draw(g,u,v){ const x=bo(u,30), y=bo(v,28);
       shadow(x,y,bw(30),bw(28)); prism(g,x,y,bw(30),bw(28),0,bw(20),NET,true); } },
   { name:"clients", card:"client", hit:[0,0,26,58,11],
-    lab:{anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11,"#8496b3","600",31]]},
+    lab:{anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11.5,"#9bb0cf","600",31]]},
     /* 무리 범위 — 판이 120×320 이던 시절에는 5×5 로는 너무 작아 판이 비어 보여 6×11 로 키웠다.
        지금은 판을 72×320 으로 좁혔으므로(왼쪽 여백 회수) 무리도 3열로 같이 줄인다 —
        판만 좁히면 무리가 넘치고, 무리만 줄이면 판이 다시 빈다.
@@ -2574,7 +2574,7 @@ const NODES=[
       cubes.sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
       cubes.forEach(p=>prism(g,p[0],p[1],G.S,G.S,0,bw(11),CROWD)); } },
   { name:"timer", card:"iocp", hit:[-22,-22,44,44,4],
-    lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",10.5,"#8496b3","600",15]]},
+    lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",11,"#9bb0cf","600",15]]},
     /* 문자판은 바닥에 놓인 원이다. 예전에는 화면 좌표에 축정렬 타원(rx=R·ax, ry=−R·by)으로 그렸는데,
        그 모양은 좌우대칭 아이소에서만 맞다 — 요각이 들어가면 실제로는 기울어진 타원이라
        판은 돌아가는데 문자판만 안 돌아 바닥에서 떠 보인다. 그래서 바닥 변환(floorTf) 안에

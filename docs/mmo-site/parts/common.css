@@ -58,7 +58,7 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); 
   padding:14px 26px 15px; font-weight:700; color:var(--mut); background:none; border:none;
   border-bottom:3px solid transparent; margin-bottom:-1px; cursor:pointer; transition:color .15s, border-color .15s}
 .tab b{font-size:1.3rem; font-weight:700}
-.tab span{font-size:.78rem; font-weight:600; color:var(--dim); transition:color .15s}
+.tab span{font-size:.78rem; font-weight:600; color:#788aa6; transition:color .15s}
 .tab:hover{color:var(--ink)}
 .tab.act{color:#fff; border-bottom-color:var(--net)}
 .tab.act span{color:var(--mut)}

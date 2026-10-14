@@ -10,11 +10,11 @@
    서는 것이라 다른 값을 쓰면 층이 하나 더 있는 것처럼 읽힌다.
    바닥선도 탭과 같이 쓴다(투명 테두리 2px + 아래 여백 6). */
 .subdoor{margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none;
-  font-family:var(--sans); font-size:1.02rem; font-weight:600; color:var(--dim);
+  font-family:var(--sans); font-size:1.02rem; font-weight:600; color:#8fa3c1;
   padding:0 1px 6px; border-bottom:2px solid transparent; transition:color .15s}
 .subdoor:hover{color:var(--ink)}
 
-.subdoor em{font-style:normal; font-size:.72rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
+.subdoor em{font-style:normal; font-size:.82rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
 @media(max-width:900px){ .subdoor{font-size:.82rem; gap:6px} }
 /* 760 이하에서는 .subtabs 가 줄을 접는다(common.css) — 문은 접힌 둘째 줄 오른쪽 끝에 선다 */
 @media(max-width:760px){ .subdoor{font-size:.78rem; padding-top:4px} }
