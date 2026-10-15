@@ -17,7 +17,6 @@
 <!--#include bneck.css -->
 <!--#include client.css -->
 <!--#include bneck-tail.css -->
-<!--#include optimization.css -->
 </style>
 </head>
 <body>
@@ -45,7 +44,6 @@
     <nav class="subnav" role="tablist" aria-label="MMO 서버 하위 섹션">
       <button class="subtab act" data-sub="build" role="tab" aria-selected="true"><em>1-1</em>전체 구조</button>
       <button class="subtab" data-sub="bneck" role="tab" aria-selected="false"><em>1-2</em>병목 개선</button>
-      <button class="subtab" id="tab-optimization" data-sub="optimization" role="tab" aria-selected="false" aria-controls="p-optimization"><em>1-3</em>최적화 원리</button>
     </nav>
     <!-- 구역 강조 — 누르면 그 구역만 남고 나머지는 죽는다. 같은 버튼을 다시 누르면 전체로 복귀.
          data-z 값은 ZONES[].color(=ZPAL 키)와 같은 문자열이라 스크립트가 그대로 씬에 얹는다.
@@ -88,8 +86,6 @@
 
 
 <!--#include panel-bneck.html -->
-
-<!--#include panel-optimization.html -->
 
 <!--#include panel-client.html -->
 
@@ -187,8 +183,6 @@
 </script>
 <!-- End Cloudflare Web Analytics -->
 <script>
-<!--#include optimization.js -->
-
 <!--#include bneck.js -->
 
 <!--#include client-render.js -->

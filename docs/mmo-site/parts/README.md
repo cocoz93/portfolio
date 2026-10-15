@@ -7,7 +7,7 @@
 
 | 갈래 | 조각 |
 |---|---|
-| **서버** — 설계 탭 + 병목 탭 + 최적화 원리 | `common.css` `bneck.css` `bneck-tail.css` `optimization.css` `panel-build.html` `panel-bneck.html` `panel-optimization.html` `scene.js` `wave.js` `bneck.js` `optimization.js` |
+| **서버** — 설계 탭 + 병목 탭 | `common.css` `bneck.css` `bneck-tail.css` `panel-build.html` `panel-bneck.html` `scene.js` `wave.js` `bneck.js` |
 | **클라** — 클라이언트 3개 하위탭 | `client.css` `panel-client.html` `client-render.js` `client.js` |
 | **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` |
 
