@@ -1,0 +1,52 @@
+{
+  "ok": true,
+  "figure": 3,
+  "msgSize": [
+    112,
+    104
+  ],
+  "matchingAllocationAndReturnGlyph": true,
+  "queueRadius": 30,
+  "mapSize": 180,
+  "synchronizedSourceAndQueueHighlight": true,
+  "persistentFinalCounts": true,
+  "permanentWiringRemoved": true,
+  "receiverArrowsBeforeAllocation": true,
+  "separateMovementMaps": true,
+  "sectorCountPerRow": 9,
+  "smallPool": true,
+  "allocationAndSerialization": [
+    3,
+    1
+  ],
+  "copyCount": [
+    3,
+    3
+  ],
+  "retainedDuringAllCopies": true,
+  "afterRefSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "queueCopiesRemainAfterPoolReturn": true,
+  "durationMs": 19648,
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFrames": 124,
+  "playPauseRestartAndRestoreVerified": true,
+  "stateEchoAndHiddenFallbackVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false,
+  "problems": [],
+  "sha256": "fa148c89ae1c20716a66dfe669cb7c8dd80255717d599c06526c212450bd534a"
+}

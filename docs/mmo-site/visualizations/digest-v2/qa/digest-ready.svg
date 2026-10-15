@@ -1,0 +1,752 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="736" height="872" viewBox="0 0 736 872"><style>text{font-family:'Malgun Gothic',sans-serif;font-weight:500}.sector-mono{font-family:Consolas,monospace}</style><rect x="0" y="0" width="736" height="872" fill="#0d1421"></rect>
+<defs><g id="bundle-swordsman-digest-four-south" shape-rendering="crispEdges">
+<rect x="-2" y="-18" width="1" height="1" fill="#554539"></rect>
+<rect x="3" y="-18" width="4" height="1" fill="#554539"></rect>
+<rect x="-4" y="-17" width="10" height="1" fill="#554539"></rect>
+<rect x="-5" y="-16" width="1" height="1" fill="#554539"></rect>
+<rect x="-4" y="-16" width="4" height="1" fill="#617e9a"></rect>
+<rect x="0" y="-16" width="1" height="1" fill="#554539"></rect>
+<rect x="1" y="-16" width="6" height="1" fill="#617e9a"></rect>
+<rect x="-6" y="-15" width="15" height="1" fill="#554539"></rect>
+<rect x="-6" y="-14" width="8" height="1" fill="#554539"></rect>
+<rect x="2" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="-14" width="6" height="1" fill="#554539"></rect>
+<rect x="-6" y="-13" width="3" height="1" fill="#554539"></rect>
+<rect x="-3" y="-13" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-13" width="3" height="1" fill="#554539"></rect>
+<rect x="1" y="-13" width="2" height="1" fill="#bd947a"></rect>
+<rect x="3" y="-13" width="7" height="1" fill="#554539"></rect>
+<rect x="-7" y="-12" width="3" height="1" fill="#554539"></rect>
+<rect x="-4" y="-12" width="7" height="1" fill="#ecd0b5"></rect>
+<rect x="3" y="-12" width="1" height="1" fill="#554539"></rect>
+<rect x="4" y="-12" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="6" y="-12" width="3" height="1" fill="#554539"></rect>
+<rect x="-7" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-11" width="1" height="1" fill="#554539"></rect>
+<rect x="-5" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-11" width="11" height="1" fill="#ecd0b5"></rect>
+<rect x="7" y="-11" width="1" height="1" fill="#554539"></rect>
+<rect x="8" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-10" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-10" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#554539"></rect>
+<rect x="-3" y="-10" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="-2" y="-10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-10" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="4" y="-10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="6" y="-10" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="7" y="-10" width="1" height="1" fill="#554539"></rect>
+<rect x="8" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-9" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-4" y="-9" width="1" height="1" fill="#554539"></rect>
+<rect x="-3" y="-9" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="0" y="-9" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="4" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="6" y="-9" width="1" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-9" width="1" height="1" fill="#554539"></rect>
+<rect x="8" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-8" width="3" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-8" width="8" height="1" fill="#ecd0b5"></rect>
+<rect x="6" y="-8" width="1" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-8" width="3" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-7" width="3" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-7" width="7" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-7" width="2" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-7" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-6" width="2" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-6" width="7" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-6" width="1" height="1" fill="#bd947a"></rect>
+<rect x="6" y="-6" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-6" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-6" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-4" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-5" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-5" width="3" height="1" fill="#ecd0b5"></rect>
+<rect x="1" y="-5" width="3" height="1" fill="#bd947a"></rect>
+<rect x="4" y="-5" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-5" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-5" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-7" y="-4" width="7" height="1" fill="#08121e"></rect>
+<rect x="0" y="-4" width="4" height="1" fill="#bd947a"></rect>
+<rect x="4" y="-4" width="3" height="1" fill="#08121e"></rect>
+<rect x="12" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-4" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-7" y="-3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-3" width="1" height="1" fill="#238fff"></rect>
+<rect x="-3" y="-3" width="4" height="1" fill="#238fff"></rect>
+<rect x="1" y="-3" width="4" height="1" fill="#08121e"></rect>
+<rect x="5" y="-3" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-3" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-3" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-8" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-2" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="-4" y="-2" width="10" height="1" fill="#238fff"></rect>
+<rect x="6" y="-2" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="12" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-8" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="-4" y="-1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="-3" y="-1" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="-1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="-1" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="6" y="-1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="9" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-1" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-8" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="0" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="-3" y="0" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="0" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="0" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="0" width="1" height="1" fill="#617e9a"></rect>
+<rect x="6" y="0" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="10" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="0" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-9" y="1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-7" y="1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="-4" y="1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="-3" y="1" width="6" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="1" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="6" y="1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="9" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="1" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-9" y="2" width="3" height="1" fill="#08121e"></rect>
+<rect x="-6" y="2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-5" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="2" width="1" height="1" fill="#617e9a"></rect>
+<rect x="-3" y="2" width="6" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="2" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="2" width="2" height="1" fill="#617e9a"></rect>
+<rect x="7" y="2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="8" y="2" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-9" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="3" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-7" y="3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-4" y="3" width="11" height="1" fill="#617e9a"></rect>
+<rect x="7" y="3" width="2" height="1" fill="#08121e"></rect>
+<rect x="9" y="3" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="12" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="3" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="4" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="4" width="5" height="1" fill="#17466a"></rect>
+<rect x="1" y="4" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="4" width="4" height="1" fill="#17466a"></rect>
+<rect x="7" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="9" y="4" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="12" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="4" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="5" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="5" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="5" width="5" height="1" fill="#17466a"></rect>
+<rect x="1" y="5" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="5" width="4" height="1" fill="#17466a"></rect>
+<rect x="7" y="5" width="4" height="1" fill="#08121e"></rect>
+<rect x="12" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="5" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="6" width="1" height="1" fill="#17466a"></rect>
+<rect x="-8" y="6" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="6" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="6" width="11" height="1" fill="#617e9a"></rect>
+<rect x="7" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="6" width="1" height="1" fill="#17466a"></rect>
+<rect x="9" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="6" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-11" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="7" width="5" height="1" fill="#17466a"></rect>
+<rect x="-4" y="7" width="10" height="1" fill="#08121e"></rect>
+<rect x="6" y="7" width="1" height="1" fill="#617e9a"></rect>
+<rect x="7" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="7" width="1" height="1" fill="#17466a"></rect>
+<rect x="9" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="13" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="8" width="5" height="1" fill="#17466a"></rect>
+<rect x="-4" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="8" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="2" y="8" width="1" height="1" fill="#17466a"></rect>
+<rect x="3" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="8" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="8" width="4" height="1" fill="#08121e"></rect>
+<rect x="11" y="8" width="5" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="9" width="2" height="1" fill="#17466a"></rect>
+<rect x="-6" y="9" width="3" height="1" fill="#08121e"></rect>
+<rect x="-3" y="9" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="9" width="4" height="1" fill="#08121e"></rect>
+<rect x="4" y="9" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="10" y="9" width="6" height="1" fill="#08121e"></rect>
+<rect x="-9" y="10" width="6" height="1" fill="#08121e"></rect>
+<rect x="-3" y="10" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="10" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="10" width="1" height="1" fill="#617e9a"></rect>
+<rect x="14" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="11" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="11" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="11" width="1" height="1" fill="#617e9a"></rect>
+<rect x="14" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="12" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="0" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="12" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="7" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="12" width="1" height="1" fill="#617e9a"></rect>
+<rect x="14" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="13" width="6" height="1" fill="#08121e"></rect>
+<rect x="2" y="13" width="6" height="1" fill="#08121e"></rect>
+<rect x="13" y="13" width="2" height="1" fill="#08121e"></rect>
+</g></defs>
+<g id="digest-four-before" opacity="0.27" style="filter:grayscale(1)">
+<text x="24" y="28" font-size="13" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">변경 전</text>
+<text x="368" y="28" font-size="16" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">패킷마다 주민에게 반복 적재</text>
+<text x="114" y="76" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">유효섹터 9칸</text>
+<rect x="24" y="126" width="180" height="180" fill="#0d1421" stroke="#7895ae" stroke-width="1.5" id="digest-four-before-valid-area"></rect>
+<rect x="24" y="126" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="25" y="127" width="58" height="58" fill="#238fff" id="digest-four-before-sector-0" opacity="0"></rect>
+<text x="54" y="139" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 1</text>
+<rect x="30" y="150" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="31" y="151" width="9" height="20" fill="#172536"></rect>
+<text x="35.5" y="161" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="41" y="151" width="36" height="20" fill="#238fff" id="digest-four-before-pending-0"></rect>
+<text x="59" y="161" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 1</text>
+<path d="M78 161 L81 161 L81 180" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="84" y="126" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="85" y="127" width="58" height="58" fill="#238fff" id="digest-four-before-sector-1" opacity="0"></rect>
+<text x="114" y="139" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 2</text>
+<rect x="90" y="150" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="91" y="151" width="9" height="20" fill="#172536"></rect>
+<text x="95.5" y="161" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="101" y="151" width="36" height="20" fill="#238fff" id="digest-four-before-pending-1"></rect>
+<text x="119" y="161" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 2</text>
+<path d="M138 161 L141 161 L141 180" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="144" y="126" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="145" y="127" width="58" height="58" fill="#238fff" id="digest-four-before-sector-2" opacity="0"></rect>
+<text x="174" y="139" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 3</text>
+<rect x="150" y="150" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="151" y="151" width="9" height="20" fill="#172536"></rect>
+<text x="155.5" y="161" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="161" y="151" width="36" height="20" fill="#238fff" id="digest-four-before-pending-2"></rect>
+<text x="179" y="161" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 3</text>
+<path d="M198 161 L201 161 L201 180" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="24" y="186" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="25" y="187" width="58" height="58" fill="#238fff" id="digest-four-before-sector-3" opacity="0"></rect>
+<text x="54" y="199" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 4</text>
+<rect x="30" y="210" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="31" y="211" width="9" height="20" fill="#172536"></rect>
+<text x="35.5" y="221" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="41" y="211" width="36" height="20" fill="#238fff" id="digest-four-before-pending-3"></rect>
+<text x="59" y="221" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 4</text>
+<path d="M78 221 L81 221 L81 240" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="84" y="186" width="60" height="60" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="85" y="187" width="58" height="58" fill="#238fff" id="digest-four-before-sector-4" opacity="0"></rect>
+<rect x="86" y="188" width="56" height="56" fill="none" stroke="#238fff" stroke-width="1.5"></rect>
+<text x="114" y="199" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#238fff">R</text>
+<rect x="90" y="210" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="91" y="211" width="9" height="20" fill="#172536"></rect>
+<text x="95.5" y="221" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="101" y="211" width="36" height="20" fill="#238fff" id="digest-four-before-pending-4"></rect>
+<text x="119" y="221" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 5</text>
+<path d="M138 221 L141 221 L141 240" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="144" y="186" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="145" y="187" width="58" height="58" fill="#238fff" id="digest-four-before-sector-5" opacity="0"></rect>
+<text x="174" y="199" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 6</text>
+<rect x="150" y="210" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="151" y="211" width="9" height="20" fill="#172536"></rect>
+<text x="155.5" y="221" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="161" y="211" width="36" height="20" fill="#238fff" id="digest-four-before-pending-5"></rect>
+<text x="179" y="221" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 6</text>
+<path d="M198 221 L201 221 L201 240" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="24" y="246" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="25" y="247" width="58" height="58" fill="#238fff" id="digest-four-before-sector-6" opacity="0"></rect>
+<text x="54" y="259" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 7</text>
+<rect x="30" y="270" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="31" y="271" width="9" height="20" fill="#172536"></rect>
+<text x="35.5" y="281" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="41" y="271" width="36" height="20" fill="#238fff" id="digest-four-before-pending-6"></rect>
+<text x="59" y="281" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 7</text>
+<path d="M78 281 L81 281 L81 300" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="84" y="246" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="85" y="247" width="58" height="58" fill="#238fff" id="digest-four-before-sector-7" opacity="0"></rect>
+<text x="114" y="259" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 8</text>
+<rect x="90" y="270" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="91" y="271" width="9" height="20" fill="#172536"></rect>
+<text x="95.5" y="281" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="101" y="271" width="36" height="20" fill="#238fff" id="digest-four-before-pending-7"></rect>
+<text x="119" y="281" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 8</text>
+<path d="M138 281 L141 281 L141 300" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="144" y="246" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="145" y="247" width="58" height="58" fill="#238fff" id="digest-four-before-sector-8" opacity="0"></rect>
+<text x="174" y="259" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 9</text>
+<rect x="150" y="270" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="151" y="271" width="9" height="20" fill="#172536"></rect>
+<text x="155.5" y="281" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="161" y="271" width="36" height="20" fill="#238fff" id="digest-four-before-pending-8"></rect>
+<text x="179" y="281" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 9</text>
+<path d="M198 281 L201 281 L201 300" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M81 180 L228 180" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M81 240 L228 240" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M81 300 L228 300" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M228 104 L228 328" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<text x="114" y="366" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">예시 · 칸당 패킷 1개</text>
+<text x="353" y="76" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">이동·채팅 패킷</text>
+<text x="353" y="366" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">같은 9패킷을 각각 적재</text>
+<rect x="281" y="93" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="94" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="104" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="94" width="116" height="20" fill="#238fff" id="digest-four-before-packet-0-data"></rect>
+<text x="365" y="104" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-0-text" class="sector-mono">Msg 1</text>
+<rect x="281" y="93" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-0-rim" opacity="0"></rect>
+<path d="M228 104 L276 104" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="104" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="104" r="1.05" fill="#0d1421"></circle>
+<path d="M430 104 L518 104" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="121" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="122" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="132" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="122" width="116" height="20" fill="#238fff" id="digest-four-before-packet-1-data"></rect>
+<text x="365" y="132" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-1-text" class="sector-mono">Msg 2</text>
+<rect x="281" y="121" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-1-rim" opacity="0"></rect>
+<path d="M228 132 L276 132" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="132" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="132" r="1.05" fill="#0d1421"></circle>
+<path d="M430 132 L518 132" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="149" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="150" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="160" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="150" width="116" height="20" fill="#238fff" id="digest-four-before-packet-2-data"></rect>
+<text x="365" y="160" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-2-text" class="sector-mono">Msg 3</text>
+<rect x="281" y="149" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-2-rim" opacity="0"></rect>
+<path d="M228 160 L276 160" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="160" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="160" r="1.05" fill="#0d1421"></circle>
+<path d="M430 160 L518 160" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="177" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="178" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="188" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="178" width="116" height="20" fill="#238fff" id="digest-four-before-packet-3-data"></rect>
+<text x="365" y="188" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-3-text" class="sector-mono">Msg 4</text>
+<rect x="281" y="177" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-3-rim" opacity="0"></rect>
+<path d="M228 188 L276 188" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="188" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="188" r="1.05" fill="#0d1421"></circle>
+<path d="M430 188 L518 188" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="205" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="206" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="216" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="206" width="116" height="20" fill="#238fff" id="digest-four-before-packet-4-data"></rect>
+<text x="365" y="216" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-4-text" class="sector-mono">Msg 5</text>
+<rect x="281" y="205" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-4-rim" opacity="0"></rect>
+<path d="M228 216 L276 216" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="216" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="216" r="1.05" fill="#0d1421"></circle>
+<path d="M430 216 L518 216" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="233" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="234" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="244" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="234" width="116" height="20" fill="#238fff" id="digest-four-before-packet-5-data"></rect>
+<text x="365" y="244" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-5-text" class="sector-mono">Msg 6</text>
+<rect x="281" y="233" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-5-rim" opacity="0"></rect>
+<path d="M228 244 L276 244" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="244" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="244" r="1.05" fill="#0d1421"></circle>
+<path d="M430 244 L518 244" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="261" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="262" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="272" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="262" width="116" height="20" fill="#238fff" id="digest-four-before-packet-6-data"></rect>
+<text x="365" y="272" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-6-text" class="sector-mono">Msg 7</text>
+<rect x="281" y="261" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-6-rim" opacity="0"></rect>
+<path d="M228 272 L276 272" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="272" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="272" r="1.05" fill="#0d1421"></circle>
+<path d="M430 272 L518 272" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="289" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="290" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="300" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="290" width="116" height="20" fill="#238fff" id="digest-four-before-packet-7-data"></rect>
+<text x="365" y="300" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-7-text" class="sector-mono">Msg 8</text>
+<rect x="281" y="289" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-7-rim" opacity="0"></rect>
+<path d="M228 300 L276 300" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="300" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="300" r="1.05" fill="#0d1421"></circle>
+<path d="M430 300 L518 300" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<rect x="281" y="317" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="318" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="328" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="318" width="116" height="20" fill="#238fff" id="digest-four-before-packet-8-data"></rect>
+<text x="365" y="328" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-packet-8-text" class="sector-mono">Msg 9</text>
+<rect x="281" y="317" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-before-packet-8-rim" opacity="0"></rect>
+<path d="M228 328 L276 328" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="328" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="328" r="1.05" fill="#0d1421"></circle>
+<path d="M430 328 L518 328" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.7"></path>
+<path d="M518 104 L518 328" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<rect x="544" y="92" width="168" height="252" fill="none" stroke="#7895ae" stroke-width="1.5" id="digest-four-before-recipient-group"></rect>
+<text x="578" y="108" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">섹터 R</text>
+<text x="628" y="76" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">같은 섹터 주민</text>
+<use href="#bundle-swordsman-digest-four-south" transform="translate(576 136) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="before-resident-0"></use>
+<text x="576" y="193" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S1</text>
+<path d="M518 162 L638 162" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></path>
+<polygon points="638,162 632,165 632,159" fill="#7895ae"></polygon>
+<circle cx="544" cy="162" r="2.5" fill="#829bb1"></circle>
+<circle cx="544" cy="162" r="1.05" fill="#0d1421"></circle>
+<circle cx="672" cy="162" r="34" fill="#172536" stroke="#354b61" stroke-width="1.5"></circle>
+<path id="digest-four-before-queue-0-slot-0" d="M672.6799546675734 128.00679977333635 A34 34 0 0 1 688.4077420977915 132.22104771399168 L681.6516129987009 144.4829692435245 A20 20 0 0 0 672.3999733338667 142.00399986666844 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="135.92000269019516" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-0">1</text>
+<path id="digest-four-before-queue-0-slot-1" d="M689.5854581288721 132.901002381565 A34 34 0 0 1 701.098997618435 144.41454187112788 L689.1170574226088 151.65561286536933 A20 20 0 0 0 682.3443871346307 144.8829425773912 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="142.9081169079632" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-1">2</text>
+<path id="digest-four-before-queue-0-slot-2" d="M701.7789522860083 145.59225790220847 A34 34 0 0 1 705.9932002266637 161.32004533242667 L691.9960001333316 161.60002666613335 A20 20 0 0 0 689.5170307564755 152.3483870012991 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="155.01188578223193" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-2">3</text>
+<path id="digest-four-before-queue-0-slot-3" d="M705.9932002266637 162.67995466757333 A34 34 0 0 1 701.7789522860083 178.40774209779153 L689.5170307564755 171.6516129987009 A20 20 0 0 0 691.9960001333316 162.39997333386665 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="168.98811421776807" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-3">4</text>
+<path id="digest-four-before-queue-0-slot-4" d="M701.098997618435 179.58545812887212 A34 34 0 0 1 689.5854581288721 191.098997618435 L682.3443871346307 179.1170574226088 A20 20 0 0 0 689.1170574226088 172.34438713463067 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="181.09188309203677" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-4">5</text>
+<path id="digest-four-before-queue-0-slot-5" d="M688.4077420977915 191.77895228600832 A34 34 0 0 1 672.6799546675734 195.99320022666365 L672.3999733338667 181.99600013333156 A20 20 0 0 0 681.6516129987009 179.5170307564755 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="188.07999730980484" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-5">6</text>
+<path id="digest-four-before-queue-0-slot-6" d="M671.3200453324267 195.99320022666365 A34 34 0 0 1 655.5922579022085 191.77895228600832 L662.3483870012991 179.5170307564755 A20 20 0 0 0 671.6000266661333 181.99600013333156 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="665.011885782232" y="188.07999730980484" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-6">7</text>
+<path id="digest-four-before-queue-0-slot-7" d="M654.4145418711279 191.098997618435 A34 34 0 0 1 642.901002381565 179.58545812887215 L654.8829425773912 172.34438713463067 A20 20 0 0 0 661.6556128653693 179.1170574226088 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="652.9081169079632" y="181.0918830920368" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-7">8</text>
+<path id="digest-four-before-queue-0-slot-8" d="M642.2210477139917 178.40774209779153 A34 34 0 0 1 638.0067997733363 162.67995466757336 L652.0039998666684 162.39997333386668 A20 20 0 0 0 654.4829692435245 171.6516129987009 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="645.9200026901951" y="168.98811421776807" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-0-number-8">9</text>
+<path id="digest-four-before-queue-0-slot-9" d="M638.0067997733363 161.32004533242667 A34 34 0 0 1 642.2210477139917 145.59225790220847 L654.4829692435245 152.3483870012991 A20 20 0 0 0 652.0039998666684 161.60002666613335 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-before-queue-0-slot-10" d="M642.901002381565 144.41454187112788 A34 34 0 0 1 654.4145418711279 132.901002381565 L661.6556128653693 144.8829425773912 A20 20 0 0 0 654.8829425773912 151.65561286536933 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-before-queue-0-slot-11" d="M655.5922579022084 132.2210477139917 A34 34 0 0 1 671.3200453324266 128.00679977333635 L671.6000266661333 142.00399986666844 A20 20 0 0 0 662.3483870012991 144.48296924352454 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="672" y="162" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" class="sector-mono">S1</text>
+<text x="672" y="114" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="672" y="210" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" id="digest-four-before-queue-0-count">적재 9회</text>
+<use href="#bundle-swordsman-digest-four-south" transform="translate(576 256) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="before-resident-1"></use>
+<text x="576" y="313" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S2</text>
+<path d="M518 282 L638 282" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></path>
+<polygon points="638,282 632,285 632,279" fill="#7895ae"></polygon>
+<circle cx="544" cy="282" r="2.5" fill="#829bb1"></circle>
+<circle cx="544" cy="282" r="1.05" fill="#0d1421"></circle>
+<circle cx="672" cy="282" r="34" fill="#172536" stroke="#354b61" stroke-width="1.5"></circle>
+<path id="digest-four-before-queue-1-slot-0" d="M672.6799546675734 248.00679977333635 A34 34 0 0 1 688.4077420977915 252.22104771399168 L681.6516129987009 264.4829692435245 A20 20 0 0 0 672.3999733338667 262.00399986666844 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="255.92000269019516" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-0">1</text>
+<path id="digest-four-before-queue-1-slot-1" d="M689.5854581288721 252.901002381565 A34 34 0 0 1 701.098997618435 264.4145418711279 L689.1170574226088 271.65561286536933 A20 20 0 0 0 682.3443871346307 264.8829425773912 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="262.90811690796323" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-1">2</text>
+<path id="digest-four-before-queue-1-slot-2" d="M701.7789522860083 265.5922579022085 A34 34 0 0 1 705.9932002266637 281.3200453324267 L691.9960001333316 281.6000266661333 A20 20 0 0 0 689.5170307564755 272.3483870012991 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="275.01188578223196" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-2">3</text>
+<path id="digest-four-before-queue-1-slot-3" d="M705.9932002266637 282.6799546675733 A34 34 0 0 1 701.7789522860083 298.4077420977915 L689.5170307564755 291.6516129987009 A20 20 0 0 0 691.9960001333316 282.3999733338667 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="288.98811421776804" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-3">4</text>
+<path id="digest-four-before-queue-1-slot-4" d="M701.098997618435 299.5854581288721 A34 34 0 0 1 689.5854581288721 311.09899761843496 L682.3443871346307 299.1170574226088 A20 20 0 0 0 689.1170574226088 292.34438713463067 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="301.09188309203677" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-4">5</text>
+<path id="digest-four-before-queue-1-slot-5" d="M688.4077420977915 311.77895228600835 A34 34 0 0 1 672.6799546675734 315.99320022666365 L672.3999733338667 301.99600013333156 A20 20 0 0 0 681.6516129987009 299.5170307564755 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="308.07999730980487" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-5">6</text>
+<path id="digest-four-before-queue-1-slot-6" d="M671.3200453324267 315.99320022666365 A34 34 0 0 1 655.5922579022085 311.77895228600835 L662.3483870012991 299.5170307564755 A20 20 0 0 0 671.6000266661333 301.99600013333156 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="665.011885782232" y="308.07999730980487" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-6">7</text>
+<path id="digest-four-before-queue-1-slot-7" d="M654.4145418711279 311.098997618435 A34 34 0 0 1 642.901002381565 299.5854581288721 L654.8829425773912 292.34438713463067 A20 20 0 0 0 661.6556128653693 299.1170574226088 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="652.9081169079632" y="301.09188309203677" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-7">8</text>
+<path id="digest-four-before-queue-1-slot-8" d="M642.2210477139917 298.4077420977915 A34 34 0 0 1 638.0067997733363 282.6799546675733 L652.0039998666684 282.3999733338667 A20 20 0 0 0 654.4829692435245 291.6516129987009 Z" fill="#238fff" stroke="#354b61" stroke-width="1.5"></path>
+<text x="645.9200026901951" y="288.9881142177681" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-queue-1-number-8">9</text>
+<path id="digest-four-before-queue-1-slot-9" d="M638.0067997733363 281.3200453324267 A34 34 0 0 1 642.2210477139917 265.5922579022085 L654.4829692435245 272.3483870012991 A20 20 0 0 0 652.0039998666684 281.6000266661333 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-before-queue-1-slot-10" d="M642.901002381565 264.4145418711279 A34 34 0 0 1 654.4145418711279 252.901002381565 L661.6556128653693 264.8829425773912 A20 20 0 0 0 654.8829425773912 271.65561286536933 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-before-queue-1-slot-11" d="M655.5922579022084 252.2210477139917 A34 34 0 0 1 671.3200453324266 248.00679977333635 L671.6000266661333 262.00399986666844 A20 20 0 0 0 662.3483870012991 264.4829692435245 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="672" y="282" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" class="sector-mono">S2</text>
+<text x="672" y="234" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="672" y="330" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" id="digest-four-before-queue-1-count">적재 9회</text>
+<g id="digest-four-before-traveler" opacity="0">
+<rect x="-23" y="-10" width="46" height="20" fill="#238fff"></rect>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-before-traveler-text" class="sector-mono" data-local="true">1</text>
+</g>
+</g>
+<path d="M24 410 L712 410" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<g id="digest-four-after" opacity="1" style="filter:none">
+<text x="24" y="438" font-size="13" dominant-baseline="middle" text-anchor="start" fill="#238fff">변경 후</text>
+<text x="368" y="438" font-size="16" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">9칸에서 모아서, 주민에게 한 번씩</text>
+<text x="114" y="486" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">유효섹터 9칸</text>
+<rect x="24" y="536" width="180" height="180" fill="#0d1421" stroke="#7895ae" stroke-width="1.5" id="digest-four-after-valid-area"></rect>
+<rect x="24" y="536" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="25" y="537" width="58" height="58" fill="#238fff" id="digest-four-after-sector-0" opacity="0"></rect>
+<text x="54" y="549" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 1</text>
+<rect x="30" y="560" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="31" y="561" width="9" height="20" fill="#172536"></rect>
+<text x="35.5" y="571" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="41" y="561" width="36" height="20" fill="#238fff" id="digest-four-after-pending-0"></rect>
+<text x="59" y="571" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 1</text>
+<path d="M78 571 L81 571 L81 590" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="84" y="536" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="85" y="537" width="58" height="58" fill="#238fff" id="digest-four-after-sector-1" opacity="0"></rect>
+<text x="114" y="549" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 2</text>
+<rect x="90" y="560" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="91" y="561" width="9" height="20" fill="#172536"></rect>
+<text x="95.5" y="571" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="101" y="561" width="36" height="20" fill="#238fff" id="digest-four-after-pending-1"></rect>
+<text x="119" y="571" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 2</text>
+<path d="M138 571 L141 571 L141 590" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="144" y="536" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="145" y="537" width="58" height="58" fill="#238fff" id="digest-four-after-sector-2" opacity="0"></rect>
+<text x="174" y="549" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 3</text>
+<rect x="150" y="560" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="151" y="561" width="9" height="20" fill="#172536"></rect>
+<text x="155.5" y="571" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="161" y="561" width="36" height="20" fill="#238fff" id="digest-four-after-pending-2"></rect>
+<text x="179" y="571" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 3</text>
+<path d="M198 571 L201 571 L201 590" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="24" y="596" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="25" y="597" width="58" height="58" fill="#238fff" id="digest-four-after-sector-3" opacity="0"></rect>
+<text x="54" y="609" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 4</text>
+<rect x="30" y="620" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="31" y="621" width="9" height="20" fill="#172536"></rect>
+<text x="35.5" y="631" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="41" y="621" width="36" height="20" fill="#238fff" id="digest-four-after-pending-3"></rect>
+<text x="59" y="631" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 4</text>
+<path d="M78 631 L81 631 L81 650" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="84" y="596" width="60" height="60" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="85" y="597" width="58" height="58" fill="#238fff" id="digest-four-after-sector-4" opacity="0"></rect>
+<rect x="86" y="598" width="56" height="56" fill="none" stroke="#238fff" stroke-width="1.5"></rect>
+<text x="114" y="609" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#238fff">R</text>
+<rect x="90" y="620" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="91" y="621" width="9" height="20" fill="#172536"></rect>
+<text x="95.5" y="631" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="101" y="621" width="36" height="20" fill="#238fff" id="digest-four-after-pending-4"></rect>
+<text x="119" y="631" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 5</text>
+<path d="M138 631 L141 631 L141 650" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="144" y="596" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="145" y="597" width="58" height="58" fill="#238fff" id="digest-four-after-sector-5" opacity="0"></rect>
+<text x="174" y="609" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 6</text>
+<rect x="150" y="620" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="151" y="621" width="9" height="20" fill="#172536"></rect>
+<text x="155.5" y="631" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="161" y="621" width="36" height="20" fill="#238fff" id="digest-four-after-pending-5"></rect>
+<text x="179" y="631" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 6</text>
+<path d="M198 631 L201 631 L201 650" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="24" y="656" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="25" y="657" width="58" height="58" fill="#238fff" id="digest-four-after-sector-6" opacity="0"></rect>
+<text x="54" y="669" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 7</text>
+<rect x="30" y="680" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="31" y="681" width="9" height="20" fill="#172536"></rect>
+<text x="35.5" y="691" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="41" y="681" width="36" height="20" fill="#238fff" id="digest-four-after-pending-6"></rect>
+<text x="59" y="691" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 7</text>
+<path d="M78 691 L81 691 L81 710" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="84" y="656" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="85" y="657" width="58" height="58" fill="#238fff" id="digest-four-after-sector-7" opacity="0"></rect>
+<text x="114" y="669" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 8</text>
+<rect x="90" y="680" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="91" y="681" width="9" height="20" fill="#172536"></rect>
+<text x="95.5" y="691" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="101" y="681" width="36" height="20" fill="#238fff" id="digest-four-after-pending-7"></rect>
+<text x="119" y="691" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 8</text>
+<path d="M138 691 L141 691 L141 710" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="144" y="656" width="60" height="60" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="145" y="657" width="58" height="58" fill="#238fff" id="digest-four-after-sector-8" opacity="0"></rect>
+<text x="174" y="669" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 9</text>
+<rect x="150" y="680" width="48" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="151" y="681" width="9" height="20" fill="#172536"></rect>
+<text x="155.5" y="691" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="161" y="681" width="36" height="20" fill="#238fff" id="digest-four-after-pending-8"></rect>
+<text x="179" y="691" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" class="sector-mono">Msg 9</text>
+<path d="M198 691 L201 691 L201 710" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M81 590 L228 590" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M81 650 L228 650" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M81 710 L228 710" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<path d="M228 538 L228 714" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<text x="114" y="776" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">예시 · 칸당 패킷 1개</text>
+<text x="353" y="486" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">Digest 하나</text>
+<rect x="273" y="519" width="160" height="214" fill="#0d1421" stroke="#238fff" stroke-width="1.5" id="digest-four-after-digest-frame"></rect>
+<text x="353" y="776" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">모으기 1회 · 헤더 보존</text>
+<rect x="281" y="527" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="528" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="538" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="528" width="116" height="20" fill="#238fff" id="digest-four-after-packet-0-data"></rect>
+<text x="365" y="538" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-0-text" class="sector-mono">Msg 1</text>
+<rect x="281" y="527" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-0-rim" opacity="1"></rect>
+<path d="M228 538 L276 538" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="538" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="538" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="549" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="550" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="560" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="550" width="116" height="20" fill="#238fff" id="digest-four-after-packet-1-data"></rect>
+<text x="365" y="560" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-1-text" class="sector-mono">Msg 2</text>
+<rect x="281" y="549" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-1-rim" opacity="1"></rect>
+<path d="M228 560 L276 560" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="560" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="560" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="571" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="572" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="582" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="572" width="116" height="20" fill="#238fff" id="digest-four-after-packet-2-data"></rect>
+<text x="365" y="582" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-2-text" class="sector-mono">Msg 3</text>
+<rect x="281" y="571" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-2-rim" opacity="1"></rect>
+<path d="M228 582 L276 582" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="582" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="582" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="593" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="594" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="604" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="594" width="116" height="20" fill="#238fff" id="digest-four-after-packet-3-data"></rect>
+<text x="365" y="604" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-3-text" class="sector-mono">Msg 4</text>
+<rect x="281" y="593" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-3-rim" opacity="1"></rect>
+<path d="M228 604 L276 604" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="604" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="604" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="615" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="616" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="626" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="616" width="116" height="20" fill="#238fff" id="digest-four-after-packet-4-data"></rect>
+<text x="365" y="626" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-4-text" class="sector-mono">Msg 5</text>
+<rect x="281" y="615" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-4-rim" opacity="1"></rect>
+<path d="M228 626 L276 626" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="626" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="626" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="637" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="638" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="648" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="638" width="116" height="20" fill="#238fff" id="digest-four-after-packet-5-data"></rect>
+<text x="365" y="648" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-5-text" class="sector-mono">Msg 6</text>
+<rect x="281" y="637" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-5-rim" opacity="1"></rect>
+<path d="M228 648 L276 648" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="648" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="648" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="659" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="660" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="670" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="660" width="116" height="20" fill="#238fff" id="digest-four-after-packet-6-data"></rect>
+<text x="365" y="670" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-6-text" class="sector-mono">Msg 7</text>
+<rect x="281" y="659" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-6-rim" opacity="1"></rect>
+<path d="M228 670 L276 670" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="670" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="670" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="681" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="682" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="692" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="682" width="116" height="20" fill="#238fff" id="digest-four-after-packet-7-data"></rect>
+<text x="365" y="692" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-7-text" class="sector-mono">Msg 8</text>
+<rect x="281" y="681" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-7-rim" opacity="1"></rect>
+<path d="M228 692 L276 692" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="692" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="692" r="1.05" fill="#0d1421"></circle>
+<rect x="281" y="703" width="144" height="22" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="282" y="704" width="25" height="20" fill="#172536"></rect>
+<text x="294" y="714" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">H</text>
+<rect x="308" y="704" width="116" height="20" fill="#238fff" id="digest-four-after-packet-8-data"></rect>
+<text x="365" y="714" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-packet-8-text" class="sector-mono">Msg 9</text>
+<rect x="281" y="703" width="144" height="22" fill="none" stroke="#238fff" stroke-width="1.5" id="digest-four-after-packet-8-rim" opacity="1"></rect>
+<path d="M228 714 L276 714" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<circle cx="278.5" cy="714" r="2.5" fill="#829bb1"></circle>
+<circle cx="278.5" cy="714" r="1.05" fill="#0d1421"></circle>
+<rect x="544" y="502" width="168" height="252" fill="none" stroke="#7895ae" stroke-width="1.5" id="digest-four-after-recipient-group"></rect>
+<text x="578" y="518" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">섹터 R</text>
+<text x="628" y="486" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">같은 섹터 주민</text>
+<use href="#bundle-swordsman-digest-four-south" transform="translate(576 546) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="after-resident-0"></use>
+<text x="576" y="603" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S1</text>
+<path d="M353 733 L353 760 L518 760 L518 572 L638 572" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></path>
+<polygon points="638,572 632,575 632,569" fill="#7895ae"></polygon>
+<circle cx="544" cy="572" r="2.5" fill="#829bb1"></circle>
+<circle cx="544" cy="572" r="1.05" fill="#0d1421"></circle>
+<circle cx="672" cy="572" r="34" fill="#172536" stroke="#354b61" stroke-width="1.5"></circle>
+<path id="digest-four-after-queue-0-slot-0" d="M672.6799546675734 538.0067997733363 A34 34 0 0 1 688.4077420977915 542.2210477139917 L681.6516129987009 554.4829692435245 A20 20 0 0 0 672.3999733338667 552.0039998666684 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="545.9200026901951" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-0">1</text>
+<path id="digest-four-after-queue-0-slot-1" d="M689.5854581288721 542.901002381565 A34 34 0 0 1 701.098997618435 554.4145418711279 L689.1170574226088 561.6556128653693 A20 20 0 0 0 682.3443871346307 554.8829425773912 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="552.9081169079632" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-1">2</text>
+<path id="digest-four-after-queue-0-slot-2" d="M701.7789522860083 555.5922579022085 A34 34 0 0 1 705.9932002266637 571.3200453324266 L691.9960001333316 571.6000266661333 A20 20 0 0 0 689.5170307564755 562.3483870012991 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="565.011885782232" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-2">3</text>
+<path id="digest-four-after-queue-0-slot-3" d="M705.9932002266637 572.6799546675733 A34 34 0 0 1 701.7789522860083 588.4077420977915 L689.5170307564755 581.6516129987009 A20 20 0 0 0 691.9960001333316 572.3999733338667 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="578.988114217768" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-3">4</text>
+<path id="digest-four-after-queue-0-slot-4" d="M701.098997618435 589.5854581288721 A34 34 0 0 1 689.5854581288721 601.098997618435 L682.3443871346307 589.1170574226088 A20 20 0 0 0 689.1170574226088 582.3443871346307 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="591.0918830920368" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-4">5</text>
+<path id="digest-four-after-queue-0-slot-5" d="M688.4077420977915 601.7789522860083 A34 34 0 0 1 672.6799546675734 605.9932002266637 L672.3999733338667 591.9960001333316 A20 20 0 0 0 681.6516129987009 589.5170307564755 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="598.0799973098049" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-5">6</text>
+<path id="digest-four-after-queue-0-slot-6" d="M671.3200453324267 605.9932002266637 A34 34 0 0 1 655.5922579022085 601.7789522860083 L662.3483870012991 589.5170307564755 A20 20 0 0 0 671.6000266661333 591.9960001333316 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="665.011885782232" y="598.0799973098049" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-6">7</text>
+<path id="digest-four-after-queue-0-slot-7" d="M654.4145418711279 601.098997618435 A34 34 0 0 1 642.901002381565 589.5854581288721 L654.8829425773912 582.3443871346307 A20 20 0 0 0 661.6556128653693 589.1170574226088 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="652.9081169079632" y="591.0918830920368" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-7">8</text>
+<path id="digest-four-after-queue-0-slot-8" d="M642.2210477139917 588.4077420977916 A34 34 0 0 1 638.0067997733363 572.6799546675734 L652.0039998666684 572.3999733338667 A20 20 0 0 0 654.4829692435245 581.6516129987009 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="645.9200026901951" y="578.988114217768" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-number-8">9</text>
+<path id="digest-four-after-queue-0-slot-9" d="M638.0067997733363 571.3200453324267 A34 34 0 0 1 642.2210477139917 555.5922579022085 L654.4829692435245 562.3483870012991 A20 20 0 0 0 652.0039998666684 571.6000266661333 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-after-queue-0-slot-10" d="M642.901002381565 554.4145418711279 A34 34 0 0 1 654.4145418711279 542.901002381565 L661.6556128653693 554.8829425773912 A20 20 0 0 0 654.8829425773912 561.6556128653693 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-after-queue-0-slot-11" d="M655.5922579022084 542.2210477139917 A34 34 0 0 1 671.3200453324266 538.0067997733363 L671.6000266661333 552.0039998666684 A20 20 0 0 0 662.3483870012991 554.4829692435245 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="672" y="572" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" class="sector-mono">S1</text>
+<text x="672" y="524" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="672" y="620" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-0-count">적재 0회</text>
+<use href="#bundle-swordsman-digest-four-south" transform="translate(576 666) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="after-resident-1"></use>
+<text x="576" y="723" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S2</text>
+<path d="M353 733 L353 760 L518 760 L518 692 L638 692" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></path>
+<polygon points="638,692 632,695 632,689" fill="#7895ae"></polygon>
+<circle cx="544" cy="692" r="2.5" fill="#829bb1"></circle>
+<circle cx="544" cy="692" r="1.05" fill="#0d1421"></circle>
+<circle cx="672" cy="692" r="34" fill="#172536" stroke="#354b61" stroke-width="1.5"></circle>
+<path id="digest-four-after-queue-1-slot-0" d="M672.6799546675734 658.0067997733363 A34 34 0 0 1 688.4077420977915 662.2210477139917 L681.6516129987009 674.4829692435245 A20 20 0 0 0 672.3999733338667 672.0039998666684 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="665.9200026901951" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-0">1</text>
+<path id="digest-four-after-queue-1-slot-1" d="M689.5854581288721 662.901002381565 A34 34 0 0 1 701.098997618435 674.4145418711279 L689.1170574226088 681.6556128653693 A20 20 0 0 0 682.3443871346307 674.8829425773912 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="672.9081169079632" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-1">2</text>
+<path id="digest-four-after-queue-1-slot-2" d="M701.7789522860083 675.5922579022085 A34 34 0 0 1 705.9932002266637 691.3200453324266 L691.9960001333316 691.6000266661333 A20 20 0 0 0 689.5170307564755 682.3483870012991 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="685.011885782232" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-2">3</text>
+<path id="digest-four-after-queue-1-slot-3" d="M705.9932002266637 692.6799546675733 A34 34 0 0 1 701.7789522860083 708.4077420977915 L689.5170307564755 701.6516129987009 A20 20 0 0 0 691.9960001333316 692.3999733338667 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="698.0799973098049" y="698.988114217768" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-3">4</text>
+<path id="digest-four-after-queue-1-slot-4" d="M701.098997618435 709.5854581288721 A34 34 0 0 1 689.5854581288721 721.098997618435 L682.3443871346307 709.1170574226088 A20 20 0 0 0 689.1170574226088 702.3443871346307 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="691.0918830920368" y="711.0918830920368" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-4">5</text>
+<path id="digest-four-after-queue-1-slot-5" d="M688.4077420977915 721.7789522860083 A34 34 0 0 1 672.6799546675734 725.9932002266637 L672.3999733338667 711.9960001333316 A20 20 0 0 0 681.6516129987009 709.5170307564755 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="678.988114217768" y="718.0799973098049" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-5">6</text>
+<path id="digest-four-after-queue-1-slot-6" d="M671.3200453324267 725.9932002266637 A34 34 0 0 1 655.5922579022085 721.7789522860083 L662.3483870012991 709.5170307564755 A20 20 0 0 0 671.6000266661333 711.9960001333316 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="665.011885782232" y="718.0799973098049" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-6">7</text>
+<path id="digest-four-after-queue-1-slot-7" d="M654.4145418711279 721.098997618435 A34 34 0 0 1 642.901002381565 709.5854581288721 L654.8829425773912 702.3443871346307 A20 20 0 0 0 661.6556128653693 709.1170574226088 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="652.9081169079632" y="711.0918830920368" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-7">8</text>
+<path id="digest-four-after-queue-1-slot-8" d="M642.2210477139917 708.4077420977916 A34 34 0 0 1 638.0067997733363 692.6799546675734 L652.0039998666684 692.3999733338667 A20 20 0 0 0 654.4829692435245 701.6516129987009 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="645.9200026901951" y="698.988114217768" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-number-8">9</text>
+<path id="digest-four-after-queue-1-slot-9" d="M638.0067997733363 691.3200453324267 A34 34 0 0 1 642.2210477139917 675.5922579022085 L654.4829692435245 682.3483870012991 A20 20 0 0 0 652.0039998666684 691.6000266661333 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-after-queue-1-slot-10" d="M642.901002381565 674.4145418711279 A34 34 0 0 1 654.4145418711279 662.901002381565 L661.6556128653693 674.8829425773912 A20 20 0 0 0 654.8829425773912 681.6556128653693 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path id="digest-four-after-queue-1-slot-11" d="M655.5922579022084 662.2210477139917 A34 34 0 0 1 671.3200453324266 658.0067997733363 L671.6000266661333 672.0039998666684 A20 20 0 0 0 662.3483870012991 674.4829692435245 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="672" y="692" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" class="sector-mono">S2</text>
+<text x="672" y="644" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="672" y="740" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="digest-four-after-queue-1-count">적재 0회</text>
+<g id="digest-four-after-traveler" opacity="0">
+<rect x="-23" y="-10" width="46" height="20" fill="#238fff"></rect>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#0d1421" id="digest-four-after-traveler-text" class="sector-mono" data-local="true">1</text>
+</g>
+</g>
+<path d="M24 820 L712 820" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<text x="368" y="847" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">A/B · 4,000세션 · 적재 요청 18만 → 4천 회/tick</text></svg>

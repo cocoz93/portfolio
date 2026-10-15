@@ -1,0 +1,43 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "frames": 66,
+  "durationMs": 8750,
+  "scope": "coordinate fields only",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "visibleFields": [
+    "x",
+    "y"
+  ],
+  "removed": [
+    "central encoder",
+    "ID",
+    "direction and state",
+    "header and count labels",
+    "client restoration and error text",
+    "whole-entry size",
+    "100-entry size"
+  ],
+  "coordinateMorph": {
+    "fromBytes": 4,
+    "toBytes": 2,
+    "durationMs": 850,
+    "holdMs": 1150,
+    "simultaneous": true
+  },
+  "serverCoordinatesPreserved": true,
+  "nativeControlsVerified": true,
+  "standaloneBrowserRuntimeVerified": true,
+  "browserHostVerified": false,
+  "serverBinaryExecuted": false,
+  "bytes": 293178,
+  "sha256": "dd02dfc834a3a9a84f018eaa7a99992a189f339c8006ab21ad0bbaef1339b21b"
+}

@@ -1,0 +1,48 @@
+{
+  "ok": true,
+  "figure": 3,
+  "variants": [
+    "hub",
+    "sequence",
+    "loop"
+  ],
+  "paletteMatched": true,
+  "packetGeometryMatched": {
+    "width": 136,
+    "height": 100,
+    "titleHeight": 24,
+    "protocolHeaderHeight": 20,
+    "dataHeight": 40
+  },
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "frameChecks": 117,
+  "durationMs": 12876,
+  "originalRetainedForAllCopies": true,
+  "wholeBufferTransferOnFinalRelease": true,
+  "queueByteCopiesSurviveRelease": true,
+  "createdBefore": 3,
+  "createdAfter": 1,
+  "copiesBefore": 3,
+  "copiesAfter": 3,
+  "initialRef": 1,
+  "afterRefSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "playPauseVerified": true,
+  "resizeAndStateRestoreVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false,
+  "problems": []
+}

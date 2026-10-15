@@ -1,0 +1,38 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "framesPerWidth": 82,
+  "durationMs": 10350,
+  "scope": "coordinate fields only",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "quantizationStageLabel": "양자화",
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "serverCoordinatesPreserved": true,
+  "quantizeResult": [
+    37440,
+    12459
+  ],
+  "coordinateHoldMs": 1150,
+  "sourceAndMsgGeometryPreservedOnDesktop": true,
+  "connectedOrthogonalTracesOnly": true,
+  "byteShrinkVerified": true,
+  "nativeControlsVerified": true,
+  "savedStateVerified": true,
+  "reducedMotionVerified": true,
+  "standaloneBrowserRuntimeVerified": true,
+  "browserHostVerified": false,
+  "serverBinaryExecuted": false,
+  "bytes": 321297,
+  "sha256": "1e7814a97a22df388b7bb298fdfbac326b261f4706940afb01c45300b4ed1203",
+  "oldVersionSha256": "d116f7015490d7f98b0d5f03fe5c462305a039496b9ab43faeaad9385f3503e5",
+  "studiesSha256": "84f7fac7635291f425c50895e1825ed75f4a7f5c054d4a8002d7c467ddb75176"
+}

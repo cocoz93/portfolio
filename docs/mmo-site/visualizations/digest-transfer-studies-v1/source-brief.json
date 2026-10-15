@@ -1,0 +1,16 @@
+{
+  "figure": 4,
+  "scope": "Digest to SendQ delivery animation alternatives only",
+  "basis": "../digest-compare-horizontal-v7/digest-compare.html",
+  "designs": [
+    {"name":"신호 띠","behavior":"A contiguous bounded signal stripe travels through the existing orthogonal route"},
+    {"name":"묶음 프레임","behavior":"One frame visibly containing Msg IDs 1,2,3,4 travels through the route"},
+    {"name":"입력 게이트","behavior":"An output port, moving signal and receiver input contact show the enqueue arrival"}
+  ],
+  "previewDurationMs": 2500,
+  "preview": "Starts with S1 Digest already prepared; 600 ms ready, 850 ms transfer, 1050 ms arrival hold",
+  "preserved": ["Approved sector grid, character sizes, PCB palette and layout","Same Msg IDs 1,2,3,4","One RequestSendRaw enqueue for S1","Source Msg lifetime","Queue slots fill only after the transfer completes","No automatic playback or loop"],
+  "limits": ["Only S1's transfer is previewed, to compare animation without replaying the full figure","Frames, signal stripes and ports are explanatory data marks, not additional headers, syscalls or hardware components"],
+  "acceptedMainFigureModified": false,
+  "browserHostVerified": false
+}

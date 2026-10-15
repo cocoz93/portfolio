@@ -1,0 +1,22 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 11,
+  "scope": "coordinate-fields-only",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-move-clear-v11/quantization.html",
+  "sha256": "0c5eb3c94802c797969628eebfc70e869fe3413609607527cb1f6171c4e62610",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-move-clear-v11/qa/review.json",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "durationMs": 9150,
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "noWiring": true,
+  "msgTransferAnimation": true,
+  "transfersPerRow": 1,
+  "noPostArrivalRefill": true,
+  "landingGeometryAndTextContinuous": true,
+  "quantizationStageLabel": "양자화",
+  "previousVersion": "quantization-one-transfer-v10/quantization.html",
+  "sourceEmptyAfterTransfer": true
+}

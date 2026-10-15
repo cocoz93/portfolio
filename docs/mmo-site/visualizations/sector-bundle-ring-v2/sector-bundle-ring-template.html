@@ -1,0 +1,48 @@
+<style>
+/* ORIGINAL_FONTS */
+#sector-bundle-ring-v2 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#6cc7ff;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-dark:#617e9a;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);background:var(--pcb-bg);color-scheme:dark;
+  font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#sector-bundle-ring-v2 .bundle-ring-board {display:block;width:100%;height:auto}
+#sector-bundle-ring-v2 .bundle-ring-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#sector-bundle-ring-v2 .bundle-ring-board .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+</style>
+<div id="sector-bundle-ring-v2" aria-label="원본 WSASend 구성으로 맞춘 패킷 묶음 비교">
+  <svg class="bundle-ring-board" xmlns="http://www.w3.org/2000/svg" width="736" height="478" viewBox="0 0 736 478" role="img" aria-labelledby="bundle-ring-v2-title bundle-ring-v2-description">
+    <title id="bundle-ring-v2-title">같은 상태, 세션당 Copy 네 번에서 한 번으로</title>
+    <desc id="bundle-ring-v2-description">위는 변경 전, 아래는 변경 후입니다. 두 그림에서 같은 섹터의 A, B, C, D 네 플레이어 상태를 같은 수신 세션에 전달합니다. 변경 전에는 개별 Msg 네 개를 SendQ에 네 번 Copy합니다. 변경 후에는 새 헤더, count, 네 최종 상태 엔트리를 담는 묶음 Msg 하나를 SendQ에 한 번 Copy합니다. 원형 SendQ는 수신 세션 하나의 링버퍼를 대표합니다. 변경 전의 네 영역은 네 번의 개별 Copy를, 변경 후의 하나로 이어진 영역은 네 상태를 포함한 한 번의 Copy를 나타냅니다. 원형 영역은 고정 크기의 패킷 슬롯이나 실제 바이트 길이를 뜻하지 않습니다. 오른쪽 큰 숫자는 세션당 Copy 횟수이며 WSASend 호출 횟수가 아닙니다. 다른 수신 세션에도 같은 과정이 적용되고 큐는 각각 독립적입니다. 정적 구도이며 아직 애니메이션을 넣지 않았습니다.</desc>
+    <!-- MATCHED_SCENE -->
+  </svg>
+</div>
+<script>
+(() => {
+/* MATCHED_SOURCE */
+  const root=document.getElementById("sector-bundle-ring-v2");
+  if(!root)return;
+  const board=root.querySelector(".bundle-ring-board");
+  let drawnWidth=736,pendingWidth=0,layoutFrame=0;
+  function queueLayout(width){
+    if(!Number.isFinite(width)||width<=0)return;
+    pendingWidth=Math.max(320,width);
+    if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{
+      layoutFrame=0;
+      if(Math.abs(pendingWidth-drawnWidth)<.5)return;
+      drawnWidth=pendingWidth;
+      const scene=createRingBundle(drawnWidth);
+      const accessible=Array.from(board.children).filter(el=>["title","desc"].includes(el.tagName.toLowerCase()));
+      board.replaceChildren(...accessible);board.insertAdjacentHTML("beforeend",scene.markup);
+      board.setAttribute("viewBox",`0 0 ${drawnWidth} ${scene.height}`);
+      board.setAttribute("width",String(drawnWidth));board.setAttribute("height",String(scene.height));
+    });
+  }
+  if(typeof ResizeObserver!=="undefined")new ResizeObserver(entries=>queueLayout(entries[0].contentRect.width)).observe(root);
+  queueLayout(root.getBoundingClientRect().width);
+})();
+</script>

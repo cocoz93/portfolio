@@ -1,0 +1,83 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    656,
+    655,
+    360,
+    320
+  ],
+  "frames": 178,
+  "scope": "matched-before-after",
+  "transferDesign": "신호 띠",
+  "ribbonRecipients": [
+    "S1",
+    "S2",
+    "S3"
+  ],
+  "layout": "full-width before above after; horizontal pipeline at desktop widths",
+  "durationMs": 41884,
+  "beforeDurationMs": 19227,
+  "afterDurationMs": 21957,
+  "example": {
+    "eventActor": "A",
+    "sourcePackets": [
+      1,
+      2,
+      3
+    ],
+    "queuedBefore": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ]
+    ],
+    "queuedAfter": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ]
+    ],
+    "callsBefore": [
+      3,
+      3,
+      3
+    ],
+    "callsAfter": [
+      1,
+      1,
+      1
+    ],
+    "logicalPacketsAndOrderPreserved": true,
+    "residentsPerShownSector": 1
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 389866,
+  "sha256": "59221e7b6d028d43d2ffb9e918aff7f724cd4182d797875ea57b8289c2de566f"
+}

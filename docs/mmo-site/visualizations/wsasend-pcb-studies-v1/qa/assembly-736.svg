@@ -1,0 +1,508 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="736" height="506" viewBox="0 0 736 506"><style>text{font-family:PCB-Review,'Malgun Gothic',sans-serif;font-weight:500}.pcb-study-mono{font-family:PCB-Review,'Malgun Gothic',monospace}</style><rect x="0" y="0" width="736" height="506" fill="#111c2b" stroke="none" stroke-width="1.6"></rect>
+<rect x="14" y="8" width="708" height="220" fill="#16283b" stroke="none" stroke-width="1.6" rx="2"></rect>
+<rect x="14" y="244" width="708" height="220" fill="#16283b" stroke="none" stroke-width="1.6" rx="2"></rect>
+<path d="M24 230 L712 230" fill="none" stroke="#486980" stroke-width="0.8" stroke-linejoin="miter" stroke-linecap="butt" opacity="0.75"></path>
+<defs><g id="pcb-study-mage-assembly" shape-rendering="crispEdges">
+<rect x="3" y="-19" width="4" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="-18" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="-18" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-18" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="-18" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="-17" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="-17" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="-17" width="2" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="-17" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="-16" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="-16" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="-16" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-16" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-15" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="-15" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="-15" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="-15" width="2" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-15" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-13" y="-14" width="4" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-14" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="-14" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="-14" width="3" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-14" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-14" y="-13" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-13" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-13" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-13" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="-13" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-13" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="-13" width="5" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-14" y="-12" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-13" y="-12" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-12" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-12" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-12" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-9" y="-12" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="-12" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-12" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="-12" width="4" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-12" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="-12" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-14" y="-11" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-13" y="-11" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-11" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-11" width="2" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-9" y="-11" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="-11" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="-11" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="-11" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="-11" width="4" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="-11" width="3" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="-11" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-14" y="-10" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-13" y="-10" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-10" width="2" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-10" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="-10" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="-10" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="-10" width="5" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-10" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="-10" width="2" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="-10" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-14" y="-9" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-13" y="-9" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-9" y="-9" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="-9" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="-9" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="-9" width="9" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="-9" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-13" y="-8" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-8" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-8" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-7" y="-8" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="-8" width="14" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="9" y="-8" width="4" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-7" width="6" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-6" y="-7" width="18" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="12" y="-7" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-6" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="-6" width="22" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-5" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-5" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-5" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="-5" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-5" width="8" height="1" fill="#ecd0b5" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="-5" width="1" height="1" fill="#bd947a" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="-5" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-4" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-4" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-4" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="-4" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-4" width="1" height="1" fill="#ecd0b5" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="-4" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="-4" width="4" height="1" fill="#ecd0b5" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-4" width="4" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-3" width="2" height="1" fill="#617e9a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-3" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="-3" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-3" width="9" height="1" fill="#bd947a" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="-3" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-2" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-2" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="-2" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="-2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="-2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="-2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="-2" width="2" height="1" fill="#bd947a" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="-2" width="3" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="-2" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="-2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="-1" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="-1" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="-1" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="-1" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="-1" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="-1" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="-1" width="3" height="1" fill="#617e9a" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="-1" width="3" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="-1" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="-1" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="0" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="0" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="0" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-6" y="0" width="4" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="0" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="0" width="3" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="0" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="0" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="0" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="0" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="1" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="1" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="1" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="1" width="3" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="1" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="1" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="1" width="7" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="1" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="1" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="1" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="2" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="2" width="2" height="1" fill="#ecd0b5" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="2" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="2" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="2" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="2" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="2" width="6" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="2" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="2" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="2" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="10" y="2" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="3" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="3" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="3" width="2" height="1" fill="#ecd0b5" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="3" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="3" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="3" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="3" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="3" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="3" width="5" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="3" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="3" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="3" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="10" y="3" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="4" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="4" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="4" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="4" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-6" y="4" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="4" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="4" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-1" y="4" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="4" width="3" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="4" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="4" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="4" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="4" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="10" y="4" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="5" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="5" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="5" width="7" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="5" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="5" width="2" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="5" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="5" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="5" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="5" width="2" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="7" y="5" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="9" y="5" width="2" height="1" fill="#ecd0b5" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="6" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="6" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="6" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-7" y="6" width="4" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="6" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="1" y="6" width="2" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="6" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="6" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="6" width="3" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="8" y="6" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="7" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="7" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="7" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-6" y="7" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="7" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="7" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="7" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="7" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="7" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="7" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="7" width="4" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="9" y="7" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="8" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="8" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="8" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-6" y="8" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="8" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="8" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="8" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="8" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="8" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="8" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="8" width="4" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="9" y="8" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="9" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="9" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="9" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-7" y="9" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="9" width="2" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="9" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="9" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="9" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="9" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="9" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="9" width="5" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="10" y="9" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="10" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="10" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="10" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-7" y="10" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="10" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="10" width="1" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="-3" y="10" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="-2" y="10" width="4" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="2" y="10" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="3" y="10" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="4" y="10" width="1" height="1" fill="#67c8ff" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="10" width="5" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="10" y="10" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="11" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="11" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="11" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="11" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-6" y="11" width="1" height="1" fill="#17466a" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="11" width="16" height="1" fill="#2579ad" stroke="none" stroke-width="1.6"></rect>
+<rect x="11" y="11" width="2" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="12" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="12" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="12" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-8" y="12" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-5" y="12" width="16" height="1" fill="#617e9a" stroke="none" stroke-width="1.6"></rect>
+<rect x="11" y="12" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="13" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-11" y="13" width="1" height="1" fill="#dce9f3" stroke="none" stroke-width="1.6"></rect>
+<rect x="-10" y="13" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-7" y="13" width="18" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-12" y="14" width="3" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="-4" y="14" width="4" height="1" fill="#617e9a" stroke="none" stroke-width="1.6"></rect>
+<rect x="0" y="14" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="5" y="14" width="1" height="1" fill="#08121e" stroke="none" stroke-width="1.6"></rect>
+<rect x="6" y="14" width="4" height="1" fill="#617e9a" stroke="none" stroke-width="1.6"></rect>
+</g></defs>
+<text x="24" y="18" font-size="13" fill="#aec4d7" text-anchor="start" dominant-baseline="middle" class="">변경 전</text>
+<text x="104" y="48" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">캐릭터 이동</text>
+<text x="287.33333333333337" y="48" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">이동 메시지</text>
+<text x="466.6666666666667" y="48" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">SendQ</text>
+<text x="650.0000000000001" y="48" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">WSASend</text>
+<path d="M37 74 H171 V79 H176 V213 H171 V218 H37 V213 H32 V79 H37 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="37" y="79" width="134" height="134" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<circle cx="73" cy="115" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<circle cx="73" cy="177" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<circle cx="135" cy="115" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<circle cx="135" cy="177" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<path d="M90 115 L118 115" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M113 111.5 L118 115 L113 118.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<circle cx="73" cy="115" r="10" fill="#101b29" stroke="#aec4d7" stroke-width="1.1"></circle>
+<text x="73" y="115" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">1</text>
+<path d="M135 132 L135 160" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M131.5 155 L135 160 L138.5 155" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<circle cx="135" cy="115" r="10" fill="#101b29" stroke="#aec4d7" stroke-width="1.1"></circle>
+<text x="135" y="115" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">2</text>
+<path d="M118 177 L90 177" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M95 173.5 L90 177 L95 180.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<circle cx="135" cy="177" r="10" fill="#101b29" stroke="#aec4d7" stroke-width="1.1"></circle>
+<text x="135" y="177" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">3</text>
+<path d="M73 160 L73 132" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M69.5 137 L73 132 L76.5 137" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<use href="#pcb-study-mage-assembly" transform="translate(73 177) scale(1.1875)" data-role="character" aria-label="마법사 캐릭터"></use>
+<text x="95" y="159" font-size="12" fill="#67c8ff" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">4</text>
+<path d="M176 146 L215.33333333333334 146 L215.33333333333334 95 L230.33333333333334 95" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 95 L359.33333333333337 95 L359.33333333333337 146 L392.6666666666667 146" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 142.5 L392.6666666666667 146 L387.6666666666667 149.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<path d="M176 146 L215.33333333333334 146 L215.33333333333334 129 L230.33333333333334 129" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 129 L359.33333333333337 129 L359.33333333333337 146 L392.6666666666667 146" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 142.5 L392.6666666666667 146 L387.6666666666667 149.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<path d="M176 146 L215.33333333333334 146 L215.33333333333334 163 L230.33333333333334 163" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 163 L359.33333333333337 163 L359.33333333333337 146 L392.6666666666667 146" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 142.5 L392.6666666666667 146 L387.6666666666667 149.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<path d="M176 146 L215.33333333333334 146 L215.33333333333334 197 L230.33333333333334 197" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 197 L359.33333333333337 197 L359.33333333333337 146 L392.6666666666667 146" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 142.5 L392.6666666666667 146 L387.6666666666667 149.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<rect x="171" y="143.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="212.83333333333334" y="143.5" width="5" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="via"></rect>
+<rect x="356.83333333333337" y="143.5" width="5" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="via"></rect>
+<path d="M242.33333333333334 81 H332.33333333333337 V86 H337.33333333333337 V104 H332.33333333333337 V109 H242.33333333333334 V104 H237.33333333333334 V86 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="86" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="83" width="96" height="24" fill="#263d52" stroke="none" stroke-width="1.6" opacity="0.55"></rect>
+<text x="287.33333333333337" y="95" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 1</text>
+<rect x="229.33333333333334" y="92.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="92.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M242.33333333333334 115 H332.33333333333337 V120 H337.33333333333337 V138 H332.33333333333337 V143 H242.33333333333334 V138 H237.33333333333334 V120 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="120" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="117" width="96" height="24" fill="#263d52" stroke="none" stroke-width="1.6" opacity="0.55"></rect>
+<text x="287.33333333333337" y="129" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 2</text>
+<rect x="229.33333333333334" y="126.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="126.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M242.33333333333334 149 H332.33333333333337 V154 H337.33333333333337 V172 H332.33333333333337 V177 H242.33333333333334 V172 H237.33333333333334 V154 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="154" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="151" width="96" height="24" fill="#263d52" stroke="none" stroke-width="1.6" opacity="0.55"></rect>
+<text x="287.33333333333337" y="163" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 3</text>
+<rect x="229.33333333333334" y="160.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="160.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M242.33333333333334 183 H332.33333333333337 V188 H337.33333333333337 V206 H332.33333333333337 V211 H242.33333333333334 V206 H237.33333333333334 V188 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="188" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="185" width="96" height="24" fill="#263d52" stroke="none" stroke-width="1.6" opacity="0.55"></rect>
+<text x="287.33333333333337" y="197" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 4</text>
+<rect x="229.33333333333334" y="194.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="194.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M403.6666666666667 78 H529.6666666666667 V83 H534.6666666666667 V209 H529.6666666666667 V214 H403.6666666666667 V209 H398.6666666666667 V83 H403.6666666666667 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="403.6666666666667" y="83" width="126" height="126" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="389.6666666666667" y="103.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="533.6666666666667" y="103.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="389.6666666666667" y="183.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="533.6666666666667" y="183.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M408.6865418180844,144.48173699814333 A58,58 0 0 1 424.594953147954,106.07543460976228 L442.0039380522489,122.59594442641236 A34,34 0 0 0 432.6783176174977,145.1099837575323 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M426.74210127642897,103.9282864812873 A58,58 0 0 1 465.1484036648101,88.01987515141768 L465.776650424199,112.01165095083105 A34,34 0 0 0 443.26261109307904,121.33727138558221 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M468.18492966852335,88.01987515141768 A58,58 0 0 1 506.5912320569044,103.92828648128733 L490.0707222402543,121.33727138558223 A34,34 0 0 0 467.5566829091344,112.01165095083105 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M508.73838018537936,106.07543460976228 A58,58 0 0 1 524.646791515249,144.48173699814336 L500.65501571583565,145.10998375753232 A34,34 0 0 0 491.3293952810845,122.59594442641236 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M524.646791515249,147.51826300185664 A58,58 0 0 1 508.73838018537936,185.92456539023772 L491.3293952810845,169.40405557358764 A34,34 0 0 0 500.65501571583565,146.89001624246768 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M506.5912320569044,188.07171351871267 A58,58 0 0 1 468.18492966852335,203.9801248485823 L467.5566829091344,179.98834904916896 A34,34 0 0 0 490.0707222402543,170.66272861441777 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M465.1484036648101,203.9801248485823 A58,58 0 0 1 426.74210127642897,188.0717135187127 L443.26261109307904,170.66272861441777 A34,34 0 0 0 465.776650424199,179.98834904916896 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<path d="M424.594953147954,185.92456539023772 A58,58 0 0 1 408.6865418180844,147.51826300185667 L432.6783176174977,146.8900162424677 A34,34 0 0 0 442.0039380522489,169.40405557358764 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="0" data-lit="false"></path>
+<text x="466.6666666666667" y="141" font-size="17" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="">즉시</text>
+<text x="466.6666666666667" y="163" font-size="11" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">매번 비움</text>
+<rect x="390.6666666666667" y="143.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M601.0000000000001 90 H699.0000000000001 V95 H704.0000000000001 V197 H699.0000000000001 V202 H601.0000000000001 V197 H596.0000000000001 V95 H601.0000000000001 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="601.0000000000001" y="95" width="98" height="102" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="614.5000000000001" y="80" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="614.5000000000001" y="202" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="636.5000000000001" y="80" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="636.5000000000001" y="202" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="658.5000000000001" y="80" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="658.5000000000001" y="202" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="680.5000000000001" y="80" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="680.5000000000001" y="202" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="704.0000000000001" y="109.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="704.0000000000001" y="177.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<text x="645.0000000000001" y="139" font-size="58" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="call-count" data-calls="4">4</text>
+<text x="690.0000000000001" y="156" font-size="11" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">회</text>
+<text x="650.0000000000001" y="185" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">개별 호출</text>
+<path d="M541.6666666666667 125 L588.0000000000001 125" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="send-trace" data-queue="0"></path>
+<path d="M583.0000000000001 121.5 L588.0000000000001 125 L583.0000000000001 128.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<rect x="588.0000000000001" y="122.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="532.6666666666667" y="122.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M541.6666666666667 139 L588.0000000000001 139" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="send-trace" data-queue="0"></path>
+<path d="M583.0000000000001 135.5 L588.0000000000001 139 L583.0000000000001 142.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<rect x="588.0000000000001" y="136.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="532.6666666666667" y="136.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M541.6666666666667 153 L588.0000000000001 153" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="send-trace" data-queue="0"></path>
+<path d="M583.0000000000001 149.5 L588.0000000000001 153 L583.0000000000001 156.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<rect x="588.0000000000001" y="150.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="532.6666666666667" y="150.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M541.6666666666667 167 L588.0000000000001 167" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="send-trace" data-queue="0"></path>
+<path d="M583.0000000000001 163.5 L588.0000000000001 167 L583.0000000000001 170.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<rect x="588.0000000000001" y="164.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="532.6666666666667" y="164.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<text x="24" y="254" font-size="13" fill="#67c8ff" text-anchor="start" dominant-baseline="middle" class="">변경 후</text>
+<text x="104" y="284" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">캐릭터 이동</text>
+<text x="287.33333333333337" y="284" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">이동 메시지</text>
+<text x="466.6666666666667" y="284" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">SendQ</text>
+<text x="650.0000000000001" y="284" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">WSASend</text>
+<path d="M37 310 H171 V315 H176 V449 H171 V454 H37 V449 H32 V315 H37 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="37" y="315" width="134" height="134" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<circle cx="73" cy="351" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<circle cx="73" cy="413" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<circle cx="135" cy="351" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<circle cx="135" cy="413" r="2" fill="#486980" stroke="none" stroke-width="1.6"></circle>
+<path d="M90 351 L118 351" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M113 347.5 L118 351 L113 354.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<circle cx="73" cy="351" r="10" fill="#101b29" stroke="#aec4d7" stroke-width="1.1"></circle>
+<text x="73" y="351" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">1</text>
+<path d="M135 368 L135 396" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M131.5 391 L135 396 L138.5 391" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<circle cx="135" cy="351" r="10" fill="#101b29" stroke="#aec4d7" stroke-width="1.1"></circle>
+<text x="135" y="351" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">2</text>
+<path d="M118 413 L90 413" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M95 409.5 L90 413 L95 416.5" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<circle cx="135" cy="413" r="10" fill="#101b29" stroke="#aec4d7" stroke-width="1.1"></circle>
+<text x="135" y="413" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">3</text>
+<path d="M73 396 L73 368" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="movement-route" opacity="0.72"></path>
+<path d="M69.5 373 L73 368 L76.5 373" fill="none" stroke="#83a5bd" stroke-width="1.6"></path>
+<use href="#pcb-study-mage-assembly" transform="translate(73 413) scale(1.1875)" data-role="character" aria-label="마법사 캐릭터"></use>
+<text x="95" y="395" font-size="12" fill="#67c8ff" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">4</text>
+<path d="M176 382 L215.33333333333334 382 L215.33333333333334 331 L230.33333333333334 331" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 331 L359.33333333333337 331 L359.33333333333337 382 L392.6666666666667 382" fill="none" stroke="#67c8ff" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 378.5 L392.6666666666667 382 L387.6666666666667 385.5" fill="none" stroke="#67c8ff" stroke-width="1.6"></path>
+<path d="M176 382 L215.33333333333334 382 L215.33333333333334 365 L230.33333333333334 365" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 365 L359.33333333333337 365 L359.33333333333337 382 L392.6666666666667 382" fill="none" stroke="#67c8ff" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 378.5 L392.6666666666667 382 L387.6666666666667 385.5" fill="none" stroke="#67c8ff" stroke-width="1.6"></path>
+<path d="M176 382 L215.33333333333334 382 L215.33333333333334 399 L230.33333333333334 399" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 399 L359.33333333333337 399 L359.33333333333337 382 L392.6666666666667 382" fill="none" stroke="#67c8ff" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 378.5 L392.6666666666667 382 L387.6666666666667 385.5" fill="none" stroke="#67c8ff" stroke-width="1.6"></path>
+<path d="M176 382 L215.33333333333334 382 L215.33333333333334 433 L230.33333333333334 433" fill="none" stroke="#83a5bd" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M344.33333333333337 433 L359.33333333333337 433 L359.33333333333337 382 L392.6666666666667 382" fill="none" stroke="#67c8ff" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="circuit-trace"></path>
+<path d="M387.6666666666667 378.5 L392.6666666666667 382 L387.6666666666667 385.5" fill="none" stroke="#67c8ff" stroke-width="1.6"></path>
+<rect x="171" y="379.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="212.83333333333334" y="379.5" width="5" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="via"></rect>
+<rect x="356.83333333333337" y="379.5" width="5" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="via"></rect>
+<path d="M242.33333333333334 317 H332.33333333333337 V322 H337.33333333333337 V340 H332.33333333333337 V345 H242.33333333333334 V340 H237.33333333333334 V322 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="322" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="319" width="96" height="24" fill="#19415e" stroke="none" stroke-width="1.6" opacity="0.68"></rect>
+<text x="287.33333333333337" y="331" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 1</text>
+<rect x="229.33333333333334" y="328.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="328.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M242.33333333333334 351 H332.33333333333337 V356 H337.33333333333337 V374 H332.33333333333337 V379 H242.33333333333334 V374 H237.33333333333334 V356 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="356" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="353" width="96" height="24" fill="#19415e" stroke="none" stroke-width="1.6" opacity="0.68"></rect>
+<text x="287.33333333333337" y="365" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 2</text>
+<rect x="229.33333333333334" y="362.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="362.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M242.33333333333334 385 H332.33333333333337 V390 H337.33333333333337 V408 H332.33333333333337 V413 H242.33333333333334 V408 H237.33333333333334 V390 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="390" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="387" width="96" height="24" fill="#19415e" stroke="none" stroke-width="1.6" opacity="0.68"></rect>
+<text x="287.33333333333337" y="399" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 3</text>
+<rect x="229.33333333333334" y="396.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="396.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M242.33333333333334 419 H332.33333333333337 V424 H337.33333333333337 V442 H332.33333333333337 V447 H242.33333333333334 V442 H237.33333333333334 V424 H242.33333333333334 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="242.33333333333334" y="424" width="90" height="18" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="239.33333333333334" y="421" width="96" height="24" fill="#19415e" stroke="none" stroke-width="1.6" opacity="0.68"></rect>
+<text x="287.33333333333337" y="433" font-size="13" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="message">Msg 4</text>
+<rect x="229.33333333333334" y="430.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="335.33333333333337" y="430.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M403.6666666666667 314 H529.6666666666667 V319 H534.6666666666667 V445 H529.6666666666667 V450 H403.6666666666667 V445 H398.6666666666667 V319 H403.6666666666667 Z" fill="#101b29" stroke="#486980" stroke-width="1.6" data-role="component-package"></path>
+<rect x="403.6666666666667" y="319" width="126" height="126" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="389.6666666666667" y="339.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="533.6666666666667" y="339.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="389.6666666666667" y="419.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="533.6666666666667" y="419.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M408.6865418180844,380.48173699814333 A58,58 0 0 1 424.594953147954,342.0754346097623 L442.0039380522489,358.59594442641236 A34,34 0 0 0 432.6783176174977,381.1099837575323 Z" fill="#67c8ff" stroke="#67c8ff" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="true"></path>
+<text x="424.1682081711475" y="364.39656211120587" font-size="12" fill="#111c2b" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">1</text>
+<path d="M426.74210127642897,339.92828648128733 A58,58 0 0 1 465.1484036648101,324.0198751514177 L465.776650424199,348.01165095083104 A34,34 0 0 0 443.26261109307904,357.3372713855822 Z" fill="#67c8ff" stroke="#67c8ff" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="true"></path>
+<text x="449.06322877787255" y="339.5015415044808" font-size="12" fill="#111c2b" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">2</text>
+<path d="M468.18492966852335,324.0198751514177 A58,58 0 0 1 506.5912320569044,339.92828648128733 L490.0707222402543,357.3372713855822 A34,34 0 0 0 467.5566829091344,348.01165095083104 Z" fill="#67c8ff" stroke="#67c8ff" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="true"></path>
+<text x="484.2701045554608" y="339.5015415044808" font-size="12" fill="#111c2b" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">3</text>
+<path d="M508.73838018537936,342.0754346097623 A58,58 0 0 1 524.646791515249,380.48173699814333 L500.65501571583565,381.1099837575323 A34,34 0 0 0 491.3293952810845,358.59594442641236 Z" fill="#67c8ff" stroke="#67c8ff" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="true"></path>
+<text x="509.16512516218586" y="364.39656211120587" font-size="12" fill="#111c2b" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono">4</text>
+<path d="M524.646791515249,383.51826300185667 A58,58 0 0 1 508.73838018537936,421.9245653902377 L491.3293952810845,405.40405557358764 A34,34 0 0 0 500.65501571583565,382.8900162424677 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="false"></path>
+<path d="M506.5912320569044,424.07171351871267 A58,58 0 0 1 468.18492966852335,439.9801248485823 L467.5566829091344,415.98834904916896 A34,34 0 0 0 490.0707222402543,406.6627286144178 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="false"></path>
+<path d="M465.1484036648101,439.9801248485823 A58,58 0 0 1 426.74210127642897,424.07171351871267 L443.26261109307904,406.6627286144178 A34,34 0 0 0 465.776650424199,415.98834904916896 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="false"></path>
+<path d="M424.594953147954,421.9245653902377 A58,58 0 0 1 408.6865418180844,383.51826300185667 L432.6783176174977,382.8900162424677 A34,34 0 0 0 442.0039380522489,405.40405557358764 Z" fill="#263d52" stroke="#486980" stroke-width="1.6" data-role="queue-slot" data-queue="1" data-lit="false"></path>
+<text x="466.6666666666667" y="377" font-size="17" fill="#edf4fc" text-anchor="middle" dominant-baseline="middle" class="">누적</text>
+<text x="466.6666666666667" y="399" font-size="11" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">4개 모아</text>
+<rect x="390.6666666666667" y="379.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<path d="M601.0000000000001 326 H699.0000000000001 V331 H704.0000000000001 V433 H699.0000000000001 V438 H601.0000000000001 V433 H596.0000000000001 V331 H601.0000000000001 Z" fill="#101b29" stroke="#67c8ff" stroke-width="1.6" data-role="component-package"></path>
+<rect x="601.0000000000001" y="331" width="98" height="102" fill="none" stroke="#486980" stroke-width="0.6"></rect>
+<rect x="614.5000000000001" y="316" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="614.5000000000001" y="438" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="636.5000000000001" y="316" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="636.5000000000001" y="438" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="658.5000000000001" y="316" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="658.5000000000001" y="438" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="680.5000000000001" y="316" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="680.5000000000001" y="438" width="5" height="10" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="704.0000000000001" y="345.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="704.0000000000001" y="413.5" width="10" height="5" fill="#a3b3c0" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<text x="645.0000000000001" y="375" font-size="58" fill="#67c8ff" text-anchor="middle" dominant-baseline="middle" class="pcb-study-mono" data-role="call-count" data-calls="1">1</text>
+<text x="690.0000000000001" y="392" font-size="11" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">회</text>
+<text x="650.0000000000001" y="421" font-size="12" fill="#aec4d7" text-anchor="middle" dominant-baseline="middle" class="">틱 끝 호출</text>
+<path d="M541.6666666666667 382 L588.0000000000001 382" fill="none" stroke="#67c8ff" stroke-width="1.6" stroke-linejoin="miter" stroke-linecap="butt" data-role="send-trace" data-queue="1"></path>
+<path d="M583.0000000000001 378.5 L588.0000000000001 382 L583.0000000000001 385.5" fill="none" stroke="#67c8ff" stroke-width="1.6"></path>
+<rect x="588.0000000000001" y="379.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="532.6666666666667" y="379.5" width="10" height="5" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="solder-pad"></rect>
+<rect x="547.3333333333335" y="347" width="36" height="18" fill="#111c2b" stroke="#486980" stroke-width="1.6" rx="0"></rect>
+<text x="565.3333333333335" y="356" font-size="11" fill="#67c8ff" text-anchor="middle" dominant-baseline="middle" class="">틱 끝</text>
+<rect x="553.3333333333335" y="373" width="24" height="18" fill="#111c2b" stroke="#67c8ff" stroke-width="1.2" data-role="batch-carrier"></rect>
+<rect x="556.3333333333335" y="377" width="3" height="10" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="batch-message"></rect>
+<rect x="561.3333333333335" y="377" width="3" height="10" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="batch-message"></rect>
+<rect x="566.3333333333335" y="377" width="3" height="10" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="batch-message"></rect>
+<rect x="571.3333333333335" y="377" width="3" height="10" fill="#67c8ff" stroke="none" stroke-width="1.6" data-role="batch-message"></rect>
+<text x="24" y="488" font-size="12" fill="#aec4d7" text-anchor="start" dominant-baseline="middle" class="">한 수신 세션 · 같은 Msg 4개</text>
+<text x="712" y="488" font-size="12" fill="#67c8ff" text-anchor="end" dominant-baseline="middle" class="">호출 4회 → 1회</text></svg>

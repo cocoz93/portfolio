@@ -1,0 +1,82 @@
+{
+  "scope": "source, responsive diagram geometry, same data across designs, and offscreen SVG rendering",
+  "checked": [
+    {
+      "design": "schematic",
+      "width": 736,
+      "height": 650
+    },
+    {
+      "design": "schematic",
+      "width": 700,
+      "height": 650
+    },
+    {
+      "design": "schematic",
+      "width": 699,
+      "height": 1000
+    },
+    {
+      "design": "schematic",
+      "width": 360,
+      "height": 1000
+    },
+    {
+      "design": "schematic",
+      "width": 320,
+      "height": 1000
+    },
+    {
+      "design": "package",
+      "width": 736,
+      "height": 650
+    },
+    {
+      "design": "package",
+      "width": 700,
+      "height": 650
+    },
+    {
+      "design": "package",
+      "width": 699,
+      "height": 1000
+    },
+    {
+      "design": "package",
+      "width": 360,
+      "height": 1000
+    },
+    {
+      "design": "package",
+      "width": 320,
+      "height": 1000
+    },
+    {
+      "design": "bus",
+      "width": 736,
+      "height": 650
+    },
+    {
+      "design": "bus",
+      "width": 700,
+      "height": 650
+    },
+    {
+      "design": "bus",
+      "width": 699,
+      "height": 1000
+    },
+    {
+      "design": "bus",
+      "width": 360,
+      "height": 1000
+    },
+    {
+      "design": "bus",
+      "width": 320,
+      "height": 1000
+    }
+  ],
+  "issues": [],
+  "browserHostVerified": false
+}

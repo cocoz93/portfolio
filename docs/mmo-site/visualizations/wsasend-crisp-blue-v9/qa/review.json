@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "figure": 1,
+  "bytes": 304119,
+  "saturatedFocusColor": "#0066d6",
+  "whiteTextContrast": 4.83766369450936,
+  "checked": [
+    {
+      "width": 1024,
+      "height": 548,
+      "duration": 23280,
+      "geometryPreserved": true
+    },
+    {
+      "width": 736,
+      "height": 548,
+      "duration": 23280,
+      "geometryPreserved": true
+    },
+    {
+      "width": 700,
+      "height": 548,
+      "duration": 23280,
+      "geometryPreserved": true
+    },
+    {
+      "width": 699,
+      "height": 1080,
+      "duration": 23280,
+      "geometryPreserved": true
+    },
+    {
+      "width": 360,
+      "height": 1080,
+      "duration": 23280,
+      "geometryPreserved": true
+    },
+    {
+      "width": 320,
+      "height": 1080,
+      "duration": 23280,
+      "geometryPreserved": true
+    }
+  ],
+  "strongTargetFillVerified": true,
+  "originalGeometryAndTimingPreserved": true,
+  "originalsPreserved": true,
+  "playPauseVerified": true,
+  "resizePreservesPhase": true,
+  "stateRestoreVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false
+}

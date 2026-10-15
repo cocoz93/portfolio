@@ -1,0 +1,24 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 2,
+  "scope": "matched-before-after",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-morph-v2/quantization.html",
+  "sha256": "88f4b9dac59da1df5c1d2ccc386f78d705e1b2f452da3ac96fa9856d32513806",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-morph-v2/qa/review.json",
+  "entryBytesBefore": 14,
+  "entryBytesAfter": 9,
+  "batchCount": 100,
+  "packetBytesBefore": 1406,
+  "packetBytesAfter": 906,
+  "durationMs": 13530,
+  "coordinateMorph": {
+    "fromBytes": 4,
+    "toBytes": 2,
+    "durationMs": 850,
+    "holdMs": 1150,
+    "simultaneous": true
+  },
+  "secondaryFieldsMuted": true,
+  "layoutPreserved": true
+}

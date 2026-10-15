@@ -1,0 +1,45 @@
+{
+  "browserHostVerified": false,
+  "variants": [
+    "패킷 중심형"
+  ],
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "upper left",
+  "outputRoute": "lower right",
+  "smallWSASendOutlet": true,
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "manual playback, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "layout": "packet",
+      "width": 736,
+      "height": 548
+    },
+    {
+      "layout": "packet",
+      "width": 700,
+      "height": 548
+    },
+    {
+      "layout": "packet",
+      "width": 699,
+      "height": 862
+    },
+    {
+      "layout": "packet",
+      "width": 360,
+      "height": 862
+    },
+    {
+      "layout": "packet",
+      "width": 320,
+      "height": 862
+    }
+  ]
+}

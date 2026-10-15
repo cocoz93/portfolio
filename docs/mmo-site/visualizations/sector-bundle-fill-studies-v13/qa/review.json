@@ -1,0 +1,197 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "얇은 띠 강조",
+    "윤곽 강조",
+    "데이터만 강조"
+  ],
+  "palette": "all three variants exactly match figure 1 palette; fill treatments differ",
+  "paletteChecks": [
+    {
+      "routing": "band",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    },
+    {
+      "routing": "outline",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    },
+    {
+      "routing": "minimal",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    }
+  ],
+  "unintendedCrossings": 0,
+  "layoutPreserved": true,
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "approved 45-degree fan-out",
+  "outputRoute": "bottom outlets on both rows",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "previousDurationMs": 33700,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "independent manual playback, hidden clock, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "material": "band",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 1024,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "band",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "band",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "band",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "band",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "band",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "outline",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 1024,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "outline",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "outline",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "outline",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "outline",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "outline",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 1024,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    }
+  ]
+}

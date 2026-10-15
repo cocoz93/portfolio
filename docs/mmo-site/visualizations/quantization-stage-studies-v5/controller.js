@@ -1,0 +1,28 @@
+function initStudy(design){
+  const kind='quantization-stage-study-'+design+'-v5',root=document.getElementById(kind);if(!root)return;
+  const boards={before:root.querySelector('[data-board="before"]'),after:root.querySelector('[data-board="after"]')},play=root.querySelector('[data-action="play"]'),reset=root.querySelector('[data-action="reset"]'),status=root.querySelector('[data-status]'),program=createProgram(),media=matchMedia('(prefers-reduced-motion: reduce)');
+  const quantized=program.after.segments.find(s=>s.phase==='quantized'),previewTime=program.before.end+program.gap+quantized.start+100;
+  let time=previewTime,preview=true,playing=false,scenes={},nodes={},lastWidth=0,raf=0,timer=0,startedAt=0,startedTime=0,revision=0,lastSaved='';
+  const session=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+  function setter(side){return(id,attrs,text)=>{const node=nodes[side].get(id);if(!node)throw Error('Missing '+id);for(const[k,v]of Object.entries(attrs))node.setAttribute(k,String(v));if(text!==undefined)node.textContent=text;};}
+  function getState(){const f=comparisonFrame(time,program);return {kind,figure:5,design:design==='bytes'?'바이트가 줄어드는 모습':'눈금으로 바꾸는 모습',time,playing,preview,activePanel:preview?'both':f.active,phase:preview?'변환 미리보기 · 재생하면 변경 전부터 비교':f.phase,scope:'coordinate fields only',serverBefore:[f.before.serverX,f.before.serverY],serverAfter:[f.after.serverX,f.after.serverY],qx:quantize(EXAMPLE.x),qy:quantize(EXAMPLE.y),coordinateBytesBefore:8,coordinateBytesAfter:4,quantizationProgress:f.after.quantized,msgStoredBefore:f.before.filled===1,msgStoredAfter:f.after.filled===1,conversionBeforeMsg:true};}
+  function render(){if(!scenes.before)return;const f=comparisonFrame(time,program);applyFrame(scenes.before,f.before,setter('before'));applyFrame(scenes.after,f.after,setter('after'));for(const side of['before','after']){const inactive=!preview&&f.active!=='both'&&(f.active==='transition'?side==='before':side!==f.active);boards[side].style.opacity=inactive?'.32':'1';boards[side].style.filter=inactive?'grayscale(1)':'none';}const text=getState().phase;if(status.textContent!==text)status.textContent=text;play.textContent=playing?'일시정지':preview||time>=program.end||time===0?'재생':'이어 재생';play.setAttribute('aria-pressed',String(playing));}
+  function save(){if(!window.openai?.setWidgetState)return;lastSaved=session+':'+(++revision);const top=document.getElementById('quantization-stage-studies-v5'),states=top.studyStates?top.studyStates():[];window.openai.setWidgetState({modelContent:{kind:'quantization-stage-studies-v5',figure:5,designs:states},privateContent:{kind:'quantization-stage-studies-v5',revision:lastSaved,designs:states.map(s=>({kind:s.kind,time:s.time,preview:s.preview}))}}).catch(()=>{});}
+  function cancel(){if(raf)cancelAnimationFrame(raf);if(timer)clearTimeout(timer);raf=0;timer=0;}
+  function update(){if(playing)time=Math.min(program.end,startedTime+Math.max(0,performance.now()-startedAt));}
+  function stop(){update();cancel();playing=false;}
+  function schedule(){raf=requestAnimationFrame(tick);timer=setTimeout(tick,80);}
+  function tick(){cancel();if(!playing)return;update();render();if(time>=program.end){stop();render();save();}else schedule();}
+  play.addEventListener('click',()=>{if(playing){stop();render();save();return;}if(preview||time>=program.end)time=0;preview=false;if(media.matches)time=program.end;else{playing=true;startedAt=performance.now();startedTime=time;schedule();}render();save();});
+  reset.addEventListener('click',()=>{stop();preview=false;time=0;render();save();});
+  function draw(width){if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,Math.round(width));if(width===lastWidth)return;for(const side of['before','after']){const scene=createScene(width,side,design),board=boards[side],accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));scenes[side]=scene;board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);nodes[side]=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));}lastWidth=width;render();}
+  function restore(snapshot){const saved=snapshot?.privateContent;if(!saved||saved.kind!=='quantization-stage-studies-v5'||saved.revision===lastSaved)return;const s=saved.designs?.find(s=>s.kind===kind);if(!s)return;stop();time=Math.max(0,Math.min(program.end,Number(s.time)||0));preview=Boolean(s.preview);render();}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>draw(entries[0].contentRect.width)).observe(root);
+  window.addEventListener('openai:set_globals',e=>restore(e.detail?.globals?.widgetState));media.addEventListener('change',()=>{if(media.matches){stop();render();save();}});
+  // Switching a study never starts playback; pause a running hidden study.
+  if(typeof MutationObserver!=='undefined')new MutationObserver(()=>{if(root.hidden&&playing){stop();render();}}).observe(root,{attributes:true,attributeFilter:['hidden']});
+  root.animation={getState,seek(t){stop();preview=false;time=Math.max(0,Math.min(program.end,Number(t)||0));render();},duration:program.end};
+}
+initStudy('bytes');initStudy('ticks');
+document.getElementById('quantization-stage-studies-v5').studyStates=()=>['bytes','ticks'].map(d=>document.getElementById('quantization-stage-study-'+d+'-v5').animation.getState());

@@ -1,0 +1,39 @@
+{
+  "verification": "source, geometry, offscreen SVG rendering",
+  "browserHostVerified": false,
+  "static": true,
+  "matchedOriginalPalette": true,
+  "matchedOriginalFonts": true,
+  "checked": [
+    {
+      "width": 736,
+      "height": 478,
+      "labels": 52
+    },
+    {
+      "width": 700,
+      "height": 478,
+      "labels": 52
+    },
+    {
+      "width": 680,
+      "height": 478,
+      "labels": 52
+    },
+    {
+      "width": 679,
+      "height": 818,
+      "labels": 52
+    },
+    {
+      "width": 360,
+      "height": 818,
+      "labels": 52
+    },
+    {
+      "width": 320,
+      "height": 818,
+      "labels": 52
+    }
+  ]
+}

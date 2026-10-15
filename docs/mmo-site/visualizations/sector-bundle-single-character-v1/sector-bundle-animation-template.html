@@ -1,0 +1,124 @@
+<style>
+/* ORIGINAL_FONTS */
+#sector-bundle-single-character-v1 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#6cc7ff;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-dark:#617e9a;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);background:var(--pcb-bg);color-scheme:dark;
+  font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#sector-bundle-single-character-v1 .bundle-animation-board {display:block;width:100%;height:auto}
+#sector-bundle-single-character-v1 .bundle-animation-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#sector-bundle-single-character-v1 .bundle-animation-board .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#sector-bundle-single-character-v1 .single-motion-toolbar {padding:12px 24px}
+#sector-bundle-single-character-v1 .single-motion-status {font-size:12px;color:var(--pcb-muted);flex:1 1 220px;text-align:right}
+</style>
+<div id="sector-bundle-single-character-v1" aria-label="원본 WSASend 구성으로 맞춘 패킷 묶음 비교">
+  <svg class="bundle-animation-board" xmlns="http://www.w3.org/2000/svg" width="736" height="478" viewBox="0 0 736 478" role="img" aria-labelledby="single-character-title single-character-description">
+    <title id="single-character-title">한 캐릭터의 네 이동과 최종 위치 Msg 비교</title>
+    <desc id="single-character-description">각 그림에는 마법사 캐릭터 한 명만 있습니다. 같은 3×3 격자에서 (0,2)에서 (0,1), (1,1), (1,0), (2,0)으로 한 칸씩 네 번 이동하며 북쪽과 동쪽을 바라봅니다. 변경 전에는 이동마다 좌표를 담은 Msg 네 개가 한 수신 세션의 SendQ에 쌓입니다. 변경 후에는 같은 캐릭터의 변경을 중복 등록하지 않고 틱 끝에 최종 좌표 (2,0)와 방향을 담은 묶음 Msg 하나를 만듭니다. Msg는 왼쪽에서 오른쪽으로 채워지고 밝은 신호가 배선을 따라 이동합니다. 큐가 채워진 뒤 양쪽 모두 틱 끝에 WSASend를 한 번 호출하여 커널에 송신을 요청하고, 요청한 데이터는 SendQ에서 비웁니다. WSASend 호출 횟수의 감소를 비교하는 그림이 아니며 수신 완료를 뜻하지 않습니다. 이번 예시는 여러 캐릭터의 상태를 한 패킷에 모으는 경우와 달리, 한 캐릭터의 중간 이동을 최종 상태로 줄이는 경우입니다. 재생하지 않는 쪽은 회색으로 낮추고 마지막에는 두 그림을 함께 비교합니다. 원형 SendQ는 바이트 링버퍼를 도식화한 것으로 고정 패킷 슬롯이나 정확한 바이트 크기를 뜻하지 않습니다. 움직임 줄이기 설정에서는 최종 비교를 표시합니다.</desc>
+    <!-- MATCHED_SCENE -->
+  </svg>
+  <div class="viz-controls single-motion-toolbar">
+    <button type="button" class="btn" data-action="play" aria-label="애니메이션 재생">재생</button>
+    <button type="button" class="btn" data-action="replay" aria-label="처음부터 다시 재생">다시 재생</button>
+    <span class="single-motion-status" role="status" aria-live="polite">완료 · 같은 최종 위치 · Msg 4개 → 1개</span>
+  </div>
+</div>
+<script>
+(() => {
+/* MATCHED_SOURCE */
+  const root=document.getElementById("sector-bundle-single-character-v1");
+  if(!root)return;
+  const board=root.querySelector(".bundle-animation-board");
+  const playButton=root.querySelector('[data-action="play"]'),replayButton=root.querySelector('[data-action="replay"]'),status=root.querySelector('.single-motion-status');
+  const KIND='sector-single-final-state-v1';
+  const reduced=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false,addEventListener(){}};
+  let scene=null,program=createBundleProgram(false),time=program.end,playing=false,raf=0,lastFrame=0;
+  let drawnWidth=0,pendingWidth=0,layoutFrame=0,hasRun=false,restored=false,nodes=new Map();
+  function set(id,attrs,text){
+    const element=nodes.get(id);if(!element)throw Error(`Missing animation element: ${id}`);
+    for(const [key,value] of Object.entries(attrs)){
+      const next=String(value);if(element.getAttribute(key)!==next)element.setAttribute(key,next);
+    }
+    if(text!==undefined&&element.textContent!==text)element.textContent=text;
+  }
+  function paint(){
+    if(!scene)return;
+    const frame=bundleFrame(time,program);applyBundleFrame(scene,frame,set);
+    const phase=reduced.matches?'완료 · Msg 4개 → 1개 · 움직임 줄이기':frame.phase;
+    if(status.textContent!==phase)status.textContent=phase;
+    playButton.textContent=reduced.matches?'결과 보기':playing?'일시정지':time>0&&time<program.end?'이어서 재생':'재생';
+    playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':reduced.matches?'움직임 없이 최종 비교 보기':'애니메이션 재생');
+  }
+  function state(){
+    const frame=bundleFrame(time,program);
+    return {kind:KIND,time,duration:program.end,playing,phase:frame.phase,activeRow:frame.activeRow,messagesBefore:frame.rows[0].copies,messagesAfter:frame.rows[1].copies,queuedBefore:frame.rows[0].drain>=1?0:frame.rows[0].copies,queuedAfter:frame.rows[1].drain>=1?0:frame.rows[1].copies,wsasendBefore:frame.rows[0].sent?1:0,wsasendAfter:frame.rows[1].sent?1:0};
+  }
+  function save(){
+    if(!window.openai?.setWidgetState)return;
+    const current=state(),position=locateBundleSegment(time,program);
+    try{Promise.resolve(window.openai.setWidgetState({modelContent:current,privateContent:{kind:KIND,segment:position.index,phaseProgress:position.progress,playing}})).catch(()=>{});}catch{}
+  }
+  function schedule(){if(playing&&!raf)raf=requestAnimationFrame(tick);}
+  function tick(now){
+    raf=0;if(!playing)return;
+    if(document.hidden){lastFrame=0;schedule();return;}
+    if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));
+    lastFrame=now;
+    if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}
+    paint();schedule();
+  }
+  function pause(){playing=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);raf=0;paint();}
+  function play(){
+    hasRun=true;
+    if(reduced.matches){pause();time=program.end;paint();return;}
+    if(time>=program.end)time=0;
+    playing=true;lastFrame=0;paint();schedule();
+  }
+  function replay(){pause();time=0;play();}
+  function draw(width){
+    if(!Number.isFinite(width)||width<=0)return;
+    width=Math.max(320,width);if(Math.abs(width-drawnWidth)<.5)return;
+    const position=locateBundleSegment(time,program),atEnd=time>=program.end;
+    const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));
+    scene=createBundleAnimationScene(width);program=createBundleProgram(scene.compact);
+    time=atEnd?program.end:program.segments[position.index].start+position.progress*program.segments[position.index].duration;
+    board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);
+    board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));
+    nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(element=>[element.id,element]));drawnWidth=width;lastFrame=0;paint();
+  }
+  function queueLayout(width){
+    if(!Number.isFinite(width)||width<=0)return;
+    pendingWidth=Math.max(320,width);
+    if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{
+      layoutFrame=0;
+      draw(pendingWidth);
+    });
+  }
+  function restore(snapshot){
+    const saved=snapshot?.privateContent;
+    if(saved?.kind!==KIND||!Number.isInteger(saved.segment)||saved.segment<0||saved.segment>=program.segments.length||!Number.isFinite(saved.phaseProgress))return false;
+    pause();const segment=program.segments[saved.segment];
+    time=reduced.matches?program.end:segment.start+bundleClamp(saved.phaseProgress)*segment.duration;
+    restored=true;hasRun=true;playing=Boolean(saved.playing)&&time<program.end&&!reduced.matches;lastFrame=0;paint();schedule();return true;
+  }
+  playButton.addEventListener('click',()=>{playing?pause():play();save();});
+  replayButton.addEventListener('click',()=>{replay();save();});
+  document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+  window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState));
+  reduced.addEventListener('change',()=>{if(reduced.matches){pause();time=program.end;paint();}});
+  root.animation=Object.freeze({getState:state,play,pause,replay,seek(ms){pause();time=reduced.matches?program.end:bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  if(typeof ResizeObserver!=="undefined")new ResizeObserver(entries=>queueLayout(entries[0].contentRect.width)).observe(root);
+  if(!restored&&!reduced.matches){
+    const start=()=>{if(!hasRun){hasRun=true;play();}};
+    if(typeof IntersectionObserver!=='undefined'){
+      const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){observer.disconnect();start();}},{threshold:.05});observer.observe(root);
+    }else start();
+  }
+})();
+</script>

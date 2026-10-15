@@ -1,0 +1,53 @@
+{
+  "figure": 3,
+  "scope": "P1 outbound serialization sharing with three valid recipients as an illustration",
+  "notionPage": "https://app.notion.com/p/39b16a0b9f5980548d14f2afe4cead7c",
+  "notionLastEdited": "2026-09-11T16:13:08.841Z",
+  "codeSources": [
+    {
+      "file": "MMOServer/MMOServer/GameServer.cpp",
+      "symbol": "MakeCreateOtherPlayer",
+      "line": 160,
+      "fact": "Alloc, BeginPacket, WriteCreateEntry, FinalizePacket return one sealed buffer with builder ownership"
+    },
+    {
+      "file": "MMOServer/MMOServer/GameServer.cpp",
+      "symbol": "SendPacket",
+      "line": 2371,
+      "fact": "Individual path reserves one send reference, RequestSendMsg consumes it, final SubRef consumes builder ownership"
+    },
+    {
+      "file": "MMOServer/MMOServer/GameServer.cpp",
+      "symbol": "FanoutToSectors",
+      "line": 3625,
+      "fact": "Count valid recipients, AddRef(N) once, reuse pMsg for each RequestSendMsg, final SubRef consumes builder ownership"
+    },
+    {
+      "file": "ServerCore/Base/CoreConfig.h",
+      "symbol": "USE_LOCKFREE_SENDQ",
+      "line": 16,
+      "value": 0
+    },
+    {
+      "file": "ServerCore/Network/IOCPServer.cpp",
+      "symbol": "RequestSendMsg",
+      "line": 912,
+      "fact": "RingBuffer branch Enqueue copies bytes and immediately calls SubRef; queue retains a byte copy independent of the original buffer"
+    },
+    {
+      "file": "ServerCore/Base/SerialBuffer.cpp",
+      "symbol": "CSerialBuffer::SubRef",
+      "line": 77,
+      "fact": "Ref 1 to 0 returns the buffer through Free to the TLS pool"
+    }
+  ],
+  "sourceDiscrepancy": "The Notion structure detail describes zero-copy pointer queues and reclamation after send completion. Current code selects the byte-copy ring-buffer branch. The diagram follows current code, so SubRef follows each copy and original buffer reclamation occurs while each SendQ still retains its bytes.",
+  "laterOptimizationScope": "Current USE_MEMBERSHIP_DIGEST is enabled; its registration path is not modeled here. Figure 3 intentionally isolates the P1 sharing primitive before digest distribution, as requested for separate optimization figures.",
+  "excludedMetrics": "No combined P1+P2 -68 percent or 0.86 to 0.49 core metrics are attributed to sharing alone. No optimization of per-recipient queue copy count or WSASend count is claimed.",
+  "preview": "A conceptual comparison of prepared buffers, not a single literal timeline frame.",
+  "refMetadata": "Ref is memory-management metadata, not part of the serialized network Header or payload. Header and buffer geometry are not proportional to byte counts.",
+  "browserHostVerified": false,
+  "revision": "Aligned before-after composition with a repeated versus persistent central Msg",
+  "repeatedBeforeAtOnePosition": true,
+  "singlePersistentAfter": true
+}

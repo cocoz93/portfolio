@@ -1,0 +1,22 @@
+<style>
+/*STYLES*/
+#digest-figure-four-v2 .digest-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-figure-four-v2 .digest-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-figure-four-v2 .digest-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-figure-four-v2 [data-status] {min-height:2em}
+</style>
+<div id="digest-figure-four-v2" aria-label="4번 그림 · 9칸 모으기와 같은 섹터 주민에게 각각 한 번 적재">
+  <svg class="digest-board" xmlns="http://www.w3.org/2000/svg" width="736" height="816" viewBox="0 0 736 816" role="img" aria-labelledby="digest-title digest-desc">
+    <title id="digest-title">4번 그림 · 같은 패킷, 세션당 적재 요청 한 번</title>
+    <desc id="digest-desc">수신 섹터 R의 유효섹터 9칸에 패킷 하나씩 둔 예시입니다. 실제로는 칸마다 패킷 수가 다르며 없는 칸도 있을 수 있습니다. 변경 전에는 같은 9패킷을 주민 S1과 S2에게 각각 개별 적재해 세션당 9회 요청합니다. 변경 후에는 9칸의 기존 패킷 바이트를 한 번 모아 R의 Digest 하나를 만들고, 같은 섹터 R 안에 묶여 있는 두 주민의 각 SendQ에 한 번씩 복사합니다. 헤더와 데이터는 그대로이며, 한 세션에게 보낼 때마다 Digest를 다시 만들지 않습니다. 노션 A/B 실측은 동접 4,000에서 적재 요청 약 18만에서 4천 회/tick입니다. 9는 시야 범위이며 실측 호출 수의 배수가 아닙니다.</desc>
+    <!--SCENE-->
+  </svg>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 예시: 같은 9패킷 · 세션당 적재 9회 → 1회</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

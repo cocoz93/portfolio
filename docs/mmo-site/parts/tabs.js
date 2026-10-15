@@ -48,7 +48,7 @@
   let booted=false;
   function syncHash(){
     if(!booted) return;
-    const h = (top==="mmo")   ? (sub==="build" ? "" : sub)
+    const h = (top==="mmo")   ? (sub==="build" ? "" : sub==="optimization"&&window.__optimizationHash ? window.__optimizationHash() : sub)
             : (top==="dummy") ? ("c"+csub)
             :                   top;
     history.replaceState(null, "", h ? "#"+h : location.pathname+location.search);
@@ -78,10 +78,12 @@
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
+    document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="optimization");
     document.getElementById("p-crender").hidden = !(top==="dummy" && csub==="render");
     document.getElementById("p-csafe").hidden = !(top==="dummy" && csub==="safe");
     document.getElementById("p-cload").hidden = !(top==="dummy" && csub==="load");
     document.getElementById("p-misc").hidden  = (top!=="misc");
+    if(window.__optimizationVisibility)window.__optimizationVisibility(top==="mmo"&&sub==="optimization");
     /* 구조도 화면으로 올 때마다 구역 강조는 전체로 — 켜 둔 구역을 들고 다니지 않는다 */
     if(top==="mmo" && sub==="build" && window.resetZone) window.resetZone();
     /* 이 화면으로 (다시) 들어올 때는 첫 로드와 똑같이 '구조가 먼저 서고 데이터가 흐른다' 를 다시 보여준다.
@@ -115,6 +117,7 @@
   /* 해시 딥링크 — #bneck 은 하위 탭이라 상위까지 같이 열어 준다 */
   const h0=(location.hash||"").replace("#","");
   if(h0==="bneck"||h0==="build"){ top="mmo"; sub=h0; }
+  else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="optimization"; }
   else if(h0==="dummy"||h0==="misc"){ top=h0; }
   else if(h0==="csafe"||h0==="cload"||h0==="crender"){ top="dummy"; csub=h0.slice(1); }
   /* #cenv 는 옛 ④ 테스트 환경 탭이었다. 그 내용이 ③ 부하 검증의 첫 띠로 들어갔으니 그쪽으로 보낸다 */

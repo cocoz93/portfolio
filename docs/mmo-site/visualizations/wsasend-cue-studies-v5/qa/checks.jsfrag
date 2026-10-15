@@ -1,0 +1,95 @@
+async function main(){
+  const normalize=value=>JSON.parse(JSON.stringify(value));
+  assert(Buffer.byteLength(fragment)<1_000_000);assert(!/<!doctype|<html\b|<head\b|<body\b/i.test(fragment));
+  assert(!/\b(?:fetch|XMLHttpRequest|WebSocket)\s*\(/.test(script));
+  assert.equal((fragment.match(/class="viz-carousel"/g)||[]).length,1);
+  assert.equal((fragment.match(/data-variant="/g)||[]).length,3);
+  parse(fragment.replace(/<script>[\s\S]*?<\/script>/g,''));
+  const prior=vm.runInNewContext(fs.readFileSync(path.resolve(dir,'../wsasend-ring-light-v4/scene.js'),'utf8')+';({createBundleAnimationScene})');
+  const layouts=[];
+  for(const material of Object.keys(names))for(const width of [1024,736,700,699,360,320]){
+    const scene=api.createBundleAnimationScene(width,'silkscreen','chamfer',material),program=api.createBundleProgram(scene.compact),nodes=parse(scene.markup),reference=prior.createBundleAnimationScene(width);
+    assert.deepEqual(normalize(scene.metrics),normalize(reference.metrics));assert.equal(scene.height,reference.height);
+    for(let r=0;r<2;r++){
+      const row=scene.rows[r];assert.equal(row.messages.length,4);assert.equal(row.queue.length,4);assert.equal(row.packets.length,4);
+      assert.deepEqual(normalize(row.character.positions),normalize(reference.rows[r].character.positions));
+      assert.deepEqual(normalize(row.packets.map(p=>p.payload)),normalize(reference.rows[r].packets.map(p=>p.payload)));
+      for(const beams of ['sourceBeams','copyBeams','outletBeams'])assert.deepEqual(normalize(row[beams].map(b=>b.points)),normalize(reference.rows[r][beams].map(b=>b.points)));
+      assertSeparatePaths(row.sourceBeams,`${material}/${width}/source`);assertSeparatePaths(row.copyBeams,`${material}/${width}/copy`);
+    }
+    for(const label of scene.labels){
+      ctx.font=`500 ${label.size}px PCB-Review`;const w=ctx.measureText(label.label).width,x=label.x-(label.anchor==='middle'?w/2:label.anchor==='end'?w:0);
+      assert(label.size>=11);assert(x>=-1&&x+w<=width+1,`${material}/${width}: ${label.label}`);assert(label.y-label.size/2>=0&&label.y+label.size/2<=scene.height);
+    }
+    const preview=api.bundlePreviewFrame(program);assert.equal(preview.rows[0].calls,4);assert.equal(preview.rows[1].calls,0);assert.equal(preview.rows[1].copies,4);
+    api.applyBundleFrame(scene,preview,setter(nodes));
+    assert.equal(nodes.get(scene.rows[0].queueCount).textContent,'0개');assert.equal(nodes.get(scene.rows[1].queueCount).textContent,'4개');
+    for(let actor=0;actor<4;actor++){
+      const before=program.segments.find(s=>s.row===0&&s.phase==='queue'&&s.actor===actor),release=program.segments.find(s=>s.row===0&&s.phase==='release'&&s.actor===actor);
+      const loaded=api.bundleFrame(before.end,program),emptied=api.bundleFrame(release.end,program);
+      assert.equal(loaded.rows[0].copies,1);assert.equal(emptied.rows[0].copies,0);assert.equal(emptied.rows[0].calls,actor+1);
+      api.applyBundleFrame(scene,emptied,setter(nodes));assert.equal(nodes.get(scene.rows[0].queueCount).textContent,'0개');
+      const after=program.segments.find(s=>s.row===1&&s.phase==='queue'&&s.actor===actor),accumulated=api.bundleFrame(after.end,program);
+      assert.equal(accumulated.rows[1].copies,actor+1);assert.equal(accumulated.rows[1].calls,0);
+      api.applyBundleFrame(scene,accumulated,setter(nodes));assert.equal(nodes.get(scene.rows[1].queueCount).textContent,`${actor+1}개`);
+    }
+    const final=api.bundleFrame(program.end,program);assert.equal(final.rows[0].calls,4);assert.equal(final.rows[1].calls,1);
+    assert.equal(final.rows[0].copies,0);assert.equal(final.rows[1].copies,0);api.applyBundleFrame(scene,final,setter(nodes));
+    for(const row of scene.rows){assert.equal(nodes.get(row.queueCount).textContent,'0개');assert.equal(nodes.get(row.character.face).getAttribute('data-facing'),'south');}
+    for(const segment of program.segments){
+      const frame=api.bundleFrame((segment.start+segment.end)/2,program);api.applyBundleFrame(scene,frame,setter(nodes));
+      if(segment.phase==='queue'){
+        const row=scene.rows[segment.row],packet=row.packets[segment.actor];assert(Number(nodes.get(packet.contentGroup).getAttribute('opacity'))<1);
+        if(material==='fill'){const window=row.queueWindows[segment.actor];assert(Math.abs(Number(nodes.get(window.mask).getAttribute('width'))-window.width/2)<1e-6);}
+        if(material==='blocks'){const tile=row.queueBlocks[segment.actor];assert(nodes.get(tile.group).getAttribute('transform')!=='translate(0 0)');assert.equal(nodes.get(tile.group).getAttribute('opacity'),'1');}
+      }
+    }
+    const ranges=api.bundleCoreRanges(program),coreDuration=ranges.reduce((sum,r)=>sum+r.duration,0);
+    let t=ranges[0].start,elapsed=0;while(t<program.end&&elapsed<coreDuration+100){t=api.bundleAdvance(t,50,program,'core');elapsed+=50;}
+    assert.equal(t,program.end);assert(elapsed<=coreDuration+50);
+    layouts.push({material,width,height:scene.height,coreDuration,fullDuration:program.end});
+  }
+  const sceneFor=material=>api.createBundleAnimationScene(736,'silkscreen','chamfer',material),program=api.createBundleProgram(false);
+  const loadedSegment=program.segments.find(s=>s.row===1&&s.phase==='queue'&&s.actor===3),held=api.bundleFrame(loadedSegment.end+100,program);
+  const led=sceneFor('led'),ledNodes=parse(led.markup);api.applyBundleFrame(led,held,setter(ledNodes));assert(Number(ledNodes.get(led.rows[1].queueFlashes[3]).getAttribute('opacity'))>.6);
+  const blocks=sceneFor('blocks'),blockNodes=parse(blocks.markup);api.applyBundleFrame(blocks,held,setter(blockNodes));
+  for(const tile of blocks.rows[1].queueBlocks){assert.equal(blockNodes.get(tile.group).getAttribute('transform'),'translate(0 0)');assert.equal(blockNodes.get(tile.group).getAttribute('opacity'),'1');}
+  const send=program.segments.find(s=>s.row===1&&s.phase==='outlet');api.applyBundleFrame(blocks,api.bundleFrame(send.start+send.duration*.45,program),setter(blockNodes));
+  assert(blocks.rows[1].queueBlocks.some(tile=>blockNodes.get(tile.group).getAttribute('transform')!=='translate(0 0)'));
+  assert(blocks.rows[1].queueBlocks.every(tile=>blockNodes.get(tile.group).getAttribute('opacity')==='1'));
+  assert.equal(blockNodes.get(blocks.rows[1].outletBeams[0].head).getAttribute('opacity'),'0');
+  const filling=sceneFor('fill'),fillNodes=parse(filling.markup),release=program.segments.find(s=>s.row===1&&s.phase==='release');
+  api.applyBundleFrame(filling,api.bundleFrame(release.start+release.duration*.5,program),setter(fillNodes));
+  for(const window of filling.rows[1].queueWindows){assert(Math.abs(Number(fillNodes.get(window.mask).getAttribute('width'))-window.width/2)<1e-6);assert(Number(fillNodes.get(window.mask).getAttribute('x'))>window.x);}
+  const rt=runtime(),first=rt.designs[0],animation=first.animation;
+  assert.equal(rt.designs.length,3);assert(rt.designs.every(d=>!d.animation.getState().playing));assert.equal(rt.saves.length,0);
+  first.buttons.play.fire('click');assert.equal(animation.getState().mode,'core');assert.equal(animation.getState().playing,true);
+  rt.advance();rt.advance(80);assert(animation.getState().time>0);
+  first.buttons.play.fire('click');const paused=animation.getState().time;rt.advance(80);assert.equal(animation.getState().time,paused);
+  first.buttons.full.fire('click');assert.equal(animation.getState().mode,'full');assert.equal(animation.getState().time,0);rt.advance();rt.advance(80);
+  first.buttons.full.fire('click');assert.equal(animation.getState().playing,false);
+  first.buttons.play.fire('click');assert.equal(animation.getState().mode,'core');rt.advance();rt.advance(80);first.buttons.play.fire('click');
+  const saved=rt.saves.at(-1),restored=runtime(736,false,saved);assert.equal(restored.designs[0].animation.getState().mode,'core');assert.equal(restored.saves.length,0);
+  animation.seek(loadedSegment.end+100);rt.resize(320);assert.equal(animation.getState().queuedAfter,4);assert.equal(first.board.getAttribute('viewBox'),'0 0 320 1080');
+  rt.resize(736);animation.play('core');for(let i=0;i<400&&animation.getState().playing;i++)rt.advance(80);
+  assert.equal(animation.getState().playing,false);assert.equal(animation.getState().callsBefore,4);assert.equal(animation.getState().callsAfter,1);
+  assert.equal(rt.designs[1].animation.getState().playing,false);assert.equal(rt.designs[2].animation.getState().playing,false);
+  const reduced=runtime(736,true);reduced.designs[0].buttons.play.fire('click');assert.equal(reduced.designs[0].animation.getState().playing,false);
+  assert.equal(reduced.pending.size,0);assert.equal(reduced.designs[0].animation.getState().queuedAfter,4);
+  for(const [file,expected] of [
+    ['../archive/wsasend-restored-20261012/wsasend-restored.html','856E1491CC7799AEC9D43B0433B1F57F34E022C9044971A2353B7ABD40817DEB'],
+    ['../sector-bundle-before-speed-v18/before-speed.html','41D9AD560871C9045803E4501011C81C384EDB74DA648177332D6C35420D3ACE']
+  ])assert.equal(require('node:crypto').createHash('sha256').update(fs.readFileSync(path.resolve(dir,file))).digest('hex').toUpperCase(),expected);
+  for(const material of Object.keys(names)){
+    await snapshot(736,'silkscreen',null,`${material}-preview`,material);
+    await snapshot(320,'silkscreen',null,`${material}-mobile`,material);
+    const entering=program.segments.find(s=>s.row===1&&s.phase==='queue'&&s.actor===2);
+    await snapshot(736,'silkscreen',entering.start+entering.duration*.7,`${material}-entry`,material);
+    await snapshot(736,'silkscreen',send.start+send.duration*.45,`${material}-send`,material);
+    if(material==='blocks')await snapshot(320,'silkscreen',send.start+send.duration*.65,'blocks-mobile-send',material);
+    await snapshot(736,'silkscreen',release.start+release.duration*.5,`${material}-release`,material);
+  }
+  const report={ok:true,bytes:Buffer.byteLength(fragment),variants:names,layouts,playModesVerified:true,stateRestoreVerified:true,resizeVerified:true,reducedMotionVerified:true,perSessionSemanticsVerified:true,sourceLayoutPreserved:true,browserHostVerified:false};
+  fs.writeFileSync(path.join(__dirname,'review.json'),JSON.stringify(report,null,2));console.log(JSON.stringify({ok:true,bytes:report.bytes,variants:report.variants,checks:layouts.length,coreDuration:layouts[0].coreDuration,fullDuration:layouts[0].fullDuration,browserHostVerified:false},null,2));
+}
+main().catch(error=>{console.error(error);process.exitCode=1;});

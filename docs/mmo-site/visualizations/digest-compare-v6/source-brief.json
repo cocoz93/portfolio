@@ -1,0 +1,33 @@
+{
+  "figure": 4,
+  "revision": 7,
+  "scope": "matched before-after comparison",
+  "composition": "Two adjacent panels use the same approved sector geometry, characters and SendQs. Before shows one Msg at a time; after preserves the accepted Digest design. Below 656 px the panels stack without shrinking labels.",
+  "sourcePage": "https://app.notion.com/p/digest-18-4-gameloop-0-57-0-21-39b16a0b9f59809b9155c081cd253537",
+  "basisAfter": "../digest-after-player-chat-v5/digest-after.html",
+  "eventActor": "A",
+  "sourceCells": [4,4,4,4],
+  "packetTypes": ["movement","chat","chat","chat"],
+  "packetIdsPerRecipient": [1,2,3,4],
+  "callsBefore": [4,4,4],
+  "callsAfter": [1,1,1],
+  "animation": "Before runs first while after is inactive gray; after then runs while before is inactive gray. Both remain visible at completion. Character movement takes 667 ms in both panels; Msg transport to Digest remains 480 ms.",
+  "rules": [
+    "The same logical Msg IDs, bytes and per-recipient order are delivered before and after",
+    "Before loops around recipients for each Msg",
+    "After retains source-sector packets, rebuilds the temporary Digest per receiving sector, then enqueues once per resident",
+    "The displayed recipient Msg badges are pending-send previews, not storage relocation",
+    "Each displayed receiving sector has one representative resident",
+    "This example's source sector is inside all three recipients' valid neighborhoods",
+    "No new wire-level header is added by Digest"
+  ],
+  "codeEvidence": {
+    "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+    "beforeFunction": "BroadcastSectorPacket",
+    "beforeEnqueue": "RequestSendMsg inside the recipient loop",
+    "afterFunction": "FlushSectorSends",
+    "afterEnqueue": "RequestSendRaw after neighbor Msg byte concatenation"
+  },
+  "limits": ["Allocation, RefCount, actual WSASend execution, membership digest and global cleanup are omitted","The 3x3 map is a viewport, not a complete boundary for all recipient neighborhoods","All example events come from one source sector to keep A's actions clear"],
+  "browserHostVerified": false
+}

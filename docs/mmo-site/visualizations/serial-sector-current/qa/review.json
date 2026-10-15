@@ -1,0 +1,45 @@
+{
+  "ok": true,
+  "figure": 3,
+  "initialMsgsAbsent": true,
+  "onlyOneBeforeMsgAtATime": true,
+  "returnedMsgsDisappear": true,
+  "beforeSequence": "allocate use return 1 then 2 then 3",
+  "poolMovedUp": true,
+  "notifications": "two diagonal straight arrows and one horizontal straight arrow",
+  "functionalCircuitRoutes": "recipient sectors to pool to Msg",
+  "fullBufferAllocationAndReturnGlyph": true,
+  "requestPrecedesBufferAllocation": true,
+  "msgAndQueueGeometryUnchanged": true,
+  "refSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "creationCount": [
+    3,
+    1
+  ],
+  "copyCount": [
+    3,
+    3
+  ],
+  "queueCopiesRemainAfterReturn": true,
+  "durationMs": 19778,
+  "controlsAndPlaybackVerified": true,
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFrames": 247,
+  "browserHostVerified": false,
+  "problems": [],
+  "sha256": "c5124c03ae4d4c433cce378f6d0925d718dd87bab38639d37d11a6140d7d2a65"
+}

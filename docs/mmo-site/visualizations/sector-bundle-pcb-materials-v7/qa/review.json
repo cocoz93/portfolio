@@ -1,0 +1,118 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "솔더마스크형",
+    "칩 모듈형",
+    "에지 커넥터형"
+  ],
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "dataEntriesLabeledAsMsg": false,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "upper left",
+  "outputRoute": "lower right",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "previousDurationMs": 33700,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "independent variants, manual playback, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "layout": "board",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "board",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "board",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "board",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "board",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "module",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "module",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "module",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "module",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "module",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "edge",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "edge",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "edge",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "edge",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "edge",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    }
+  ]
+}

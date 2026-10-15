@@ -1,0 +1,73 @@
+<style>
+/* EMBEDDED_FONTS */
+/* DESIGN_PALETTES */
+#pcb-design-variants-v1 .pcb-design {
+  width:100%;color:var(--pcb-text);background:var(--pcb-bg);color-scheme:dark;
+  font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#pcb-design-variants-v1 .pcb-design-board {display:block;width:100%;height:auto}
+#pcb-design-variants-v1 .pcb-design-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#pcb-design-variants-v1 .pcb-design-board .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+</style>
+<div id="pcb-design-variants-v1" class="viz-carousel" aria-label="전자회로와 PCB 디자인 시안" data-previous-label="이전 디자인" data-next-label="다음 디자인">
+  <section data-variant="설계 도면형" aria-label="가느다란 윤곽선과 접점으로 표현한 전자회로 도면">
+    <div class="pcb-design pcb-design-schematic">
+      <svg class="pcb-design-board" xmlns="http://www.w3.org/2000/svg" data-design="schematic" role="img" aria-labelledby="pcb-schematic-title pcb-schematic-desc" width="736" height="650" viewBox="0 0 736 650">
+        <title id="pcb-schematic-title">설계 도면형</title>
+        <desc id="pcb-schematic-desc">같은 섹터에서 네 방향으로 움직인 플레이어 A부터 D까지의 변경분을 비교하는 정적 시안입니다. 변경 전에는 개별 패킷 네 개를 각 수신 세션 SendQ에 네 번 Copy합니다. 변경 후에는 새 헤더와 count, 네 최종 상태를 담은 묶음 패킷 하나를 세션마다 한 번 Copy합니다. 수신 세션 세 개는 예시이며 실제 주변 시야의 수신자 수는 달라질 수 있습니다.</desc>
+        <!-- SCHEMATIC -->
+      </svg>
+    </div>
+  </section>
+  <section data-variant="칩 패키지형" aria-label="금속 핀과 검은 패키지를 녹색 PCB에 배치한 디자인" hidden>
+    <div class="pcb-design pcb-design-package">
+      <svg class="pcb-design-board" xmlns="http://www.w3.org/2000/svg" data-design="package" role="img" aria-labelledby="pcb-package-title pcb-package-desc" width="736" height="650" viewBox="0 0 736 650">
+        <title id="pcb-package-title">칩 패키지형</title>
+        <desc id="pcb-package-desc">같은 네 플레이어의 변경분과 같은 수신 세션 세 개를 표현합니다. 개별 패킷 네 개를 세션마다 네 번 Copy하던 방식에서, 네 최종 상태를 새 패킷 하나에 담아 세션마다 한 번 Copy하는 방식으로 바뀝니다. 부품과 금속 핀은 전자회로 느낌을 표현하는 외형이며 실제 전기 회로를 설명하는 그림은 아닙니다. 정적 디자인 시안입니다.</desc>
+        <!-- PACKAGE -->
+      </svg>
+    </div>
+  </section>
+  <section data-variant="버스 배선형" aria-label="연결 단자와 슬롯으로 표현한 버스 배선 디자인" hidden>
+    <div class="pcb-design pcb-design-bus">
+      <svg class="pcb-design-board" xmlns="http://www.w3.org/2000/svg" data-design="bus" role="img" aria-labelledby="pcb-bus-title pcb-bus-desc" width="736" height="650" viewBox="0 0 736 650">
+        <title id="pcb-bus-title">버스 배선형</title>
+        <desc id="pcb-bus-desc">같은 섹터의 네 플레이어 변경분을 수신 세션 세 개에 전달하는 정적 시안입니다. 개별 상태 패킷은 세션마다 Copy 네 번, 새 묶음 패킷은 세션마다 Copy 한 번입니다. 각 SendQ는 서로 다른 세션의 큐입니다. 기존 패킷을 단순히 이어붙이는 digest와 구별하여 새 헤더와 count를 가진 패킷을 표시합니다. WSASend 호출 수나 새로운 성능 측정값을 표현한 것은 아닙니다.</desc>
+        <!-- BUS -->
+      </svg>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  /* DRAWING_FUNCTION */
+  const root=document.getElementById("pcb-design-variants-v1");
+  if(!root)return;
+  const boards=Array.from(root.querySelectorAll(".pcb-design-board"));
+  let pendingWidth=0,drawnWidth=736,layoutFrame=0;
+  function queueLayout(width){
+    if(!Number.isFinite(width)||width<=0)return;
+    pendingWidth=width;
+    if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{
+      layoutFrame=0;
+      if(Math.abs(pendingWidth-drawnWidth)<.5)return;
+      drawnWidth=pendingWidth;
+      for(const board of boards){
+        const scene=createPcbDesign(drawnWidth,board.getAttribute("data-design"));
+        const accessible=Array.from(board.children).filter(child=>child.tagName==="title"||child.tagName==="desc");
+        board.replaceChildren(...accessible);
+        board.insertAdjacentHTML("beforeend",scene.markup);
+        board.setAttribute("viewBox",`0 0 ${drawnWidth} ${scene.height}`);
+        board.setAttribute("width",String(drawnWidth));
+        board.setAttribute("height",String(scene.height));
+      }
+    });
+  }
+  if(typeof ResizeObserver!=="undefined"){
+    const observer=new ResizeObserver(entries=>queueLayout(entries[0].contentRect.width));
+    observer.observe(root);
+  }
+  queueLayout(root.getBoundingClientRect().width);
+})();
+</script>

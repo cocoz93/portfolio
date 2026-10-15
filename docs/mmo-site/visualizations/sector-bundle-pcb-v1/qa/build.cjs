@@ -1,0 +1,13 @@
+const fs=require("node:fs"),path=require("node:path");
+const {createBundleLayout}=require("./layouts.cjs");
+const dir=path.resolve(__dirname,"..");
+const prior=fs.readFileSync(path.resolve(dir,"../pcb-animation-v1/wsasend-pcb-previous.html"),"utf8");
+const fontRules=prior.match(/@font-face\{[^}]+\}/g);
+if(!fontRules||fontRules.length!==2)throw new Error("PCB 글꼴을 확인하지 못했습니다.");
+let template=fs.readFileSync(path.join(dir,"sector-bundle-pcb-template.html"),"utf8");
+const drawing=fs.readFileSync(path.join(__dirname,"layouts.cjs"),"utf8").replace(/\nif\(typeof module[^\n]+\n?$/,"\n");
+template=template.replace("/* EMBEDDED_FONTS */",fontRules.join("\n")).replace("/* DRAWING_FUNCTION */",drawing);
+for(const [marker,kind] of [["FANOUT","fanout"],["ANATOMY","anatomy"],["MATRIX","matrix"]])template=template.replace(`<!-- ${marker} -->`,createBundleLayout(736,kind).markup);
+new Function(template.match(/<script>([\s\S]*?)<\/script>/)[1]);
+fs.writeFileSync(path.join(dir,"sector-bundle-pcb.html"),template,"utf8");
+console.log(JSON.stringify({bytes:Buffer.byteLength(template),variants:3,path:path.join(dir,"sector-bundle-pcb.html")}));

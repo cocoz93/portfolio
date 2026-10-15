@@ -1,0 +1,96 @@
+{
+  "figure": 5,
+  "subject": "coordinate quantization only",
+  "notionSource": "https://app.notion.com/p/3bb16a0b9f598049a873fad65fc1aeff",
+  "sourceEvidence": [
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/Shared/Protocol/Protocol.h",
+      "lines": [
+        352,
+        415
+      ],
+      "facts": "512 scale; rounded float-to-uint16; inverse scale; direction low nibble, state high nibble; packed 9B SectorUpdateEntry; max 100 entries"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+      "lines": [
+        635,
+        656
+      ],
+      "facts": "MakeSectorUpdates writes ID, QuantizePos(x), QuantizePos(y), PackDirState"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/Actor.h",
+      "lines": [
+        6,
+        13
+      ],
+      "facts": "RIGHT=4"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/ServerCore/Network/NetHeader.h",
+      "lines": [
+        20,
+        26
+      ],
+      "facts": "MsgHeader is 4B"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/WebClient/proto.js",
+      "lines": [
+        65,
+        65
+      ],
+      "facts": "Client inverse scale 1/512"
+    }
+  ],
+  "beforeHistoricalSource": "Supplied Notion page: ID 4 + direction 1 + state 1 + x 4 + y 4 = 14B. Current checkout has the accepted 9B wire format.",
+  "invariants": [
+    "Server float coordinates and actor movement are identical before and after.",
+    "Coordinates only: float 4B plus float 4B versus uint16 2B plus uint16 2B.",
+    "Multiply by 512 and round before Msg serialization.",
+    "Large integers qx and qy are tick indices in 1/512-tile units.",
+    "After Msg contains no intermediate float bytes; only converted uint16 values are written.",
+    "Coordinate shape morph occurs outside Msg over 850ms, followed by transfer and direct 2B field writes.",
+    "All other fields and headers remain in the actual protocol and are omitted from the drawing."
+  ],
+  "diagramAbstractions": [
+    "PCB quantization component represents a software conversion stage, not hardware or an additional allocated buffer.",
+    "Stage retains the converted numeric representation while a visual copy is written to Msg.",
+    "Only coordinate fields are displayed. Other fields, header, count and physical send remain in the real protocol but are omitted here.",
+    "8B and 4B refer to coordinates only.",
+    "4B-to-2B morph compares representations; actual serializer writes uint16 directly.",
+    "Character motion and animation timings are schematic."
+  ],
+  "styleReference": "serial-sector-bank-v1/figure-3.html palette, embedded fonts, mage, structural strokes and before-after treatment",
+  "status": "draft",
+  "coordinateMorph": {
+    "durationMs": 850,
+    "holdMs": 1150,
+    "simultaneous": true,
+    "secondaryFieldsMuted": true
+  },
+  "visibleElements": [
+    "character movement",
+    "unchanged server float coordinate card",
+    "PCB quantization component",
+    "x and y input/output traces",
+    "two coordinate fields of Msg",
+    "coordinate bytes 8B and 4B"
+  ],
+  "conversionBeforeMsg": true,
+  "conversionLabel": "×512 · 반올림",
+  "preservedGeometry": [
+    "character grid",
+    "server coordinate card",
+    "PCB conversion component",
+    "Msg component",
+    "desktop and mobile layout",
+    "PCB palette",
+    "movement/conversion/transfer speeds",
+    "1150 ms hold"
+  ],
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-single-arrival-v7/qa/review.json",
+  "arrivalBehavior": "Moving coordinate blocks hand over to identical stored Msg blocks at arrival. No pre-arrival fade or second fill animation.",
+  "durationMs": 9750
+}

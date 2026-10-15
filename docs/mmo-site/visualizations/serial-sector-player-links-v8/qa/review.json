@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "figure": 3,
+  "separateMovementMaps": true,
+  "sectorCountPerRow": 9,
+  "queuesBesideActualRecipients": true,
+  "allCopyPathsReachRecipientQueues": true,
+  "sourcePathsStartAtMovingPlayer": true,
+  "poolDrawingRemoved": true,
+  "returnWiringRemoved": true,
+  "paletteMatched": true,
+  "allocationAndSerialization": [
+    3,
+    1
+  ],
+  "copyCount": [
+    3,
+    3
+  ],
+  "retainedDuringAllCopies": true,
+  "afterRefSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "queueCopiesRemainAfterPoolReturn": true,
+  "durationMs": 14488,
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFrames": 100,
+  "oldFailuresReproduced": [
+    "hidden-document-stop",
+    "state-echo-stop",
+    "sparse-frame-time-clamp"
+  ],
+  "fixedCasesVerified": [
+    "timer-fallback",
+    "state-echo",
+    "sparse-frame-time"
+  ],
+  "playPauseRestartAndRestoreVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false,
+  "problems": [],
+  "sha256": "4408186cb150d1c02251fcebdf25957651ff87dc4b379a4f277fd2cf1a140023"
+}

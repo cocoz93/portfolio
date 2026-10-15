@@ -1,0 +1,14 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const dir=__dirname;
+const baseline=fs.readFileSync(path.resolve(dir,'../sector-bundle-held-pulse-v26/scene.js'),'utf8');
+const start=baseline.indexOf('  function mageDefinition(){'),end=baseline.indexOf('  function movement(');
+assert(start>=0&&end>start);
+const source=fs.readFileSync(path.join(dir,'scene-template.js'),'utf8').replace('/* MAGE_RENDERER */',baseline.slice(start,end));
+new vm.Script(source);fs.writeFileSync(path.join(dir,'scene.js'),source);
+const api=vm.runInNewContext(source+';({createMatchedReuseScene})');
+const fonts=fs.readFileSync(path.resolve(dir,'../pcb-animation-v1/wsasend-pcb-previous.html'),'utf8').match(/@font-face\{[^}]+\}/g).join('\n');
+const template=fs.readFileSync(path.join(dir,'studies-template.html'),'utf8');
+const result=template.replace('/* ORIGINAL_FONTS */',fonts).replace('/* SCENE_SOURCE */',source).replace('<!-- ALIGNED_SCENE -->',`<g data-scene-root="">${api.createMatchedReuseScene(736,'aligned').markup}</g>`).replace('<!-- FANOUT_SCENE -->',`<g data-scene-root="">${api.createMatchedReuseScene(736,'fanout').markup}</g>`);
+new vm.Script(result.match(/<script>([\s\S]*?)<\/script>/)[1]);assert(Buffer.byteLength(result)<1_000_000);
+fs.writeFileSync(path.join(dir,'reuse-studies.html'),result);
+console.log(JSON.stringify({file:path.join(dir,'reuse-studies.html'),bytes:Buffer.byteLength(result)}));

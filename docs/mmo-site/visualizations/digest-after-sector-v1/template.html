@@ -1,0 +1,23 @@
+<style>
+/*STYLES*/
+#digest-after-sector-v1 {--pcb-target:#df6572}
+#digest-after-sector-v1 .digest-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-after-sector-v1 .digest-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-after-sector-v1 .digest-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-after-sector-v1 [data-status] {min-height:2em}
+</style>
+<div id="digest-after-sector-v1" aria-label="4번 그림 변경 후 · 섹터별 Msg 보관과 수신 섹터별 Digest">
+  <svg class="digest-board" xmlns="http://www.w3.org/2000/svg" width="736" height="448" viewBox="0 0 736 448" role="img" aria-labelledby="digest-after-title digest-after-desc">
+    <title id="digest-after-title">변경 후 · 각 수신 섹터의 유효범위에서 Digest 구성</title>
+    <desc id="digest-after-desc">마법사 A가 3×3 섹터 그리드 안에서 왼쪽 중앙 칸에서 가운데 중앙 칸으로 이동한 뒤 이동 Msg 1을 가운데 발생 섹터에 보관합니다. 다른 발생 섹터의 채팅 Msg 2와 3, 가운데 섹터의 추가 채팅 Msg 4도 각 발생 섹터 안에 쌓입니다. 맨 위 가로 세 수신 섹터 R1, R2, R3에는 각각 주민 S1, S2, S3가 있습니다. R1을 선택하면 이 그림에 보이는 유효범위의 Msg 2, 1, 4를 원본 헤더와 데이터 그대로 순회 순서대로 연접하여 임시버퍼 Digest R1을 만듭니다. S1의 SendQ에 한 번 적재합니다. 임시버퍼를 비워 R2의 유효범위에 맞춰 Msg 2, 1, 4, 3으로 Digest R2를 다시 구성하고 S2에 한 번 적재합니다. R3은 Msg 1, 4, 3으로 Digest R3을 구성하여 S3에 한 번 적재합니다. 원본 Msg는 발생 섹터에 계속 남아 다른 수신 섹터의 Digest에도 쓰입니다. 수신자의 유효범위는 이 그림 밖에도 이어질 수 있으며 이 그림에 나타난 부분만 강조합니다. 각 섹터의 주민을 한 명씩 표시한 예시입니다. 실제로 같은 수신 섹터의 주민이 여러 명이면 그 섹터용 Digest를 한 번 구성한 뒤 각 주민의 SendQ에 한 번씩 적재합니다. 임시버퍼 제목은 표시용이며 새 패킷 헤더를 추가하지 않습니다. Msg 수명 정리, 후속 WSASend와 추가 멤버십 이벤트는 생략합니다.</desc>
+    <!--SCENE-->
+  </svg>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 발생 섹터에 보관 → 수신 섹터별 Digest → 주민별 1회 적재</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

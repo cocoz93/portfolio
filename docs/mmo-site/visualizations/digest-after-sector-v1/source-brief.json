@@ -1,0 +1,42 @@
+{
+  "figure": 4,
+  "scope": "after-only composition draft",
+  "revision": 2,
+  "visualRevision": "Removed all source-sector-to-Digest circuit wires and gather trails; restored the mage to the before drawing's 36px width and painted source Msgs in front of the player with intentional overlap",
+  "sourcePage": "https://app.notion.com/p/digest-18-4-gameloop-0-57-0-21-39b16a0b9f59809b9155c081cd253537",
+  "composition": "One 3x3 viewport contains the moving player, top-row recipients and original source-sector Msg stacks. The center component is a reusable raw Digest; the right components remain separate resident SendQs.",
+  "example": {
+    "sourcePacketIds": [1, 2, 3, 4],
+    "sourceCells": [4, 3, 5, 4],
+    "R1": [2, 1, 4],
+    "R2": [2, 1, 4, 3],
+    "R3": [1, 4, 3],
+    "enqueueCallsPerResident": [1, 1, 1],
+    "residentsPerShownSector": 1
+  },
+  "semanticRules": [
+    "Packets are stored in the sector where the event originated",
+    "Each receiving sector chooses its own neighboring source-sector packets",
+    "Packet order follows source-sector row and column order, then order within a sector",
+    "Original headers and payloads are concatenated without adding a new wire-level header",
+    "The reusable temporary buffer is cleared and rebuilt for each receiving sector",
+    "Original source packets remain available while other receiving sectors are processed",
+    "One RequestSendRaw per resident; several residents in the same sector would use the same completed Digest bytes",
+    "The displayed grid is a viewport; valid neighborhoods can extend beyond its edges"
+  ],
+  "limits": [
+    "This after draft uses four events to make accumulation visible; the preceding before draft shows one event, so they are not yet a matched numerical A/B example",
+    "Membership digest, global cleanup, Msg allocation and later WSASend execution are outside this drawing",
+    "Only completed source packet generation is illustrated; dirty coordinate aggregation is not changed"
+  ],
+  "codeEvidence": {
+    "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+    "functions": ["RegisterSectorItem", "FlushSectorSends"],
+    "temporaryBufferClearLine": 4373,
+    "neighborSelectionLine": 4389,
+    "originalByteConcatenationLine": 4395,
+    "residentEnqueueLine": 4415
+  },
+  "visualBasis": "Verified Figure 3 character vectors, navy PCB palette, orthogonal 1.5px traces, source packet stacks inside sectors",
+  "browserHostVerified": false
+}

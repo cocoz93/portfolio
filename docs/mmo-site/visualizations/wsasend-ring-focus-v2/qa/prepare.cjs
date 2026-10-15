@@ -1,0 +1,25 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),crypto=require('node:crypto');
+const dir=path.resolve(__dirname,'..');
+function once(s,old,value){assert(s.includes(old),old);assert.equal(s.split(old).length,2,old);return s.replace(old,value);}
+let scene=fs.readFileSync(path.join(dir,'scene-template.js'),'utf8');
+scene=scene.slice(0,scene.indexOf('/* MAGE_RENDERER */'))+fs.readFileSync(path.join(dir,'scene-body.jsfrag'),'utf8');
+scene=once(scene,"const kind='signal-'","const kind='wsasend-ring-focus-'");
+scene=once(scene,"txt(String(i+1),x,y,11,C.bg","txt(String(i+1),x,y,13,C.bg");
+scene=once(scene,"txt(meta.row===1?'누적':'즉시',cx,cy-5,14,C.text);","txt(meta.row===1?'누적':'즉시',cx,cy-7,18,C.text);");
+scene=once(scene,"txt(after?'Msg 1개':'Msg 4개',cx,cy+14,11,C.muted","txt(after?'Msg 1개':'Msg 4개',cx,cy+17,13,C.muted");
+fs.writeFileSync(path.join(dir,'scene-template.js'),scene);
+let html=fs.readFileSync(path.join(dir,'design-studies-template.html'),'utf8').replaceAll('wsasend-matched-v1','wsasend-ring-focus-v2').replaceAll('wsasend-matched-minimal','wsasend-ring-focus-minimal').replaceAll('wsasend-matched-title','wsasend-ring-focus-title').replaceAll('wsasend-matched-desc','wsasend-ring-focus-desc');
+html=html.replace(/<desc id="wsasend-ring-focus-desc">[\s\S]*?<\/desc>/,'<desc id="wsasend-ring-focus-desc">1번 그림. 같은 수신 세션의 SendQ 링버퍼에 같은 네 개의 이동 Msg가 들어갑니다. 변경 전에는 Msg 하나가 들어올 때마다 즉시 WSASend를 호출하고 큐를 비웁니다. 변경 후에는 네 개의 Msg를 누적한 뒤 틱 끝에 WSASend를 한 번 호출합니다. Msg 자체를 합치는 최적화가 아닙니다. SendQ의 지름은 이전 100픽셀에서 152픽셀로 늘렸고 이동판과 Msg는 줄였습니다. Msg의 Header 상세는 생략하고 좌표 데이터만 남겼습니다. 원본 블루, PCB 접점과 배선, 마법사와 왼쪽에서 오른쪽으로 채우는 동작, 회색 비활성 행, 기존 재생 속도를 유지합니다. 송신 출구는 커널에 대한 송신 요청이며 수신 완료나 TCP 패킷 수를 의미하지 않습니다.</desc>');
+fs.writeFileSync(path.join(dir,'design-studies-template.html'),html);
+const build=fs.readFileSync(path.join(dir,'qa/build.cjs'),'utf8').replaceAll('wsasend-matched.html','ring-focus.html');fs.writeFileSync(path.join(dir,'qa/build.cjs'),build);
+let review=fs.readFileSync(path.join(dir,'qa/review.cjs'),'utf8').replaceAll('wsasend-matched.html','ring-focus.html').replaceAll('wsasend-matched-v1','wsasend-ring-focus-v2');
+review=once(review,"assert.equal(scene.metrics.mapW,120);assert.equal(scene.metrics.mapH,144);","assert(scene.metrics.mapW<reference.metrics.mapW&&scene.metrics.mapH<reference.metrics.mapH);assert(scene.metrics.ringR>=reference.metrics.ringR*1.5);");
+review=once(review,'assert.deepEqual(normalize(row.character.positions),normalize(reference.rows[r].character.positions));','assert.equal(row.character.positions.length,reference.rows[r].character.positions.length);');
+review=once(review,'assert.equal(message.height,100);assert.equal(message.width,56);assert.equal(message.titleHeight,24);assert.equal(message.protocolHeaderHeight,20);','assert(message.height<100&&message.width<=56);assert.equal(message.protocolHeaderHeight,0);');
+review=once(review,"assert.equal(nodes.get(packet.base).getAttribute('width'),'48');assert.equal(nodes.get(packet.base).getAttribute('height'),'40');assert(packet.header&&packet.protocolHeader);","assert(Number(nodes.get(packet.base).getAttribute('width'))<48);assert(Number(nodes.get(packet.base).getAttribute('height'))<40);assert(packet.header&&!packet.protocolHeader);");
+review=once(review,'assert.deepEqual(normalize(scene.rows[0].messages),normalize(reference.rows[0].messages));','assert(scene.rows[0].messages.every(m=>m.height<reference.rows[0].messages[0].height));');
+review=once(review,'assert.equal((scene.markup.match(/data-role="packet-header"/g)||[]).length,8);','assert.equal((scene.markup.match(/data-role="packet-header"/g)||[]).length,0);');
+const previous=path.resolve(dir,'../wsasend-matched-v1/wsasend-matched.html'),previousHash=crypto.createHash('sha256').update(fs.readFileSync(previous)).digest('hex');
+review=once(review,'  const program736=api.createBundleProgram(false)',`  assert.equal(require('node:crypto').createHash('sha256').update(fs.readFileSync(path.resolve(dir,'../wsasend-matched-v1/wsasend-matched.html'))).digest('hex'),'${previousHash}');\n  const program736=api.createBundleProgram(false)`);
+fs.writeFileSync(path.join(dir,'qa/review.cjs'),review);
+console.log('Ring area increased; source and Msg simplified. Timing preserved.');

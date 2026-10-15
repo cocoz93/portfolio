@@ -1,0 +1,15 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const dir=path.resolve(__dirname,'..');
+const original=fs.readFileSync(path.resolve(dir,'../pcb-animation-v1/wsasend-pcb-previous.html'),'utf8');
+const fonts=original.match(/@font-face\{[^}]+\}/g);
+const pixelsExpression=original.match(/const pixels=(\[[\s\S]*?\]);/)[1];
+const pixels=vm.runInNewContext(pixelsExpression);
+const sceneSource=fs.readFileSync(path.join(dir,'scenes.js'),'utf8');
+const create=vm.runInNewContext(sceneSource+';createPcbStudy');
+let fragment=fs.readFileSync(path.join(dir,'wsasend-pcb-studies-template.html'),'utf8');
+for(const design of ['mask','schematic','assembly'])fragment=fragment.replace(`<!-- ${design.toUpperCase()}_SCENE -->`,create(736,design,pixels).markup);
+fragment=fragment.replace('/* STUDY_FONTS */',fonts.join('\n')).replace('/* SCENE_SOURCE */',sceneSource).replace('/* MAGE_PIXELS */',JSON.stringify(pixels));
+new vm.Script(fragment.match(/<script>([\s\S]*?)<\/script>/)[1]);
+fs.writeFileSync(path.join(dir,'wsasend-pcb-studies.html'),fragment,'utf8');
+fs.writeFileSync(path.join(__dirname,'mage-pixels.json'),JSON.stringify(pixels));
+console.log(JSON.stringify({bytes:Buffer.byteLength(fragment),designs:3,path:path.join(dir,'wsasend-pcb-studies.html')}));

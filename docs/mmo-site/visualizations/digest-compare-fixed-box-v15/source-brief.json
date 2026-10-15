@@ -1,0 +1,80 @@
+{
+  "figure": 4,
+  "revision": 16,
+  "selectedTransferDesign": "Msg 사본 직접 이동",
+  "transferDesignBasis": "../digest-compare-chat-focus-v14/digest-compare.html",
+  "transferRevision": "Remove Digest container height changes and height interpolation. Its position, width 176 px, three-Msg height 174 px and footer position stay fixed throughout playback, including S3. Only selected data and copy marks change. Chat emphasis, actor actions, recipient scope, timings, source retention and enqueue counts are preserved.",
+  "scope": "matched before-after comparison",
+  "composition": "Before is above after; both panels occupy the full available width. At desktop widths the approved left-to-right sector / Msg or Digest / SendQ flow is preserved. Panels are never halved to place before and after in adjacent columns. Small mobile widths retain the established responsive flow without shrinking labels.",
+  "sourcePage": "https://app.notion.com/p/digest-18-4-gameloop-0-57-0-21-39b16a0b9f59809b9155c081cd253537",
+  "basisAfter": "../digest-compare-chat-focus-v14/digest-compare.html",
+  "eventActor": "A",
+  "sourceCells": [
+    3,
+    3,
+    4
+  ],
+  "packetTypes": [
+    "movement",
+    "chat",
+    "movement"
+  ],
+  "packetIdsPerRecipient": [
+    [
+      1,
+      2,
+      3
+    ],
+    [
+      1,
+      2,
+      3
+    ],
+    [
+      3
+    ]
+  ],
+  "callsBefore": [
+    3,
+    3,
+    1
+  ],
+  "callsAfter": [
+    1,
+    1,
+    1
+  ],
+  "animation": "Before runs first while after is inactive gray; after then runs while before is inactive gray. A starts bottom left, moves north in 550 ms, faces front and shows an emphasized chat bubble for the existing 850 ms chat phase, then moves east in 550 ms. Msg gathering takes 400 ms, output copies move in 350 ms, and after SendQ arrival remains visible for 650 ms.",
+  "rules": [
+    "The same logical Msg IDs, bytes and per-recipient order are delivered before and after",
+    "Before loops around eligible recipients for each Msg",
+    "After retains source-sector packets, rebuilds the temporary Digest per receiving sector, then enqueues once per resident",
+    "The displayed recipient Msg badges are pending-send previews, not storage relocation",
+    "Each displayed receiving sector has one representative resident",
+    "Msg 1 and 2 originate in sector 3, which is in S1 and S2 neighborhoods; Msg 3 originates in sector 4, which is in all three neighborhoods",
+    "No new wire-level header is added by Digest"
+  ],
+  "codeEvidence": {
+    "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+    "beforeFunction": "BroadcastSectorPacket",
+    "beforeEnqueue": "RequestSendMsg inside the recipient loop",
+    "afterFunction": "FlushSectorSends",
+    "afterEnqueue": "RequestSendRaw after neighbor Msg byte concatenation"
+  },
+  "limits": [
+    "Allocation, RefCount, actual WSASend execution, membership digest and global cleanup are omitted",
+    "The 3x3 map is a viewport, not a complete boundary for all recipient neighborhoods",
+    "The visualization starts from three logical Msgs; it does not depict dirty-move production, tick timing or membership-change packet creation"
+  ],
+  "browserHostVerified": false,
+  "actorPathCells": [
+    6,
+    3,
+    4
+  ],
+  "eventSequence": [
+    "move north",
+    "chat",
+    "move east"
+  ]
+}

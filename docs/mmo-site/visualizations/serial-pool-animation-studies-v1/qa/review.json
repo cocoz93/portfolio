@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "variants": [
+    "slot",
+    "gate",
+    "card"
+  ],
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFramesPerVariant": 431,
+  "oneRecipientArrowAtATime": true,
+  "beforeNextArrowFollowsReturn": true,
+  "afterSharedMsgBuiltBeforeArrows": true,
+  "afterSharedMsgRetainedAcrossRecipientArrows": true,
+  "allComponentPositionsAndSizesUnchanged": true,
+  "firstAllocationIsStraight": true,
+  "otherDestinationsHaveTwoExplicitOrthogonalTurns": true,
+  "noShortZigzagAtPoolExit": true,
+  "copyMatchingHeightsAreStraight": true,
+  "copyBranchesUseTwoExplicitOrthogonalTurns": true,
+  "copyMotionHasNoVerticalWobble": true,
+  "noShrinkingMsgText": true,
+  "noSecondarySizeAnimationAtDock": true,
+  "dockingTitleSizeAndPositionMatch": true,
+  "focusedReplayStopsBeforeNextAllocation": true,
+  "fullSourceRetainedThroughCopies": true,
+  "referenceSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "copies": [
+    3,
+    3
+  ],
+  "creation": [
+    3,
+    1
+  ],
+  "durationMs": 22766,
+  "replayPauseResetRestoreResizeVerified": true,
+  "noAutoplayOnVariantSelection": true,
+  "browserHostVerified": false,
+  "sha256": "b9e615e3e436056cd37266540c6269a99bca9817033d7540982ae4b593d6ea3e",
+  "baselineSha256": "c5124c03ae4d4c433cce378f6d0925d718dd87bab38639d37d11a6140d7d2a65"
+}

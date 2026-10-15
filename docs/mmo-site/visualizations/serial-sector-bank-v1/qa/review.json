@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "variants": [
+    "bank"
+  ],
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFramesPerVariant": 431,
+  "oneBlueRecipientArrowAtATime": true,
+  "grayTargetsRemainVisible": true,
+  "arrowGeometryIsFixed": true,
+  "mageAndSwordsmanRolesVerified": true,
+  "referenceOwnershipCaptionVerified": true,
+  "beforeNextArrowFollowsReturn": true,
+  "afterSharedMsgBuiltBeforeArrows": true,
+  "afterSharedMsgRetainedAcrossRecipientArrows": true,
+  "allComponentPositionsAndSizesUnchanged": true,
+  "copyMatchingHeightsAreStraight": true,
+  "copyBranchesUseTwoExplicitOrthogonalTurns": true,
+  "copyMotionHasNoVerticalWobble": true,
+  "focusedReplayStopsBeforeNextAllocation": true,
+  "fullSourceRetainedThroughCopies": true,
+  "referenceSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "copies": [
+    3,
+    3
+  ],
+  "creation": [
+    3,
+    1
+  ],
+  "durationMs": 22766,
+  "replayPauseResetRestoreResizeVerified": true,
+  "noAutoplayOnVariantSelection": true,
+  "browserHostVerified": false,
+  "sha256": "37740788661632ef3eddbd5055b230c462bc5a971a19fa67570dab2ba1bce89c",
+  "baselineSha256": "c5124c03ae4d4c433cce378f6d0925d718dd87bab38639d37d11a6140d7d2a65"
+}

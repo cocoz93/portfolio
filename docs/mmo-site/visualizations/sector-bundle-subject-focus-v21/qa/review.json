@@ -1,0 +1,60 @@
+{
+  "ok": true,
+  "figure": 2,
+  "bytes": 303127,
+  "checked": [
+    {
+      "width": 1024,
+      "height": 548,
+      "duration": 24646,
+      "geometryAndBeamPathsPreserved": true
+    },
+    {
+      "width": 736,
+      "height": 548,
+      "duration": 24646,
+      "geometryAndBeamPathsPreserved": true
+    },
+    {
+      "width": 700,
+      "height": 548,
+      "duration": 24646,
+      "geometryAndBeamPathsPreserved": true
+    },
+    {
+      "width": 699,
+      "height": 1080,
+      "duration": 29266,
+      "geometryAndBeamPathsPreserved": true
+    },
+    {
+      "width": 360,
+      "height": 1080,
+      "duration": 29266,
+      "geometryAndBeamPathsPreserved": true
+    },
+    {
+      "width": 320,
+      "height": 1080,
+      "duration": 29266,
+      "geometryAndBeamPathsPreserved": true
+    }
+  ],
+  "paletteChecks": [
+    {
+      "routing": "minimal",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    }
+  ],
+  "subjectForegroundVerified": true,
+  "semanticsPreserved": true,
+  "meaningfulDwellVerified": true,
+  "playPauseVerified": true,
+  "resizePreservesPhase": true,
+  "reducedMotionVerified": true,
+  "stateRestoreVerified": true,
+  "acceptedOriginalsPreserved": true,
+  "browserHostVerified": false
+}

@@ -1,0 +1,51 @@
+<style>
+/*STYLES*/
+#quantization-stage-studies-v5 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#quantization-stage-studies-v5 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#quantization-stage-studies-v5 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#quantization-stage-studies-v5 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#quantization-stage-studies-v5 [data-status] {min-height:2em}
+</style>
+<div id="quantization-stage-studies-v5" class="viz-carousel" aria-label="양자화 중앙 표현 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section id="quantization-stage-study-bytes-v5" class="quantization-product" data-variant="바이트가 줄어드는 모습" aria-label="좌표 블록 4바이트에서 2바이트로 변환">
+    <div class="comparison-panels">
+      <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-bytes-before-title quant-bytes-before-desc">
+        <title id="quant-bytes-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+        <desc id="quant-bytes-before-desc">캐릭터가 오른쪽으로 이동하고 서버 float 좌표가 갱신됩니다. 최종 x 73.12570과 y 24.33333을 변환 없이 각각 4바이트 float으로 Msg에 기록합니다. 그림은 좌표 부분만 보여주며 다른 필드와 물리 송신은 생략합니다.</desc>
+        <!--BYTES-BEFORE-->
+      </svg>
+      <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-bytes-after-title quant-bytes-after-desc">
+        <title id="quant-bytes-after-title">변경 후 · 가운데 양자화에서 4바이트를 2바이트 눈금값으로</title>
+        <desc id="quant-bytes-after-desc">서버 내부의 float 좌표는 그대로입니다. 가운데 양자화 단계에서 전송용 좌표에 512를 곱하고 반올림합니다. x와 y 블록이 각각 4칸에서 2칸으로 줄고 qx 37440과 qy 12459라는 정수 눈금값으로 바뀝니다. 변환된 2바이트 값만 Msg에 기록합니다. 8바이트에서 4바이트로 줄어드는 것은 좌표 부분이며 전체 패킷 크기가 아닙니다. 도형 축소는 표현의 차이를 보여주는 도식이며 float 버퍼를 실제로 압축하는 구현을 나타내지 않습니다.</desc>
+        <!--BYTES-AFTER-->
+      </svg>
+    </div>
+    <div class="viz-controls">
+      <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+      <button class="btn" type="button" data-action="reset">처음으로</button>
+    </div>
+    <div class="text-small" data-status aria-live="polite">변환 미리보기 · 재생하면 변경 전부터 비교</div>
+  </section>
+  <section id="quantization-stage-study-ticks-v5" class="quantization-product" data-variant="눈금으로 바꾸는 모습" aria-label="가까운 눈금 선택 후 2바이트 좌표 기록" hidden>
+    <div class="comparison-panels">
+      <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-ticks-before-title quant-ticks-before-desc">
+        <title id="quant-ticks-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+        <desc id="quant-ticks-before-desc">같은 캐릭터 이동과 서버 좌표를 사용합니다. x와 y를 변환 없이 각각 4바이트 float으로 Msg에 기록합니다. 그림에는 좌표 부분만 표시합니다.</desc>
+        <!--TICKS-BEFORE-->
+      </svg>
+      <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-ticks-after-title quant-ticks-after-desc">
+        <title id="quant-ticks-after-title">변경 후 · 양자화에서 가장 가까운 1/512타일 눈금 선택</title>
+        <desc id="quant-ticks-after-desc">가운데 양자화 단계에서 float 좌표를 1/512타일 간격의 가까운 눈금으로 표현합니다. x와 y 각각의 점이 가장 가까운 눈금으로 이동하고 qx 37440과 qy 12459라는 정수 눈금 번호로 바뀝니다. 눈금은 해당 좌표 주변의 일부만 확대해 그린 것입니다. 서버의 float 좌표는 이동하지 않습니다. 전송용 눈금값만 각각 2바이트 uint16으로 Msg에 기록하며 좌표 부분 합계는 4바이트입니다.</desc>
+        <!--TICKS-AFTER-->
+      </svg>
+    </div>
+    <div class="viz-controls">
+      <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+      <button class="btn" type="button" data-action="reset">처음으로</button>
+    </div>
+    <div class="text-small" data-status aria-live="polite">변환 미리보기 · 재생하면 변경 전부터 비교</div>
+  </section>
+</div>
+<script>
+/*SCRIPT*/
+</script>

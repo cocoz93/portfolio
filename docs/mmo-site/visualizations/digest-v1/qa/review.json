@@ -1,0 +1,31 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "frames": 229,
+  "durationMs": 22660,
+  "example": {
+    "packets": 3,
+    "residents": 2,
+    "callsBefore": [
+      3,
+      3
+    ],
+    "callsAfter": [
+      1,
+      1
+    ],
+    "identicalBytesPerResident": true,
+    "digestConcatenationsPerReceivingSector": 1
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 273148,
+  "sha256": "e65de9007da1255bd50a4888afef4ee37eea021532044595a0357fd667c4ff92"
+}

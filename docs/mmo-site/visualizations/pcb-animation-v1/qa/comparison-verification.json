@@ -1,0 +1,825 @@
+{
+  "checks": [
+    {
+      "name": "previous-first-completed-frame",
+      "ok": true,
+      "actual": [
+        {
+          "hidden": false,
+          "rect": {
+            "height": 509.953125,
+            "width": 736
+          },
+          "state": {
+            "time": 22580,
+            "before": {
+              "time": 11340,
+              "current": 3,
+              "local": 2960,
+              "generated": 4,
+              "queued": 4,
+              "calls": 4,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 10840,
+              "current": 3,
+              "local": 4260,
+              "generated": 4,
+              "queued": 4,
+              "calls": 1,
+              "pending": 0,
+              "period": 2060,
+              "tickEnd": true
+            },
+            "activeRow": "comparison",
+            "focusAfter": 1,
+            "compareProgress": 1,
+            "callsBefore": 4,
+            "callsAfter": 1,
+            "pendingBefore": 0,
+            "pendingAfter": 0,
+            "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+            "playing": false,
+            "mode": "desktop"
+          },
+          "register": 0,
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "hidden": true,
+          "rect": {
+            "height": 0,
+            "width": 0
+          },
+          "state": {
+            "time": 22580,
+            "before": {
+              "time": 11340,
+              "current": 3,
+              "local": 2960,
+              "generated": 4,
+              "queued": 4,
+              "calls": 4,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 10840,
+              "current": 3,
+              "local": 4260,
+              "generated": 4,
+              "queued": 4,
+              "calls": 1,
+              "pending": 0,
+              "period": 2060,
+              "tickEnd": true
+            },
+            "activeRow": "comparison",
+            "focusAfter": 1,
+            "compareProgress": 1,
+            "callsBefore": 4,
+            "callsAfter": 1,
+            "pendingBefore": 0,
+            "pendingAfter": 0,
+            "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+            "playing": false,
+            "mode": "mobile"
+          },
+          "register": 2,
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "different-graphic-systems",
+      "ok": true,
+      "actual": [
+        0,
+        2
+      ]
+    },
+    {
+      "name": "unique-ids-and-clip-paths",
+      "ok": true,
+      "actual": []
+    },
+    {
+      "name": "current-switch-same-frame",
+      "ok": true,
+      "actual": [
+        {
+          "hidden": true,
+          "rect": {
+            "height": 0,
+            "width": 0
+          },
+          "state": {
+            "time": 22580,
+            "before": {
+              "time": 11340,
+              "current": 3,
+              "local": 2960,
+              "generated": 4,
+              "queued": 4,
+              "calls": 4,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 10840,
+              "current": 3,
+              "local": 4260,
+              "generated": 4,
+              "queued": 4,
+              "calls": 1,
+              "pending": 0,
+              "period": 2060,
+              "tickEnd": true
+            },
+            "activeRow": "comparison",
+            "focusAfter": 1,
+            "compareProgress": 1,
+            "callsBefore": 4,
+            "callsAfter": 1,
+            "pendingBefore": 0,
+            "pendingAfter": 0,
+            "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+            "playing": false,
+            "mode": "mobile"
+          },
+          "register": 0,
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "hidden": false,
+          "rect": {
+            "height": 509.953125,
+            "width": 736
+          },
+          "state": {
+            "time": 22580,
+            "before": {
+              "time": 11340,
+              "current": 3,
+              "local": 2960,
+              "generated": 4,
+              "queued": 4,
+              "calls": 4,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 10840,
+              "current": 3,
+              "local": 4260,
+              "generated": 4,
+              "queued": 4,
+              "calls": 1,
+              "pending": 0,
+              "period": 2060,
+              "tickEnd": true
+            },
+            "activeRow": "comparison",
+            "focusAfter": 1,
+            "compareProgress": 1,
+            "callsBefore": 4,
+            "callsAfter": 1,
+            "pendingBefore": 0,
+            "pendingAfter": 0,
+            "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+            "playing": false,
+            "mode": "desktop"
+          },
+          "register": 2,
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "stable-stage-height",
+      "ok": true,
+      "actual": {
+        "previous": 509.953125,
+        "current": 509.953125
+      }
+    },
+    {
+      "name": "seek-preserved-on-switch",
+      "ok": true,
+      "actual": [
+        {
+          "hidden": false,
+          "rect": {
+            "height": 509.953125,
+            "width": 736
+          },
+          "state": {
+            "time": 6500,
+            "before": {
+              "time": 6500,
+              "current": 2,
+              "local": 780,
+              "generated": 2,
+              "queued": 2,
+              "calls": 2,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 0,
+              "current": -1,
+              "local": -1,
+              "generated": 0,
+              "queued": 0,
+              "calls": 0,
+              "pending": 0,
+              "period": 2060,
+              "tickEnd": false
+            },
+            "activeRow": "before",
+            "focusAfter": 0,
+            "compareProgress": 0,
+            "callsBefore": 2,
+            "callsAfter": 0,
+            "pendingBefore": 0,
+            "pendingAfter": 0,
+            "phase": "변경 전 · 이동 3 · Msg로 전달",
+            "playing": false,
+            "mode": "desktop"
+          },
+          "register": 0,
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "hidden": true,
+          "rect": {
+            "height": 0,
+            "width": 0
+          },
+          "state": {
+            "time": 6500,
+            "before": {
+              "time": 6500,
+              "current": 2,
+              "local": 780,
+              "generated": 2,
+              "queued": 2,
+              "calls": 2,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 0,
+              "current": -1,
+              "local": -1,
+              "generated": 0,
+              "queued": 0,
+              "calls": 0,
+              "pending": 0,
+              "period": 2060,
+              "tickEnd": false
+            },
+            "activeRow": "before",
+            "focusAfter": 0,
+            "compareProgress": 0,
+            "callsBefore": 2,
+            "callsAfter": 0,
+            "pendingBefore": 0,
+            "pendingAfter": 0,
+            "phase": "변경 전 · 이동 3 · Msg로 전달",
+            "playing": false,
+            "mode": "mobile"
+          },
+          "register": 2,
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "switch-pauses-at-matching-time",
+      "ok": true,
+      "actual": [
+        {
+          "time": 333.30000000000007,
+          "before": {
+            "time": 333.30000000000007,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 0,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "before",
+          "focusAfter": 0,
+          "compareProgress": 0,
+          "callsBefore": 0,
+          "callsAfter": 0,
+          "pendingBefore": 0,
+          "pendingAfter": 0,
+          "phase": "변경 전 · 이동 준비",
+          "playing": false,
+          "mode": "mobile"
+        },
+        {
+          "time": 333.30000000000007,
+          "before": {
+            "time": 333.30000000000007,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 0,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "before",
+          "focusAfter": 0,
+          "compareProgress": 0,
+          "callsBefore": 0,
+          "callsAfter": 0,
+          "pendingBefore": 0,
+          "pendingAfter": 0,
+          "phase": "변경 전 · 이동 준비",
+          "playing": false,
+          "mode": "desktop"
+        }
+      ]
+    },
+    {
+      "name": "same-tick-end-state",
+      "ok": true,
+      "actual": [
+        {
+          "hidden": true,
+          "rect": {
+            "height": 0,
+            "width": 0
+          },
+          "state": {
+            "time": 20380,
+            "before": {
+              "time": 11340,
+              "current": 3,
+              "local": 2960,
+              "generated": 4,
+              "queued": 4,
+              "calls": 4,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 8640,
+              "current": 3,
+              "local": 2060,
+              "generated": 4,
+              "queued": 4,
+              "calls": 0,
+              "pending": 4,
+              "period": 2060,
+              "tickEnd": true
+            },
+            "activeRow": "after",
+            "focusAfter": 1,
+            "compareProgress": 0,
+            "callsBefore": 4,
+            "callsAfter": 0,
+            "pendingBefore": 0,
+            "pendingAfter": 4,
+            "phase": "변경 후 · 틱 끝 · 모은 메시지 송신",
+            "playing": false,
+            "mode": "mobile"
+          },
+          "register": 0,
+          "pending": [
+            "0개 대기",
+            "4개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "hidden": false,
+          "rect": {
+            "height": 509.953125,
+            "width": 736
+          },
+          "state": {
+            "time": 20380,
+            "before": {
+              "time": 11340,
+              "current": 3,
+              "local": 2960,
+              "generated": 4,
+              "queued": 4,
+              "calls": 4,
+              "pending": 0,
+              "period": 2660,
+              "tickEnd": false
+            },
+            "after": {
+              "time": 8640,
+              "current": 3,
+              "local": 2060,
+              "generated": 4,
+              "queued": 4,
+              "calls": 0,
+              "pending": 4,
+              "period": 2060,
+              "tickEnd": true
+            },
+            "activeRow": "after",
+            "focusAfter": 1,
+            "compareProgress": 0,
+            "callsBefore": 4,
+            "callsAfter": 0,
+            "pendingBefore": 0,
+            "pendingAfter": 4,
+            "phase": "변경 후 · 틱 끝 · 모은 메시지 송신",
+            "playing": false,
+            "mode": "desktop"
+          },
+          "register": 2,
+          "pending": [
+            "0개 대기",
+            "4개 대기"
+          ],
+          "levels": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "layout-previous-1536",
+      "ok": true,
+      "actual": {
+        "width": 1536,
+        "mode": "desktop",
+        "overflow": false,
+        "minTextHeight": 29,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-current-1536",
+      "ok": true,
+      "actual": {
+        "width": 1536,
+        "mode": "desktop",
+        "overflow": false,
+        "minTextHeight": 29,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-previous-736",
+      "ok": true,
+      "actual": {
+        "width": 736,
+        "mode": "desktop",
+        "overflow": false,
+        "minTextHeight": 13.999969482421875,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-current-736",
+      "ok": true,
+      "actual": {
+        "width": 736,
+        "mode": "desktop",
+        "overflow": false,
+        "minTextHeight": 14,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-previous-390",
+      "ok": true,
+      "actual": {
+        "width": 390,
+        "mode": "mobile",
+        "overflow": false,
+        "minTextHeight": 16,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-current-390",
+      "ok": true,
+      "actual": {
+        "width": 390,
+        "mode": "mobile",
+        "overflow": false,
+        "minTextHeight": 16,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-previous-320",
+      "ok": true,
+      "actual": {
+        "width": 320,
+        "mode": "mobile",
+        "overflow": false,
+        "minTextHeight": 16,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "layout-current-320",
+      "ok": true,
+      "actual": {
+        "width": 320,
+        "mode": "mobile",
+        "overflow": false,
+        "minTextHeight": 16,
+        "clipped": [],
+        "counts": [
+          4,
+          1
+        ]
+      }
+    },
+    {
+      "name": "no-runtime-errors",
+      "ok": true,
+      "actual": []
+    },
+    {
+      "name": "no-network-requests",
+      "ok": true,
+      "actual": []
+    },
+    {
+      "name": "inline-selector-and-same-frame",
+      "ok": true,
+      "actual": {
+        "previousHidden": true,
+        "currentHidden": false,
+        "state": {
+          "time": 22580,
+          "before": {
+            "time": 11340,
+            "current": 3,
+            "local": 2960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 4,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 10840,
+            "current": 3,
+            "local": 4260,
+            "generated": 4,
+            "queued": 4,
+            "calls": 1,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": true
+          },
+          "activeRow": "comparison",
+          "focusAfter": 1,
+          "compareProgress": 1,
+          "callsBefore": 4,
+          "callsAfter": 1,
+          "pendingBefore": 0,
+          "pendingAfter": 0,
+          "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+          "playing": false,
+          "mode": "desktop"
+        }
+      }
+    },
+    {
+      "name": "inline-no-runtime-errors",
+      "ok": true,
+      "actual": []
+    }
+  ],
+  "errors": [],
+  "network": []
+}

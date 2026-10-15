@@ -1,0 +1,31 @@
+<style>
+/*STYLES*/
+#quantization-single-arrival-v7 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#quantization-single-arrival-v7 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#quantization-single-arrival-v7 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#quantization-single-arrival-v7 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#quantization-single-arrival-v7 [data-status] {min-height:2em}
+</style>
+<div id="quantization-single-arrival-v7" aria-label="5번 그림 · 좌표 표현을 양자화한 뒤 Msg에 저장">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-pcb-before-title quant-pcb-before-desc">
+      <title id="quant-pcb-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+      <desc id="quant-pcb-before-desc">캐릭터가 오른쪽으로 이동하고 서버 내부 float 좌표가 갱신됩니다. 가운데에서는 전송용 표현을 변환하지 않고 x와 y를 각각 4바이트 float으로 Msg에 기록합니다. 두 좌표는 8바이트입니다. 같은 크기의 네 칸은 한 좌표의 네 바이트를 나타냅니다. Msg의 다른 필드와 물리 송신은 화면에서 생략합니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-pcb-after-title quant-pcb-after-desc">
+      <title id="quant-pcb-after-title">변경 후 · 양자화에서 4바이트를 2바이트로 바꾼 뒤 기록</title>
+      <desc id="quant-pcb-after-desc">같은 캐릭터 이동과 같은 서버 float 좌표를 유지합니다. 가운데 양자화 단계는 소프트웨어 변환을 PCB 부품으로 그린 도식이며 실제 하드웨어나 추가로 할당하는 버퍼가 아닙니다. 전송용 x와 y에 512를 곱하고 반올림합니다. 네 칸짜리 블록이 두 칸으로 줄어들고 qx 37440과 qy 12459라는 정수 눈금값으로 바뀝니다. 한 눈금은 1/512타일입니다. 변환 완료 후 이 값들의 사본을 각각 2바이트 uint16으로 Msg에 기록합니다. Msg에는 float을 기록한 뒤 압축하는 중간 단계가 없습니다. 좌표 부분 합계는 8바이트에서 4바이트로 줄어듭니다. 서버 내부의 좌표는 그대로입니다. 블록의 축소는 전송 표현의 크기를 비교하며 실제 바이트 삭제나 메모리 압축 구현을 나타내지 않습니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 좌표 8B → 4B</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>
+

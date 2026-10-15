@@ -1,0 +1,2365 @@
+{
+  "passed": 46,
+  "timing": {
+    "t": {
+      "start": 400,
+      "period": 2660,
+      "periodAfter": 2060,
+      "move": 400,
+      "inputEnd": 800,
+      "msgEnd": 1200,
+      "queueStart": 1360,
+      "queueOn": 1760,
+      "sendStart": 1960,
+      "call": 2360,
+      "tick": 8640,
+      "batchCall": 9040,
+      "switchStart": 11340,
+      "afterStart": 11740,
+      "compareStart": 20980,
+      "compareEnd": 21380,
+      "end": 22580
+    },
+    "m": {
+      "main": 400,
+      "state": 200,
+      "hold": 160,
+      "rest": 100,
+      "result": 1200
+    }
+  },
+  "checks": [
+    {
+      "name": "presentation-duration",
+      "ok": true,
+      "actual": 22580
+    },
+    {
+      "name": "unified-motion",
+      "ok": true,
+      "actual": {
+        "t": {
+          "start": 400,
+          "period": 2660,
+          "periodAfter": 2060,
+          "move": 400,
+          "inputEnd": 800,
+          "msgEnd": 1200,
+          "queueStart": 1360,
+          "queueOn": 1760,
+          "sendStart": 1960,
+          "call": 2360,
+          "tick": 8640,
+          "batchCall": 9040,
+          "switchStart": 11340,
+          "afterStart": 11740,
+          "compareStart": 20980,
+          "compareEnd": 21380,
+          "end": 22580
+        },
+        "m": {
+          "main": 400,
+          "state": 200,
+          "hold": 160,
+          "rest": 100,
+          "result": 1200
+        }
+      }
+    },
+    {
+      "name": "mage-and-two-eyes",
+      "ok": true,
+      "actual": [
+        {
+          "kind": "mage",
+          "eyes": 2,
+          "transform": "translate(185,381)"
+        },
+        {
+          "kind": "mage",
+          "eyes": 2,
+          "transform": "translate(185,781)"
+        }
+      ]
+    },
+    {
+      "name": "inactive-after-starts-empty",
+      "ok": true,
+      "actual": {
+        "counts": [
+          0,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-enqueue-0",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 2360,
+          "before": {
+            "time": 2360,
+            "current": 0,
+            "local": 1960,
+            "generated": 1,
+            "queued": 1,
+            "calls": 0,
+            "pending": 1,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 0,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "before",
+          "focusAfter": 0,
+          "compareProgress": 0,
+          "callsBefore": 0,
+          "callsAfter": 0,
+          "pendingBefore": 1,
+          "pendingAfter": 0,
+          "phase": "변경 전 · 이동 1 · 즉시 송신",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            0,
+            0
+          ],
+          "lit": [
+            1,
+            0
+          ],
+          "levels": [
+            [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "1개 대기",
+            "0개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            },
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,231)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "before-drain-fade-0",
+      "ok": true,
+      "actual": {
+        "counts": [
+          1,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0.5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,231)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-queue-cleared-0",
+      "ok": true,
+      "actual": {
+        "counts": [
+          1,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,231)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-enqueue-1",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 5020,
+          "before": {
+            "time": 5020,
+            "current": 1,
+            "local": 1960,
+            "generated": 2,
+            "queued": 2,
+            "calls": 1,
+            "pending": 1,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 0,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "before",
+          "focusAfter": 0,
+          "compareProgress": 0,
+          "callsBefore": 1,
+          "callsAfter": 0,
+          "pendingBefore": 1,
+          "pendingAfter": 0,
+          "phase": "변경 전 · 이동 2 · 즉시 송신",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            1,
+            0
+          ],
+          "lit": [
+            1,
+            0
+          ],
+          "levels": [
+            [
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "1개 대기",
+            "0개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            },
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(335,231)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "before-drain-fade-1",
+      "ok": true,
+      "actual": {
+        "counts": [
+          2,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0.5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(335,231)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-queue-cleared-1",
+      "ok": true,
+      "actual": {
+        "counts": [
+          2,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(335,231)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-enqueue-2",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 7680,
+          "before": {
+            "time": 7680,
+            "current": 2,
+            "local": 1960,
+            "generated": 3,
+            "queued": 3,
+            "calls": 2,
+            "pending": 1,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 0,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "before",
+          "focusAfter": 0,
+          "compareProgress": 0,
+          "callsBefore": 2,
+          "callsAfter": 0,
+          "pendingBefore": 1,
+          "pendingAfter": 0,
+          "phase": "변경 전 · 이동 3 · 즉시 송신",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            2,
+            0
+          ],
+          "lit": [
+            1,
+            0
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "1개 대기",
+            "0개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            },
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(335,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "before-drain-fade-2",
+      "ok": true,
+      "actual": {
+        "counts": [
+          3,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0.5,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(335,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-queue-cleared-2",
+      "ok": true,
+      "actual": {
+        "counts": [
+          3,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(335,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-enqueue-3",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 10340,
+          "before": {
+            "time": 10340,
+            "current": 3,
+            "local": 1960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 3,
+            "pending": 1,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 0,
+            "current": -1,
+            "local": -1,
+            "generated": 0,
+            "queued": 0,
+            "calls": 0,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "before",
+          "focusAfter": 0,
+          "compareProgress": 0,
+          "callsBefore": 3,
+          "callsAfter": 0,
+          "pendingBefore": 1,
+          "pendingAfter": 0,
+          "phase": "변경 전 · 이동 4 · 즉시 송신",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            3,
+            0
+          ],
+          "lit": [
+            1,
+            0
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "1개 대기",
+            "0개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            },
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "before-drain-fade-3",
+      "ok": true,
+      "actual": {
+        "counts": [
+          4,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0.5,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "before-queue-cleared-3",
+      "ok": true,
+      "actual": {
+        "counts": [
+          4,
+          0
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          },
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "focus-crossfade",
+      "ok": true,
+      "actual": [
+        {
+          "opacity": 0.66,
+          "filter": "grayscale(0.5)"
+        },
+        {
+          "opacity": 0.66,
+          "filter": "grayscale(0.5)"
+        }
+      ]
+    },
+    {
+      "name": "after-accumulates-0",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 14100,
+          "before": {
+            "time": 11340,
+            "current": 3,
+            "local": 2960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 4,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 2360,
+            "current": 0,
+            "local": 1960,
+            "generated": 1,
+            "queued": 1,
+            "calls": 0,
+            "pending": 1,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "after",
+          "focusAfter": 1,
+          "compareProgress": 0,
+          "callsBefore": 4,
+          "callsAfter": 0,
+          "pendingBefore": 0,
+          "pendingAfter": 1,
+          "phase": "변경 후 · 이동 1 · 큐에 보관",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            4,
+            0
+          ],
+          "lit": [
+            0,
+            1
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "0개 대기",
+            "1개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            },
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,631)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "after-accumulates-1",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 16160,
+          "before": {
+            "time": 11340,
+            "current": 3,
+            "local": 2960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 4,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 4420,
+            "current": 1,
+            "local": 1960,
+            "generated": 2,
+            "queued": 2,
+            "calls": 0,
+            "pending": 2,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "after",
+          "focusAfter": 1,
+          "compareProgress": 0,
+          "callsBefore": 4,
+          "callsAfter": 0,
+          "pendingBefore": 0,
+          "pendingAfter": 2,
+          "phase": "변경 후 · 이동 2 · 큐에 보관",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            4,
+            0
+          ],
+          "lit": [
+            0,
+            2
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "0개 대기",
+            "2개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            },
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(335,631)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "after-accumulates-2",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 18220,
+          "before": {
+            "time": 11340,
+            "current": 3,
+            "local": 2960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 4,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 6480,
+            "current": 2,
+            "local": 1960,
+            "generated": 3,
+            "queued": 3,
+            "calls": 0,
+            "pending": 3,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "after",
+          "focusAfter": 1,
+          "compareProgress": 0,
+          "callsBefore": 4,
+          "callsAfter": 0,
+          "pendingBefore": 0,
+          "pendingAfter": 3,
+          "phase": "변경 후 · 이동 3 · 큐에 보관",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            4,
+            0
+          ],
+          "lit": [
+            0,
+            3
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "0개 대기",
+            "3개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            },
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(335,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "after-accumulates-3",
+      "ok": true,
+      "actual": {
+        "s": {
+          "time": 20280,
+          "before": {
+            "time": 11340,
+            "current": 3,
+            "local": 2960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 4,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 8540,
+            "current": 3,
+            "local": 1960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 0,
+            "pending": 4,
+            "period": 2060,
+            "tickEnd": false
+          },
+          "activeRow": "after",
+          "focusAfter": 1,
+          "compareProgress": 0,
+          "callsBefore": 4,
+          "callsAfter": 0,
+          "pendingBefore": 0,
+          "pendingAfter": 4,
+          "phase": "변경 후 · 이동 4 · 큐에 보관",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "r": {
+          "counts": [
+            4,
+            0
+          ],
+          "lit": [
+            0,
+            4
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "0개 대기",
+            "4개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 0.32,
+              "filter": "grayscale(1)"
+            },
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "four-pending-until-batch-arrival",
+      "ok": true,
+      "actual": {
+        "counts": [
+          4,
+          0
+        ],
+        "lit": [
+          0,
+          4
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "4개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          },
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "batch-queue-fades-together",
+      "ok": true,
+      "actual": {
+        "counts": [
+          4,
+          1
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0.5,
+            0.5,
+            0.5,
+            0.5,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          },
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "batch-queue-cleared",
+      "ok": true,
+      "actual": {
+        "counts": [
+          4,
+          1
+        ],
+        "lit": [
+          0,
+          0
+        ],
+        "levels": [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "pending": [
+          "0개 대기",
+          "0개 대기"
+        ],
+        "focus": [
+          {
+            "opacity": 0.32,
+            "filter": "grayscale(1)"
+          },
+          {
+            "opacity": 1,
+            "filter": "grayscale(0)"
+          }
+        ],
+        "chars": [
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,381)"
+          },
+          {
+            "kind": "mage",
+            "eyes": 2,
+            "transform": "translate(185,781)"
+          }
+        ]
+      }
+    },
+    {
+      "name": "comparison-restores-before-smoothly",
+      "ok": true,
+      "actual": [
+        {
+          "opacity": 0.66,
+          "filter": "grayscale(0.5)"
+        },
+        {
+          "opacity": 1,
+          "filter": "grayscale(0)"
+        }
+      ]
+    },
+    {
+      "name": "final-comparison",
+      "ok": true,
+      "actual": {
+        "finalState": {
+          "time": 22580,
+          "before": {
+            "time": 11340,
+            "current": 3,
+            "local": 2960,
+            "generated": 4,
+            "queued": 4,
+            "calls": 4,
+            "pending": 0,
+            "period": 2660,
+            "tickEnd": false
+          },
+          "after": {
+            "time": 10840,
+            "current": 3,
+            "local": 4260,
+            "generated": 4,
+            "queued": 4,
+            "calls": 1,
+            "pending": 0,
+            "period": 2060,
+            "tickEnd": true
+          },
+          "activeRow": "comparison",
+          "focusAfter": 1,
+          "compareProgress": 1,
+          "callsBefore": 4,
+          "callsAfter": 1,
+          "pendingBefore": 0,
+          "pendingAfter": 0,
+          "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+          "playing": false,
+          "mode": "desktop"
+        },
+        "final": {
+          "counts": [
+            4,
+            1
+          ],
+          "lit": [
+            0,
+            0
+          ],
+          "levels": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "pending": [
+            "0개 대기",
+            "0개 대기"
+          ],
+          "focus": [
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            },
+            {
+              "opacity": 1,
+              "filter": "grayscale(0)"
+            }
+          ],
+          "chars": [
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,381)"
+            },
+            {
+              "kind": "mage",
+              "eyes": 2,
+              "transform": "translate(185,781)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "same-easing-0.25",
+      "ok": true,
+      "actual": {
+        "expected": 0.15625,
+        "parts": [
+          {
+            "role": "character",
+            "value": 0.15625
+          },
+          {
+            "role": "input-transfer",
+            "value": 0.15625
+          },
+          {
+            "role": "message-fill",
+            "value": 0.15625
+          },
+          {
+            "role": "queue-transfer",
+            "value": 0.15625
+          },
+          {
+            "role": "send-transfer",
+            "value": 0.15625
+          }
+        ]
+      }
+    },
+    {
+      "name": "same-easing-0.5",
+      "ok": true,
+      "actual": {
+        "expected": 0.5,
+        "parts": [
+          {
+            "role": "character",
+            "value": 0.5
+          },
+          {
+            "role": "input-transfer",
+            "value": 0.5
+          },
+          {
+            "role": "message-fill",
+            "value": 0.5
+          },
+          {
+            "role": "queue-transfer",
+            "value": 0.5
+          },
+          {
+            "role": "send-transfer",
+            "value": 0.5
+          }
+        ]
+      }
+    },
+    {
+      "name": "same-easing-0.75",
+      "ok": true,
+      "actual": {
+        "expected": 0.84375,
+        "parts": [
+          {
+            "role": "character",
+            "value": 0.84375
+          },
+          {
+            "role": "input-transfer",
+            "value": 0.84375
+          },
+          {
+            "role": "message-fill",
+            "value": 0.84375
+          },
+          {
+            "role": "queue-transfer",
+            "value": 0.84375
+          },
+          {
+            "role": "send-transfer",
+            "value": 0.84375
+          }
+        ]
+      }
+    },
+    {
+      "name": "horizontal-fill-and-readable-hold",
+      "ok": true,
+      "actual": {
+        "w": 188,
+        "h": 52
+      }
+    },
+    {
+      "name": "numbered-message-carrier",
+      "ok": true,
+      "actual": {
+        "items": "1",
+        "opacity": 1,
+        "label": "1"
+      }
+    },
+    {
+      "name": "one-bundle-holds-four-messages",
+      "ok": true,
+      "actual": {
+        "items": "4",
+        "bars": 4,
+        "opacity": 1
+      }
+    },
+    {
+      "name": "layout-1536",
+      "ok": true,
+      "actual": {
+        "width": 1536,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 29,
+        "characters": [
+          {
+            "w": 66.5,
+            "h": 80.75,
+            "contained": true
+          },
+          {
+            "w": 66.5,
+            "h": 80.75,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout-1024",
+      "ok": true,
+      "actual": {
+        "width": 1024,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 19,
+        "characters": [
+          {
+            "w": 44.33293151855469,
+            "h": 53.832855224609375,
+            "contained": true
+          },
+          {
+            "w": 44.33293151855469,
+            "h": 53.832855224609375,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout-736",
+      "ok": true,
+      "actual": {
+        "width": 736,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 14,
+        "characters": [
+          {
+            "w": 31.86418914794922,
+            "h": 38.69224548339844,
+            "contained": true
+          },
+          {
+            "w": 31.86418914794922,
+            "h": 38.692230224609375,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout-660",
+      "ok": true,
+      "actual": {
+        "width": 660,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 12,
+        "characters": [
+          {
+            "w": 28.57421875,
+            "h": 34.697265625,
+            "contained": true
+          },
+          {
+            "w": 28.57421875,
+            "h": 34.697265625,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout-659",
+      "ok": true,
+      "actual": {
+        "width": 659,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 16,
+        "characters": [
+          {
+            "w": 42,
+            "h": 51,
+            "contained": true
+          },
+          {
+            "w": 42,
+            "h": 51,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout-390",
+      "ok": true,
+      "actual": {
+        "width": 390,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 16,
+        "characters": [
+          {
+            "w": 42,
+            "h": 51,
+            "contained": true
+          },
+          {
+            "w": 42,
+            "h": 51,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "layout-320",
+      "ok": true,
+      "actual": {
+        "width": 320,
+        "overflow": false,
+        "overlaps": [],
+        "clipped": [],
+        "minTextHeight": 16,
+        "characters": [
+          {
+            "w": 42,
+            "h": 51,
+            "contained": true
+          },
+          {
+            "w": 42,
+            "h": 51,
+            "contained": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "pause-preserves-state",
+      "ok": true,
+      "actual": {
+        "time": 750,
+        "before": {
+          "time": 750,
+          "current": 0,
+          "local": 350,
+          "generated": 0,
+          "queued": 0,
+          "calls": 0,
+          "pending": 0,
+          "period": 2660,
+          "tickEnd": false
+        },
+        "after": {
+          "time": 0,
+          "current": -1,
+          "local": -1,
+          "generated": 0,
+          "queued": 0,
+          "calls": 0,
+          "pending": 0,
+          "period": 2060,
+          "tickEnd": false
+        },
+        "activeRow": "before",
+        "focusAfter": 0,
+        "compareProgress": 0,
+        "callsBefore": 0,
+        "callsAfter": 0,
+        "pendingBefore": 0,
+        "pendingAfter": 0,
+        "phase": "변경 전 · 이동 1 · 한 칸 이동",
+        "playing": false,
+        "mode": "desktop"
+      }
+    },
+    {
+      "name": "replay-resets-comparison",
+      "ok": true,
+      "actual": {
+        "time": 0,
+        "before": {
+          "time": 0,
+          "current": -1,
+          "local": -1,
+          "generated": 0,
+          "queued": 0,
+          "calls": 0,
+          "pending": 0,
+          "period": 2660,
+          "tickEnd": false
+        },
+        "after": {
+          "time": 0,
+          "current": -1,
+          "local": -1,
+          "generated": 0,
+          "queued": 0,
+          "calls": 0,
+          "pending": 0,
+          "period": 2060,
+          "tickEnd": false
+        },
+        "activeRow": "before",
+        "focusAfter": 0,
+        "compareProgress": 0,
+        "callsBefore": 0,
+        "callsAfter": 0,
+        "pendingBefore": 0,
+        "pendingAfter": 0,
+        "phase": "변경 전 · 이동 준비",
+        "playing": true,
+        "mode": "desktop"
+      }
+    },
+    {
+      "name": "single-cycle-stop",
+      "ok": true,
+      "actual": {
+        "time": 22580,
+        "before": {
+          "time": 11340,
+          "current": 3,
+          "local": 2960,
+          "generated": 4,
+          "queued": 4,
+          "calls": 4,
+          "pending": 0,
+          "period": 2660,
+          "tickEnd": false
+        },
+        "after": {
+          "time": 10840,
+          "current": 3,
+          "local": 4260,
+          "generated": 4,
+          "queued": 4,
+          "calls": 1,
+          "pending": 0,
+          "period": 2060,
+          "tickEnd": true
+        },
+        "activeRow": "comparison",
+        "focusAfter": 1,
+        "compareProgress": 1,
+        "callsBefore": 4,
+        "callsAfter": 1,
+        "pendingBefore": 0,
+        "pendingAfter": 0,
+        "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+        "playing": false,
+        "mode": "desktop"
+      }
+    },
+    {
+      "name": "reduced-motion-starts-paused",
+      "ok": true,
+      "actual": {
+        "time": 0,
+        "before": {
+          "time": 0,
+          "current": -1,
+          "local": -1,
+          "generated": 0,
+          "queued": 0,
+          "calls": 0,
+          "pending": 0,
+          "period": 2660,
+          "tickEnd": false
+        },
+        "after": {
+          "time": 0,
+          "current": -1,
+          "local": -1,
+          "generated": 0,
+          "queued": 0,
+          "calls": 0,
+          "pending": 0,
+          "period": 2060,
+          "tickEnd": false
+        },
+        "activeRow": "before",
+        "focusAfter": 0,
+        "compareProgress": 0,
+        "callsBefore": 0,
+        "callsAfter": 0,
+        "pendingBefore": 0,
+        "pendingAfter": 0,
+        "phase": "변경 전 · 이동 준비",
+        "playing": false,
+        "mode": "desktop"
+      }
+    },
+    {
+      "name": "inline-final-comparison",
+      "ok": true,
+      "actual": {
+        "time": 22580,
+        "before": {
+          "time": 11340,
+          "current": 3,
+          "local": 2960,
+          "generated": 4,
+          "queued": 4,
+          "calls": 4,
+          "pending": 0,
+          "period": 2660,
+          "tickEnd": false
+        },
+        "after": {
+          "time": 10840,
+          "current": 3,
+          "local": 4260,
+          "generated": 4,
+          "queued": 4,
+          "calls": 1,
+          "pending": 0,
+          "period": 2060,
+          "tickEnd": true
+        },
+        "activeRow": "comparison",
+        "focusAfter": 1,
+        "compareProgress": 1,
+        "callsBefore": 4,
+        "callsAfter": 1,
+        "pendingBefore": 0,
+        "pendingAfter": 0,
+        "phase": "완료 · 같은 메시지 · 호출 4회 → 1회",
+        "playing": false,
+        "mode": "desktop"
+      }
+    },
+    {
+      "name": "no-runtime-errors",
+      "ok": true,
+      "actual": []
+    },
+    {
+      "name": "offline-ready",
+      "ok": true,
+      "actual": []
+    }
+  ],
+  "layouts": [
+    {
+      "width": 1536,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 29,
+      "characters": [
+        {
+          "w": 66.5,
+          "h": 80.75,
+          "contained": true
+        },
+        {
+          "w": 66.5,
+          "h": 80.75,
+          "contained": true
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 19,
+      "characters": [
+        {
+          "w": 44.33293151855469,
+          "h": 53.832855224609375,
+          "contained": true
+        },
+        {
+          "w": 44.33293151855469,
+          "h": 53.832855224609375,
+          "contained": true
+        }
+      ]
+    },
+    {
+      "width": 736,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 14,
+      "characters": [
+        {
+          "w": 31.86418914794922,
+          "h": 38.69224548339844,
+          "contained": true
+        },
+        {
+          "w": 31.86418914794922,
+          "h": 38.692230224609375,
+          "contained": true
+        }
+      ]
+    },
+    {
+      "width": 660,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 12,
+      "characters": [
+        {
+          "w": 28.57421875,
+          "h": 34.697265625,
+          "contained": true
+        },
+        {
+          "w": 28.57421875,
+          "h": 34.697265625,
+          "contained": true
+        }
+      ]
+    },
+    {
+      "width": 659,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 16,
+      "characters": [
+        {
+          "w": 42,
+          "h": 51,
+          "contained": true
+        },
+        {
+          "w": 42,
+          "h": 51,
+          "contained": true
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 16,
+      "characters": [
+        {
+          "w": 42,
+          "h": 51,
+          "contained": true
+        },
+        {
+          "w": 42,
+          "h": 51,
+          "contained": true
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "overflow": false,
+      "overlaps": [],
+      "clipped": [],
+      "minTextHeight": 16,
+      "characters": [
+        {
+          "w": 42,
+          "h": 51,
+          "contained": true
+        },
+        {
+          "w": 42,
+          "h": 51,
+          "contained": true
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "network": []
+}

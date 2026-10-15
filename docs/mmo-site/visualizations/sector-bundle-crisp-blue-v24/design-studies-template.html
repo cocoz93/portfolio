@@ -1,0 +1,110 @@
+<style>
+/* ORIGINAL_FONTS */
+#sector-bundle-crisp-blue-v24 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;--pcb-char-blue:#4eafe8;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#sector-bundle-crisp-blue-v24 .study-design {width:100%;background:var(--pcb-bg);color-scheme:dark}
+#sector-bundle-crisp-blue-v24 .study-board {display:block;width:100%;height:auto}
+#sector-bundle-crisp-blue-v24 .study-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#sector-bundle-crisp-blue-v24 .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#sector-bundle-crisp-blue-v24 .study-toolbar {padding:12px 20px}
+#sector-bundle-crisp-blue-v24 .study-status {font-size:12px;color:var(--pcb-muted);flex:1 1 220px;text-align:right}
+</style>
+<div id="sector-bundle-crisp-blue-v24">
+  <section id="msg-crisp-blue-minimal" class="study-design" data-variant="데이터만 강조" data-routing="chamfer" data-material="minimal" data-layout="silkscreen" aria-label="데이터만 강조">
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="msg-crisp-blue-title msg-crisp-blue-desc">
+      <title id="msg-crisp-blue-title">데이터만 강조</title>
+      <desc id="msg-crisp-blue-desc">2번 그림: 같은 네 개의 이동 좌표 (0,1), (1,1), (1,0), (2,0)를 순서대로 보존합니다. 변경 전에는 개별 Msg 네 개, 변경 후에는 네 개 데이터가 들어 있는 Msg 하나를 한 수신 세션의 SendQ에 복사합니다. 내부 사각형은 독립된 Msg가 아닙니다. 승인된 사선 팬아웃 구도와 원본 블루 색상을 유지합니다. 모든 Msg의 높이는 100픽셀, 이름표 영역은 24픽셀, 실제 패킷 헤더를 나타내는 별도의 회색 Header 영역은 20픽셀, 좌표 데이터 칸은 48 곱하기 40픽셀로 통일했습니다. 변경 전의 Msg 네 개에는 각각 Header가 있고, 변경 후 묶음 Msg에는 Header 하나와 네 좌표 데이터가 있습니다. Header의 도형 크기는 실제 바이트 비율을 나타내지 않습니다. Msg 이름과 좌표는 같은 12픽셀 글자 크기를 사용합니다. 구분선, 내부 여백, 원형 접점, 8픽셀 연결단과 6픽셀 배선 간격을 같은 규칙으로 맞췄습니다. 좁은 화면에서도 부품을 줄이지 않고 캐릭터, Msg, SendQ를 위에서 아래로 쌓습니다. 정지한 마법사는 정면을 보고, 이동 중에만 이동 방향을 봅니다.  변경 전과 변경 후 모두 Msg 아래에서 출력 배선이 나옵니다. WSASend 데이터 신호가 커널 경계를 통과한 후 큐가 비워집니다. 수신 완료나 WSASend 호출 횟수 비교를 나타내지 않습니다. 재생하면 변경 전은 기존의 1.25배속, 변경 후와 전후 전환은 기존 속도로 순서대로 움직입니다. Msg의 좌표 데이터 칸은 비었을 때 어둡게, 채워지면 짙고 선명한 블루로 표시합니다. 저장된 데이터의 채움 농도는 72퍼센트, 입력 순간에는 100퍼센트입니다. SendQ의 기존 채움 방식은 유지합니다. 현재 채우는 칸이 가장 밝고 저장 후에는 차분한 블루로 남습니다. Header와 Msg 이름표는 회색으로 채워져 데이터와 구분됩니다. 채움은 기존과 같은 속도로 왼쪽에서 오른쪽으로 진행합니다.</desc>
+      <!-- SCENE_MINIMAL -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play" aria-label="데이터만 강조 애니메이션 재생">재생</button>
+      <button type="button" class="btn" data-action="preview">구도 보기</button>
+      <span class="study-status" role="status" aria-live="polite">같은 이동 메시지 4개 · Msg 4개 → 1개</span>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+/* MATCHED_SOURCE */
+  const root=document.getElementById('sector-bundle-crisp-blue-v24');if(!root)return;
+  const KIND='sector-bundle-crisp-blue-v24';
+  const reduced=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false,addEventListener(){}};
+  const designs=Array.from(root.querySelectorAll('.study-design')),controllers=[];
+  let drawnWidth=0,pendingWidth=0,layoutFrame=0;
+  function save(){
+    if(!window.openai?.setWidgetState)return;
+    const snapshots=controllers.map(controller=>controller.snapshot());
+    try{Promise.resolve(window.openai.setWidgetState({modelContent:{kind:KIND,designs:controllers.map(controller=>controller.state())},privateContent:{kind:KIND,designs:snapshots}})).catch(()=>{});}catch{}
+  }
+  for(const design of designs){
+    const layout=design.getAttribute('data-layout'),routing=design.getAttribute('data-routing'),material=design.getAttribute('data-material'),board=design.querySelector('.study-board');
+    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map();
+    function set(id,attrs,text){
+      const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
+      for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
+      if(text!==undefined&&element.textContent!==text)element.textContent=text;
+    }
+    function frame(){return preview?bundlePreviewFrame(program):bundleFrame(time,program);}
+    function paint(){
+      if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
+      if(status.textContent!==current.phase)status.textContent=current.phase;
+      playButton.textContent=playing?'일시정지':time>0&&time<program.end&&!preview?'이어서 재생':'재생';
+      playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 애니메이션 재생`);
+    }
+    function state(){const f=frame();return {layout,routing,material,name:design.getAttribute('data-variant'),time,duration:program.end,playing,preview,phase:f.phase,outboundMsgsBefore:f.rows[0].copies,outboundMsgsAfter:f.rows[1].copies,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].release>=1?0:f.rows[0].copies,queuedAfter:f.rows[1].release>=1?0:f.rows[1].copies};}
+    function pause(){playing=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);raf=0;paint();}
+    function schedule(){if(playing&&!raf)raf=requestAnimationFrame(tick);}
+    function tick(now){
+      raf=0;if(!playing)return;
+      if(document.hidden||design.hidden){lastFrame=0;schedule();return;}
+      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));lastFrame=now;
+      if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
+    }
+    function play(){
+      if(reduced.matches){pause();preview=true;time=program.end;paint();return;}
+      if(preview||time>=program.end)time=0;preview=false;playing=true;lastFrame=0;paint();schedule();
+    }
+    function showPreview(){pause();time=program.end;preview=true;paint();}
+    function renderDesign(width){
+      const position=locateBundleSegment(time,program),atEnd=time>=program.end;
+      const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));
+      scene=createBundleAnimationScene(width,layout,routing,material);program=createBundleProgram(scene.compact);
+      time=atEnd?program.end:program.segments[position.index].start+position.progress*program.segments[position.index].duration;
+      board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);
+      board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));
+      nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastFrame=0;paint();
+    }
+    function snapshot(){const p=locateBundleSegment(time,program);return {layout,routing,material,segment:p.index,phaseProgress:p.progress,playing,preview};}
+    function restore(saved){
+      if(saved?.layout!==layout||saved?.routing!==routing||saved?.material!==material||!Number.isInteger(saved.segment)||saved.segment<0||saved.segment>=program.segments.length||!Number.isFinite(saved.phaseProgress))return;
+      pause();const segment=program.segments[saved.segment];time=segment.start+bundleClamp(saved.phaseProgress)*segment.duration;preview=Boolean(saved.preview);
+      if(reduced.matches){preview=true;time=program.end;}
+      playing=!preview&&!reduced.matches&&Boolean(saved.playing)&&time<program.end;paint();schedule();
+    }
+    const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
+    design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
+    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});
+    document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+    reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
+  }
+  function draw(width){
+    if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,width);
+    if(Math.abs(width-drawnWidth)<.5)return;controllers.forEach(controller=>controller.draw(width));drawnWidth=width;
+  }
+  function restore(snapshot){if(snapshot?.privateContent?.kind!==KIND)return;for(const controller of controllers)controller.restore(snapshot.privateContent.designs?.find(entry=>entry.layout===controller.state().layout&&entry.routing===controller.state().routing&&entry.material===controller.state().material));}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState));
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{
+    pendingWidth=entries[0].contentRect.width;if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{layoutFrame=0;draw(pendingWidth);});
+  }).observe(root);
+})();
+</script>

@@ -1,0 +1,157 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "차분한 블루",
+    "차분한 청록",
+    "차분한 회청색"
+  ],
+  "palette": "navy background preserved; dimmer and less saturated signals",
+  "paletteChecks": [
+    {
+      "tone": "blue",
+      "active": "#7e9ab8",
+      "luminance": 0.31007513897034344,
+      "signalTextContrast": 6.321896044446549
+    },
+    {
+      "tone": "teal",
+      "active": "#7ca097",
+      "luminance": 0.3166106309468272,
+      "signalTextContrast": 6.436640708554136
+    },
+    {
+      "tone": "slate",
+      "active": "#8b98a8",
+      "luminance": 0.30772593523097447,
+      "signalTextContrast": 6.280650703626897
+    }
+  ],
+  "traceCrossings": 0,
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "upper left",
+  "outputRoute": "lower right",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "previousDurationMs": 33700,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "independent manual playback, hidden palette clock, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "tone": "blue",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "blue",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "blue",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "blue",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "blue",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "teal",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "teal",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "teal",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "teal",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "teal",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "slate",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "slate",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "slate",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "slate",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "slate",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    }
+  ]
+}

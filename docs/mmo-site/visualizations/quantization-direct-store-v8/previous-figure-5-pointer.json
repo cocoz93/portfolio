@@ -1,0 +1,19 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 7,
+  "scope": "coordinate-fields-only",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-single-arrival-v7/quantization.html",
+  "sha256": "1174f0d3edfc8bce5702c54f49cf8b0c6da21e98edcea50bd3b2480806de5f11",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-single-arrival-v7/qa/review.json",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "durationMs": 9750,
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "noPostArrivalRefill": true,
+  "landingGeometryAndTextContinuous": true,
+  "quantizationStageLabel": "양자화",
+  "design": "PCB conversion component",
+  "previousVersion": "quantization-pcb-v6/quantization.html"
+}

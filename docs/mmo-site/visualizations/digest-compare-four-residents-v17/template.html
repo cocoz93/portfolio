@@ -1,0 +1,31 @@
+<style>
+/*STYLES*/
+#digest-comparison-four-residents-v17 {--pcb-target:#238fff;--pcb-done:#657282}
+#digest-comparison-four-residents-v17 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#digest-comparison-four-residents-v17 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-comparison-four-residents-v17 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-comparison-four-residents-v17 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-comparison-four-residents-v17 [data-status] {min-height:2em}
+</style>
+<div id="digest-comparison-four-residents-v17" data-layout="rows" aria-label="4번 그림 · 기존 좌우 흐름을 유지한 변경 전후 비교">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="504" viewBox="0 0 736 504" role="img" aria-labelledby="digest-compare-before-title digest-compare-before-desc">
+      <title id="digest-compare-before-title">변경 전 · Msg마다 수신 섹터를 순회해 개별 적재</title>
+      <desc id="digest-compare-before-desc">한 틱 안에서 A가 왼쪽 아래에서 위로 이동해 dirty로 등록되고, 채팅 Msg 1을 만든 뒤 오른쪽으로 이동합니다. 이동 중에는 이동 Msg를 만들지 않고, 틱 끝에 최종 상태의 이동 Msg 2 하나를 만듭니다. 채팅은 발생 당시 섹터, 이동은 틱 끝의 최종 섹터를 기준으로 합니다. 섹터 1 주민 S1과 S2는 채팅과 최종 이동을 각각 적재해 두 번, 가운데 섹터 2의 S3도 두 Msg를 두 번 적재하고, 오른쪽 섹터 3의 S4는 최종 이동만 한 번 적재합니다. 번호가 붙은 사본이 직접 SendQ로 이동합니다. 이동과 채팅의 적재만 나타내며, 물리 송신, 멤버십 CREATE와 DELETE, A 자신에게 보내는 트래픽은 생략합니다. 링의 번호는 바이트 큐 안의 논리 Msg를 나타내는 도식입니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="504" viewBox="0 0 736 504" role="img" aria-labelledby="digest-compare-after-title digest-compare-after-desc">
+      <title id="digest-compare-after-title">변경 후 · 섹터별 보관 후 수신 섹터별 Digest 구성</title>
+      <desc id="digest-compare-after-desc">같은 한 틱의 동작으로 채팅 Msg 1은 왼쪽 가운데 발생 섹터에, 최종 이동 Msg 2는 틱 끝에 가운데 섹터에 보관합니다. 수신 섹터 1의 이웃 유효범위에서 두 Msg의 기존 헤더와 데이터를 임시 Digest로 연접합니다. 이 Digest는 한 번만 구성하고 그대로 유지하며, 같은 섹터 주민 S1과 S2의 SendQ에 각각 한 번 복사합니다. 두 주민을 마치면 섹터 1은 회색으로 바뀝니다. 다음 수신 섹터 2에서는 채팅과 최종 이동을 연접해 가운데 주민 S3의 SendQ에 한 번 복사합니다. 마지막 수신 섹터 3에서는 최종 이동 Msg 2만 모아 오른쪽 주민 S4의 SendQ에 한 번 복사합니다. 모든 수신 섹터를 처리한 뒤 발생 섹터의 Msg를 해제합니다. Digest에는 별도의 프로토콜 헤더를 추가하지 않으며 상자 위치와 크기는 고정됩니다. 이 예시에서 전후 데이터 순서는 같지만 일반적인 섹터 간 시간 순서를 보장하는 설명은 아닙니다. 주민이 없는 섹터, 멤버십 트래픽과 A의 자기 수신은 생략하고 적재 횟수와 송신 횟수는 구분합니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 같은 Msg 유지 · S1·S2·S3 적재 2회 → 1회</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

@@ -1,0 +1,31 @@
+{
+  "figure": 5,
+  "subject": "sector-update entry quantization and direction-state packing",
+  "notionSource": "https://app.notion.com/p/3bb16a0b9f598049a873fad65fc1aeff",
+  "sourceEvidence": [
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/Shared/Protocol/Protocol.h", "lines": [352, 415], "facts": "512 scale; rounded float-to-uint16; inverse scale; direction low nibble, state high nibble; packed 9B SectorUpdateEntry; max 100 entries"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp", "lines": [635, 656], "facts": "MakeSectorUpdates writes ID, QuantizePos(x), QuantizePos(y), PackDirState"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/Actor.h", "lines": [6, 13], "facts": "RIGHT=4"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/ServerCore/Network/NetHeader.h", "lines": [20, 26], "facts": "MsgHeader is 4B"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/WebClient/proto.js", "lines": [65, 65], "facts": "Client inverse scale 1/512"}
+  ],
+  "beforeHistoricalSource": "Supplied Notion page: ID 4 + direction 1 + state 1 + x 4 + y 4 = 14B. Current checkout has the accepted 9B wire format.",
+  "invariants": [
+    "same actor movement and server float coordinates before and after",
+    "only the wire representation of sector-update entries changes",
+    "entry lengths 14B and 9B exclude MsgHeader and count",
+    "100-entry packet sizes include MsgHeader 4B and count 2B: 1406B and 906B",
+    "direction RIGHT 4 in lower nibble; MOVING 1 in upper nibble gives 0x14",
+    "coordinate ruler is a magnified view of x quantization; the server player never snaps to it",
+    "maximum entries and packet count remain unchanged"
+  ],
+  "diagramAbstractions": [
+    "related fields grouped to compare sizes; actual wire order is documented in SVG desc",
+    "one entry shown inside Msg; the 100-entry size is a calculated example",
+    "schematic movement duration does not depict server tick wall time",
+    "receiver broadcast, SendQ, physical send and other packet types omitted to focus on representation",
+    "endpoint/clamp behavior not demonstrated; example lies well inside the supported map"
+  ],
+  "styleReference": "serial-sector-bank-v1/figure-3.html palette, embedded fonts, mage, structural strokes and before-after treatment",
+  "status": "draft"
+}

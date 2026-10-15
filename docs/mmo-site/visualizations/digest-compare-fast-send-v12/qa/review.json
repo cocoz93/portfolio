@@ -1,0 +1,85 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    656,
+    655,
+    360,
+    320
+  ],
+  "frames": 178,
+  "scope": "matched-before-after",
+  "transferDesign": "Msg 사본 직접 이동",
+  "deliveryRecipients": [
+    "S1",
+    "S2",
+    "S3"
+  ],
+  "outputWiresRemoved": true,
+  "originalBufferPreservedDuringCopy": true,
+  "layout": "full-width before above after; horizontal pipeline at desktop widths",
+  "durationMs": 32854,
+  "beforeDurationMs": 16137,
+  "afterDurationMs": 16017,
+  "example": {
+    "eventActor": "A",
+    "sourcePackets": [
+      1,
+      2,
+      3
+    ],
+    "queuedBefore": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ]
+    ],
+    "queuedAfter": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ]
+    ],
+    "callsBefore": [
+      3,
+      3,
+      3
+    ],
+    "callsAfter": [
+      1,
+      1,
+      1
+    ],
+    "logicalPacketsAndOrderPreserved": true,
+    "residentsPerShownSector": 1
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 389890,
+  "sha256": "2acfdbb0703b99643bd1dc90588c91905ca905dd9d35c9d9b41c1428902c5afb"
+}

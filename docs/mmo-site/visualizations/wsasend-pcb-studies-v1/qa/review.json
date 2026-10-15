@@ -1,0 +1,151 @@
+{
+  "verification": "source, emulated responsive component, offscreen SVG rasterization",
+  "browserHostVerified": false,
+  "staticDesigns": true,
+  "checks": [
+    {
+      "design": "mask",
+      "width": 736,
+      "height": 506,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "schematic",
+      "width": 736,
+      "height": 506,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "assembly",
+      "width": 736,
+      "height": 506,
+      "labels": 43,
+      "pads": 58,
+      "traces": 29
+    },
+    {
+      "design": "mask",
+      "width": 700,
+      "height": 506,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "schematic",
+      "width": 700,
+      "height": 506,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "assembly",
+      "width": 700,
+      "height": 506,
+      "labels": 43,
+      "pads": 58,
+      "traces": 29
+    },
+    {
+      "design": "mask",
+      "width": 680,
+      "height": 506,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "schematic",
+      "width": 680,
+      "height": 506,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "assembly",
+      "width": 680,
+      "height": 506,
+      "labels": 43,
+      "pads": 58,
+      "traces": 29
+    },
+    {
+      "design": "mask",
+      "width": 679,
+      "height": 810,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "schematic",
+      "width": 679,
+      "height": 810,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "assembly",
+      "width": 679,
+      "height": 810,
+      "labels": 43,
+      "pads": 58,
+      "traces": 29
+    },
+    {
+      "design": "mask",
+      "width": 360,
+      "height": 810,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "schematic",
+      "width": 360,
+      "height": 810,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "assembly",
+      "width": 360,
+      "height": 810,
+      "labels": 43,
+      "pads": 58,
+      "traces": 29
+    },
+    {
+      "design": "mask",
+      "width": 320,
+      "height": 810,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "schematic",
+      "width": 320,
+      "height": 810,
+      "labels": 43,
+      "pads": 25,
+      "traces": 29
+    },
+    {
+      "design": "assembly",
+      "width": 320,
+      "height": 810,
+      "labels": 43,
+      "pads": 58,
+      "traces": 29
+    }
+  ]
+}

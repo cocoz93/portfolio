@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "figure": 1,
+  "bytes": 309513,
+  "checked": [
+    {
+      "width": 1024,
+      "height": 548,
+      "duration": 26090
+    },
+    {
+      "width": 736,
+      "height": 548,
+      "duration": 26090
+    },
+    {
+      "width": 700,
+      "height": 548,
+      "duration": 26090
+    },
+    {
+      "width": 699,
+      "height": 1080,
+      "duration": 26090
+    },
+    {
+      "width": 360,
+      "height": 1080,
+      "duration": 26090
+    },
+    {
+      "width": 320,
+      "height": 1080,
+      "duration": 26090
+    }
+  ],
+  "pulseRiseMs": 40,
+  "pulseHoldUntilMs": 540,
+  "pulseFullHoldMs": 500,
+  "pulseFadeMs": 350,
+  "arrivalOnly": true,
+  "emptySlotsNeverLit": true,
+  "completionSynchronizationVerified": true,
+  "restColorRestored": true,
+  "paletteAndGeometryPreserved": true,
+  "targetedHoldsExtended": true,
+  "playPauseVerified": true,
+  "resizeAndRestoreVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false
+}

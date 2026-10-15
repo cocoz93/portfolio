@@ -1,0 +1,14 @@
+{
+  "figure": 3,
+  "status": "interim-fixed",
+  "selectionDate": "2026-10-13",
+  "poolInterior": "슬롯 뱅크",
+  "poolAnimation": "회로 게이트",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/serial-sector-bank-v1/figure-3.html",
+  "sourceVariant": "serial-pool-interior-studies-v1:bank",
+  "actors": { "A": "mage", "S1": "swordsman", "S2": "swordsman", "S3": "swordsman" },
+  "referenceSequenceAfter": [1, 4, 3, 2, 1, 0],
+  "durationMs": 22766,
+  "sha256": "37740788661632ef3eddbd5055b230c462bc5a971a19fa67570dab2ba1bce89c",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/serial-sector-bank-v1/qa/review.json"
+}

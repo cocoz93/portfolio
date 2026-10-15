@@ -1,0 +1,30 @@
+<style>
+/*STYLES*/
+#quantization-figure-five-focus-v3 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#quantization-figure-five-focus-v3 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#quantization-figure-five-focus-v3 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#quantization-figure-five-focus-v3 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#quantization-figure-five-focus-v3 [data-status] {min-height:2em}
+</style>
+<div id="quantization-figure-five-focus-v3" aria-label="5번 그림 · 좌표 8바이트를 4바이트로">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-focus-before-title quant-focus-before-desc">
+      <title id="quant-focus-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+      <desc id="quant-focus-before-desc">캐릭터가 오른쪽으로 이동하고 서버 float 좌표가 갱신됩니다. 최종 x 73.12570과 y 24.33333을 각각 4바이트 float으로 보냅니다. Msg의 좌표 부분만 보여주며 두 좌표에 총 8바이트가 필요합니다. ID, 방향과 상태, 헤더와 count, SendQ와 물리 송신은 생략합니다. 이 그림은 이동 시간이나 전체 패킷 크기를 비교하는 그림이 아닙니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-focus-after-title quant-focus-after-desc">
+      <title id="quant-focus-after-title">변경 후 · 눈금 좌표 두 개에 4바이트</title>
+      <desc id="quant-focus-after-desc">동일한 캐릭터 이동과 서버 float 좌표를 유지합니다. 전송 직전에 1/512타일 눈금으로 반올림합니다. Msg 안의 x와 y 4칸이 동시에 각각 2칸으로 줄어들고 이름은 qx와 qy, 숫자는 37440과 12459로 바뀝니다. 한 칸은 1바이트입니다. 줄어든 상태를 1150밀리초 이상 유지하며 좌표 부분의 합계는 8바이트에서 4바이트가 됩니다. 서버 float 좌표가 정수로 바뀌거나 눈금에 맞춰 움직이는 것은 아닙니다. 이 축소 애니메이션은 전송 표현을 비교하는 도식입니다. 실제 MakeSectorUpdates는 양자화한 uint16을 직접 직렬화하며 float을 먼저 Msg에 적고 압축하는 방식은 아닙니다. 생략된 다른 필드까지 포함한 전체 엔트리 크기는 이 그림의 8바이트와 4바이트와 다릅니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 좌표 8B → 4B</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

@@ -1,0 +1,18 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const dir=__dirname,file=path.join(dir,'sector-reuse.html'),original=fs.readFileSync(file,'utf8');
+const script=original.match(/<script>([\s\S]*?)<\/script>/)[1];
+const first=script.indexOf('function createSectorReuseScene('),last=script.indexOf("  const root=document.getElementById(");assert(first>=0&&last>first);
+const source=script.slice(first,last);new vm.Script(source);fs.writeFileSync(path.join(dir,'scene.js'),source);
+const api=vm.runInNewContext(source+';({createSectorReuseScene})'),scene=api.createSectorReuseScene(736);
+const start=original.indexOf('</desc>')+7,end=original.indexOf('</svg>',start);assert(start>7&&end>start);
+const fragment=original.slice(0,start)+'\n'+scene.markup+'\n  '+original.slice(end);
+new vm.Script(fragment.match(/<script>([\s\S]*?)<\/script>/)[1]);assert(Buffer.byteLength(fragment)<1_000_000);
+fs.writeFileSync(file,fragment);
+const before=path.resolve(dir,'../serial-sector-presentation-v12'),priorReview=fs.readFileSync(path.join(before,'qa/review.cjs'),'utf8');
+let helpers=priorReview.slice(0,priorReview.indexOf('async function main(){')).replaceAll('serial-sector-presentation-v12','serial-sector-current');
+helpers=helpers.replace("canvas.GlobalFonts.registerFromPath('C:/Windows/Fonts/malgun.ttf','PCB-Review');", "canvas.GlobalFonts.registerFromPath('C:/Windows/Fonts/malgun.ttf','PCB-Review');canvas.GlobalFonts.registerFromPath('C:/Windows/Fonts/consola.ttf','PCB-Code-Review');");
+helpers=helpers.replace('ctx.font=`500 ${l.size}px PCB-Review`', "ctx.font=`500 ${l.size}px ${/^(Msg(?: \\d+| 풀)?|Ref \\d+)$/.test(l.text)?'PCB-Code-Review':'PCB-Review'}`");
+helpers=helpers.replace("sans-serif;font-weight:500}</style>","sans-serif;font-weight:500}.sector-mono{font-family:PCB-Code-Review,monospace}</style>");
+const qa=path.join(dir,'qa');fs.mkdirSync(qa,{recursive:true});
+fs.writeFileSync(path.join(qa,'review.cjs'),helpers+'\n'+fs.readFileSync(path.join(qa,'review-sequence.cjs'),'utf8'));
+console.log(JSON.stringify({file,bytes:Buffer.byteLength(fragment),initialMarkupUpdated:true}));

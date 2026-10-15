@@ -1,0 +1,60 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "촘촘한 배선형"
+  ],
+  "palette": "exact v6 navy and cyan",
+  "traceCrossings": 0,
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "upper left",
+  "outputRoute": "lower right",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "previousDurationMs": 33700,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "manual playback, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    }
+  ]
+}

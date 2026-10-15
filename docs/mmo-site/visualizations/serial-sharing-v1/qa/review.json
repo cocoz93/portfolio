@@ -1,0 +1,66 @@
+{
+  "ok": true,
+  "figure": 3,
+  "checked": [
+    {
+      "width": 1024,
+      "height": 832,
+      "frames": 157
+    },
+    {
+      "width": 736,
+      "height": 832,
+      "frames": 157
+    },
+    {
+      "width": 700,
+      "height": 832,
+      "frames": 157
+    },
+    {
+      "width": 699,
+      "height": 1328,
+      "frames": 157
+    },
+    {
+      "width": 360,
+      "height": 1328,
+      "frames": 157
+    },
+    {
+      "width": 320,
+      "height": 1328,
+      "frames": 157
+    }
+  ],
+  "durationMs": 19750,
+  "paletteMatched": true,
+  "initialRefs": 1,
+  "beforeRefSequence": [
+    1,
+    2,
+    1,
+    0
+  ],
+  "afterRefSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "copiesBefore": 3,
+  "copiesAfter": 3,
+  "createdBefore": 3,
+  "createdAfter": 1,
+  "sendQMode": "ring-buffer-byte-copy",
+  "refReleasedAt": "immediately-after-copy",
+  "refsZeroWhileQueueCopiesRemain": true,
+  "pulseFullHoldMs": 500,
+  "textBoundsVerified": true,
+  "playPauseVerified": true,
+  "resizeRestoreVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false
+}

@@ -1,0 +1,48 @@
+<style>
+/* ORIGINAL_FONTS */
+#serial-sharing-design-studies-v4 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;--pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  width:100%;
+}
+#serial-sharing-design-studies-v4 .design-proposal {background:var(--pcb-bg);color:var(--pcb-text);color-scheme:dark;font-family:PCB-Pretendard,"Malgun Gothic",sans-serif}
+#serial-sharing-design-studies-v4 .proposal-board {display:block;width:100%;height:auto}
+#serial-sharing-design-studies-v4 .proposal-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#serial-sharing-design-studies-v4 .study-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+</style>
+<div id="serial-sharing-design-studies-v4" class="viz-carousel" aria-label="3번 그림 구도 비교" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section class="design-proposal" data-variant="반복 작업 비교" data-study="work" aria-label="반복 작업 비교형">
+    <svg class="proposal-board" xmlns="http://www.w3.org/2000/svg" width="736" height="736" viewBox="0 0 736 736" role="img" aria-labelledby="sharing-work-title sharing-work-desc">
+      <title id="sharing-work-title">반복 작업 비교</title>
+      <desc id="sharing-work-desc">3번 그림 정적 설계 시안. 수신자 세 명을 예로 들어 생성·직렬화 작업과 Msg를 세 번 만드는 전, 한 번 만든 뒤 같은 Msg를 각 SendQ에 Copy하는 후를 비교합니다. 작업 횟수는 3회에서 1회, 세션별 Copy는 3회로 동일합니다. 변경 후 AddRef(3)은 초기 빌더 Ref 1에 세 수신자 몫을 더합니다. 각 Copy 직후 SubRef하며 마지막 빌더 몫 SubRef에서 풀 반환됩니다. 현재 링버퍼 byte-copy 경로입니다. 순차 작업을 나란히 펼친 프로세스 도식이며 세 버퍼의 동시 존재나 실제 소켓 송신 횟수를 나타내지 않습니다. 파란 영역은 같은 내용입니다. 부품 크기는 바이트 비율이 아닙니다. 정적 시안이며 애니메이션은 포함하지 않습니다.</desc>
+      <!-- WORK_SCENE -->
+    </svg>
+  </section>
+  <section class="design-proposal" data-variant="팬아웃 배선" data-study="fanout" aria-label="팬아웃 배선형" hidden>
+    <svg class="proposal-board" xmlns="http://www.w3.org/2000/svg" width="736" height="736" viewBox="0 0 736 736" role="img" aria-labelledby="sharing-fanout-title sharing-fanout-desc">
+      <title id="sharing-fanout-title">팬아웃 배선</title>
+      <desc id="sharing-fanout-desc">같은 내용을 가진 Msg를 수신자마다 만드는 전과, 한 번 직렬화한 같은 Msg에서 세 세션의 독립된 링버퍼 SendQ로 Copy하는 후를 비교합니다. 화살표는 버퍼에서 큐로의 바이트 복사이며 큐가 버퍼 포인터를 보관하는 zero-copy를 나타내지 않습니다. AddRef(3)은 수신자별 호출에 사용할 소유권을 확보합니다. Copy 직후 SubRef, 마지막 빌더 소유권 SubRef에서 Ref 0이면 풀 반환입니다. 전후 Msg 크기는 동일하며 내용은 같은 파란 영역입니다. 정적 프로세스 도식이며 세 개 Msg가 동시에 살아 있는 런타임 스냅샷이 아닙니다. 정적 시안이며 애니메이션은 포함하지 않습니다.</desc>
+      <!-- FANOUT_SCENE -->
+    </svg>
+  </section>
+  <section class="design-proposal" data-variant="버퍼 수명" data-study="lifetime" aria-label="버퍼 수명형" hidden>
+    <svg class="proposal-board" xmlns="http://www.w3.org/2000/svg" width="736" height="736" viewBox="0 0 736 736" role="img" aria-labelledby="sharing-lifetime-title sharing-lifetime-desc">
+      <title id="sharing-lifetime-title">버퍼 수명</title>
+      <desc id="sharing-lifetime-desc">수신자 처리 순서에 따른 Msg 수명을 비교합니다. 변경 전에는 각 수신자 처리에서 Msg를 생성하고 Copy 후 풀 반환합니다. 변경 후에는 Msg 하나가 세 번의 Copy 동안 계속 유지됩니다. 띠의 길이는 버퍼 수명과 논리적인 처리 순서를 나타내며 실제 시간, 성능, 바이트 수나 패킷 크기를 나타내지 않습니다. 초기 Ref 1에 AddRef(3)하여 4, 각 세션 SendQ에 Copy한 직후 SubRef로 3, 2, 1, 마지막 빌더 소유권 SubRef로 0이 되어 풀 반환합니다. 현재 링버퍼 경로이므로 수신 완료를 기다리는 수명이 아닙니다. 세 SendQ의 바이트 사본은 유지됩니다. 정적 시안이며 애니메이션은 포함하지 않습니다.</desc>
+      <!-- LIFETIME_SCENE -->
+    </svg>
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+/* STUDY_SOURCE */
+  const root=document.getElementById('serial-sharing-design-studies-v4');if(!root)return;
+  const designs=Array.from(root.querySelectorAll('[data-study]'));let lastWidth=0,pendingWidth=0,raf=0;
+  function draw(width){if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,Math.round(width));if(width===lastWidth)return;
+    for(const design of designs){const board=design.querySelector('.proposal-board'),scene=createSharingStudy(width,design.getAttribute('data-study')),accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));}lastWidth=width;
+  }
+  draw(root.getBoundingClientRect().width||736);
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{pendingWidth=entries[0].contentRect.width;if(raf)return;raf=requestAnimationFrame(()=>{raf=0;draw(pendingWidth);});}).observe(root);
+})();
+</script>

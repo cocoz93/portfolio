@@ -1,0 +1,143 @@
+<style>
+#wsasend-character-options { --cc-bg:#0d1421; --cc-surface:#151f2c; --cc-edge:#415971; --cc-track:#6686a4; --cc-text:#eef2fb; --cc-muted:#a5b8cf; --cc-active:#6cc7ff; --cc-ink:#08121e; --cc-steel:#dce9f3; --cc-steel-mid:#a6bed1; --cc-steel-dark:#617e9a; --cc-blue:#4eafe8; --cc-blue-mid:#2579ad; --cc-blue-dark:#17466a; --cc-skin:#ecd0b5; --cc-skin-dark:#bd947a; --cc-hair:#554539; color:var(--cc-text); font-family:"Malgun Gothic",sans-serif; color-scheme:dark; width:100%; }
+#wsasend-character-options * { box-sizing:border-box; }
+#wsasend-character-options .cc-stage { padding:24px; background:var(--cc-bg); min-height:376px; }
+#wsasend-character-options .cc-name { margin:0 0 24px; font-size:20px; line-height:1.4; font-weight:600; }
+#wsasend-character-options .cc-comparison { display:grid; grid-template-columns:180px minmax(0,1fr); gap:28px; align-items:center; }
+#wsasend-character-options .cc-portrait { margin:0; text-align:center; }
+#wsasend-character-options .cc-portrait svg { width:144px; height:180px; display:block; margin:0 auto 16px; overflow:visible; }
+#wsasend-character-options figcaption { font-size:12px; line-height:1.5; color:var(--cc-muted); }
+#wsasend-character-options .cc-contexts { display:flex; flex-wrap:wrap; gap:24px; justify-content:center; align-items:center; }
+#wsasend-character-options .cc-context { margin:0; text-align:center; }
+#wsasend-character-options .cc-context svg { display:block; margin:0 auto 16px; }
+#wsasend-character-options .cc-context.cc-desktop svg { width:144px; height:149px; }
+#wsasend-character-options .cc-context.cc-mobile svg { width:220px; height:220px; }
+#wsasend-character-options .cc-map text { fill:var(--cc-muted); font:500 14px "Malgun Gothic",sans-serif; text-anchor:middle; dominant-baseline:central; }
+#wsasend-character-options .cc-map .cc-position { fill:var(--cc-active); }
+@media (max-width:700px) { #wsasend-character-options .cc-comparison { grid-template-columns:144px minmax(0,1fr); gap:16px; } #wsasend-character-options .cc-stage { min-height:553px; } #wsasend-character-options .cc-contexts { gap:20px; } }
+@media (max-width:480px) { #wsasend-character-options .cc-stage { padding:20px 16px; min-height:753px; } #wsasend-character-options .cc-name { margin-bottom:12px; } #wsasend-character-options .cc-comparison { grid-template-columns:1fr; gap:24px; } #wsasend-character-options .cc-portrait svg { width:120px; height:150px; margin-bottom:8px; } #wsasend-character-options .cc-contexts { gap:20px; flex-direction:column; align-items:center; } }
+</style>
+<div id="wsasend-character-options" class="viz-carousel" aria-label="게임 캐릭터 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section data-variant="실버 기사" aria-label="실버 기사 시안">
+    <div class="cc-stage">
+      <h2 class="cc-name">실버 기사</h2>
+      <div class="cc-comparison">
+        <figure class="cc-portrait"><svg data-sprite="knight" role="img" aria-label="은색 투구와 푸른 깃, 검과 방패를 든 기사"></svg><figcaption>확대 모습</figcaption></figure>
+        <div class="cc-contexts">
+          <figure class="cc-context cc-desktop"><svg class="cc-map" data-map="knight" data-scale="desktop" role="img" aria-label="현재 화면 크기에서 본 실버 기사"></svg><figcaption>현재 화면 크기</figcaption></figure>
+          <figure class="cc-context cc-mobile"><svg class="cc-map" data-map="knight" data-scale="mobile" role="img" aria-label="작은 화면에서 본 실버 기사"></svg><figcaption>작은 화면</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section data-variant="청년 검사" aria-label="청년 검사 시안" hidden>
+    <div class="cc-stage">
+      <h2 class="cc-name">청년 검사</h2>
+      <div class="cc-comparison">
+        <figure class="cc-portrait"><svg data-sprite="swordsman" role="img" aria-label="얼굴이 보이고 푸른 망토와 은색 갑옷을 입은 검사"></svg><figcaption>확대 모습</figcaption></figure>
+        <div class="cc-contexts">
+          <figure class="cc-context cc-desktop"><svg class="cc-map" data-map="swordsman" data-scale="desktop" role="img" aria-label="현재 화면 크기에서 본 청년 검사"></svg><figcaption>현재 화면 크기</figcaption></figure>
+          <figure class="cc-context cc-mobile"><svg class="cc-map" data-map="swordsman" data-scale="mobile" role="img" aria-label="작은 화면에서 본 청년 검사"></svg><figcaption>작은 화면</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section data-variant="후드 레인저" aria-label="후드 레인저 시안" hidden>
+    <div class="cc-stage">
+      <h2 class="cc-name">후드 레인저</h2>
+      <div class="cc-comparison">
+        <figure class="cc-portrait"><svg data-sprite="ranger" role="img" aria-label="푸른 후드와 망토를 걸치고 활을 든 레인저"></svg><figcaption>확대 모습</figcaption></figure>
+        <div class="cc-contexts">
+          <figure class="cc-context cc-desktop"><svg class="cc-map" data-map="ranger" data-scale="desktop" role="img" aria-label="현재 화면 크기에서 본 후드 레인저"></svg><figcaption>현재 화면 크기</figcaption></figure>
+          <figure class="cc-context cc-mobile"><svg class="cc-map" data-map="ranger" data-scale="mobile" role="img" aria-label="작은 화면에서 본 후드 레인저"></svg><figcaption>작은 화면</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section data-variant="로브 마법사" aria-label="로브 마법사 시안" hidden>
+    <div class="cc-stage">
+      <h2 class="cc-name">로브 마법사</h2>
+      <div class="cc-comparison">
+        <figure class="cc-portrait"><svg data-sprite="mage" role="img" aria-label="고깔모자와 푸른 로브를 입고 수정 지팡이를 든 마법사"></svg><figcaption>확대 모습</figcaption></figure>
+        <div class="cc-contexts">
+          <figure class="cc-context cc-desktop"><svg class="cc-map" data-map="mage" data-scale="desktop" role="img" aria-label="현재 화면 크기에서 본 로브 마법사"></svg><figcaption>현재 화면 크기</figcaption></figure>
+          <figure class="cc-context cc-mobile"><svg class="cc-map" data-map="mage" data-scale="mobile" role="img" aria-label="작은 화면에서 본 로브 마법사"></svg><figcaption>작은 화면</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  const root=document.getElementById("wsasend-character-options");
+  if(!root) return;
+  const NS="http://www.w3.org/2000/svg";
+  const colors={o:"var(--cc-ink)",l:"var(--cc-steel)",m:"var(--cc-steel-mid)",d:"var(--cc-steel-dark)",a:"var(--cc-active)",b:"var(--cc-blue)",c:"var(--cc-blue-mid)",v:"var(--cc-blue-dark)",s:"var(--cc-skin)",t:"var(--cc-skin-dark)",h:"var(--cc-hair)"};
+  function node(tag,attrs,parent){const n=document.createElementNS(NS,tag);Object.entries(attrs).forEach(([k,v])=>n.setAttribute(k,v));parent.appendChild(n);return n;}
+  function pixels(kind){
+    const grid=Array.from({length:36},()=>Array(32).fill(" "));
+    function r(x,y,w,h,c){for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)if(grid[yy]&&xx>=0&&xx<32)grid[yy][xx]=c;}
+    function p(points,c){const xs=points.map(a=>a[0]),ys=points.map(a=>a[1]);for(let y=Math.min(...ys);y<Math.max(...ys);y++)for(let x=Math.min(...xs);x<Math.max(...xs);x++){let inside=false;for(let i=0,j=points.length-1;i<points.length;j=i++){const a=points[i],b=points[j];if((a[1]>y+.5)!==(b[1]>y+.5)&&(x+.5)<(b[0]-a[0])*(y+.5-a[1])/(b[1]-a[1])+a[0])inside=!inside;}if(inside)r(x,y,1,1,c);}}
+    function blade(x,y){p([[x+1,y],[x+3,y+3],[x+3,y+17],[x+1,y+18],[x,y+16],[x,y+3]],"o");r(x+1,y+3,1,14,"l");r(x+2,y+4,1,13,"m");r(x-2,y+18,7,2,"o");r(x-1,y+18,5,1,"m");r(x+1,y+20,2,4,"o");r(x+1,y+20,1,3,"d");}
+    if(kind==="knight"){
+      p([[11,18],[24,18],[27,31],[24,33],[10,33],[7,30]],"o");p([[12,19],[23,19],[25,31],[22,32],[10,31]],"v");r(10,29,3,3,"c");r(22,27,2,4,"c");
+      r(12,28,5,5,"o");r(19,28,5,5,"o");r(12,28,4,4,"d");r(19,28,4,4,"d");r(11,32,6,2,"o");r(18,32,6,2,"o");r(12,32,4,1,"m");r(19,32,4,1,"m");
+      p([[10,17],[13,16],[23,16],[26,18],[26,23],[23,24],[22,28],[12,28],[11,24],[8,23],[8,19]],"o");r(11,18,13,5,"d");r(13,18,9,7,"m");r(13,18,2,5,"l");r(13,24,9,2,"d");r(13,26,9,1,"m");r(16,18,3,8,"b");r(17,18,1,6,"a");p([[9,18],[12,17],[13,20],[11,22],[8,21]],"m");r(9,18,3,1,"l");p([[23,17],[26,18],[27,21],[24,22],[22,20]],"m");r(23,18,3,1,"l");
+      p([[12,5],[21,5],[24,8],[24,15],[21,18],[13,18],[10,15],[10,8]],"o");p([[13,6],[20,6],[23,8],[23,14],[20,17],[13,16],[11,14],[11,8]],"d");p([[13,6],[20,6],[23,8],[23,10],[11,10],[11,8]],"m");r(13,6,6,1,"l");r(11,8,3,2,"l");r(12,10,11,3,"o");r(13,11,8,1,"d");r(13,11,5,1,"a");r(17,13,2,3,"m");r(12,14,3,1,"m");r(20,14,2,1,"m");r(13,16,3,1,"m");
+      p([[16,5],[16,3],[20,1],[26,1],[23,3],[25,3],[21,5]],"o");r(18,2,7,1,"b");r(17,3,6,1,"a");r(17,4,4,1,"b");
+      blade(28,10);
+      p([[4,21],[11,20],[13,22],[12,29],[8,33],[4,29]],"o");p([[5,22],[10,21],[12,23],[11,28],[8,31],[5,28]],"m");p([[6,23],[10,22],[11,23],[10,28],[8,30],[6,28]],"v");r(8,23,1,6,"a");r(6,25,5,1,"a");r(5,23,1,4,"l");
+    } else if(kind==="swordsman"){
+      p([[9,16],[23,16],[27,28],[23,32],[15,29],[9,32],[5,29]],"o");p([[10,17],[22,17],[25,28],[22,30],[15,27],[9,30],[7,28]],"v");r(8,20,2,7,"c");r(10,19,2,5,"b");r(23,23,1,5,"c");
+      r(12,26,5,6,"o");r(19,26,5,6,"o");r(13,27,3,5,"d");r(20,27,3,5,"d");r(11,32,6,2,"o");r(18,32,6,2,"o");r(12,32,4,1,"m");r(19,32,4,1,"m");
+      p([[10,17],[24,17],[27,20],[25,25],[23,26],[22,28],[12,28],[11,25],[8,23],[8,20]],"o");r(12,18,11,7,"d");r(13,18,8,5,"m");r(13,18,3,3,"l");r(12,24,11,2,"v");r(12,26,11,1,"d");r(17,24,2,2,"m");p([[9,18],[12,18],[13,21],[11,23],[9,22]],"m");r(9,18,3,1,"l");p([[22,18],[25,18],[26,21],[24,23],[22,21]],"m");r(22,18,3,1,"l");
+      r(15,14,6,4,"o");r(16,15,4,3,"t");r(12,17,10,2,"b");r(13,17,5,1,"a");r(19,19,2,4,"c");
+      p([[10,6],[13,3],[22,3],[25,6],[25,12],[23,16],[20,18],[14,17],[11,14],[9,11]],"o");p([[12,7],[22,7],[24,10],[22,15],[19,17],[14,16],[11,13]],"t");r(12,8,11,5,"s");r(14,13,7,3,"s");r(12,11,2,2,"t");r(22,11,1,2,"t");
+      p([[11,4],[15,2],[16,3],[23,2],[22,4],[25,5],[26,8],[24,10],[22,8],[19,9],[19,6],[16,8],[13,7],[11,10],[9,9],[10,7]],"h");r(12,4,4,1,"d");r(17,4,6,1,"d");r(12,10,1,2,"h");r(23,9,1,3,"h");r(14,10,2,2,"o");r(20,10,2,2,"o");r(14,10,1,1,"l");r(20,10,1,1,"l");r(17,15,3,1,"t");
+      blade(28,10);r(24,23,3,3,"o");r(25,23,2,2,"m");
+    } else if(kind==="ranger"){
+      r(6,13,5,15,"o");r(7,15,3,11,"d");r(7,12,1,6,"m");r(9,11,1,7,"m");r(6,10,3,2,"l");r(8,9,3,2,"l");
+      p([[10,17],[23,17],[27,30],[23,33],[10,33],[6,29]],"o");p([[11,18],[22,18],[25,30],[22,31],[10,31],[8,29]],"v");p([[11,19],[14,21],[13,30],[9,30]],"c");p([[21,19],[22,19],[24,28],[21,31],[20,26]],"c");r(10,22,1,6,"b");
+      r(12,31,5,3,"o");r(19,31,5,3,"o");r(13,32,3,1,"d");r(20,32,3,1,"d");r(14,21,7,8,"o");r(15,22,5,5,"d");r(15,27,5,1,"m");
+      p([[15,4],[21,5],[25,10],[25,15],[22,19],[12,19],[9,15],[9,10]],"o");p([[15,5],[20,6],[24,10],[24,14],[21,18],[13,18],[10,14],[10,10]],"v");p([[15,5],[20,6],[22,8],[15,8],[12,11],[11,14],[10,13],[10,10]],"b");p([[22,9],[24,11],[24,14],[21,17],[20,16],[22,13]],"c");p([[15,9],[21,9],[23,12],[22,16],[14,17],[12,14],[12,12]],"o");p([[14,12],[21,12],[22,13],[21,16],[14,16],[13,14]],"t");r(14,12,7,2,"s");r(14,12,2,1,"o");r(20,12,2,1,"o");r(16,15,4,1,"s");r(13,17,8,2,"c");r(14,17,4,1,"b");
+      p([[28,12],[30,14],[31,17],[31,24],[29,29],[27,31],[26,29],[28,26],[29,22],[29,18],[27,14]],"o");p([[28,13],[29,15],[30,18],[30,23],[28,28],[27,29],[28,25],[29,22],[29,18],[28,15]],"m");r(27,15,1,14,"d");r(24,23,4,3,"o");r(24,23,3,2,"m");
+    } else if(kind==="mage"){
+      r(4,12,3,23,"o");r(5,13,1,21,"m");r(4,17,2,1,"d");
+      p([[5,5],[9,8],[9,12],[6,15],[2,12],[2,8]],"o");p([[5,6],[8,9],[8,11],[5,13],[3,11],[3,9]],"c");p([[5,7],[7,9],[6,11],[4,11],[3,9]],"a");r(4,8,1,2,"l");
+      r(12,31,5,4,"o");r(21,31,5,4,"o");r(12,34,4,1,"d");r(22,34,4,1,"d");
+      p([[13,18],[24,18],[27,22],[26,26],[29,32],[27,34],[9,34],[8,32],[11,26],[10,22]],"o");p([[14,19],[23,19],[25,22],[24,26],[27,32],[10,32],[13,26],[12,22]],"v");p([[15,21],[18,21],[18,32],[12,32]],"c");r(13,27,1,4,"b");r(19,23,2,9,"b");r(20,23,1,8,"a");r(11,31,16,1,"c");r(11,32,16,1,"d");
+      p([[11,20],[13,21],[13,25],[10,27],[6,25],[6,22]],"o");p([[10,21],[12,22],[12,24],[9,25],[7,24],[7,22]],"c");r(6,22,2,2,"s");p([[24,21],[27,22],[28,25],[25,27],[23,25]],"o");r(24,22,2,3,"c");r(25,25,2,1,"s");
+      p([[14,12],[22,12],[25,15],[24,20],[21,24],[15,23],[12,20],[11,15]],"o");r(14,14,9,5,"t");r(14,14,8,3,"s");r(15,16,2,1,"o");r(21,16,2,1,"o");p([[13,18],[15,18],[17,19],[20,18],[24,18],[23,23],[21,26],[18,27],[15,24]],"m");p([[14,18],[17,19],[20,19],[23,18],[22,23],[19,26],[16,23]],"l");r(17,19,3,1,"d");r(18,20,2,1,"m");
+      p([[20,1],[23,1],[23,4],[22,7],[25,10],[25,12],[29,12],[30,15],[8,15],[7,13],[11,12],[13,8],[16,5]],"o");p([[20,2],[22,2],[21,6],[24,11],[24,13],[28,13],[28,14],[9,14],[12,13],[14,9],[17,6]],"v");p([[20,2],[21,2],[20,5],[17,8],[15,12],[12,12],[14,8],[17,5]],"c");r(11,12,14,1,"b");r(10,13,18,1,"c");r(21,8,1,1,"a");r(20,9,3,1,"a");r(21,10,1,1,"a");
+    }
+    return grid;
+  }
+  const definitions=Object.fromEntries(["knight","swordsman","ranger","mage"].map(k=>[k,pixels(k)]));
+  function drawSprite(svg,kind,x,y,w,h){
+    const g=node("g",{transform:"translate("+x+" "+y+") scale("+(w/32)+" "+(h/36)+")","shape-rendering":"crispEdges","data-character":kind},svg);
+    definitions[kind].forEach((row,yy)=>{let xx=0;while(xx<32){const c=row[xx];let end=xx+1;while(end<32&&row[end]===c)end++;if(colors[c])node("rect",{x:xx,y:yy,width:end-xx,height:1,fill:colors[c]},g);xx=end;}});
+    return g;
+  }
+  root.querySelectorAll("[data-sprite]").forEach(svg=>{svg.setAttribute("viewBox","0 0 144 180");drawSprite(svg,svg.dataset.sprite,8,16,128,144);});
+  root.querySelectorAll("[data-map]").forEach(svg=>{
+    const mobile=svg.dataset.scale==="mobile";
+    const width=mobile?220:144,height=mobile?220:149,pad=mobile?16:9;
+    svg.setAttribute("viewBox","0 0 "+width+" "+height);
+    node("rect",{x:1,y:1,width:width-2,height:height-2,rx:2,fill:"var(--cc-bg)",stroke:"var(--cc-edge)","stroke-width":1},svg);
+    const ix=pad,iy=pad,iw=width-pad*2,ih=height-pad*2;
+    node("rect",{x:ix,y:iy,width:iw,height:ih,fill:"none",stroke:"var(--cc-edge)","stroke-width":.8},svg);
+    node("path",{d:"M"+(width/2)+" "+iy+" V"+(height-pad)+" M"+ix+" "+(height/2)+" H"+(width-pad),fill:"none",stroke:"var(--cc-edge)","stroke-width":.8},svg);
+    const ps=[[ix+iw/4,iy+ih/4],[ix+iw*3/4,iy+ih/4],[ix+iw*3/4,iy+ih*3/4],[ix+iw/4,iy+ih*3/4]],radius=mobile?18:11;
+    ps.forEach((a,i)=>{const b=ps[(i+1)%4],dx=Math.sign(b[0]-a[0]),dy=Math.sign(b[1]-a[1]),gap=radius+(mobile?12:6),sx=a[0]+dx*gap,sy=a[1]+dy*gap,ex=b[0]-dx*gap,ey=b[1]-dy*gap;
+      node("path",{d:"M"+sx+" "+sy+" L"+ex+" "+ey,fill:"none",stroke:"var(--cc-track)","stroke-width":mobile?2:1.5,opacity:.65},svg);
+      const tip=mobile?5:3;
+      node("polyline",{points:(dx!==0?[[ex-dx*tip,ey-tip],[ex,ey],[ex-dx*tip,ey+tip]]:[[ex-tip,ey-dy*tip],[ex,ey],[ex+tip,ey-dy*tip]]).map(p=>p.join(",")).join(" "),fill:"none",stroke:"var(--cc-track)","stroke-width":mobile?2:1.5,opacity:.65},svg);
+      if(i<3){node("circle",{cx:a[0],cy:a[1],r:radius,fill:"var(--cc-bg)",stroke:"var(--cc-muted)","stroke-width":1},svg);const t=node("text",{x:a[0],y:a[1]},svg);t.textContent=String(i+1);}
+    });
+    const size=mobile?39:28;
+    const point=ps[3];drawSprite(svg,svg.dataset.map,point[0]-size*.5,point[1]-size*.62,size,size*1.125);
+    const mark=node("text",{x:point[0]+size*.7,y:point[1]-size*.45,class:"cc-position"},svg);mark.textContent="4";
+  });
+  root.characterDefinitions=Object.freeze(definitions);
+})();
+</script>

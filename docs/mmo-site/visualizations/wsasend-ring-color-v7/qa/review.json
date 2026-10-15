@@ -1,0 +1,51 @@
+{
+  "ok": true,
+  "figure": 1,
+  "targetColor": "#f2bb67",
+  "checked": [
+    {
+      "width": 1024,
+      "height": 548,
+      "duration": 23280,
+      "colorOnlyChanges": 16
+    },
+    {
+      "width": 736,
+      "height": 548,
+      "duration": 23280,
+      "colorOnlyChanges": 16
+    },
+    {
+      "width": 700,
+      "height": 548,
+      "duration": 23280,
+      "colorOnlyChanges": 16
+    },
+    {
+      "width": 699,
+      "height": 1080,
+      "duration": 23280,
+      "colorOnlyChanges": 16
+    },
+    {
+      "width": 360,
+      "height": 1080,
+      "duration": 23280,
+      "colorOnlyChanges": 16
+    },
+    {
+      "width": 320,
+      "height": 1080,
+      "duration": 23280,
+      "colorOnlyChanges": 16
+    }
+  ],
+  "onlyTargetColorChanged": true,
+  "originalContrastAndTimingRestored": true,
+  "acceptedOriginalsPreserved": true,
+  "playPauseVerified": true,
+  "stateRestoreVerified": true,
+  "resizePreservesPhase": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false
+}

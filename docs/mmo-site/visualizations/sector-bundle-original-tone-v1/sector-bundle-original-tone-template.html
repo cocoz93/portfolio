@@ -1,0 +1,50 @@
+<style>
+/* ORIGINAL_FONTS */
+#sector-bundle-original-tone-v1 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#6cc7ff;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-dark:#617e9a;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;
+  --pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);background:var(--pcb-bg);color-scheme:dark;
+  font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#sector-bundle-original-tone-v1 .bundle-tone-board {display:block;width:100%;height:auto}
+#sector-bundle-original-tone-v1 .bundle-tone-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#sector-bundle-original-tone-v1 .bundle-tone-board .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+</style>
+<div id="sector-bundle-original-tone-v1" aria-label="새 묶음 패킷과 세션 SendQ Copy 횟수 비교">
+  <svg class="bundle-tone-board" xmlns="http://www.w3.org/2000/svg" width="736" height="650" viewBox="0 0 736 650" role="img" aria-labelledby="bundle-tone-title bundle-tone-description">
+    <title id="bundle-tone-title">개별 패킷 네 개를 새 묶음 패킷 하나로</title>
+    <desc id="bundle-tone-description">같은 섹터에서 움직인 플레이어 A, B, C, D의 변경분을 같은 수신자에게 전달합니다. 변경 전에는 헤더와 한 명의 상태가 들어 있는 개별 패킷 네 개를 수신 세션마다 네 번 Copy합니다. 변경 후에는 새 헤더, count, 네 명의 최종 상태 엔트리를 담는 새로운 묶음 패킷 하나를 수신 세션마다 한 번 Copy합니다. Q1, Q2, Q3는 각기 다른 수신 세션의 SendQ입니다. 수신자 세 명으로 축약한 예시이며 실제 수신자 수는 주변 시야에 따라 달라집니다. 이 그림은 Copy 횟수와 새 패킷 구성을 표현하며 WSASend 호출 횟수를 나타내지 않습니다.</desc>
+    <!-- ORIGINAL_TONE_SCENE -->
+  </svg>
+</div>
+<script>
+(() => {
+/* ORIGINAL_TONE_SOURCE */
+  const root=document.getElementById("sector-bundle-original-tone-v1");
+  if(!root)return;
+  const board=root.querySelector(".bundle-tone-board");
+  let drawnWidth=736,pendingWidth=0,layoutFrame=0;
+  function queueLayout(width){
+    if(!Number.isFinite(width)||width<=0)return;
+    pendingWidth=Math.max(320,width);
+    if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{
+      layoutFrame=0;
+      if(Math.abs(pendingWidth-drawnWidth)<.5)return;
+      drawnWidth=pendingWidth;
+      const scene=createOriginalToneBundle(drawnWidth);
+      const accessible=Array.from(board.children).filter(el=>["title","desc"].includes(el.tagName.toLowerCase()));
+      board.replaceChildren(...accessible);
+      board.insertAdjacentHTML("beforeend",scene.markup);
+      board.setAttribute("viewBox",`0 0 ${drawnWidth} ${scene.height}`);
+      board.setAttribute("width",String(drawnWidth));board.setAttribute("height",String(scene.height));
+    });
+  }
+  if(typeof ResizeObserver!=="undefined")new ResizeObserver(entries=>queueLayout(entries[0].contentRect.width)).observe(root);
+  queueLayout(root.getBoundingClientRect().width);
+})();
+</script>

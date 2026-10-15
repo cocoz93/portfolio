@@ -1,0 +1,39 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "framesPerWidth": 80,
+  "durationMs": 8300,
+  "scope": "coordinate fields only",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "instantMsgAfterQuantization": true,
+  "inputSignalBeforeFill": true,
+  "noMsgTransferAnimation": true,
+  "noOutputWiring": true,
+  "noSecondFill": true,
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "serverCoordinatesPreserved": true,
+  "quantizeResult": [
+    37440,
+    12459
+  ],
+  "coordinateHoldMs": 1150,
+  "geometryAndPalettePreserved": true,
+  "nativeControlsVerified": true,
+  "savedStateVerified": true,
+  "reducedMotionVerified": true,
+  "standaloneBrowserRuntimeVerified": true,
+  "browserHostVerified": false,
+  "serverBinaryExecuted": false,
+  "bytes": 312946,
+  "sha256": "c05d70fa85849211a5fa329c1f7061d9277f39bae11c060675c9fd49d737aaa7",
+  "oldVersionSha256": "1174f0d3edfc8bce5702c54f49cf8b0c6da21e98edcea50bd3b2480806de5f11"
+}

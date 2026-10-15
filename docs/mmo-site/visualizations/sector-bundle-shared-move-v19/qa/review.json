@@ -1,0 +1,123 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "데이터만 강조"
+  ],
+  "palette": "original figure 1 palette, selected minimal fill",
+  "paletteChecks": [
+    {
+      "routing": "minimal",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    }
+  ],
+  "messageHeight": 100,
+  "titleHeight": 24,
+  "protocolHeaderHeight": 20,
+  "protocolHeadersBefore": 4,
+  "protocolHeadersAfter": 1,
+  "headerAppearance": "neutral gray, payload-only blue emphasis",
+  "dataCell": [
+    56,
+    40
+  ],
+  "messageAndDataFont": 12,
+  "leadLength": 8,
+  "tracePitch": 6,
+  "pulseSize": [
+    6,
+    6
+  ],
+  "mapSize": [
+    72,
+    218
+  ],
+  "sharedCharacters": 1,
+  "sharedMovementMaps": 1,
+  "sourcePath": "four upward moves replayed for both rows",
+  "reset": "fade out at endpoint then return to origin without emitting a message",
+  "queueRadius": 50,
+  "dividers": 5,
+  "idleFacing": "front",
+  "movingFacing": "travel direction only",
+  "unintendedCrossings": 0,
+  "desktopLayout": "one centered shared source, wider message cells",
+  "compactLayout": "same-size components stacked top to bottom",
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersTotal": 1,
+  "movementArrows": "current move only",
+  "outputRoute": "bottom outlets on both rows",
+  "playbackRateBefore": 1.25,
+  "playbackRateAfter": 1,
+  "transitionRate": 1,
+  "messageFillMs": {
+    "before": 280,
+    "after": 350
+  },
+  "sourceTransferDesktopMs": {
+    "before": 280,
+    "after": 350
+  },
+  "newDurationMs": 24026,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "manual playback, hidden clock, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 1024,
+      "height": 548,
+      "durationMs": 24026
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 24026
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 24026
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 980,
+      "durationMs": 28646
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 980,
+      "durationMs": 28646
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 980,
+      "durationMs": 28646
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "figure": 4,
+  "status": "draft",
+  "version": 16,
+  "scope": "matched-before-after",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/digest-compare-fixed-box-v15/digest-compare.html",
+  "transferDesign": "Msg 사본 직접 이동",
+  "stages": [
+    "source-sector storage",
+    "receiving-sector scope selection and raw concatenation",
+    "one enqueue for each resident"
+  ],
+  "sha256": "40ee8e9948bc07a13bedf8eb0825f1bbc2a17a74af62cb5fc2e537bcc0f7350a",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/digest-compare-fixed-box-v15/qa/review.json"
+}

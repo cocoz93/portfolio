@@ -1,0 +1,42 @@
+{
+  "verification": "timeline boundaries, one character and four adjacent tile moves, DOM-emulated controls and resize, geometry, offscreen SVG frames",
+  "browserHostVerified": false,
+  "messagesBefore": 4,
+  "messagesAfter": 1,
+  "charactersPerRow": 1,
+  "wsasendCallsPerRow": 1,
+  "afterSerializationAtTickEnd": true,
+  "queueDrained": true,
+  "checked": [
+    {
+      "width": 736,
+      "height": 478,
+      "durationMs": 28550
+    },
+    {
+      "width": 700,
+      "height": 478,
+      "durationMs": 28550
+    },
+    {
+      "width": 680,
+      "height": 478,
+      "durationMs": 28550
+    },
+    {
+      "width": 679,
+      "height": 818,
+      "durationMs": 33800
+    },
+    {
+      "width": 360,
+      "height": 818,
+      "durationMs": 33800
+    },
+    {
+      "width": 320,
+      "height": 818,
+      "durationMs": 33800
+    }
+  ]
+}

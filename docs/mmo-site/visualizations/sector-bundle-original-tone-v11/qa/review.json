@@ -1,0 +1,199 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "원본 블루",
+    "구리빛 신호",
+    "민트 신호",
+    "라벤더 신호"
+  ],
+  "palette": "original equals archived figure 1 palette; three alternative signals on the same navy background",
+  "paletteChecks": [
+    {
+      "tone": "original",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    },
+    {
+      "tone": "copper",
+      "active": "#c9a375",
+      "luminance": 0.3989624716499695,
+      "signalTextContrast": 7.882504973115227
+    },
+    {
+      "tone": "mint",
+      "active": "#77bea6",
+      "luminance": 0.43502023613351054,
+      "signalTextContrast": 8.515576835038074
+    },
+    {
+      "tone": "lavender",
+      "active": "#a99cc8",
+      "luminance": 0.3638208086460765,
+      "signalTextContrast": 7.265517249456019
+    }
+  ],
+  "traceCrossings": 0,
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "upper left",
+  "outputRoute": "lower right",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "previousDurationMs": 33700,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "independent manual playback, hidden palette clock, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "tone": "original",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "original",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "original",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "original",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "original",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "copper",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "copper",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "copper",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "copper",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "copper",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "mint",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "mint",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "mint",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "mint",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "mint",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "lavender",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "lavender",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "tone": "lavender",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "lavender",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "tone": "lavender",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    }
+  ]
+}

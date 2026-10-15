@@ -1,0 +1,144 @@
+{
+  "ok": true,
+  "bytes": 623820,
+  "variants": {
+    "led": "LED 점등",
+    "blocks": "블록 입출력",
+    "fill": "채움·비움"
+  },
+  "layouts": [
+    {
+      "material": "led",
+      "width": 1024,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "led",
+      "width": 736,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "led",
+      "width": 700,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "led",
+      "width": 699,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "led",
+      "width": 360,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "led",
+      "width": 320,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "blocks",
+      "width": 1024,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "blocks",
+      "width": 736,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "blocks",
+      "width": 700,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "blocks",
+      "width": 699,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "blocks",
+      "width": 360,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "blocks",
+      "width": 320,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "fill",
+      "width": 1024,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "fill",
+      "width": 736,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "fill",
+      "width": 700,
+      "height": 548,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "fill",
+      "width": 699,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "fill",
+      "width": 360,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    },
+    {
+      "material": "fill",
+      "width": 320,
+      "height": 1080,
+      "coreDuration": 13440,
+      "fullDuration": 27840
+    }
+  ],
+  "playModesVerified": true,
+  "stateRestoreVerified": true,
+  "resizeVerified": true,
+  "reducedMotionVerified": true,
+  "perSessionSemanticsVerified": true,
+  "sourceLayoutPreserved": true,
+  "browserHostVerified": false
+}

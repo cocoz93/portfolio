@@ -1,0 +1,40 @@
+async function verifyQueueLighting(api,parse,setter,snapshot,normalize,previousApi,assert){
+  for(const width of [736,320]){
+    const scene=api.createBundleAnimationScene(width),program=api.createBundleProgram(scene.compact),nodes=parse(scene.markup);
+    const prior=previousApi.createBundleAnimationScene(width);
+    assert.deepEqual(normalize(scene.metrics),normalize(prior.metrics));
+    assert.equal((scene.markup.match(/data-role="queue-lit-outline"/g)||[]).length,8);
+    assert.equal((scene.markup.match(/data-role="outlet-lit-trace"/g)||[]).length,2);
+    for(let actor=0;actor<4;actor++){
+      const segment=program.segments.find(s=>s.row===1&&s.phase==='queue'&&s.actor===actor);
+      for(const age of [0,100,200]){
+        const frame=api.bundleFrame(segment.end+age,program);assert.equal(frame.rows[1].queueLights[actor],1);
+        api.applyBundleFrame(scene,frame,setter(nodes));
+        assert.equal(Number(nodes.get(scene.rows[1].queue[actor].id).getAttribute('fill-opacity')),.8);
+        assert.equal(Number(nodes.get(scene.rows[1].queueRims[actor]).getAttribute('opacity')),1);
+        assert.equal(nodes.get(scene.rows[1].queueLabels[actor]).getAttribute('fill'),'var(--pcb-char-ink)');
+      }
+      const rested=api.bundleFrame(segment.end+400,program);assert.equal(rested.rows[1].queueLights[actor],0);
+      api.applyBundleFrame(scene,rested,setter(nodes));assert.equal(Number(nodes.get(scene.rows[1].queue[actor].id).getAttribute('fill-opacity')),.3);
+      assert.equal(Number(nodes.get(scene.rows[1].queueRims[actor]).getAttribute('opacity')),0);
+    }
+    const send=program.segments.find(s=>s.row===1&&s.phase==='outlet'),sending=api.bundleFrame(send.start+200,program);
+    api.applyBundleFrame(scene,sending,setter(nodes));
+    assert.equal(sending.rows[1].sendLight,1);assert.equal(sending.rows[1].calls,1);
+    assert.equal(Number(nodes.get(scene.rows[1].outletLight).getAttribute('opacity')),1);
+    for(let i=0;i<4;i++){assert.equal(Number(nodes.get(scene.rows[1].queueRims[i]).getAttribute('opacity')),1);assert.equal(Number(nodes.get(scene.rows[1].queue[i].id).getAttribute('fill-opacity')),.8);}
+    const released=program.segments.find(s=>s.row===1&&s.phase==='release'),done=api.bundleFrame(released.end,program);
+    api.applyBundleFrame(scene,done,setter(nodes));
+    assert.equal(done.rows[1].copies,0);assert.equal(nodes.get(scene.rows[1].queueCount).textContent,'0개');
+    assert.equal(Number(nodes.get(scene.rows[1].outletLight).getAttribute('opacity')),0);
+    for(let i=0;i<4;i++){assert.equal(Number(nodes.get(scene.rows[1].queueRims[i]).getAttribute('opacity')),0);assert.equal(Number(nodes.get(scene.rows[1].queue[i].id).getAttribute('opacity')),0);}
+    for(const row of scene.rows)for(const id of row.queueRims)assert.equal(nodes.get(id).getAttribute('stroke-width'),'1.5');
+    for(let time=0;time<program.end;time+=100){
+      const frame=api.bundleFrame(time,program);api.applyBundleFrame(scene,frame,setter(nodes));
+      for(const row of frame.rows){assert(row.queueLights.every(p=>p>=0&&p<=1));assert(row.sendLight>=0&&row.sendLight<=1);}
+    }
+    const last=program.segments.find(s=>s.row===1&&s.phase==='queue'&&s.actor===3);
+    await snapshot(width,'silkscreen',last.end+100,`held-light-${width}`);
+    await snapshot(width,'silkscreen',send.start+200,`send-light-${width}`);
+  }
+}

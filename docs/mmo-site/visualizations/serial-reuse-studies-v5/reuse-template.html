@@ -1,0 +1,78 @@
+<style>
+/* ORIGINAL_FONTS */
+#serial-reuse-studies-v5 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;--pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  width:100%;
+}
+#serial-reuse-studies-v5 .reuse-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#serial-reuse-studies-v5 .reuse-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#serial-reuse-studies-v5 .reuse-state-line {min-height:3em}
+</style>
+<div id="serial-reuse-studies-v5" class="viz-carousel" aria-label="같은 Msg 재사용과 반환 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section data-variant="공용 Msg 중심" data-reuse="hub" aria-label="공용 Msg 중심 시안">
+    <svg class="reuse-board" xmlns="http://www.w3.org/2000/svg" width="736" height="892" viewBox="0 0 736 892" role="img" aria-labelledby="reuse-hub-title reuse-hub-desc">
+      <title id="reuse-hub-title">공용 Msg 중심</title>
+      <desc id="reuse-hub-desc">변경 전에는 수신자 세 명을 처리할 때마다 같은 내용을 생성·직렬화하고 Copy 후 풀 반환합니다. 변경 후에는 Msg A 하나가 같은 위치에 유지된 채 세 SendQ로 바이트 Copy되고, 세 번의 사용이 끝난 뒤 최종 SubRef로 버퍼 풀에 반환됩니다. Msg의 제목, Header, 파란 데이터는 1번·2번 그림과 같은 구분을 사용합니다. Ref는 Header가 아닌 메모리 관리 정보입니다. 링버퍼 SendQ는 독립된 바이트 사본을 가지므로 Msg A 반환 후에도 사본 세 개가 남습니다. 화살표 번호는 순서이며 예시 수신자 수는 셋입니다. 전체 구도는 순차 사건을 펼친 도식입니다. 풀 안의 슬롯은 반환 사건을 식별하기 위한 그림이며 실제 풀 용량이나 주소, 동시에 존재하는 객체 개수를 나타내지 않습니다. 동작 보기를 누르면 변경 전을 재생한 뒤 변경 후를 재생합니다.</desc>
+      <!-- HUB_SCENE -->
+    </svg>
+    <div class="viz-controls">
+      <button class="btn btn-primary" type="button" data-reuse-action="play" aria-pressed="false">동작 보기</button>
+      <button class="btn" type="button" data-reuse-action="preview">구도 보기</button>
+    </div>
+    <div class="reuse-state-line"><span class="reuse-status text-small" aria-live="polite">같은 Msg를 3회 사용 → 마지막에 풀 반환</span></div>
+  </section>
+  <section data-variant="순차 사용" data-reuse="sequence" aria-label="순차 사용 시안" hidden>
+    <svg class="reuse-board" xmlns="http://www.w3.org/2000/svg" width="736" height="892" viewBox="0 0 736 892" role="img" aria-labelledby="reuse-sequence-title reuse-sequence-desc">
+      <title id="reuse-sequence-title">순차 사용</title>
+      <desc id="reuse-sequence-desc">고정된 Msg A를 주인공으로 두고 Copy 1, 2, 3을 차례로 수행하는 구도입니다. 원본 Msg A는 Copy 때 없어지거나 SendQ로 이동하지 않습니다. 파란 작은 블록은 Copy되는 바이트이며, 마지막 반환 경로를 움직이는 Header와 데이터 모양의 작은 부품은 전체 직렬화버퍼를 나타냅니다. 초기 Ref 1에 AddRef(3)으로 4, 각 Copy 직후 SubRef로 3, 2, 1이 되고 빌더의 마지막 SubRef로 0이 되면 풀 반환합니다. 전후 Copy는 셋으로 동일하며 생성·직렬화만 셋에서 하나로 줄어듭니다. 풀 슬롯은 반환 사건의 표식으로 실제 주소나 객체 수를 보장하지 않습니다. 구도 보기는 정적 프로세스 도식이며 동작 보기는 버퍼 수명과 반환을 보여줍니다.</desc>
+      <!-- SEQUENCE_SCENE -->
+    </svg>
+    <div class="viz-controls">
+      <button class="btn btn-primary" type="button" data-reuse-action="play" aria-pressed="false">동작 보기</button>
+      <button class="btn" type="button" data-reuse-action="preview">구도 보기</button>
+    </div>
+    <div class="reuse-state-line"><span class="reuse-status text-small" aria-live="polite">같은 Msg를 3회 사용 → 마지막에 풀 반환</span></div>
+  </section>
+  <section data-variant="풀 왕복" data-reuse="loop" aria-label="풀 왕복 시안" hidden>
+    <svg class="reuse-board" xmlns="http://www.w3.org/2000/svg" width="736" height="892" viewBox="0 0 736 892" role="img" aria-labelledby="reuse-loop-title reuse-loop-desc">
+      <title id="reuse-loop-title">풀 왕복</title>
+      <desc id="reuse-loop-desc">같은 Msg A에서 세 SendQ로 나가는 Copy 배선과 마지막에 원본 버퍼가 풀로 돌아오는 회로를 구분합니다. Copy 경로의 작은 파란 블록은 바이트 사본이며 반환 회로의 Header와 데이터 모양 부품은 원본 직렬화버퍼입니다. 반환은 세 번의 Copy와 각각의 SubRef가 끝난 뒤 빌더 소유권을 최종 SubRef할 때 일어납니다. Ref 0은 소켓 송신 완료를 기다리는 상태가 아니며 각 SendQ의 독립 사본은 유지됩니다. 전후 생성·직렬화 횟수는 3회에서 1회, Copy는 3회입니다. 풀 안의 작은 슬롯은 반환 사건 표식으로 풀 크기나 실제 주소 및 동시 객체 수와 무관합니다. 전체 구도는 순차 사건을 펼친 개념도이며 동작 보기에서 실제 수명 순서를 확인할 수 있습니다.</desc>
+      <!-- LOOP_SCENE -->
+    </svg>
+    <div class="viz-controls">
+      <button class="btn btn-primary" type="button" data-reuse-action="play" aria-pressed="false">동작 보기</button>
+      <button class="btn" type="button" data-reuse-action="preview">구도 보기</button>
+    </div>
+    <div class="reuse-state-line"><span class="reuse-status text-small" aria-live="polite">같은 Msg를 3회 사용 → 마지막에 풀 반환</span></div>
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+/* REUSE_SOURCE */
+  const root=document.getElementById('serial-reuse-studies-v5');if(!root)return;
+  const program=createReuseProgram(),media=matchMedia('(prefers-reduced-motion: reduce)'),controllers=[];
+  function snapshot(){return {modelContent:{kind:'serial-reuse-studies-v5',figure:3,designs:controllers.map(c=>({name:c.design.getAttribute('data-variant'),variant:c.variant,...c.getState()}))},privateContent:{kind:'serial-reuse-studies-v5',designs:controllers.map(c=>({variant:c.variant,time:c.time,preview:c.preview}))}};}
+  function save(){if(window.openai&&typeof window.openai.setWidgetState==='function')window.openai.setWidgetState(snapshot()).catch(()=>{});}
+  for(const design of root.querySelectorAll('[data-reuse]')){
+    const board=design.querySelector('.reuse-board'),play=design.querySelector('[data-reuse-action="play"]'),preview=design.querySelector('[data-reuse-action="preview"]'),status=design.querySelector('.reuse-status');
+    const c={design,board,play,previewButton:preview,status,variant:design.getAttribute('data-reuse'),time:0,preview:true,playing:false,raf:0,last:0,scene:null,nodes:new Map()};controllers.push(c);
+    function set(id,attrs){const node=c.nodes.get(id);if(!node)throw Error('Missing diagram element '+id);for(const [name,value] of Object.entries(attrs))node.setAttribute(name,String(value));}
+    c.render=()=>{if(!c.scene)return;const f=reuseFrame(c.time,program,c.preview);applyReuseFrame(c.scene,f,set);if(status.textContent!==f.phase)status.textContent=f.phase;play.textContent=c.playing?'일시정지':c.preview?'동작 보기':c.time>=program.end?'다시 보기':'이어 보기';play.setAttribute('aria-pressed',String(c.playing));};
+    c.stop=()=>{if(c.raf)cancelAnimationFrame(c.raf);c.raf=0;c.playing=false;c.last=0;};
+    function tick(now){if(!c.playing)return;if(design.hidden||document.hidden){c.stop();c.render();return;}if(c.last)c.time=Math.min(program.end,c.time+Math.min(100,Math.max(0,now-c.last)));c.last=now;c.render();if(c.time>=program.end){c.stop();c.render();save();}else c.raf=requestAnimationFrame(tick);}
+    c.getState=()=>{const f=reuseFrame(c.time,program,c.preview);return {time:c.time,duration:program.end,playing:c.playing,preview:c.preview,phase:f.phase,createdBefore:f.rows[0].created,createdAfter:f.rows[1].created,copiesBefore:f.rows[0].copies,copiesAfter:f.rows[1].copies,refAfter:f.rows[1].messages[0].ref,originalRetained:f.rows[1].messages[0].live,returnedAfter:f.rows[1].returned[0],queuedAfter:f.rows[1].queues.filter(q=>q.filled).length};};
+    design.animation={getState:c.getState,seek(time){c.stop();c.preview=false;c.time=Math.max(0,Math.min(program.end,Number(time)||0));c.render();}};
+    play.addEventListener('click',()=>{if(c.playing)c.stop();else{if(c.preview||c.time>=program.end)c.time=0;c.preview=false;if(media.matches)c.time=program.end;else{c.playing=true;c.last=0;c.raf=requestAnimationFrame(tick);}}c.render();save();});
+    preview.addEventListener('click',()=>{c.stop();c.preview=true;c.time=0;c.render();save();});
+  }
+  let lastWidth=0,resizeRaf=0,pendingWidth=0;
+  function draw(width){if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,Math.round(width));if(width===lastWidth)return;for(const c of controllers){c.scene=createReuseScene(width,c.variant);const accessible=Array.from(c.board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));c.board.replaceChildren(...accessible);c.board.insertAdjacentHTML('beforeend',c.scene.markup);c.board.setAttribute('width',String(width));c.board.setAttribute('height',String(c.scene.height));c.board.setAttribute('viewBox',`0 0 ${width} ${c.scene.height}`);c.nodes=new Map(Array.from(c.board.querySelectorAll('[id]')).map(el=>[el.id,el]));c.render();}lastWidth=width;}
+  function restore(state){const s=state&&state.privateContent;if(!s||s.kind!=='serial-reuse-studies-v5'||!Array.isArray(s.designs))return;for(const c of controllers){const saved=s.designs.find(d=>d.variant===c.variant);if(!saved)continue;c.stop();c.time=Math.max(0,Math.min(program.end,Number(saved.time)||0));c.preview=saved.preview!==false;c.render();}}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai&&window.openai.widgetState);
+  window.addEventListener('openai:set_globals',e=>restore(e.detail&&e.detail.globals&&e.detail.globals.widgetState));
+  media.addEventListener('change',()=>{if(media.matches)for(const c of controllers){c.stop();c.render();}});
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{pendingWidth=entries[0].contentRect.width;if(resizeRaf)return;resizeRaf=requestAnimationFrame(()=>{resizeRaf=0;draw(pendingWidth);});}).observe(root);
+})();
+</script>

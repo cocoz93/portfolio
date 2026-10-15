@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "figure": 3,
+  "staticDesigns": [
+    "work",
+    "fanout",
+    "lifetime"
+  ],
+  "paletteMatched": true,
+  "responsiveWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "orthogonalTraces": true,
+  "textProblems": [],
+  "runtimeResizeVerified": true,
+  "accessibleTitleAndDescriptionPreserved": true,
+  "carouselNavigation": "native-host",
+  "browserHostVerified": false
+}

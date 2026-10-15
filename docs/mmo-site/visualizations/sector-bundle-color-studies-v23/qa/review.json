@@ -1,0 +1,179 @@
+{
+  "ok": true,
+  "figure": 2,
+  "bytes": 730526,
+  "colors": [
+    {
+      "key": "mint",
+      "name": "민트",
+      "hex": "#79cfb0"
+    },
+    {
+      "key": "lavender",
+      "name": "라벤더",
+      "hex": "#baabf4"
+    },
+    {
+      "key": "coral",
+      "name": "코랄",
+      "hex": "#ef9c91"
+    },
+    {
+      "key": "amber",
+      "name": "앰버",
+      "hex": "#f2bb67"
+    }
+  ],
+  "checked": [
+    {
+      "color": "민트",
+      "width": 736,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "민트",
+      "width": 700,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "민트",
+      "width": 699,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "민트",
+      "width": 360,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "민트",
+      "width": 320,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "라벤더",
+      "width": 736,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "라벤더",
+      "width": 700,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "라벤더",
+      "width": 699,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "라벤더",
+      "width": 360,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "라벤더",
+      "width": 320,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "코랄",
+      "width": 736,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "코랄",
+      "width": 700,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "코랄",
+      "width": 699,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "코랄",
+      "width": 360,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "코랄",
+      "width": 320,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "앰버",
+      "width": 736,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "앰버",
+      "width": 700,
+      "height": 548,
+      "duration": 24026
+    },
+    {
+      "color": "앰버",
+      "width": 699,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "앰버",
+      "width": 360,
+      "height": 1080,
+      "duration": 28646
+    },
+    {
+      "color": "앰버",
+      "width": 320,
+      "height": 1080,
+      "duration": 28646
+    }
+  ],
+  "contrastChecks": [
+    {
+      "name": "민트",
+      "dataTextContrast": 4.773933726555744,
+      "brightRingNumberContrast": 7.156871111801629
+    },
+    {
+      "name": "라벤더",
+      "dataTextContrast": 5.077493586398815,
+      "brightRingNumberContrast": 6.485339345733353
+    },
+    {
+      "name": "코랄",
+      "dataTextContrast": 5.30984000130693,
+      "brightRingNumberContrast": 6.23355314211437
+    },
+    {
+      "name": "앰버",
+      "dataTextContrast": 4.652320029974099,
+      "brightRingNumberContrast": 7.513484763051619
+    }
+  ],
+  "uniqueIDs": 717,
+  "unchangedMovementAndTiming": true,
+  "nativeCarousel": true,
+  "independentPlaybackVerified": true,
+  "colorStateRestoreVerified": true,
+  "resizePreservesPhase": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false
+}

@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "bytes": 297479,
+  "paletteChecks": [
+    {
+      "routing": "minimal",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    }
+  ],
+  "checked": [
+    {
+      "width": 1024,
+      "height": 548,
+      "duration": 23280,
+      "beforeMsgs": 4,
+      "afterMsgs": 4,
+      "beforeCalls": 4,
+      "afterCalls": 1
+    },
+    {
+      "width": 736,
+      "height": 548,
+      "duration": 23280,
+      "beforeMsgs": 4,
+      "afterMsgs": 4,
+      "beforeCalls": 4,
+      "afterCalls": 1
+    },
+    {
+      "width": 700,
+      "height": 548,
+      "duration": 23280,
+      "beforeMsgs": 4,
+      "afterMsgs": 4,
+      "beforeCalls": 4,
+      "afterCalls": 1
+    },
+    {
+      "width": 699,
+      "height": 1080,
+      "duration": 23280,
+      "beforeMsgs": 4,
+      "afterMsgs": 4,
+      "beforeCalls": 4,
+      "afterCalls": 1
+    },
+    {
+      "width": 360,
+      "height": 1080,
+      "duration": 23280,
+      "beforeMsgs": 4,
+      "afterMsgs": 4,
+      "beforeCalls": 4,
+      "afterCalls": 1
+    },
+    {
+      "width": 320,
+      "height": 1080,
+      "duration": 23280,
+      "beforeMsgs": 4,
+      "afterMsgs": 4,
+      "beforeCalls": 4,
+      "afterCalls": 1
+    }
+  ],
+  "manualPlay": true,
+  "playPauseVerified": true,
+  "resizePreservesPhase": true,
+  "reducedMotionVerified": true,
+  "stateRestoreVerified": true,
+  "originalsPreserved": true,
+  "browserHostVerified": false
+}

@@ -1,0 +1,23 @@
+<style>
+/*STYLES*/
+#digest-before-sector-v1 {--pcb-target:#df6572}
+#digest-before-sector-v1 .digest-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-before-sector-v1 .digest-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-before-sector-v1 .digest-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-before-sector-v1 [data-status] {min-height:2em}
+</style>
+<div id="digest-before-sector-v1" aria-label="4번 그림 변경 전 · 섹터 안의 이동과 수신자별 적재">
+  <svg class="digest-board" xmlns="http://www.w3.org/2000/svg" width="736" height="424" viewBox="0 0 736 424" role="img" aria-labelledby="digest-before-title digest-before-desc">
+    <title id="digest-before-title">변경 전 · 이동 Msg 하나를 수신 섹터별로 순회해 적재</title>
+    <desc id="digest-before-desc">3×3 섹터 그리드 안에서 마법사 A가 왼쪽 중앙 칸에서 가운데 중앙 칸으로 이동합니다. 이동할 때는 진행 방향, 정지할 때는 정면을 봅니다. 이동이 끝나면 직렬화버퍼 Msg 1이 만들어집니다. 유효범위 중 위쪽 가로 세 수신 섹터 R1, R2, R3를 대표로 표시합니다. 각 섹터에는 수신자 S1, S2, S3가 한 명씩 있습니다. 세 섹터를 수신 대상으로 표시한 뒤 현재 순회하는 섹터 하나만 파란색으로 점등합니다. 해당 주민의 SendQ로 Msg 바이트를 개별 적재하고 다음 섹터로 넘어갑니다. 큐의 원본 Msg 1 사본이 한 칸씩 채워지고 최종 적재 요청은 각 수신자 한 번입니다. 실제 유효범위가 세 섹터라는 뜻은 아닙니다. 그림은 변경 전 파이프라인 한 이벤트의 예시이며 Digest, Msg 할당과 반환, WSASend 실행은 생략합니다.</desc>
+    <!--SCENE-->
+  </svg>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · Msg 하나를 수신 섹터별로 순회해 개별 적재</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

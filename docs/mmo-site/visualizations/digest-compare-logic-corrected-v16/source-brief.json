@@ -1,0 +1,10 @@
+{
+  "figure":4,
+  "intent":"동일한 이동 집계 조건에서 Digest의 섹터별 연접과 주민별 한 번 적재를 비교한다",
+  "scenario":{"tickCount":1,"actorPath":[6,3,4],"actions":["move dirty","chat","move dirty","tick end snapshot"],"messages":[{"id":1,"kind":"chat","sourceSector":3},{"id":2,"kind":"final movement","sourceSector":4}],"receivingSectors":[{"cell":0,"residents":["S1","S2"]},{"cell":2,"residents":["S3"]}],"expectedQueues":[[1,2],[1,2],[2]],"enqueueCallsBefore":[2,2,1],"enqueueCallsAfter":[1,1,1]},
+  "invariants":["Movement aggregation applies before and after","No move Msg is made until tick end","Chat source sector is captured at receipt","Source-sector buffers survive all receiving-sector copies","One Digest construction per receiving sector with residents","Every resident receives a byte copy of the same completed Digest","Original Msg headers are retained; Digest adds no wire header","SendQ is a byte ring, depicted with numbered logical Msg marks","Fixed Digest box; same actor, ring geometry and blue PCB palette"],
+  "omitted":["Membership CREATE/DELETE messages","Actor self-reception and other residents outside the viewport","Physical WSASend flush"],
+  "ordering":"Selected source sectors are concatenated in grid order and Msgs in per-sector insertion order. The chosen example matches the baseline byte order; no global time ordering claim.",
+  "evidence":["GameServer.cpp RecvChat","GameServer.cpp MarkMoveDirty","GameServer.cpp FlushSectorUpdates","GameServer.cpp RegisterSectorItem","GameServer.cpp FlushSectorSends","SectorManager.cpp GetAroundSectorList","IOCPServer.cpp RequestSendMsg and RequestSendRaw"],
+  "validationScope":"Source review and animation-model/runtime harness; not a running server-binary comparison"
+}

@@ -1,0 +1,11 @@
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const dir=path.resolve(__dirname,'..');
+let source=fs.readFileSync(path.resolve(dir,'../wsasend-ring-light-v4/qa/review.cjs'),'utf8');
+source=source.slice(0,source.indexOf('async function main(){'));
+source=source.replaceAll('queue-light.html','queue-cue-studies.html').replaceAll('wsasend-ring-light-v4','wsasend-cue-studies-v5');
+source=source.replace("const names={minimal:'데이터만 강조'};","const names={led:'LED 점등',blocks:'블록 입출력',fill:'채움·비움'};");
+source=source.replace('applyBundleFrame})','applyBundleFrame,bundleCoreRanges,bundleAdvance})');
+source=source.replace("routing='minimal'","routing='led'");
+source=source.replace("preview:new Element('button')","full:new Element('button')").replace("selector.includes('preview')?buttons.preview","selector.includes('full')?buttons.full");
+assert(source.includes('buttons.full'));assert(source.includes('bundleAdvance'));
+fs.writeFileSync(path.join(dir,'qa/review.cjs'),source+fs.readFileSync(path.join(dir,'qa/checks.jsfrag'),'utf8'));

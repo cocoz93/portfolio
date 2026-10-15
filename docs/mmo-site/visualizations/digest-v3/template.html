@@ -1,0 +1,22 @@
+<style>
+/*STYLES*/
+#digest-figure-four-v3 .digest-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-figure-four-v3 .digest-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-figure-four-v3 .digest-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-figure-four-v3 [data-status] {min-height:2em}
+</style>
+<div id="digest-figure-four-v3" aria-label="4번 그림 · 섹터별 보관, 유효범위 선택과 연접, 주민별 적재">
+  <svg class="digest-board" xmlns="http://www.w3.org/2000/svg" width="736" height="816" viewBox="0 0 736 816" role="img" aria-labelledby="digest-title digest-desc">
+    <title id="digest-title">4번 그림 · 같은 패킷, 세션당 적재 요청 한 번</title>
+    <desc id="digest-desc">변경 후의 세 단계입니다. 첫째, 이동·채팅 패킷 일곱 개를 각각 발생 섹터의 보관함에 저장합니다. B 섹터에는 두 개가 쌓입니다. 둘째, 수신 섹터 R의 유효섹터 9칸을 선택합니다. 그 안에 있는 Msg 1부터 5의 헤더와 데이터를 임시버퍼에 그대로 연접해 Digest R 하나를 만듭니다. 범위 밖 Msg 6과 7은 R의 Digest에 들어가지 않습니다. 셋째, 완성된 같은 Digest를 R 주민 S1과 S2의 각 SendQ에 한 번씩 복사합니다. 한 주민에게 복사한 뒤에도 Digest는 유지됩니다. 변경 전에는 같은 다섯 패킷을 두 주민에게 각각 개별 적재해 세션당 다섯 번 요청했습니다. 그림은 수신 섹터 R 한 곳의 예시이며, 다른 수신 섹터는 자신의 유효범위를 선택해 임시버퍼 내용을 구성합니다. 노션 A/B 실측은 동접 4,000에서 약 18만에서 4천 회/tick입니다.</desc>
+    <!--SCENE-->
+  </svg>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 섹터별 보관 → R의 유효범위 선택·연접 → 주민별 1회 적재</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

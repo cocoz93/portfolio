@@ -1,0 +1,25 @@
+{
+  "figure": 4,
+  "scope": "before-only composition draft",
+  "sourcePage": "https://app.notion.com/p/digest-18-4-gameloop-0-57-0-21-39b16a0b9f59809b9155c081cd253537",
+  "approvedComposition": [
+    "Mage moves from left-center sector to center-center within one 3x3 grid",
+    "Movement completes before the source Msg is created",
+    "Top-row R1, R2 and R3 mark three representative receiving sectors",
+    "Each receiving sector contains one resident; only the current sector is brightly active",
+    "The same complete Msg bytes are copied to S1, S2 and S3 SendQs in sequence"
+  ],
+  "representationLimits": [
+    "One event illustrates the before pipeline; repeated movement and chat events are not added in this draft",
+    "The drawing represents three recipients within the valid range, not a change of the actual valid-sector count",
+    "Completed movement Msg generation is illustrative; dirty aggregation, membership events, allocation and WSASend are outside this drawing",
+    "Later sector Digest behavior is excluded because the user requested the before drawing first"
+  ],
+  "visualBasis": "Verified Figure 3 character vectors, navy PCB palette, component geometry, contact ports, 1.5px circuit traces",
+  "codeEvidence": {
+    "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+    "function": "BroadcastSectorPacket",
+    "relationship": "per-packet traversal and per-resident enqueue"
+  },
+  "browserHostVerified": false
+}

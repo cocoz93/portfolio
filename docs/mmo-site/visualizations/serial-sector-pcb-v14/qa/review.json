@@ -1,0 +1,61 @@
+{
+  "ok": true,
+  "figure": 3,
+  "layout": "aligned-recipient-slots",
+  "fixedQueuePositionsAcrossComparison": true,
+  "equalBufferSizesBeforeAfter": true,
+  "msgSizeDesktop": [
+    136,
+    104
+  ],
+  "msgSizeCompact": [
+    88,
+    104
+  ],
+  "stationaryComponents": true,
+  "allocationAndReturnUseControlSignals": true,
+  "parallelLanesPerLogicalBus": 3,
+  "orthogonalTraceGeometry": true,
+  "queueRadiusDesktop": 32,
+  "queueRadiusCompact": 28,
+  "mapSize": 180,
+  "referenceMarksEqualLiveRef": true,
+  "sectorToMsgWiringRemoved": true,
+  "receiverArrowsBeforeAllocation": true,
+  "separateMovementMaps": true,
+  "sectorCountPerRow": 9,
+  "allocationAndSerialization": [
+    3,
+    1
+  ],
+  "copyCount": [
+    3,
+    3
+  ],
+  "retainedDuringAllCopies": true,
+  "afterRefSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "queueCopiesRemainAfterPoolReturn": true,
+  "durationMs": 17126,
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFrames": 206,
+  "playPauseRestartAndRestoreVerified": true,
+  "stateEchoAndHiddenFallbackVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false,
+  "problems": [],
+  "sha256": "a3effcb4dac9e0d6f827b52b42297d732c678484992b46bee863cc869700b87a"
+}

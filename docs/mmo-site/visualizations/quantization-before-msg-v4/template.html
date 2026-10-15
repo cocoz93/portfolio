@@ -1,0 +1,30 @@
+<style>
+/*STYLES*/
+#quantization-figure-five-before-msg-v4 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#quantization-figure-five-before-msg-v4 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#quantization-figure-five-before-msg-v4 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#quantization-figure-five-before-msg-v4 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#quantization-figure-five-before-msg-v4 [data-status] {min-height:2em}
+</style>
+<div id="quantization-figure-five-before-msg-v4" aria-label="5번 그림 · 좌표 8바이트를 4바이트로">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-focus-before-title quant-focus-before-desc">
+      <title id="quant-focus-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+      <desc id="quant-focus-before-desc">캐릭터가 오른쪽으로 이동하고 서버 float 좌표가 갱신됩니다. 최종 x 73.12570과 y 24.33333을 각각 4바이트 float으로 보냅니다. Msg의 좌표 부분만 보여주며 두 좌표에 총 8바이트가 필요합니다. ID, 방향과 상태, 헤더와 count, SendQ와 물리 송신은 생략합니다. 이 그림은 이동 시간이나 전체 패킷 크기를 비교하는 그림이 아닙니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-focus-after-title quant-focus-after-desc">
+      <title id="quant-focus-after-title">변경 후 · 눈금 좌표 두 개에 4바이트</title>
+      <desc id="quant-focus-after-desc">동일한 캐릭터 이동과 서버 float 좌표를 유지합니다. Msg 바깥의 전송용 좌표 표현에서 512를 곱하고 반올림합니다. 두 좌표 블록이 각각 4칸에서 2칸으로 줄고, x와 y는 qx와 qy, 값은 37440과 12459로 바뀝니다. 이 정수는 1/512타일 단위의 눈금 번호입니다. 변환이 끝난 뒤 2바이트 눈금값이 Msg로 들어가며 Msg에는 float 좌표가 기록되는 장면이 없습니다. Msg에는 처음부터 uint16 두 개만 직렬화합니다. 좌표 부분 합계는 8바이트에서 4바이트로 줄고 서버 좌표는 그대로입니다. 다른 필드와 헤더는 화면에서 생략합니다. 두 좌표를 동시에 바꾸는 연출은 개념을 보여주는 도식이며 실제 코드의 개별 필드 쓰기 시간이나 메모리 구조를 나타내지 않습니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 좌표 8B → 4B</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

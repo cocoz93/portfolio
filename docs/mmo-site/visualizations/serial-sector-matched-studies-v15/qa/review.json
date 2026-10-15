@@ -1,0 +1,45 @@
+{
+  "ok": true,
+  "designs": [
+    "수신자 정렬",
+    "공용 Msg 중심"
+  ],
+  "animated": false,
+  "paletteExactlyMatchesFigure2": true,
+  "sameWizardRenderer": true,
+  "sameHeaderGeometry": [
+    24,
+    20
+  ],
+  "sameDataHeight": 40,
+  "sameMsgHeight": 100,
+  "equalMsgDimensionsAcrossComparison": true,
+  "equalQueuePositionsAcrossComparison": true,
+  "created": [
+    3,
+    1
+  ],
+  "copies": [
+    3,
+    3
+  ],
+  "refSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "browserHostVerified": false,
+  "problems": [],
+  "sha256": "e92ffc560b8ec5e3ea8f1e25ac358bac2ecfa64f620e33c16cb99b251ca34656"
+}

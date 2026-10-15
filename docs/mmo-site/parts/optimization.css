@@ -1,0 +1,92 @@
+/* 1-3 — 목차는 고정 폭, 그림은 기존 가로 구도를 읽을 폭을 먼저 확보한다. */
+/* 본문 시작선은 상단 1-3보다 조금 왼쪽에 두고, 오른쪽에도 완충 여백을 남긴다. */
+#p-optimization{max-width:none;margin-left:44px;margin-right:32px}
+.op-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start;container-type:inline-size;container-name:op-layout}
+.op-workspace{min-width:0}
+.op-index{position:sticky;top:16px;display:flex;flex-direction:column;gap:7px}
+#builddoor[hidden]{display:none}
+.op-index button{position:relative;display:flex;align-items:center;gap:10px;text-align:left;
+  padding:14px 15px;border:1px solid var(--line2);border-radius:11px;background:var(--sunk);
+  color:#8f9fb6;font-family:var(--sans);font-size:1rem;font-weight:700;line-height:1.4;cursor:pointer}
+.op-index button::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;
+  background:#2b3648;border-radius:11px 0 0 11px}
+.op-index button em{font-family:var(--mono);font-size:.82rem;font-style:normal;color:#66748c;flex:none}
+.op-index button:hover{border-color:#3c4a63;background:#151f33;color:#d3ddee}
+.op-index button[aria-pressed="true"]{border-color:#2c5f85;background:#14243a;color:var(--ink)}
+.op-index button[aria-pressed="true"]::before{background:var(--net)}
+.op-index button[aria-pressed="true"] em{color:var(--net)}
+.op-index button:focus-visible,.op-report:focus-visible,.op-principle:focus-visible{outline:2px solid var(--net);outline-offset:2px}
+.op-detail{container-type:inline-size;min-width:0;background:#0b111d;border:1px solid #3f4d6b;border-radius:12px;
+  box-shadow:0 20px 42px -22px rgba(0,0,0,1);overflow:hidden}
+.op-heading{padding:19px 20px 16px;border-bottom:1px solid var(--line)}
+.op-heading h2{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 12px;margin:0;font-size:1.42rem;font-weight:800;letter-spacing:-.02em;line-height:1.35}
+.op-heading .op-effect{font-family:var(--mono);color:var(--net);white-space:nowrap}
+.op-heading .op-effect::before{content:"·";margin-right:12px;color:#66748c}
+.op-heading .op-term{font-size:.78rem;font-weight:500;letter-spacing:0;color:#a8b8ca;white-space:nowrap}
+.op-heading p{margin:8px 0 0;color:#a8b8ca;font-size:.9rem;line-height:1.65}
+.op-heading .op-note{margin-top:7px;padding-left:10px;border-left:2px solid #2c5f85;
+  color:#c4d3e4;font-size:.84rem;line-height:1.6}
+.op-heading .op-example{margin-top:14px;font-size:.75rem;color:var(--mut)}
+.op-example[hidden],.op-explanation[hidden]{display:none}
+/* 1번은 그림 폭을 유지하고, 설명이 실제 남은 공간을 채우다가 최소 폭도 없을 때만 줄을 바꾼다. */
+#p-optimization[data-figure="wsasend"] .op-workspace{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-start}
+#p-optimization[data-figure="wsasend"] .op-detail{flex:0 1 1000px;width:100%}
+.op-explanation{flex:1 0 260px;min-width:0;padding:12px 0;container-type:inline-size;container-name:op-explanation}
+.op-explanation .op-heading{max-width:360px;padding:0;border:0}
+.op-explanation .op-heading h2{flex-direction:column;align-items:flex-start;gap:12px;font-size:clamp(2.25rem,12cqi,3rem);line-height:1.12;letter-spacing:-.035em}
+.op-explanation .op-title-line{display:block;white-space:nowrap}
+.op-explanation .op-term{order:1;font-size:.875rem;line-height:1.5;letter-spacing:0}
+.op-explanation .op-effect{order:2;margin-top:20px;font-size:2.5rem;line-height:1.15;letter-spacing:-.02em}
+.op-explanation .op-effect::before{content:none;margin:0}
+.op-explanation .op-heading p{margin-top:22px;font-size:1rem;line-height:1.75}
+.op-explanation .op-heading .op-example{font-size:.75rem;margin-top:14px}
+.op-viewer{max-width:none;margin-inline:20px;min-width:0;background:#0d1421}
+/* 그림은 넓은 화면에서도 과도하게 커지지 않도록 표시 폭만 제한한다. */
+.op-frame{display:block;border:0;width:100%;max-width:1000px;margin-inline:auto;height:640px;visibility:hidden}
+/* 1번은 카드와 그림 폭을 함께 줄여 카드 안에 큰 좌우 여백이 생기지 않게 한다. */
+#p-optimization[data-figure="wsasend"] .op-detail{max-width:1000px}
+.op-viewer[data-figure="wsasend"] .op-frame{max-width:none}
+/* 좁은 데스크톱·태블릿에서는 기존 가로 비교 배치를 유지한다. */
+@container(min-width:670px) and (max-width:963px){.op-frame{zoom:.9}}
+.op-viewer[data-state="ready"] .op-frame{visibility:visible}
+.op-viewer[data-state="error"] .op-frame{display:none}
+.op-loading,.op-error{margin:0;padding:22px 20px;font-size:.88rem;line-height:1.6;color:var(--mut)}
+.op-error a{color:var(--net)}
+.op-footer{display:flex;align-items:flex-start;justify-content:flex-end;gap:16px;
+  margin:0 20px;padding:11px 0 13px;border-top:1px solid var(--line);flex-wrap:wrap}
+.op-footer p{margin:0;color:#a8b8ca;font-size:.84rem;line-height:1.65;flex:1 1 420px}
+.op-report{font-size:.84rem;font-weight:700;color:var(--net);text-decoration:none;white-space:nowrap}
+.op-report:hover{text-decoration:underline}
+.op-principle{display:block;margin-top:9px;text-align:right;color:var(--net);text-decoration:none;
+  font-family:var(--sans);font-size:.72rem;font-weight:700}
+.op-principle:hover{text-decoration:underline}
+.op-principle[hidden]{display:none}
+@media(max-width:1199px){#p-optimization{margin-inline:0}}
+/* 220 + 16 + 바깥 여백 40 + 테두리 2를 빼도 그림이 700px 이상 남는 범위다. */
+@media(max-width:1000px){
+  .op-layout{grid-template-columns:minmax(0,1fr);gap:14px}
+  .op-index{position:static;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+  .op-index button{font-size:.88rem;padding:12px;gap:8px}
+}
+@media(max-width:640px){
+  #p-optimization{margin-inline:-20px}
+  .op-explanation{padding:12px 16px}
+  .op-explanation .op-heading h2{font-size:2.25rem}
+  .op-index{display:flex;flex-direction:row;gap:6px;margin-inline:16px;
+    overflow-x:auto;padding-bottom:6px;overscroll-behavior-x:contain;scrollbar-width:thin;
+    color-scheme:dark;scrollbar-color:#354b61 #0b111d}
+  .op-index button{flex:0 0 auto;min-width:0;padding:8px 10px;font-size:.78rem;gap:6px;border-radius:8px;white-space:nowrap}
+  .op-index button em{font-size:.7rem}
+  .op-detail{border:0;border-radius:0;box-shadow:none}
+  .op-viewer{margin-inline:0}
+  .op-heading{padding:17px 16px 14px}
+  .op-heading h2{font-size:1.22rem}
+  .op-heading p{font-size:.86rem}
+  .op-footer{margin-inline:16px;gap:10px}
+}
+@media(max-width:430px){
+  #subtabs .subnav{gap:10px}
+  #subtabs .subtab{font-size:.82rem;gap:5px}
+  #subtabs .subtab em{font-size:.7rem}
+}
+@media(pointer:coarse){.op-index button{min-height:44px}}

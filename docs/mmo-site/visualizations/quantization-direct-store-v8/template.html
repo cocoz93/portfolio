@@ -1,0 +1,32 @@
+<style>
+/*STYLES*/
+#quantization-direct-store-v8 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#quantization-direct-store-v8 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#quantization-direct-store-v8 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#quantization-direct-store-v8 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#quantization-direct-store-v8 [data-status] {min-height:2em}
+</style>
+<div id="quantization-direct-store-v8" aria-label="5번 그림 · 좌표 표현을 양자화한 뒤 Msg에 저장">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-pcb-before-title quant-pcb-before-desc">
+      <title id="quant-pcb-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+      <desc id="quant-pcb-before-desc">캐릭터가 오른쪽으로 이동하고 서버 내부 float 좌표가 갱신됩니다. 입력 배선의 신호가 먼저 도착한 다음 가운데 좌표 블록이 채워집니다. 좌표는 변환 없이 각각 4바이트 float으로 Msg에 기록된 상태가 바로 표시됩니다. 가운데에서 Msg로 이동하는 블록이나 추가 채우기 애니메이션은 없습니다. 두 좌표는 8바이트입니다. Msg의 다른 필드와 물리 송신은 생략합니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="416" viewBox="0 0 736 416" role="img" aria-labelledby="quant-pcb-after-title quant-pcb-after-desc">
+      <title id="quant-pcb-after-title">변경 후 · 양자화에서 4바이트를 2바이트로 바꾼 뒤 기록</title>
+      <desc id="quant-pcb-after-desc">같은 캐릭터 이동과 같은 서버 float 좌표를 유지합니다. 입력 배선의 신호가 도착한 뒤 가운데 좌표 블록을 채웁니다. 양자화에서 512를 곱하고 반올림하면 네 칸짜리 좌표가 두 칸짜리 qx 37440과 qy 12459로 바뀝니다. 한 눈금은 1/512타일입니다. 양자화 완료와 동시에 이 값을 각각 2바이트 uint16으로 Msg에 저장한 상태를 표시합니다. 양자화에서 Msg로 가는 배선, 이동 블록, 추가 채우기 애니메이션은 없습니다. 소프트웨어 변환을 PCB 부품으로 그린 도식이며 실제 하드웨어나 추가로 할당하는 버퍼가 아닙니다. Msg에 float을 먼저 기록한 뒤 압축하는 구현을 나타내지 않습니다. 좌표 부분만 8바이트에서 4바이트로 줄고 서버의 float 좌표는 그대로입니다. 다른 필드와 물리 송신은 화면에서 생략합니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 좌표 8B → 4B</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>
+
+

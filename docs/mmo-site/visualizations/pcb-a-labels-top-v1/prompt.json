@@ -1,0 +1,16 @@
+{
+  "mode": "built-in imagegen edit",
+  "reference": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/pcb-a-polished-v1/wsasend-pcb-a-polished.png",
+  "source": "C:/Users/USER/.codex/generated_images/01a11c42-4baf-7450-b29c-e804573c9d61/exec-a602ed73-07c0-46f7-9cfa-883aa3a0797c.png",
+  "saved": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/pcb-a-labels-top-v1/wsasend-pcb-a-labels-top.png",
+  "prompt": "Use case: precise-object-edit / label relocation.\nImage1 is the EDIT TARGET. Change ONLY the position and styling of the two comparison-row labels \"변경 전\" and \"변경 후\". Preserve every other visual feature, object position, size, text, line, PCB material, color and canvas dimensions EXACTLY.\n\nRemove the existing boxed \"변경 전\" badge at the far-left middle of the upper row and the boxed \"변경 후\" badge at the far-left middle of the lower row. Restore the matching empty navy background where they were, with no ghost text or remaining border.\n\nPut each label as small UNBOXED text at its row's UPPER-LEFT, one line ABOVE the first stage heading \"캐릭터 이동\". Left-align both labels with the LEFT EDGE of their map perimeter, not with the centered stage heading. The text marks the whole comparison row, not a stage.\nOn the1536x1024 reference, approximate text left edge x112; top label near y65, bottom label near y500, just below the existing horizontal row divider and above the lower headings. Keep enough vertical breathing room so neither touches the heading rules, divider or map.\nTop label verbatim \"변경 전\": small refined semibold Korean type, around20px, muted light slate #9cacc2.\nBottom label verbatim \"변경 후\": same type, size and left alignment, cyan #6cc7ff.\nNO boxes, pills, outlines, underlines, icons, extra words, extra section-title panels or large titles.\n\nKeep all existing stage headings and divider rules, maps, pixel characters, four MSG chips per row, the ring sectors, the four top outgoing arrows and one cyan bottom outgoing arrow, \"틱 끝\", and the4회/1회 count chips unchanged. Preserve top ring one cyan sector4 and bottom ring four cyan sectors1,2,3,4; all empty sectors unnumbered. No crop, no rearrangement, no redesign. Return one finished image with ONLY the two labels moved and unboxed.",
+  "verification": {
+    "method": "Manual visual inspection",
+    "checks": [
+      "Labels moved above first stage heading at upper-left of each row",
+      "Top label slate, bottom label cyan, both unboxed",
+      "Previous left-middle badges removed",
+      "Four messages each row, occupied queue cells1/4, outgoing arrows4/1, request counts4/1 retained"
+    ]
+  }
+}

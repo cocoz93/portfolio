@@ -1,0 +1,73 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "frames": 193,
+  "durationMs": 25850,
+  "scope": "after-only",
+  "example": {
+    "mapSectors": 9,
+    "representativeReceivingSectors": 3,
+    "residentsPerDisplayedSector": 1,
+    "sourcePackets": 4,
+    "sourcePacketCells": [
+      4,
+      3,
+      5,
+      4
+    ],
+    "selectedPacketIds": [
+      [
+        2,
+        1,
+        4
+      ],
+      [
+        2,
+        1,
+        4,
+        3
+      ],
+      [
+        1,
+        4,
+        3
+      ]
+    ],
+    "queuedPacketIds": [
+      [
+        2,
+        1,
+        4
+      ],
+      [
+        2,
+        1,
+        4,
+        3
+      ],
+      [
+        1,
+        4,
+        3
+      ]
+    ],
+    "calls": [
+      1,
+      1,
+      1
+    ],
+    "originalSourcePacketsRetained": true,
+    "temporaryBufferRebuiltForEachReceivingSector": true
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 264600,
+  "sha256": "e27e4999f367bd8f408d5d34361113bdc600464bd235267e5c34b543436dbff7"
+}

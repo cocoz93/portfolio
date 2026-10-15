@@ -1,0 +1,55 @@
+<style>
+/* ORIGINAL_FONTS */
+#serial-sector-pcb-v14 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;--pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;
+  --pcb-char-blue:#4eafe8;--pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;
+}
+#serial-sector-pcb-v14 .sector-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#serial-sector-pcb-v14 .sector-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#serial-sector-pcb-v14 .sector-board .sector-ref {font-family:PCB-Mono,monospace;font-variant-numeric:tabular-nums}
+#serial-sector-pcb-v14 .sector-state-line {min-height:3em}
+</style>
+<div id="serial-sector-pcb-v14" aria-label="전후 각각의 섹터 이동과 같은 Msg 재사용">
+  <svg class="sector-board" xmlns="http://www.w3.org/2000/svg" width="736" height="800" viewBox="0 0 736 800" role="img" aria-labelledby="sector-pcb-title sector-pcb-desc">
+    <title id="sector-pcb-title">같은 섹터 이동 · Msg 생성 3회에서 1회로</title>
+    <desc id="sector-pcb-desc">변경 전과 후 각각 9개 섹터에서 A가 가운데에서 오른쪽으로 같은 이동을 합니다. 짧은 화살표는 같은 알림을 받을 세 수신자를 표시하며 실제 네트워크 도착을 뜻하지 않습니다. 수신자 배치는 설명용 예시이고 실제 AOI 경계를 재현하지 않습니다. 변경 전은 수신자마다 Msg를 할당하고 직렬화하여 SendQ에 Copy한 뒤 반환합니다. 이 과정을 세 번 반복합니다. 변경 후는 하나의 Msg를 할당하고 직렬화하여 세 SendQ에 바이트 사본을 넣습니다. Msg 부품과 세 SendQ는 움직이지 않고 같은 위치에 남습니다. 기판 배선은 할당·반환과 Copy의 논리 경로를 표현하며 실제 하드웨어 회로를 뜻하지 않습니다. 평행 배선 세 줄은 하나의 버스를 표현하는 디자인이고 Copy 횟수를 뜻하지 않습니다. 작은 빛은 할당과 반환을 나타내며 A 정보라고 적힌 데이터 블록은 SendQ로 들어가는 바이트 사본입니다. 캐릭터 영역에는 배선을 연결하지 않았습니다. Ref는 최초 1, AddRef(3) 후 4, Copy 직후 SubRef마다 3, 2, 1, 빌더의 마지막 SubRef 후 0이 됩니다. 파란 표식의 개수는 살아 있는 Msg의 Ref와 같습니다. 원본 반환 후에도 SendQ의 바이트 사본은 유지됩니다. 구도 보기에서 변경 전의 Msg 세 개는 순차 생성의 개념도이며 변경 후 원본은 세 번 사용한 뒤 빌더 Ref 1이 남은 모습을 보여 줍니다. 재생 시간은 설명을 위한 연출이며 성능 측정값이 아닙니다.</desc>
+    <!-- SECTOR_SCENE -->
+  </svg>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-sector-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-sector-action="preview">구도 보기</button>
+  </div>
+  <div class="sector-state-line"><span class="sector-status text-small" aria-live="polite">같은 이동 · 같은 수신자 · Msg 생성 3회 → 1회</span></div>
+</div>
+<script>
+(() => {
+  'use strict';
+/* SECTOR_SOURCE */
+  const root=document.getElementById('serial-sector-pcb-v14');if(!root)return;
+  const board=root.querySelector('.sector-board'),play=root.querySelector('[data-sector-action="play"]'),previewButton=root.querySelector('[data-sector-action="preview"]'),status=root.querySelector('.sector-status');
+  const program=createReuseProgram(),duration=program.end,media=matchMedia('(prefers-reduced-motion: reduce)');
+  let scene,nodes=new Map(),time=0,preview=true,playing=false,raf=0,timer=0,startedAt=0,startedTime=0,lastWidth=0;
+  let revision=0,lastSavedRevision='',session=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+  function set(id,attrs,text){const el=nodes.get(id);if(!el)throw Error('Missing element '+id);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,String(value));if(text!==undefined)el.textContent=text;}
+  function getState(){const f=sectorFrame(time,program,preview);return {kind:'serial-sector-pcb-v14',figure:3,time,duration,preview,playing,phase:f.phase,sectorCountPerRow:9,recipientExample:3,movement:'center-to-right',originalRetained:f.rows[1].messages[0].live,createdBefore:f.rows[0].created,createdAfter:f.rows[1].created,copiesBefore:f.rows[0].copies,copiesAfter:f.rows[1].copies,refAfter:f.rows[1].messages[0].ref,returnedAfter:f.rows[1].returned[0],queuedAfter:f.rows[1].queues.filter(q=>q.filled).length};}
+  function save(){if(window.openai&&typeof window.openai.setWidgetState==='function'){lastSavedRevision=session+':'+(++revision);window.openai.setWidgetState({modelContent:getState(),privateContent:{kind:'serial-sector-pcb-v14',time,preview,revision:lastSavedRevision}}).catch(()=>{});}}
+  function render(){if(!scene)return;const f=sectorFrame(time,program,preview);applySectorFrame(scene,f,set);if(status.textContent!==f.phase)status.textContent=f.phase;play.textContent=playing?'일시정지':preview?'재생':time>=duration?'다시 재생':'이어 재생';play.setAttribute('aria-pressed',String(playing));}
+  function cancelScheduled(){if(raf)cancelAnimationFrame(raf);if(timer)clearTimeout(timer);raf=0;timer=0;}
+  function updateTime(){if(playing)time=Math.min(duration,startedTime+Math.max(0,performance.now()-startedAt));}
+  function stop(){updateTime();cancelScheduled();playing=false;}
+  function schedule(){raf=requestAnimationFrame(tick);timer=setTimeout(tick,80);}
+  function tick(){cancelScheduled();if(!playing)return;updateTime();render();if(time>=duration){stop();render();save();}else schedule();}
+  play.addEventListener('click',()=>{if(playing)stop();else{if(preview||time>=duration)time=0;preview=false;if(media.matches)time=duration;else{playing=true;startedTime=time;startedAt=performance.now();schedule();}}render();save();});
+  previewButton.addEventListener('click',()=>{stop();time=0;preview=true;render();save();});
+  root.animation={getState,seek(next){stop();preview=false;time=Math.max(0,Math.min(duration,Number(next)||0));render();}};
+  function draw(width){if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,Math.round(width));if(width===lastWidth)return;scene=createSectorReuseScene(width);const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastWidth=width;render();}
+  function restore(state){const s=state&&state.privateContent;if(!s||s.kind!=='serial-sector-pcb-v14'||(s.revision&&s.revision===lastSavedRevision))return;stop();time=Math.max(0,Math.min(duration,Number(s.time)||0));preview=s.preview!==false;render();}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai&&window.openai.widgetState);
+  window.addEventListener('openai:set_globals',e=>restore(e.detail&&e.detail.globals&&e.detail.globals.widgetState));
+  media.addEventListener('change',()=>{if(media.matches){stop();render();}});
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>draw(entries[0].contentRect.width)).observe(root);
+})();
+</script>

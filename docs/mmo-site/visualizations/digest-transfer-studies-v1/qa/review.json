@@ -1,0 +1,40 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "designs": [
+    {
+      "key": "ribbon",
+      "name": "신호 띠"
+    },
+    {
+      "key": "frame",
+      "name": "묶음 프레임"
+    },
+    {
+      "key": "gate",
+      "name": "입력 게이트"
+    }
+  ],
+  "durationMs": 2500,
+  "scope": "S1 Digest ready through one enqueue and hold",
+  "queuedMsgIds": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "enqueueCalls": 1,
+  "sourceMsgRetained": true,
+  "noAutoplay": true,
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 519138,
+  "sha256": "e70971dcbe4b68565fe259f6970ac5191b370e314be0a41a2137764f444071f8"
+}

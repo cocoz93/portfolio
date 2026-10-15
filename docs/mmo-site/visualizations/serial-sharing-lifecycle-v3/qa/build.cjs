@@ -1,0 +1,12 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const dir=path.resolve(__dirname,'..'),prior=fs.readFileSync(path.resolve(dir,'../sector-bundle-held-pulse-v26/scene.js'),'utf8');
+const begin=prior.indexOf('  function mageDefinition(){'),end=prior.indexOf('  const G=',begin);assert(begin>0&&end>begin);
+const source=fs.readFileSync(path.join(dir,'scene-template.js'),'utf8').replace('/* MAGE_RENDERER */',prior.slice(begin,end))+'\n'+fs.readFileSync(path.join(dir,'motion.js'),'utf8');new vm.Script(source);fs.writeFileSync(path.join(dir,'scene.js'),source,'utf8');
+const api=vm.runInNewContext(source+';({createRefScene,createRefProgram,refPreview,applyRefFrame})');
+const scene=api.createRefScene(736),frame=api.refPreview(api.createRefProgram()),attrs=new Map(),texts=new Map();api.applyRefFrame(scene,frame,(id,values,text)=>{attrs.set(id,{...(attrs.get(id)||{}),...values});if(text!==undefined)texts.set(id,text);});
+const escape=v=>String(v).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
+let markup=scene.markup.replace(/<([\w:-]+)\b([^<>]*)>/g,(all,tag,body)=>{const id=body.match(/\bid="([^"]+)"/)?.[1];if(!id||!attrs.has(id))return all;const values=Object.fromEntries([...body.matchAll(/([\w:-]+)="([^"]*)"/g)].map(m=>[m[1],m[2]]));Object.assign(values,attrs.get(id));return `<${tag} ${Object.entries(values).map(([k,v])=>`${k}="${escape(v)}"`).join(' ')}>`;});
+markup=markup.replace(/(<text\b[^>]*\bid="([^"]+)"[^>]*>)([^<]*)(<\/text>)/g,(all,open,id,body,end)=>texts.has(id)?`${open}${escape(texts.get(id))}${end}`:all);
+const fonts=fs.readFileSync(path.resolve(dir,'../pcb-animation-v1/wsasend-pcb-previous.html'),'utf8').match(/@font-face\{[^}]+\}/g).join('\n');
+const fragment=fs.readFileSync(path.join(dir,'serial-sharing-template.html'),'utf8').replace('/* ORIGINAL_FONTS */',fonts).replace('/* MATCHED_SOURCE */',source).replace('<!-- INITIAL_SCENE -->',markup);
+new vm.Script(fragment.match(/<script>([\s\S]*?)<\/script>/)[1]);assert(Buffer.byteLength(fragment)<1_000_000);fs.writeFileSync(path.join(dir,'serial-sharing-lifecycle.html'),fragment,'utf8');console.log(JSON.stringify({path:path.join(dir,'serial-sharing-lifecycle.html'),bytes:Buffer.byteLength(fragment),duration:api.createRefProgram().end}));

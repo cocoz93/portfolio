@@ -1,0 +1,28 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 3,
+  "scope": "coordinate-fields-only",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-focus-v3/quantization.html",
+  "sha256": "dd02dfc834a3a9a84f018eaa7a99992a189f339c8006ab21ad0bbaef1339b21b",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-focus-v3/qa/review.json",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "durationMs": 8750,
+  "coordinateMorph": {
+    "fromBytes": 4,
+    "toBytes": 2,
+    "durationMs": 850,
+    "holdMs": 1150,
+    "simultaneous": true
+  },
+  "removed": [
+    "central encoder",
+    "ID",
+    "direction and state",
+    "header and count labels",
+    "client restoration and error text",
+    "whole-entry size",
+    "100-entry size"
+  ]
+}

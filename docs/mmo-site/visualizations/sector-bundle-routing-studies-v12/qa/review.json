@@ -1,0 +1,201 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "버스 레일형",
+    "측면 핀형",
+    "사선 팬아웃형",
+    "현재 배선"
+  ],
+  "palette": "all four variants exactly match figure 1 palette; component layout remains fixed",
+  "paletteChecks": [
+    {
+      "routing": "bus",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    },
+    {
+      "routing": "side",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    },
+    {
+      "routing": "chamfer",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    },
+    {
+      "routing": "baseline",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    }
+  ],
+  "unintendedCrossings": 0,
+  "busJunctionsIntentional": true,
+  "layoutPreserved": true,
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "dividerRestored": true,
+  "movementArrows": "current move only",
+  "inputRoute": "bus rail, side pins, 45-degree fan-out or original parallel routing",
+  "outputRoute": "short right exits in the new designs",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "previousDurationMs": 33700,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "independent manual playback, hidden palette clock, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "routing": "bus",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "bus",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "bus",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "bus",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "bus",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "side",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "side",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "side",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "side",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "side",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "baseline",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "baseline",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "routing": "baseline",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "baseline",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 862,
+      "durationMs": 32220
+    },
+    {
+      "routing": "baseline",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 862,
+      "durationMs": 32220
+    }
+  ]
+}

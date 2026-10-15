@@ -1,0 +1,117 @@
+<style>
+/* ORIGINAL_FONTS */
+#wsasend-held-pulse-v11 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;--pcb-char-blue:#4eafe8;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#wsasend-held-pulse-v11 .study-design {width:100%;background:var(--pcb-bg);color-scheme:dark}
+#wsasend-held-pulse-v11 .study-board {display:block;width:100%;height:auto}
+#wsasend-held-pulse-v11 .study-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#wsasend-held-pulse-v11 .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#wsasend-held-pulse-v11 .study-toolbar {display:flex;align-items:flex-start;flex-wrap:wrap;gap:12px;padding:12px 20px}
+#wsasend-held-pulse-v11 .study-actions {display:flex;gap:8px;align-items:center}
+#wsasend-held-pulse-v11 .study-status {flex:1 1 220px;min-width:0;font-size:12px;line-height:1.5;color:var(--pcb-muted);text-align:right}
+@media(max-width:480px){#wsasend-held-pulse-v11 .study-status:not(:empty){flex-basis:100%;text-align:left}}
+
+</style>
+<div id="wsasend-held-pulse-v11">
+  <section id="wsasend-held-pulse-minimal" class="study-design" data-variant="틱 끝 묶음 송신" data-routing="chamfer" data-material="minimal" data-layout="silkscreen" aria-label="틱 끝 묶음 송신">
+    <div class="viz-controls study-toolbar">
+      <div class="study-actions">
+        <button type="button" class="btn" data-action="play" aria-label="틱 끝 묶음 송신 애니메이션 재생">재생</button>
+        <button type="button" class="btn" data-action="preview">구도 보기</button>
+      </div>
+      <span class="study-status" role="status" aria-live="polite"></span>
+    </div>
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="wsasend-held-pulse-title wsasend-held-pulse-desc">
+      <title id="wsasend-held-pulse-title">틱 끝 묶음 송신</title>
+      <desc id="wsasend-held-pulse-desc">1번 그림. 같은 수신 세션의 SendQ에 같은 네 개의 Msg가 들어갑니다. 변경 전에는 하나가 들어올 때마다 즉시 WSASend를 호출하고 큐를 비웁니다. 변경 후에는 네 Msg를 누적한 뒤 틱 끝에 한 번 요청합니다. Msg 자체를 합치는 최적화가 아닙니다. 입력 중인 칸은 내부 채움과 테두리가 함께 켜지고 적재 후 0.2초 동안 밝기를 유지한 뒤 차분해집니다. 송신 요청 중에는 저장된 칸과 출력 배선이 함께 켜지고, 큐가 비워지면 소등합니다. 링버퍼 데이터는 짙고 선명한 블루로 채웁니다. 저장된 칸은 선명한 블루로 남습니다. 데이터 도착 시 그 칸이 밝은 전기 블루로 약 0.5초 동안 점등된 뒤 0.35초에 걸쳐 원래 블루로 돌아옵니다. 송신할 때는 저장된 칸들이 함께 한 번 점등되고, 비워진 칸은 꺼집니다. 점등 중인 숫자는 어두운 글자로 표시합니다. 첫 화면은 색 확인을 위한 송신 요청 중 장면이며, 재생하면 같은 입력을 기준으로 변경 전·후를 동시에 보여줍니다. 링버퍼의 대기 개수는 변경 전 1과 0을 반복하고, 변경 후 1, 2, 3, 4로 늘었다가 0이 됩니다. 변경 전·후에 정사각형 이동 지도를 하나씩 표시합니다. 두 캐릭터가 같은 경로를 동시에 이동하며, 양쪽에 같은 좌표와 Msg가 동시에 전달됩니다. 변경 전은 매번 즉시 송신하고 변경 후는 누적하다 틱 끝에 송신합니다. 이동·Msg 생성·전달의 단계별 재생 속도와 Msg 전달 후 톤이 낮아지는 동작을 유지합니다. 이 재생은 처리 방식의 비교이며 실제 처리 시간을 뜻하지 않습니다. 송신 출구는 커널에 대한 요청이며 수신 완료나 TCP 패킷 수를 의미하지 않습니다.</desc>
+      <!-- SCENE_MINIMAL -->
+    </svg>
+
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+/* MATCHED_SOURCE */
+  const root=document.getElementById('wsasend-held-pulse-v11');if(!root)return;
+  const KIND='wsasend-held-pulse-v11-parallel-v1';
+  const reduced=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false,addEventListener(){}};
+  const designs=Array.from(root.querySelectorAll('.study-design')),controllers=[];
+  let drawnWidth=0,pendingWidth=0,layoutFrame=0;
+  function save(){
+    if(!window.openai?.setWidgetState)return;
+    const snapshots=controllers.map(controller=>controller.snapshot());
+    try{Promise.resolve(window.openai.setWidgetState({modelContent:{kind:KIND,designs:controllers.map(controller=>controller.state())},privateContent:{kind:KIND,designs:snapshots}})).catch(()=>{});}catch{}
+  }
+  for(const design of designs){
+    const layout=design.getAttribute('data-layout'),routing=design.getAttribute('data-routing'),material=design.getAttribute('data-material'),board=design.querySelector('.study-board');
+    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map();
+    function set(id,attrs,text){
+      const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
+      for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
+      if(text!==undefined&&element.textContent!==text)element.textContent=text;
+    }
+    function frame(){return preview?bundlePreviewFrame(program):bundleFrame(time,program);}
+    function paint(){
+      if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
+      const phase=current.preview?'':current.phase;
+      if(status.textContent!==phase)status.textContent=phase;
+      playButton.textContent=playing?'일시정지':time>0&&time<program.end&&!preview?'이어서 재생':'재생';
+      playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 애니메이션 재생`);
+    }
+    function state(){const f=frame();return {layout,routing,material,name:design.getAttribute('data-variant'),time,duration:program.end,playing,preview,phase:f.phase,callsBefore:f.rows[0].calls,callsAfter:f.rows[1].calls,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].copies,queuedAfter:f.rows[1].copies};}
+    function pause(){playing=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);raf=0;paint();}
+    function schedule(){if(playing&&!raf)raf=requestAnimationFrame(tick);}
+    function tick(now){
+      raf=0;if(!playing)return;
+      if(document.hidden||design.hidden){lastFrame=0;schedule();return;}
+      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));lastFrame=now;
+      if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
+    }
+    function play(){
+      if(reduced.matches){pause();preview=true;time=program.end;paint();return;}
+      if(preview||time>=program.end)time=0;preview=false;playing=true;lastFrame=0;paint();schedule();
+    }
+    function showPreview(){pause();time=program.end;preview=true;paint();}
+    function renderDesign(width){
+      const position=locateBundleSegment(time,program),atEnd=time>=program.end;
+      const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));
+      scene=createBundleAnimationScene(width,layout,routing,material);program=createBundleProgram(scene.compact);
+      time=atEnd?program.end:program.segments[position.index].start+position.progress*program.segments[position.index].duration;
+      board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);
+      board.setAttribute('viewBox',`0 0 ${scene.width} ${scene.height}`);board.setAttribute('width',String(scene.width));board.setAttribute('height',String(scene.height));
+      nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastFrame=0;paint();
+    }
+    function snapshot(){const p=locateBundleSegment(time,program);return {layout,routing,material,segment:p.index,phaseProgress:p.progress,playing,preview};}
+    function restore(saved){
+      if(saved?.layout!==layout||saved?.routing!==routing||saved?.material!==material||!Number.isInteger(saved.segment)||saved.segment<0||saved.segment>=program.segments.length||!Number.isFinite(saved.phaseProgress))return;
+      pause();const segment=program.segments[saved.segment];time=segment.start+bundleClamp(saved.phaseProgress)*segment.duration;preview=Boolean(saved.preview);
+      if(reduced.matches){preview=true;time=program.end;}
+      playing=!preview&&!reduced.matches&&Boolean(saved.playing)&&time<program.end;paint();schedule();
+    }
+    const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
+    design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
+    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});
+    document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+    reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
+  }
+  function draw(width){
+    if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,width);
+    if(Math.abs(width-drawnWidth)<.5)return;controllers.forEach(controller=>controller.draw(width));drawnWidth=width;
+  }
+  function restore(snapshot){if(snapshot?.privateContent?.kind!==KIND)return;for(const controller of controllers)controller.restore(snapshot.privateContent.designs?.find(entry=>entry.layout===controller.state().layout&&entry.routing===controller.state().routing&&entry.material===controller.state().material));}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState));
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{
+    pendingWidth=entries[0].contentRect.width;if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{layoutFrame=0;draw(pendingWidth);});
+  }).observe(root);
+})();
+</script>

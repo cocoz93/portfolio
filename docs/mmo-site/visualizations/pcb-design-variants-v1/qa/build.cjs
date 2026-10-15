@@ -1,0 +1,15 @@
+const fs=require("node:fs"),path=require("node:path");
+const {createPcbDesign}=require("./designs.cjs");
+const {DESIGNS}=require("./config.cjs");
+const dir=path.resolve(__dirname,"..");
+const prior=fs.readFileSync(path.resolve(dir,"../pcb-animation-v1/wsasend-pcb-previous.html"),"utf8");
+const fontRules=prior.match(/@font-face\{[^}]+\}/g);
+if(!fontRules||fontRules.length!==2)throw new Error("PCB 글꼴을 확인하지 못했습니다.");
+let template=fs.readFileSync(path.join(dir,"pcb-designs-template.html"),"utf8");
+const drawing=fs.readFileSync(path.join(__dirname,"designs.cjs"),"utf8").replace(/\nif\(typeof module[^\n]+\n?$/,"\n");
+const palette=DESIGNS.map(({key,colors})=>`#pcb-design-variants-v1 .pcb-design-${key}{${Object.entries(colors).map(([token,value])=>`--${token}:${value};`).join("")}}`).join("\n");
+template=template.replace("/* EMBEDDED_FONTS */",fontRules.join("\n")).replace("/* DESIGN_PALETTES */",palette).replace("/* DRAWING_FUNCTION */",drawing);
+for(const {key} of DESIGNS)template=template.replace(`<!-- ${key.toUpperCase()} -->`,createPcbDesign(736,key).markup);
+new Function(template.match(/<script>([\s\S]*?)<\/script>/)[1]);
+fs.writeFileSync(path.join(dir,"pcb-design-variants.html"),template,"utf8");
+console.log(JSON.stringify({bytes:Buffer.byteLength(template),designs:DESIGNS.map(({name})=>name)}));

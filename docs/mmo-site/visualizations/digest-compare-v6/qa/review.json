@@ -1,0 +1,84 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    656,
+    655,
+    360,
+    320
+  ],
+  "frames": 220,
+  "scope": "matched-before-after",
+  "layout": "side-by-side at 656px and above; stacked below",
+  "durationMs": 50914,
+  "beforeDurationMs": 24377,
+  "afterDurationMs": 25837,
+  "example": {
+    "eventActor": "A",
+    "sourcePackets": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "queuedBefore": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        1,
+        2,
+        3,
+        4
+      ]
+    ],
+    "queuedAfter": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        1,
+        2,
+        3,
+        4
+      ]
+    ],
+    "callsBefore": [
+      4,
+      4,
+      4
+    ],
+    "callsAfter": [
+      1,
+      1,
+      1
+    ],
+    "logicalPacketsAndOrderPreserved": true,
+    "residentsPerShownSector": 1
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 388262,
+  "sha256": "4af6332767571997c6fbe536fac82ba5fd4227e89dc0d85e4f36418f602df79e"
+}

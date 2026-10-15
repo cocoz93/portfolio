@@ -1,0 +1,193 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="736" height="736" viewBox="0 0 736 736"><style>text{font-family:PCB-Review,'Malgun Gothic',sans-serif;font-weight:500}</style><rect x="0" y="0" width="736" height="736" fill="#0d1421"></rect>
+<text x="24" y="32" fill="#eef2fb" font-size="14" text-anchor="start" dominant-baseline="middle">변경 전 · 수신자마다 같은 작업</text>
+<text x="92" y="68" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">생성·직렬화</text>
+<text x="370" y="68" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">직렬화버퍼</text>
+<text x="660" y="68" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">수신 세션</text>
+<rect x="40" y="92" width="104" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serialization-work"></rect>
+<path d="M36 94 L36 88 L42 88" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 94 L148 88 L142 88" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M36 138 L36 144 L42 144" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 138 L148 144 L142 144" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="92" y="116" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">생성·직렬화</text>
+<circle cx="150" cy="116" r="3" fill="#829bb1"></circle>
+<circle cx="150" cy="116" r="1.25" fill="#0d1421"></circle>
+<rect x="302" y="78" width="136" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M298 80 L298 74 L304 74" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 80 L442 74 L436 74" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M298 152 L298 158 L304 158" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 152 L442 158 L436 158" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="303" y="79" width="134" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="303" y="101" width="134" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M303 100 L437 100" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M303 116 L437 116" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="308" y="122" width="124" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="312" y="89" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg 1</text>
+<text x="312" y="108" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="370" y="135" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="296" cy="116" r="3" fill="#829bb1"></circle>
+<circle cx="296" cy="116" r="1.25" fill="#0d1421"></circle>
+<circle cx="444" cy="116" r="3" fill="#829bb1"></circle>
+<circle cx="444" cy="116" r="1.25" fill="#0d1421"></circle>
+<rect x="616" y="92" width="88" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="session-sendq-port"></rect>
+<path d="M612 94 L612 88 L618 88" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 94 L708 88 L702 88" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M612 138 L612 144 L618 144" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 138 L708 144 L702 144" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="660" y="108" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">세션 1</text>
+<text x="660" y="126" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="610" cy="116" r="3" fill="#829bb1"></circle>
+<circle cx="610" cy="116" r="1.25" fill="#0d1421"></circle>
+<path d="M150 116 L296 116" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="292,113 296,116 292,119" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M444 116 L610 116" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="606,113 610,116 606,119" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="527" y="132" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<rect x="40" y="188" width="104" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serialization-work"></rect>
+<path d="M36 190 L36 184 L42 184" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 190 L148 184 L142 184" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M36 234 L36 240 L42 240" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 234 L148 240 L142 240" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="92" y="212" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">생성·직렬화</text>
+<circle cx="150" cy="212" r="3" fill="#829bb1"></circle>
+<circle cx="150" cy="212" r="1.25" fill="#0d1421"></circle>
+<rect x="302" y="174" width="136" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M298 176 L298 170 L304 170" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 176 L442 170 L436 170" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M298 248 L298 254 L304 254" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 248 L442 254 L436 254" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="303" y="175" width="134" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="303" y="197" width="134" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M303 196 L437 196" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M303 212 L437 212" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="308" y="218" width="124" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="312" y="185" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg 2</text>
+<text x="312" y="204" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="370" y="231" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="296" cy="212" r="3" fill="#829bb1"></circle>
+<circle cx="296" cy="212" r="1.25" fill="#0d1421"></circle>
+<circle cx="444" cy="212" r="3" fill="#829bb1"></circle>
+<circle cx="444" cy="212" r="1.25" fill="#0d1421"></circle>
+<rect x="616" y="188" width="88" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="session-sendq-port"></rect>
+<path d="M612 190 L612 184 L618 184" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 190 L708 184 L702 184" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M612 234 L612 240 L618 240" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 234 L708 240 L702 240" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="660" y="204" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">세션 2</text>
+<text x="660" y="222" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="610" cy="212" r="3" fill="#829bb1"></circle>
+<circle cx="610" cy="212" r="1.25" fill="#0d1421"></circle>
+<path d="M150 212 L296 212" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="292,209 296,212 292,215" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M444 212 L610 212" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="606,209 610,212 606,215" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="527" y="228" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<rect x="40" y="284" width="104" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serialization-work"></rect>
+<path d="M36 286 L36 280 L42 280" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 286 L148 280 L142 280" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M36 330 L36 336 L42 336" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 330 L148 336 L142 336" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="92" y="308" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">생성·직렬화</text>
+<circle cx="150" cy="308" r="3" fill="#829bb1"></circle>
+<circle cx="150" cy="308" r="1.25" fill="#0d1421"></circle>
+<rect x="302" y="270" width="136" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M298 272 L298 266 L304 266" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 272 L442 266 L436 266" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M298 344 L298 350 L304 350" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 344 L442 350 L436 350" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="303" y="271" width="134" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="303" y="293" width="134" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M303 292 L437 292" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M303 308 L437 308" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="308" y="314" width="124" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="312" y="281" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg 3</text>
+<text x="312" y="300" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="370" y="327" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="296" cy="308" r="3" fill="#829bb1"></circle>
+<circle cx="296" cy="308" r="1.25" fill="#0d1421"></circle>
+<circle cx="444" cy="308" r="3" fill="#829bb1"></circle>
+<circle cx="444" cy="308" r="1.25" fill="#0d1421"></circle>
+<rect x="616" y="284" width="88" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="session-sendq-port"></rect>
+<path d="M612 286 L612 280 L618 280" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 286 L708 280 L702 280" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M612 330 L612 336 L618 336" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 330 L708 336 L702 336" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="660" y="300" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">세션 3</text>
+<text x="660" y="318" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="610" cy="308" r="3" fill="#829bb1"></circle>
+<circle cx="610" cy="308" r="1.25" fill="#0d1421"></circle>
+<path d="M150 308 L296 308" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="292,305 296,308 292,311" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M444 308 L610 308" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="606,305 610,308 606,311" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="527" y="324" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<path d="M20 378 L716 378" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.8"></path>
+<text x="24" y="410" fill="#238fff" font-size="14" text-anchor="start" dominant-baseline="middle">변경 후 · 한 번 만들고 재사용</text>
+<rect x="40" y="524" width="104" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serialization-work"></rect>
+<path d="M36 526 L36 520 L42 520" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 526 L148 520 L142 520" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M36 570 L36 576 L42 576" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M148 570 L148 576 L142 576" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="92" y="548" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">생성·직렬화</text>
+<circle cx="150" cy="548" r="3" fill="#829bb1"></circle>
+<circle cx="150" cy="548" r="1.25" fill="#0d1421"></circle>
+<rect x="302" y="510" width="136" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M298 512 L298 506 L304 506" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 512 L442 506 L436 506" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M298 584 L298 590 L304 590" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M442 584 L442 590 L436 590" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="303" y="511" width="134" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="303" y="533" width="134" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M303 532 L437 532" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M303 548 L437 548" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="308" y="554" width="124" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="312" y="521" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg</text>
+<text x="312" y="540" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="370" y="567" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="296" cy="548" r="3" fill="#829bb1"></circle>
+<circle cx="296" cy="548" r="1.25" fill="#0d1421"></circle>
+<circle cx="444" cy="548" r="3" fill="#829bb1"></circle>
+<circle cx="444" cy="548" r="1.25" fill="#0d1421"></circle>
+<path d="M150 548 L296 548" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="292,545 296,548 292,551" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M444 548 L576 548" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M576 464 L576 632" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="616" y="440" width="88" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="session-sendq-port"></rect>
+<path d="M612 442 L612 436 L618 436" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 442 L708 436 L702 436" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M612 486 L612 492 L618 492" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 486 L708 492 L702 492" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="660" y="456" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">세션 1</text>
+<text x="660" y="474" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="610" cy="464" r="3" fill="#829bb1"></circle>
+<circle cx="610" cy="464" r="1.25" fill="#0d1421"></circle>
+<path d="M576 464 L610 464" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="606,461 610,464 606,467" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="596" y="480" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<rect x="616" y="524" width="88" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="session-sendq-port"></rect>
+<path d="M612 526 L612 520 L618 520" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 526 L708 520 L702 520" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M612 570 L612 576 L618 576" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 570 L708 576 L702 576" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="660" y="540" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">세션 2</text>
+<text x="660" y="558" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="610" cy="548" r="3" fill="#829bb1"></circle>
+<circle cx="610" cy="548" r="1.25" fill="#0d1421"></circle>
+<path d="M576 548 L610 548" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="606,545 610,548 606,551" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="596" y="564" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<rect x="616" y="608" width="88" height="48" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="session-sendq-port"></rect>
+<path d="M612 610 L612 604 L618 604" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 610 L708 604 L702 604" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M612 654 L612 660 L618 660" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M708 654 L708 660 L702 660" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<text x="660" y="624" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">세션 3</text>
+<text x="660" y="642" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="610" cy="632" r="3" fill="#829bb1"></circle>
+<circle cx="610" cy="632" r="1.25" fill="#0d1421"></circle>
+<path d="M576 632 L610 632" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="606,629 610,632 606,635" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="596" y="648" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<text x="92" y="598" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">생성·직렬화 1회</text>
+<text x="370" y="610" fill="#238fff" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">AddRef(3)</text>
+<text x="368" y="702" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle">생성 3회 → 1회</text>
+<text x="712" y="702" fill="#a8b8ca" font-size="11" text-anchor="end" dominant-baseline="middle">세션별 Copy는 3회</text></svg>

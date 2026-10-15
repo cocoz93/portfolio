@@ -1,0 +1,33 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "frames": 66,
+  "durationMs": 11760,
+  "entryBytesBefore": 14,
+  "entryBytesAfter": 9,
+  "batchCount": 100,
+  "packetBytesBefore": 1406,
+  "packetBytesAfter": 906,
+  "quantScale": 512,
+  "example": {
+    "serverX": 73.12570190429688,
+    "serverY": 24.333330154418945,
+    "qx": 37440,
+    "qy": 12459,
+    "dirState": 20
+  },
+  "serverCoordinatesPreserved": true,
+  "nativeControlsVerified": true,
+  "standaloneBrowserRuntimeVerified": true,
+  "browserHostVerified": false,
+  "serverBinaryExecuted": false,
+  "bytes": 307011,
+  "sha256": "4e9adcfe8dd5e0d58c3c688ea30e351ecd55e8d794500e9012128299611f097a"
+}

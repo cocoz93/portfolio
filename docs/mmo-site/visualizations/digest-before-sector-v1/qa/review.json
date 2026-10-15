@@ -1,0 +1,35 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "frames": 65,
+  "durationMs": 9360,
+  "scope": "before-only",
+  "example": {
+    "mapSectors": 9,
+    "representativeReceivingSectors": 3,
+    "residentsPerDisplayedSector": 1,
+    "sourceMovement": "left-center to center-center",
+    "generatedMsgs": 1,
+    "enqueueOrder": [
+      "S1",
+      "S2",
+      "S3"
+    ],
+    "calls": [
+      1,
+      1,
+      1
+    ]
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 251180,
+  "sha256": "8fed4c8f44739b40b189184aedac9d524a2dfebb92621fd9838165b002fba492"
+}

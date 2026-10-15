@@ -1,0 +1,18 @@
+      const sample=[a,b,-180,-90,0,90,180].filter(angle=>angle>=a&&angle<=b);
+      const edgePoints=sample.flatMap(angle=>[polar(cx,cy,r,angle),polar(cx,cy,inner,angle)]);
+      const xs=edgePoints.map(p=>p[0]),ys=edgePoints.map(p=>p[1]),x=Math.min(...xs)-1,y=Math.min(...ys)-1;
+      const w=Math.max(...xs)-x+1,h=Math.max(...ys)-y+1,clip=sid(meta.row,'queue-window-clip',index),mask=sid(meta.row,'queue-window-mask',index);
+      out.push(`<defs><clipPath id="${clip}"><rect id="${mask}" x="${x}" y="${y}" width="${w}" height="${h}"></rect></clipPath></defs>`);
+      meta.queueWindows.push({mask,x,y,width:w,height:h,clip});
+      if(material==='fill'){
+        const node=out.findIndex(markup=>markup.includes(`id="${id}"`));
+        out[node]=out[node].replace('data-role=',`clip-path="url(#${clip})" data-role=`);
+      }
+      const flash=sid(meta.row,'queue-flash',index);meta.queueFlashes.push(flash);
+      tag('path',{id:flash,d:ringPath(cx,cy,r,inner,a,b),fill:C.text,opacity:0,'data-role':'queue-led-flash'});
+      const [tx,ty]=polar(cx,cy,(r+inner)/2,(a+b)/2),group=sid(meta.row,'queue-block',index);
+      const inputX=cx-r-8,inputY=cy+9-index*6,top=cy-r-2,outputX=cx+r-2;
+      const entry=clippedCorners([[inputX,inputY],[inputX,top],[tx,top],[tx,ty]]);
+      const exit=clippedCorners([[tx,ty],[tx,top],[outputX,top],[outputX,cy],[width-12,cy]]);
+      const exitLength=exit.slice(1).reduce((sum,p,i)=>sum+Math.hypot(p[0]-exit[i][0],p[1]-exit[i][1]),0);
+      meta.queueBlocks.push({group,x:tx,y:ty,entry,exit,exitLength});

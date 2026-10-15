@@ -1,0 +1,19 @@
+{
+  "figure": 4,
+  "status": "draft",
+  "sourcePage": "https://app.notion.com/p/digest-18-4-gameloop-0-57-0-21-39b16a0b9f59809b9155c081cd253537",
+  "sourcePageLastEditedAt": "2026-10-09T04:00:35.276Z",
+  "scope": "USE_BROADCAST_BUNDLE: coordinate-update bundles and chat; later membership digest is excluded",
+  "before": "Each existing packet calls RequestSendMsg once per recipient, with send coalescing already enabled",
+  "after": "Register packets in their source sectors; concatenate the receiving sector's neighboring pending packet bytes once; call RequestSendRaw once for each resident",
+  "example": {"packets": 3, "residentsInOneSector": 2, "callsPerResidentBefore": 3, "callsPerResidentAfter": 1},
+  "notionAB": {"sessions": 4000, "callsPerTickBeforeApprox": 180000, "callsPerTickAfterApprox": 4000, "averageCallsPerSessionBeforeApprox": 45, "averageCallsPerSessionAfterApprox": 1},
+  "preserved": ["existing packet headers", "existing packet payloads", "individual session SendQs", "subsequent tick-end WSASend coalescing"],
+  "codeEvidence": [
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp", "start": 4155, "end": 4180, "function": "BroadcastSectorPacket"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp", "start": 4214, "end": 4224, "function": "RegisterSectorItem"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp", "start": 4346, "end": 4410, "function": "FlushSectorSends: concatenate outside the resident loop"},
+    {"path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/ServerCore/Network/IOCPServer.cpp", "start": 990, "end": 1023, "function": "RequestSendRaw"}
+  ],
+  "browserHostVerified": false
+}

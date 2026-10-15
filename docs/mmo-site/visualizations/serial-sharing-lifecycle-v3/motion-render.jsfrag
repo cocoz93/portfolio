@@ -1,0 +1,23 @@
+function applyRefFrame(scene,frame,set){
+  const C={active:'var(--pcb-active)',text:'var(--pcb-text)',muted:'var(--pcb-muted)',dark:'var(--pcb-char-ink)'};
+  function paintBeam(b,p){const on=p>0&&p<1,[x,y]=refPoint(b.points,p);set(b.line,{opacity:on?1:0,'stroke-dashoffset':b.length*(1-p)});set(b.head,{opacity:on?1:0,x:x-3,y:y-3});}
+  for(let row=0;row<2;row++){
+    const meta=scene.rows[row],state=frame.rows[row],packet=meta.packets[0];set(meta.group,{opacity:frame.opacity[row],filter:frame.opacity[row]===1?'none':'url(#serial-sharing-lifecycle-v3-off)'});
+    const selected=row===1?0:frame.preview?2:frame.segment.row===0?frame.segment.actor:Math.max(0,Math.min(2,state.builds-1)),s=state.packets[selected];
+    const returning=!frame.preview&&frame.segment.row===row&&frame.segment.phase==='return',returnProgress=returning?frame.progress:0;
+    const lifetime=s.alive?refEase(refClamp(s.fill/.2)):returning?1-refEase(refClamp(returnProgress*frame.segment.duration/200)):0;
+    set(packet.content,{opacity:frame.preview?1:lifetime});set(packet.placeholder,{opacity:frame.preview||s.alive||lifetime>0?0:1},s.freed?'풀 반환':'생성 대기');
+    const reading=Math.max(0,...(row===1?meta.copyEvents:[meta.copyEvents[selected]]).map(time=>refPulse(frame.time,time))),flash=Math.max(refPulse(frame.time,s.born),reading)*(s.alive?1:0),refFlash=refPulse(frame.time,s.refEvent);
+    set(packet.mask,{width:(packet.w-16)*s.fill});set(packet.fill,{opacity:.72});set(packet.flash,{opacity:flash});set(packet.body,{fill:flash>=.5?C.dark:C.text},'동일한 정보');
+    set(packet.title,{},row===1?'Msg':frame.preview?'Msg':`Msg ${selected+1}`);
+    const showRef=row===1&&(frame.preview||s.alive||s.freed);set(packet.refGroup,{opacity:showRef?1:0});set(packet.ref,{fill:refFlash>.2?C.active:s.ref>0?C.text:C.muted},String(s.ref));
+    const consumed=state.subEvents.some(time=>time===s.refEvent)&&refFlash>0;set(packet.op,{fill:refPulse(frame.time,s.opEvent)>.2||consumed?C.active:C.muted},frame.preview?'AddRef(3)':s.op||(consumed?'SubRef()':''));
+    set(meta.caption,{fill:C.text},row===1?'같은 Msg를 계속 사용':'수신자마다 다시 생성');
+    for(let i=0;i<3;i++){
+      const q=meta.queues[i],n=state.queues[i],d=scene.arc(q.cx,q.cy,q.r,q.inner,q.a,q.a+(q.b-q.a)*Math.max(.001,n)),pulse=refPulse(frame.time,state.queueEvents[i]);set(q.fill,{d,opacity:n>0?.72:0});set(q.flash,{d,opacity:n>0?pulse:0});set(q.label,{fill:n>=1?C.text:C.muted},n>=1?'Msg':'0');paintBeam(meta.copy[i],state.copy[i]);paintBeam(meta.source[i],state.source[i]);set(meta.cues[i],{fill:C.active},state.copy[i]>0?'Copy':'');
+    }
+    paintBeam(meta.returns[0],returnProgress);
+    const poolVisible=returning||!frame.preview&&state.packets.some(p=>p.freed);set(meta.pool.group,{opacity:poolVisible?1:0});const poolFlash=s.freed?refPulse(frame.time,s.refEvent):0;set(meta.pool.flash,{opacity:poolFlash});set(meta.pool.label,{fill:poolFlash>=.5?C.dark:C.muted});
+    set(meta.created,{},`생성·직렬화 ${state.builds}회`);set(meta.enqueued,{},`적재 ${state.copies}회`);
+  }
+}

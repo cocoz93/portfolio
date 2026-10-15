@@ -1,0 +1,101 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    656,
+    655,
+    360,
+    320
+  ],
+  "frames": 166,
+  "scope": "matched-before-after",
+  "transferDesign": "Msg 사본 직접 이동",
+  "deliveryRecipients": [
+    "S1",
+    "S2",
+    "S3"
+  ],
+  "eventSequence": [
+    "move north",
+    "chat",
+    "move east"
+  ],
+  "actorCells": [
+    6,
+    3,
+    4
+  ],
+  "digestHeights": {
+    "threeMsg": 174,
+    "oneMsg": 174
+  },
+  "digestBoxFixed": true,
+  "outputWiresRemoved": true,
+  "originalBufferPreservedDuringCopy": true,
+  "layout": "full-width before above after; horizontal pipeline at desktop widths",
+  "durationMs": 32460,
+  "beforeDurationMs": 15510,
+  "afterDurationMs": 16250,
+  "example": {
+    "eventActor": "A",
+    "sourcePackets": [
+      1,
+      2,
+      3
+    ],
+    "sourceCells": [
+      3,
+      3,
+      4
+    ],
+    "queuedBefore": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        3
+      ]
+    ],
+    "queuedAfter": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        3
+      ]
+    ],
+    "callsBefore": [
+      3,
+      3,
+      1
+    ],
+    "callsAfter": [
+      1,
+      1,
+      1
+    ],
+    "logicalPacketsAndOrderPreserved": true,
+    "residentsPerShownSector": 1
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "bytes": 393587,
+  "sha256": "40ee8e9948bc07a13bedf8eb0825f1bbc2a17a74af62cb5fc2e537bcc0f7350a"
+}

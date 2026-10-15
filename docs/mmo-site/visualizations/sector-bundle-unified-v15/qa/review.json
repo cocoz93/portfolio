@@ -1,0 +1,106 @@
+{
+  "browserHostVerified": false,
+  "figure": 2,
+  "variants": [
+    "데이터만 강조"
+  ],
+  "palette": "original figure 1 palette, selected minimal fill",
+  "paletteChecks": [
+    {
+      "routing": "minimal",
+      "active": "#6cc7ff",
+      "luminance": 0.5125499293470126,
+      "signalTextContrast": 9.876777895058943
+    }
+  ],
+  "messageHeight": 80,
+  "headerHeight": 24,
+  "dataCell": [
+    48,
+    40
+  ],
+  "messageAndDataFont": 12,
+  "leadLength": 8,
+  "tracePitch": 6,
+  "pulseSize": [
+    6,
+    6
+  ],
+  "mapSize": [
+    120,
+    144
+  ],
+  "queueRadius": 50,
+  "dividers": 5,
+  "idleFacing": "front",
+  "movingFacing": "travel direction only",
+  "unintendedCrossings": 0,
+  "desktopLayout": "original stage centers",
+  "compactLayout": "same-size components stacked top to bottom",
+  "inputLanes": 4,
+  "outputLanesBefore": 4,
+  "outputLanesAfter": 1,
+  "initialView": "both rows queued",
+  "messagesPreserved": 4,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "charactersPerRow": 1,
+  "movementArrows": "current move only",
+  "outputRoute": "bottom outlets on both rows",
+  "messageFillMs": 350,
+  "sourceTransferDesktopMs": 350,
+  "newDurationMs": 26920,
+  "outlet": "16 by 10 signal crosses a kernel boundary",
+  "queueEmptiesOnReplay": true,
+  "controllerChecks": "manual playback, hidden clock, pause, static preview, saved state, resize and reduced motion",
+  "checked": [
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 1024,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 736,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 700,
+      "height": 548,
+      "durationMs": 26920
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 699,
+      "height": 1040,
+      "durationMs": 32220
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 360,
+      "height": 1040,
+      "durationMs": 32220
+    },
+    {
+      "material": "minimal",
+      "routing": "chamfer",
+      "layout": "silkscreen",
+      "width": 320,
+      "height": 1040,
+      "durationMs": 32220
+    }
+  ]
+}

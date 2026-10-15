@@ -1,0 +1,14 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const dir=path.resolve(__dirname,'..');
+const original=fs.readFileSync(path.resolve(dir,'../pcb-animation-v1/wsasend-pcb-previous.html'),'utf8');
+const previous=fs.readFileSync(path.resolve(dir,'../sector-bundle-layouts-v1/qa/layouts.cjs'),'utf8');
+const begin=previous.indexOf('  function mageDefinition(){'),end=previous.indexOf('  function sector(');
+assert(begin>0&&end>begin);
+const source=fs.readFileSync(path.join(dir,'scene-template.js'),'utf8').replace('/* MAGE_RENDERER */',previous.slice(begin,end))+'\n'+fs.readFileSync(path.join(dir,'motion.js'),'utf8');
+new vm.Script(source);
+fs.writeFileSync(path.join(dir,'scene.js'),source,'utf8');
+const create=vm.runInNewContext(source+';createBundleAnimationScene');
+const fragment=fs.readFileSync(path.join(dir,'sector-bundle-animation-template.html'),'utf8').replace('/* ORIGINAL_FONTS */',original.match(/@font-face\{[^}]+\}/g).join('\n')).replace('<!-- MATCHED_SCENE -->',create(736).markup).replace('/* MATCHED_SOURCE */',source);
+new vm.Script(fragment.match(/<script>([\s\S]*?)<\/script>/)[1]);
+fs.writeFileSync(path.join(dir,'sector-bundle-animation.html'),fragment,'utf8');
+console.log(JSON.stringify({bytes:Buffer.byteLength(fragment),path:path.join(dir,'sector-bundle-animation.html')}));

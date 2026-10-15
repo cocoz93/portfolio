@@ -1,0 +1,54 @@
+<style>
+/* ORIGINAL_FONTS */
+#serial-sector-player-links-v8 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;--pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;
+  --pcb-char-blue:#4eafe8;--pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;
+}
+#serial-sector-player-links-v8 .sector-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#serial-sector-player-links-v8 .sector-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#serial-sector-player-links-v8 .sector-state-line {min-height:3em}
+</style>
+<div id="serial-sector-player-links-v8" aria-label="전후 각각의 섹터 이동과 같은 Msg 재사용">
+  <svg class="sector-board" xmlns="http://www.w3.org/2000/svg" width="736" height="864" viewBox="0 0 736 864" role="img" aria-labelledby="sector-separated-title sector-separated-desc">
+    <title id="sector-separated-title">같은 섹터 이동 · Msg 생성 3회에서 1회로</title>
+    <desc id="sector-separated-desc">변경 전과 변경 후에 각각 아홉 칸의 게임 섹터가 있습니다. 캐릭터 A는 가운데에서 오른쪽 섹터로 같은 이동을 합니다. 세 수신자 S1, S2, S3의 바로 아래에 각 세션의 SendQ를 배치하고 짧은 배선으로 연결했습니다. SendQ는 서버 메모리에 있는 큐이며 그림에서는 플레이어와 세션의 대응 관계를 나타내려고 옆에 배치했습니다. A에서 나온 정보가 Msg로 향하고, Msg의 바이트 사본은 배선을 따라 각 수신자의 SendQ로 이동합니다. 데이터 도착 시 그 SendQ와 플레이어가 함께 점등합니다. 세 수신자와 배치는 설명용 예시로 실제 AOI 범위나 GetSectorDiff 결과를 나타내지 않습니다. 변경 전에는 수신자마다 Msg를 할당하고 직렬화하여 해당 SendQ에 Copy한 뒤 반환합니다. 변경 후에는 같은 Msg를 한 번만 생성합니다. 초기 Ref 1에서 AddRef(3)으로 4가 되고, 각 SendQ Copy 직후 SubRef하여 3, 2, 1이 됩니다. 마지막 빌더 몫을 SubRef하여 Ref 0이면 풀에 반환합니다. 한 원본 Msg는 세 번의 Copy 동안 같은 위치에 유지되며, 각 SendQ에는 바이트 사본이 남습니다. intrusive reference counting의 개념도이며 std::shared_ptr 객체나 zero-copy 전송을 나타내지 않습니다. 풀 도형과 반환 배선은 생략했습니다. 이후 digest와 실제 WSASend 횟수는 이 비교에 포함하지 않습니다.</desc>
+    <!-- SECTOR_SCENE -->
+  </svg>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-sector-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-sector-action="preview">구도 보기</button>
+  </div>
+  <div class="sector-state-line"><span class="sector-status text-small" aria-live="polite">같은 이동 · 같은 수신자 · Msg 생성 3회 → 1회</span></div>
+</div>
+<script>
+(() => {
+  'use strict';
+/* SECTOR_SOURCE */
+  const root=document.getElementById('serial-sector-player-links-v8');if(!root)return;
+  const board=root.querySelector('.sector-board'),play=root.querySelector('[data-sector-action="play"]'),previewButton=root.querySelector('[data-sector-action="preview"]'),status=root.querySelector('.sector-status');
+  const program=createReuseProgram(),duration=program.end,media=matchMedia('(prefers-reduced-motion: reduce)');
+  let scene,nodes=new Map(),time=0,preview=true,playing=false,raf=0,timer=0,startedAt=0,startedTime=0,lastWidth=0;
+  let revision=0,lastSavedRevision='',session=Date.now().toString(36)+'-'+Math.random().toString(36).slice(2);
+  function set(id,attrs,text){const el=nodes.get(id);if(!el)throw Error('Missing element '+id);for(const [key,value] of Object.entries(attrs))el.setAttribute(key,String(value));if(text!==undefined)el.textContent=text;}
+  function getState(){const f=sectorFrame(time,program,preview);return {kind:'serial-sector-player-links-v8',figure:3,time,duration,preview,playing,phase:f.phase,sectorCountPerRow:9,recipientExample:3,movement:'center-to-right',originalRetained:f.rows[1].messages[0].live,createdBefore:f.rows[0].created,createdAfter:f.rows[1].created,copiesBefore:f.rows[0].copies,copiesAfter:f.rows[1].copies,refAfter:f.rows[1].messages[0].ref,returnedAfter:f.rows[1].returned[0],queuedAfter:f.rows[1].queues.filter(q=>q.filled).length};}
+  function save(){if(window.openai&&typeof window.openai.setWidgetState==='function'){lastSavedRevision=session+':'+(++revision);window.openai.setWidgetState({modelContent:getState(),privateContent:{kind:'serial-sector-player-links-v8',time,preview,revision:lastSavedRevision}}).catch(()=>{});}}
+  function render(){if(!scene)return;const f=sectorFrame(time,program,preview);applySectorFrame(scene,f,set);if(status.textContent!==f.phase)status.textContent=f.phase;play.textContent=playing?'일시정지':preview?'재생':time>=duration?'다시 재생':'이어 재생';play.setAttribute('aria-pressed',String(playing));}
+  function cancelScheduled(){if(raf)cancelAnimationFrame(raf);if(timer)clearTimeout(timer);raf=0;timer=0;}
+  function updateTime(){if(playing)time=Math.min(duration,startedTime+Math.max(0,performance.now()-startedAt));}
+  function stop(){updateTime();cancelScheduled();playing=false;}
+  function schedule(){raf=requestAnimationFrame(tick);timer=setTimeout(tick,80);}
+  function tick(){cancelScheduled();if(!playing)return;updateTime();render();if(time>=duration){stop();render();save();}else schedule();}
+  play.addEventListener('click',()=>{if(playing)stop();else{if(preview||time>=duration)time=0;preview=false;if(media.matches)time=duration;else{playing=true;startedTime=time;startedAt=performance.now();schedule();}}render();save();});
+  previewButton.addEventListener('click',()=>{stop();time=0;preview=true;render();save();});
+  root.animation={getState,seek(next){stop();preview=false;time=Math.max(0,Math.min(duration,Number(next)||0));render();}};
+  function draw(width){if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,Math.round(width));if(width===lastWidth)return;scene=createSectorReuseScene(width);const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastWidth=width;render();}
+  function restore(state){const s=state&&state.privateContent;if(!s||s.kind!=='serial-sector-player-links-v8'||(s.revision&&s.revision===lastSavedRevision))return;stop();time=Math.max(0,Math.min(duration,Number(s.time)||0));preview=s.preview!==false;render();}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai&&window.openai.widgetState);
+  window.addEventListener('openai:set_globals',e=>restore(e.detail&&e.detail.globals&&e.detail.globals.widgetState));
+  media.addEventListener('change',()=>{if(media.matches){stop();render();}});
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>draw(entries[0].contentRect.width)).observe(root);
+})();
+</script>

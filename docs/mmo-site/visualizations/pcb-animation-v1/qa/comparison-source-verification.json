@@ -1,0 +1,350 @@
+{
+  "scope": "Source and domain model checks; user-host rendering is not verified.",
+  "checks": [
+    {
+      "name": "single-script-initialization",
+      "ok": true,
+      "actual": 1
+    },
+    {
+      "name": "no-cross-script-dom-objects",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "no-mutation-observer-dependency",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "single-style-sheet",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "embedded-fonts-shared-once",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "under-256-kib",
+      "ok": true,
+      "actual": 177792
+    },
+    {
+      "name": "standalone-matches-fragment",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "old-comparison-reference-updated",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "no-duplicate-static-ids",
+      "ok": true,
+      "actual": [
+        "wsasend-design-comparison",
+        "wsasend-design-switch",
+        "wsasend-pcb-comparison-previous",
+        "pcb-comparison-previous-title",
+        "pcb-comparison-previous-description",
+        "wsasend-pcb-comparison-current",
+        "pcb-comparison-current-title",
+        "pcb-comparison-current-description"
+      ]
+    },
+    {
+      "name": "queried-roots-exist",
+      "ok": true,
+      "actual": [
+        "wsasend-design-comparison",
+        "wsasend-pcb-comparison-previous",
+        "wsasend-pcb-comparison-current",
+        "wsasend-design-comparison",
+        "wsasend-design-comparison"
+      ]
+    },
+    {
+      "name": "both-design-buttons-present",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "scripts-outside-panels",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "initialization-after-dom-ready",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "startup-failure-has-visible-diagnostic",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "previous-and-current-preserved",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "original-standalone-snapshots-preserved",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "both-generated-initializers-found",
+      "ok": true,
+      "actual": 2
+    },
+    {
+      "name": "matching-timelines",
+      "ok": true,
+      "actual": {
+        "start": 400,
+        "period": 2660,
+        "periodAfter": 2060,
+        "move": 400,
+        "inputEnd": 800,
+        "msgEnd": 1200,
+        "queueStart": 1360,
+        "queueOn": 1760,
+        "sendStart": 1960,
+        "call": 2360,
+        "tick": 8640,
+        "batchCall": 9040,
+        "switchStart": 11340,
+        "afterStart": 11740,
+        "compareStart": 20980,
+        "compareEnd": 21380,
+        "end": 22580
+      }
+    },
+    {
+      "name": "spatial-motion-duration-preserved",
+      "ok": true,
+      "actual": {
+        "main": 400,
+        "state": 200,
+        "hold": 160,
+        "rest": 100,
+        "result": 1200
+      }
+    },
+    {
+      "name": "original-animation-timing-restored",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "before-event-0",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 0,
+          "pending": 1
+        },
+        {
+          "calls": 0,
+          "pending": 1
+        }
+      ]
+    },
+    {
+      "name": "before-drained-0",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 1,
+          "pending": 0
+        },
+        {
+          "calls": 1,
+          "pending": 0
+        }
+      ]
+    },
+    {
+      "name": "after-event-0",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 0,
+          "pending": 1
+        },
+        {
+          "calls": 0,
+          "pending": 1
+        }
+      ]
+    },
+    {
+      "name": "before-event-1",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 1,
+          "pending": 1
+        },
+        {
+          "calls": 1,
+          "pending": 1
+        }
+      ]
+    },
+    {
+      "name": "before-drained-1",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 2,
+          "pending": 0
+        },
+        {
+          "calls": 2,
+          "pending": 0
+        }
+      ]
+    },
+    {
+      "name": "after-event-1",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 0,
+          "pending": 2
+        },
+        {
+          "calls": 0,
+          "pending": 2
+        }
+      ]
+    },
+    {
+      "name": "before-event-2",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 2,
+          "pending": 1
+        },
+        {
+          "calls": 2,
+          "pending": 1
+        }
+      ]
+    },
+    {
+      "name": "before-drained-2",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 3,
+          "pending": 0
+        },
+        {
+          "calls": 3,
+          "pending": 0
+        }
+      ]
+    },
+    {
+      "name": "after-event-2",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 0,
+          "pending": 3
+        },
+        {
+          "calls": 0,
+          "pending": 3
+        }
+      ]
+    },
+    {
+      "name": "before-event-3",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 3,
+          "pending": 1
+        },
+        {
+          "calls": 3,
+          "pending": 1
+        }
+      ]
+    },
+    {
+      "name": "before-drained-3",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 4,
+          "pending": 0
+        },
+        {
+          "calls": 4,
+          "pending": 0
+        }
+      ]
+    },
+    {
+      "name": "after-event-3",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 0,
+          "pending": 4
+        },
+        {
+          "calls": 0,
+          "pending": 4
+        }
+      ]
+    },
+    {
+      "name": "batch-clears-four-once",
+      "ok": true,
+      "actual": [
+        {
+          "calls": 1,
+          "pending": 0
+        },
+        {
+          "calls": 1,
+          "pending": 0
+        }
+      ]
+    },
+    {
+      "name": "original-signal-geometry-restored-0",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "original-signal-geometry-restored-1",
+      "ok": true,
+      "actual": true
+    },
+    {
+      "name": "final-four-vs-one-both-bright",
+      "ok": true,
+      "actual": [
+        {
+          "before": 4,
+          "after": 1
+        },
+        {
+          "before": 4,
+          "after": 1
+        }
+      ]
+    }
+  ]
+}

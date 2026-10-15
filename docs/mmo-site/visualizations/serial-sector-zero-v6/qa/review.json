@@ -1,0 +1,40 @@
+{
+  "ok": true,
+  "figure": 3,
+  "zeroBase": true,
+  "sectorCount": 9,
+  "recipientExample": 3,
+  "paletteMatched": true,
+  "mageMatched": true,
+  "movement": "center-to-right",
+  "senderFacesFrontWhenIdle": true,
+  "allocationAndSerializationBefore": 3,
+  "allocationAndSerializationAfter": 1,
+  "copyCountBefore": 3,
+  "copyCountAfter": 3,
+  "retainedDuringAllCopies": true,
+  "afterRefSequence": [
+    1,
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "queueCopiesRemainAfterPoolReturn": true,
+  "durationMs": 14226,
+  "checkedWidths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "checkedFrames": 93,
+  "playPauseAndResizeRestoreVerified": true,
+  "reducedMotionVerified": true,
+  "browserHostVerified": false,
+  "problems": [],
+  "sha256": "eb598bb8a8030fac76daa42fba2651b3b95541f4ffe7de60637e40d8d54a1528"
+}

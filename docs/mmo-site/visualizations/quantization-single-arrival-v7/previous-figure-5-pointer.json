@@ -1,0 +1,18 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 6,
+  "scope": "coordinate-fields-only",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-pcb-v6/quantization.html",
+  "sha256": "1e7814a97a22df388b7bb298fdfbac326b261f4706940afb01c45300b4ed1203",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-pcb-v6/qa/review.json",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "durationMs": 10350,
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "quantizationStageLabel": "양자화",
+  "design": "PCB conversion component",
+  "previousVersion": "quantization-before-msg-v4/quantization.html",
+  "previousStudies": "quantization-stage-studies-v5/quantization-studies.html"
+}

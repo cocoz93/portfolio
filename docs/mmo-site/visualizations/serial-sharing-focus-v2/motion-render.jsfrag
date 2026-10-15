@@ -1,0 +1,28 @@
+function applyRefFrame(scene,frame,set){
+  const C={active:'var(--pcb-active)',text:'var(--pcb-text)',muted:'var(--pcb-muted)',dark:'var(--pcb-char-ink)'};
+  function paintBeam(b,p){const on=p>0&&p<1,[x,y]=refPoint(b.points,p);set(b.line,{opacity:on?1:0,'stroke-dashoffset':b.length*(1-p)});set(b.head,{opacity:on?1:0,x:x-3,y:y-3});}
+  for(let row=0;row<2;row++){
+    const meta=scene.rows[row],state=frame.rows[row],character=meta.character;set(meta.group,{opacity:frame.opacity[row],filter:frame.opacity[row]===1?'none':'url(#serial-sharing-focus-v2-off)'});
+    const a=character.positions[0],b=character.positions[1],x=a[0]+(b[0]-a[0])*state.move,y=a[1];
+    set(character.face,{href:`#bundle-mage-${character.kind}-${state.moving?'east':'south'}`,transform:`translate(${x} ${y}) scale(${character.size/32})`,'data-facing':state.moving?'east':'south'});set(character.highlight,{x:x-16,opacity:.18});set(character.arrow,{opacity:state.moving?1:0});
+    let poolFlash=0;
+    for(let i=0;i<meta.packets.length;i++){
+      const packet=meta.packets[i],s=state.packets[i],readFlash=Math.max(0,...packet.readEvents.map(time=>refPulse(frame.time,time))),flash=Math.max(refPulse(frame.time,s.born),readFlash)*(s.alive?1:0),refFlash=refPulse(frame.time,s.refEvent),opFlash=refPulse(frame.time,s.opEvent);
+      set(packet.mask,{width:(packet.w-12)*s.fill});set(packet.fill,{opacity:s.alive?.72:0});set(packet.flash,{opacity:flash});set(packet.body,{fill:s.alive?(flash>=.5?C.dark:C.text):C.muted},s.freed?'풀 반환':'동일 정보');
+      set(packet.ref,{fill:refFlash>.2?C.active:s.alive?C.text:C.muted},String(s.ref));
+      const consuming=state.subEvents.some(time=>time===s.refEvent)&&refFlash>0;
+      set(packet.op,{fill:opFlash>.2||consuming?C.active:C.muted},frame.preview?(row===1?'AddRef(3)':''):s.op||(consuming?'SubRef()':''));
+      const returning=!frame.preview&&frame.segment.row===row&&frame.segment.phase==='return'&&(row===1||frame.segment.actor===i)?frame.progress:0;paintBeam(meta.returns[i],returning);
+      if(s.freed)poolFlash=Math.max(poolFlash,refPulse(frame.time,s.refEvent));
+    }
+    if(row===1){
+      const s=state.packets[0],countPulse=refPulse(frame.time,s.refEvent);
+      for(const slot of meta.ownerSlots){const alive=slot.owner===0?s.ref>0:frame.preview||s.ref>=1+4-slot.owner,flash=alive?countPulse:0;set(slot.fill,{opacity:alive?.72:0});set(slot.flash,{opacity:flash});set(slot.label,{fill:alive?(flash>=.5?C.dark:C.text):C.muted});}
+    }
+    for(let i=0;i<3;i++){
+      const q=meta.queues[i],n=state.queues[i],d=scene.arc(q.cx,q.cy,q.r,q.inner,q.a,q.a+(q.b-q.a)*Math.max(.001,n)),flash=refPulse(frame.time,state.queueEvents[i]),subFlash=refPulse(frame.time,state.subEvents[i]);
+      set(q.fill,{d,opacity:n>0?.72:0});set(q.flash,{d,opacity:n>0?flash:0});set(q.label,{fill:n>=1?C.text:C.muted},n>=1?'Msg':'0');set(q.sub,{fill:C.muted},'');set(meta.cues[i],{fill:state.copy[i]>0?C.active:C.muted},row===1&&state.copy[i]>0?'Copy':'');paintBeam(meta.copy[i],state.copy[i]);if(meta.source[i])paintBeam(meta.source[i],state.source[i]);
+    }
+    set(meta.pool.flash,{opacity:poolFlash});set(meta.pool.label,{fill:poolFlash>=.5?C.dark:C.muted});set(meta.created,{},`생성·직렬화 ${state.builds}회`);set(meta.enqueued,{},`적재 ${state.copies}회`);
+  }
+}

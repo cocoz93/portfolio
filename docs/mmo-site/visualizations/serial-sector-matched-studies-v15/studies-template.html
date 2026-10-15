@@ -1,0 +1,75 @@
+<style>
+/* ORIGINAL_FONTS */
+#serial-sector-matched-studies-v15 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;--pcb-char-blue:#4eafe8;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;color:var(--pcb-text);
+}
+#serial-sector-matched-studies-v15 .reuse-stage {width:100%;background:var(--pcb-bg);color-scheme:dark}
+#serial-sector-matched-studies-v15 .reuse-board {display:block;width:100%;height:auto}
+#serial-sector-matched-studies-v15 .reuse-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#serial-sector-matched-studies-v15 .reuse-board .reuse-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+</style>
+<div id="serial-sector-matched-studies-v15" class="viz-carousel" aria-label="3번 그림 구도 비교" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section class="reuse-stage" data-variant="수신자 정렬" data-layout="aligned" aria-label="수신자 정렬">
+    <svg class="reuse-board" xmlns="http://www.w3.org/2000/svg" width="736" height="880" viewBox="0 0 736 880" role="img" aria-labelledby="reuse-aligned-title reuse-aligned-desc">
+      <title id="reuse-aligned-title">수신자 정렬</title>
+      <desc id="reuse-aligned-desc">3번 그림의 정적 설계 시안. A가 가운데 섹터에서 오른쪽 섹터로 이동하여 S1, S2, S3 세 세션에 같은 정보를 보냅니다. 변경 전에는 세 Msg를 각각 할당하고 직렬화합니다. 변경 후에는 한 Msg를 할당하고 직렬화하여 같은 버퍼를 세 번 읽습니다. Msg와 각 SendQ를 수신자별로 정렬하여 왼쪽에서 오른쪽으로 비교합니다. Msg 풀은 부품 상자가 아닌 반환 문구로 표시합니다. 각 SendQ에는 여전히 바이트 사본이 하나씩 들어갑니다. AddRef로 세 수신자의 참조를 예약하여 Ref는 1에서 4로 올라가고, 세 Copy 뒤의 SubRef와 작성자의 마지막 SubRef로 3, 2, 1, 0이 되어 풀에 반환합니다. 이 정적 화면은 여러 시점을 종합한 구도이며 동시 상태 스냅샷이 아닙니다. Ref는 패킷 헤더가 아닌 Msg 객체의 메타데이터입니다. 캐릭터 그림과 색상, Msg의 24픽셀 이름표, 20픽셀 Header, 40픽셀 데이터 구획, 단일 배선, 접점은 완성된 1, 2번 그림과 동일합니다.</desc>
+      <!-- ALIGNED_SCENE -->
+    </svg>
+  </section>
+  <section class="reuse-stage" data-variant="공용 Msg 중심" data-layout="fanout" aria-label="공용 Msg 중심" hidden>
+    <svg class="reuse-board" xmlns="http://www.w3.org/2000/svg" width="736" height="880" viewBox="0 0 736 880" role="img" aria-labelledby="reuse-fanout-title reuse-fanout-desc">
+      <title id="reuse-fanout-title">공용 Msg 중심</title>
+      <desc id="reuse-fanout-desc">같은 A 이동 알림과 세 수신자를 사용하는 정적 설계 시안입니다. 변경 전의 세 Msg와 세 SendQ는 같은 열로 연결합니다. 변경 후에는 가운데 Msg 하나가 동일한 세 SendQ로 분기합니다. 분기 배선은 세 바이트 Copy를 나타내며 SendQ가 원본 버퍼 포인터를 보관한다는 의미가 아닙니다. 큐의 사본은 원본 Msg의 풀 반환 후에도 유지됩니다. 원본 Msg의 Ref 수명은 1, 4, 3, 2, 1, 0이며 마지막 SubRef 뒤 풀에 반환합니다. 변경 전의 세 Msg는 반복 생성 과정을 모아 보여주는 개념도입니다. 변경 후의 Ref 1은 세 Copy가 끝나고 작성자의 마지막 참조가 남은 상태를 나타냅니다. 전후의 원본 Msg와 SendQ 크기를 동일하게 유지하며 1, 2번 그림의 색상, 마법사, 메시지 구획, 링버퍼와 접점을 그대로 사용합니다.</desc>
+      <!-- FANOUT_SCENE -->
+    </svg>
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+  /* SCENE_SOURCE */
+  const root=document.getElementById('serial-sector-matched-studies-v15');
+  if(!root)return;
+  const sections=[...root.querySelectorAll('.reuse-stage')];
+  function draw() {
+    const width=Math.max(320,Math.round(root.getBoundingClientRect().width||736));
+    for(const section of sections) {
+      const svg=section.querySelector('.reuse-board');
+      const scene=createMatchedReuseScene(width,section.dataset.layout);
+      svg.setAttribute('width',width);svg.setAttribute('height',scene.height);svg.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);
+      let layer=svg.querySelector('[data-scene-root]');
+      if(!layer) {layer=document.createElementNS('http://www.w3.org/2000/svg','g');layer.setAttribute('data-scene-root','');svg.appendChild(layer);}
+      layer.innerHTML=scene.markup;
+    }
+  }
+  const kind='serial-sector-matched-studies-v15';
+  function restore(value) {
+    const state=value?.privateContent;
+    if(state?.kind!==kind || !sections.some(s=>s.dataset.layout===state.layout))return;
+    for(const section of sections)section.hidden=section.dataset.layout!==state.layout;
+  }
+  restore(window.openai?.widgetState);
+  let previous=sections.find(s=>!s.hidden)?.dataset.layout;
+  const observer=new MutationObserver(()=>{
+    const section=sections.find(s=>!s.hidden),layout=section?.dataset.layout;
+    if(!layout||layout===previous)return;
+    previous=layout;
+    window.openai?.setWidgetState?.({modelContent:{kind,figure:3,design:section.dataset.variant,animated:false},privateContent:{kind,layout}})?.catch(()=>{});
+  });
+  observer.observe(root,{subtree:true,attributes:true,attributeFilter:['hidden']});
+  window.addEventListener('openai:set_globals',event=>{
+    const value=event.detail?.globals?.widgetState;
+    const layout=value?.privateContent?.layout;
+    if(value?.privateContent?.kind!==kind||!sections.some(s=>s.dataset.layout===layout))return;
+    previous=layout;restore(value);
+  });
+  draw();
+  if(typeof ResizeObserver==='function')new ResizeObserver(draw).observe(root);
+  root.designs={draw,getState:()=>({kind,figure:3,layout:sections.find(s=>!s.hidden)?.dataset.layout,animated:false})};
+})();
+</script>

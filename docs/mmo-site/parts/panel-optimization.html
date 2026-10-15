@@ -1,0 +1,29 @@
+  <section class="panel" id="p-optimization" role="tabpanel" aria-labelledby="tab-optimization" hidden>
+    <div class="op-layout">
+      <nav class="op-index" aria-label="핵심 최적화 다섯 가지">
+        <button type="button" data-optimization="wsasend" aria-pressed="true" aria-controls="op-detail"><em>01</em>WSASend 호출 묶기</button>
+        <button type="button" data-optimization="msg-bundle" aria-pressed="false" aria-controls="op-detail"><em>02</em>이동 정보 묶기</button>
+        <button type="button" data-optimization="msg-sharing" aria-pressed="false" aria-controls="op-detail"><em>03</em>직렬화버퍼 재사용</button>
+        <button type="button" data-optimization="digest" aria-pressed="false" aria-controls="op-detail"><em>04</em>수신 섹터별 Digest</button>
+        <button type="button" data-optimization="quantization" aria-pressed="false" aria-controls="op-detail"><em>05</em>좌표 양자화</button>
+      </nav>
+      <div class="op-workspace">
+      <div class="op-detail" id="op-detail" role="region" aria-labelledby="op-title">
+        <div class="op-heading">
+          <h2 id="op-title"><span class="op-title-main"><span class="op-title-line">WSASend</span> <span class="op-title-line">호출 묶기</span></span><span class="op-effect">N회 → 1회</span><small class="op-term">Send Coalescing</small></h2>
+          <p id="op-summary">같은 세션의 Msg N개를 틱 끝에 모아 한 번 호출합니다. (그림은 N=4 예시)</p>
+          <p class="op-note" id="op-note" hidden></p>
+          <p class="op-example" id="op-example" hidden></p>
+        </div>
+        <div class="op-viewer" id="op-viewer" data-state="idle">
+          <p class="op-loading" id="op-loading" role="status" hidden>그림을 불러오는 중입니다.</p>
+          <p class="op-error" id="op-error" role="alert" hidden>그림을 불러오지 못했습니다. <a id="op-open-source" target="_blank" rel="noopener">그림 새 창에서 열기 ↗</a></p>
+        </div>
+        <div class="op-footer">
+          <a class="op-report" id="op-report" target="_blank" rel="noopener" hidden>관련 실측 보고서 ↗</a>
+        </div>
+      </div>
+      <aside class="op-explanation" id="op-explanation" aria-labelledby="op-title" hidden></aside>
+      </div>
+    </div>
+  </section>

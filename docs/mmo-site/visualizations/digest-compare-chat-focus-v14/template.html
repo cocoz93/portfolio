@@ -1,0 +1,31 @@
+<style>
+/*STYLES*/
+#digest-comparison-chat-focus-v14 {--pcb-target:#238fff;--pcb-done:#657282}
+#digest-comparison-chat-focus-v14 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#digest-comparison-chat-focus-v14 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-comparison-chat-focus-v14 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-comparison-chat-focus-v14 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-comparison-chat-focus-v14 [data-status] {min-height:2em}
+</style>
+<div id="digest-comparison-chat-focus-v14" data-layout="rows" aria-label="4번 그림 · 기존 좌우 흐름을 유지한 변경 전후 비교">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="digest-compare-before-title digest-compare-before-desc">
+      <title id="digest-compare-before-title">변경 전 · Msg마다 수신 섹터를 순회해 개별 적재</title>
+      <desc id="digest-compare-before-desc">A가 왼쪽 맨 아래에서 바로 위칸으로 이동해 Msg 1이 생기고, 그 자리에서 채팅해 Msg 2가 생긴 뒤, 오른쪽 칸으로 이동해 Msg 3이 생깁니다. 발생 당시 섹터가 유효범위에 들어가는 S에게만 각 Msg를 적재합니다. S1과 S2는 Msg 1, 2, 3을 받아 세 번 적재하고, S3는 Msg 3만 받아 한 번 적재합니다. 원본 Msg를 남겨두고 번호가 붙은 사본 하나가 배선 없이 SendQ로 직접 이동하며, 도착하면 큐에 쌓입니다. S 위의 Msg 개수는 아직 적재하지 않은 유효 항목 수입니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="digest-compare-after-title digest-compare-after-desc">
+      <title id="digest-compare-after-title">변경 후 · 섹터별 보관 후 수신 섹터별 Digest 구성</title>
+      <desc id="digest-compare-after-desc">같은 A가 왼쪽 맨 아래에서 위칸으로 이동한 Msg 1, 그 자리에서 채팅한 Msg 2, 오른쪽 칸으로 이동한 Msg 3을 각각 발생 섹터에 모읍니다. 수신 섹터의 유효범위에서 기존 Msg 헤더와 데이터를 Digest로 연접한 뒤 주민마다 한 번 적재합니다. S1과 S2의 Digest에는 Msg 1, 2, 3이, S3의 Digest에는 Msg 3만 들어갑니다. 높이도 해당 Msg 수에 맞춰 빈 행 공간을 없앱니다. Digest를 남겨두고 번호가 붙은 사본이 한 덩어리로 배선 없이 SendQ로 직접 이동하며, 도착하면 함께 쌓입니다. 전후에 같은 데이터와 순서를 받으며 적재 요청은 세션마다 한 번입니다. Msg 표시는 S 위, 채팅! 표시는 A 위에 두며 완료한 S는 파란색에서 회색으로 전환합니다. 원본 Msg는 다른 수신 섹터를 처리하는 동안 유지되고 임시버퍼는 수신 섹터마다 비워 다시 구성합니다. 이 예시는 각 수신 섹터의 주민 한 명만 나타내고 있습니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 같은 Msg 유지 · S1·S2 적재 3회 → 1회</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

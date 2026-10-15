@@ -1,0 +1,82 @@
+{
+  "scope": "source, diagram geometry, and offscreen SVG rendering",
+  "checked": [
+    {
+      "kind": "fanout",
+      "width": 736,
+      "height": 650
+    },
+    {
+      "kind": "fanout",
+      "width": 700,
+      "height": 650
+    },
+    {
+      "kind": "fanout",
+      "width": 699,
+      "height": 1000
+    },
+    {
+      "kind": "fanout",
+      "width": 360,
+      "height": 1000
+    },
+    {
+      "kind": "fanout",
+      "width": 320,
+      "height": 1000
+    },
+    {
+      "kind": "anatomy",
+      "width": 736,
+      "height": 650
+    },
+    {
+      "kind": "anatomy",
+      "width": 700,
+      "height": 650
+    },
+    {
+      "kind": "anatomy",
+      "width": 699,
+      "height": 1000
+    },
+    {
+      "kind": "anatomy",
+      "width": 360,
+      "height": 1000
+    },
+    {
+      "kind": "anatomy",
+      "width": 320,
+      "height": 1000
+    },
+    {
+      "kind": "matrix",
+      "width": 736,
+      "height": 650
+    },
+    {
+      "kind": "matrix",
+      "width": 700,
+      "height": 650
+    },
+    {
+      "kind": "matrix",
+      "width": 699,
+      "height": 1000
+    },
+    {
+      "kind": "matrix",
+      "width": 360,
+      "height": 1000
+    },
+    {
+      "kind": "matrix",
+      "width": 320,
+      "height": 1000
+    }
+  ],
+  "issues": [],
+  "browserHostVerified": false
+}

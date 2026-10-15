@@ -1,0 +1,42 @@
+<style>
+/*STYLES*/
+#digest-transfer-studies-v1 {--pcb-target:#238fff;--pcb-done:#657282}
+#digest-transfer-studies-v1 .transfer-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-transfer-studies-v1 .transfer-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-transfer-studies-v1 .transfer-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-transfer-studies-v1 [data-status] {min-height:2em}
+</style>
+<div id="digest-transfer-studies-v1">
+  <div class="viz-carousel" aria-label="Digest에서 SendQ로 전달하는 애니메이션 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+    <section data-variant="신호 띠" data-study="ribbon" aria-label="신호 띠 전달 시안">
+      <svg class="transfer-board" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="transfer-ribbon-title transfer-ribbon-desc">
+        <title id="transfer-ribbon-title">신호 띠 · 연접한 바이트가 배선을 따라 흐릅니다</title>
+        <desc id="transfer-ribbon-desc">S1용 Digest의 Msg 네 개를 하나의 연속된 신호 띠로 나타냅니다. 띠의 마지막 부분까지 도착한 뒤 S1 SendQ에 네 Msg가 함께 표시되고 적재 요청이 한 번 증가합니다. 비교를 위해 이미 구성된 Digest의 전달 구간만 재생합니다.</desc>
+        <!--RIBBON-->
+      </svg>
+      <div class="viz-controls"><button type="button" class="btn btn-primary" data-action="play" aria-pressed="false">재생</button><button type="button" class="btn" data-action="reset">처음으로</button></div>
+      <div class="text-small" data-status aria-live="polite">Digest S1 · Msg 4개 준비</div>
+    </section>
+    <section data-variant="묶음 프레임" data-study="frame" aria-label="묶음 프레임 전달 시안" hidden>
+      <svg class="transfer-board" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="transfer-frame-title transfer-frame-desc">
+        <title id="transfer-frame-title">묶음 프레임 · Msg 네 개를 담은 Digest가 하나로 이동합니다</title>
+        <desc id="transfer-frame-desc">Msg 1, 2, 3, 4를 담은 프레임 하나가 배선을 따라 이동합니다. 프레임은 설명용 표식이며 새로운 패킷 헤더를 뜻하지 않습니다. 도착한 뒤 네 Msg가 SendQ에 함께 표시되고 적재 요청이 한 번 증가합니다. 비교를 위해 이미 구성된 Digest의 전달 구간만 재생합니다.</desc>
+        <!--FRAME-->
+      </svg>
+      <div class="viz-controls"><button type="button" class="btn btn-primary" data-action="play" aria-pressed="false">재생</button><button type="button" class="btn" data-action="reset">처음으로</button></div>
+      <div class="text-small" data-status aria-live="polite">Digest S1 · Msg 4개 준비</div>
+    </section>
+    <section data-variant="입력 게이트" data-study="gate" aria-label="입력 게이트 전달 시안" hidden>
+      <svg class="transfer-board" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="transfer-gate-title transfer-gate-desc">
+        <title id="transfer-gate-title">입력 게이트 · 전달 신호에 SendQ 입력 접점이 반응합니다</title>
+        <desc id="transfer-gate-desc">Digest 출구가 점등하고 신호가 배선을 따라 SendQ 입구에 도착합니다. 입구 접점이 반응한 뒤 네 Msg가 SendQ에 함께 표시되고 적재 요청이 한 번 증가합니다. 실제 하드웨어 게이트를 구현했다는 뜻은 아니며, 적재 순간을 보여주는 설명용 표식입니다. 비교를 위해 이미 구성된 Digest의 전달 구간만 재생합니다.</desc>
+        <!--GATE-->
+      </svg>
+      <div class="viz-controls"><button type="button" class="btn btn-primary" data-action="play" aria-pressed="false">재생</button><button type="button" class="btn" data-action="reset">처음으로</button></div>
+      <div class="text-small" data-status aria-live="polite">Digest S1 · Msg 4개 준비</div>
+    </section>
+  </div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

@@ -1,0 +1,45 @@
+{
+  "pass": true,
+  "checkedAt": "2026-10-14T15:03:13.269Z",
+  "figureCount": 5,
+  "originalsUnmodified": true,
+  "standaloneBrowserRuntimeVerified": true,
+  "browserHostVerified": false,
+  "results": [
+    {
+      "number": 1,
+      "sourceHashMatches": true,
+      "viewerHashMatches": true,
+      "standalonePlayPauseVerified": true,
+      "consoleErrors": []
+    },
+    {
+      "number": 2,
+      "sourceHashMatches": true,
+      "viewerHashMatches": true,
+      "standalonePlayPauseVerified": true,
+      "consoleErrors": []
+    },
+    {
+      "number": 3,
+      "sourceHashMatches": true,
+      "viewerHashMatches": true,
+      "standalonePlayPauseVerified": true,
+      "consoleErrors": []
+    },
+    {
+      "number": 4,
+      "sourceHashMatches": true,
+      "viewerHashMatches": true,
+      "standalonePlayPauseVerified": true,
+      "consoleErrors": []
+    },
+    {
+      "number": 5,
+      "sourceHashMatches": true,
+      "viewerHashMatches": true,
+      "standalonePlayPauseVerified": true,
+      "consoleErrors": []
+    }
+  ]
+}

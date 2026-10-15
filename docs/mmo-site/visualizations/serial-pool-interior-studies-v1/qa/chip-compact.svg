@@ -1,0 +1,2103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="1404" viewBox="0 0 320 1404"><style>text{font-family:PCB-Review,'Malgun Gothic',sans-serif;font-weight:500}.sector-mono{font-family:PCB-Code-Review,monospace}</style><rect x="0" y="0" width="320" height="1404" fill="#0d1421"></rect>
+<defs>
+<g id="bundle-mage-sector-pool-interior-chip-south" shape-rendering="crispEdges">
+<rect x="3" y="-19" width="4" height="1" fill="#08121e"></rect>
+<rect x="2" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="-18" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-18" width="1" height="1" fill="#17466a"></rect>
+<rect x="6" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="-17" width="2" height="1" fill="#2579ad"></rect>
+<rect x="4" y="-17" width="2" height="1" fill="#17466a"></rect>
+<rect x="6" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-16" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-16" width="3" height="1" fill="#2579ad"></rect>
+<rect x="4" y="-16" width="1" height="1" fill="#17466a"></rect>
+<rect x="5" y="-16" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-15" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-15" width="3" height="1" fill="#2579ad"></rect>
+<rect x="3" y="-15" width="2" height="1" fill="#17466a"></rect>
+<rect x="5" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-14" width="4" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-14" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="-14" width="3" height="1" fill="#17466a"></rect>
+<rect x="5" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-13" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-13" width="1" height="1" fill="#238fff"></rect>
+<rect x="-11" y="-13" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-10" y="-13" width="2" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-13" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-13" width="5" height="1" fill="#17466a"></rect>
+<rect x="-14" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="-12" y="-12" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-11" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="-10" y="-12" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-9" y="-12" width="2" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-12" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-12" width="4" height="1" fill="#17466a"></rect>
+<rect x="5" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-11" width="1" height="1" fill="#238fff"></rect>
+<rect x="-12" y="-11" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-11" y="-11" width="2" height="1" fill="#238fff"></rect>
+<rect x="-9" y="-11" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-8" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-11" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-11" width="4" height="1" fill="#17466a"></rect>
+<rect x="4" y="-11" width="3" height="1" fill="#238fff"></rect>
+<rect x="7" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-10" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-12" y="-10" width="2" height="1" fill="#238fff"></rect>
+<rect x="-10" y="-10" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-8" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-10" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-10" width="5" height="1" fill="#17466a"></rect>
+<rect x="5" y="-10" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-10" width="2" height="1" fill="#17466a"></rect>
+<rect x="8" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-9" width="4" height="1" fill="#2579ad"></rect>
+<rect x="-9" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-9" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-1" y="-9" width="9" height="1" fill="#17466a"></rect>
+<rect x="8" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-8" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-10" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-8" width="14" height="1" fill="#238fff"></rect>
+<rect x="9" y="-8" width="4" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-7" width="6" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-7" width="18" height="1" fill="#2579ad"></rect>
+<rect x="12" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-6" width="3" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-6" width="22" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-5" width="3" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-5" width="8" height="1" fill="#ecd0b5"></rect>
+<rect x="6" y="-5" width="1" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-4" width="3" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-4" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="-1" y="-4" width="2" height="1" fill="#08121e"></rect>
+<rect x="1" y="-4" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-4" width="4" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-3" width="2" height="1" fill="#617e9a"></rect>
+<rect x="-10" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-3" width="9" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-2" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="-2" width="2" height="1" fill="#bd947a"></rect>
+<rect x="2" y="-2" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="-2" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-1" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="-1" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="1" y="-1" width="3" height="1" fill="#617e9a"></rect>
+<rect x="4" y="-1" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="8" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="0" width="4" height="1" fill="#08121e"></rect>
+<rect x="-2" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="0" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="2" y="0" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="4" y="0" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="0" width="3" height="1" fill="#08121e"></rect>
+<rect x="-12" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="1" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-5" y="1" width="3" height="1" fill="#08121e"></rect>
+<rect x="-2" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="1" width="7" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="1" width="1" height="1" fill="#17466a"></rect>
+<rect x="8" y="1" width="3" height="1" fill="#08121e"></rect>
+<rect x="-12" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="2" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-8" y="2" width="4" height="1" fill="#2579ad"></rect>
+<rect x="-4" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="2" width="1" height="1" fill="#17466a"></rect>
+<rect x="-2" y="2" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="2" width="6" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="2" width="1" height="1" fill="#17466a"></rect>
+<rect x="8" y="2" width="2" height="1" fill="#2579ad"></rect>
+<rect x="10" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="3" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-8" y="3" width="4" height="1" fill="#2579ad"></rect>
+<rect x="-4" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="3" width="1" height="1" fill="#17466a"></rect>
+<rect x="-2" y="3" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-1" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="3" width="5" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="3" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="3" width="2" height="1" fill="#2579ad"></rect>
+<rect x="10" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="4" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="4" width="3" height="1" fill="#08121e"></rect>
+<rect x="-3" y="4" width="1" height="1" fill="#17466a"></rect>
+<rect x="-2" y="4" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-1" y="4" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="1" y="4" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="4" y="4" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="4" width="1" height="1" fill="#17466a"></rect>
+<rect x="7" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="4" width="2" height="1" fill="#2579ad"></rect>
+<rect x="10" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="5" width="7" height="1" fill="#08121e"></rect>
+<rect x="-3" y="5" width="1" height="1" fill="#17466a"></rect>
+<rect x="-2" y="5" width="2" height="1" fill="#2579ad"></rect>
+<rect x="0" y="5" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="2" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="3" y="5" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="5" width="2" height="1" fill="#17466a"></rect>
+<rect x="7" y="5" width="2" height="1" fill="#08121e"></rect>
+<rect x="9" y="5" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-12" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="6" width="4" height="1" fill="#08121e"></rect>
+<rect x="-3" y="6" width="4" height="1" fill="#2579ad"></rect>
+<rect x="1" y="6" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="3" y="6" width="1" height="1" fill="#238fff"></rect>
+<rect x="4" y="6" width="1" height="1" fill="#238fff"></rect>
+<rect x="5" y="6" width="3" height="1" fill="#17466a"></rect>
+<rect x="8" y="6" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="7" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="7" width="1" height="1" fill="#17466a"></rect>
+<rect x="-3" y="7" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="7" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="7" width="1" height="1" fill="#17466a"></rect>
+<rect x="3" y="7" width="1" height="1" fill="#238fff"></rect>
+<rect x="4" y="7" width="1" height="1" fill="#238fff"></rect>
+<rect x="5" y="7" width="4" height="1" fill="#17466a"></rect>
+<rect x="9" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="8" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="8" width="1" height="1" fill="#17466a"></rect>
+<rect x="-3" y="8" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="8" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="8" width="1" height="1" fill="#17466a"></rect>
+<rect x="3" y="8" width="1" height="1" fill="#238fff"></rect>
+<rect x="4" y="8" width="1" height="1" fill="#238fff"></rect>
+<rect x="5" y="8" width="4" height="1" fill="#17466a"></rect>
+<rect x="9" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="9" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="9" width="2" height="1" fill="#17466a"></rect>
+<rect x="-3" y="9" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="9" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="9" width="1" height="1" fill="#17466a"></rect>
+<rect x="3" y="9" width="1" height="1" fill="#238fff"></rect>
+<rect x="4" y="9" width="1" height="1" fill="#238fff"></rect>
+<rect x="5" y="9" width="5" height="1" fill="#17466a"></rect>
+<rect x="10" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="10" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="10" width="1" height="1" fill="#17466a"></rect>
+<rect x="-4" y="10" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-3" y="10" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="10" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="10" width="1" height="1" fill="#17466a"></rect>
+<rect x="3" y="10" width="1" height="1" fill="#238fff"></rect>
+<rect x="4" y="10" width="1" height="1" fill="#238fff"></rect>
+<rect x="5" y="10" width="5" height="1" fill="#17466a"></rect>
+<rect x="10" y="10" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="11" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="11" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="11" width="16" height="1" fill="#2579ad"></rect>
+<rect x="11" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="12" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="12" width="3" height="1" fill="#08121e"></rect>
+<rect x="-5" y="12" width="16" height="1" fill="#617e9a"></rect>
+<rect x="11" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="13" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="13" width="8" height="1" fill="#08121e"></rect>
+<rect x="4" y="13" width="7" height="1" fill="#08121e"></rect>
+<rect x="-12" y="14" width="3" height="1" fill="#08121e"></rect>
+<rect x="-5" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="-1" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="5" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="9" y="14" width="2" height="1" fill="#08121e"></rect>
+<rect x="4" y="15" width="1" height="1" fill="#08121e"></rect>
+<rect x="5" y="15" width="4" height="1" fill="#617e9a"></rect>
+<rect x="9" y="15" width="1" height="1" fill="#08121e"></rect>
+</g>
+<g id="bundle-mage-sector-pool-interior-chip-north" shape-rendering="crispEdges">
+<rect x="3" y="-19" width="4" height="1" fill="#08121e"></rect>
+<rect x="2" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="-18" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-18" width="1" height="1" fill="#17466a"></rect>
+<rect x="6" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="-17" width="2" height="1" fill="#2579ad"></rect>
+<rect x="4" y="-17" width="2" height="1" fill="#17466a"></rect>
+<rect x="6" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-16" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-16" width="3" height="1" fill="#2579ad"></rect>
+<rect x="4" y="-16" width="1" height="1" fill="#17466a"></rect>
+<rect x="5" y="-16" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-15" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-15" width="3" height="1" fill="#2579ad"></rect>
+<rect x="3" y="-15" width="2" height="1" fill="#17466a"></rect>
+<rect x="5" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-14" width="4" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-14" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="-14" width="3" height="1" fill="#17466a"></rect>
+<rect x="5" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-13" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-13" width="1" height="1" fill="#238fff"></rect>
+<rect x="-11" y="-13" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-10" y="-13" width="2" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-13" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-13" width="5" height="1" fill="#17466a"></rect>
+<rect x="-14" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="-12" y="-12" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-11" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="-10" y="-12" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-9" y="-12" width="2" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-12" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-12" width="4" height="1" fill="#17466a"></rect>
+<rect x="5" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-11" width="1" height="1" fill="#238fff"></rect>
+<rect x="-12" y="-11" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-11" y="-11" width="2" height="1" fill="#238fff"></rect>
+<rect x="-9" y="-11" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-8" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-11" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-11" width="4" height="1" fill="#17466a"></rect>
+<rect x="4" y="-11" width="3" height="1" fill="#238fff"></rect>
+<rect x="7" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-10" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-12" y="-10" width="2" height="1" fill="#238fff"></rect>
+<rect x="-10" y="-10" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-8" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-10" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-10" width="5" height="1" fill="#17466a"></rect>
+<rect x="5" y="-10" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-10" width="2" height="1" fill="#17466a"></rect>
+<rect x="8" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-9" width="4" height="1" fill="#2579ad"></rect>
+<rect x="-9" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-9" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-1" y="-9" width="9" height="1" fill="#17466a"></rect>
+<rect x="8" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="-8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-8" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-10" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-8" width="14" height="1" fill="#238fff"></rect>
+<rect x="9" y="-8" width="4" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-7" width="6" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-7" width="18" height="1" fill="#2579ad"></rect>
+<rect x="12" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-6" width="3" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-6" width="22" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-5" width="9" height="1" fill="#17466a"></rect>
+<rect x="7" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-4" width="9" height="1" fill="#17466a"></rect>
+<rect x="7" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-3" width="2" height="1" fill="#617e9a"></rect>
+<rect x="-10" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-3" width="6" height="1" fill="#17466a"></rect>
+<rect x="5" y="-3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-2" width="4" height="1" fill="#17466a"></rect>
+<rect x="2" y="-2" width="3" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-2" width="1" height="1" fill="#17466a"></rect>
+<rect x="6" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-1" width="4" height="1" fill="#17466a"></rect>
+<rect x="2" y="-1" width="3" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-1" width="2" height="1" fill="#17466a"></rect>
+<rect x="7" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="0" width="4" height="1" fill="#08121e"></rect>
+<rect x="-2" y="0" width="4" height="1" fill="#17466a"></rect>
+<rect x="2" y="0" width="3" height="1" fill="#2579ad"></rect>
+<rect x="5" y="0" width="2" height="1" fill="#17466a"></rect>
+<rect x="7" y="0" width="3" height="1" fill="#08121e"></rect>
+<rect x="-12" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="1" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-5" y="1" width="3" height="1" fill="#08121e"></rect>
+<rect x="-2" y="1" width="4" height="1" fill="#17466a"></rect>
+<rect x="2" y="1" width="4" height="1" fill="#2579ad"></rect>
+<rect x="6" y="1" width="2" height="1" fill="#17466a"></rect>
+<rect x="8" y="1" width="3" height="1" fill="#08121e"></rect>
+<rect x="-12" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="2" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-8" y="2" width="4" height="1" fill="#2579ad"></rect>
+<rect x="-4" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="2" width="4" height="1" fill="#17466a"></rect>
+<rect x="1" y="2" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="2" width="1" height="1" fill="#17466a"></rect>
+<rect x="7" y="2" width="2" height="1" fill="#2579ad"></rect>
+<rect x="9" y="2" width="1" height="1" fill="#bd947a"></rect>
+<rect x="10" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="3" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-8" y="3" width="4" height="1" fill="#2579ad"></rect>
+<rect x="-4" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="3" width="4" height="1" fill="#17466a"></rect>
+<rect x="1" y="3" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="3" width="1" height="1" fill="#17466a"></rect>
+<rect x="7" y="3" width="2" height="1" fill="#2579ad"></rect>
+<rect x="9" y="3" width="1" height="1" fill="#bd947a"></rect>
+<rect x="10" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="4" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="4" width="3" height="1" fill="#08121e"></rect>
+<rect x="-3" y="4" width="4" height="1" fill="#17466a"></rect>
+<rect x="1" y="4" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="4" width="1" height="1" fill="#17466a"></rect>
+<rect x="7" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="4" width="1" height="1" fill="#2579ad"></rect>
+<rect x="9" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="5" width="7" height="1" fill="#08121e"></rect>
+<rect x="-3" y="5" width="4" height="1" fill="#17466a"></rect>
+<rect x="1" y="5" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="5" width="2" height="1" fill="#17466a"></rect>
+<rect x="8" y="5" width="2" height="1" fill="#08121e"></rect>
+<rect x="10" y="5" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-12" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="6" width="4" height="1" fill="#08121e"></rect>
+<rect x="-3" y="6" width="4" height="1" fill="#17466a"></rect>
+<rect x="1" y="6" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="6" width="3" height="1" fill="#17466a"></rect>
+<rect x="9" y="6" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="7" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="7" width="1" height="1" fill="#17466a"></rect>
+<rect x="-3" y="7" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="7" width="3" height="1" fill="#17466a"></rect>
+<rect x="1" y="7" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="7" width="4" height="1" fill="#17466a"></rect>
+<rect x="10" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="8" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="8" width="1" height="1" fill="#17466a"></rect>
+<rect x="-3" y="8" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="8" width="3" height="1" fill="#17466a"></rect>
+<rect x="1" y="8" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="8" width="4" height="1" fill="#17466a"></rect>
+<rect x="10" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="9" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="9" width="2" height="1" fill="#17466a"></rect>
+<rect x="-3" y="9" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="9" width="3" height="1" fill="#17466a"></rect>
+<rect x="1" y="9" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="9" width="5" height="1" fill="#17466a"></rect>
+<rect x="11" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="10" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="10" width="1" height="1" fill="#17466a"></rect>
+<rect x="-4" y="10" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-3" y="10" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="10" width="3" height="1" fill="#17466a"></rect>
+<rect x="1" y="10" width="5" height="1" fill="#2579ad"></rect>
+<rect x="6" y="10" width="5" height="1" fill="#17466a"></rect>
+<rect x="11" y="10" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="11" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="11" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="11" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-3" y="11" width="4" height="1" fill="#17466a"></rect>
+<rect x="1" y="11" width="10" height="1" fill="#2579ad"></rect>
+<rect x="11" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-12" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="12" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="12" width="3" height="1" fill="#08121e"></rect>
+<rect x="-5" y="12" width="16" height="1" fill="#617e9a"></rect>
+<rect x="11" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-12" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="13" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-10" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="13" width="8" height="1" fill="#08121e"></rect>
+<rect x="3" y="13" width="9" height="1" fill="#08121e"></rect>
+<rect x="-12" y="14" width="3" height="1" fill="#08121e"></rect>
+<rect x="-5" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="-1" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="5" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="9" y="14" width="2" height="1" fill="#08121e"></rect>
+<rect x="4" y="15" width="1" height="1" fill="#08121e"></rect>
+<rect x="5" y="15" width="4" height="1" fill="#617e9a"></rect>
+<rect x="9" y="15" width="1" height="1" fill="#08121e"></rect>
+</g>
+<g id="bundle-mage-sector-pool-interior-chip-east" shape-rendering="crispEdges">
+<rect x="4" y="-19" width="4" height="1" fill="#08121e"></rect>
+<rect x="3" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="-18" width="2" height="1" fill="#2579ad"></rect>
+<rect x="6" y="-18" width="1" height="1" fill="#17466a"></rect>
+<rect x="7" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="-17" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-17" width="2" height="1" fill="#17466a"></rect>
+<rect x="7" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-16" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="-16" width="3" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-16" width="1" height="1" fill="#17466a"></rect>
+<rect x="6" y="-16" width="2" height="1" fill="#08121e"></rect>
+<rect x="0" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-15" width="3" height="1" fill="#2579ad"></rect>
+<rect x="4" y="-15" width="2" height="1" fill="#17466a"></rect>
+<rect x="6" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-14" width="3" height="1" fill="#2579ad"></rect>
+<rect x="3" y="-14" width="3" height="1" fill="#17466a"></rect>
+<rect x="6" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-13" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="-13" width="4" height="1" fill="#17466a"></rect>
+<rect x="6" y="-13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-12" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-12" width="4" height="1" fill="#17466a"></rect>
+<rect x="5" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-11" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-11" width="3" height="1" fill="#17466a"></rect>
+<rect x="4" y="-11" width="2" height="1" fill="#238fff"></rect>
+<rect x="6" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-10" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-10" width="3" height="1" fill="#17466a"></rect>
+<rect x="3" y="-10" width="1" height="1" fill="#238fff"></rect>
+<rect x="4" y="-10" width="2" height="1" fill="#17466a"></rect>
+<rect x="6" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-9" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-9" width="6" height="1" fill="#17466a"></rect>
+<rect x="6" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-8" width="11" height="1" fill="#238fff"></rect>
+<rect x="7" y="-8" width="4" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-7" width="16" height="1" fill="#2579ad"></rect>
+<rect x="10" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-6" width="16" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-5" width="1" height="1" fill="#17466a"></rect>
+<rect x="0" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-5" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-5" width="1" height="1" fill="#bd947a"></rect>
+<rect x="6" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-4" width="1" height="1" fill="#17466a"></rect>
+<rect x="0" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-4" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="3" y="-4" width="2" height="1" fill="#08121e"></rect>
+<rect x="5" y="-4" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="6" y="-4" width="1" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-3" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-3" width="1" height="1" fill="#17466a"></rect>
+<rect x="0" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-3" width="6" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-3" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="8" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-2" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="-2" width="1" height="1" fill="#17466a"></rect>
+<rect x="0" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="2" y="-2" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="4" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="-2" width="3" height="1" fill="#bd947a"></rect>
+<rect x="8" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-2" y="-1" width="2" height="1" fill="#08121e"></rect>
+<rect x="0" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="1" y="-1" width="4" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="-1" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="0" width="2" height="1" fill="#08121e"></rect>
+<rect x="-1" y="0" width="2" height="1" fill="#17466a"></rect>
+<rect x="1" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="2" y="0" width="4" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="0" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-2" y="1" width="2" height="1" fill="#17466a"></rect>
+<rect x="0" y="1" width="2" height="1" fill="#2579ad"></rect>
+<rect x="2" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="3" y="1" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="7" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="1" width="1" height="1" fill="#238fff"></rect>
+<rect x="14" y="1" width="1" height="1" fill="#2579ad"></rect>
+<rect x="15" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="2" width="2" height="1" fill="#17466a"></rect>
+<rect x="-1" y="2" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="3" y="2" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="11" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="2" width="1" height="1" fill="#238fff"></rect>
+<rect x="13" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="2" width="1" height="1" fill="#238fff"></rect>
+<rect x="15" y="2" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-5" y="3" width="2" height="1" fill="#08121e"></rect>
+<rect x="-3" y="3" width="2" height="1" fill="#17466a"></rect>
+<rect x="-1" y="3" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="3" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="4" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="6" y="3" width="2" height="1" fill="#08121e"></rect>
+<rect x="11" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="3" width="3" height="1" fill="#2579ad"></rect>
+<rect x="15" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="4" width="2" height="1" fill="#17466a"></rect>
+<rect x="-2" y="4" width="5" height="1" fill="#2579ad"></rect>
+<rect x="3" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="4" y="4" width="1" height="1" fill="#17466a"></rect>
+<rect x="5" y="4" width="1" height="1" fill="#2579ad"></rect>
+<rect x="6" y="4" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="8" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="5" width="2" height="1" fill="#17466a"></rect>
+<rect x="-2" y="5" width="5" height="1" fill="#2579ad"></rect>
+<rect x="3" y="5" width="2" height="1" fill="#17466a"></rect>
+<rect x="5" y="5" width="1" height="1" fill="#2579ad"></rect>
+<rect x="6" y="5" width="3" height="1" fill="#ecd0b5"></rect>
+<rect x="9" y="5" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="6" width="2" height="1" fill="#17466a"></rect>
+<rect x="-2" y="6" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="6" width="3" height="1" fill="#17466a"></rect>
+<rect x="5" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="6" y="6" width="2" height="1" fill="#2579ad"></rect>
+<rect x="8" y="6" width="2" height="1" fill="#08121e"></rect>
+<rect x="11" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="7" width="2" height="1" fill="#17466a"></rect>
+<rect x="-2" y="7" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="7" width="4" height="1" fill="#17466a"></rect>
+<rect x="6" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="11" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="7" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="8" width="2" height="1" fill="#17466a"></rect>
+<rect x="-3" y="8" width="5" height="1" fill="#2579ad"></rect>
+<rect x="2" y="8" width="1" height="1" fill="#238fff"></rect>
+<rect x="3" y="8" width="3" height="1" fill="#17466a"></rect>
+<rect x="6" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="11" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="8" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="9" width="2" height="1" fill="#17466a"></rect>
+<rect x="-3" y="9" width="5" height="1" fill="#2579ad"></rect>
+<rect x="2" y="9" width="1" height="1" fill="#238fff"></rect>
+<rect x="3" y="9" width="4" height="1" fill="#17466a"></rect>
+<rect x="7" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="11" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="9" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="10" width="2" height="1" fill="#17466a"></rect>
+<rect x="-4" y="10" width="6" height="1" fill="#2579ad"></rect>
+<rect x="2" y="10" width="1" height="1" fill="#238fff"></rect>
+<rect x="3" y="10" width="4" height="1" fill="#17466a"></rect>
+<rect x="7" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="11" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="11" width="2" height="1" fill="#17466a"></rect>
+<rect x="-4" y="11" width="6" height="1" fill="#2579ad"></rect>
+<rect x="2" y="11" width="1" height="1" fill="#238fff"></rect>
+<rect x="3" y="11" width="5" height="1" fill="#17466a"></rect>
+<rect x="8" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="11" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="11" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="12" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="12" width="13" height="1" fill="#617e9a"></rect>
+<rect x="7" y="12" width="2" height="1" fill="#08121e"></rect>
+<rect x="11" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="12" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="13" width="8" height="1" fill="#08121e"></rect>
+<rect x="2" y="13" width="7" height="1" fill="#08121e"></rect>
+<rect x="11" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="13" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="13" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="-2" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="8" y="14" width="2" height="1" fill="#08121e"></rect>
+<rect x="11" y="14" width="3" height="1" fill="#08121e"></rect>
+<rect x="3" y="15" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="15" width="4" height="1" fill="#617e9a"></rect>
+<rect x="8" y="15" width="1" height="1" fill="#08121e"></rect>
+</g>
+<g id="bundle-mage-sector-pool-interior-chip-west" shape-rendering="crispEdges">
+<rect x="-8" y="-19" width="4" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-18" width="1" height="1" fill="#17466a"></rect>
+<rect x="-6" y="-18" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-4" y="-18" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-17" width="2" height="1" fill="#17466a"></rect>
+<rect x="-5" y="-17" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-3" y="-17" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-16" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-16" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="-16" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-2" y="-16" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-15" width="2" height="1" fill="#17466a"></rect>
+<rect x="-4" y="-15" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-1" y="-15" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-14" width="3" height="1" fill="#17466a"></rect>
+<rect x="-3" y="-14" width="3" height="1" fill="#2579ad"></rect>
+<rect x="0" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-13" width="4" height="1" fill="#17466a"></rect>
+<rect x="-2" y="-13" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="-13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-12" width="1" height="1" fill="#238fff"></rect>
+<rect x="-5" y="-12" width="4" height="1" fill="#17466a"></rect>
+<rect x="-1" y="-12" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="-12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-11" width="2" height="1" fill="#238fff"></rect>
+<rect x="-4" y="-11" width="3" height="1" fill="#17466a"></rect>
+<rect x="-1" y="-11" width="3" height="1" fill="#2579ad"></rect>
+<rect x="2" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-10" width="2" height="1" fill="#17466a"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#238fff"></rect>
+<rect x="-3" y="-10" width="3" height="1" fill="#17466a"></rect>
+<rect x="0" y="-10" width="3" height="1" fill="#2579ad"></rect>
+<rect x="3" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-9" width="6" height="1" fill="#17466a"></rect>
+<rect x="0" y="-9" width="3" height="1" fill="#2579ad"></rect>
+<rect x="3" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-8" width="4" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-8" width="11" height="1" fill="#238fff"></rect>
+<rect x="4" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-11" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-10" y="-7" width="16" height="1" fill="#2579ad"></rect>
+<rect x="6" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-10" y="-6" width="16" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-5" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-5" y="-5" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="-1" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-5" width="1" height="1" fill="#17466a"></rect>
+<rect x="1" y="-5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-4" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-6" y="-4" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="-5" y="-4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-4" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-1" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-4" width="1" height="1" fill="#17466a"></rect>
+<rect x="1" y="-4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-3" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="-7" y="-3" width="6" height="1" fill="#bd947a"></rect>
+<rect x="-1" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-3" width="1" height="1" fill="#17466a"></rect>
+<rect x="1" y="-3" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-2" width="3" height="1" fill="#bd947a"></rect>
+<rect x="-5" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-4" y="-2" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="-2" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-2" width="1" height="1" fill="#17466a"></rect>
+<rect x="1" y="-2" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-1" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="-5" y="-1" width="4" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="-1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-15" y="0" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-6" y="0" width="4" height="1" fill="#dce9f3"></rect>
+<rect x="-2" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="0" width="2" height="1" fill="#17466a"></rect>
+<rect x="1" y="0" width="2" height="1" fill="#08121e"></rect>
+<rect x="-16" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-15" y="1" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-14" y="1" width="1" height="1" fill="#238fff"></rect>
+<rect x="-13" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-6" y="1" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="-3" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-2" y="1" width="2" height="1" fill="#2579ad"></rect>
+<rect x="0" y="1" width="2" height="1" fill="#17466a"></rect>
+<rect x="2" y="1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-16" y="2" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-15" y="2" width="1" height="1" fill="#238fff"></rect>
+<rect x="-14" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-13" y="2" width="1" height="1" fill="#238fff"></rect>
+<rect x="-12" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-5" y="2" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="-3" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-2" y="2" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="2" width="2" height="1" fill="#17466a"></rect>
+<rect x="3" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-16" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-15" y="3" width="3" height="1" fill="#2579ad"></rect>
+<rect x="-12" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="3" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-5" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-4" y="3" width="2" height="1" fill="#dce9f3"></rect>
+<rect x="-2" y="3" width="3" height="1" fill="#2579ad"></rect>
+<rect x="1" y="3" width="2" height="1" fill="#17466a"></rect>
+<rect x="3" y="3" width="2" height="1" fill="#08121e"></rect>
+<rect x="-15" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-13" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="4" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="-6" y="4" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-5" y="4" width="1" height="1" fill="#17466a"></rect>
+<rect x="-4" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-3" y="4" width="5" height="1" fill="#2579ad"></rect>
+<rect x="2" y="4" width="2" height="1" fill="#17466a"></rect>
+<rect x="4" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="-15" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-13" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="5" width="3" height="1" fill="#ecd0b5"></rect>
+<rect x="-6" y="5" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-5" y="5" width="2" height="1" fill="#17466a"></rect>
+<rect x="-3" y="5" width="5" height="1" fill="#2579ad"></rect>
+<rect x="2" y="5" width="2" height="1" fill="#17466a"></rect>
+<rect x="4" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-10" y="6" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="6" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="6" width="3" height="1" fill="#17466a"></rect>
+<rect x="-2" y="6" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="6" width="2" height="1" fill="#17466a"></rect>
+<rect x="4" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="7" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="7" width="4" height="1" fill="#17466a"></rect>
+<rect x="-2" y="7" width="4" height="1" fill="#2579ad"></rect>
+<rect x="2" y="7" width="2" height="1" fill="#17466a"></rect>
+<rect x="4" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-14" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="8" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="8" width="3" height="1" fill="#17466a"></rect>
+<rect x="-3" y="8" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="8" width="5" height="1" fill="#2579ad"></rect>
+<rect x="3" y="8" width="2" height="1" fill="#17466a"></rect>
+<rect x="5" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="9" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="9" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="9" width="4" height="1" fill="#17466a"></rect>
+<rect x="-3" y="9" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="9" width="5" height="1" fill="#2579ad"></rect>
+<rect x="3" y="9" width="2" height="1" fill="#17466a"></rect>
+<rect x="5" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-14" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="10" width="4" height="1" fill="#17466a"></rect>
+<rect x="-3" y="10" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="10" width="6" height="1" fill="#2579ad"></rect>
+<rect x="4" y="10" width="2" height="1" fill="#17466a"></rect>
+<rect x="6" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-14" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="11" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="11" width="5" height="1" fill="#17466a"></rect>
+<rect x="-3" y="11" width="1" height="1" fill="#238fff"></rect>
+<rect x="-2" y="11" width="6" height="1" fill="#2579ad"></rect>
+<rect x="4" y="11" width="2" height="1" fill="#17466a"></rect>
+<rect x="6" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-14" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="12" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="12" width="2" height="1" fill="#08121e"></rect>
+<rect x="-7" y="12" width="13" height="1" fill="#617e9a"></rect>
+<rect x="6" y="12" width="2" height="1" fill="#08121e"></rect>
+<rect x="-14" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-13" y="13" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-12" y="13" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="13" width="7" height="1" fill="#08121e"></rect>
+<rect x="-1" y="13" width="8" height="1" fill="#08121e"></rect>
+<rect x="-14" y="14" width="3" height="1" fill="#08121e"></rect>
+<rect x="-10" y="14" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="-4" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="1" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="14" width="4" height="1" fill="#617e9a"></rect>
+<rect x="6" y="14" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="15" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="15" width="4" height="1" fill="#617e9a"></rect>
+<rect x="-4" y="15" width="1" height="1" fill="#08121e"></rect>
+</g>
+</defs>
+<defs><g id="bundle-swordsman-sector-pool-interior-chip-south" shape-rendering="crispEdges">
+<rect x="-2" y="-18" width="1" height="1" fill="#554539"></rect>
+<rect x="3" y="-18" width="4" height="1" fill="#554539"></rect>
+<rect x="-4" y="-17" width="10" height="1" fill="#554539"></rect>
+<rect x="-5" y="-16" width="1" height="1" fill="#554539"></rect>
+<rect x="-4" y="-16" width="4" height="1" fill="#617e9a"></rect>
+<rect x="0" y="-16" width="1" height="1" fill="#554539"></rect>
+<rect x="1" y="-16" width="6" height="1" fill="#617e9a"></rect>
+<rect x="-6" y="-15" width="15" height="1" fill="#554539"></rect>
+<rect x="-6" y="-14" width="8" height="1" fill="#554539"></rect>
+<rect x="2" y="-14" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="-14" width="6" height="1" fill="#554539"></rect>
+<rect x="-6" y="-13" width="3" height="1" fill="#554539"></rect>
+<rect x="-3" y="-13" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-13" width="3" height="1" fill="#554539"></rect>
+<rect x="1" y="-13" width="2" height="1" fill="#bd947a"></rect>
+<rect x="3" y="-13" width="7" height="1" fill="#554539"></rect>
+<rect x="-7" y="-12" width="3" height="1" fill="#554539"></rect>
+<rect x="-4" y="-12" width="7" height="1" fill="#ecd0b5"></rect>
+<rect x="3" y="-12" width="1" height="1" fill="#554539"></rect>
+<rect x="4" y="-12" width="2" height="1" fill="#ecd0b5"></rect>
+<rect x="6" y="-12" width="3" height="1" fill="#554539"></rect>
+<rect x="-7" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-11" width="1" height="1" fill="#554539"></rect>
+<rect x="-5" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-11" width="11" height="1" fill="#ecd0b5"></rect>
+<rect x="7" y="-11" width="1" height="1" fill="#554539"></rect>
+<rect x="8" y="-11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-10" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-10" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-4" y="-10" width="1" height="1" fill="#554539"></rect>
+<rect x="-3" y="-10" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="-2" y="-10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="-1" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="0" y="-10" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="4" y="-10" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="5" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="6" y="-10" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="7" y="-10" width="1" height="1" fill="#554539"></rect>
+<rect x="8" y="-10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-9" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-4" y="-9" width="1" height="1" fill="#554539"></rect>
+<rect x="-3" y="-9" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="0" y="-9" width="4" height="1" fill="#ecd0b5"></rect>
+<rect x="4" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="6" y="-9" width="1" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-9" width="1" height="1" fill="#554539"></rect>
+<rect x="8" y="-9" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="-9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-6" y="-8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-8" width="3" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-8" width="8" height="1" fill="#ecd0b5"></rect>
+<rect x="6" y="-8" width="1" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-8" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-8" width="3" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-7" width="3" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-7" width="7" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-7" width="2" height="1" fill="#bd947a"></rect>
+<rect x="7" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-7" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="-6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-6" width="2" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-6" width="7" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-6" width="1" height="1" fill="#bd947a"></rect>
+<rect x="6" y="-6" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-6" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-6" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-4" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="-5" width="1" height="1" fill="#bd947a"></rect>
+<rect x="-2" y="-5" width="3" height="1" fill="#ecd0b5"></rect>
+<rect x="1" y="-5" width="3" height="1" fill="#bd947a"></rect>
+<rect x="4" y="-5" width="1" height="1" fill="#ecd0b5"></rect>
+<rect x="5" y="-5" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-5" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-5" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-7" y="-4" width="7" height="1" fill="#08121e"></rect>
+<rect x="0" y="-4" width="4" height="1" fill="#bd947a"></rect>
+<rect x="4" y="-4" width="3" height="1" fill="#08121e"></rect>
+<rect x="12" y="-4" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-4" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-7" y="-3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-4" y="-3" width="1" height="1" fill="#238fff"></rect>
+<rect x="-3" y="-3" width="4" height="1" fill="#238fff"></rect>
+<rect x="1" y="-3" width="4" height="1" fill="#08121e"></rect>
+<rect x="5" y="-3" width="1" height="1" fill="#238fff"></rect>
+<rect x="6" y="-3" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="-3" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-3" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-8" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-2" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="-4" y="-2" width="10" height="1" fill="#238fff"></rect>
+<rect x="6" y="-2" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="12" y="-2" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-8" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="-1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="-4" y="-1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="-3" y="-1" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="-1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="-1" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="-1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="6" y="-1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="9" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="-1" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="-1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="-1" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-8" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="-7" y="0" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="-3" y="0" width="3" height="1" fill="#dce9f3"></rect>
+<rect x="0" y="0" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="0" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="0" width="1" height="1" fill="#617e9a"></rect>
+<rect x="6" y="0" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="10" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="0" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="0" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="0" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-9" y="1" width="2" height="1" fill="#08121e"></rect>
+<rect x="-7" y="1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="-4" y="1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="-3" y="1" width="6" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="1" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="1" width="1" height="1" fill="#617e9a"></rect>
+<rect x="6" y="1" width="3" height="1" fill="#a6bed1"></rect>
+<rect x="9" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="1" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="1" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="1" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-9" y="2" width="3" height="1" fill="#08121e"></rect>
+<rect x="-6" y="2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-5" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="2" width="1" height="1" fill="#617e9a"></rect>
+<rect x="-3" y="2" width="6" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="2" width="2" height="1" fill="#2579ad"></rect>
+<rect x="5" y="2" width="2" height="1" fill="#617e9a"></rect>
+<rect x="7" y="2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="8" y="2" width="2" height="1" fill="#08121e"></rect>
+<rect x="12" y="2" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="2" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="2" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-9" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="3" width="1" height="1" fill="#2579ad"></rect>
+<rect x="-7" y="3" width="3" height="1" fill="#08121e"></rect>
+<rect x="-4" y="3" width="11" height="1" fill="#617e9a"></rect>
+<rect x="7" y="3" width="2" height="1" fill="#08121e"></rect>
+<rect x="9" y="3" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="12" y="3" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="3" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="3" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="4" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="4" width="5" height="1" fill="#17466a"></rect>
+<rect x="1" y="4" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="4" width="4" height="1" fill="#17466a"></rect>
+<rect x="7" y="4" width="2" height="1" fill="#08121e"></rect>
+<rect x="9" y="4" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="12" y="4" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="4" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="4" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="5" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="5" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="5" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="5" width="5" height="1" fill="#17466a"></rect>
+<rect x="1" y="5" width="2" height="1" fill="#a6bed1"></rect>
+<rect x="3" y="5" width="4" height="1" fill="#17466a"></rect>
+<rect x="7" y="5" width="4" height="1" fill="#08121e"></rect>
+<rect x="12" y="5" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="5" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="5" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-9" y="6" width="1" height="1" fill="#17466a"></rect>
+<rect x="-8" y="6" width="2" height="1" fill="#2579ad"></rect>
+<rect x="-6" y="6" width="1" height="1" fill="#17466a"></rect>
+<rect x="-5" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="6" width="11" height="1" fill="#617e9a"></rect>
+<rect x="7" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="6" width="1" height="1" fill="#17466a"></rect>
+<rect x="9" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="12" y="6" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="6" width="1" height="1" fill="#dce9f3"></rect>
+<rect x="14" y="6" width="1" height="1" fill="#a6bed1"></rect>
+<rect x="-11" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="7" width="5" height="1" fill="#17466a"></rect>
+<rect x="-4" y="7" width="10" height="1" fill="#08121e"></rect>
+<rect x="6" y="7" width="1" height="1" fill="#617e9a"></rect>
+<rect x="7" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="8" y="7" width="1" height="1" fill="#17466a"></rect>
+<rect x="9" y="7" width="2" height="1" fill="#08121e"></rect>
+<rect x="13" y="7" width="1" height="1" fill="#08121e"></rect>
+<rect x="-11" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="-9" y="8" width="5" height="1" fill="#17466a"></rect>
+<rect x="-4" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="8" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="8" width="2" height="1" fill="#08121e"></rect>
+<rect x="2" y="8" width="1" height="1" fill="#17466a"></rect>
+<rect x="3" y="8" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="8" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="8" width="4" height="1" fill="#08121e"></rect>
+<rect x="11" y="8" width="5" height="1" fill="#a6bed1"></rect>
+<rect x="-10" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="-8" y="9" width="2" height="1" fill="#17466a"></rect>
+<rect x="-6" y="9" width="3" height="1" fill="#08121e"></rect>
+<rect x="-3" y="9" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="9" width="4" height="1" fill="#08121e"></rect>
+<rect x="4" y="9" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="9" width="2" height="1" fill="#08121e"></rect>
+<rect x="10" y="9" width="6" height="1" fill="#08121e"></rect>
+<rect x="-9" y="10" width="6" height="1" fill="#08121e"></rect>
+<rect x="-3" y="10" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="10" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="10" width="1" height="1" fill="#617e9a"></rect>
+<rect x="14" y="10" width="1" height="1" fill="#08121e"></rect>
+<rect x="-8" y="11" width="2" height="1" fill="#08121e"></rect>
+<rect x="-4" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-3" y="11" width="3" height="1" fill="#617e9a"></rect>
+<rect x="0" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="4" y="11" width="3" height="1" fill="#617e9a"></rect>
+<rect x="7" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="11" width="1" height="1" fill="#617e9a"></rect>
+<rect x="14" y="11" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-4" y="12" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="0" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="2" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="3" y="12" width="4" height="1" fill="#a6bed1"></rect>
+<rect x="7" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="13" y="12" width="1" height="1" fill="#617e9a"></rect>
+<rect x="14" y="12" width="1" height="1" fill="#08121e"></rect>
+<rect x="-5" y="13" width="6" height="1" fill="#08121e"></rect>
+<rect x="2" y="13" width="6" height="1" fill="#08121e"></rect>
+<rect x="13" y="13" width="2" height="1" fill="#08121e"></rect>
+</g></defs>
+<defs><filter id="sector-pool-interior-chip-before-gray" color-interpolation-filters="sRGB"><feColorMatrix id="sector-pool-interior-chip-before-matrix" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs><g id="sector-pool-interior-chip-before" filter="url(#sector-pool-interior-chip-before-gray)" opacity="1">
+<text x="24" y="30" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">변경 전</text>
+<text x="296" y="30" font-size="16" dominant-baseline="middle" text-anchor="end" fill="#eef2fb" id="sector-pool-interior-chip-before-result">1회 생성</text>
+<g id="sector-pool-interior-chip-before-world" opacity="0.6599999999999999">
+<rect x="70" y="96" width="180" height="180" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="71" y="97" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="0,0"></rect>
+<rect x="131" y="97" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="1,0"></rect>
+<rect x="191" y="97" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="2,0"></rect>
+<rect x="71" y="157" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="0,1"></rect>
+<rect x="131" y="157" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="1,1"></rect>
+<rect x="191" y="157" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="2,1"></rect>
+<rect x="71" y="217" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="0,2"></rect>
+<rect x="131" y="217" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="1,2"></rect>
+<rect x="191" y="217" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="2,2"></rect>
+<rect x="71" y="157" width="58" height="58" fill="#1b3a50" id="sector-pool-interior-chip-before-origin" opacity="0"></rect>
+<rect x="131" y="157" width="58" height="58" fill="#1b3a50" id="sector-pool-interior-chip-before-destination" opacity="0.5"></rect>
+<path d="M130 96 L130 276" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M70 156 L250 156" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M190 96 L190 276" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M70 216 L250 216" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<g data-role="component-registration">
+<path d="M73 106 L73 99 L80 99" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+<path d="M247 106 L247 99 L240 99" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+<path d="M73 266 L73 273 L80 273" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+<path d="M247 266 L247 273 L240 273" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+</g>
+<rect x="201" y="105" width="38" height="40" fill="#1b3a50" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-receiver-0" opacity="1"></rect>
+<use href="#bundle-swordsman-sector-pool-interior-chip-south" transform="translate(220 125) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="before-S1"></use>
+<text x="220" y="151" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S1</text>
+<rect x="201" y="165" width="38" height="40" fill="#1b3a50" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-receiver-1" opacity="0.12"></rect>
+<use href="#bundle-swordsman-sector-pool-interior-chip-south" transform="translate(220 185) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="before-S2"></use>
+<text x="220" y="211" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S2</text>
+<rect x="201" y="225" width="38" height="40" fill="#1b3a50" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-receiver-2" opacity="0.12"></rect>
+<use href="#bundle-swordsman-sector-pool-interior-chip-south" transform="translate(220 245) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="before-S3"></use>
+<text x="220" y="271" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S3</text>
+<path d="M177 169 L202 144" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-before-0-notice-idle" stroke="#a8b8ca" opacity="0.5" data-role="recipient-arrow-idle"></path>
+<polygon id="sector-pool-interior-chip-before-0-notice-idle-head" points="200.5857864376269,149.65685424949237 202,144 196.34314575050763,145.4142135623731" fill="#a8b8ca" opacity="0.5"></polygon>
+<path d="M177 169 L202 144" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-before-0-notice" stroke="#238fff" stroke-dashoffset="0" opacity="1" data-role="notice-arrow"></path>
+<polygon id="sector-pool-interior-chip-before-0-notice-head" points="200.5857864376269,149.65685424949237 202,144 196.34314575050763,145.4142135623731" fill="#238fff" opacity="1"></polygon>
+<path d="M181 186 L201 186" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-before-1-notice-idle" stroke="#a8b8ca" opacity="0.5" data-role="recipient-arrow-idle"></path>
+<polygon id="sector-pool-interior-chip-before-1-notice-idle-head" points="196,189 201,186 196,183" fill="#a8b8ca" opacity="0.5"></polygon>
+<path d="M181 186 L201 186" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-before-1-notice" stroke="#238fff" stroke-dashoffset="0" opacity="0" data-role="notice-arrow"></path>
+<polygon id="sector-pool-interior-chip-before-1-notice-head" points="196,189 201,186 196,183" fill="#238fff" opacity="0"></polygon>
+<path d="M177 203 L202 228" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-before-2-notice-idle" stroke="#a8b8ca" opacity="0.5" data-role="recipient-arrow-idle"></path>
+<polygon id="sector-pool-interior-chip-before-2-notice-idle-head" points="196.34314575050763,226.5857864376269 202,228 200.5857864376269,222.34314575050763" fill="#a8b8ca" opacity="0.5"></polygon>
+<path d="M177 203 L202 228" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-before-2-notice" stroke="#238fff" stroke-dashoffset="0" opacity="0" data-role="notice-arrow"></path>
+<polygon id="sector-pool-interior-chip-before-2-notice-head" points="196.34314575050763,226.5857864376269 202,228 200.5857864376269,222.34314575050763" fill="#238fff" opacity="0"></polygon>
+<g id="sector-pool-interior-chip-before-arrow" opacity="0">
+<path d="M121 186 L138 186" fill="none" stroke="#238fff" stroke-width="1.5"></path>
+<polygon points="138,186 133,183 133,189" fill="#238fff"></polygon>
+</g>
+<g id="sector-pool-interior-chip-before-hero" transform="translate(60 0)">
+<use id="sector-pool-interior-chip-before-face" href="#bundle-mage-sector-pool-interior-chip-south" transform="translate(100 186) scale(.9375)" data-character="mage" data-facing="south" data-actor="before-A"></use>
+<text x="77" y="195" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#238fff">A</text>
+</g>
+</g>
+<text x="160" y="70" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 이동</text>
+<text x="160" y="302" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">수신자 S1 · S2 · S3</text>
+<rect x="10" y="316" width="78" height="64" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="pool-gate" data-interior="chip"></rect>
+<text x="49" y="328" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" class="sector-mono">Msg 풀</text>
+<path d="M11 337 L87 337" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="80" y="323" width="3" height="3" fill="#238fff" id="sector-pool-interior-chip-before-pool-indicator" opacity="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-pool-interiorClip"><rect x="15" y="338" width="68" height="21"></rect></clipPath></defs>
+<g clip-path="url(#sector-pool-interior-chip-before-pool-interiorClip)">
+<rect x="18" y="339" width="62" height="19" fill="#0d1421" id="sector-pool-interior-chip-before-pool-slotFill" opacity="0.7"></rect>
+<rect x="18" y="339" width="62" height="19" fill="#238fff" id="sector-pool-interior-chip-before-pool-slotActive" opacity="0"></rect>
+<path d="M20 342 L25 342" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M73 342 L78 342" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M20 348 L25 348" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M73 348 L78 348" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M20 354 L25 354" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M73 354 L78 354" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<rect x="25" y="340" width="48" height="16" fill="#172536" stroke="#7895ae" stroke-width="1.5"></rect>
+<rect x="31" y="344" width="3" height="8" fill="#7895ae" opacity="0.45"></rect>
+<rect x="37" y="344" width="3" height="8" fill="#7895ae" opacity="0.45"></rect>
+<rect x="43" y="344" width="3" height="8" fill="#7895ae" opacity="0.45"></rect>
+<path d="M51 343 L51 353" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<g id="sector-pool-interior-chip-before-pool-available" opacity="0"><g id="sector-pool-interior-chip-before-pool-card" opacity="1" transform="translate(0 0)">
+<rect x="55" y="344" width="12" height="8" fill="#151f2c" stroke="#7895ae" stroke-width="1.5"></rect>
+<rect x="57" y="346" width="8" height="2" fill="#a8b8ca" opacity="0.65"></rect>
+</g></g>
+<g id="sector-pool-interior-chip-before-pool-activeBuffer" opacity="0" transform="translate(24 0)">
+<rect x="55" y="344" width="12" height="8" fill="#238fff"></rect>
+<rect x="57" y="346" width="8" height="2" fill="#eef2fb" opacity="0.7"></rect>
+</g>
+<g id="sector-pool-interior-chip-before-pool-gateLeft" transform="translate(0 0)">
+<path d="M79 340 L79 345" fill="none" stroke="#829bb1" stroke-width="1.5" opacity="0.8"></path>
+</g>
+<g id="sector-pool-interior-chip-before-pool-gateRight" transform="translate(0 0)">
+<path d="M79 351 L79 356" fill="none" stroke="#829bb1" stroke-width="1.5" opacity="0.8"></path>
+</g>
+</g>
+<rect x="10" y="316" width="78" height="64" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-pool-flash" opacity="0"></rect>
+<text x="49" y="371" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-pool-count">할당 중</text>
+<text x="160" y="322" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">직렬화 버퍼</text>
+<text x="271" y="322" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<g id="sector-pool-interior-chip-before-msg-0-group" opacity="1" transform="translate(0 0)" clip-path="url(#sector-pool-interior-chip-before-study-0-msgClipPath)">
+<rect x="96" y="342" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="97" y="343" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="108" y="355" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 1</text>
+<path d="M97 367 L223 367" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M96 381 L91 381" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="381" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="381" r="1.05" fill="#0d1421"></circle>
+<path d="M96 395 L91 395" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="395" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="395" r="1.05" fill="#0d1421"></circle>
+<path d="M96 409 L91 409" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="409" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="409" r="1.05" fill="#0d1421"></circle>
+<path d="M224 372 L229 372" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="372" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="372" r="1.05" fill="#0d1421"></circle>
+<path d="M224 384 L229 384" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="384" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="384" r="1.05" fill="#0d1421"></circle>
+<path d="M224 396 L229 396" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="396" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="396" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-msg-0-content" opacity="0">
+<rect x="108" y="377" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-msg-0-mask-clip"><rect id="sector-pool-interior-chip-before-msg-0-mask" x="108" y="377" width="0" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-msg-0-mask-clip)">
+<rect x="108" y="377" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="108" y="411" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="108" y="377" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-msg-0-flash" opacity="0"></rect>
+<text x="160" y="395" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="before-msg-0" id="sector-pool-interior-chip-before-msg-0-data-label">A 정보</text>
+</g></g>
+<text x="160" y="395" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-msg-0-returned" opacity="0" data-exclusive="before-msg-0">반환됨</text>
+<rect x="96" y="342" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-msg-0-rim" opacity="0"></rect>
+</g>
+<g id="sector-pool-interior-chip-before-msg-1-group" opacity="0" transform="translate(0 0)" clip-path="url(#sector-pool-interior-chip-before-study-1-msgClipPath)">
+<rect x="96" y="450" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="97" y="451" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="108" y="463" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 2</text>
+<path d="M97 475 L223 475" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M96 489 L91 489" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="489" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="489" r="1.05" fill="#0d1421"></circle>
+<path d="M96 503 L91 503" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="503" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="503" r="1.05" fill="#0d1421"></circle>
+<path d="M96 517 L91 517" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="517" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="517" r="1.05" fill="#0d1421"></circle>
+<path d="M224 480 L229 480" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="480" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="480" r="1.05" fill="#0d1421"></circle>
+<path d="M224 492 L229 492" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="492" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="492" r="1.05" fill="#0d1421"></circle>
+<path d="M224 504 L229 504" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="504" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="504" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-msg-1-content" opacity="0">
+<rect x="108" y="485" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-msg-1-mask-clip"><rect id="sector-pool-interior-chip-before-msg-1-mask" x="108" y="485" width="0" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-msg-1-mask-clip)">
+<rect x="108" y="485" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="108" y="519" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="108" y="485" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-msg-1-flash" opacity="0"></rect>
+<text x="160" y="503" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="before-msg-1" id="sector-pool-interior-chip-before-msg-1-data-label">A 정보</text>
+</g></g>
+<text x="160" y="503" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-msg-1-returned" opacity="0" data-exclusive="before-msg-1">반환됨</text>
+<rect x="96" y="450" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-msg-1-rim" opacity="0"></rect>
+</g>
+<g id="sector-pool-interior-chip-before-msg-2-group" opacity="0" transform="translate(0 0)" clip-path="url(#sector-pool-interior-chip-before-study-2-msgClipPath)">
+<rect x="96" y="558" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="97" y="559" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="108" y="571" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 3</text>
+<path d="M97 583 L223 583" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M96 597 L91 597" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="597" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="597" r="1.05" fill="#0d1421"></circle>
+<path d="M96 611 L91 611" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="611" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="611" r="1.05" fill="#0d1421"></circle>
+<path d="M96 625 L91 625" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="625" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="625" r="1.05" fill="#0d1421"></circle>
+<path d="M224 588 L229 588" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="588" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="588" r="1.05" fill="#0d1421"></circle>
+<path d="M224 600 L229 600" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="600" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="600" r="1.05" fill="#0d1421"></circle>
+<path d="M224 612 L229 612" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="612" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="612" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-msg-2-content" opacity="0">
+<rect x="108" y="593" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-msg-2-mask-clip"><rect id="sector-pool-interior-chip-before-msg-2-mask" x="108" y="593" width="0" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-msg-2-mask-clip)">
+<rect x="108" y="593" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="108" y="627" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="108" y="593" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-msg-2-flash" opacity="0"></rect>
+<text x="160" y="611" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="before-msg-2" id="sector-pool-interior-chip-before-msg-2-data-label">A 정보</text>
+</g></g>
+<text x="160" y="611" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-msg-2-returned" opacity="0" data-exclusive="before-msg-2">반환됨</text>
+<rect x="96" y="558" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-msg-2-rim" opacity="0"></rect>
+</g>
+<path d="M241.01028025073327,383.2146915507638 A30,30 0 0 1 249.23876886963137,363.34936272918736 L259.03132287829726,372.64214950105304 A16.5,16.5 0 0 0 254.50565413790332,383.5680803529201 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M250.3493627291874,362.2387688696314 A30,30 0 0 1 270.2146915507638,354.0102802507333 L270.5680803529201,367.5056541379033 A16.5,16.5 0 0 0 259.64214950105304,372.03132287829726 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,354.0102802507333 A30,30 0 0 1 291.65063727081264,362.2387688696314 L282.35785049894696,372.03132287829726 A16.5,16.5 0 0 0 271.4319196470799,367.5056541379033 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,354.0102802507333 A30,30 0 0 1 291.65063727081264,362.2387688696314 L282.35785049894696,372.03132287829726 A16.5,16.5 0 0 0 271.4319196470799,367.5056541379033 Z" id="sector-pool-interior-chip-before-q-0-data" fill="#0066d6" opacity="0"></path>
+<path d="M271.7853084492362,354.0102802507333 A30,30 0 0 1 291.65063727081264,362.2387688696314 L282.35785049894696,372.03132287829726 A16.5,16.5 0 0 0 271.4319196470799,367.5056541379033 Z" id="sector-pool-interior-chip-before-q-0-flash" fill="#238fff" opacity="0"></path>
+<path d="M292.7612311303686,363.34936272918736 A30,30 0 0 1 300.9897197492667,383.2146915507638 L287.4943458620967,383.5680803529201 A16.5,16.5 0 0 0 282.96867712170274,372.64214950105304 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M300.9897197492667,384.7853084492362 A30,30 0 0 1 292.7612311303686,404.65063727081264 L282.96867712170274,395.35785049894696 A16.5,16.5 0 0 0 287.4943458620967,384.4319196470799 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M291.65063727081264,405.7612311303686 A30,30 0 0 1 271.7853084492362,413.9897197492667 L271.4319196470799,400.4943458620967 A16.5,16.5 0 0 0 282.35785049894696,395.96867712170274 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M270.2146915507638,413.9897197492667 A30,30 0 0 1 250.3493627291874,405.7612311303686 L259.64214950105304,395.96867712170274 A16.5,16.5 0 0 0 270.5680803529201,400.4943458620967 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M249.23876886963137,404.65063727081264 A30,30 0 0 1 241.01028025073327,384.7853084492362 L254.50565413790332,384.4319196470799 A16.5,16.5 0 0 0 259.03132287829726,395.35785049894696 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<circle cx="237" cy="384" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="237" cy="384" r="1.05" fill="#0d1421"></circle>
+<path d="M239.5 384 L241 384" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle id="sector-pool-interior-chip-before-q-0-rim" cx="271" cy="384" r="34" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></circle>
+<text x="271" y="384" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S1</text>
+<text x="271" y="432" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-q-0-caption" opacity="0">Copy</text>
+<path id="sector-pool-interior-chip-before-copy-0-trail" d="M212 384 L212 384" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-copy-0-parcel" opacity="0" transform="translate(212 384) scale(1)">
+<rect x="-18" y="-12" width="36" height="24" fill="#238fff" rx="1"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#0d1421">A</text>
+</g>
+<path d="M241.01028025073327,491.2146915507638 A30,30 0 0 1 249.23876886963137,471.34936272918736 L259.03132287829726,480.64214950105304 A16.5,16.5 0 0 0 254.50565413790332,491.5680803529201 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M250.3493627291874,470.2387688696314 A30,30 0 0 1 270.2146915507638,462.0102802507333 L270.5680803529201,475.5056541379033 A16.5,16.5 0 0 0 259.64214950105304,480.03132287829726 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,462.0102802507333 A30,30 0 0 1 291.65063727081264,470.2387688696314 L282.35785049894696,480.03132287829726 A16.5,16.5 0 0 0 271.4319196470799,475.5056541379033 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,462.0102802507333 A30,30 0 0 1 291.65063727081264,470.2387688696314 L282.35785049894696,480.03132287829726 A16.5,16.5 0 0 0 271.4319196470799,475.5056541379033 Z" id="sector-pool-interior-chip-before-q-1-data" fill="#0066d6" opacity="0"></path>
+<path d="M271.7853084492362,462.0102802507333 A30,30 0 0 1 291.65063727081264,470.2387688696314 L282.35785049894696,480.03132287829726 A16.5,16.5 0 0 0 271.4319196470799,475.5056541379033 Z" id="sector-pool-interior-chip-before-q-1-flash" fill="#238fff" opacity="0"></path>
+<path d="M292.7612311303686,471.34936272918736 A30,30 0 0 1 300.9897197492667,491.2146915507638 L287.4943458620967,491.5680803529201 A16.5,16.5 0 0 0 282.96867712170274,480.64214950105304 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M300.9897197492667,492.7853084492362 A30,30 0 0 1 292.7612311303686,512.6506372708126 L282.96867712170274,503.35785049894696 A16.5,16.5 0 0 0 287.4943458620967,492.4319196470799 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M291.65063727081264,513.7612311303686 A30,30 0 0 1 271.7853084492362,521.9897197492667 L271.4319196470799,508.4943458620967 A16.5,16.5 0 0 0 282.35785049894696,503.96867712170274 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M270.2146915507638,521.9897197492667 A30,30 0 0 1 250.3493627291874,513.7612311303686 L259.64214950105304,503.96867712170274 A16.5,16.5 0 0 0 270.5680803529201,508.4943458620967 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M249.23876886963137,512.6506372708126 A30,30 0 0 1 241.01028025073327,492.7853084492362 L254.50565413790332,492.4319196470799 A16.5,16.5 0 0 0 259.03132287829726,503.35785049894696 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<circle cx="237" cy="492" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="237" cy="492" r="1.05" fill="#0d1421"></circle>
+<path d="M239.5 492 L241 492" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle id="sector-pool-interior-chip-before-q-1-rim" cx="271" cy="492" r="34" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></circle>
+<text x="271" y="492" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S2</text>
+<text x="271" y="540" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-q-1-caption" opacity="0">Copy</text>
+<path id="sector-pool-interior-chip-before-copy-1-trail" d="M212 492 L212 492" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-copy-1-parcel" opacity="0" transform="translate(212 492) scale(1)">
+<rect x="-18" y="-12" width="36" height="24" fill="#238fff" rx="1"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#0d1421">A</text>
+</g>
+<path d="M241.01028025073327,599.2146915507637 A30,30 0 0 1 249.23876886963137,579.3493627291874 L259.03132287829726,588.642149501053 A16.5,16.5 0 0 0 254.50565413790332,599.5680803529201 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M250.3493627291874,578.2387688696314 A30,30 0 0 1 270.2146915507638,570.0102802507333 L270.5680803529201,583.5056541379033 A16.5,16.5 0 0 0 259.64214950105304,588.0313228782973 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,570.0102802507333 A30,30 0 0 1 291.65063727081264,578.2387688696314 L282.35785049894696,588.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,583.5056541379033 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,570.0102802507333 A30,30 0 0 1 291.65063727081264,578.2387688696314 L282.35785049894696,588.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,583.5056541379033 Z" id="sector-pool-interior-chip-before-q-2-data" fill="#0066d6" opacity="0"></path>
+<path d="M271.7853084492362,570.0102802507333 A30,30 0 0 1 291.65063727081264,578.2387688696314 L282.35785049894696,588.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,583.5056541379033 Z" id="sector-pool-interior-chip-before-q-2-flash" fill="#238fff" opacity="0"></path>
+<path d="M292.7612311303686,579.3493627291874 A30,30 0 0 1 300.9897197492667,599.2146915507639 L287.4943458620967,599.5680803529201 A16.5,16.5 0 0 0 282.96867712170274,588.642149501053 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M300.9897197492667,600.7853084492361 A30,30 0 0 1 292.7612311303686,620.6506372708126 L282.96867712170274,611.357850498947 A16.5,16.5 0 0 0 287.4943458620967,600.4319196470799 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M291.65063727081264,621.7612311303686 A30,30 0 0 1 271.7853084492362,629.9897197492667 L271.4319196470799,616.4943458620967 A16.5,16.5 0 0 0 282.35785049894696,611.9686771217027 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M270.2146915507638,629.9897197492667 A30,30 0 0 1 250.3493627291874,621.7612311303686 L259.64214950105304,611.9686771217027 A16.5,16.5 0 0 0 270.5680803529201,616.4943458620967 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M249.23876886963137,620.6506372708126 A30,30 0 0 1 241.01028025073327,600.7853084492363 L254.50565413790332,600.4319196470799 A16.5,16.5 0 0 0 259.03132287829726,611.357850498947 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<circle cx="237" cy="600" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="237" cy="600" r="1.05" fill="#0d1421"></circle>
+<path d="M239.5 600 L241 600" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle id="sector-pool-interior-chip-before-q-2-rim" cx="271" cy="600" r="34" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></circle>
+<text x="271" y="600" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S3</text>
+<text x="271" y="648" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-q-2-caption" opacity="0">Copy</text>
+<path id="sector-pool-interior-chip-before-copy-2-trail" d="M212 600 L212 600" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-copy-2-parcel" opacity="0" transform="translate(212 600) scale(1)">
+<rect x="-18" y="-12" width="36" height="24" fill="#238fff" rx="1"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#0d1421">A</text>
+</g>
+<path d="M41 314.5 L41 316" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path d="M239 126 L242 126" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="242" cy="126" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="242" cy="126" r="1.05" fill="#0d1421"></circle>
+<circle cx="41" cy="312" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="41" cy="312" r="1.05" fill="#0d1421"></circle>
+<path id="sector-pool-interior-chip-before-sector-pool-0-circuit" d="M242 126 L252 126 L258 132 L258 278 L252 284 L47 284 L41 290 L41 312" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-request-0-trail" d="M242 126 L242 126" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-request-0-parcel" opacity="0" transform="translate(242 126) scale(1)">
+<rect x="-3" y="-3" width="6" height="6" fill="#238fff"></rect>
+</g>
+<path d="M49 314.5 L49 316" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path d="M239 186 L242 186" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="242" cy="186" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="242" cy="186" r="1.05" fill="#0d1421"></circle>
+<circle cx="49" cy="312" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="49" cy="312" r="1.05" fill="#0d1421"></circle>
+<path id="sector-pool-interior-chip-before-sector-pool-1-circuit" d="M242 186 L258 186 L264 192 L264 282 L258 288 L55 288 L49 294 L49 312" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-request-1-trail" d="M242 186 L242 186" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-request-1-parcel" opacity="0" transform="translate(242 186) scale(1)">
+<rect x="-3" y="-3" width="6" height="6" fill="#238fff"></rect>
+</g>
+<path d="M57 314.5 L57 316" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path d="M239 246 L242 246" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="242" cy="246" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="242" cy="246" r="1.05" fill="#0d1421"></circle>
+<circle cx="57" cy="312" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="57" cy="312" r="1.05" fill="#0d1421"></circle>
+<path id="sector-pool-interior-chip-before-sector-pool-2-circuit" d="M242 246 L264 246 L270 252 L270 286 L264 292 L63 292 L57 298 L57 312" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-request-2-trail" d="M242 246 L242 246" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-request-2-parcel" opacity="0" transform="translate(242 246) scale(1)">
+<rect x="-3" y="-3" width="6" height="6" fill="#238fff"></rect>
+</g>
+<circle cx="90" cy="348" r="2" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="90" cy="348" r="0.84" fill="#0d1421"></circle>
+<path d="M88 348 L90 348" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path id="sector-pool-interior-chip-before-allocation-trunk-circuit" d="M90 348 L91 348 L92 349 L92 395" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-allocation-branch-0-circuit" d="M92 395 L92 395" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-allocation-branch-1-circuit" d="M92 503 L92 503" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-allocation-branch-2-circuit" d="M92 611 L92 611" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-before-allocate-0-trail" d="M114.17402976293494 395 L142.17402976293494 395" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-allocate-0-parcel" opacity="0" transform="translate(142.17402976293494 395) scale(0.9338775510204083)">
+<g id="sector-pool-interior-chip-before-allocate-0-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 1</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-allocate-0-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-allocate-0-glyph-mask-clip"><rect id="sector-pool-interior-chip-before-allocate-0-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-allocate-0-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-allocate-0-glyph-flash" opacity="0"></rect>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-allocate-0-glyph-returned" opacity="0" data-exclusive="before-allocate-0-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-allocate-0-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<path id="sector-pool-interior-chip-before-return-0-trail" d="M160 395 L160 395" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-return-0-parcel" opacity="0" transform="translate(160 395) scale(1)">
+<g id="sector-pool-interior-chip-before-return-0-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 1</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-return-0-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-return-0-glyph-mask-clip"><rect id="sector-pool-interior-chip-before-return-0-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-return-0-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="-52" y="16" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-return-0-glyph-flash" opacity="0"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="before-return-0-glyph" id="sector-pool-interior-chip-before-return-0-glyph-data-label">A 정보</text>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-return-0-glyph-returned" opacity="0" data-exclusive="before-return-0-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-return-0-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<path id="sector-pool-interior-chip-before-allocate-1-trail" d="M49 348 L49 348" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-allocate-1-parcel" opacity="0" transform="translate(49 348) scale(0.44)">
+<g id="sector-pool-interior-chip-before-allocate-1-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 2</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-allocate-1-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-allocate-1-glyph-mask-clip"><rect id="sector-pool-interior-chip-before-allocate-1-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-allocate-1-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-allocate-1-glyph-flash" opacity="0"></rect>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-allocate-1-glyph-returned" opacity="0" data-exclusive="before-allocate-1-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-allocate-1-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<path id="sector-pool-interior-chip-before-return-1-trail" d="M160 503 L160 503" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-return-1-parcel" opacity="0" transform="translate(160 503) scale(1)">
+<g id="sector-pool-interior-chip-before-return-1-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 2</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-return-1-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-return-1-glyph-mask-clip"><rect id="sector-pool-interior-chip-before-return-1-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-return-1-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="-52" y="16" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-return-1-glyph-flash" opacity="0"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="before-return-1-glyph" id="sector-pool-interior-chip-before-return-1-glyph-data-label">A 정보</text>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-return-1-glyph-returned" opacity="0" data-exclusive="before-return-1-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-return-1-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<path id="sector-pool-interior-chip-before-allocate-2-trail" d="M49 348 L49 348" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-allocate-2-parcel" opacity="0" transform="translate(49 348) scale(0.44)">
+<g id="sector-pool-interior-chip-before-allocate-2-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 3</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-allocate-2-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-allocate-2-glyph-mask-clip"><rect id="sector-pool-interior-chip-before-allocate-2-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-allocate-2-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-allocate-2-glyph-flash" opacity="0"></rect>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-allocate-2-glyph-returned" opacity="0" data-exclusive="before-allocate-2-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-allocate-2-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<path id="sector-pool-interior-chip-before-return-2-trail" d="M160 611 L160 611" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-before-return-2-parcel" opacity="0" transform="translate(160 611) scale(1)">
+<g id="sector-pool-interior-chip-before-return-2-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 3</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-before-return-2-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-before-return-2-glyph-mask-clip"><rect id="sector-pool-interior-chip-before-return-2-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-return-2-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="-52" y="16" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-before-return-2-glyph-flash" opacity="0"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="before-return-2-glyph" id="sector-pool-interior-chip-before-return-2-glyph-data-label">A 정보</text>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-before-return-2-glyph-returned" opacity="0" data-exclusive="before-return-2-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-return-2-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<defs><clipPath id="sector-pool-interior-chip-before-study-0-msgClipPath" clipPathUnits="userSpaceOnUse"><rect id="sector-pool-interior-chip-before-study-0-msgClip" x="90" y="342" width="120.3313265306123" height="84"></rect></clipPath></defs>
+<path id="sector-pool-interior-chip-before-study-0-ribbon" d="M91.41421356237309 348 L91.5 348 L92 348.5 L92 394.5 L92.5 395 L93 395" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="allocation-direction"></path>
+<polygon id="sector-pool-interior-chip-before-study-0-arrow" points="0,0 -6,-3 -6,3" fill="#238fff" opacity="0" transform="translate(93 395) rotate(22.5000000000001)"></polygon>
+<rect x="96" y="342" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-study-0-outline" opacity="0"></rect>
+<path id="sector-pool-interior-chip-before-study-0-front" d="M210.3313265306123 342L210.3313265306123 426" fill="none" stroke="#238fff" stroke-width="1.5" opacity="1"></path>
+<defs><clipPath id="sector-pool-interior-chip-before-study-0-poolExitClip" clipPathUnits="userSpaceOnUse"><rect x="89" y="0" width="231" height="702"></rect><rect x="0" y="0" width="320" height="315"></rect><rect x="0" y="381" width="320" height="321"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-study-0-poolExitClip)"><g id="sector-pool-interior-chip-before-study-0-token" opacity="0">
+<defs><clipPath id="sector-pool-interior-chip-before-study-0-tokenClip-path"><rect id="sector-pool-interior-chip-before-study-0-tokenClip" x="-30" y="-13" width="60" height="26"></rect></clipPath></defs>
+<g clip-path="url(#sector-pool-interior-chip-before-study-0-tokenClip-path)">
+<rect x="-30" y="-13" width="60" height="26" fill="#151f2c" stroke="#238fff" stroke-width="1.5"></rect>
+<rect x="-29" y="-12" width="58" height="3" fill="#238fff" opacity="0.65"></rect>
+<text x="-23" y="0" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 1</text>
+</g></g></g>
+<defs><clipPath id="sector-pool-interior-chip-before-study-1-msgClipPath" clipPathUnits="userSpaceOnUse"><rect id="sector-pool-interior-chip-before-study-1-msgClip" x="90" y="450" width="140" height="84"></rect></clipPath></defs>
+<path id="sector-pool-interior-chip-before-study-1-ribbon" d="M0 0" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="allocation-direction"></path>
+<polygon id="sector-pool-interior-chip-before-study-1-arrow" points="0,0 -6,-3 -6,3" fill="#238fff" opacity="0"></polygon>
+<rect x="96" y="450" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-study-1-outline" opacity="0"></rect>
+<path id="sector-pool-interior-chip-before-study-1-front" d="M0 0" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></path>
+<defs><clipPath id="sector-pool-interior-chip-before-study-1-poolExitClip" clipPathUnits="userSpaceOnUse"><rect x="89" y="0" width="231" height="702"></rect><rect x="0" y="0" width="320" height="315"></rect><rect x="0" y="381" width="320" height="321"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-study-1-poolExitClip)"><g id="sector-pool-interior-chip-before-study-1-token" opacity="0">
+<defs><clipPath id="sector-pool-interior-chip-before-study-1-tokenClip-path"><rect id="sector-pool-interior-chip-before-study-1-tokenClip" x="-30" y="-13" width="60" height="26"></rect></clipPath></defs>
+<g clip-path="url(#sector-pool-interior-chip-before-study-1-tokenClip-path)">
+<rect x="-30" y="-13" width="60" height="26" fill="#151f2c" stroke="#238fff" stroke-width="1.5"></rect>
+<rect x="-29" y="-12" width="58" height="3" fill="#238fff" opacity="0.65"></rect>
+<text x="-23" y="0" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 2</text>
+</g></g></g>
+<defs><clipPath id="sector-pool-interior-chip-before-study-2-msgClipPath" clipPathUnits="userSpaceOnUse"><rect id="sector-pool-interior-chip-before-study-2-msgClip" x="90" y="558" width="140" height="84"></rect></clipPath></defs>
+<path id="sector-pool-interior-chip-before-study-2-ribbon" d="M0 0" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="allocation-direction"></path>
+<polygon id="sector-pool-interior-chip-before-study-2-arrow" points="0,0 -6,-3 -6,3" fill="#238fff" opacity="0"></polygon>
+<rect x="96" y="558" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-before-study-2-outline" opacity="0"></rect>
+<path id="sector-pool-interior-chip-before-study-2-front" d="M0 0" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></path>
+<defs><clipPath id="sector-pool-interior-chip-before-study-2-poolExitClip" clipPathUnits="userSpaceOnUse"><rect x="89" y="0" width="231" height="702"></rect><rect x="0" y="0" width="320" height="315"></rect><rect x="0" y="381" width="320" height="321"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-before-study-2-poolExitClip)"><g id="sector-pool-interior-chip-before-study-2-token" opacity="0">
+<defs><clipPath id="sector-pool-interior-chip-before-study-2-tokenClip-path"><rect id="sector-pool-interior-chip-before-study-2-tokenClip" x="-30" y="-13" width="60" height="26"></rect></clipPath></defs>
+<g clip-path="url(#sector-pool-interior-chip-before-study-2-tokenClip-path)">
+<rect x="-30" y="-13" width="60" height="26" fill="#151f2c" stroke="#238fff" stroke-width="1.5"></rect>
+<rect x="-29" y="-12" width="58" height="3" fill="#238fff" opacity="0.65"></rect>
+<text x="-23" y="0" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg 3</text>
+</g></g></g>
+</g>
+<path d="M24 702 L296 702" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<defs><filter id="sector-pool-interior-chip-after-gray" color-interpolation-filters="sRGB"><feColorMatrix id="sector-pool-interior-chip-after-matrix" type="matrix" values="0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.0722 0 0 0.2126 0.7152 0.07220000000000004 0 0 0 0 0 1 0"></feColorMatrix></filter></defs><g id="sector-pool-interior-chip-after" filter="url(#sector-pool-interior-chip-after-gray)" opacity="0.4">
+<text x="24" y="732" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#238fff">변경 후</text>
+<text x="296" y="732" font-size="16" dominant-baseline="middle" text-anchor="end" fill="#238fff" id="sector-pool-interior-chip-after-result">0회 생성 · 0회 사용</text>
+<g id="sector-pool-interior-chip-after-world" opacity="0.8">
+<rect x="70" y="798" width="180" height="180" fill="#0d1421" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="71" y="799" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="0,0"></rect>
+<rect x="131" y="799" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="1,0"></rect>
+<rect x="191" y="799" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="2,0"></rect>
+<rect x="71" y="859" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="0,1"></rect>
+<rect x="131" y="859" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="1,1"></rect>
+<rect x="191" y="859" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="2,1"></rect>
+<rect x="71" y="919" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="0,2"></rect>
+<rect x="131" y="919" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="1,2"></rect>
+<rect x="191" y="919" width="58" height="58" fill="#0d1421" data-role="sector" data-sector="2,2"></rect>
+<rect x="71" y="859" width="58" height="58" fill="#1b3a50" id="sector-pool-interior-chip-after-origin" opacity="0.5"></rect>
+<rect x="131" y="859" width="58" height="58" fill="#1b3a50" id="sector-pool-interior-chip-after-destination" opacity="0"></rect>
+<path d="M130 798 L130 978" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M70 858 L250 858" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M190 798 L190 978" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M70 918 L250 918" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<g data-role="component-registration">
+<path d="M73 808 L73 801 L80 801" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+<path d="M247 808 L247 801 L240 801" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+<path d="M73 968 L73 975 L80 975" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+<path d="M247 968 L247 975 L240 975" fill="none" stroke="#a8b8ca" stroke-width="1.5" opacity="0.45"></path>
+</g>
+<rect x="201" y="807" width="38" height="40" fill="#1b3a50" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-receiver-0" opacity="0.12"></rect>
+<use href="#bundle-swordsman-sector-pool-interior-chip-south" transform="translate(220 827) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="after-S1"></use>
+<text x="220" y="853" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S1</text>
+<rect x="201" y="867" width="38" height="40" fill="#1b3a50" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-receiver-1" opacity="0.12"></rect>
+<use href="#bundle-swordsman-sector-pool-interior-chip-south" transform="translate(220 887) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="after-S2"></use>
+<text x="220" y="913" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S2</text>
+<rect x="201" y="927" width="38" height="40" fill="#1b3a50" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-receiver-2" opacity="0.12"></rect>
+<use href="#bundle-swordsman-sector-pool-interior-chip-south" transform="translate(220 947) scale(0.875)" data-character="swordsman" data-facing="south" data-actor="after-S3"></use>
+<text x="220" y="973" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">S3</text>
+<path d="M177 871 L202 846" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-after-0-notice-idle" stroke="#a8b8ca" opacity="0" data-role="recipient-arrow-idle"></path>
+<polygon id="sector-pool-interior-chip-after-0-notice-idle-head" points="200.5857864376269,851.6568542494924 202,846 196.34314575050763,847.4142135623731" fill="#a8b8ca" opacity="0"></polygon>
+<path d="M177 871 L202 846" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-after-0-notice" stroke="#238fff" stroke-dashoffset="0" opacity="0" data-role="notice-arrow"></path>
+<polygon id="sector-pool-interior-chip-after-0-notice-head" points="200.5857864376269,851.6568542494924 202,846 196.34314575050763,847.4142135623731" fill="#238fff" opacity="0"></polygon>
+<path d="M181 888 L201 888" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-after-1-notice-idle" stroke="#a8b8ca" opacity="0" data-role="recipient-arrow-idle"></path>
+<polygon id="sector-pool-interior-chip-after-1-notice-idle-head" points="196,891 201,888 196,885" fill="#a8b8ca" opacity="0"></polygon>
+<path d="M181 888 L201 888" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-after-1-notice" stroke="#238fff" stroke-dashoffset="0" opacity="0" data-role="notice-arrow"></path>
+<polygon id="sector-pool-interior-chip-after-1-notice-head" points="196,891 201,888 196,885" fill="#238fff" opacity="0"></polygon>
+<path d="M177 905 L202 930" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-after-2-notice-idle" stroke="#a8b8ca" opacity="0" data-role="recipient-arrow-idle"></path>
+<polygon id="sector-pool-interior-chip-after-2-notice-idle-head" points="196.34314575050763,928.5857864376269 202,930 200.5857864376269,924.3431457505076" fill="#a8b8ca" opacity="0"></polygon>
+<path d="M177 905 L202 930" fill="none" stroke-width="1.5" id="sector-pool-interior-chip-after-2-notice" stroke="#238fff" stroke-dashoffset="0" opacity="0" data-role="notice-arrow"></path>
+<polygon id="sector-pool-interior-chip-after-2-notice-head" points="196.34314575050763,928.5857864376269 202,930 200.5857864376269,924.3431457505076" fill="#238fff" opacity="0"></polygon>
+<g id="sector-pool-interior-chip-after-arrow" opacity="0">
+<path d="M121 888 L138 888" fill="none" stroke="#238fff" stroke-width="1.5"></path>
+<polygon points="138,888 133,885 133,891" fill="#238fff"></polygon>
+</g>
+<g id="sector-pool-interior-chip-after-hero" transform="translate(0 0)">
+<use id="sector-pool-interior-chip-after-face" href="#bundle-mage-sector-pool-interior-chip-south" transform="translate(100 888) scale(.9375)" data-character="mage" data-facing="south" data-actor="after-A"></use>
+<text x="77" y="897" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#238fff">A</text>
+</g>
+</g>
+<text x="160" y="772" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">섹터 이동</text>
+<text x="160" y="1004" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">수신자 S1 · S2 · S3</text>
+<rect x="10" y="1018" width="78" height="64" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="pool-gate" data-interior="chip"></rect>
+<text x="49" y="1030" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" class="sector-mono">Msg 풀</text>
+<path d="M11 1039 L87 1039" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.7"></path>
+<rect x="80" y="1025" width="3" height="3" fill="#238fff" id="sector-pool-interior-chip-after-pool-indicator" opacity="0"></rect>
+<defs><clipPath id="sector-pool-interior-chip-after-pool-interiorClip"><rect x="15" y="1040" width="68" height="21"></rect></clipPath></defs>
+<g clip-path="url(#sector-pool-interior-chip-after-pool-interiorClip)">
+<rect x="18" y="1041" width="62" height="19" fill="#0d1421" id="sector-pool-interior-chip-after-pool-slotFill" opacity="0.7"></rect>
+<rect x="18" y="1041" width="62" height="19" fill="#238fff" id="sector-pool-interior-chip-after-pool-slotActive" opacity="0"></rect>
+<path d="M20 1044 L25 1044" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M73 1044 L78 1044" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M20 1050 L25 1050" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M73 1050 L78 1050" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M20 1056 L25 1056" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<path d="M73 1056 L78 1056" fill="none" stroke="#7895ae" stroke-width="1.5"></path>
+<rect x="25" y="1042" width="48" height="16" fill="#172536" stroke="#7895ae" stroke-width="1.5"></rect>
+<rect x="31" y="1046" width="3" height="8" fill="#7895ae" opacity="0.45"></rect>
+<rect x="37" y="1046" width="3" height="8" fill="#7895ae" opacity="0.45"></rect>
+<rect x="43" y="1046" width="3" height="8" fill="#7895ae" opacity="0.45"></rect>
+<path d="M51 1045 L51 1055" fill="none" stroke="#354b61" stroke-width="1.5"></path>
+<g id="sector-pool-interior-chip-after-pool-available" opacity="1"><g id="sector-pool-interior-chip-after-pool-card" opacity="1" transform="translate(0 0)">
+<rect x="55" y="1046" width="12" height="8" fill="#151f2c" stroke="#7895ae" stroke-width="1.5"></rect>
+<rect x="57" y="1048" width="8" height="2" fill="#a8b8ca" opacity="0.65"></rect>
+</g></g>
+<g id="sector-pool-interior-chip-after-pool-activeBuffer" opacity="0" transform="translate(0 0)">
+<rect x="55" y="1046" width="12" height="8" fill="#238fff"></rect>
+<rect x="57" y="1048" width="8" height="2" fill="#eef2fb" opacity="0.7"></rect>
+</g>
+<g id="sector-pool-interior-chip-after-pool-gateLeft" transform="translate(0 0)">
+<path d="M79 1042 L79 1047" fill="none" stroke="#829bb1" stroke-width="1.5" opacity="0.8"></path>
+</g>
+<g id="sector-pool-interior-chip-after-pool-gateRight" transform="translate(0 0)">
+<path d="M79 1053 L79 1058" fill="none" stroke="#829bb1" stroke-width="1.5" opacity="0.8"></path>
+</g>
+</g>
+<rect x="10" y="1018" width="78" height="64" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-pool-flash" opacity="0"></rect>
+<text x="49" y="1073" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-pool-count">대기</text>
+<text x="160" y="1024" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">직렬화 버퍼</text>
+<text x="271" y="1024" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<g id="sector-pool-interior-chip-after-msg-0-group" opacity="0" transform="translate(0 0)" clip-path="url(#sector-pool-interior-chip-after-study-0-msgClipPath)">
+<rect x="96" y="1152" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="97" y="1153" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="108" y="1165" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg</text>
+<path d="M97 1177 L223 1177" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<text x="212" y="1165" font-size="12" dominant-baseline="middle" text-anchor="end" fill="#238fff" id="sector-pool-interior-chip-after-msg-0-ref" class="sector-mono" opacity="0" transform="translate(0 0)">Ref 0</text>
+<path d="M96 1191 L91 1191" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="1191" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="1191" r="1.05" fill="#0d1421"></circle>
+<path d="M96 1205 L91 1205" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="1205" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="1205" r="1.05" fill="#0d1421"></circle>
+<path d="M96 1219 L91 1219" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="93.5" cy="1219" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="93.5" cy="1219" r="1.05" fill="#0d1421"></circle>
+<path d="M224 1182 L229 1182" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="1182" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="1182" r="1.05" fill="#0d1421"></circle>
+<path d="M224 1194 L229 1194" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="1194" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="1194" r="1.05" fill="#0d1421"></circle>
+<path d="M224 1206 L229 1206" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="226.5" cy="1206" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="226.5" cy="1206" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-after-msg-0-content" opacity="0">
+<rect x="108" y="1187" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-after-msg-0-mask-clip"><rect id="sector-pool-interior-chip-after-msg-0-mask" x="108" y="1187" width="0" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-after-msg-0-mask-clip)">
+<rect x="108" y="1187" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="108" y="1221" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="108" y="1187" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-after-msg-0-flash" opacity="0"></rect>
+<text x="160" y="1205" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="after-msg-0" id="sector-pool-interior-chip-after-msg-0-data-label">A 정보</text>
+</g></g>
+<text x="160" y="1205" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-msg-0-returned" opacity="0" data-exclusive="after-msg-0">반환됨</text>
+<rect x="96" y="1152" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-msg-0-rim" opacity="0"></rect>
+</g>
+<path d="M241.01028025073327,1085.2146915507637 A30,30 0 0 1 249.23876886963137,1065.3493627291873 L259.03132287829726,1074.6421495010532 A16.5,16.5 0 0 0 254.50565413790332,1085.56808035292 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M250.3493627291874,1064.2387688696313 A30,30 0 0 1 270.2146915507638,1056.0102802507333 L270.5680803529201,1069.5056541379033 A16.5,16.5 0 0 0 259.64214950105304,1074.0313228782973 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,1056.0102802507333 A30,30 0 0 1 291.65063727081264,1064.2387688696315 L282.35785049894696,1074.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1069.5056541379033 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,1056.0102802507333 A30,30 0 0 1 291.65063727081264,1064.2387688696315 L282.35785049894696,1074.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1069.5056541379033 Z" id="sector-pool-interior-chip-after-q-0-data" fill="#0066d6" opacity="0"></path>
+<path d="M271.7853084492362,1056.0102802507333 A30,30 0 0 1 291.65063727081264,1064.2387688696315 L282.35785049894696,1074.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1069.5056541379033 Z" id="sector-pool-interior-chip-after-q-0-flash" fill="#238fff" opacity="0"></path>
+<path d="M292.7612311303686,1065.3493627291873 A30,30 0 0 1 300.9897197492667,1085.2146915507637 L287.4943458620967,1085.56808035292 A16.5,16.5 0 0 0 282.96867712170274,1074.6421495010532 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M300.9897197492667,1086.7853084492363 A30,30 0 0 1 292.7612311303686,1106.6506372708127 L282.96867712170274,1097.3578504989468 A16.5,16.5 0 0 0 287.4943458620967,1086.43191964708 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M291.65063727081264,1107.7612311303685 A30,30 0 0 1 271.7853084492362,1115.9897197492667 L271.4319196470799,1102.4943458620967 A16.5,16.5 0 0 0 282.35785049894696,1097.9686771217027 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M270.2146915507638,1115.9897197492667 A30,30 0 0 1 250.3493627291874,1107.7612311303687 L259.64214950105304,1097.9686771217027 A16.5,16.5 0 0 0 270.5680803529201,1102.4943458620967 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M249.23876886963137,1106.6506372708127 A30,30 0 0 1 241.01028025073327,1086.7853084492363 L254.50565413790332,1086.43191964708 A16.5,16.5 0 0 0 259.03132287829726,1097.3578504989468 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<circle cx="237" cy="1086" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="237" cy="1086" r="1.05" fill="#0d1421"></circle>
+<path d="M239.5 1086 L241 1086" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle id="sector-pool-interior-chip-after-q-0-rim" cx="271" cy="1086" r="34" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></circle>
+<text x="271" y="1086" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S1</text>
+<text x="271" y="1134" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-q-0-caption" opacity="0">Copy</text>
+<path id="sector-pool-interior-chip-after-copy-0-trail" d="M212 1194 L212 1194" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-copy-0-parcel" opacity="0" transform="translate(212 1194) scale(1)">
+<rect x="-18" y="-12" width="36" height="24" fill="#238fff" rx="1"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#0d1421">A</text>
+</g>
+<path d="M241.01028025073327,1193.2146915507637 A30,30 0 0 1 249.23876886963137,1173.3493627291873 L259.03132287829726,1182.6421495010532 A16.5,16.5 0 0 0 254.50565413790332,1193.56808035292 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M250.3493627291874,1172.2387688696313 A30,30 0 0 1 270.2146915507638,1164.0102802507333 L270.5680803529201,1177.5056541379033 A16.5,16.5 0 0 0 259.64214950105304,1182.0313228782973 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,1164.0102802507333 A30,30 0 0 1 291.65063727081264,1172.2387688696315 L282.35785049894696,1182.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1177.5056541379033 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,1164.0102802507333 A30,30 0 0 1 291.65063727081264,1172.2387688696315 L282.35785049894696,1182.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1177.5056541379033 Z" id="sector-pool-interior-chip-after-q-1-data" fill="#0066d6" opacity="0"></path>
+<path d="M271.7853084492362,1164.0102802507333 A30,30 0 0 1 291.65063727081264,1172.2387688696315 L282.35785049894696,1182.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1177.5056541379033 Z" id="sector-pool-interior-chip-after-q-1-flash" fill="#238fff" opacity="0"></path>
+<path d="M292.7612311303686,1173.3493627291873 A30,30 0 0 1 300.9897197492667,1193.2146915507637 L287.4943458620967,1193.56808035292 A16.5,16.5 0 0 0 282.96867712170274,1182.6421495010532 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M300.9897197492667,1194.7853084492363 A30,30 0 0 1 292.7612311303686,1214.6506372708127 L282.96867712170274,1205.3578504989468 A16.5,16.5 0 0 0 287.4943458620967,1194.43191964708 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M291.65063727081264,1215.7612311303685 A30,30 0 0 1 271.7853084492362,1223.9897197492667 L271.4319196470799,1210.4943458620967 A16.5,16.5 0 0 0 282.35785049894696,1205.9686771217027 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M270.2146915507638,1223.9897197492667 A30,30 0 0 1 250.3493627291874,1215.7612311303687 L259.64214950105304,1205.9686771217027 A16.5,16.5 0 0 0 270.5680803529201,1210.4943458620967 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M249.23876886963137,1214.6506372708127 A30,30 0 0 1 241.01028025073327,1194.7853084492363 L254.50565413790332,1194.43191964708 A16.5,16.5 0 0 0 259.03132287829726,1205.3578504989468 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<circle cx="237" cy="1194" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="237" cy="1194" r="1.05" fill="#0d1421"></circle>
+<path d="M239.5 1194 L241 1194" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle id="sector-pool-interior-chip-after-q-1-rim" cx="271" cy="1194" r="34" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></circle>
+<text x="271" y="1194" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S2</text>
+<text x="271" y="1242" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-q-1-caption" opacity="0">Copy</text>
+<path id="sector-pool-interior-chip-after-copy-1-trail" d="M212 1194 L212 1194" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-copy-1-parcel" opacity="0" transform="translate(212 1194) scale(1)">
+<rect x="-18" y="-12" width="36" height="24" fill="#238fff" rx="1"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#0d1421">A</text>
+</g>
+<path d="M241.01028025073327,1301.2146915507637 A30,30 0 0 1 249.23876886963137,1281.3493627291873 L259.03132287829726,1290.6421495010532 A16.5,16.5 0 0 0 254.50565413790332,1301.56808035292 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M250.3493627291874,1280.2387688696313 A30,30 0 0 1 270.2146915507638,1272.0102802507333 L270.5680803529201,1285.5056541379033 A16.5,16.5 0 0 0 259.64214950105304,1290.0313228782973 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,1272.0102802507333 A30,30 0 0 1 291.65063727081264,1280.2387688696315 L282.35785049894696,1290.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1285.5056541379033 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M271.7853084492362,1272.0102802507333 A30,30 0 0 1 291.65063727081264,1280.2387688696315 L282.35785049894696,1290.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1285.5056541379033 Z" id="sector-pool-interior-chip-after-q-2-data" fill="#0066d6" opacity="0"></path>
+<path d="M271.7853084492362,1272.0102802507333 A30,30 0 0 1 291.65063727081264,1280.2387688696315 L282.35785049894696,1290.0313228782973 A16.5,16.5 0 0 0 271.4319196470799,1285.5056541379033 Z" id="sector-pool-interior-chip-after-q-2-flash" fill="#238fff" opacity="0"></path>
+<path d="M292.7612311303686,1281.3493627291873 A30,30 0 0 1 300.9897197492667,1301.2146915507637 L287.4943458620967,1301.56808035292 A16.5,16.5 0 0 0 282.96867712170274,1290.6421495010532 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M300.9897197492667,1302.7853084492363 A30,30 0 0 1 292.7612311303686,1322.6506372708127 L282.96867712170274,1313.3578504989468 A16.5,16.5 0 0 0 287.4943458620967,1302.43191964708 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M291.65063727081264,1323.7612311303685 A30,30 0 0 1 271.7853084492362,1331.9897197492667 L271.4319196470799,1318.4943458620967 A16.5,16.5 0 0 0 282.35785049894696,1313.9686771217027 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M270.2146915507638,1331.9897197492667 A30,30 0 0 1 250.3493627291874,1323.7612311303687 L259.64214950105304,1313.9686771217027 A16.5,16.5 0 0 0 270.5680803529201,1318.4943458620967 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M249.23876886963137,1322.6506372708127 A30,30 0 0 1 241.01028025073327,1302.7853084492363 L254.50565413790332,1302.43191964708 A16.5,16.5 0 0 0 259.03132287829726,1313.3578504989468 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<circle cx="237" cy="1302" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="237" cy="1302" r="1.05" fill="#0d1421"></circle>
+<path d="M239.5 1302 L241 1302" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle id="sector-pool-interior-chip-after-q-2-rim" cx="271" cy="1302" r="34" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></circle>
+<text x="271" y="1302" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S3</text>
+<text x="271" y="1350" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-q-2-caption" opacity="0">Copy</text>
+<path id="sector-pool-interior-chip-after-copy-2-trail" d="M212 1194 L212 1194" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-copy-2-parcel" opacity="0" transform="translate(212 1194) scale(1)">
+<rect x="-18" y="-12" width="36" height="24" fill="#238fff" rx="1"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#0d1421">A</text>
+</g>
+<text x="160" y="1260" font-size="13" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-reuse-caption" opacity="0">Ref 0 · 풀 반환</text>
+<path d="M41 1016.5 L41 1018" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path d="M239 828 L242 828" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="242" cy="828" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="242" cy="828" r="1.05" fill="#0d1421"></circle>
+<circle cx="41" cy="1014" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="41" cy="1014" r="1.05" fill="#0d1421"></circle>
+<path id="sector-pool-interior-chip-after-sector-pool-0-circuit" d="M242 828 L252 828 L258 834 L258 980 L252 986 L47 986 L41 992 L41 1014" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-after-request-0-trail" d="M242 828 L242 828" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-request-0-parcel" opacity="0" transform="translate(242 828) scale(1)">
+<rect x="-3" y="-3" width="6" height="6" fill="#238fff"></rect>
+</g>
+<path d="M49 1016.5 L49 1018" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path d="M239 888 L242 888" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="242" cy="888" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="242" cy="888" r="1.05" fill="#0d1421"></circle>
+<circle cx="49" cy="1014" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="49" cy="1014" r="1.05" fill="#0d1421"></circle>
+<path id="sector-pool-interior-chip-after-sector-pool-1-circuit" d="M242 888 L258 888 L264 894 L264 984 L258 990 L55 990 L49 996 L49 1014" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-after-request-1-trail" d="M242 888 L242 888" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-request-1-parcel" opacity="0" transform="translate(242 888) scale(1)">
+<rect x="-3" y="-3" width="6" height="6" fill="#238fff"></rect>
+</g>
+<path d="M57 1016.5 L57 1018" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path d="M239 948 L242 948" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="242" cy="948" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="242" cy="948" r="1.05" fill="#0d1421"></circle>
+<circle cx="57" cy="1014" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="57" cy="1014" r="1.05" fill="#0d1421"></circle>
+<path id="sector-pool-interior-chip-after-sector-pool-2-circuit" d="M242 948 L264 948 L270 954 L270 988 L264 994 L63 994 L57 1000 L57 1014" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.5" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-after-request-2-trail" d="M242 948 L242 948" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-request-2-parcel" opacity="0" transform="translate(242 948) scale(1)">
+<rect x="-3" y="-3" width="6" height="6" fill="#238fff"></rect>
+</g>
+<circle cx="90" cy="1050" r="2" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="90" cy="1050" r="0.84" fill="#0d1421"></circle>
+<path d="M88 1050 L90 1050" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<path id="sector-pool-interior-chip-after-allocation-trunk-circuit" d="M90 1050 L92 1050" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-after-allocation-branch-0-circuit" d="M92 1205 L92 1205" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="functional-circuit"></path>
+<path id="sector-pool-interior-chip-after-allocate-0-trail" d="M49 1050 L49 1050" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-allocate-0-parcel" opacity="0" transform="translate(49 1050) scale(0.44)">
+<g id="sector-pool-interior-chip-after-allocate-0-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<text x="52" y="-40" font-size="12" dominant-baseline="middle" text-anchor="end" fill="#238fff" id="sector-pool-interior-chip-after-allocate-0-glyph-ref" class="sector-mono">Ref 1</text>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-after-allocate-0-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-after-allocate-0-glyph-mask-clip"><rect id="sector-pool-interior-chip-after-allocate-0-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-after-allocate-0-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-after-allocate-0-glyph-flash" opacity="0"></rect>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-allocate-0-glyph-returned" opacity="0" data-exclusive="after-allocate-0-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-allocate-0-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<path id="sector-pool-interior-chip-after-return-0-trail" d="M160 1205 L160 1205" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0" data-role="transient-transfer"></path>
+<g id="sector-pool-interior-chip-after-return-0-parcel" opacity="0" transform="translate(160 1205) scale(1)">
+<g id="sector-pool-interior-chip-after-return-0-glyph-group" opacity="1">
+<rect x="-64" y="-53" width="128" height="84" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<rect x="-63" y="-52" width="126" height="23" fill="#a8b8ca" opacity="0.14"></rect>
+<text x="-52" y="-40" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg</text>
+<path d="M-63 -28 L63 -28" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.6"></path>
+<text x="52" y="-40" font-size="12" dominant-baseline="middle" text-anchor="end" fill="#238fff" id="sector-pool-interior-chip-after-return-0-glyph-ref" class="sector-mono">Ref 0</text>
+<path d="M-64 -14 L-69 -14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="-14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="-14" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 0 L-69 0" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="0" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="0" r="1.05" fill="#0d1421"></circle>
+<path d="M-64 14 L-69 14" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="-66.5" cy="14" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="-66.5" cy="14" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -23 L69 -23" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-23" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-23" r="1.05" fill="#0d1421"></circle>
+<path d="M64 -11 L69 -11" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="-11" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="-11" r="1.05" fill="#0d1421"></circle>
+<path d="M64 1 L69 1" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.65"></path>
+<circle cx="66.5" cy="1" r="2.5" fill="#829bb1" opacity="0.85" data-role="plated-contact"></circle>
+<circle cx="66.5" cy="1" r="1.05" fill="#0d1421"></circle>
+<g id="sector-pool-interior-chip-after-return-0-glyph-content">
+<rect x="-52" y="-18" width="104" height="36" fill="#172536" rx="1"></rect>
+<defs><clipPath id="sector-pool-interior-chip-after-return-0-glyph-mask-clip"><rect id="sector-pool-interior-chip-after-return-0-glyph-mask" x="-52" y="-18" width="104" height="36"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-after-return-0-glyph-mask-clip)">
+<rect x="-52" y="-18" width="104" height="36" fill="#0066d6" rx="1"></rect>
+<rect x="-52" y="16" width="104" height="2" fill="#238fff" data-role="ready-data-strip"></rect>
+<rect x="-52" y="-18" width="104" height="36" fill="#238fff" id="sector-pool-interior-chip-after-return-0-glyph-flash" opacity="0"></rect>
+<text x="0" y="0" font-size="14" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb" data-exclusive="after-return-0-glyph" id="sector-pool-interior-chip-after-return-0-glyph-data-label">A 정보</text>
+</g></g>
+<text x="0" y="0" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca" id="sector-pool-interior-chip-after-return-0-glyph-returned" opacity="0" data-exclusive="after-return-0-glyph">반환됨</text>
+<rect x="-64" y="-53" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-return-0-glyph-rim" opacity="0"></rect>
+</g>
+</g>
+<defs><clipPath id="sector-pool-interior-chip-after-study-0-msgClipPath" clipPathUnits="userSpaceOnUse"><rect id="sector-pool-interior-chip-after-study-0-msgClip" x="90" y="1152" width="140" height="84"></rect></clipPath></defs>
+<path id="sector-pool-interior-chip-after-study-0-ribbon" d="M0 0" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" opacity="0" data-role="allocation-direction"></path>
+<polygon id="sector-pool-interior-chip-after-study-0-arrow" points="0,0 -6,-3 -6,3" fill="#238fff" opacity="0"></polygon>
+<rect x="96" y="1152" width="128" height="84" fill="none" stroke="#238fff" stroke-width="1.5" id="sector-pool-interior-chip-after-study-0-outline" opacity="0"></rect>
+<path id="sector-pool-interior-chip-after-study-0-front" d="M0 0" fill="none" stroke="#238fff" stroke-width="1.5" opacity="0"></path>
+<defs><clipPath id="sector-pool-interior-chip-after-study-0-poolExitClip" clipPathUnits="userSpaceOnUse"><rect x="89" y="702" width="231" height="702"></rect><rect x="0" y="702" width="320" height="315"></rect><rect x="0" y="1083" width="320" height="321"></rect></clipPath></defs><g clip-path="url(#sector-pool-interior-chip-after-study-0-poolExitClip)"><g id="sector-pool-interior-chip-after-study-0-token" opacity="0">
+<defs><clipPath id="sector-pool-interior-chip-after-study-0-tokenClip-path"><rect id="sector-pool-interior-chip-after-study-0-tokenClip" x="-30" y="-13" width="60" height="26"></rect></clipPath></defs>
+<g clip-path="url(#sector-pool-interior-chip-after-study-0-tokenClip-path)">
+<rect x="-30" y="-13" width="60" height="26" fill="#151f2c" stroke="#238fff" stroke-width="1.5"></rect>
+<rect x="-29" y="-12" width="58" height="3" fill="#238fff" opacity="0.65"></rect>
+<text x="-23" y="0" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#eef2fb" class="sector-mono">Msg</text>
+</g></g></g>
+</g></svg>

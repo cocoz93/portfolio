@@ -1,0 +1,134 @@
+<style>
+/* ORIGINAL_FONTS */
+#sector-bundle-pcb-materials-v7 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#6cc7ff;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;--pcb-board:#112936;--pcb-metal:#b4c3ca;--pcb-print:#7d9ea9;--pcb-ink:#101a25;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-dark:#617e9a;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#sector-bundle-pcb-materials-v7 .study-design {width:100%;background:var(--pcb-bg);color-scheme:dark}
+#sector-bundle-pcb-materials-v7 .study-board {display:block;width:100%;height:auto}
+#sector-bundle-pcb-materials-v7 .study-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#sector-bundle-pcb-materials-v7 .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#sector-bundle-pcb-materials-v7 .study-toolbar {padding:12px 20px}
+#sector-bundle-pcb-materials-v7 .study-status {font-size:12px;color:var(--pcb-muted);flex:1 1 220px;text-align:right}
+</style>
+<div id="sector-bundle-pcb-materials-v7" class="viz-carousel" aria-label="2번 그림 기판 디자인 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+<section id="bundle-material-board" class="study-design" data-variant="솔더마스크형" data-layout="board" aria-label="기판 바탕 위에 부품과 배선을 배치한 시안">
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="material-board-title material-board-desc">
+      <title id="material-board-title">기판 바탕 위에 부품과 배선을 배치한 시안</title>
+      <desc id="material-board-desc">2번 그림: 같은 이동 메시지 네 개를 Msg 하나로 묶는 비교입니다. 변경 전에는 개별 Msg 1부터 4까지 나열합니다. 변경 후에는 Msg라는 이름을 바깥 직렬화버퍼에 한 번만 표시하고, 내부 사각형 네 개는 이동 좌표 데이터만 나타냅니다. 캐릭터와 메시지 사이에는 회색 구분선이 있으며 입력 배선은 왼쪽 위, 출력 배선은 아래 오른쪽을 지납니다. 이동 좌표 (0,1), (1,1), (1,0), (2,0)는 전후에 같은 순서로 보존됩니다. Msg 채우기는 0.35초이며 캐릭터 이동과 SendQ 적재는 0.65초입니다. 맵의 방향 화살표는 해당 칸을 이동하는 동안에만 표시됩니다. SendQ 옆의 WSASend 출구에는 커널 경계선이 있습니다. 송신 요청 시 더 큰 직사각형 데이터 신호가 경계를 통과하고, 이후 큐 불빛이 꺼집니다. 이는 커널 송신 요청을 나타내며 수신 완료나 WSASend 호출 횟수 비교를 의미하지 않습니다. 원형 큐는 바이트 링버퍼의 도식입니다. 좁은 화면에서는 메시지를 세로로 재배치합니다. 구도 보기와 수동 재생을 지원합니다.</desc>
+      <!-- SCENE_BOARD -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play" aria-label="솔더마스크형 애니메이션 재생">재생</button>
+      <button type="button" class="btn" data-action="preview">구도 보기</button>
+      <span class="study-status" role="status" aria-live="polite">같은 이동 메시지 4개 · Msg 4개 → 1개</span>
+    </div>
+  </section>
+<section hidden id="bundle-material-module" class="study-design" data-variant="칩 모듈형" data-layout="module" aria-label="금속 리드와 부품 몸체를 강조한 칩 모듈 시안">
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="material-module-title material-module-desc">
+      <title id="material-module-title">금속 리드와 부품 몸체를 강조한 칩 모듈 시안</title>
+      <desc id="material-module-desc">2번 그림: 같은 이동 메시지 네 개를 Msg 하나로 묶는 비교입니다. 변경 전에는 개별 Msg 1부터 4까지 나열합니다. 변경 후에는 Msg라는 이름을 바깥 직렬화버퍼에 한 번만 표시하고, 내부 사각형 네 개는 이동 좌표 데이터만 나타냅니다. 캐릭터와 메시지 사이에는 회색 구분선이 있으며 입력 배선은 왼쪽 위, 출력 배선은 아래 오른쪽을 지납니다. 이동 좌표 (0,1), (1,1), (1,0), (2,0)는 전후에 같은 순서로 보존됩니다. Msg 채우기는 0.35초이며 캐릭터 이동과 SendQ 적재는 0.65초입니다. 맵의 방향 화살표는 해당 칸을 이동하는 동안에만 표시됩니다. SendQ 옆의 WSASend 출구에는 커널 경계선이 있습니다. 송신 요청 시 더 큰 직사각형 데이터 신호가 경계를 통과하고, 이후 큐 불빛이 꺼집니다. 이는 커널 송신 요청을 나타내며 수신 완료나 WSASend 호출 횟수 비교를 의미하지 않습니다. 원형 큐는 바이트 링버퍼의 도식입니다. 좁은 화면에서는 메시지를 세로로 재배치합니다. 구도 보기와 수동 재생을 지원합니다.</desc>
+      <!-- SCENE_MODULE -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play" aria-label="칩 모듈형 애니메이션 재생">재생</button>
+      <button type="button" class="btn" data-action="preview">구도 보기</button>
+      <span class="study-status" role="status" aria-live="polite">같은 이동 메시지 4개 · Msg 4개 → 1개</span>
+    </div>
+  </section>
+<section hidden id="bundle-material-edge" class="study-design" data-variant="에지 커넥터형" data-layout="edge" aria-label="노출된 접점과 하나의 Msg 보드를 강조한 시안">
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="material-edge-title material-edge-desc">
+      <title id="material-edge-title">노출된 접점과 하나의 Msg 보드를 강조한 시안</title>
+      <desc id="material-edge-desc">2번 그림: 같은 이동 메시지 네 개를 Msg 하나로 묶는 비교입니다. 변경 전에는 개별 Msg 1부터 4까지 나열합니다. 변경 후에는 Msg라는 이름을 바깥 직렬화버퍼에 한 번만 표시하고, 내부 사각형 네 개는 이동 좌표 데이터만 나타냅니다. 캐릭터와 메시지 사이에는 회색 구분선이 있으며 입력 배선은 왼쪽 위, 출력 배선은 아래 오른쪽을 지납니다. 이동 좌표 (0,1), (1,1), (1,0), (2,0)는 전후에 같은 순서로 보존됩니다. Msg 채우기는 0.35초이며 캐릭터 이동과 SendQ 적재는 0.65초입니다. 맵의 방향 화살표는 해당 칸을 이동하는 동안에만 표시됩니다. SendQ 옆의 WSASend 출구에는 커널 경계선이 있습니다. 송신 요청 시 더 큰 직사각형 데이터 신호가 경계를 통과하고, 이후 큐 불빛이 꺼집니다. 이는 커널 송신 요청을 나타내며 수신 완료나 WSASend 호출 횟수 비교를 의미하지 않습니다. 원형 큐는 바이트 링버퍼의 도식입니다. 좁은 화면에서는 메시지를 세로로 재배치합니다. 구도 보기와 수동 재생을 지원합니다.</desc>
+      <!-- SCENE_EDGE -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play" aria-label="에지 커넥터형 애니메이션 재생">재생</button>
+      <button type="button" class="btn" data-action="preview">구도 보기</button>
+      <span class="study-status" role="status" aria-live="polite">같은 이동 메시지 4개 · Msg 4개 → 1개</span>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+/* MATCHED_SOURCE */
+  const root=document.getElementById('sector-bundle-pcb-materials-v7');if(!root)return;
+  const KIND='sector-bundle-pcb-materials-v7';
+  const reduced=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false,addEventListener(){}};
+  const designs=Array.from(root.querySelectorAll('.study-design')),controllers=[];
+  let drawnWidth=0,pendingWidth=0,layoutFrame=0;
+  function save(){
+    if(!window.openai?.setWidgetState)return;
+    const snapshots=controllers.map(controller=>controller.snapshot());
+    try{Promise.resolve(window.openai.setWidgetState({modelContent:{kind:KIND,designs:controllers.map(controller=>controller.state())},privateContent:{kind:KIND,designs:snapshots}})).catch(()=>{});}catch{}
+  }
+  for(const design of designs){
+    const layout=design.getAttribute('data-layout'),board=design.querySelector('.study-board');
+    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map();
+    function set(id,attrs,text){
+      const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
+      for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
+      if(text!==undefined&&element.textContent!==text)element.textContent=text;
+    }
+    function frame(){return preview?bundlePreviewFrame(program):bundleFrame(time,program);}
+    function paint(){
+      if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
+      if(status.textContent!==current.phase)status.textContent=current.phase;
+      playButton.textContent=playing?'일시정지':time>0&&time<program.end&&!preview?'이어서 재생':'재생';
+      playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 애니메이션 재생`);
+    }
+    function state(){const f=frame();return {layout,name:design.getAttribute('data-variant'),time,duration:program.end,playing,preview,phase:f.phase,outboundMsgsBefore:f.rows[0].copies,outboundMsgsAfter:f.rows[1].copies,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].release>=1?0:f.rows[0].copies,queuedAfter:f.rows[1].release>=1?0:f.rows[1].copies};}
+    function pause(){playing=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);raf=0;paint();}
+    function schedule(){if(playing&&!raf)raf=requestAnimationFrame(tick);}
+    function tick(now){
+      raf=0;if(!playing)return;
+      if(document.hidden){lastFrame=0;schedule();return;}
+      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));lastFrame=now;
+      if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
+    }
+    function play(){
+      if(reduced.matches){pause();preview=true;time=program.end;paint();return;}
+      if(preview||time>=program.end)time=0;preview=false;playing=true;lastFrame=0;paint();schedule();
+    }
+    function showPreview(){pause();time=program.end;preview=true;paint();}
+    function renderDesign(width){
+      const position=locateBundleSegment(time,program),atEnd=time>=program.end;
+      const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));
+      scene=createBundleAnimationScene(width,layout);program=createBundleProgram(scene.compact);
+      time=atEnd?program.end:program.segments[position.index].start+position.progress*program.segments[position.index].duration;
+      board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);
+      board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));
+      nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastFrame=0;paint();
+    }
+    function snapshot(){const p=locateBundleSegment(time,program);return {layout,segment:p.index,phaseProgress:p.progress,playing,preview};}
+    function restore(saved){
+      if(saved?.layout!==layout||!Number.isInteger(saved.segment)||saved.segment<0||saved.segment>=program.segments.length||!Number.isFinite(saved.phaseProgress))return;
+      pause();const segment=program.segments[saved.segment];time=segment.start+bundleClamp(saved.phaseProgress)*segment.duration;preview=Boolean(saved.preview);
+      if(reduced.matches){preview=true;time=program.end;}
+      playing=!preview&&!reduced.matches&&Boolean(saved.playing)&&time<program.end;paint();schedule();
+    }
+    const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
+    design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
+    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});
+    document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+    reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
+  }
+  function draw(width){
+    if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,width);
+    if(Math.abs(width-drawnWidth)<.5)return;controllers.forEach(controller=>controller.draw(width));drawnWidth=width;
+  }
+  function restore(snapshot){if(snapshot?.privateContent?.kind!==KIND)return;for(const controller of controllers)controller.restore(snapshot.privateContent.designs?.find(entry=>entry.layout===controller.state().layout));}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState));
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{
+    pendingWidth=entries[0].contentRect.width;if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{layoutFrame=0;draw(pendingWidth);});
+  }).observe(root);
+})();
+</script>

@@ -1,0 +1,80 @@
+{
+  "figure": 5,
+  "subject": "coordinate quantization only",
+  "notionSource": "https://app.notion.com/p/3bb16a0b9f598049a873fad65fc1aeff",
+  "sourceEvidence": [
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/Shared/Protocol/Protocol.h",
+      "lines": [
+        352,
+        415
+      ],
+      "facts": "512 scale; rounded float-to-uint16; inverse scale; direction low nibble, state high nibble; packed 9B SectorUpdateEntry; max 100 entries"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+      "lines": [
+        635,
+        656
+      ],
+      "facts": "MakeSectorUpdates writes ID, QuantizePos(x), QuantizePos(y), PackDirState"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/Actor.h",
+      "lines": [
+        6,
+        13
+      ],
+      "facts": "RIGHT=4"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/ServerCore/Network/NetHeader.h",
+      "lines": [
+        20,
+        26
+      ],
+      "facts": "MsgHeader is 4B"
+    },
+    {
+      "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/WebClient/proto.js",
+      "lines": [
+        65,
+        65
+      ],
+      "facts": "Client inverse scale 1/512"
+    }
+  ],
+  "beforeHistoricalSource": "Supplied Notion page: ID 4 + direction 1 + state 1 + x 4 + y 4 = 14B. Current checkout has the accepted 9B wire format.",
+  "invariants": [
+    "Server float coordinates and actor movement are identical before and after.",
+    "Coordinates only: float 4B plus float 4B versus uint16 2B plus uint16 2B.",
+    "Multiply by 512 and round before Msg serialization.",
+    "Large integers qx and qy are tick indices in 1/512-tile units.",
+    "After Msg contains no intermediate float bytes; only converted uint16 values are written.",
+    "Coordinate shape morph occurs outside Msg over 850ms, followed by transfer and direct 2B field writes.",
+    "All other fields and headers remain in the actual protocol and are omitted from the drawing."
+  ],
+  "diagramAbstractions": [
+    "Only x and y shown inside Msg. Other fields and header are omitted, not removed from the real protocol.",
+    "8B and 4B describe coordinates only, not the whole entry or packet.",
+    "4B-to-2B morph compares representations; actual serializer writes uint16 directly.",
+    "Character motion is schematic, not a scale-accurate map or tick timing."
+  ],
+  "styleReference": "serial-sector-bank-v1/figure-3.html palette, embedded fonts, mage, structural strokes and before-after treatment",
+  "status": "draft",
+  "coordinateMorph": {
+    "durationMs": 850,
+    "holdMs": 1150,
+    "simultaneous": true,
+    "secondaryFieldsMuted": true
+  },
+  "visibleElements": [
+    "character movement",
+    "server float coordinates",
+    "two coordinate fields of Msg",
+    "1/512 tile conversion label",
+    "coordinate bytes 8B and 4B"
+  ],
+  "conversionBeforeMsg": true,
+  "conversionLabel": "×512 · 반올림"
+}

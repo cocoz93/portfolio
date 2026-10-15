@@ -1,0 +1,13 @@
+const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm'),assert=require('node:assert/strict');
+const dir=path.resolve(__dirname,'..'),previous=path.resolve(dir,'../serial-sector-msg-focus-v11');
+const mage=fs.readFileSync(path.resolve(dir,'../sector-bundle-held-pulse-v26/scene.js'),'utf8'),begin=mage.indexOf('  function mageDefinition(){'),end=mage.indexOf('  function movement(');assert(begin>=0&&end>begin);
+const source=fs.readFileSync(path.join(dir,'scene-template.js'),'utf8').replace('/* MAGE_RENDERER */',mage.slice(begin,end));new vm.Script(source);fs.writeFileSync(path.join(dir,'scene.js'),source);
+const api=vm.runInNewContext(source+';({createSectorReuseScene})');
+const fonts=fs.readFileSync(path.resolve(dir,'../pcb-animation-v1/wsasend-pcb-previous.html'),'utf8').match(/@font-face\{[^}]+\}/g).join('\n');
+let template=fs.readFileSync(path.join(dir,'sector-template.html'),'utf8').replaceAll('sector-msg-focus-v11','sector-presentation-v12').replaceAll('sector-separated-title','sector-presentation-title').replaceAll('sector-separated-desc','sector-presentation-desc').replace('height="960" viewBox="0 0 736 960"','height="784" viewBox="0 0 736 784"');
+fs.writeFileSync(path.join(dir,'sector-template.html'),template);
+const fragment=template.replace('/* ORIGINAL_FONTS */',fonts).replace('/* SECTOR_SOURCE */',source).replace('<!-- SECTOR_SCENE -->',api.createSectorReuseScene(736).markup);
+new vm.Script(fragment.match(/<script>([\s\S]*?)<\/script>/)[1]);assert(Buffer.byteLength(fragment)<1_000_000);fs.writeFileSync(path.join(dir,'sector-reuse.html'),fragment);
+const previousReview=fs.readFileSync(path.join(previous,'qa/review.cjs'),'utf8'),helpers=previousReview.slice(0,previousReview.indexOf('async function main(')).replaceAll('sector-msg-focus-v11','sector-presentation-v12').replace('if(Math.min(a.x1,b.x1)', 'if(a.exclusive&&a.exclusive===b.exclusive)continue;if(Math.min(a.x1,b.x1)');
+fs.writeFileSync(path.join(__dirname,'review.cjs'),helpers+'\n'+fs.readFileSync(path.join(__dirname,'review-template.cjs'),'utf8'));
+console.log(JSON.stringify({path:path.join(dir,'sector-reuse.html'),bytes:Buffer.byteLength(fragment)}));

@@ -1,0 +1,45 @@
+{
+  "pass": true,
+  "designs": [
+    "바이트가 줄어드는 모습",
+    "눈금으로 바꾸는 모습"
+  ],
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    360,
+    320
+  ],
+  "framesPerWidthPerDesign": 82,
+  "durationMs": 10350,
+  "preserveGeometry": [
+    "character grid",
+    "server coordinate card",
+    "Msg",
+    "PCB route",
+    "board height"
+  ],
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "quantizationStageLabel": "양자화",
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "serverCoordinatesPreserved": true,
+  "quantizeResult": [
+    37440,
+    12459
+  ],
+  "byteShrinkAndRulerMotionVerified": true,
+  "nativeControlsVerified": true,
+  "savedStatesVerified": true,
+  "reducedMotionVerified": true,
+  "standaloneBrowserRuntimeVerified": true,
+  "browserHostVerified": false,
+  "hostCarouselVerified": false,
+  "serverBinaryExecuted": false,
+  "oldVersionSha256": "d116f7015490d7f98b0d5f03fe5c462305a039496b9ab43faeaad9385f3503e5",
+  "bytes": 477235,
+  "sha256": "84f7fac7635291f425c50895e1825ed75f4a7f5c054d4a8002d7c467ddb75176"
+}

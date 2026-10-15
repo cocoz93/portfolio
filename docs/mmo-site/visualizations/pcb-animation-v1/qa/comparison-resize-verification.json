@@ -1,0 +1,19 @@
+{
+  "scope": "Controlled observer-delivery regression checks, not a browser or Codex inline-host render.",
+  "observedHostError": "ResizeObserver loop completed with undelivered notifications.",
+  "checks": [
+    "one-comparison-observer-no-child-observers",
+    "initial-layout-waits-for-animation-frame",
+    "observer-delivery-does-not-write-layout",
+    "initial-frame-draws-both-at-visible-width",
+    "height-only-notification-does-not-redraw",
+    "resize-burst-is-coalesced-and-uses-latest-width",
+    "switch-preserves-time-and-does-not-resize-in-callback",
+    "zero-width-hidden-container-does-not-overwrite-layout",
+    "restoring-desktop-layout-does-not-loop",
+    "saved-design-and-playhead-still-restore",
+    "real-child-draw-functions-consume-shared-width",
+    "former-direct-draw-is-detected-wsasend-pcb-previous.html",
+    "former-direct-draw-is-detected-wsasend-pcb-animation.html"
+  ]
+}

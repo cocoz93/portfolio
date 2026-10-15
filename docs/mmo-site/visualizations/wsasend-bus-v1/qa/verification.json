@@ -1,0 +1,85 @@
+{
+  "verification": "source, emulated component DOM, offscreen SVG rasterization",
+  "browserHostVerified": false,
+  "widths": [
+    736,
+    660,
+    659,
+    360,
+    320
+  ],
+  "timelineMs": 22580,
+  "phases": [
+    {
+      "name": "initial",
+      "at": 0,
+      "before": 0,
+      "after": 0,
+      "pendingBefore": 0,
+      "pendingAfter": 0
+    },
+    {
+      "name": "before-queue",
+      "at": 2360,
+      "before": 0,
+      "after": 0,
+      "pendingBefore": 1,
+      "pendingAfter": 0
+    },
+    {
+      "name": "before-drained",
+      "at": 2960,
+      "before": 1,
+      "after": 0,
+      "pendingBefore": 0,
+      "pendingAfter": 0
+    },
+    {
+      "name": "after-stored",
+      "at": 20280,
+      "before": 4,
+      "after": 0,
+      "pendingBefore": 0,
+      "pendingAfter": 4
+    },
+    {
+      "name": "after-send",
+      "at": 20580,
+      "before": 4,
+      "after": 0,
+      "pendingBefore": 0,
+      "pendingAfter": 4
+    },
+    {
+      "name": "final",
+      "at": 22580,
+      "before": 4,
+      "after": 1,
+      "pendingBefore": 0,
+      "pendingAfter": 0
+    }
+  ],
+  "renders": [
+    "initial-736.png",
+    "before-queue-736.png",
+    "before-drained-736.png",
+    "after-stored-736.png",
+    "after-send-736.png",
+    "final-736.png",
+    "after-send-660.png",
+    "final-660.png",
+    "after-send-320.png",
+    "final-320.png"
+  ],
+  "checks": [
+    "unchanged model at every 20ms",
+    "queue enters and drains",
+    "batch accumulates four and drains",
+    "4 versus 1 calls",
+    "left-to-right Msg fills",
+    "play, pause and replay",
+    "resize preserves playhead",
+    "reduced motion pauses",
+    "label bounds and minimum size"
+  ]
+}

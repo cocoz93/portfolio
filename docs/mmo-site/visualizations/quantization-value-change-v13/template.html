@@ -1,0 +1,35 @@
+<style>
+/*STYLES*/
+#quantization-value-change-v13 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+#quantization-value-change-v13 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#quantization-value-change-v13 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#quantization-value-change-v13 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#quantization-value-change-v13 [data-status] {min-height:2em}
+</style>
+<div id="quantization-value-change-v13" aria-label="5번 그림 · 좌표 표현을 양자화한 뒤 Msg에 저장">
+  <svg class="comparison-board" data-board="input" xmlns="http://www.w3.org/2000/svg" width="736" height="140" viewBox="0 0 736 140" role="img" aria-label="공통 입력 · 서버 float 좌표 유지"><!--INPUT--></svg>
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="264" viewBox="0 0 736 264" role="img" aria-labelledby="quant-pcb-before-title quant-pcb-before-desc">
+      <title id="quant-pcb-before-title">변경 전 · float 좌표 두 개에 8바이트</title>
+      <desc id="quant-pcb-before-desc">캐릭터가 오른쪽으로 이동하고 서버 float 좌표가 갱신됩니다. 가운데 좌표가 각각 4바이트 float 블록으로 채워집니다. 블록은 Msg로 한 번 이동하고 도착한 자리에 그대로 남습니다. 출발한 가운데 블록은 사라지고 다시 나타나지 않습니다. 부품 사이의 배선과 신호, 도착 후 추가 채우기 동작은 없습니다. 두 좌표는 8바이트입니다. 다른 필드와 물리 송신은 생략합니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="264" viewBox="0 0 736 264" role="img" aria-labelledby="quant-pcb-after-title quant-pcb-after-desc">
+      <title id="quant-pcb-after-title">변경 후 · 양자화에서 4바이트를 2바이트로 바꾼 뒤 기록</title>
+      <desc id="quant-pcb-after-desc">동일한 캐릭터 이동과 서버 float 좌표를 유지합니다. 양자화 전에는 x 73.12570과 y 24.33333을 각각 4B 네 칸으로 보여줍니다. 512를 곱하고 반올림하는 동안 블록이 두 칸으로 줄어들고, 이름과 값과 바이트 표기가 함께 qx 37440과 qy 12459 및 각각 2B로 바뀝니다. 중간 계산값은 표시하지 않습니다. 한 눈금은 1/512타일입니다. 반올림 오차는 최대 약 ±0.001타일이며 원래 좌표의 완전 복원을 뜻하지 않습니다. 변환된 두 블록이 Msg로 한 번 이동합니다. 출발한 양자화 블록은 사라지고 다시 나타나지 않습니다. 이 표시는 값의 전달을 표현하며 서버 좌표나 변수의 삭제를 뜻하지 않습니다. 도착한 블록과 같은 위치와 크기로 저장 상태가 이어지며 다시 차오르는 동작은 없습니다. 부품 사이의 배선과 접점, 배선 신호는 없습니다. 변환 부품은 소프트웨어 단계를 그린 도식이며 실제 하드웨어나 추가로 할당하는 버퍼가 아닙니다. Msg에는 처음부터 각각 2바이트 uint16을 기록합니다. 좌표 부분은 총 4바이트이고 서버 float 좌표는 그대로입니다. 다른 필드와 물리 송신은 생략합니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 좌표 8B → 4B</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>
+
+
+
+

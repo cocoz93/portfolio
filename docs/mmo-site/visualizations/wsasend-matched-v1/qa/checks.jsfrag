@@ -1,0 +1,94 @@
+async function main(){
+  assert(Buffer.byteLength(fragment)<1_000_000);
+  assert(!/\b(?:fetch|XMLHttpRequest|WebSocket)\s*\(/.test(script));
+  assert(!/<!doctype|<html\b|<head\b|<body\b/i.test(fragment));
+  parse(fragment.replace(/<script>[\s\S]*?<\/script>/g,''));
+  const normalize=value=>JSON.parse(JSON.stringify(value));
+  const figure2Source=fs.readFileSync(path.resolve(dir,'../sector-bundle-before-speed-v18/scene.js'),'utf8');
+  const figure2=vm.runInNewContext(figure2Source+';({createBundleAnimationScene})');
+  const checked=[];
+  for(const width of [1024,736,700,699,360,320]){
+    const scene=api.createBundleAnimationScene(width),program=api.createBundleProgram(scene.compact),nodes=parse(scene.markup),reference=figure2.createBundleAnimationScene(width);
+    assert.equal(scene.height,reference.height);assert.equal(scene.metrics.mapW,120);assert.equal(scene.metrics.mapH,144);
+    assert(!scene.markup.includes('bundle-packet'));assert(!scene.markup.includes('bundle-msg-region'));
+    for(let r=0;r<2;r++){
+      const row=scene.rows[r];assert.equal(row.messages.length,4);assert.equal(row.packets.length,4);assert.equal(row.queue.length,4);
+      assert.equal(row.sourceBeams.length,4);assert.equal(row.copyBeams.length,4);assert.equal(row.outletBeams.length,1);
+      assert.deepEqual(normalize(row.character.positions),normalize(reference.rows[r].character.positions));
+      assert.deepEqual(normalize(row.character.coordinates),normalize(reference.rows[r].character.coordinates));
+      assert.deepEqual(normalize(row.character.directions),normalize(reference.rows[r].character.directions));
+      for(const message of row.messages){assert.equal(message.height,100);assert.equal(message.width,56);assert.equal(message.titleHeight,24);assert.equal(message.protocolHeaderHeight,20);}
+      for(const packet of row.packets){assert.equal(nodes.get(packet.base).getAttribute('width'),'48');assert.equal(nodes.get(packet.base).getAttribute('height'),'40');assert(packet.header&&packet.protocolHeader);}
+      assert.deepEqual(normalize(row.packets.map(p=>p.payload)),normalize(reference.rows[0].packets.map(p=>p.payload)));
+      assertSeparatePaths(row.sourceBeams,`source ${width}/${r}`);assertSeparatePaths(row.copyBeams,`copy ${width}/${r}`);
+      const qlabel=nodes.get(row.queueCount);assert(qlabel);
+    }
+    assert.deepEqual(normalize(scene.rows[0].messages),normalize(reference.rows[0].messages));
+    assert.equal((scene.markup.match(/data-role="packet-header"/g)||[]).length,8);
+    assert.equal((scene.markup.match(/data-role="call-count"/g)||[]).length,2);
+    assert.equal((scene.markup.match(/data-character="mage"/g)||[]).length,2);
+    for(const label of scene.labels){
+      ctx.font=`500 ${label.size}px PCB-Review`;const measured=ctx.measureText(label.label).width;
+      const left=label.x-(label.anchor==='middle'?measured/2:label.anchor==='end'?measured:0);
+      assert(label.size>=11);assert(left>=-1&&left+measured<=width+1,`Label outside ${width}: ${label.label}`);
+      assert(label.y-label.size/2>=0&&label.y+label.size/2<=scene.height);
+    }
+    for(const points of scene.traces)for(const [x,y] of points)assert(x>=0&&x<=width&&y>=0&&y<=scene.height);
+    const beforeOutlets=program.segments.filter(s=>s.row===0&&s.phase==='outlet'),afterOutlets=program.segments.filter(s=>s.row===1&&s.phase==='outlet');
+    assert.equal(beforeOutlets.length,4);assert.equal(afterOutlets.length,1);
+    for(let i=0;i<4;i++){
+      const queue=program.segments.find(s=>s.row===0&&s.phase==='queue'&&s.actor===i),release=program.segments.find(s=>s.row===0&&s.phase==='release'&&s.actor===i);
+      const ready=api.bundleFrame(queue.end,program),sent=api.bundleFrame(release.end,program);
+      assert.equal(ready.rows[0].copies,1);assert.equal(ready.rows[0].calls,i);assert.equal(ready.rows[0].drains[i],0);
+      assert.equal(sent.rows[0].copies,0);assert.equal(sent.rows[0].calls,i+1);assert.equal(sent.rows[0].drains[i],1);
+      api.applyBundleFrame(scene,sent,setter(nodes));assert.equal(nodes.get(scene.rows[0].queue[i].id).getAttribute('opacity'),'0');
+      for(let j=0;j<i;j++)assert.equal(ready.rows[0].drains[j],1);
+      const afterQueue=program.segments.find(s=>s.row===1&&s.phase==='queue'&&s.actor===i),accumulated=api.bundleFrame(afterQueue.end,program);
+      assert.equal(accumulated.rows[1].copies,i+1);assert.equal(accumulated.rows[1].calls,0);
+      api.applyBundleFrame(scene,accumulated,setter(nodes));for(let j=0;j<=i;j++)assert.equal(nodes.get(scene.rows[1].queue[j].id).getAttribute('opacity'),'1');
+    }
+    const tick=program.segments.find(s=>s.phase==='tick'),waiting=api.bundleFrame(tick.start,program);
+    assert.equal(waiting.rows[1].copies,4);assert.equal(waiting.rows[1].calls,0);
+    const final=api.bundleFrame(program.end,program);assert.equal(final.rows[0].calls,4);assert.equal(final.rows[1].calls,1);assert.equal(final.rows[0].copies,0);assert.equal(final.rows[1].copies,0);
+    for(const row of final.rows){assert(row.moves.every(v=>v===1));assert(row.packets.every(v=>v===1));assert.equal(row.opacity,1);assert.equal(row.gray,0);}
+    api.applyBundleFrame(scene,final,setter(nodes));
+    assert.equal(nodes.get(scene.rows[0].callCount).textContent,'4회');assert.equal(nodes.get(scene.rows[1].callCount).textContent,'1회');
+    for(const row of scene.rows){assert.equal(nodes.get(row.queueCount).textContent,'비움');assert.equal(nodes.get(row.character.face).getAttribute('data-facing'),'south');}
+    for(const segment of program.segments){
+      const mid=(segment.start+segment.end)/2,frame=api.bundleFrame(mid,program);api.applyBundleFrame(scene,frame,setter(nodes));
+      if(segment.phase==='message'){
+        const packet=scene.rows[segment.row].packets[segment.actor];assert.equal(Number(nodes.get(packet.mask).getAttribute('width')),packet.width/2);
+        assert.equal(Number(nodes.get(packet.fill).getAttribute('opacity')),.46);
+      }
+      if(segment.phase==='move')assert.equal(nodes.get(scene.rows[segment.row].character.face).getAttribute('data-facing'),scene.rows[segment.row].character.directions[segment.actor]);
+      if(segment.row===0&&segment.phase!=='rowEnd'){assert.equal(frame.rows[1].opacity,.28);assert.equal(frame.rows[1].gray,1);}
+      if(segment.row===1&&!['switch','compare'].includes(segment.phase)){assert.equal(frame.rows[0].opacity,.28);assert.equal(frame.rows[0].gray,1);}
+    }
+    checked.push({width,height:scene.height,duration:program.end,beforeMsgs:4,afterMsgs:4,beforeCalls:4,afterCalls:1});
+  }
+  const rt=runtime(),design=rt.designs[0],animation=design.animation;
+  assert.equal(animation.getState().preview,true);assert.equal(animation.getState().playing,false);assert.equal(rt.saves.length,0);
+  design.buttons.play.fire('click');assert.equal(animation.getState().playing,true);rt.advance(16);rt.advance(80);assert(animation.getState().time>0);
+  design.buttons.play.fire('click');const paused=animation.getState().time;rt.advance(80);assert.equal(animation.getState().time,paused);
+  design.buttons.play.fire('click');rt.advance();rt.advance(80);assert(animation.getState().time>paused);
+  const program=animation.getProgram(),tick=program.segments.find(s=>s.phase==='tick');animation.seek(tick.start);assert.equal(animation.getState().queuedAfter,4);assert.equal(animation.getState().callsAfter,0);
+  rt.resize(320);assert.equal(animation.getState().queuedAfter,4);assert.equal(animation.getState().callsAfter,0);assert.equal(design.board.getAttribute('viewBox'),'0 0 320 1080');
+  design.buttons.play.fire('click');rt.advance();rt.advance(80);design.buttons.play.fire('click');const saved=rt.saves.at(-1),restored=runtime(736,false,saved);assert.equal(restored.designs[0].animation.getState().queuedAfter,4);assert.equal(restored.saves.length,0);
+  design.buttons.preview.fire('click');assert.equal(animation.getState().preview,true);assert.equal(animation.getState().callsBefore,4);assert.equal(animation.getState().callsAfter,1);
+  const reduced=runtime(736,true);reduced.designs[0].buttons.play.fire('click');assert.equal(reduced.designs[0].animation.getState().playing,false);assert.equal(reduced.pending.size,0);
+  for(const [file,expected] of [
+    ['../archive/wsasend-restored-20261012/wsasend-restored.html','856E1491CC7799AEC9D43B0433B1F57F34E022C9044971A2353B7ABD40817DEB'],
+    ['../sector-bundle-before-speed-v18/before-speed.html','41D9AD560871C9045803E4501011C81C384EDB74DA648177332D6C35420D3ACE']
+  ])assert.equal(require('node:crypto').createHash('sha256').update(fs.readFileSync(path.resolve(dir,file))).digest('hex').toUpperCase(),expected,'Approved originals preserved');
+  const program736=api.createBundleProgram(false),segment=(r,p,i=0)=>program736.segments.find(s=>s.row===r&&s.phase===p&&s.actor===i);
+  await snapshot(736,'silkscreen',null,'final-736');await snapshot(320,'silkscreen',null,'final-320');
+  await snapshot(736,'silkscreen',segment(0,'queue',0).end,'before-queue-lit');
+  await snapshot(736,'silkscreen',segment(0,'release',0).end,'before-queue-empty');
+  await snapshot(736,'silkscreen',program736.segments.find(s=>s.phase==='tick').start,'after-accumulated');
+  const send=program736.segments.find(s=>s.row===1&&s.phase==='outlet');await snapshot(736,'silkscreen',send.start+send.duration*.65,'after-send');
+  const message=segment(0,'message',0);await snapshot(736,'silkscreen',message.start+message.duration*.5,'left-right-fill');
+  const moving=segment(0,'move',2);await snapshot(736,'silkscreen',moving.start+moving.duration*.5,'character-moving');
+  const report={ok:true,bytes:Buffer.byteLength(fragment),paletteChecks,checked,manualPlay:true,playPauseVerified:true,resizePreservesPhase:true,reducedMotionVerified:true,stateRestoreVerified:true,originalsPreserved:true,browserHostVerified:false};
+  fs.writeFileSync(path.join(__dirname,'review.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
+}
+main().catch(error=>{console.error(error);process.exitCode=1;});

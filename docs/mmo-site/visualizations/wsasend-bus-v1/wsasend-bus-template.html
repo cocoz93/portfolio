@@ -1,0 +1,37 @@
+<style>
+/* EMBEDDED_FONTS */
+#wsasend-bus-v1 {
+  --pcb-bg:#101923;--pcb-surface:#182b3b;--pcb-edge:#3f5b72;
+  --pcb-track:#8fa9bd;--pcb-text:#eff4fa;--pcb-muted:#b8c5d3;
+  --pcb-active:#67c8ff;--pcb-soft:#21465e;--pcb-empty:#213547;--pcb-pin:#8fa9bd;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;
+  --pcb-char-steel-dark:#617e9a;--pcb-char-blue:#4eafe8;--pcb-char-blue-mid:#2579ad;
+  --pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);background:var(--pcb-bg);color-scheme:dark;
+  font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#wsasend-bus-v1 .pcb-board {width:100%;height:auto;display:block}
+#wsasend-bus-v1 .pcb-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;fill:var(--pcb-text);font-weight:500}
+#wsasend-bus-v1 .pcb-board .pcb-mono {font-family:PCB-Mono,"Malgun Gothic",monospace}
+#wsasend-bus-v1 .pcb-board .pcb-muted {fill:var(--pcb-muted)}
+#wsasend-bus-v1 .pcb-board .pcb-accent {fill:var(--pcb-active)}
+#wsasend-bus-v1 .pcb-board .pcb-number {font-variant-numeric:tabular-nums}
+#wsasend-bus-v1 .pcb-controls {display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 24px 20px}
+#wsasend-bus-v1 .pcb-status {font-size:12px;color:var(--pcb-muted);margin-left:auto}
+@media(max-width:659px){#wsasend-bus-v1 .pcb-status{margin-left:0;flex-basis:100%}}
+</style>
+<div id="wsasend-bus-v1" aria-label="WSASend 버스 배선형 비교 애니메이션">
+  <svg class="pcb-board" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 736 476" width="736" height="476" role="img" aria-labelledby="wsasend-bus-title wsasend-bus-description">
+    <title id="wsasend-bus-title">WSASend: 즉시 송신과 틱 끝 묶음 송신</title>
+    <desc id="wsasend-bus-description">한 수신 세션으로 보내는 이동 메시지 네 개를 비교합니다. 변경 전을 먼저 재생하고, 끝나면 변경 후를 재생합니다. 비활성 영역은 회색으로 어두워집니다. 캐릭터가 한 칸 이동하면 Msg가 왼쪽에서 오른쪽으로 채워지고, 데이터가 배선을 따라 SendQ에 들어갑니다. 변경 전은 즉시 WSASend를 호출하며 큐의 불빛이 꺼집니다. 변경 후는 네 메시지를 보관하다 틱 끝에 한 번 호출하고 큐가 비워집니다. 같은 메시지를 커널에 요청하는 횟수가 네 번에서 한 번으로 바뀝니다. 수신 완료나 TCP 패킷 수를 나타내는 그림은 아닙니다.</desc>
+    <!-- STATIC_PREVIEW -->
+  </svg>
+  <div class="pcb-controls">
+    <button type="button" class="btn pcb-play" aria-label="애니메이션 일시정지">일시정지</button>
+    <button type="button" class="btn pcb-replay">다시 재생</button>
+    <span class="pcb-status" aria-live="polite" aria-atomic="true">변경 전 · 이동 준비</span>
+  </div>
+</div>
+<script>
+/* ANIMATION_SOURCE */
+</script>

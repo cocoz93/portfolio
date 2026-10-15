@@ -1,0 +1,42 @@
+{
+  "figure": 4,
+  "scope": "after-only composition draft",
+  "revision": 4,
+  "visualRevision": "Desktop columns have equal center spacing and aligned headings; the sector map, Digest and middle SendQ share one horizontal axis. Single flat Msg previews replace stacked rectangles. S labels and Msg counts use clearer type hierarchy. Waiting data stays dark blue, only the current recipient preview turns vivid blue, and completed recipients fade to gray over the existing 650 ms. Grid lines and scope outlines are quieter; repeated captions and the footer are removed. Character sizes, packet selection, timing and enqueue behavior remain the same.",
+  "sourcePage": "https://app.notion.com/p/digest-18-4-gameloop-0-57-0-21-39b16a0b9f59809b9155c081cd253537",
+  "composition": "One 3x3 viewport contains the moving A and top-row S1, S2, S3. Each recipient has an overhead preview of the number of Msgs it must receive. The center remains a reusable raw Digest; the right components remain separate SendQs. Original source-sector storage is internal to the model and is not drawn.",
+  "example": {
+    "sourcePacketIds": [1, 2, 3, 4],
+    "sourceCells": [4, 3, 5, 4],
+    "S1": [2, 1, 4],
+    "S2": [2, 1, 4, 3],
+    "S3": [1, 4, 3],
+    "enqueueCallsPerResident": [1, 1, 1],
+    "residentsPerShownSector": 1
+  },
+  "semanticRules": [
+    "Packets are stored in the sector where the event originated",
+    "Each receiving sector chooses its own neighboring source-sector packets",
+    "Packet order follows source-sector row and column order, then order within a sector",
+    "Original headers and payloads are concatenated without adding a new wire-level header",
+    "The reusable temporary buffer is cleared and rebuilt for each receiving sector",
+    "Original source packets remain available while other receiving sectors are processed",
+    "One RequestSendRaw per resident; several residents in the same sector would use the same completed Digest bytes",
+    "The displayed grid is a viewport; valid neighborhoods can extend beyond its edges"
+  ],
+  "limits": [
+    "This after draft uses four events to make accumulation visible; the preceding before draft shows one event, so they are not yet a matched numerical A/B example",
+    "Membership digest, global cleanup, Msg allocation and later WSASend execution are outside this drawing",
+    "Only completed source packet generation is illustrated; dirty coordinate aggregation is not changed"
+  ],
+  "codeEvidence": {
+    "path": "C:/Users/USER/Desktop/MyGit/MMO_Zone/MMOServer/MMOServer/GameServer.cpp",
+    "functions": ["RegisterSectorItem", "FlushSectorSends"],
+    "temporaryBufferClearLine": 4373,
+    "neighborSelectionLine": 4389,
+    "originalByteConcatenationLine": 4395,
+    "residentEnqueueLine": 4415
+  },
+  "visualBasis": "Verified Figure 3 character vectors and navy PCB palette, orthogonal 1.5px traces, flat recipient Msg previews, data-only emphasis",
+  "browserHostVerified": false
+}

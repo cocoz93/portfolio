@@ -1,0 +1,110 @@
+<style>
+/* ORIGINAL_FONTS */
+#wsasend-crisp-blue-v9 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#238fff;--pcb-data-focus:#0066d6;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;--pcb-char-blue:#4eafe8;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#wsasend-crisp-blue-v9 .study-design {width:100%;background:var(--pcb-bg);color-scheme:dark}
+#wsasend-crisp-blue-v9 .study-board {display:block;width:100%;height:auto}
+#wsasend-crisp-blue-v9 .study-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#wsasend-crisp-blue-v9 .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#wsasend-crisp-blue-v9 .study-toolbar {padding:12px 20px}
+#wsasend-crisp-blue-v9 .study-status {font-size:12px;color:var(--pcb-muted);flex:1 1 220px;text-align:right}
+</style>
+<div id="wsasend-crisp-blue-v9">
+  <section id="wsasend-crisp-blue-minimal" class="study-design" data-variant="틱 끝 묶음 송신" data-routing="chamfer" data-material="minimal" data-layout="silkscreen" aria-label="틱 끝 묶음 송신">
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="wsasend-crisp-blue-title wsasend-crisp-blue-desc">
+      <title id="wsasend-crisp-blue-title">틱 끝 묶음 송신</title>
+      <desc id="wsasend-crisp-blue-desc">1번 그림. 같은 수신 세션의 SendQ에 같은 네 개의 Msg가 들어갑니다. 변경 전에는 하나가 들어올 때마다 즉시 WSASend를 호출하고 큐를 비웁니다. 변경 후에는 네 Msg를 누적한 뒤 틱 끝에 한 번 요청합니다. Msg 자체를 합치는 최적화가 아닙니다. 입력 중인 칸은 내부 채움과 테두리가 함께 켜지고 적재 후 0.2초 동안 밝기를 유지한 뒤 차분해집니다. 송신 요청 중에는 저장된 칸과 출력 배선이 함께 켜지고, 큐가 비워지면 소등합니다. 링버퍼 데이터는 짙고 선명한 블루로 채웁니다. 저장된 칸의 채움 농도는 72퍼센트, 입력과 송신 순간에는 100퍼센트로 높이며 숫자는 밝은 글자로 표시합니다. 첫 화면은 색 확인을 위한 송신 요청 중 장면이며, 재생하면 기존 타이밍으로 전체 과정을 보여줍니다. 링버퍼의 대기 개수는 변경 전 1과 0을 반복하고, 변경 후 1, 2, 3, 4로 늘었다가 0이 됩니다. 크기와 구도, 원본 블루, Msg 전달 후 톤이 낮아지는 동작, 기존 재생 속도를 유지합니다. 송신 출구는 커널에 대한 요청이며 수신 완료나 TCP 패킷 수를 의미하지 않습니다.</desc>
+      <!-- SCENE_MINIMAL -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play" aria-label="틱 끝 묶음 송신 애니메이션 재생">재생</button>
+      <button type="button" class="btn" data-action="preview">구도 보기</button>
+      <span class="study-status" role="status" aria-live="polite">같은 Msg 4개 · WSASend 4회 → 1회</span>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  'use strict';
+/* MATCHED_SOURCE */
+  const root=document.getElementById('wsasend-crisp-blue-v9');if(!root)return;
+  const KIND='wsasend-crisp-blue-v9';
+  const reduced=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false,addEventListener(){}};
+  const designs=Array.from(root.querySelectorAll('.study-design')),controllers=[];
+  let drawnWidth=0,pendingWidth=0,layoutFrame=0;
+  function save(){
+    if(!window.openai?.setWidgetState)return;
+    const snapshots=controllers.map(controller=>controller.snapshot());
+    try{Promise.resolve(window.openai.setWidgetState({modelContent:{kind:KIND,designs:controllers.map(controller=>controller.state())},privateContent:{kind:KIND,designs:snapshots}})).catch(()=>{});}catch{}
+  }
+  for(const design of designs){
+    const layout=design.getAttribute('data-layout'),routing=design.getAttribute('data-routing'),material=design.getAttribute('data-material'),board=design.querySelector('.study-board');
+    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map();
+    function set(id,attrs,text){
+      const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
+      for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
+      if(text!==undefined&&element.textContent!==text)element.textContent=text;
+    }
+    function frame(){return preview?bundlePreviewFrame(program):bundleFrame(time,program);}
+    function paint(){
+      if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
+      if(status.textContent!==current.phase)status.textContent=current.phase;
+      playButton.textContent=playing?'일시정지':time>0&&time<program.end&&!preview?'이어서 재생':'재생';
+      playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 애니메이션 재생`);
+    }
+    function state(){const f=frame();return {layout,routing,material,name:design.getAttribute('data-variant'),time,duration:program.end,playing,preview,phase:f.phase,callsBefore:f.rows[0].calls,callsAfter:f.rows[1].calls,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].copies,queuedAfter:f.rows[1].copies};}
+    function pause(){playing=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);raf=0;paint();}
+    function schedule(){if(playing&&!raf)raf=requestAnimationFrame(tick);}
+    function tick(now){
+      raf=0;if(!playing)return;
+      if(document.hidden||design.hidden){lastFrame=0;schedule();return;}
+      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));lastFrame=now;
+      if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
+    }
+    function play(){
+      if(reduced.matches){pause();preview=true;time=program.end;paint();return;}
+      if(preview||time>=program.end)time=0;preview=false;playing=true;lastFrame=0;paint();schedule();
+    }
+    function showPreview(){pause();time=program.end;preview=true;paint();}
+    function renderDesign(width){
+      const position=locateBundleSegment(time,program),atEnd=time>=program.end;
+      const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));
+      scene=createBundleAnimationScene(width,layout,routing,material);program=createBundleProgram(scene.compact);
+      time=atEnd?program.end:program.segments[position.index].start+position.progress*program.segments[position.index].duration;
+      board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);
+      board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));
+      nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastFrame=0;paint();
+    }
+    function snapshot(){const p=locateBundleSegment(time,program);return {layout,routing,material,segment:p.index,phaseProgress:p.progress,playing,preview};}
+    function restore(saved){
+      if(saved?.layout!==layout||saved?.routing!==routing||saved?.material!==material||!Number.isInteger(saved.segment)||saved.segment<0||saved.segment>=program.segments.length||!Number.isFinite(saved.phaseProgress))return;
+      pause();const segment=program.segments[saved.segment];time=segment.start+bundleClamp(saved.phaseProgress)*segment.duration;preview=Boolean(saved.preview);
+      if(reduced.matches){preview=true;time=program.end;}
+      playing=!preview&&!reduced.matches&&Boolean(saved.playing)&&time<program.end;paint();schedule();
+    }
+    const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
+    design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
+    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});
+    document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+    reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
+  }
+  function draw(width){
+    if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,width);
+    if(Math.abs(width-drawnWidth)<.5)return;controllers.forEach(controller=>controller.draw(width));drawnWidth=width;
+  }
+  function restore(snapshot){if(snapshot?.privateContent?.kind!==KIND)return;for(const controller of controllers)controller.restore(snapshot.privateContent.designs?.find(entry=>entry.layout===controller.state().layout&&entry.routing===controller.state().routing&&entry.material===controller.state().material));}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState));
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{
+    pendingWidth=entries[0].contentRect.width;if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{layoutFrame=0;draw(pendingWidth);});
+  }).observe(root);
+})();
+</script>

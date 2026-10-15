@@ -1,0 +1,12 @@
+const fs=require("node:fs"),path=require("node:path"),vm=require("node:vm");
+const dir=path.resolve(__dirname,"..");
+const original=fs.readFileSync(path.resolve(dir,"../pcb-animation-v1/wsasend-pcb-previous.html"),"utf8");
+const fonts=original.match(/@font-face\{[^}]+\}/g);
+if(fonts?.length!==2)throw new Error("PCB 글꼴을 확인하지 못했습니다.");
+const animation=fs.readFileSync(path.join(dir,"animation.js"),"utf8");
+new vm.Script(animation);
+let fragment=fs.readFileSync(path.join(dir,"wsasend-bus-template.html"),"utf8").replace("/* EMBEDDED_FONTS */",fonts.join("\n")).replace("/* ANIMATION_SOURCE */",animation);
+const poster=path.join(__dirname,"initial-scene.svg.txt");
+if(fs.existsSync(poster))fragment=fragment.replace("<!-- STATIC_PREVIEW -->",fs.readFileSync(poster,"utf8"));
+fs.writeFileSync(path.join(dir,"wsasend-bus.html"),fragment,"utf8");
+console.log(JSON.stringify({bytes:Buffer.byteLength(fragment),path:path.join(dir,"wsasend-bus.html")}));

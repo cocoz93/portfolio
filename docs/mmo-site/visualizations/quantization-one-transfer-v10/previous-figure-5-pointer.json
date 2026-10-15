@@ -1,0 +1,20 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 9,
+  "scope": "coordinate-fields-only",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-no-wires-v9/quantization.html",
+  "sha256": "ae32ce23df0fb7df23cd66593aaae10e31a87ea3cd2b704c81247e420931fe29",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-no-wires-v9/qa/review.json",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "durationMs": 7700,
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "instantMsgAfterQuantization": true,
+  "noWiring": true,
+  "noMsgTransferAnimation": true,
+  "quantizationStageLabel": "양자화",
+  "design": "PCB conversion component",
+  "previousVersion": "quantization-direct-store-v8/quantization.html"
+}

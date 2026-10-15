@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="736" height="736" viewBox="0 0 736 736"><style>text{font-family:PCB-Review,'Malgun Gothic',sans-serif;font-weight:500}</style><rect x="0" y="0" width="736" height="736" fill="#0d1421"></rect>
+<text x="24" y="34" fill="#a8b8ca" font-size="12" text-anchor="start" dominant-baseline="middle">수신자별 처리 순서</text>
+<path d="M104 70 L698 70" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.8"></path>
+<polyline points="694,67 698,70 694,73" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.8"></polyline>
+<text x="197" y="100" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">세션 1 처리</text>
+<path d="M104 64 L104 76" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="383" y="100" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">세션 2 처리</text>
+<path d="M290 64 L290 76" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="569" y="100" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">세션 3 처리</text>
+<path d="M476 64 L476 76" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="24" y="144" fill="#eef2fb" font-size="14" text-anchor="start" dominant-baseline="middle">변경 전</text>
+<rect x="112" y="170" width="170" height="62" fill="#0066d6" opacity="0.85" data-role="separate-buffer-lifetime"></rect>
+<text x="197" y="201" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">Msg 1</text>
+<text x="116" y="252" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle">생성</text>
+<text x="278" y="252" fill="#a8b8ca" font-size="11" text-anchor="end" dominant-baseline="middle">풀 반환</text>
+<rect x="298" y="170" width="170" height="62" fill="#0066d6" opacity="0.85" data-role="separate-buffer-lifetime"></rect>
+<text x="383" y="201" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">Msg 2</text>
+<text x="302" y="252" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle">생성</text>
+<text x="464" y="252" fill="#a8b8ca" font-size="11" text-anchor="end" dominant-baseline="middle">풀 반환</text>
+<rect x="484" y="170" width="170" height="62" fill="#0066d6" opacity="0.85" data-role="separate-buffer-lifetime"></rect>
+<text x="569" y="201" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">Msg 3</text>
+<text x="488" y="252" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle">생성</text>
+<text x="650" y="252" fill="#a8b8ca" font-size="11" text-anchor="end" dominant-baseline="middle">풀 반환</text>
+<path d="M20 306 L716 306" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.8"></path>
+<text x="24" y="350" fill="#238fff" font-size="14" text-anchor="start" dominant-baseline="middle">변경 후</text>
+<rect x="112" y="376" width="542" height="76" fill="#0066d6" opacity="0.85" data-role="retained-buffer-lifetime"></rect>
+<text x="383" y="414" fill="#eef2fb" font-size="14" text-anchor="middle" dominant-baseline="middle">같은 Msg를 세 번의 Copy 동안 유지</text>
+<text x="24" y="494" fill="#a8b8ca" font-size="13" text-anchor="start" dominant-baseline="middle" class="study-mono">Ref</text>
+<path d="M112 452 L112 470" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="112" y="494" fill="#eef2fb" font-size="22" text-anchor="middle" dominant-baseline="middle" class="study-mono">4</text>
+<path d="M128 494 L274 494" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="270,491 274,494 270,497" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M290 452 L290 470" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="290" y="494" fill="#eef2fb" font-size="22" text-anchor="middle" dominant-baseline="middle" class="study-mono">3</text>
+<path d="M306 494 L460 494" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="456,491 460,494 456,497" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M476 452 L476 470" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="476" y="494" fill="#eef2fb" font-size="22" text-anchor="middle" dominant-baseline="middle" class="study-mono">2</text>
+<path d="M492 494 L638 494" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="634,491 638,494 634,497" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M654 452 L654 470" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="654" y="494" fill="#eef2fb" font-size="22" text-anchor="middle" dominant-baseline="middle" class="study-mono">1</text>
+<path d="M670 494 L682 494" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="678,491 682,494 678,497" fill="none" stroke="#354b61" stroke-width="1.5" opacity="0.75"></polyline>
+<path d="M698 452 L698 470" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<text x="698" y="494" fill="#238fff" font-size="22" text-anchor="middle" dominant-baseline="middle" class="study-mono">0</text>
+<text x="112" y="548" fill="#a8b8ca" font-size="12" text-anchor="start" dominant-baseline="middle">초기 Ref 1</text>
+<text x="112" y="574" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">AddRef(3) → 4</text>
+<text x="410.9" y="548" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">Copy마다 SubRef</text>
+<text x="410.9" y="574" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle" class="study-mono">4 → 3 → 2 → 1</text>
+<text x="698" y="548" fill="#a8b8ca" font-size="12" text-anchor="end" dominant-baseline="middle">빌더 몫 반환</text>
+<text x="698" y="574" fill="#238fff" font-size="12" text-anchor="end" dominant-baseline="middle" class="study-mono">1 → 0 · 풀 반환</text>
+<text x="368" y="682" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle">생성 3회 → 1회 · 세션별 Copy는 그대로</text></svg>

@@ -1,0 +1,20 @@
+<style>
+#wsasend-design-switch{display:flex;align-items:center;gap:24px;padding:10px 5% 0;background:#0d1421}
+#wsasend-design-switch button{min-height:44px;padding:8px 0;border:0;border-bottom:2px solid transparent;background:transparent;color:#a8b8ca;font:400 14px PCB-Pretendard,"Malgun Gothic",sans-serif}
+#wsasend-design-switch button[aria-pressed="true"]{border-bottom-color:#6cc7ff;color:#eef2fb}
+</style>
+<div id="wsasend-design-switch" role="group" aria-label="디자인 비교">
+  <button type="button" aria-pressed="true" data-show-design="0">이전 디자인</button>
+  <button type="button" aria-pressed="false" data-show-design="1">이번 디자인</button>
+</div>
+<!--DESIGN_COMPARE-->
+<script>
+(() => {
+  const buttons = Array.from(document.querySelectorAll("#wsasend-design-switch button"));
+  const panels = Array.from(document.querySelectorAll("#wsasend-design-comparison > section"));
+  buttons.forEach((button, index) => button.addEventListener("click", () => {
+    panels.forEach((panel, i) => { panel.hidden = i !== index; });
+    buttons.forEach((other, i) => { other.setAttribute("aria-pressed", String(i === index)); });
+  }));
+})();
+</script>

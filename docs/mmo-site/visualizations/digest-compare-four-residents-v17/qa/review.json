@@ -1,0 +1,107 @@
+{
+  "pass": true,
+  "widths": [
+    1024,
+    736,
+    700,
+    699,
+    656,
+    655,
+    360,
+    320
+  ],
+  "frames": 162,
+  "durationMs": 33200,
+  "beforeDurationMs": 16200,
+  "afterDurationMs": 16300,
+  "logicCorrections": [
+    "dirty registration followed by one final tick-end move Msg",
+    "one Digest per receiving sector reused for each resident",
+    "source Msg marks inside their actual source cells"
+  ],
+  "digestBoxFixed": true,
+  "digestHeight": 140,
+  "outputWiresRemoved": true,
+  "originalBufferPreservedDuringCopy": true,
+  "example": {
+    "actorCells": [
+      6,
+      3,
+      4
+    ],
+    "sourceMsgIds": [
+      1,
+      2
+    ],
+    "sourceCells": [
+      3,
+      4
+    ],
+    "residentsPerShownSector": [
+      2,
+      1,
+      1
+    ],
+    "receivingCells": [
+      0,
+      1,
+      2
+    ],
+    "queuedBefore": [
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "queuedAfter": [
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        2
+      ]
+    ],
+    "callsBefore": [
+      2,
+      2,
+      2,
+      1
+    ],
+    "callsAfter": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "digestBuilds": [
+      1,
+      1,
+      1
+    ]
+  },
+  "functionalRuntimeVerified": true,
+  "browserHostVerified": false,
+  "serverBinaryExecuted": false,
+  "bytes": 401486,
+  "sha256": "d7b3a01b14735bb61ebd6d8fe7fe84a48c85ccc25801002a417788aa89d436f8"
+}

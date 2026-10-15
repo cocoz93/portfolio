@@ -1,0 +1,31 @@
+<style>
+/*STYLES*/
+#digest-comparison-horizontal-v7 {--pcb-target:#238fff;--pcb-done:#657282}
+#digest-comparison-horizontal-v7 .comparison-panels {display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+#digest-comparison-horizontal-v7 .comparison-board {display:block;width:100%;height:auto;background:var(--pcb-bg)}
+#digest-comparison-horizontal-v7 .comparison-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#digest-comparison-horizontal-v7 .comparison-board .sector-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#digest-comparison-horizontal-v7 [data-status] {min-height:2em}
+</style>
+<div id="digest-comparison-horizontal-v7" data-layout="rows" aria-label="4번 그림 · 기존 좌우 흐름을 유지한 변경 전후 비교">
+  <div class="comparison-panels">
+    <svg class="comparison-board" data-board="before" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="digest-compare-before-title digest-compare-before-desc">
+      <title id="digest-compare-before-title">변경 전 · Msg마다 수신 섹터를 순회해 개별 적재</title>
+      <desc id="digest-compare-before-desc">A가 이동하고 채팅해 만드는 Msg 1, 2, 3, 4를 하나씩 S1, S2, S3에게 적재합니다. 각 SendQ에 같은 Msg 네 개가 들어가며 적재 요청은 세션마다 네 번입니다. S 위의 Msg 개수는 그 세션에 아직 적재하지 않은 항목 수입니다.</desc>
+      <!--BEFORE-->
+    </svg>
+    <svg class="comparison-board" data-board="after" xmlns="http://www.w3.org/2000/svg" width="736" height="400" viewBox="0 0 736 400" role="img" aria-labelledby="digest-compare-after-title digest-compare-after-desc">
+      <title id="digest-compare-after-title">변경 후 · 섹터별 보관 후 수신 섹터별 Digest 구성</title>
+      <desc id="digest-compare-after-desc">같은 A의 이동 Msg 1과 채팅 Msg 2, 3, 4를 발생 섹터에 모읍니다. 수신 섹터의 유효범위에서 기존 Msg 헤더와 데이터를 Digest로 연접한 뒤 주민마다 한 번 적재합니다. 같은 Msg 네 개를 받지만 적재 요청은 세션마다 한 번입니다. Msg 표시는 S 위, 채팅 표시는 A 위에 두며 완료한 S는 파란색에서 회색으로 전환합니다. 원본 Msg는 다른 수신 섹터를 처리하는 동안 유지되고 임시버퍼는 수신 섹터마다 비워 다시 구성합니다. 이 예시는 각 수신 섹터의 주민 한 명만 나타내고 있습니다.</desc>
+      <!--AFTER-->
+    </svg>
+  </div>
+  <div class="viz-controls">
+    <button class="btn btn-primary" type="button" data-action="play" aria-pressed="false">재생</button>
+    <button class="btn" type="button" data-action="reset">처음으로</button>
+  </div>
+  <div class="text-small" data-status aria-live="polite">완료 · 같은 Msg 4개 · 주민별 SendQ 적재 4회 → 1회</div>
+</div>
+<script>
+/*SCRIPT*/
+</script>

@@ -1,0 +1,80 @@
+<style>
+/* EMBEDDED_FONTS */
+#sector-bundle-layouts-v1 .bundle-variant {
+  --pcb-bg:#0d1421; --pcb-surface:#151f2c; --pcb-edge:#354b61;
+  --pcb-track:#7895ae; --pcb-text:#eef2fb; --pcb-muted:#a8b8ca;
+  --pcb-active:#6cc7ff; --pcb-soft:#1b3a50; --pcb-empty:#172536;
+  --pcb-char-ink:#08121e; --pcb-char-steel:#dce9f3;
+  --pcb-char-steel-dark:#617e9a; --pcb-char-blue-mid:#2579ad;
+  --pcb-char-blue-dark:#17466a; --pcb-char-skin:#ecd0b5;
+  --pcb-char-skin-dark:#bd947a;
+  width:100%; color:var(--pcb-text); background:var(--pcb-bg);
+  color-scheme:dark; font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#sector-bundle-layouts-v1 .bundle-layout-board {display:block;width:100%;height:auto}
+#sector-bundle-layouts-v1 .bundle-layout-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#sector-bundle-layouts-v1 .bundle-layout-board .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+</style>
+<div id="sector-bundle-layouts-v1" class="viz-carousel" aria-label="섹터 묶음 구도 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section data-variant="팬아웃 흐름" aria-label="한 섹터의 변경분이 여러 수신 세션으로 전달되는 구도">
+    <div class="bundle-variant">
+      <svg class="bundle-layout-board" xmlns="http://www.w3.org/2000/svg" data-layout="fanout" role="img" aria-labelledby="bundle-fanout-title bundle-fanout-desc" width="736" height="650" viewBox="0 0 736 650">
+        <title id="bundle-fanout-title">팬아웃 흐름</title>
+        <desc id="bundle-fanout-desc">같은 소스 섹터에서 움직인 네 플레이어의 변경분을 비교합니다. 개별 패킷 네 개는 수신 세션마다 네 번 Copy합니다. 새 묶음 패킷은 네 최종 상태를 엔트리로 담아 수신 세션마다 한 번 Copy합니다. 수신자는 세 명으로 축약한 예시이며 각 세션의 SendQ는 별도로 존재합니다.</desc>
+        <!-- FANOUT -->
+      </svg>
+    </div>
+  </section>
+  <section data-variant="패킷 구조" aria-label="개별 패킷과 새 묶음 패킷의 내부 구조를 비교하는 구도" hidden>
+    <div class="bundle-variant">
+      <svg class="bundle-layout-board" xmlns="http://www.w3.org/2000/svg" data-layout="anatomy" role="img" aria-labelledby="bundle-anatomy-title bundle-anatomy-desc" width="736" height="650" viewBox="0 0 736 650">
+        <title id="bundle-anatomy-title">패킷 구조</title>
+        <desc id="bundle-anatomy-desc">변경 전에는 헤더와 개별 상태가 들어 있는 이동 패킷 네 개입니다. 변경 후에는 새로운 섹터 업데이트 헤더, count 필드, 네 최종 상태 엔트리가 들어 있는 패킷 하나입니다. 기존 패킷을 이어붙이는 digest와 구별하기 위한 구도입니다. 묶음 상한을 넘으면 여러 청크로 나뉩니다.</desc>
+        <!-- ANATOMY -->
+      </svg>
+    </div>
+  </section>
+  <section data-variant="복사 횟수" aria-label="이동자와 수신 세션의 조합에서 발생하는 Copy 횟수를 비교하는 구도" hidden>
+    <div class="bundle-variant">
+      <svg class="bundle-layout-board" xmlns="http://www.w3.org/2000/svg" data-layout="matrix" role="img" aria-labelledby="bundle-matrix-title bundle-matrix-desc" width="736" height="650" viewBox="0 0 736 650">
+        <title id="bundle-matrix-title">복사 횟수</title>
+        <desc id="bundle-matrix-desc">이동자 네 명과 수신자 세 명인 예시입니다. 개별 패킷은 각 수신 세션의 SendQ에 플레이어마다 Copy하여 총 열두 번입니다. 네 엔트리를 새 패킷 하나로 묶으면 세션마다 Copy 한 번, 총 세 번입니다. 수신자 수와 전달할 플레이어 상태 수는 같습니다. 실제 실측 수치나 WSASend 호출 수를 표시한 것이 아닙니다.</desc>
+        <!-- MATRIX -->
+      </svg>
+    </div>
+  </section>
+</div>
+<script>
+(() => {
+  /* DRAWING_FUNCTION */
+  const root=document.getElementById("sector-bundle-layouts-v1");
+  if(!root)return;
+  const boards=Array.from(root.querySelectorAll(".bundle-layout-board"));
+  let pendingWidth=0,drawnWidth=736,layoutFrame=0;
+  function queueLayout(width){
+    if(!Number.isFinite(width)||width<=0)return;
+    pendingWidth=width;
+    if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{
+      layoutFrame=0;
+      if(Math.abs(pendingWidth-drawnWidth)<.5)return;
+      drawnWidth=pendingWidth;
+      for(const board of boards){
+        const scene=createBundleLayout(drawnWidth,board.getAttribute("data-layout"));
+        const accessible=Array.from(board.children).filter(child=>child.tagName==="title"||child.tagName==="desc");
+        board.replaceChildren(...accessible);
+        board.insertAdjacentHTML("beforeend",scene.markup);
+        board.setAttribute("viewBox",`0 0 ${drawnWidth} ${scene.height}`);
+        board.setAttribute("width",String(drawnWidth));
+        board.setAttribute("height",String(scene.height));
+      }
+    });
+  }
+  const observer=new ResizeObserver(entries=>{
+    const entry=entries.find(item=>item.target===root);
+    if(entry)queueLayout(entry.contentRect.width);
+  });
+  observer.observe(root);
+  queueLayout(root.getBoundingClientRect().width);
+})();
+</script>

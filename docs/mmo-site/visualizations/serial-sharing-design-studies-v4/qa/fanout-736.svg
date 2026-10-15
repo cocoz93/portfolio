@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="736" height="736" viewBox="0 0 736 736"><style>text{font-family:PCB-Review,'Malgun Gothic',sans-serif;font-weight:500}</style><rect x="0" y="0" width="736" height="736" fill="#0d1421"></rect>
+<text x="24" y="32" fill="#eef2fb" font-size="14" text-anchor="start" dominant-baseline="middle">변경 전 · 같은 내용의 Msg 세 개</text>
+<rect x="144" y="86" width="156" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M140 88 L140 82 L146 82" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M304 88 L304 82 L298 82" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M140 160 L140 166 L146 166" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M304 160 L304 166 L298 166" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="145" y="87" width="154" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="145" y="109" width="154" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M145 108 L299 108" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M145 124 L299 124" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="150" y="130" width="144" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="154" y="97" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg 1</text>
+<text x="154" y="116" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="222" y="143" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="138" cy="124" r="3" fill="#829bb1"></circle>
+<circle cx="138" cy="124" r="1.25" fill="#0d1421"></circle>
+<circle cx="306" cy="124" r="3" fill="#829bb1"></circle>
+<circle cx="306" cy="124" r="1.25" fill="#0d1421"></circle>
+<path d="M560.0089553065645,123.26703465542039 A30,30 0 0 1 568.274844156876,103.3114136879299 L576.5304033772632,111.17307648651654 A18.6,18.6 0 0 0 571.40555229007,123.54556148636064 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M569.3114136879299,102.27484415687597 A30,30 0 0 1 589.2670346554204,94.0089553065645 L589.5455614863606,105.40555229006999 A18.6,18.6 0 0 0 577.1730764865165,110.5304033772631 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M590.7329653445796,94.0089553065645 A30,30 0 0 1 610.6885863120701,102.27484415687599 L602.8269235134835,110.5304033772631 A18.6,18.6 0 0 0 590.4544385136394,105.40555229006999 Z" fill="#0066d6" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M611.7251558431241,103.3114136879299 A30,30 0 0 1 619.9910446934355,123.2670346554204 L608.59444770993,123.54556148636065 A18.6,18.6 0 0 0 603.4695966227368,111.17307648651654 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M619.9910446934355,124.7329653445796 A30,30 0 0 1 611.7251558431241,144.6885863120701 L603.4695966227368,136.82692351348345 A18.6,18.6 0 0 0 608.59444770993,124.45443851363935 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M610.6885863120701,145.725155843124 A30,30 0 0 1 590.7329653445796,153.9910446934355 L590.4544385136394,142.59444770993002 A18.6,18.6 0 0 0 602.8269235134835,137.4695966227369 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M589.2670346554204,153.9910446934355 A30,30 0 0 1 569.3114136879299,145.725155843124 L577.1730764865165,137.4695966227369 A18.6,18.6 0 0 0 589.5455614863606,142.59444770993002 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M568.2748441568759,144.6885863120701 A30,30 0 0 1 560.0089553065645,124.73296534457958 L571.40555229007,124.45443851363935 A18.6,18.6 0 0 0 576.5304033772632,136.82692351348345 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="590" y="124" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">S1</text>
+<text x="590" y="170" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="554" cy="124" r="3" fill="#829bb1"></circle>
+<circle cx="554" cy="124" r="1.25" fill="#0d1421"></circle>
+<path d="M306 124 L554 124" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="550,121 554,124 550,127" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="430" y="142" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<rect x="144" y="204" width="156" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M140 206 L140 200 L146 200" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M304 206 L304 200 L298 200" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M140 278 L140 284 L146 284" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M304 278 L304 284 L298 284" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="145" y="205" width="154" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="145" y="227" width="154" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M145 226 L299 226" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M145 242 L299 242" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="150" y="248" width="144" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="154" y="215" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg 2</text>
+<text x="154" y="234" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="222" y="261" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="138" cy="242" r="3" fill="#829bb1"></circle>
+<circle cx="138" cy="242" r="1.25" fill="#0d1421"></circle>
+<circle cx="306" cy="242" r="3" fill="#829bb1"></circle>
+<circle cx="306" cy="242" r="1.25" fill="#0d1421"></circle>
+<path d="M560.0089553065645,241.2670346554204 A30,30 0 0 1 568.274844156876,221.3114136879299 L576.5304033772632,229.17307648651652 A18.6,18.6 0 0 0 571.40555229007,241.54556148636064 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M569.3114136879299,220.27484415687596 A30,30 0 0 1 589.2670346554204,212.0089553065645 L589.5455614863606,223.40555229006998 A18.6,18.6 0 0 0 577.1730764865165,228.5304033772631 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M590.7329653445796,212.0089553065645 A30,30 0 0 1 610.6885863120701,220.274844156876 L602.8269235134835,228.5304033772631 A18.6,18.6 0 0 0 590.4544385136394,223.40555229006998 Z" fill="#0066d6" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M611.7251558431241,221.3114136879299 A30,30 0 0 1 619.9910446934355,241.26703465542042 L608.59444770993,241.54556148636064 A18.6,18.6 0 0 0 603.4695966227368,229.17307648651655 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M619.9910446934355,242.73296534457958 A30,30 0 0 1 611.7251558431241,262.6885863120701 L603.4695966227368,254.82692351348345 A18.6,18.6 0 0 0 608.59444770993,242.45443851363936 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M610.6885863120701,263.725155843124 A30,30 0 0 1 590.7329653445796,271.99104469343547 L590.4544385136394,260.59444770993 A18.6,18.6 0 0 0 602.8269235134835,255.4695966227369 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M589.2670346554204,271.99104469343547 A30,30 0 0 1 569.3114136879299,263.725155843124 L577.1730764865165,255.4695966227369 A18.6,18.6 0 0 0 589.5455614863606,260.59444770993 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M568.2748441568759,262.6885863120701 A30,30 0 0 1 560.0089553065645,242.73296534457958 L571.40555229007,242.45443851363933 A18.6,18.6 0 0 0 576.5304033772632,254.82692351348345 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="590" y="242" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">S2</text>
+<text x="590" y="288" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="554" cy="242" r="3" fill="#829bb1"></circle>
+<circle cx="554" cy="242" r="1.25" fill="#0d1421"></circle>
+<path d="M306 242 L554 242" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="550,239 554,242 550,245" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="430" y="260" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<rect x="144" y="322" width="156" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M140 324 L140 318 L146 318" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M304 324 L304 318 L298 318" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M140 396 L140 402 L146 402" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M304 396 L304 402 L298 402" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="145" y="323" width="154" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="145" y="345" width="154" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M145 344 L299 344" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M145 360 L299 360" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="150" y="366" width="144" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="154" y="333" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg 3</text>
+<text x="154" y="352" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="222" y="379" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="138" cy="360" r="3" fill="#829bb1"></circle>
+<circle cx="138" cy="360" r="1.25" fill="#0d1421"></circle>
+<circle cx="306" cy="360" r="3" fill="#829bb1"></circle>
+<circle cx="306" cy="360" r="1.25" fill="#0d1421"></circle>
+<path d="M560.0089553065645,359.2670346554204 A30,30 0 0 1 568.274844156876,339.31141368792987 L576.5304033772632,347.17307648651655 A18.6,18.6 0 0 0 571.40555229007,359.54556148636067 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M569.3114136879299,338.274844156876 A30,30 0 0 1 589.2670346554204,330.00895530656453 L589.5455614863606,341.40555229007 A18.6,18.6 0 0 0 577.1730764865165,346.5304033772631 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M590.7329653445796,330.00895530656453 A30,30 0 0 1 610.6885863120701,338.274844156876 L602.8269235134835,346.5304033772631 A18.6,18.6 0 0 0 590.4544385136394,341.40555229007 Z" fill="#0066d6" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M611.7251558431241,339.3114136879299 A30,30 0 0 1 619.9910446934355,359.2670346554204 L608.59444770993,359.54556148636067 A18.6,18.6 0 0 0 603.4695966227368,347.17307648651655 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M619.9910446934355,360.7329653445796 A30,30 0 0 1 611.7251558431241,380.6885863120701 L603.4695966227368,372.82692351348345 A18.6,18.6 0 0 0 608.59444770993,360.45443851363933 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M610.6885863120701,381.725155843124 A30,30 0 0 1 590.7329653445796,389.99104469343547 L590.4544385136394,378.59444770993 A18.6,18.6 0 0 0 602.8269235134835,373.4695966227369 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M589.2670346554204,389.99104469343547 A30,30 0 0 1 569.3114136879299,381.725155843124 L577.1730764865165,373.4695966227369 A18.6,18.6 0 0 0 589.5455614863606,378.59444770993 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M568.2748441568759,380.6885863120701 A30,30 0 0 1 560.0089553065645,360.73296534457955 L571.40555229007,360.45443851363933 A18.6,18.6 0 0 0 576.5304033772632,372.82692351348345 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="590" y="360" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">S3</text>
+<text x="590" y="406" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="554" cy="360" r="3" fill="#829bb1"></circle>
+<circle cx="554" cy="360" r="1.25" fill="#0d1421"></circle>
+<path d="M306 360 L554 360" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="550,357 554,360 550,363" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="430" y="378" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<path d="M20 424 L716 424" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.8"></path>
+<text x="24" y="454" fill="#238fff" font-size="14" text-anchor="start" dominant-baseline="middle">변경 후 · 같은 Msg에서 팬아웃</text>
+<rect x="290" y="490" width="156" height="76" fill="#151f2c" stroke="#354b61" stroke-width="1.5" data-role="serial-buffer"></rect>
+<path d="M286 492 L286 486 L292 486" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M450 492 L450 486 L444 486" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M286 564 L286 570 L292 570" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<path d="M450 564 L450 570 L444 570" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.9"></path>
+<rect x="291" y="491" width="154" height="21" fill="#a8b8ca" opacity="0.1"></rect>
+<rect x="291" y="513" width="154" height="15" fill="#a8b8ca" opacity="0.17"></rect>
+<path d="M291 512 L445 512" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M291 528 L445 528" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<rect x="296" y="534" width="144" height="26" fill="#0066d6" opacity="0.85" data-role="identical-payload"></rect>
+<text x="300" y="501" fill="#eef2fb" font-size="12" text-anchor="start" dominant-baseline="middle" class="study-mono">Msg</text>
+<text x="300" y="520" fill="#a8b8ca" font-size="11" text-anchor="start" dominant-baseline="middle" class="study-mono">Header</text>
+<text x="368" y="547" fill="#eef2fb" font-size="12" text-anchor="middle" dominant-baseline="middle">같은 내용</text>
+<circle cx="284" cy="528" r="3" fill="#829bb1"></circle>
+<circle cx="284" cy="528" r="1.25" fill="#0d1421"></circle>
+<circle cx="452" cy="528" r="3" fill="#829bb1"></circle>
+<circle cx="452" cy="528" r="1.25" fill="#0d1421"></circle>
+<text x="368" y="478" fill="#238fff" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">AddRef(3)</text>
+<circle cx="368" cy="572" r="3" fill="#829bb1"></circle>
+<circle cx="368" cy="572" r="1.25" fill="#0d1421"></circle>
+<path d="M368 572 L368 600" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M176.64 600 L559.36 600" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<path d="M146.6489553065645,653.2670346554204 A30,30 0 0 1 154.91484415687597,633.3114136879299 L163.17040337726309,641.1730764865165 A18.6,18.6 0 0 0 158.04555229006996,653.5455614863606 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M155.95141368792991,632.2748441568759 A30,30 0 0 1 175.9070346554204,624.0089553065645 L176.18556148636065,635.40555229007 A18.6,18.6 0 0 0 163.81307648651654,640.5304033772632 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M177.3729653445796,624.0089553065645 A30,30 0 0 1 197.3285863120701,632.2748441568759 L189.46692351348344,640.5304033772632 A18.6,18.6 0 0 0 177.09443851363935,635.40555229007 Z" fill="#0066d6" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M198.365155843124,633.3114136879299 A30,30 0 0 1 206.63104469343548,653.2670346554204 L195.23444770993,653.5455614863606 A18.6,18.6 0 0 0 190.1095966227369,641.1730764865165 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M206.63104469343548,654.7329653445796 A30,30 0 0 1 198.365155843124,674.6885863120701 L190.1095966227369,666.8269235134835 A18.6,18.6 0 0 0 195.23444770993,654.4544385136394 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M197.3285863120701,675.7251558431241 A30,30 0 0 1 177.3729653445796,683.9910446934355 L177.09443851363935,672.59444770993 A18.6,18.6 0 0 0 189.46692351348344,667.4695966227368 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M175.9070346554204,683.9910446934355 A30,30 0 0 1 155.9514136879299,675.725155843124 L163.8130764865165,667.4695966227368 A18.6,18.6 0 0 0 176.18556148636063,672.59444770993 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M154.91484415687597,674.6885863120701 A30,30 0 0 1 146.6489553065645,654.7329653445796 L158.04555229006996,654.4544385136394 A18.6,18.6 0 0 0 163.17040337726309,666.8269235134835 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="176.64" y="654" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">S1</text>
+<text x="176.64" y="700" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="140.64" cy="654" r="3" fill="#829bb1"></circle>
+<circle cx="140.64" cy="654" r="1.25" fill="#0d1421"></circle>
+<circle cx="176.64" cy="618" r="3" fill="#829bb1"></circle>
+<circle cx="176.64" cy="618" r="1.25" fill="#0d1421"></circle>
+<path d="M176.64 600 L176.64 618" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="173.64,614 176.64,618 179.64,614" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="206.64" y="610" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<path d="M338.00895530656453,653.2670346554204 A30,30 0 0 1 346.274844156876,633.3114136879299 L354.5304033772631,641.1730764865165 A18.6,18.6 0 0 0 349.40555229007,653.5455614863606 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M347.3114136879299,632.2748441568759 A30,30 0 0 1 367.2670346554204,624.0089553065645 L367.54556148636067,635.40555229007 A18.6,18.6 0 0 0 355.17307648651655,640.5304033772632 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M368.7329653445796,624.0089553065645 A30,30 0 0 1 388.6885863120701,632.2748441568759 L380.82692351348345,640.5304033772632 A18.6,18.6 0 0 0 368.45443851363933,635.40555229007 Z" fill="#0066d6" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M389.725155843124,633.3114136879299 A30,30 0 0 1 397.99104469343547,653.2670346554204 L386.59444770993,653.5455614863606 A18.6,18.6 0 0 0 381.4695966227369,641.1730764865165 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M397.99104469343547,654.7329653445796 A30,30 0 0 1 389.725155843124,674.6885863120701 L381.4695966227369,666.8269235134835 A18.6,18.6 0 0 0 386.59444770993,654.4544385136394 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M388.6885863120701,675.7251558431241 A30,30 0 0 1 368.7329653445796,683.9910446934355 L368.45443851363933,672.59444770993 A18.6,18.6 0 0 0 380.82692351348345,667.4695966227368 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M367.2670346554204,683.9910446934355 A30,30 0 0 1 347.31141368792987,675.725155843124 L355.17307648651655,667.4695966227368 A18.6,18.6 0 0 0 367.54556148636067,672.59444770993 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M346.274844156876,674.6885863120701 A30,30 0 0 1 338.00895530656453,654.7329653445796 L349.40555229007,654.4544385136394 A18.6,18.6 0 0 0 354.5304033772631,666.8269235134835 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="368" y="654" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">S2</text>
+<text x="368" y="700" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="332" cy="654" r="3" fill="#829bb1"></circle>
+<circle cx="332" cy="654" r="1.25" fill="#0d1421"></circle>
+<circle cx="368" cy="618" r="3" fill="#829bb1"></circle>
+<circle cx="368" cy="618" r="1.25" fill="#0d1421"></circle>
+<path d="M368 600 L368 618" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="365,614 368,618 371,614" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="398" y="610" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<path d="M529.3689553065645,653.2670346554204 A30,30 0 0 1 537.634844156876,633.3114136879299 L545.8904033772632,641.1730764865165 A18.6,18.6 0 0 0 540.76555229007,653.5455614863606 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M538.6714136879299,632.2748441568759 A30,30 0 0 1 558.6270346554204,624.0089553065645 L558.9055614863606,635.40555229007 A18.6,18.6 0 0 0 546.5330764865165,640.5304033772632 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M560.0929653445796,624.0089553065645 A30,30 0 0 1 580.0485863120701,632.2748441568759 L572.1869235134835,640.5304033772632 A18.6,18.6 0 0 0 559.8144385136394,635.40555229007 Z" fill="#0066d6" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M581.0851558431241,633.3114136879299 A30,30 0 0 1 589.3510446934355,653.2670346554204 L577.95444770993,653.5455614863606 A18.6,18.6 0 0 0 572.8295966227369,641.1730764865165 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M589.3510446934355,654.7329653445796 A30,30 0 0 1 581.0851558431241,674.6885863120701 L572.8295966227369,666.8269235134835 A18.6,18.6 0 0 0 577.95444770993,654.4544385136394 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M580.0485863120701,675.7251558431241 A30,30 0 0 1 560.0929653445796,683.9910446934355 L559.8144385136394,672.59444770993 A18.6,18.6 0 0 0 572.1869235134835,667.4695966227368 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M558.6270346554204,683.9910446934355 A30,30 0 0 1 538.6714136879299,675.725155843124 L546.5330764865165,667.4695966227368 A18.6,18.6 0 0 0 558.9055614863606,672.59444770993 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M537.6348441568759,674.6885863120701 A30,30 0 0 1 529.3689553065645,654.7329653445796 L540.76555229007,654.4544385136394 A18.6,18.6 0 0 0 545.8904033772632,666.8269235134835 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="559.36" y="654" fill="#eef2fb" font-size="13" text-anchor="middle" dominant-baseline="middle" class="study-mono">S3</text>
+<text x="559.36" y="700" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">SendQ</text>
+<circle cx="523.36" cy="654" r="3" fill="#829bb1"></circle>
+<circle cx="523.36" cy="654" r="1.25" fill="#0d1421"></circle>
+<circle cx="559.36" cy="618" r="3" fill="#829bb1"></circle>
+<circle cx="559.36" cy="618" r="1.25" fill="#0d1421"></circle>
+<path d="M559.36 600 L559.36 618" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter" opacity="0.75"></path>
+<polyline points="556.36,614 559.36,618 562.36,614" fill="none" stroke="#7895ae" stroke-width="1.5" opacity="0.75"></polyline>
+<text x="589.36" y="610" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle" class="study-mono">Copy</text>
+<text x="246" y="528" fill="#a8b8ca" font-size="12" text-anchor="middle" dominant-baseline="middle">생성 1회</text>
+<text x="368" y="724" fill="#a8b8ca" font-size="11" text-anchor="middle" dominant-baseline="middle">Copy 후 SubRef · 마지막 Ref 0에서 풀 반환</text></svg>

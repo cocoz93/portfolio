@@ -1,0 +1,23 @@
+{
+  "figure": 5,
+  "status": "draft",
+  "version": 4,
+  "scope": "coordinate-fields-only",
+  "path": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-before-msg-v4/quantization.html",
+  "sha256": "d116f7015490d7f98b0d5f03fe5c462305a039496b9ab43faeaad9385f3503e5",
+  "reviewPath": "C:/Users/USER/Desktop/MyGit/portfolio/docs/mmo-site/visualizations/quantization-before-msg-v4/qa/review.json",
+  "coordinateBytesBefore": 8,
+  "coordinateBytesAfter": 4,
+  "durationMs": 10350,
+  "coordinateMorph": {
+    "fromBytes": 4,
+    "toBytes": 2,
+    "durationMs": 850,
+    "holdMs": 1150,
+    "simultaneous": true
+  },
+  "conversionBeforeMsg": true,
+  "noFloatWrittenToAfterMsg": true,
+  "conversionLabel": "×512 · 반올림",
+  "tickValueLabel": "눈금값 · 1/512타일"
+}

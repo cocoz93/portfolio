@@ -1,0 +1,43 @@
+{
+  "verification": "three stages only, four original movement messages and order preserved, queued data retained, DOM-emulated controls and resize, geometry, offscreen SVG frames",
+  "browserHostVerified": false,
+  "outboundMsgsBefore": 4,
+  "outboundMsgsAfter": 1,
+  "containedMovesBefore": 4,
+  "containedMovesAfter": 4,
+  "charactersPerRow": 1,
+  "bundleFinalizedAtTickEnd": true,
+  "queueRetained": true,
+  "checked": [
+    {
+      "width": 736,
+      "height": 478,
+      "durationMs": 30500
+    },
+    {
+      "width": 700,
+      "height": 478,
+      "durationMs": 30500
+    },
+    {
+      "width": 680,
+      "height": 478,
+      "durationMs": 30500
+    },
+    {
+      "width": 679,
+      "height": 818,
+      "durationMs": 36800
+    },
+    {
+      "width": 360,
+      "height": 818,
+      "durationMs": 36800
+    },
+    {
+      "width": 320,
+      "height": 818,
+      "durationMs": 36800
+    }
+  ]
+}

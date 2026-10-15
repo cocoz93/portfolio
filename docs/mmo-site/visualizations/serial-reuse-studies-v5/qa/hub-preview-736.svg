@@ -1,0 +1,300 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="736" height="892" viewBox="0 0 736 892"><style>text{font-family:PCB-Review,'Malgun Gothic',sans-serif;font-weight:500}</style><rect x="0" y="0" width="736" height="892" fill="#0d1421"></rect>
+<defs><filter id="reuse-v5-hub-row-0-gray" color-interpolation-filters="sRGB"><feColorMatrix id="reuse-v5-hub-matrix-0" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs><g id="reuse-v5-hub-row-0" filter="url(#reuse-v5-hub-row-0-gray)" opacity="1">
+<text x="24" y="28" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">변경 전</text>
+<rect x="290" y="346" width="156" height="72" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<path d="M286 348 L286 342 L292 342" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M450 348 L450 342 L444 342" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M286 416 L286 422 L292 422" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M450 416 L450 422 L444 422" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<text x="368" y="360" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">버퍼 풀</text>
+<rect x="314" y="377" width="28" height="36" fill="#172536" stroke="#354b61" stroke-width="1.5"></rect>
+<g id="reuse-v5-hub-before-pool-0" opacity="0" transform="translate(328 395)" data-role="returned-whole-buffer">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#0066d6"></rect>
+</g>
+<rect x="354" y="377" width="28" height="36" fill="#172536" stroke="#354b61" stroke-width="1.5"></rect>
+<g id="reuse-v5-hub-before-pool-1" opacity="0" transform="translate(368 395)" data-role="returned-whole-buffer">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#0066d6"></rect>
+</g>
+<rect x="394" y="377" width="28" height="36" fill="#172536" stroke="#354b61" stroke-width="1.5"></rect>
+<g id="reuse-v5-hub-before-pool-2" opacity="0" transform="translate(408 395)" data-role="returned-whole-buffer">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#0066d6"></rect>
+</g>
+<circle cx="368" cy="340" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<rect x="93.91999999999999" y="74" width="136" height="100" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<path d="M89.91999999999999 76 L89.91999999999999 70 L95.91999999999999 70" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M233.92 76 L233.92 70 L227.92 70" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M89.91999999999999 172 L89.91999999999999 178 L95.91999999999999 178" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M233.92 172 L233.92 178 L227.92 178" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<g id="reuse-v5-hub-before-msg-0-content" data-role="retained-msg" opacity="1">
+<rect x="94.91999999999999" y="75" width="134" height="23" fill="#a8b8ca" opacity="0.08"></rect>
+<rect x="94.91999999999999" y="99" width="134" height="18" fill="#a8b8ca" opacity="0.18"></rect>
+<path d="M94.91999999999999 98 L228.92 98" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M94.91999999999999 118 L228.92 118" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<text x="101.91999999999999" y="86" font-size="12" dominant-baseline="middle" text-anchor="start" fill="#eef2fb">Msg 1</text>
+<text x="101.91999999999999" y="108" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Header</text>
+<defs><clipPath id="reuse-v5-hub-before-msg-0-mask-clip"><rect id="reuse-v5-hub-before-msg-0-mask" x="101.91999999999999" y="126" width="120" height="40"></rect></clipPath></defs>
+<g clip-path="url(#reuse-v5-hub-before-msg-0-mask-clip)">
+<rect x="101.91999999999999" y="126" width="120" height="40" fill="#0066d6"></rect>
+<rect x="101.91999999999999" y="126" width="120" height="40" fill="#238fff" id="reuse-v5-hub-before-msg-0-flash" opacity="0"></rect>
+<text x="161.92" y="146" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">이동 데이터</text>
+</g></g>
+<path d="M131.9289553065645,235.2670346554204 A30,30 0 0 1 140.19484415687597,215.3114136879299 L148.66765493569434,223.37996234963722 A18.3,18.3 0 0 0 143.62546273700434,235.55289113980643 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M141.2314136879299,214.27484415687596 A30,30 0 0 1 161.1870346554204,206.0089553065645 L161.47289113980645,217.70546273700435 A18.3,18.3 0 0 0 149.29996234963724,222.74765493569433 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M162.6529653445796,206.0089553065645 A30,30 0 0 1 182.6085863120701,214.274844156876 L174.54003765036273,222.74765493569436 A18.3,18.3 0 0 0 162.36710886019355,217.70546273700435 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M162.6529653445796,206.0089553065645 A30,30 0 0 1 182.6085863120701,214.274844156876 L174.54003765036273,222.74765493569436 A18.3,18.3 0 0 0 162.36710886019355,217.70546273700435 Z" fill="#0066d6" id="reuse-v5-hub-before-q-0-data" opacity="1"></path>
+<path d="M162.6529653445796,206.0089553065645 A30,30 0 0 1 182.6085863120701,214.274844156876 L174.54003765036273,222.74765493569436 A18.3,18.3 0 0 0 162.36710886019355,217.70546273700435 Z" fill="#238fff" id="reuse-v5-hub-before-q-0-flash" opacity="0"></path>
+<path d="M183.645155843124,215.3114136879299 A30,30 0 0 1 191.91104469343549,235.26703465542042 L180.21453726299563,235.55289113980643 A18.3,18.3 0 0 0 175.17234506430563,223.37996234963725 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M191.91104469343549,236.73296534457958 A30,30 0 0 1 183.645155843124,256.6885863120701 L175.17234506430563,248.62003765036275 A18.3,18.3 0 0 0 180.21453726299563,236.44710886019357 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M182.6085863120701,257.725155843124 A30,30 0 0 1 162.6529653445796,265.99104469343547 L162.36710886019355,254.29453726299565 A18.3,18.3 0 0 0 174.54003765036273,249.25234506430564 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M161.1870346554204,265.99104469343547 A30,30 0 0 1 141.2314136879299,257.725155843124 L149.2999623496372,249.25234506430564 A18.3,18.3 0 0 0 161.47289113980642,254.29453726299565 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M140.19484415687594,256.6885863120701 A30,30 0 0 1 131.9289553065645,236.73296534457958 L143.62546273700434,236.44710886019354 A18.3,18.3 0 0 0 148.66765493569432,248.62003765036275 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="161.92" y="236" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S1</text>
+<text x="161.92" y="282" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="161.92" y="300" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef</text>
+<circle cx="161.92" cy="180" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="161.92" cy="200" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M161.92 180 L161.92 200" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="158.92,196 161.92,200 164.92,196" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M161.92 180 L161.92 200" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-before-copy-0-trace" opacity="0"></path>
+<rect x="-9" y="-5" width="18" height="10" fill="#238fff" stroke="#eef2fb" stroke-width="1.5" id="reuse-v5-hub-before-copy-0-carrier" opacity="0" data-role="byte-copy-in-flight" transform="translate(161.92 180)"></rect>
+<text x="179.92" y="196" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Copy 1</text>
+<circle cx="87.91999999999999" cy="124" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M87.91999999999999 124 L73.91999999999999 124 L73.91999999999999 328 L368 328 L368 340" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="365,336 368,340 371,336" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M87.91999999999999 124 L73.91999999999999 124 L73.91999999999999 328 L368 328 L368 340" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-before-return-0-trace" opacity="0"></path>
+<g id="reuse-v5-hub-before-return-0-carrier" opacity="0" data-role="whole-buffer-in-flight" transform="translate(87.91999999999999 124)">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#238fff"></rect>
+</g>
+<rect x="300" y="74" width="136" height="100" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<path d="M296 76 L296 70 L302 70" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M440 76 L440 70 L434 70" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M296 172 L296 178 L302 178" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M440 172 L440 178 L434 178" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<g id="reuse-v5-hub-before-msg-1-content" data-role="retained-msg" opacity="1">
+<rect x="301" y="75" width="134" height="23" fill="#a8b8ca" opacity="0.08"></rect>
+<rect x="301" y="99" width="134" height="18" fill="#a8b8ca" opacity="0.18"></rect>
+<path d="M301 98 L435 98" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M301 118 L435 118" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<text x="308" y="86" font-size="12" dominant-baseline="middle" text-anchor="start" fill="#eef2fb">Msg 2</text>
+<text x="308" y="108" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Header</text>
+<defs><clipPath id="reuse-v5-hub-before-msg-1-mask-clip"><rect id="reuse-v5-hub-before-msg-1-mask" x="308" y="126" width="120" height="40"></rect></clipPath></defs>
+<g clip-path="url(#reuse-v5-hub-before-msg-1-mask-clip)">
+<rect x="308" y="126" width="120" height="40" fill="#0066d6"></rect>
+<rect x="308" y="126" width="120" height="40" fill="#238fff" id="reuse-v5-hub-before-msg-1-flash" opacity="0"></rect>
+<text x="368" y="146" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">이동 데이터</text>
+</g></g>
+<path d="M338.00895530656453,235.2670346554204 A30,30 0 0 1 346.274844156876,215.3114136879299 L354.74765493569436,223.37996234963722 A18.3,18.3 0 0 0 349.7054627370043,235.55289113980643 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M347.3114136879299,214.27484415687596 A30,30 0 0 1 367.2670346554204,206.0089553065645 L367.55289113980643,217.70546273700435 A18.3,18.3 0 0 0 355.37996234963725,222.74765493569433 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M368.7329653445796,206.0089553065645 A30,30 0 0 1 388.6885863120701,214.274844156876 L380.62003765036275,222.74765493569436 A18.3,18.3 0 0 0 368.44710886019357,217.70546273700435 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M368.7329653445796,206.0089553065645 A30,30 0 0 1 388.6885863120701,214.274844156876 L380.62003765036275,222.74765493569436 A18.3,18.3 0 0 0 368.44710886019357,217.70546273700435 Z" fill="#0066d6" id="reuse-v5-hub-before-q-1-data" opacity="1"></path>
+<path d="M368.7329653445796,206.0089553065645 A30,30 0 0 1 388.6885863120701,214.274844156876 L380.62003765036275,222.74765493569436 A18.3,18.3 0 0 0 368.44710886019357,217.70546273700435 Z" fill="#238fff" id="reuse-v5-hub-before-q-1-flash" opacity="0"></path>
+<path d="M389.725155843124,215.3114136879299 A30,30 0 0 1 397.99104469343547,235.26703465542042 L386.2945372629957,235.55289113980643 A18.3,18.3 0 0 0 381.25234506430564,223.37996234963725 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M397.99104469343547,236.73296534457958 A30,30 0 0 1 389.725155843124,256.6885863120701 L381.25234506430564,248.62003765036275 A18.3,18.3 0 0 0 386.2945372629957,236.44710886019357 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M388.6885863120701,257.725155843124 A30,30 0 0 1 368.7329653445796,265.99104469343547 L368.44710886019357,254.29453726299565 A18.3,18.3 0 0 0 380.62003765036275,249.25234506430564 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M367.2670346554204,265.99104469343547 A30,30 0 0 1 347.31141368792987,257.725155843124 L355.37996234963725,249.25234506430564 A18.3,18.3 0 0 0 367.55289113980643,254.29453726299565 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M346.274844156876,256.6885863120701 A30,30 0 0 1 338.00895530656453,236.73296534457958 L349.7054627370043,236.44710886019354 A18.3,18.3 0 0 0 354.74765493569436,248.62003765036275 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="368" y="236" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S2</text>
+<text x="368" y="282" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="368" y="300" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef</text>
+<circle cx="368" cy="180" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="368" cy="200" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M368 180 L368 200" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="365,196 368,200 371,196" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M368 180 L368 200" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-before-copy-1-trace" opacity="0"></path>
+<rect x="-9" y="-5" width="18" height="10" fill="#238fff" stroke="#eef2fb" stroke-width="1.5" id="reuse-v5-hub-before-copy-1-carrier" opacity="0" data-role="byte-copy-in-flight" transform="translate(368 180)"></rect>
+<text x="386" y="196" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Copy 2</text>
+<circle cx="294" cy="124" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M294 124 L280 124 L280 328 L368 328 L368 340" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="365,336 368,340 371,336" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M294 124 L280 124 L280 328 L368 328 L368 340" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-before-return-1-trace" opacity="0"></path>
+<g id="reuse-v5-hub-before-return-1-carrier" opacity="0" data-role="whole-buffer-in-flight" transform="translate(294 124)">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#238fff"></rect>
+</g>
+<rect x="506.08000000000004" y="74" width="136" height="100" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<path d="M502.08000000000004 76 L502.08000000000004 70 L508.08000000000004 70" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M646.08 76 L646.08 70 L640.08 70" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M502.08000000000004 172 L502.08000000000004 178 L508.08000000000004 178" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M646.08 172 L646.08 178 L640.08 178" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<g id="reuse-v5-hub-before-msg-2-content" data-role="retained-msg" opacity="1">
+<rect x="507.08000000000004" y="75" width="134" height="23" fill="#a8b8ca" opacity="0.08"></rect>
+<rect x="507.08000000000004" y="99" width="134" height="18" fill="#a8b8ca" opacity="0.18"></rect>
+<path d="M507.08000000000004 98 L641.08 98" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M507.08000000000004 118 L641.08 118" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<text x="514.08" y="86" font-size="12" dominant-baseline="middle" text-anchor="start" fill="#eef2fb">Msg 3</text>
+<text x="514.08" y="108" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Header</text>
+<defs><clipPath id="reuse-v5-hub-before-msg-2-mask-clip"><rect id="reuse-v5-hub-before-msg-2-mask" x="514.08" y="126" width="120" height="40"></rect></clipPath></defs>
+<g clip-path="url(#reuse-v5-hub-before-msg-2-mask-clip)">
+<rect x="514.08" y="126" width="120" height="40" fill="#0066d6"></rect>
+<rect x="514.08" y="126" width="120" height="40" fill="#238fff" id="reuse-v5-hub-before-msg-2-flash" opacity="0"></rect>
+<text x="574.08" y="146" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">이동 데이터</text>
+</g></g>
+<path d="M544.0889553065646,235.2670346554204 A30,30 0 0 1 552.3548441568761,215.3114136879299 L560.8276549356943,223.37996234963722 A18.3,18.3 0 0 0 555.7854627370044,235.55289113980643 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M553.3914136879299,214.27484415687596 A30,30 0 0 1 573.3470346554204,206.0089553065645 L573.6328911398065,217.70546273700435 A18.3,18.3 0 0 0 561.4599623496373,222.74765493569433 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M574.8129653445797,206.0089553065645 A30,30 0 0 1 594.7685863120702,214.274844156876 L586.7000376503628,222.74765493569436 A18.3,18.3 0 0 0 574.5271088601936,217.70546273700435 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M574.8129653445797,206.0089553065645 A30,30 0 0 1 594.7685863120702,214.274844156876 L586.7000376503628,222.74765493569436 A18.3,18.3 0 0 0 574.5271088601936,217.70546273700435 Z" fill="#0066d6" id="reuse-v5-hub-before-q-2-data" opacity="1"></path>
+<path d="M574.8129653445797,206.0089553065645 A30,30 0 0 1 594.7685863120702,214.274844156876 L586.7000376503628,222.74765493569436 A18.3,18.3 0 0 0 574.5271088601936,217.70546273700435 Z" fill="#238fff" id="reuse-v5-hub-before-q-2-flash" opacity="0"></path>
+<path d="M595.8051558431241,215.3114136879299 A30,30 0 0 1 604.0710446934355,235.26703465542042 L592.3745372629957,235.55289113980643 A18.3,18.3 0 0 0 587.3323450643057,223.37996234963725 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M604.0710446934355,236.73296534457958 A30,30 0 0 1 595.8051558431241,256.6885863120701 L587.3323450643057,248.62003765036275 A18.3,18.3 0 0 0 592.3745372629957,236.44710886019357 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M594.7685863120702,257.725155843124 A30,30 0 0 1 574.8129653445797,265.99104469343547 L574.5271088601936,254.29453726299565 A18.3,18.3 0 0 0 586.7000376503628,249.25234506430564 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M573.3470346554204,265.99104469343547 A30,30 0 0 1 553.3914136879299,257.725155843124 L561.4599623496373,249.25234506430564 A18.3,18.3 0 0 0 573.6328911398065,254.29453726299565 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M552.354844156876,256.6885863120701 A30,30 0 0 1 544.0889553065646,236.73296534457958 L555.7854627370044,236.44710886019354 A18.3,18.3 0 0 0 560.8276549356943,248.62003765036275 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="574.08" y="236" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S3</text>
+<text x="574.08" y="282" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="574.08" y="300" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef</text>
+<circle cx="574.08" cy="180" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="574.08" cy="200" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M574.08 180 L574.08 200" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="571.08,196 574.08,200 577.08,196" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M574.08 180 L574.08 200" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-before-copy-2-trace" opacity="0"></path>
+<rect x="-9" y="-5" width="18" height="10" fill="#238fff" stroke="#eef2fb" stroke-width="1.5" id="reuse-v5-hub-before-copy-2-carrier" opacity="0" data-role="byte-copy-in-flight" transform="translate(574.08 180)"></rect>
+<text x="592.08" y="196" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Copy 3</text>
+<circle cx="500.08000000000004" cy="124" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M500.08000000000004 124 L486.08000000000004 124 L486.08000000000004 328 L368 328 L368 340" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="365,336 368,340 371,336" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M500.08000000000004 124 L486.08000000000004 124 L486.08000000000004 328 L368 328 L368 340" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-before-return-2-trace" opacity="0"></path>
+<g id="reuse-v5-hub-before-return-2-carrier" opacity="0" data-role="whole-buffer-in-flight" transform="translate(500.08000000000004 124)">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#238fff"></rect>
+</g>
+<text x="712" y="386" font-size="12" dominant-baseline="middle" text-anchor="end" fill="#a8b8ca">매번 생성 · 매번 반환</text>
+</g>
+<path d="M20 440 L716 440" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<defs><filter id="reuse-v5-hub-row-1-gray" color-interpolation-filters="sRGB"><feColorMatrix id="reuse-v5-hub-matrix-1" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs><g id="reuse-v5-hub-row-1" filter="url(#reuse-v5-hub-row-1-gray)" opacity="1">
+<text x="24" y="468" font-size="14" dominant-baseline="middle" text-anchor="start" fill="#238fff">변경 후</text>
+<rect x="300" y="514" width="136" height="100" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<path d="M296 516 L296 510 L302 510" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M440 516 L440 510 L434 510" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M296 612 L296 618 L302 618" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M440 612 L440 618 L434 618" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<g id="reuse-v5-hub-after-msg-content" data-role="retained-msg" opacity="1">
+<rect x="301" y="515" width="134" height="23" fill="#a8b8ca" opacity="0.08"></rect>
+<rect x="301" y="539" width="134" height="18" fill="#a8b8ca" opacity="0.18"></rect>
+<path d="M301 538 L435 538" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M301 558 L435 558" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<text x="308" y="526" font-size="12" dominant-baseline="middle" text-anchor="start" fill="#eef2fb">Msg A</text>
+<text x="308" y="548" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Header</text>
+<defs><clipPath id="reuse-v5-hub-after-msg-mask-clip"><rect id="reuse-v5-hub-after-msg-mask" x="308" y="566" width="120" height="40"></rect></clipPath></defs>
+<g clip-path="url(#reuse-v5-hub-after-msg-mask-clip)">
+<rect x="308" y="566" width="120" height="40" fill="#0066d6"></rect>
+<rect x="308" y="566" width="120" height="40" fill="#238fff" id="reuse-v5-hub-after-msg-flash" opacity="0"></rect>
+<text x="368" y="586" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">이동 데이터</text>
+</g></g>
+<text x="368" y="496" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#238fff">AddRef(3)</text>
+<path d="M131.9289553065645,675.2670346554204 A30,30 0 0 1 140.19484415687597,655.3114136879299 L148.66765493569434,663.3799623496373 A18.3,18.3 0 0 0 143.62546273700434,675.5528911398064 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M141.2314136879299,654.2748441568759 A30,30 0 0 1 161.1870346554204,646.0089553065645 L161.47289113980645,657.7054627370044 A18.3,18.3 0 0 0 149.29996234963724,662.7476549356943 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M162.6529653445796,646.0089553065645 A30,30 0 0 1 182.6085863120701,654.2748441568759 L174.54003765036273,662.7476549356943 A18.3,18.3 0 0 0 162.36710886019355,657.7054627370044 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M162.6529653445796,646.0089553065645 A30,30 0 0 1 182.6085863120701,654.2748441568759 L174.54003765036273,662.7476549356943 A18.3,18.3 0 0 0 162.36710886019355,657.7054627370044 Z" fill="#0066d6" id="reuse-v5-hub-after-q-0-data" opacity="1"></path>
+<path d="M162.6529653445796,646.0089553065645 A30,30 0 0 1 182.6085863120701,654.2748441568759 L174.54003765036273,662.7476549356943 A18.3,18.3 0 0 0 162.36710886019355,657.7054627370044 Z" fill="#238fff" id="reuse-v5-hub-after-q-0-flash" opacity="0"></path>
+<path d="M183.645155843124,655.3114136879299 A30,30 0 0 1 191.91104469343549,675.2670346554204 L180.21453726299563,675.5528911398064 A18.3,18.3 0 0 0 175.17234506430563,663.3799623496373 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M191.91104469343549,676.7329653445796 A30,30 0 0 1 183.645155843124,696.6885863120701 L175.17234506430563,688.6200376503627 A18.3,18.3 0 0 0 180.21453726299563,676.4471088601936 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M182.6085863120701,697.7251558431241 A30,30 0 0 1 162.6529653445796,705.9910446934355 L162.36710886019355,694.2945372629956 A18.3,18.3 0 0 0 174.54003765036273,689.2523450643057 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M161.1870346554204,705.9910446934355 A30,30 0 0 1 141.2314136879299,697.725155843124 L149.2999623496372,689.2523450643057 A18.3,18.3 0 0 0 161.47289113980642,694.2945372629956 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M140.19484415687594,696.6885863120701 A30,30 0 0 1 131.9289553065645,676.7329653445796 L143.62546273700434,676.4471088601936 A18.3,18.3 0 0 0 148.66765493569432,688.6200376503627 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="161.92" y="676" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S1</text>
+<text x="161.92" y="722" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="161.92" y="740" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef</text>
+<circle cx="368" cy="620" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="161.92" cy="640" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M368 620 L368 638 L161.92 638 L161.92 640" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="158.92,636 161.92,640 164.92,636" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M368 620 L368 638 L161.92 638 L161.92 640" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-after-copy-0-trace" opacity="0"></path>
+<rect x="-9" y="-5" width="18" height="10" fill="#238fff" stroke="#eef2fb" stroke-width="1.5" id="reuse-v5-hub-after-copy-0-carrier" opacity="0" data-role="byte-copy-in-flight" transform="translate(368 620)"></rect>
+<text x="179.92" y="624" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Copy 1</text>
+<path d="M338.00895530656453,675.2670346554204 A30,30 0 0 1 346.274844156876,655.3114136879299 L354.74765493569436,663.3799623496373 A18.3,18.3 0 0 0 349.7054627370043,675.5528911398064 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M347.3114136879299,654.2748441568759 A30,30 0 0 1 367.2670346554204,646.0089553065645 L367.55289113980643,657.7054627370044 A18.3,18.3 0 0 0 355.37996234963725,662.7476549356943 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M368.7329653445796,646.0089553065645 A30,30 0 0 1 388.6885863120701,654.2748441568759 L380.62003765036275,662.7476549356943 A18.3,18.3 0 0 0 368.44710886019357,657.7054627370044 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M368.7329653445796,646.0089553065645 A30,30 0 0 1 388.6885863120701,654.2748441568759 L380.62003765036275,662.7476549356943 A18.3,18.3 0 0 0 368.44710886019357,657.7054627370044 Z" fill="#0066d6" id="reuse-v5-hub-after-q-1-data" opacity="1"></path>
+<path d="M368.7329653445796,646.0089553065645 A30,30 0 0 1 388.6885863120701,654.2748441568759 L380.62003765036275,662.7476549356943 A18.3,18.3 0 0 0 368.44710886019357,657.7054627370044 Z" fill="#238fff" id="reuse-v5-hub-after-q-1-flash" opacity="0"></path>
+<path d="M389.725155843124,655.3114136879299 A30,30 0 0 1 397.99104469343547,675.2670346554204 L386.2945372629957,675.5528911398064 A18.3,18.3 0 0 0 381.25234506430564,663.3799623496373 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M397.99104469343547,676.7329653445796 A30,30 0 0 1 389.725155843124,696.6885863120701 L381.25234506430564,688.6200376503627 A18.3,18.3 0 0 0 386.2945372629957,676.4471088601936 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M388.6885863120701,697.7251558431241 A30,30 0 0 1 368.7329653445796,705.9910446934355 L368.44710886019357,694.2945372629956 A18.3,18.3 0 0 0 380.62003765036275,689.2523450643057 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M367.2670346554204,705.9910446934355 A30,30 0 0 1 347.31141368792987,697.725155843124 L355.37996234963725,689.2523450643057 A18.3,18.3 0 0 0 367.55289113980643,694.2945372629956 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M346.274844156876,696.6885863120701 A30,30 0 0 1 338.00895530656453,676.7329653445796 L349.7054627370043,676.4471088601936 A18.3,18.3 0 0 0 354.74765493569436,688.6200376503627 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="368" y="676" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S2</text>
+<text x="368" y="722" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="368" y="740" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef</text>
+<circle cx="368" cy="620" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="368" cy="640" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M368 620 L368 638 L368 638 L368 640" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="365,636 368,640 371,636" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M368 620 L368 638 L368 638 L368 640" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-after-copy-1-trace" opacity="0"></path>
+<rect x="-9" y="-5" width="18" height="10" fill="#238fff" stroke="#eef2fb" stroke-width="1.5" id="reuse-v5-hub-after-copy-1-carrier" opacity="0" data-role="byte-copy-in-flight" transform="translate(368 620)"></rect>
+<text x="386" y="624" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Copy 2</text>
+<path d="M544.0889553065646,675.2670346554204 A30,30 0 0 1 552.3548441568761,655.3114136879299 L560.8276549356943,663.3799623496373 A18.3,18.3 0 0 0 555.7854627370044,675.5528911398064 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M553.3914136879299,654.2748441568759 A30,30 0 0 1 573.3470346554204,646.0089553065645 L573.6328911398065,657.7054627370044 A18.3,18.3 0 0 0 561.4599623496373,662.7476549356943 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M574.8129653445797,646.0089553065645 A30,30 0 0 1 594.7685863120702,654.2748441568759 L586.7000376503628,662.7476549356943 A18.3,18.3 0 0 0 574.5271088601936,657.7054627370044 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M574.8129653445797,646.0089553065645 A30,30 0 0 1 594.7685863120702,654.2748441568759 L586.7000376503628,662.7476549356943 A18.3,18.3 0 0 0 574.5271088601936,657.7054627370044 Z" fill="#0066d6" id="reuse-v5-hub-after-q-2-data" opacity="1"></path>
+<path d="M574.8129653445797,646.0089553065645 A30,30 0 0 1 594.7685863120702,654.2748441568759 L586.7000376503628,662.7476549356943 A18.3,18.3 0 0 0 574.5271088601936,657.7054627370044 Z" fill="#238fff" id="reuse-v5-hub-after-q-2-flash" opacity="0"></path>
+<path d="M595.8051558431241,655.3114136879299 A30,30 0 0 1 604.0710446934355,675.2670346554204 L592.3745372629957,675.5528911398064 A18.3,18.3 0 0 0 587.3323450643057,663.3799623496373 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M604.0710446934355,676.7329653445796 A30,30 0 0 1 595.8051558431241,696.6885863120701 L587.3323450643057,688.6200376503627 A18.3,18.3 0 0 0 592.3745372629957,676.4471088601936 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M594.7685863120702,697.7251558431241 A30,30 0 0 1 574.8129653445797,705.9910446934355 L574.5271088601936,694.2945372629956 A18.3,18.3 0 0 0 586.7000376503628,689.2523450643057 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M573.3470346554204,705.9910446934355 A30,30 0 0 1 553.3914136879299,697.725155843124 L561.4599623496373,689.2523450643057 A18.3,18.3 0 0 0 573.6328911398065,694.2945372629956 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<path d="M552.354844156876,696.6885863120701 A30,30 0 0 1 544.0889553065646,676.7329653445796 L555.7854627370044,676.4471088601936 A18.3,18.3 0 0 0 560.8276549356943,688.6200376503627 Z" fill="#172536" stroke="#354b61" stroke-width="1.5"></path>
+<text x="574.08" y="676" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#eef2fb">S3</text>
+<text x="574.08" y="722" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SendQ</text>
+<text x="574.08" y="740" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef</text>
+<circle cx="368" cy="620" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="574.08" cy="640" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M368 620 L368 638 L574.08 638 L574.08 640" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="571.08,636 574.08,640 577.08,636" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M368 620 L368 638 L574.08 638 L574.08 640" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-after-copy-2-trace" opacity="0"></path>
+<rect x="-9" y="-5" width="18" height="10" fill="#238fff" stroke="#eef2fb" stroke-width="1.5" id="reuse-v5-hub-after-copy-2-carrier" opacity="0" data-role="byte-copy-in-flight" transform="translate(368 620)"></rect>
+<text x="592.08" y="624" font-size="11" dominant-baseline="middle" text-anchor="start" fill="#a8b8ca">Copy 3</text>
+<rect x="290" y="786" width="156" height="72" fill="#151f2c" stroke="#354b61" stroke-width="1.5"></rect>
+<path d="M286 788 L286 782 L292 782" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M450 788 L450 782 L444 782" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M286 856 L286 862 L292 862" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<path d="M450 856 L450 862 L444 862" fill="none" stroke="#354b61" stroke-width="1.5" stroke-linejoin="miter"></path>
+<text x="368" y="800" font-size="12" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">버퍼 풀</text>
+<rect x="314" y="817" width="28" height="36" fill="#172536" stroke="#354b61" stroke-width="1.5"></rect>
+<g id="reuse-v5-hub-after-pool-0" opacity="0" transform="translate(328 835)" data-role="returned-whole-buffer">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#0066d6"></rect>
+</g>
+<rect x="354" y="817" width="28" height="36" fill="#172536" stroke="#354b61" stroke-width="1.5"></rect>
+<g id="reuse-v5-hub-after-pool-1" opacity="0" transform="translate(368 835)" data-role="returned-whole-buffer">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#0066d6"></rect>
+</g>
+<rect x="394" y="817" width="28" height="36" fill="#172536" stroke="#354b61" stroke-width="1.5"></rect>
+<g id="reuse-v5-hub-after-pool-2" opacity="0" transform="translate(408 835)" data-role="returned-whole-buffer">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#0066d6"></rect>
+</g>
+<circle cx="294" cy="564" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<circle cx="368" cy="780" r="2.5" fill="#0d1421" stroke="#829bb1" stroke-width="1.5"></circle>
+<path d="M294 564 L60 564 L60 768 L368 768 L368 780" fill="none" stroke="#7895ae" stroke-width="1.5" stroke-linejoin="miter"></path>
+<polyline points="365,776 368,780 371,776" fill="none" stroke="#7895ae" stroke-width="1.5"></polyline>
+<path d="M294 564 L60 564 L60 768 L368 768 L368 780" fill="none" stroke="#238fff" stroke-width="1.5" stroke-linejoin="miter" id="reuse-v5-hub-after-return-trace" opacity="0"></path>
+<g id="reuse-v5-hub-after-return-carrier" opacity="0" data-role="whole-buffer-in-flight" transform="translate(294 564)">
+<rect x="-13" y="-17" width="26" height="34" fill="#151f2c" stroke="#829bb1" stroke-width="1.5"></rect>
+<line x1="-12" x2="12" y1="-8" y2="-8" stroke="#354b61" stroke-width="1.5"></line>
+<line x1="-12" x2="12" y1="-1" y2="-1" stroke="#354b61" stroke-width="1.5"></line>
+<rect x="-9" y="3" width="18" height="10" fill="#238fff"></rect>
+</g>
+<text x="76" y="796" font-size="12" dominant-baseline="middle" text-anchor="start" fill="#238fff">마지막 반환</text>
+<text x="368" y="881" font-size="11" dominant-baseline="middle" text-anchor="middle" fill="#a8b8ca">SubRef → Ref 0</text>
+</g></svg>

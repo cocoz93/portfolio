@@ -1,0 +1,34 @@
+{
+  "verification": "source, component sizing, offscreen SVG rendering",
+  "browserHostVerified": false,
+  "static": true,
+  "matchedOriginalPalette": true,
+  "matchedOriginalFonts": true,
+  "checked": [
+    {
+      "width": 736,
+      "height": 650,
+      "labels": 67
+    },
+    {
+      "width": 700,
+      "height": 650,
+      "labels": 67
+    },
+    {
+      "width": 699,
+      "height": 1000,
+      "labels": 61
+    },
+    {
+      "width": 360,
+      "height": 1000,
+      "labels": 61
+    },
+    {
+      "width": 320,
+      "height": 1000,
+      "labels": 61
+    }
+  ]
+}

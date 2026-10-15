@@ -1,0 +1,137 @@
+<style>
+/* ORIGINAL_FONTS */
+#wsasend-cue-studies-v5 {
+  --pcb-bg:#0d1421;--pcb-surface:#151f2c;--pcb-edge:#354b61;
+  --pcb-track:#7895ae;--pcb-text:#eef2fb;--pcb-muted:#a8b8ca;
+  --pcb-active:#6cc7ff;--pcb-soft:#1b3a50;--pcb-empty:#172536;--pcb-pin:#829bb1;
+  --pcb-char-ink:#08121e;--pcb-char-steel:#dce9f3;--pcb-char-steel-mid:#a6bed1;--pcb-char-steel-dark:#617e9a;--pcb-char-blue:#4eafe8;
+  --pcb-char-blue-mid:#2579ad;--pcb-char-blue-dark:#17466a;--pcb-char-skin:#ecd0b5;--pcb-char-skin-dark:#bd947a;
+  width:100%;color:var(--pcb-text);font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;
+}
+#wsasend-cue-studies-v5 .study-design {width:100%;background:var(--pcb-bg);color-scheme:dark}
+#wsasend-cue-studies-v5 .study-board {display:block;width:100%;height:auto}
+#wsasend-cue-studies-v5 .study-board text {font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-weight:500}
+#wsasend-cue-studies-v5 .bundle-mono {font-family:PCB-Mono,"Malgun Gothic",monospace;font-variant-numeric:tabular-nums}
+#wsasend-cue-studies-v5 .study-toolbar {padding:12px 20px}
+#wsasend-cue-studies-v5 .study-status {font-size:12px;color:var(--pcb-muted);flex:1 1 220px;text-align:right}
+</style>
+<div id="wsasend-cue-studies-v5" class="viz-carousel" aria-label="링버퍼 변화 강조 시안" data-previous-label="이전 시안" data-next-label="다음 시안">
+  <section id="cue-led" class="study-design" data-variant="LED 점등" data-routing="chamfer" data-material="led" data-layout="silkscreen" aria-label="LED 점등">
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="cue-led-title cue-led-desc">
+      <title id="cue-led-title">LED 점등</title>
+      <desc id="cue-led-desc">한 수신 세션의 SendQ입니다. 변경 전에는 Msg 하나마다 송신 요청하고, 변경 후에는 같은 네 Msg를 누적한 뒤 틱 끝에 한 번 요청합니다. 입력된 칸은 밝은 블루와 흰 점등으로 켜졌다가 보관 색으로 돌아옵니다. 송신 때는 대기한 칸이 함께 켜진 뒤 비워집니다. 큐만 재생은 입력 준비 구간을 건너뛰고 적재, 송신, 비움만 비교합니다. 전체 재생은 캐릭터 이동부터 보여줍니다. 처음 정지 화면은 변경 전이 이미 네 번 송신하고 변경 후가 네 Msg를 보관 중인 틱 끝 직전입니다. Msg를 하나로 합치거나 TCP 패킷 수를 나타내는 그림은 아닙니다.</desc>
+      <!-- SCENE_LED -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play">큐만 재생</button>
+      <button type="button" class="btn" data-action="full">전체 재생</button>
+      <span class="study-status" role="status" aria-live="polite">틱 끝 직전 · 변경 후 Msg 4개 대기</span>
+    </div>
+  </section>
+  <section id="cue-blocks" class="study-design" data-variant="블록 입출력" data-routing="chamfer" data-material="blocks" data-layout="silkscreen" aria-label="블록 입출력" hidden>
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="cue-blocks-title cue-blocks-desc">
+      <title id="cue-blocks-title">블록 입출력</title>
+      <desc id="cue-blocks-desc">같은 네 Msg가 데이터 블록으로 링버퍼 안에 들어와 자리를 잡습니다. 변경 전에는 한 블록마다 송신 요청하고, 변경 후에는 네 블록을 보관한 뒤 한 번의 송신 요청으로 내보냅니다. 여러 블록은 각각 별도의 Msg이며, 송신 중 중앙 숫자는 요청 중인 Msg 수입니다. 데이터 블록의 이동은 큐와 커널 요청 사이의 개념적 전달을 보여줍니다. 실제 TCP 패킷 수를 나타내지 않습니다. 큐만 재생과 전체 재생으로 비교할 수 있습니다.</desc>
+      <!-- SCENE_BLOCKS -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play">큐만 재생</button>
+      <button type="button" class="btn" data-action="full">전체 재생</button>
+      <span class="study-status" role="status" aria-live="polite">틱 끝 직전 · 변경 후 Msg 4개 대기</span>
+    </div>
+  </section>
+  <section id="cue-fill" class="study-design" data-variant="채움·비움" data-routing="chamfer" data-material="fill" data-layout="silkscreen" aria-label="채움·비움" hidden>
+    <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="cue-fill-title cue-fill-desc">
+      <title id="cue-fill-title">채움·비움</title>
+      <desc id="cue-fill-desc">링버퍼의 각 Msg 칸을 선명한 블루 면으로 왼쪽에서 오른쪽으로 채웁니다. 보관 중에는 색이 유지되고 송신 후 같은 방향으로 면이 지워집니다. 변경 전에는 한 칸이 차고 비워지는 동작을 네 번 반복합니다. 변경 후에는 네 칸이 함께 남아 있다가 한 번의 송신 요청 후 비워집니다. 별도 Msg 네 개를 유지하며 큐 용량의 퍼센트나 TCP 패킷 수를 뜻하지 않습니다. 큐만 재생과 전체 재생으로 비교할 수 있습니다.</desc>
+      <!-- SCENE_FILL -->
+    </svg>
+    <div class="viz-controls study-toolbar">
+      <button type="button" class="btn" data-action="play">큐만 재생</button>
+      <button type="button" class="btn" data-action="full">전체 재생</button>
+      <span class="study-status" role="status" aria-live="polite">틱 끝 직전 · 변경 후 Msg 4개 대기</span>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  'use strict';
+/* MATCHED_SOURCE */
+  const root=document.getElementById('wsasend-cue-studies-v5');if(!root)return;
+  const KIND='wsasend-cue-studies-v5';
+  const reduced=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)'):{matches:false,addEventListener(){}};
+  const designs=Array.from(root.querySelectorAll('.study-design')),controllers=[];
+  let drawnWidth=0,pendingWidth=0,layoutFrame=0;
+  function save(){
+    if(!window.openai?.setWidgetState)return;
+    const snapshots=controllers.map(controller=>controller.snapshot());
+    try{Promise.resolve(window.openai.setWidgetState({modelContent:{kind:KIND,designs:controllers.map(controller=>controller.state())},privateContent:{kind:KIND,designs:snapshots}})).catch(()=>{});}catch{}
+  }
+  for(const design of designs){
+    const layout=design.getAttribute('data-layout'),routing=design.getAttribute('data-routing'),material=design.getAttribute('data-material'),board=design.querySelector('.study-board');
+    const playButton=design.querySelector('[data-action="play"]'),fullButton=design.querySelector('[data-action="full"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,mode='core',raf=0,lastFrame=0,nodes=new Map();
+    function set(id,attrs,text){
+      const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
+      for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
+      if(text!==undefined&&element.textContent!==text)element.textContent=text;
+    }
+    function frame(){return preview?bundlePreviewFrame(program):bundleFrame(time,program);}
+    function paint(){
+      if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
+      if(status.textContent!==current.phase)status.textContent=current.phase;
+      playButton.textContent=playing&&mode==='core'?'일시정지':'큐만 재생';
+      fullButton.textContent=playing&&mode==='full'?'일시정지':'전체 재생';
+      playButton.setAttribute('aria-label',playing&&mode==='core'?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 큐만 재생`);
+      fullButton.setAttribute('aria-label',playing&&mode==='full'?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 전체 재생`);
+    }
+    function state(){const f=frame();return {layout,routing,material,name:design.getAttribute('data-variant'),time,duration:program.end,coreDuration:bundleCoreRanges(program).reduce((sum,r)=>sum+r.end-r.start,0),mode,playing,preview,phase:f.phase,callsBefore:f.rows[0].calls,callsAfter:f.rows[1].calls,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].copies,queuedAfter:f.rows[1].copies};}
+    function pause(){playing=false;lastFrame=0;if(raf)cancelAnimationFrame(raf);raf=0;paint();}
+    function schedule(){if(playing&&!raf)raf=requestAnimationFrame(tick);}
+    function tick(now){
+      raf=0;if(!playing)return;
+      if(document.hidden||design.hidden){lastFrame=0;schedule();return;}
+      if(lastFrame)time=bundleAdvance(time,Math.min(80,Math.max(0,now-lastFrame)),program,mode);lastFrame=now;
+      if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
+    }
+    function play(nextMode=mode){
+      if(reduced.matches){pause();preview=true;time=program.end;paint();return;}
+      if(preview||time>=program.end||nextMode!==mode)time=nextMode==='core'?bundleCoreRanges(program)[0].start:0;mode=nextMode;preview=false;playing=true;lastFrame=0;paint();schedule();
+    }
+    function showPreview(){pause();time=program.end;preview=true;paint();}
+    function renderDesign(width){
+      const position=locateBundleSegment(time,program),atEnd=time>=program.end;
+      const accessible=Array.from(board.children).filter(el=>['title','desc'].includes(el.tagName.toLowerCase()));
+      scene=createBundleAnimationScene(width,layout,routing,material);program=createBundleProgram(scene.compact);
+      time=atEnd?program.end:program.segments[position.index].start+position.progress*program.segments[position.index].duration;
+      board.replaceChildren(...accessible);board.insertAdjacentHTML('beforeend',scene.markup);
+      board.setAttribute('viewBox',`0 0 ${width} ${scene.height}`);board.setAttribute('width',String(width));board.setAttribute('height',String(scene.height));
+      nodes=new Map(Array.from(board.querySelectorAll('[id]')).map(el=>[el.id,el]));lastFrame=0;paint();
+    }
+    function snapshot(){const p=locateBundleSegment(time,program);return {layout,routing,material,segment:p.index,phaseProgress:p.progress,mode,playing,preview};}
+    function restore(saved){
+      if(saved?.layout!==layout||saved?.routing!==routing||saved?.material!==material||!Number.isInteger(saved.segment)||saved.segment<0||saved.segment>=program.segments.length||!Number.isFinite(saved.phaseProgress))return;
+      pause();mode=saved.mode==='full'?'full':'core';const segment=program.segments[saved.segment];time=segment.start+bundleClamp(saved.phaseProgress)*segment.duration;preview=Boolean(saved.preview);
+      if(reduced.matches){preview=true;time=program.end;}
+      playing=!preview&&!reduced.matches&&Boolean(saved.playing)&&time<program.end;paint();schedule();
+    }
+    const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
+    design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
+    playButton.addEventListener('click',()=>{playing&&mode==='core'?pause():play('core');save();});fullButton.addEventListener('click',()=>{playing&&mode==='full'?pause():play('full');save();});
+    document.addEventListener('visibilitychange',()=>{lastFrame=0;});
+    reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
+  }
+  function draw(width){
+    if(!Number.isFinite(width)||width<=0)return;width=Math.max(320,width);
+    if(Math.abs(width-drawnWidth)<.5)return;controllers.forEach(controller=>controller.draw(width));drawnWidth=width;
+  }
+  function restore(snapshot){if(snapshot?.privateContent?.kind!==KIND)return;for(const controller of controllers)controller.restore(snapshot.privateContent.designs?.find(entry=>entry.layout===controller.state().layout&&entry.routing===controller.state().routing&&entry.material===controller.state().material));}
+  draw(root.getBoundingClientRect().width||736);restore(window.openai?.widgetState);
+  window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState));
+  if(typeof ResizeObserver!=='undefined')new ResizeObserver(entries=>{
+    pendingWidth=entries[0].contentRect.width;if(layoutFrame)return;
+    layoutFrame=requestAnimationFrame(()=>{layoutFrame=0;draw(pendingWidth);});
+  }).observe(root);
+})();
+</script>
