@@ -352,6 +352,12 @@ function paintFan(it){
    실험 이름을 문구에 넣지 않는 이유는 폭이다. 이름이 긴 카드(⑤ ⑨)에서 줄이 접히면
    계기판과의 간격이 그 카드에서만 벌어진다 — 무엇의 보고서인지는 바로 위 계기판 라벨이 말한다. */
 function paintMore(it){
+  var principle=document.getElementById("bn-principle");
+  var figure=window.__optimizationForExperiment&&window.__optimizationForExperiment(it.s);
+  if(principle){principle.hidden=!figure;
+    if(figure){principle.href="#optimization-"+figure.id;principle.dataset.optimization=figure.id;
+      principle.setAttribute("aria-label",figure.title+" — 최적화 원리 그림 보기");}
+    else {principle.removeAttribute("href");delete principle.dataset.optimization;}}
   var a=document.getElementById("bn-more"); if(!a) return;
   if(it.nt){ a.href=it.nt; a.hidden=false;
              a.setAttribute("aria-label", it.n+" 실측 보고서 — 노션에서 열기"); }
