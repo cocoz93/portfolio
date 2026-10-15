@@ -33,6 +33,7 @@
 .op-principle{display:block;margin-top:9px;text-align:right;color:var(--net);text-decoration:none;
   font-family:var(--sans);font-size:.72rem;font-weight:700}
 .op-principle:hover{text-decoration:underline}
+.op-principle[hidden]{display:none}
 /* 220 + 16 + 바깥 여백 40 + 테두리 2를 빼도 그림이 700px 이상 남는 범위다. */
 @media(max-width:1000px){
   .op-layout{grid-template-columns:minmax(0,1fr);gap:14px}
