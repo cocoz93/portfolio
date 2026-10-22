@@ -733,12 +733,19 @@ function openZone(z,brief){ const Z=ZI[z]; if(!Z||!card) return;
    되어 눌러 볼 것이 사라진다. 설명을 지우고 나면 남는 것이 수치 넷인데, 그게 구역 버튼에는
    없는 값이다(버튼은 이름뿐) — 버튼을 세로로 다시 적은 것이 아니게 되는 지점이 여기다. */
 const ZORDER=["outside","net","game","store"];   /* 씬이 흐르는 순서 — 클라 → 네트워크 → 게임 → 저장 */
+const ZSUM={
+  outside:"인덱스 슬롯 세션 · ABA 차단",
+  net:"수신 4 · 송신 3 · 수락 1 분산",
+  game:"무락 SwapQ · 25fps 틱 방어",
+  store:"dirty 선별 · 비동기 배치 UPSERT"
+};
 function openAll(){ if(!card) return;
   cbd.innerHTML='<h3>IOCP 서버</h3>'+
     ZORDER.map(function(k){ const Z=ZI[k];
       /* 줄마다 --ac 를 그 구역 색으로 — 수치 글자가 씬에서 그 구역이 쓰는 색과 같아진다 */
       return '<div class="zn-it" style="--ac:'+Z.ac+'"><span class="t">'+Z.nm+
-             '<em>'+Z.sub+'</em></span></div>'; }).join("");
+             '<em>'+Z.sub+'</em></span>'+
+             '<span class="d">'+ZSUM[k]+'</span></div>'; }).join("");
   /* 왼쪽 세로선만 중립색이다. 구역 색 중 하나를 쓰면 그 구역만 켜진 화면으로 읽힌다. */
   card.style.setProperty("--ac","#8fa8cc");
   card.classList.add("on"); }
