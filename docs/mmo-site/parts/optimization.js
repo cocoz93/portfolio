@@ -8,19 +8,19 @@
      source:"visualizations/wsasend-held-pulse-v11/ring-held-pulse.html",
      summary:"같은 세션의 Msg N개를 틱 끝에 모아 한 번 호출합니다.",example:"그림은 N=4 예시",
      note:""},
-    {id:"msg-bundle",title:"이동 정보 묶기",experiment:6,root:"sector-bundle-held-pulse-v26",
+    {id:"msg-bundle",title:"이동 정보 묶기",titleLines:["이동 정보","묶기"],effect:"Msg N개 → 1개",term:"Message Bundling",experiment:6,root:"sector-bundle-held-pulse-v26",
      source:"visualizations/sector-bundle-held-pulse-v26/msg-held-pulse.html",
-     summary:"같은 섹터의 이동 정보 네 개를 하나의 Msg로 만듭니다.",
+     summary:"같은 섹터의 이동 정보 네 개를 하나의 Msg로 만듭니다.",example:"그림은 N=4 예시",
      note:"네 이동 정보는 그대로 보존합니다. 묶음 Msg에는 Header 하나와 좌표 데이터 네 개가 들어갑니다."},
-    {id:"msg-sharing",title:"직렬화버퍼 재사용",experiment:8,root:"serial-figure-3-interim",
+    {id:"msg-sharing",title:"직렬화버퍼 재사용",titleLines:["직렬화버퍼","재사용"],effect:"Msg 생성 N회 → 1회",term:"Buffer Sharing",experiment:8,root:"serial-figure-3-interim",
      source:"visualizations/serial-sector-bank-v1/figure-3.html",
-     summary:"동일한 Msg를 한 번 만들어 세 수신자의 SendQ에 복사합니다.",
+     summary:"동일한 Msg를 한 번 만들어 N명 수신자의 SendQ에 복사합니다.",
      note:"Ref는 1→4→3→2→1→0으로 줄고, 마지막에 원본을 풀에 반환합니다. SendQ에는 바이트 사본이 남습니다."},
-    {id:"digest",title:"수신 섹터별 Digest",experiment:9,root:"digest-comparison-four-residents-v17",
+    {id:"digest",title:"수신 섹터별 Digest",titleLines:["수신 섹터별","Digest"],effect:"N회 적재 → 1회",term:"Sector Digest",experiment:9,root:"digest-comparison-four-residents-v17",
      source:"visualizations/digest-compare-four-residents-v17/digest-compare.html",
      summary:"섹터별 Msg를 수신 섹터별로 모아 주민의 SendQ에 한 번씩 적재합니다.",
      note:"같은 수신 섹터의 주민은 동일한 Digest를 재사용합니다. 예시는 세 섹터의 주민 2/1/1명, SendQ 네 개입니다."},
-    {id:"quantization",title:"좌표 양자화",experiment:15,root:"quantization-value-change-v13",
+    {id:"quantization",title:"좌표 양자화",titleLines:["좌표","양자화"],effect:"8B → 4B",term:"Coordinate Quantization",experiment:15,root:"quantization-value-change-v13",
      source:"visualizations/quantization-value-change-v13/quantization.html",
      summary:"서버 float은 유지하고, 전송할 좌표 부분을 8B에서 4B로 줄입니다.",
      note:"좌표에 ×512 후 반올림하여 uint16로 기록합니다. 좌표 하나당 4B→2B이며 반올림 오차가 있습니다."}
@@ -34,7 +34,10 @@
   function currentDocument(){try{return frame&&frame.contentDocument;}catch(e){return null;}}
   function pause(){
     const doc=currentDocument();if(!doc) return;
-    Array.from(doc.querySelectorAll("button")).forEach(button=>{if(button.textContent.trim()==="일시정지")button.click();});
+    Array.from(doc.querySelectorAll("button")).forEach(button=>{
+      const text=button.textContent.trim();
+      if(text==="일시정지"||text==="❚❚"||button.getAttribute("aria-label")?.includes("일시정지"))button.click();
+    });
   }
   function disconnect(){if(observer)observer.disconnect();observer=null;if(resizeFrame)cancelAnimationFrame(resizeFrame);resizeFrame=0;}
   function hash(){return selected===figures[0]?"optimization":"optimization-"+selected.id;}
@@ -47,7 +50,7 @@
   }
   function paint(){
     panel.dataset.figure=selected.id;
-    const sideExplanation=selected.id==="wsasend";
+    const sideExplanation=true;
     if(sideExplanation){if(heading.parentElement!==explanation)explanation.appendChild(heading);}
     else if(heading.parentElement!==viewer.parentElement)viewer.parentElement.insertBefore(heading,viewer);
     explanation.hidden=!sideExplanation;
@@ -101,17 +104,20 @@
       const style=doc.createElement("style");
       style.textContent=`html{color-scheme:dark}body{margin:0;background:#0d1421;overflow:hidden}
         .viz-controls{zoom:var(--op-control-zoom,1);display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0;padding:10px 20px}
-        button.btn{font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-size:13px;font-weight:500;
+        button.btn{font-family:PCB-Pretendard,"Malgun Gothic",sans-serif;font-size:13px;font-weight:600;
           line-height:1.4;padding:8px 12px;border-radius:7px;border:1px solid #354b61;color:#eef2fb;
-          background:#151f2c;cursor:pointer}button.btn:hover{border-color:#6cc7ff}
+          background:#151f2c;cursor:pointer;min-width:40px;text-align:center}button.btn:hover{border-color:#6cc7ff}
         button.btn:focus-visible{outline:2px solid #6cc7ff;outline-offset:2px}
-        .text-small,[data-status],.sector-status{font-size:12px;line-height:1.5;color:#a8b8ca}
-        .viz-controls .sector-state-line,.viz-controls [data-status]{margin:0;min-height:0;flex:1 1 220px;text-align:right}
+        /* 재생 버튼만 주황으로 칠해 그림마다 먼저 누를 곳을 하나로 정한다 — E 그림의 재생 버튼과 같은 값 */
+        button.btn[data-action="play"]{background:#f5b13d;border-color:#f5b13d;color:#0a0f1a}
+        button.btn[data-action="play"]:hover{background:#ffc25c;border-color:#ffc25c}
+        /* 단계 문구는 0.3초 안팎으로 바뀌어 읽히지 않고, 끝 문구는 효과 문구와 같은 말이라 숨긴다 */
+        .study-status,[data-status]{display:none!important}
         @media(max-width:480px){.viz-controls{padding:8px 12px}button.btn{padding:7px 10px}}
         @media(pointer:coarse){button.btn{min-height:44px}}`;
       doc.head.appendChild(style);
       const toolbar=root.querySelector(".viz-controls");
-      if(toolbar){const state=root.querySelector(".sector-state-line,[data-status]");if(state)toolbar.appendChild(state);root.prepend(toolbar);}
+      if(toolbar)root.prepend(toolbar);
       if(typeof ResizeObserver==="function"){observer=new ResizeObserver(queueMeasure);observer.observe(root);}
       const ready=function(){if(token!==generation)return;queueMeasure();viewer.dataset.state="ready";loading.hidden=true;};
       if(doc.fonts&&doc.fonts.ready)doc.fonts.ready.then(ready);else ready();
@@ -120,7 +126,7 @@
     frame.addEventListener("error",function(){if(token===generation)fail();});
     viewer.dataset.state="loading";loading.hidden=false;error.hidden=true;loadedId=figure.id;
     /* 같은 파일명을 다시 빌드해도 상위 문서의 변경 시각으로 그림 캐시를 갱신한다. */
-    frame.src=figure.source+"?v="+encodeURIComponent(document.lastModified);viewer.appendChild(frame);
+    frame.src=figure.source+"?v="+encodeURIComponent(document.lastModified)+"-"+Date.now();viewer.appendChild(frame);
   }
   function select(id){
     const figure=figures.find(f=>f.id===id);if(!figure) return;

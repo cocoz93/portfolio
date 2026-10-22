@@ -1,11 +1,11 @@
   <section class="panel" id="p-optimization" role="tabpanel" aria-labelledby="tab-optimization" hidden>
     <div class="op-layout">
       <nav class="op-index" aria-label="핵심 최적화 다섯 가지">
-        <button type="button" data-optimization="wsasend" aria-pressed="true" aria-controls="op-detail"><em>01</em>WSASend 호출 묶기</button>
-        <button type="button" data-optimization="msg-bundle" aria-pressed="false" aria-controls="op-detail"><em>02</em>이동 정보 묶기</button>
-        <button type="button" data-optimization="msg-sharing" aria-pressed="false" aria-controls="op-detail"><em>03</em>직렬화버퍼 재사용</button>
-        <button type="button" data-optimization="digest" aria-pressed="false" aria-controls="op-detail"><em>04</em>수신 섹터별 Digest</button>
-        <button type="button" data-optimization="quantization" aria-pressed="false" aria-controls="op-detail"><em>05</em>좌표 양자화</button>
+        <button type="button" data-optimization="wsasend" aria-pressed="true" aria-controls="op-detail" title="A WSASend 호출 묶기"><em>A</em><span class="op-nav-text">WSASend 호출 묶기</span></button>
+        <button type="button" data-optimization="msg-bundle" aria-pressed="false" aria-controls="op-detail" title="B 이동 정보 묶기"><em>B</em><span class="op-nav-text">이동 정보 묶기</span></button>
+        <button type="button" data-optimization="msg-sharing" aria-pressed="false" aria-controls="op-detail" title="C 직렬화버퍼 재사용"><em>C</em><span class="op-nav-text">직렬화버퍼 재사용</span></button>
+        <button type="button" data-optimization="digest" aria-pressed="false" aria-controls="op-detail" title="D 수신 섹터별 Digest"><em>D</em><span class="op-nav-text">수신 섹터별 Digest</span></button>
+        <button type="button" data-optimization="quantization" aria-pressed="false" aria-controls="op-detail" title="E 좌표 양자화"><em>E</em><span class="op-nav-text">좌표 양자화</span></button>
       </nav>
       <div class="op-workspace">
       <div class="op-detail" id="op-detail" role="region" aria-labelledby="op-title">

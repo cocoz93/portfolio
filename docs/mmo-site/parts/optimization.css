@@ -28,24 +28,21 @@
   color:#c4d3e4;font-size:.84rem;line-height:1.6}
 .op-heading .op-example{margin-top:14px;font-size:.75rem;color:var(--mut)}
 .op-example[hidden],.op-explanation[hidden]{display:none}
-/* 1번은 그림 폭을 유지하고, 설명이 실제 남은 공간을 채우다가 최소 폭도 없을 때만 줄을 바꾼다. */
-#p-optimization[data-figure="wsasend"] .op-workspace{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-start}
-#p-optimization[data-figure="wsasend"] .op-detail{flex:0 1 1000px;width:100%}
+/* 1~5번 핵심 최적화 전체: 카드는 최대 1000px 유지, 설명은 우측에 2단으로 나란히 배치 */
+.op-workspace{display:flex;flex-wrap:wrap;gap:20px 28px;align-items:flex-start}
+.op-detail{flex:0 1 1000px;width:100%;max-width:1000px}
 .op-explanation{flex:1 0 260px;min-width:0;padding:12px 0;container-type:inline-size;container-name:op-explanation}
 .op-explanation .op-heading{max-width:360px;padding:0;border:0}
 .op-explanation .op-heading h2{flex-direction:column;align-items:flex-start;gap:12px;font-size:clamp(2.25rem,12cqi,3rem);line-height:1.12;letter-spacing:-.035em}
 .op-explanation .op-title-line{display:block;white-space:nowrap}
-.op-explanation .op-term{order:1;font-size:.875rem;line-height:1.5;letter-spacing:0}
-.op-explanation .op-effect{order:2;margin-top:20px;font-size:2.5rem;line-height:1.15;letter-spacing:-.02em}
+.op-explanation .op-term{order:1;font-family:var(--mono);font-size:.82rem;font-weight:600;letter-spacing:.04em;color:#8ea3bf;line-height:1.4}
+.op-explanation .op-effect{order:2;margin-top:18px;font-family:var(--sans);font-weight:800;font-variant-numeric:tabular-nums;font-size:clamp(2.1rem,9cqi,2.75rem);line-height:1.15;letter-spacing:-.03em;color:var(--net)}
 .op-explanation .op-effect::before{content:none;margin:0}
 .op-explanation .op-heading p{margin-top:22px;font-size:1rem;line-height:1.75}
 .op-explanation .op-heading .op-example{font-size:.75rem;margin-top:14px}
 .op-viewer{max-width:none;margin-inline:20px;min-width:0;background:#0d1421}
 /* 그림은 넓은 화면에서도 과도하게 커지지 않도록 표시 폭만 제한한다. */
-.op-frame{display:block;border:0;width:100%;max-width:1000px;margin-inline:auto;height:640px;visibility:hidden}
-/* 1번은 카드와 그림 폭을 함께 줄여 카드 안에 큰 좌우 여백이 생기지 않게 한다. */
-#p-optimization[data-figure="wsasend"] .op-detail{max-width:1000px}
-.op-viewer[data-figure="wsasend"] .op-frame{max-width:none}
+.op-frame{display:block;border:0;width:100%;max-width:none;margin-inline:auto;height:640px;visibility:hidden}
 /* 좁은 데스크톱·태블릿에서는 기존 가로 비교 배치를 유지한다. */
 @container(min-width:670px) and (max-width:963px){.op-frame{zoom:.9}}
 .op-viewer[data-state="ready"] .op-frame{visibility:visible}
@@ -62,11 +59,24 @@
 .op-principle:hover{text-decoration:underline}
 .op-principle[hidden]{display:none}
 @media(max-width:1199px){#p-optimization{margin-inline:0}}
+/* 1660px 이하(1440px 및 확대 환경)에서는 목차를 숫자 레일로 축소해 그림(1000px)과 우측 설명을 나란히 유지한다. */
+/* 기준은 목차 220px을 둔 채 설명(260px)이 아래로 밀리기 시작하는 폭(약 1640px)보다 커야 한다 — 낮으면 110%에서 내려갔다 125%에서 다시 올라온다. */
+@media(max-width:1660px){
+  #p-optimization{margin-inline:0}
+  .op-layout{grid-template-columns:52px minmax(0,1fr);gap:14px}
+  .op-index button{padding:12px 0;justify-content:center;gap:0}
+  .op-index button em{font-size:.92rem}
+  .op-index button .op-nav-text{display:none}
+  #p-optimization[data-figure="wsasend"] .op-workspace,
+  #p-optimization[data-figure="msg-bundle"] .op-workspace{gap:16px 20px}
+  .op-explanation{flex:1 1 200px;min-width:180px}
+}
 /* 220 + 16 + 바깥 여백 40 + 테두리 2를 빼도 그림이 700px 이상 남는 범위다. */
 @media(max-width:1000px){
   .op-layout{grid-template-columns:minmax(0,1fr);gap:14px}
   .op-index{position:static;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
-  .op-index button{font-size:.88rem;padding:12px;gap:8px}
+  .op-index button{font-size:.88rem;padding:12px;gap:8px;justify-content:flex-start}
+  .op-index button .op-nav-text{display:inline}
 }
 @media(max-width:640px){
   #p-optimization{margin-inline:-20px}
