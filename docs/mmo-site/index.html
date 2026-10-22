@@ -4837,8 +4837,8 @@ window.__flowReset=function(){
      source:"visualizations/digest-compare-four-residents-v17/digest-compare.html",
      summary:"섹터별 Msg를 수신 섹터별로 모아 주민의 SendQ에 한 번씩 적재합니다.",
      note:"같은 수신 섹터의 주민은 동일한 Digest를 재사용합니다. 예시는 세 섹터의 주민 2/1/1명, SendQ 네 개입니다."},
-    {id:"quantization",title:"좌표 양자화",titleLines:["좌표","양자화"],effect:"8B → 4B",term:"Coordinate Quantization",experiment:15,root:"quantization-value-change-v13",
-     source:"visualizations/quantization-value-change-v13/quantization.html",
+    {id:"quantization",title:"좌표 양자화",titleLines:["좌표","양자화"],effect:"8B → 4B",term:"Coordinate Quantization",experiment:15,root:"quantization-msg-strip-v14",
+     source:"visualizations/quantization-msg-strip-v14/quantization.html",
      summary:"서버 float은 유지하고, 전송할 좌표 부분을 8B에서 4B로 줄입니다.",
      note:"좌표에 ×512 후 반올림하여 uint16로 기록합니다. 좌표 하나당 4B→2B이며 반올림 오차가 있습니다."}
   ];

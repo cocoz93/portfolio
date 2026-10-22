@@ -14,7 +14,7 @@
 | 2 | 여러 이동 정보를 Msg 하나로 묶기 | sector-bundle-held-pulse-v26 | 02-msg-bundle.html |
 | 3 | 직렬화버퍼 재사용, AddRef/SubRef, 반환 | serial-sector-bank-v1 | 03-msg-sharing.html |
 | 4 | 섹터별 Msg, 수신 섹터별 Digest, 주민별 1회 적재 | digest-compare-four-residents-v17 | 04-digest.html |
-| 5 | 좌표 양자화: 좌표 부분 8B→4B | quantization-value-change-v13 | 05-quantization.html |
+| 5 | 좌표 양자화: 좌표 부분 8B→4B | quantization-msg-strip-v14 (사이트가 직접 연다 · `node build.cjs`) | 05-quantization.html (v14 미반영) |
 
 ## 소스 빌드
 
@@ -43,6 +43,7 @@
 - 3번은 한 Msg를 세 번 재사용하고 마지막에 반환한다. Ref 예시는 1→4→3→2→1→0이며 SendQ에는 사본이 남는다.
 - 4번은 수신 섹터별 Digest를 같은 섹터 주민에게 재사용한다. 위 세 섹터의 주민은 2/1/1명, SendQ는 4개다.
 - 5번은 서버 float을 유지하고 ×512·반올림 후 uint16로 기록한다. 이름·값·4B/2B가 함께 바뀌며 네 칸이 두 칸으로 줄어든다. Msg 이동은 한 번이고, 원래 슬롯에 블록이 다시 생기지 않는다. 반올림 오차 안내가 있다.
+- 5번 v14(2026-10-23)는 A~D와 같은 변경 전·후 두 줄(지도 → Msg → SendQ)로 다시 그렸다. 두 줄은 동시에 재생되며, Msg에 x·y float(4B씩, 파랑)이 찰 때까지 똑같다. 그다음 변경 후 줄만 Msg 안에서 칸 수·값·이름·색이 함께 바뀌어 qx·qy(2B씩, 금색 — B·C의 변경 후 데이터 칸과 같은 강조)가 되고, 남는 자리에 −4B 점선이 드러난다. SendQ로는 두 줄이 같은 순간에 보낸다. 지도는 B와 같은 톤이고, 이동 중엔 옆모습 도트, 칸 배경은 출발·도착 칸이 제자리에서 교차한다. 처음 화면은 완성 상태, 폭 700 미만은 좁은 배치. v13(QUANTIZER ASIC 판)은 이력으로만 남긴다.
 
 기존 시안은 비교 이력이다. `archive/optimization-figures-interim-20261014`는 당시 검증 기록만 남긴다.
 `migration/result.json`과 `migration/workspace-verification.json`이 이전 작업의 확인 결과다.
