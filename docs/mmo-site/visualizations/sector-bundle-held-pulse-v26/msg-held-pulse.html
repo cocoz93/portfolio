@@ -20,7 +20,7 @@
   <section id="msg-held-pulse-minimal" class="study-design" data-variant="데이터만 강조" data-routing="chamfer" data-material="minimal" data-layout="silkscreen" aria-label="데이터만 강조">
     <svg class="study-board" xmlns="http://www.w3.org/2000/svg" width="736" height="548" viewBox="0 0 736 548" role="img" aria-labelledby="msg-held-pulse-title msg-held-pulse-desc">
       <title id="msg-held-pulse-title">데이터만 강조</title>
-      <desc id="msg-held-pulse-desc">2번 그림: 같은 네 개의 이동 좌표 (0,1), (1,1), (1,0), (2,0)를 순서대로 보존합니다. 변경 전에는 개별 Msg 네 개, 변경 후에는 네 개 데이터가 들어 있는 Msg 하나를 한 수신 세션의 SendQ에 복사합니다. 내부 사각형은 독립된 Msg가 아닙니다. 승인된 사선 팬아웃 구도와 원본 블루 색상을 유지합니다. 모든 Msg의 높이는 100픽셀, 이름표 영역은 24픽셀, 실제 패킷 헤더를 나타내는 별도의 회색 Header 영역은 20픽셀, 좌표 데이터 칸은 48 곱하기 40픽셀로 통일했습니다. 변경 전의 Msg 네 개에는 각각 Header가 있고, 변경 후 묶음 Msg에는 Header 하나와 네 좌표 데이터가 있습니다. Header의 도형 크기는 실제 바이트 비율을 나타내지 않습니다. Msg 이름과 좌표는 같은 12픽셀 글자 크기를 사용합니다. 구분선, 내부 여백, 원형 접점, 8픽셀 연결단과 6픽셀 배선 간격을 같은 규칙으로 맞췄습니다. 좁은 화면에서도 부품을 줄이지 않고 캐릭터, Msg, SendQ를 위에서 아래로 쌓습니다. 정지한 마법사는 정면을 보고, 이동 중에만 이동 방향을 봅니다.  변경 전과 변경 후 모두 Msg 아래에서 출력 배선이 나옵니다. WSASend 데이터 신호가 커널 경계를 통과한 후 큐가 비워집니다. 수신 완료나 WSASend 호출 횟수 비교를 나타내지 않습니다. 재생하면 변경 전은 기존의 1.25배속, 변경 후와 전후 전환은 기존 속도로 순서대로 움직입니다. Msg의 좌표 데이터 칸은 비었을 때 어둡게, 채워지면 짙고 선명한 블루로 표시합니다. 저장된 데이터는 선명한 블루로 남습니다. 각 데이터가 도착하면 해당 칸이 밝은 전기 블루로 약 0.5초 점등된 뒤 0.35초에 걸쳐 원래 블루로 돌아옵니다. 묶음 Msg 완성 시 내부 데이터 네 칸이 함께 한 번 점등됩니다. 점등 중인 좌표는 어두운 글자로 표시합니다. SendQ의 기존 채움 방식은 유지합니다. 현재 채우는 칸이 가장 밝고 저장 후에는 차분한 블루로 남습니다. Header와 Msg 이름표는 회색으로 채워져 데이터와 구분됩니다. 채움은 기존과 같은 속도로 왼쪽에서 오른쪽으로 진행합니다.</desc>
+      <desc id="msg-held-pulse-desc">2번 그림: 같은 섹터의 캐릭터 A, B, C, D가 한 칸씩 이동하고, 각자의 마지막 위치가 묶음 Msg의 데이터 하나가 됩니다. 변경 전에는 개별 Msg 네 개, 변경 후에는 네 개 데이터가 들어 있는 Msg 하나를 한 수신 세션의 SendQ에 복사합니다. 내부 사각형은 독립된 Msg가 아닙니다. 승인된 사선 팬아웃 구도와 원본 블루 색상을 유지합니다. 모든 Msg의 높이는 100픽셀, 이름표 영역은 24픽셀, 실제 패킷 헤더를 나타내는 별도의 회색 Header 영역은 20픽셀, 좌표 데이터 칸은 48 곱하기 40픽셀로 통일했습니다. 변경 전의 Msg 네 개에는 각각 Header가 있고, 변경 후 묶음 Msg에는 Header 하나와 네 좌표 데이터가 있습니다. Header의 도형 크기는 실제 바이트 비율을 나타내지 않습니다. Msg 이름과 좌표는 같은 12픽셀 글자 크기를 사용합니다. 구분선, 내부 여백, 원형 접점, 8픽셀 연결단과 6픽셀 배선 간격을 같은 규칙으로 맞췄습니다. 좁은 화면에서도 부품을 줄이지 않고 캐릭터, Msg, SendQ를 위에서 아래로 쌓습니다. 정지한 마법사는 정면을 보고, 이동 중에만 이동 방향을 봅니다.  변경 전과 변경 후 모두 Msg 아래에서 출력 배선이 나옵니다. WSASend 데이터 신호가 커널 경계를 통과한 후 큐가 비워집니다. 수신 완료나 WSASend 호출 횟수 비교를 나타내지 않습니다. 재생하면 변경 전은 기존의 1.25배속, 변경 후와 전후 전환은 기존 속도로 순서대로 움직입니다. Msg의 좌표 데이터 칸은 비었을 때 어둡게, 채워지면 짙고 선명한 블루로 표시합니다. 저장된 데이터는 선명한 블루로 남습니다. 각 데이터가 도착하면 해당 칸이 밝은 전기 블루로 약 0.5초 점등된 뒤 0.35초에 걸쳐 원래 블루로 돌아옵니다. 묶음 Msg 완성 시 내부 데이터 네 칸이 함께 한 번 점등됩니다. 점등 중인 좌표는 어두운 글자로 표시합니다. SendQ의 기존 채움 방식은 유지합니다. 현재 채우는 칸이 가장 밝고 저장 후에는 차분한 블루로 남습니다. Header와 Msg 이름표는 회색으로 채워져 데이터와 구분됩니다. 채움은 기존과 같은 속도로 왼쪽에서 오른쪽으로 진행합니다.</desc>
       <rect x="0" y="0" width="736" height="548" fill="var(--pcb-bg)"></rect>
 <defs>
 <g id="bundle-mage-msg-held-pulse-minimal-chamfer-silkscreen-south" shape-rendering="crispEdges">
@@ -1007,7 +1007,7 @@
 <text x="582" y="35" fill="var(--pcb-muted)" font-size="12" text-anchor="middle" dominant-baseline="middle" class="">SendQ</text>
 <defs><filter id="msg-held-pulse-minimal-chamfer-silkscreen-0-gray" color-interpolation-filters="sRGB"><feColorMatrix id="msg-held-pulse-minimal-chamfer-silkscreen-0-gray-matrix" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs>
 <g id="msg-held-pulse-minimal-chamfer-silkscreen-0-row" filter="url(#msg-held-pulse-minimal-chamfer-silkscreen-0-gray)" data-role="comparison-row" data-row="0" opacity="1">
-<text x="24" y="76" fill="var(--pcb-muted)" font-size="14" text-anchor="start" dominant-baseline="middle" class="">변경 전</text>
+<text x="24" y="76" fill="var(--pcb-text)" font-size="16" text-anchor="start" dominant-baseline="middle" class="">변경 전</text>
 <g data-role="source-message-divider">
 <path d="M154 98 L154 114" fill="none" stroke="var(--pcb-edge)" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter" opacity="0.55"></path>
 <path d="M154 234 L154 250" fill="none" stroke="var(--pcb-edge)" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter" opacity="0.55"></path>
@@ -1235,7 +1235,7 @@
 </g>
 <defs><filter id="msg-held-pulse-minimal-chamfer-silkscreen-1-gray" color-interpolation-filters="sRGB"><feColorMatrix id="msg-held-pulse-minimal-chamfer-silkscreen-1-gray-matrix" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs>
 <g id="msg-held-pulse-minimal-chamfer-silkscreen-1-row" filter="url(#msg-held-pulse-minimal-chamfer-silkscreen-1-gray)" data-role="comparison-row" data-row="1" opacity="1">
-<text x="24" y="324" fill="var(--pcb-active)" font-size="14" text-anchor="start" dominant-baseline="middle" class="">변경 후</text>
+<text x="24" y="324" fill="#f5b13d" font-size="16" text-anchor="start" dominant-baseline="middle" class="">변경 후</text>
 <g data-role="source-message-divider">
 <path d="M154 346 L154 362" fill="none" stroke="var(--pcb-edge)" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter" opacity="0.55"></path>
 <path d="M154 482 L154 498" fill="none" stroke="var(--pcb-edge)" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter" opacity="0.55"></path>
@@ -1390,9 +1390,10 @@
 <path d="M20 298 L716 298" fill="none" stroke="var(--pcb-edge)" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter" opacity="0.55"></path>
     </svg>
     <div class="viz-controls study-toolbar">
-      <button type="button" class="btn" data-action="play" aria-label="데이터만 강조 애니메이션 재생">재생</button>
-      <button type="button" class="btn" data-action="preview">구도 보기</button>
-      <span class="study-status" role="status" aria-live="polite">같은 이동 메시지 4개 · Msg 4개 → 1개</span>
+      <button type="button" class="btn" data-action="play" aria-label="재생">▶</button>
+      <button type="button" class="btn" data-action="preview" aria-label="처음으로 (구도 보기)">↺</button>
+      <button type="button" class="btn" data-action="speed" aria-label="재생 속도: 1배속">1×</button>
+      <span class="study-status" role="status" aria-live="polite">같은 섹터 4명 이동 · Msg 4개 → 1개</span>
     </div>
   </section>
 </div>
@@ -1402,7 +1403,7 @@
 function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',material='minimal'){
   width=Math.max(320,width);
   if(layout!=='silkscreen'||routing!=='chamfer'||material!=='minimal')throw Error('Unsupported design');
-  const kind='msg-held-pulse-'+material+'-'+routing+'-'+layout,compact=width<700,height=compact?1080:548;
+  const kind='msg-held-pulse-'+material+'-'+routing+'-'+layout,compact=width<700,rowHeight=compact?612:226,height=compact?2*rowHeight:508;
   const skin={fill:'soft',housing:false};
   const C={focus:'var(--pcb-data-focus)',bg:'var(--pcb-bg)',surface:'var(--pcb-surface)',edge:'var(--pcb-edge)',track:'var(--pcb-track)',text:'var(--pcb-text)',muted:'var(--pcb-muted)',active:'var(--pcb-active)',soft:'var(--pcb-soft)',empty:'var(--pcb-empty)',pin:'var(--pcb-pin)'};
   const out=[],labels=[],traces=[],rows=[];
@@ -1463,10 +1464,10 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
     if(flash)box(x+1,y+1,w-2,h-2,C.active,null,{id:flash,'clip-path':`url(#${clip})`,opacity:0,'data-role':'packet-arrival-flash'});
     return {clip,mask,flash,fill:key+'-fill',width:w-2,base:key+'-base',normal:[],ink:[],inkColor:bright?C.bg:C.text};
   }
-  function packetText(packet,label,x,y,size=12,color=C.text,mono=false,anchor='middle'){
+  function packetText(packet,label,x,y,size=12,color=C.text,mono=false,anchor='middle',extra={}){
     const n=packet.normal.length,id=packet.base+'-label'+n,ink=id+'-ink';
-    txt(label,x,y,size,color,anchor,mono,{id});
-    txt(label,x,y,size,packet.inkColor,anchor,mono,{id:ink,'clip-path':`url(#${packet.clip})`,'data-ink-copy':true});
+    txt(label,x,y,size,color,anchor,mono,{id,...extra});
+    txt(label,x,y,size,packet.inkColor,anchor,mono,{id:ink,'clip-path':`url(#${packet.clip})`,'data-ink-copy':true,...extra});
     packet.normal.push(id);packet.ink.push(ink);
   }
   function makeBeam(points,key,headWidth=6,headHeight=6){
@@ -1512,9 +1513,9 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
       tag('path',{d:ringPath(cx,cy,r,inner,a,b),fill:C.empty,stroke:C.edge,'stroke-width':1.5});
       addRegion(0,a,b,'bundle-msg-region');
     }
-    for(let i=0;i<4;i++){const [x,y]=polar(cx,cy,(r+inner)/2,-157.5+i*45),id=sid(meta.row,'queue-label',i);meta.queueLabels.push(id);txt(String(i+1),x,y,11,C.bg,'middle',true,{id});}
-    txt(after?'묶음':'개별',cx,cy-5,14,C.text);
-    txt(after?'Msg 1개':'Msg 4개',cx,cy+14,11,C.muted,'middle',true,{id:meta.queueCount});
+    for(let i=0;i<4;i++){const [x,y]=polar(cx,cy,(r+inner)/2,-157.5+i*45),id=sid(meta.row,'queue-label',i);meta.queueLabels.push(id);txt(String(i+1),x,y,13,C.bg,'middle',true,{id});}
+    txt(after?'묶음':'개별',cx,cy-5,16,C.text,'middle',true);
+    txt(after?'Msg 1개':'Msg 4개',cx,cy+18,12,C.muted,'middle',true,{id:meta.queueCount});
     out.push('</g>');
   }
   function clippedCorners(points){
@@ -1624,12 +1625,15 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
     else wire([[x+side,y-11],[x+side,y+13]],C.track,true);
   }
 
-  const G={packetH:100,headerH:24,protocolHeaderH:20,dataW:48,dataH:40,columnW:56,columnGap:10,pad:8,lead:8,pitch:6,mapW:120,mapH:144,ringR:50,characterSize:28};
+  const growth=bundleClamp((width-700)/300),mapSize=compact?192:124+64*growth,mapColumnW=mapSize;
+  const columnW=compact?60:60+20*growth,outletW=70+26*growth,rightPad=16+24*growth;
+  const G={packetH:84,headerH:24,protocolHeaderH:18,dataW:columnW-8,dataH:30,columnW,columnGap:8,pad:6,lead:8,pitch:4,
+    mapW:mapSize,mapH:mapSize,ringR:compact?76:64+14*growth,characterSize:Math.min(compact?56:52,(mapSize-18)*.35)};
   box(0,0,width,height,C.bg);mageDefinition();
-  const groupW=264,left=24,gap=(width-left-20-G.mapW-groupW-G.ringR*2-84)/2;
-  const messageX=compact?(width-groupW)/2:left+G.mapW+gap;
+  const groupW=4*G.columnW+3*G.columnGap+10,left=24,gap=Math.min(55,(width-left-rightPad-mapColumnW-groupW-G.ringR*2-outletW)/2);
+  const messageX=compact?(width-groupW)/2:left+mapColumnW+gap;
   const ringX=compact?width/2:messageX+groupW+gap+G.ringR;
-  if(!compact){txt('캐릭터 이동',left+G.mapW/2,35,12,C.muted);txt('이동 메시지',messageX+groupW/2,35,12,C.muted);txt('SendQ',ringX,35,12,C.muted);}
+  if(!compact){txt('캐릭터 이동',left+mapColumnW/2,35,14,C.text);txt('이동 메시지',messageX+groupW/2,35,14,C.muted);txt('SendQ · 링버퍼',ringX,35,14,C.text);}
   function terminal(cx,cy,edge,axis){
     wire(axis==='x'?[[edge,cy],[cx+Math.sign(cx-edge)*4,cy]]:[[cx,edge],[cx,cy+Math.sign(cy-edge)*4]],C.track,false,.65);
     pin(cx-2,cy-1.5);
@@ -1648,15 +1652,15 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
     out.push('</g>');return {label,mask,fill:key,x:x+1,y:top,width:w-2,height:G.protocolHeaderH};
   }
   for(let row=0;row<2;row++){
-    const after=row===1,offset=row*(compact?548:248),cy=offset+(compact?134:174);
-    const map={x:compact?(width-G.mapW)/2:left,y:cy-G.mapH/2,w:G.mapW,h:G.mapH};
-    const msgTop=compact?offset+248:cy-G.packetH/2,msgBottom=msgTop+G.packetH;
-    const ringY=compact?offset+458:cy,queueLeft=ringX-G.ringR-G.lead;
+    const after=row===1,offset=row*rowHeight,cy=offset+(compact?174:158);
+    const map={x:compact?(width-G.mapW)/2:left+(mapColumnW-G.mapW)/2,y:compact?offset+52:cy-G.mapH/2,w:G.mapW,h:G.mapH};
+    const msgTop=compact?offset+300:cy-G.packetH/2,msgBottom=msgTop+G.packetH;
+    const ringY=compact?offset+512:cy,queueLeft=ringX-G.ringR-G.lead;
     const meta={row,group:sid(row,'row'),matrix:sid(row,'gray-matrix'),packets:[],messages:[],queue:[],queueBands:[],queueInk:C.text,queueLabels:[],sourceBeams:[],copyBeams:[],outletBeams:[],outletLabel:sid(row,'outlet-label'),kernelBoundary:sid(row,'kernel-boundary'),kernelLabel:sid(row,'kernel-label'),queueCount:sid(row,'queue-count')};rows.push(meta);
     out.push(`<defs><filter id="${sid(row,'gray')}" color-interpolation-filters="sRGB"><feColorMatrix id="${meta.matrix}" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs>`);
     out.push(`<g id="${meta.group}" filter="url(#${sid(row,'gray')})" data-role="comparison-row" data-row="${row}">`);
-    txt(after?'변경 후':'변경 전',compact?20:left,offset+(compact?20:76),14,after?C.active:C.muted,'start');
-    if(compact){txt('캐릭터 이동',width/2,offset+46,12,C.muted);txt('SendQ',ringX,offset+396,12,C.muted);}
+    txt(after?'변경 후 · 묶음 송신':'변경 전 · 개별 송신',compact?20:messageX,offset+(compact?20:76),16,after?'#f5b13d':C.text,'start');
+    if(compact){txt('캐릭터 이동',width/2,offset+46,12,C.muted);txt('SendQ · 링버퍼',ringX,offset+424,14,C.text);}
     else{
       const x=map.x+map.w+10;
       out.push('<g data-role="source-message-divider">');
@@ -1664,20 +1668,28 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
     }
     box(map.x,map.y,map.w,map.h,C.bg,C.edge,{rx:1.5,'data-role':'source-sector'});footprint(map.x-4,map.y-4,map.w+8,map.h+8);
     const grid={x:map.x+9,y:map.y+9,w:map.w-18,h:map.h-18},cellW=grid.w/3,cellH=grid.h/3;
-    const coordinates=[[0,2],[0,1],[1,1],[1,0],[2,0]],positions=coordinates.map(([x,y])=>[grid.x+cellW*(x+.5),grid.y+cellH*(y+.5)]);
-    const sourceCell=sid(row,'source-cell'),targetCell=sid(row,'target-cell');
-    for(const [i,id,opacity] of [[3,sourceCell,0],[4,targetCell,1]])box(grid.x+coordinates[i][0]*cellW+1,grid.y+coordinates[i][1]*cellH+1,cellW-2,cellH-2,C.soft,null,{id,opacity});
+    // 같은 섹터 캐릭터 네 명이 한 칸씩 — 각자의 마지막 위치 1건이 묶음 Msg의 데이터 하나가 된다
+    const movers=[{id:'A',from:[0,0],to:[1,0],dir:'east'},{id:'B',from:[2,0],to:[2,1],dir:'south'},{id:'C',from:[2,2],to:[1,2],dir:'west'},{id:'D',from:[0,2],to:[0,1],dir:'north'}];
+    const cellCenter=([x,y])=>[grid.x+cellW*(x+.5),grid.y+cellH*(y+.5)],cellBox=([x,y],id,opacity)=>box(grid.x+x*cellW+1,grid.y+y*cellH+1,cellW-2,cellH-2,C.soft,null,{id,opacity});
+    meta.cells=movers.map((m,i)=>{const sourceCell=sid(row,'source-cell',i),targetCell=sid(row,'target-cell',i);cellBox(m.from,sourceCell,0);cellBox(m.to,targetCell,1);return {sourceCell,targetCell};});
     box(grid.x,grid.y,grid.w,grid.h,'none',C.edge,{opacity:.45});
     for(let i=1;i<3;i++){wire([[grid.x+cellW*i,grid.y],[grid.x+cellW*i,grid.y+grid.h]],C.edge,false,.45);wire([[grid.x,grid.y+cellH*i],[grid.x+grid.w,grid.y+cellH*i]],C.edge,false,.45);}
-    meta.movementArrows=[];
-    for(let i=0;i<4;i++){
-      const a=positions[i],b=positions[i+1],dx=b[0]-a[0],dy=b[1]-a[1],id=sid(row,'movement-arrow',i);meta.movementArrows.push(id);
+    meta.movementArrows=movers.map((m,i)=>{
+      const a=cellCenter(m.from),b=cellCenter(m.to),dx=b[0]-a[0],dy=b[1]-a[1],id=sid(row,'movement-arrow',i);
       out.push(`<g id="${id}" data-role="movement-arrow" opacity="0">`);wire([[a[0]+dx*.22,a[1]+dy*.22],[a[0]+dx*.73,a[1]+dy*.73]],C.track,true,1);out.push('</g>');
-    }
-    const sprite=sid(row,'character'),face=sid(row,'character-face');
-    out.push(`<g id="${sprite}" transform="translate(${positions[4][0]-positions[0][0]} ${positions[4][1]-positions[0][1]})">`);
-    tag('use',{id:face,href:`#bundle-mage-${kind}-south`,transform:`translate(${positions[0][0]} ${positions[0][1]}) scale(${G.characterSize/32})`,'data-character':'mage','data-facing':'south'});out.push('</g>');
-    meta.character={sprite,face,kind,size:G.characterSize,positions,coordinates,directions:['north','east','north','east'],grid,cellW,cellH,sourceCell,targetCell};
+      return id;
+    });
+    const moverSize=G.characterSize*.82;
+    meta.characterKind=kind;
+    meta.characters=movers.map((m,i)=>{
+      const a=cellCenter(m.from),b=cellCenter(m.to),sprite=sid(row,'character',i),face=sid(row,'character-face',i);
+      out.push(`<g id="${sprite}" transform="translate(${b[0]-a[0]} ${b[1]-a[1]})">`);
+      tag('use',{id:face,href:`#bundle-mage-${kind}-south`,transform:`translate(${a[0]} ${a[1]}) scale(${moverSize/32})`,'data-character':'mage','data-facing':'south','data-actor':m.id});
+      txt(m.id,a[0]+cellW*.36,a[1]-cellH*.34,11,C.text,'middle',true,{'data-role':'actor-tag'});
+      out.push('</g>');
+      return {sprite,face,from:a,to:b,dir:m.dir};
+    });
+    if(!compact)txt('같은 섹터 · 4명 이동',map.x+map.w/2,map.y+map.h+12,12,C.muted);
     const centers=Array.from({length:4},(_,i)=>messageX+5+i*(G.columnW+G.columnGap)+G.columnW/2);
     if(after){
       const id=sid(row,'packet','bundle')+'-base';box(messageX,msgTop,groupW,G.packetH,C.surface,C.edge,{id,'data-role':'bundle-packet','data-count':4});
@@ -1695,8 +1707,10 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
       }
       const dataX=x+4,dataY=msgTop+G.headerH+G.protocolHeaderH+G.pad;
       box(dataX,dataY,G.dataW,G.dataH,C.empty,null,{id:sid(row,'packet',index)+'-base','data-role':after?'bundle-entry':'individual-data-entry','data-move':i+1});
-      const packet=packetFill(row,index,dataX,dataY,G.dataW,G.dataH);packet.suppressStroke=true;packet.header=header;packet.protocolHeader=packetHeader;packet.payload={move:i+1,x:coordinates[i+1][0],y:coordinates[i+1][1]};meta.packets.push(packet);
-      packetText(packet,coordinates[i+1].join(','),centers[i],dataY+G.dataH/2,12,C.text,true);
+      const packet=packetFill(row,index,dataX,dataY,G.dataW,G.dataH);packet.suppressStroke=true;packet.header=header;packet.protocolHeader=packetHeader;packet.payload={actor:movers[i].id,x:movers[i].to[0],y:movers[i].to[1]};meta.packets.push(packet);
+      // 캐릭터 글자는 왼쪽 위 꼬리표, 좌표는 가운데 — 지도 속 꼬리표와 같은 꼴
+      packetText(packet,movers[i].id,dataX+7,dataY+8,9,C.text,true,'middle',{'font-weight':700});
+      packetText(packet,movers[i].to.join(','),centers[i]+2,dataY+G.dataH/2+2,12,C.text,true);
       terminal(centers[i],msgTop-4,msgTop,'y');
       if(!after)terminal(centers[i],msgBottom+4,msgBottom,'y');
     }
@@ -1735,9 +1749,9 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
       }
     }
     inputs.forEach(points=>wire(points,C.track,false,.65));outputs.forEach(points=>wire(points,after?C.active:C.track,false,after?.85:.65));
-    if(!compact)txt(after?'4개를 Msg 하나로':'개별 Msg 4개',messageX+groupW/2,cy+108,12,after?C.active:C.muted,'middle',false,{'data-role':'message-caption'});
+    if(!compact)txt(after?'묶음 Msg 1개':'개별 Msg 4개',messageX+groupW/2,cy+78,12,C.muted,'middle',false,{'data-role':'message-caption'});
     ring(ringX,ringY,G.ringR,after,meta);
-    const start=ringX+G.ringR+G.lead,end=width-10,boundary=width-22,path=[[start,ringY],[end,ringY]];
+    const start=ringX+G.ringR+G.lead,end=compact?width-10:ringX+G.ringR+outletW,boundary=end-12,path=[[start,ringY],[end,ringY]];
     terminal(ringX+G.ringR+4,ringY,ringX+G.ringR,'x');wire(path,C.track,true,.8);
     meta.boundaryProgress=(boundary-start)/(end-start);
     txt('WSASend',(start+boundary)/2,ringY-19,12,C.muted,'middle',true,{id:meta.outletLabel,'data-role':'outlet-label'});
@@ -1746,7 +1760,7 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
     meta.sourceBeams=inputs.map((p,i)=>makeBeam(p,sid(row,'source-beam',i)));meta.copyBeams=outputs.map((p,i)=>makeBeam(p,sid(row,'copy-beam',i)));meta.outletBeams=[makeBeam(path,sid(row,'outlet-beam',0),16,10)];
     out.push('</g>');
   }
-  wire([[20,compact?530:298],[width-20,compact?530:298]],C.edge,false,.55);
+  wire([[20,compact?rowHeight:276],[compact?width-20:width-rightPad,compact?rowHeight:276]],C.edge,false,.55);
   return {markup:out.join('\n'),width,height,compact,layout,routing,material,metrics:G,labels,traces,rows};
 }
 
@@ -1754,7 +1768,7 @@ function bundleClamp(value,min=0,max=1){return Math.min(max,Math.max(min,value))
 function bundlePreviewFrame(program){
   const frame=bundleFrame(program.end,program);
   for(const row of frame.rows){row.release=0;row.requested=false;row.outlet={index:0,progress:.68,opacity:.8};}
-  frame.phase='같은 이동 메시지 4개 · Msg 4개 → 1개';frame.preview=true;
+  frame.phase='같은 섹터 4명 이동 · Msg 4개 → 1개';frame.preview=true;
   return frame;
 }
 function bundleEase(value){const p=bundleClamp(value);return p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;}
@@ -1766,23 +1780,33 @@ function applyProtocolHeader(header,progress,set){
 }
 function createBundleProgram(compact=false){
   const segments=[];let cursor=0;
-  const actors=['1','2','3','4'],input=compact?700:350,copy=compact?1250:750;
+  const actors=['A','B','C','D'],input=compact?500:350,copy=compact?650:450;
   function add(row,phase,duration,actor=-1){
-    if(row===0)duration/=1.25;
-    const name=row===0?'변경 전':'변경 후',subject=actor>=0?`이동 ${actors[actor]} · `:'';
-    const captions={warm:'이동 준비',move:subject+'한 칸 이동',source:subject+'좌표 전달',message:row===0?`Msg ${actors[actor]} 생성`:`Msg에 이동 ${actors[actor]} 담기`,bundle:'이동 데이터 4개를 담은 Msg 완성',copy:row===0?`Msg ${actors[actor]} → SendQ`:'이동 데이터 4개를 담은 Msg → SendQ',queue:'SendQ에 쌓기',hold:row===0?'Msg 적재 완료':actor>=0?`이동 ${actors[actor]} 보관`:'네 메시지 보존',tick:'틱 끝 · 네 메시지 모두 묶기',holdQueue:row===0?'SendQ에 개별 Msg 4개':'SendQ에 묶음 Msg 1개',outlet:'WSASend · 큐의 데이터 송신 요청',release:'SendQ 비움',rowEnd:'송신 요청 완료',switch:'변경 후 · 같은 경로 다시 이동',compare:'완료 · 같은 이동 메시지 4개 · 개별 → 묶음'};
-    const label=phase==='switch'||phase==='compare'?captions[phase]:`${name} · ${captions[phase]}`;
+    const name=row==='both'?'공통':row===0?'변경 전':'변경 후',subject=actor>=0?`캐릭터 ${actors[actor]} · `:'';
+    const captions={
+      warm:'전·후 동시 비교 준비',
+      move:subject+'한 칸 이동',
+      source:subject+'좌표 전달',
+      message:row===0?`Msg ${actor+1} 생성`:row===1?`Msg에 ${actors[actor]} 이동 담기`:`${actors[actor]} 이동 데이터 생성`,
+      bundle:'이동 데이터 4개를 담은 Msg 1개 완성',
+      copy:row===0?`Msg ${actor+1} → SendQ`:'묶음 Msg → SendQ',
+      queue:row===0?'SendQ에 개별 Msg 쌓기':'SendQ에 묶음 Msg 적재',
+      tick:'틱 끝 · 같은 섹터 4명 이동 묶기',
+      holdQueue:'SendQ 적재 완료 · 개별 4개 vs 묶음 1개',
+      outlet:'WSASend · 큐 데이터 송신 요청',
+      release:'SendQ 비움',
+      compare:'완료 · 같은 섹터 4명 이동 · Msg 4개 → 1개'
+    };
+    const label=['warm','holdQueue','compare'].includes(phase)?captions[phase]:`${name} · ${captions[phase]}`;
     segments.push({id:`${row}-${phase}-${actor}-${segments.length}`,row,phase,actor,start:cursor,end:cursor+duration,duration,label});cursor+=duration;
   }
-  add(0,'warm',350);
+  add('both','warm',350);
   for(let actor=0;actor<4;actor++){
-    add(0,'move',650,actor);add(0,'source',input,actor);add(0,'message',350,actor);
-    add(0,'copy',copy,actor);add(0,'queue',650,actor);add(0,'hold',180,actor);
+    add('both','move',450,actor);add('both','source',input,actor);add('both','message',350,actor);
+    add(0,'copy',copy,actor);add(0,'queue',350,actor);
   }
-  add(0,'holdQueue',900);add(0,'outlet',800);add(0,'release',450);add(0,'rowEnd',250);add(1,'switch',650);add(1,'warm',300);
-  for(let actor=0;actor<4;actor++){add(1,'move',650,actor);add(1,'source',input,actor);add(1,'message',350,actor);add(1,'hold',550,actor);}
-  add(1,'tick',400);add(1,'bundle',350);add(1,'hold',550);
-  add(1,'copy',copy);add(1,'queue',650);add(1,'holdQueue',900);add(1,'outlet',800);add(1,'release',450);add(1,'rowEnd',250);add(1,'compare',650);
+  add(1,'tick',400);add(1,'bundle',350);add(1,'copy',copy);add(1,'queue',400);
+  add('both','holdQueue',600);add('both','outlet',800);add('both','release',450);add('both','compare',650);
   return {segments,end:cursor,compact};
 }
 function locateBundleSegment(time,program){
@@ -1794,32 +1818,32 @@ function locateBundleSegment(time,program){
 function bundleFrame(time,program){
   const t=bundleClamp(time,0,program.end),position=locateBundleSegment(t,program),current=program.segments[position.index];
   const makeRow=()=>({moves:[0,0,0,0],packets:[0,0,0,0],bundleReady:0,queue:[0,0,0,0],source:null,copy:null,outlet:null,release:0,requested:false,opacity:1,gray:0,focus:-1,copies:0});
-  const rows=[makeRow(),makeRow()];rows[1].opacity=.28;rows[1].gray=1;
+  const rows=[makeRow(),makeRow()];
   for(let index=0;index<=position.index;index++){
-    const segment=program.segments[index],raw=index===position.index?position.progress:1,p=bundleEase(raw),row=rows[segment.row],live=index===position.index&&t<program.end;
-    if(segment.phase==='move'){row.moves[segment.actor]=p;if(live)row.focus=segment.actor;}
-    if(segment.phase==='message')row.packets[segment.actor]=p;
-    if(segment.phase==='bundle')row.bundleReady=p;
-    if(segment.phase==='queue')row.queue[segment.row===0?segment.actor:0]=p;
-    if(segment.phase==='outlet'&&raw>=1)row.requested=true;
-    if(segment.phase==='release')row.release=p;
-    if(segment.phase==='switch'){
-      rows[0].opacity=1-.72*p;rows[0].gray=p;rows[1].opacity=.28+.72*p;rows[1].gray=1-p;
-    }
-    if(segment.phase==='compare'){rows[0].opacity=.28+.72*p;rows[0].gray=1-p;}
-    if(live){
-      if(segment.phase==='source')row.source={index:segment.actor,progress:p,opacity:1};
-      if(segment.phase==='message')row.source={index:segment.actor,progress:1,opacity:1-p};
-      if(segment.phase==='copy')row.copy={index:segment.row===0?segment.actor:0,progress:p,opacity:1};
-      if(segment.phase==='queue')row.copy={index:segment.row===0?segment.actor:0,progress:1,opacity:1-p};
-      if(segment.phase==='outlet')row.outlet={index:0,progress:p,opacity:1};
-      if(segment.phase==='release')row.outlet={index:0,progress:1,opacity:1-p};
+    const segment=program.segments[index],raw=index===position.index?position.progress:1,p=bundleEase(raw),live=index===position.index&&t<program.end;
+    const targetRows=segment.row==='both'?[0,1]:[segment.row];
+    for(const r of targetRows){
+      const row=rows[r];
+      if(segment.phase==='move'){row.moves[segment.actor]=p;if(live)row.focus=segment.actor;}
+      if(segment.phase==='message'&&segment.actor>=0)row.packets[segment.actor]=p;
+      if(segment.phase==='bundle')row.bundleReady=p;
+      if(segment.phase==='queue')row.queue[r===0?segment.actor:0]=p;
+      if(segment.phase==='outlet'&&raw>=1)row.requested=true;
+      if(segment.phase==='release')row.release=p;
+      if(live){
+        if(segment.phase==='source')row.source={index:segment.actor,progress:p,opacity:1};
+        if(segment.phase==='message')row.source={index:segment.actor,progress:1,opacity:1-p};
+        if(segment.phase==='copy')row.copy={index:r===0?segment.actor:0,progress:p,opacity:1};
+        if(segment.phase==='queue')row.copy={index:r===0?segment.actor:0,progress:1,opacity:1-p};
+        if(segment.phase==='outlet')row.outlet={index:0,progress:p,opacity:1};
+        if(segment.phase==='release')row.outlet={index:0,progress:1,opacity:1-p};
+      }
     }
   }
   rows[0].copies=rows[0].queue.filter(value=>value>=1).length;
   rows[1].copies=rows[1].queue[0]>=1?1:0;
-  const phase=t>=program.end?'완료 · 같은 이동 메시지 4개 · 개별 → 묶음':current.label;
-  return {time:t,phase,rows,segment:position.index,progress:position.progress,done:t>=program.end,activeRow:t>=program.end?'both':current.phase==='switch'?'switch':current.row===0?'before':'after'};
+  const phase=t>=program.end?'완료 · 같은 섹터 4명 이동 · Msg 4개 → 1개':current.label;
+  return {time:t,phase,rows,segment:position.index,progress:position.progress,done:t>=program.end,activeRow:'both'};
 }
 function bundleCharacterPose(character,moves){
   let step=3,progress=1;
@@ -1852,18 +1876,14 @@ function applyBundleFrame(scene,frame,set){
   for(let rowIndex=0;rowIndex<2;rowIndex++){
     const meta=scene.rows[rowIndex],state=frame.rows[rowIndex];
     set(meta.group,{opacity:state.opacity});set(meta.matrix,{values:bundleGrayMatrix(state.gray)});
-    const character=meta.character,pose=bundleCharacterPose(character,state.moves),base=character.positions[0];
-    set(character.sprite,{transform:`translate(${pose.x-base[0]} ${pose.y-base[1]})`});
-    const moving=state.focus>=0&&state.moves[state.focus]>0&&state.moves[state.focus]<1;
-    const facing=moving?character.directions[state.focus]:'south';
-    set(character.face,{href:`#bundle-mage-${character.kind}-${facing}`,'data-facing':facing});
-    meta.movementArrows?.forEach((id,index)=>{
-      const p=state.moves[index],opacity=state.focus===index ? .6*Math.min(1,p/.15,(1-p)/.15) : 0;
-      set(id,{opacity});
+    meta.characters.forEach((ch,i)=>{
+      const p=state.moves[i],x=ch.from[0]+(ch.to[0]-ch.from[0])*p,y=ch.from[1]+(ch.to[1]-ch.from[1])*p,moving=p>0&&p<1;
+      set(ch.sprite,{transform:`translate(${x-ch.from[0]} ${y-ch.from[1]})`});
+      const facing=moving?ch.dir:'south';
+      set(ch.face,{href:`#bundle-mage-${meta.characterKind}-${facing}`,'data-facing':facing});
+      set(meta.movementArrows[i],{opacity:state.focus===i?.6*Math.min(1,p/.15,(1-p)/.15):0});
+      set(meta.cells[i].sourceCell,{opacity:moving?1-p:0});set(meta.cells[i].targetCell,{opacity:p});
     });
-    for(const [id,index,opacity] of [[character.sourceCell,pose.step,1-pose.progress],[character.targetCell,pose.step+1,pose.progress]]){
-      const [x,y]=character.coordinates[index];set(id,{x:character.grid.x+x*character.cellW+1,y:character.grid.y+y*character.cellH+1,opacity});
-    }
     meta.packets.forEach((packet,index)=>{
       const p=state.packets[index];set(packet.mask,{width:packet.width*p});set(packet.fill,{opacity:.72});
       if(!packet.suppressStroke)set(packet.base,{stroke:p>0&&scene.material==='outline'?'var(--pcb-active)':'var(--pcb-edge)'});
@@ -1899,8 +1919,9 @@ function applyBundleFrame(scene,frame,set){
     for(const [beams,active] of [[meta.sourceBeams,state.source],[meta.copyBeams,state.copy],[meta.outletBeams,state.outlet]])beams.forEach((beam,index)=>{
       const selected=active&&index===active.index,p=selected?active.progress:0,opacity=selected?active.opacity:0;
       const [x,y]=bundlePathPoint(beam.points,p);
-      set(beam.trace,{'stroke-dashoffset':beam.length*(1-p),opacity:.8*opacity});
-      set(beam.head,{x:x-(beam.headWidth||7)/2,y:y-(beam.headHeight||7)/2,opacity:p>0&&p<1?opacity:0});
+      const isAfterBundleSignal=(rowIndex===1&&beams===meta.copyBeams);   // WSASend 쪽은 블루 유지
+      set(beam.trace,{'stroke-dashoffset':beam.length*(1-p),opacity:.8*opacity,stroke:isAfterBundleSignal?'#f5b13d':'var(--pcb-active)'});
+      set(beam.head,{x:x-(beam.headWidth||7)/2,y:y-(beam.headHeight||7)/2,opacity:p>0&&p<1?opacity:0,fill:isAfterBundleSignal?'#f5b13d':'var(--pcb-active)'});
     });
   }
   applyArrivalFlashes(scene,frame,set);
@@ -1916,11 +1937,13 @@ function bundleArrivalPulse(time,eventTime){
 function bundleFlashEvents(program){
   const rows=Array.from({length:2},()=>({queue:[Infinity,Infinity,Infinity,Infinity],message:[Infinity,Infinity,Infinity,Infinity],send:[],bundle:Infinity}));
   for(const segment of program.segments){
-    const row=rows[segment.row];
-    if(segment.phase==='queue'&&segment.actor>=0)row.queue[segment.actor]=segment.end;
-    if(segment.phase==='message')row.message[segment.actor]=segment.end;
-    if(segment.phase==='outlet')row.send.push(segment.start);
-    if(segment.phase==='bundle')row.bundle=segment.end;
+    for(const rowIndex of segment.row==='both'?[0,1]:[segment.row]){
+      const row=rows[rowIndex];
+      if(segment.phase==='queue')row.queue[segment.actor>=0?segment.actor:0]=segment.end;
+      if(segment.phase==='message'&&segment.actor>=0)row.message[segment.actor]=segment.end;
+      if(segment.phase==='outlet')row.send.push(segment.start);
+      if(segment.phase==='bundle')row.bundle=segment.end;
+    }
   }
   return rows;
 }
@@ -1940,10 +1963,11 @@ function applyArrivalFlashes(scene,frame,set){
       });
     }else{
       const completed=rowIndex===1?bundleArrivalPulse(frame.time,events.bundle):0;
+      const isBundleFlash=(rowIndex===1&&completed>0.05);
       meta.packets.forEach((packet,index)=>{
         const arrived=state.packets[index]>=1;
         const strength=arrived?Math.max(bundleArrivalPulse(frame.time,events.message[index]),completed):0;
-        set(packet.flash,{opacity:strength});
+        set(packet.flash,{opacity:strength,fill:isBundleFlash?'#f5b13d':'var(--pcb-active)'});
         const ink=strength>=.5?'var(--pcb-char-ink)':'var(--pcb-text)';
         for(const id of [...packet.normal,...packet.ink])set(id,{fill:ink});
       });
@@ -1963,8 +1987,8 @@ function applyArrivalFlashes(scene,frame,set){
   }
   for(const design of designs){
     const layout=design.getAttribute('data-layout'),routing=design.getAttribute('data-routing'),material=design.getAttribute('data-material'),board=design.querySelector('.study-board');
-    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),status=design.querySelector('.study-status');
-    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map();
+    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),speedButton=design.querySelector('[data-action="speed"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map(),speed=1.35;
     function set(id,attrs,text){
       const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
       for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
@@ -1974,7 +1998,7 @@ function applyArrivalFlashes(scene,frame,set){
     function paint(){
       if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
       if(status.textContent!==current.phase)status.textContent=current.phase;
-      playButton.textContent=playing?'일시정지':time>0&&time<program.end&&!preview?'이어서 재생':'재생';
+      playButton.textContent=playing?'❚❚':'▶';
       playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 애니메이션 재생`);
     }
     function state(){const f=frame();return {layout,routing,material,name:design.getAttribute('data-variant'),time,duration:program.end,playing,preview,phase:f.phase,outboundMsgsBefore:f.rows[0].copies,outboundMsgsAfter:f.rows[1].copies,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].release>=1?0:f.rows[0].copies,queuedAfter:f.rows[1].release>=1?0:f.rows[1].copies};}
@@ -1983,7 +2007,7 @@ function applyArrivalFlashes(scene,frame,set){
     function tick(now){
       raf=0;if(!playing)return;
       if(document.hidden||design.hidden){lastFrame=0;schedule();return;}
-      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));lastFrame=now;
+      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame))*speed);lastFrame=now;
       if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
     }
     function play(){
@@ -2009,7 +2033,7 @@ function applyArrivalFlashes(scene,frame,set){
     }
     const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
     design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
-    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});
+    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});if(speedButton){const speeds=[{label:'1×',rate:1.35},{label:'1.5×',rate:2.025},{label:'0.5×',rate:0.675}];let speedIdx=0;speedButton.addEventListener('click',()=>{speedIdx=(speedIdx+1)%speeds.length;speed=speeds[speedIdx].rate;speedButton.textContent=speeds[speedIdx].label;speedButton.setAttribute('aria-label',`재생 속도: ${speeds[speedIdx].label}`);});}
     document.addEventListener('visibilitychange',()=>{lastFrame=0;});
     reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
   }

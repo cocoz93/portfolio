@@ -23,8 +23,9 @@
   <section id="wsasend-held-pulse-minimal" class="study-design" data-variant="틱 끝 묶음 송신" data-routing="chamfer" data-material="minimal" data-layout="silkscreen" aria-label="틱 끝 묶음 송신">
     <div class="viz-controls study-toolbar">
       <div class="study-actions">
-        <button type="button" class="btn" data-action="play" aria-label="틱 끝 묶음 송신 애니메이션 재생">재생</button>
-        <button type="button" class="btn" data-action="preview">구도 보기</button>
+        <button type="button" class="btn" data-action="play" aria-label="재생">▶</button>
+        <button type="button" class="btn" data-action="preview" aria-label="처음으로 (구도 보기)">↺</button>
+        <button type="button" class="btn" data-action="speed" aria-label="재생 속도: 1배속">1×</button>
       </div>
       <span class="study-status" role="status" aria-live="polite"></span>
     </div>
@@ -1053,7 +1054,7 @@
 </g>
 <text x="89.84" y="235.84" fill="var(--pcb-muted)" font-size="12" text-anchor="middle" dominant-baseline="middle" class="">동일 경로 · 동시 이동</text>
 </g>
-<text x="192.36" y="76" fill="var(--pcb-muted)" font-size="14" text-anchor="start" dominant-baseline="middle" class="">변경 전 · 즉시 송신</text>
+<text x="192.36" y="76" fill="var(--pcb-text)" font-size="16" text-anchor="start" dominant-baseline="middle" class="">변경 전 · 즉시 송신</text>
 <rect x="197.36" y="120" width="62.4" height="76" fill="var(--pcb-surface)" stroke="var(--pcb-edge)" stroke-width="1.5" id="wsasend-held-pulse-minimal-chamfer-silkscreen-0-message-body0" data-role="individual-packet" data-count="1"></rect>
 <g id="wsasend-held-pulse-minimal-chamfer-silkscreen-0-message-contents0" data-role="message-contents" opacity="0.55">
 <defs><clipPath id="wsasend-held-pulse-minimal-chamfer-silkscreen-0-packetheader0-clip"><rect id="wsasend-held-pulse-minimal-chamfer-silkscreen-0-packetheader0-mask" x="198.36" y="121" width="60.4" height="26"></rect></clipPath></defs>
@@ -1270,7 +1271,7 @@
 </g>
 <text x="89.84" y="461.84" fill="var(--pcb-muted)" font-size="12" text-anchor="middle" dominant-baseline="middle" class="">동일 경로 · 동시 이동</text>
 </g>
-<text x="192.36" y="302" fill="var(--pcb-active)" font-size="14" text-anchor="start" dominant-baseline="middle" class="">변경 후 · 틱 끝 송신</text>
+<text x="192.36" y="302" fill="#f5b13d" font-size="16" text-anchor="start" dominant-baseline="middle" class="">변경 후 · 틱 끝 송신</text>
 <rect x="197.36" y="346" width="62.4" height="76" fill="var(--pcb-surface)" stroke="var(--pcb-edge)" stroke-width="1.5" id="wsasend-held-pulse-minimal-chamfer-silkscreen-1-message-body0" data-role="individual-packet" data-count="1"></rect>
 <g id="wsasend-held-pulse-minimal-chamfer-silkscreen-1-message-contents0" data-role="message-contents" opacity="0.55">
 <defs><clipPath id="wsasend-held-pulse-minimal-chamfer-silkscreen-1-packetheader0-clip"><rect id="wsasend-held-pulse-minimal-chamfer-silkscreen-1-packetheader0-mask" x="198.36" y="347" width="60.4" height="26"></rect></clipPath></defs>
@@ -1737,7 +1738,7 @@ function createBundleAnimationScene(width,layout='silkscreen',routing='chamfer',
     out.push(`<defs><filter id="${sid(row,'gray')}" color-interpolation-filters="sRGB"><feColorMatrix id="${meta.matrix}" type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0"></feColorMatrix></filter></defs>`);
     out.push(`<g id="${meta.group}" filter="url(#${sid(row,'gray')})" data-role="comparison-row" data-row="${row}">`);
     const player=drawPlayer(row,cy,offset),map=player.map;players.push(player);
-    txt(after?'변경 후 · 틱 끝 송신':'변경 전 · 즉시 송신',compact?20:messageX,offset+(compact?20:76),14,after?C.active:C.muted,'start');
+    txt(after?'변경 후 · 틱 끝 송신':'변경 전 · 즉시 송신',compact?20:messageX,offset+(compact?20:76),16,after?'#f5b13d':C.text,'start');
     if(compact)txt('SendQ · 링버퍼',ringX,offset+420,14,C.text);
     const coordinates=player.character.coordinates;
     const centers=Array.from({length:4},(_,i)=>messageX+5+i*(G.columnW+G.columnGap)+G.columnW/2);
@@ -1940,9 +1941,10 @@ function applyBundleFrame(scene,frame,set){
       set(id,{fill:filled?ink:'var(--pcb-muted)',opacity:filled?.42+.58*lamp.remaining:.42});
     });
     set(meta.queueCount,{fill:state.copies?'var(--pcb-text)':'var(--pcb-muted)'},`${state.copies}개`);
-    set(meta.callCount,{fill:state.outlet?'var(--pcb-active)':'var(--pcb-muted)'},`${state.calls}회`);
-    set(meta.outletLabel,{fill:state.outlet?'var(--pcb-active)':'var(--pcb-muted)'});
-    set(meta.outletLight,{opacity:state.sendLight});
+    const isAfterOutletActive = (rowIndex === 1 && Boolean(state.outlet));
+    set(meta.callCount,{fill:state.outlet?(isAfterOutletActive?'#f5b13d':'var(--pcb-active)'):'var(--pcb-muted)'},`${state.calls}회`);
+    set(meta.outletLabel,{fill:state.outlet?(isAfterOutletActive?'#f5b13d':'var(--pcb-active)'):'var(--pcb-muted)'});
+    set(meta.outletLight,{opacity:state.sendLight,fill:isAfterOutletActive?'#f5b13d':'var(--pcb-active)'});
     if(meta.kernelBoundary){
       const crossed=state.outlet&&state.outlet.progress>=meta.boundaryProgress;
       set(meta.kernelBoundary,{stroke:crossed?'var(--pcb-active)':'var(--pcb-track)'});
@@ -1951,8 +1953,9 @@ function applyBundleFrame(scene,frame,set){
     for(const [beams,active] of [[meta.sourceBeams,state.source],[meta.copyBeams,state.copy],[meta.outletBeams,state.outlet]])beams.forEach((beam,index)=>{
       const selected=active&&index===active.index,p=selected?active.progress:0,opacity=selected?active.opacity:0;
       const [x,y]=bundlePathPoint(beam.points,p);
-      set(beam.trace,{'stroke-dashoffset':beam.length*(1-p),opacity:.8*opacity});
-      set(beam.head,{x:x-(beam.headWidth||7)/2,y:y-(beam.headHeight||7)/2,opacity:p>0&&p<1?opacity:0});
+      const isAfterOutlet = (rowIndex === 1 && beams === meta.outletBeams);
+      set(beam.trace,{'stroke-dashoffset':beam.length*(1-p),opacity:.8*opacity,stroke:isAfterOutlet?'#f5b13d':'var(--pcb-active)'});
+      set(beam.head,{x:x-(beam.headWidth||7)/2,y:y-(beam.headHeight||7)/2,opacity:p>0&&p<1?opacity:0,fill:isAfterOutlet?'#f5b13d':'var(--pcb-active)'});
     });
   }
   applyArrivalFlashes(scene,frame,set);
@@ -1985,11 +1988,19 @@ function applyArrivalFlashes(scene,frame,set){
     const meta=scene.rows[rowIndex],state=frame.rows[rowIndex],events=scene.flashEvents[rowIndex];
     if(ringMode){
       const sending=Math.max(0,...events.send.map(time=>bundleArrivalPulse(frame.time,time)));
+      const isSendFlash = (rowIndex === 1 && sending > 0.05);
       meta.queue.forEach((region,index)=>{
         const strength=Math.max(bundleArrivalPulse(frame.time,events.queue[index]),sending);
         const remaining=1-state.drains[index],loaded=state.queue[index]>0;
-        set(region.flash,{d:bundleArc(region,state.queue[index]),opacity:loaded?strength*remaining:0});
-        set(meta.queueRims[index],{opacity:loaded?strength*remaining:0});
+        set(region.flash,{
+          d:bundleArc(region,state.queue[index]),
+          opacity:loaded?strength*remaining:0,
+          fill:isSendFlash?'#f5b13d':'var(--pcb-active)'
+        });
+        set(meta.queueRims[index],{
+          opacity:loaded?strength*remaining:0,
+          stroke:isSendFlash?'#f5b13d':'var(--pcb-active)'
+        });
         if(remaining>0&&state.queue[index]>=.55)set(meta.queueLabels[index],{fill:strength>=.5?'var(--pcb-char-ink)':'var(--pcb-text)'});
       });
     }else{
@@ -2035,8 +2046,8 @@ function applyPlayerFrames(scene,frame,set){
   }
   for(const design of designs){
     const layout=design.getAttribute('data-layout'),routing=design.getAttribute('data-routing'),material=design.getAttribute('data-material'),board=design.querySelector('.study-board');
-    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),status=design.querySelector('.study-status');
-    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map();
+    const playButton=design.querySelector('[data-action="play"]'),previewButton=design.querySelector('[data-action="preview"]'),speedButton=design.querySelector('[data-action="speed"]'),status=design.querySelector('.study-status');
+    let scene=null,program=createBundleProgram(false),time=program.end,playing=false,preview=true,raf=0,lastFrame=0,nodes=new Map(),speed=1.5;
     function set(id,attrs,text){
       const element=nodes.get(id);if(!element)throw Error(`Missing diagram element: ${id}`);
       for(const [key,value] of Object.entries(attrs))if(element.getAttribute(key)!==String(value))element.setAttribute(key,String(value));
@@ -2047,7 +2058,7 @@ function applyPlayerFrames(scene,frame,set){
       if(!scene)return;const current=frame();applyBundleFrame(scene,current,set);
       const phase=current.preview?'':current.phase;
       if(status.textContent!==phase)status.textContent=phase;
-      playButton.textContent=playing?'일시정지':time>0&&time<program.end&&!preview?'이어서 재생':'재생';
+      playButton.textContent=playing?'❚❚':'▶';
       playButton.setAttribute('aria-label',playing?'애니메이션 일시정지':`${design.getAttribute('data-variant')} 애니메이션 재생`);
     }
     function state(){const f=frame();return {layout,routing,material,name:design.getAttribute('data-variant'),time,duration:program.end,playing,preview,phase:f.phase,callsBefore:f.rows[0].calls,callsAfter:f.rows[1].calls,containedMovesBefore:f.rows[0].packets.filter(v=>v>=1).length,containedMovesAfter:f.rows[1].packets.filter(v=>v>=1).length,queuedBefore:f.rows[0].copies,queuedAfter:f.rows[1].copies};}
@@ -2056,7 +2067,7 @@ function applyPlayerFrames(scene,frame,set){
     function tick(now){
       raf=0;if(!playing)return;
       if(document.hidden||design.hidden){lastFrame=0;schedule();return;}
-      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame)));lastFrame=now;
+      if(lastFrame)time=Math.min(program.end,time+Math.min(80,Math.max(0,now-lastFrame))*speed);lastFrame=now;
       if(time>=program.end){playing=false;lastFrame=0;paint();save();return;}paint();schedule();
     }
     function play(){
@@ -2082,7 +2093,7 @@ function applyPlayerFrames(scene,frame,set){
     }
     const controller={draw:renderDesign,state,snapshot,restore};controllers.push(controller);
     design.animation=Object.freeze({getState:state,play,pause,preview:showPreview,seek(ms){pause();preview=false;time=bundleClamp(Number.isFinite(ms)?ms:0,0,program.end);paint();return state();},getProgram:()=>program});
-    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});
+    playButton.addEventListener('click',()=>{playing?pause():play();save();});previewButton.addEventListener('click',()=>{showPreview();save();});if(speedButton){const speeds=[{label:'1×',rate:1.5},{label:'1.5×',rate:2.25},{label:'0.5×',rate:0.75}];let speedIdx=0;speedButton.addEventListener('click',()=>{speedIdx=(speedIdx+1)%speeds.length;speed=speeds[speedIdx].rate;speedButton.textContent=speeds[speedIdx].label;speedButton.setAttribute('aria-label',`재생 속도: ${speeds[speedIdx].label}`);});}
     document.addEventListener('visibilitychange',()=>{lastFrame=0;});
     reduced.addEventListener('change',()=>{if(reduced.matches)showPreview();});
   }
