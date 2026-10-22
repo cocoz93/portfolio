@@ -108,9 +108,9 @@
           line-height:1.4;padding:8px 12px;border-radius:7px;border:1px solid #354b61;color:#eef2fb;
           background:#151f2c;cursor:pointer;min-width:40px;text-align:center}button.btn:hover{border-color:#6cc7ff}
         button.btn:focus-visible{outline:2px solid #6cc7ff;outline-offset:2px}
-        /* 재생 버튼만 주황으로 칠해 그림마다 먼저 누를 곳을 하나로 정한다 — E 그림의 재생 버튼과 같은 값 */
-        button.btn[data-action="play"]{background:#f5b13d;border-color:#f5b13d;color:#0a0f1a}
-        button.btn[data-action="play"]:hover{background:#ffc25c;border-color:#ffc25c}
+        /* 재생 버튼만 기본 강조색(파랑)으로 칠해 그림마다 먼저 누를 곳을 하나로 정한다 — 주황은 그림 안에서 「변경 후」를 뜻해 피한다 */
+        button.btn[data-action="play"]{background:#46b1ff;border-color:#46b1ff;color:#0a0f1a}
+        button.btn[data-action="play"]:hover{background:#6cc7ff;border-color:#6cc7ff}
         /* 단계 문구는 0.3초 안팎으로 바뀌어 읽히지 않고, 끝 문구는 효과 문구와 같은 말이라 숨긴다 */
         .study-status,[data-status]{display:none!important}
         @media(max-width:480px){.viz-controls{padding:8px 12px}button.btn{padding:7px 10px}}
