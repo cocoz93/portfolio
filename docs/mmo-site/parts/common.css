@@ -671,4 +671,11 @@ body.pop-hold #scene .chips{opacity:0}
 @media(max-width:760px){ .subtabs{flex-wrap:wrap; min-height:0}
   .zonebar{position:static; gap:12px; width:100%; margin:9px 0 0} .zb{font-size:.78rem; gap:4px} }
 
+/* 아직 내용이 없는 자리(1-4 컨텐츠 · MO 서버) — 채우면 판째 갈아 끼우므로 꾸미지 않는다.
+   위 여백 62 는 링크 모음 판(.lk-box)과 같은 근거다(하위 탭 줄이 없는 탭의 본문 시작 높이). */
+.soon{max-width:740px; margin:62px auto 0; padding:56px 24px; border:1px dashed var(--line);
+  border-radius:14px; display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center}
+.soon b{font-size:1.3rem; font-weight:700; color:var(--ink)}
+.soon span{font-size:.92rem; color:var(--mut)}
+
 @media(prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}

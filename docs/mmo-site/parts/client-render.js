@@ -86,9 +86,29 @@ function enter(){
 /* 탭 전환 코드가 이 이름으로 부른다 — 영상 깨우기와 진입 애니가 한 창구를 쓴다.
    판의 hidden 을 보는 아래 MutationObserver 에는 안 얹는다: 그쪽은 tabs.js 가 hidden 을
    내리는 순간 따로 한 번 더 돌아서, 얹으면 같은 애니가 두 번 시작한다. */
-window.__crenderPlay=function(){ play(); enter(); };
+/* ── 1-1 구조도 아래로 옮긴 뒤(2026-10-23) ──
+   판은 1-1 에 들어온 순간 화면 밖(구조도 아래)이다. 그때 재생·진입 애니를 걸면 영상 둘이 안 보이는 데서
+   디코딩하며 구조도 애니와 겹치고, 진입 애니는 내려왔을 땐 이미 끝나 있다. 그래서 탭 진입은 '장전' 만
+   하고, 판이 화면에 걸리는 순간(threshold 0 — 첫 줄이 들어오자마자) 재생과 진입을 같이 건다.
+   화면 밖으로 나가면 영상은 멈춘다. IntersectionObserver 가 없으면 예전처럼 바로 재생한다. */
+var armed=false, io=null;
+if(window.IntersectionObserver){
+  io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting && !pane.hidden){ play(); if(armed){ armed=false; enter(); } }
+      else stop();
+    });
+  },{threshold:0});
+  io.observe(pane);
+}
+window.__crenderPlay=function(){
+  if(!io){ play(); enter(); return; }
+  armed=true;
+  /* 이미 화면에 걸려 있으면 교차 변화가 없어 콜백이 안 온다 — 다시 붙여 지금 상태를 한 번 받는다 */
+  io.unobserve(pane); io.observe(pane);
+};
 if(window.MutationObserver){
-  new MutationObserver(function(){ if(pane.hidden) stop(); else play(); })
+  new MutationObserver(function(){ if(pane.hidden) stop(); else if(!io) play(); })
     .observe(pane,{attributes:true,attributeFilter:["hidden"]});
 }
 /* 저절로 도는 영상은 멈출 방법이 있어야 한다 — 컨트롤 바는 화면을 어지럽히므로 화면 자체를 누르게 한다.
@@ -97,5 +117,5 @@ vids.forEach(function(v){ v.addEventListener("click",function(){ if(v.paused) ki
 /* 첫 로드에 이 탭이 열려 있는 경우(딥링크 #crender). tabs.js 는 이 조각보다 먼저라
    그때의 paint() 는 __crenderPlay 를 아직 못 찾는다 — wave.js 가 같은 이유로 스스로 한 번
    재생하는 것과 같은 자리다. */
-if(!pane.hidden){ play(); enter(); }
+if(!pane.hidden) window.__crenderPlay();
 })();

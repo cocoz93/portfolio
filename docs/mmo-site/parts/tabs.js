@@ -1,6 +1,8 @@
 (function(){
-  /* 탭은 2단이다: 상위(mmo·dummy·misc) 아래 mmo 만 하위(build·bneck)를 갖는다.
-     패널 4장은 그대로 형제로 두고 보이기만 두 값의 조합으로 정한다 —
+  /* 탭은 2단이다: 상위(mmo·mo·misc) 아래 mmo 만 하위(build·bneck·optimization·content)를 갖는다.
+     한때 상위 탭 'dummy'(클라이언트)와 그 아래 2-1~2-3 하위 줄이 따로 있었다. 지금은 2-1 실행 화면
+     녹화(p-crender)만 남아 1-1 구조도 아래에 같이 보인다.
+     패널은 전부 그대로 형제로 두고 보이기만 두 값의 조합으로 정한다 —
      패널을 그룹 div 로 감싸면 p-build.hidden 이 false 인 채 부모만 숨어서
      칩 애니(pBuild.hidden 검사)가 안 보이는 화면에서 계속 돈다. */
   const tabs=[].slice.call(document.querySelectorAll(".tab"));
@@ -15,9 +17,7 @@
      줄 높이는 .subtabs 의 min-height 가 잡아 두어 숨겨도 화면이 튀지 않는다. */
   const zonebar=document.getElementById("zonebar");
   const builddoor=document.getElementById("builddoor");
-  const subs2=[].slice.call(document.querySelectorAll(".subtab[data-csub]"));
-  const subbar2=document.getElementById("subtabs2");
-  let top="mmo", sub="build", csub="render";
+  let top="mmo", sub="build";
   /* 하위 줄 글자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)이 그 탭과 같아야 소속이 보인다.
      줄 자체는 화면 폭을 다 쓴다(바닥선이 끝까지 가야 하므로) — 움직이는 건 안쪽 여백뿐이다.
      offsetLeft 는 offsetParent 에 따라 기준이 흔들려서 탭줄과의 상대 좌표로 잰다.
@@ -49,7 +49,6 @@
   function syncHash(){
     if(!booted) return;
     const h = (top==="mmo")   ? (sub==="build" ? "" : sub==="optimization"&&window.__optimizationHash ? window.__optimizationHash() : sub)
-            : (top==="dummy") ? ("c"+csub)
             :                   top;
     history.replaceState(null, "", h ? "#"+h : location.pathname+location.search);
   }
@@ -68,20 +67,17 @@
       t.className = on ? "tab act" : "tab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subs.forEach(function(t){ var on=(t.getAttribute("data-sub")===sub);
       t.className = on ? "subtab act" : "subtab"; t.setAttribute("aria-selected", on?"true":"false"); });
-    subs2.forEach(function(t){ var on=(t.getAttribute("data-csub")===csub);
-      t.className = on ? "subtab act" : "subtab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subbar.hidden  = (top!=="mmo");
     if(zonebar) zonebar.hidden = !(top==="mmo" && sub==="build");
     /* 나가는 문도 구역 필터와 같은 자리·같은 조건이다 — 1-2 는 고른 실험으로 가는 제 문을 쓴다 */
     if(builddoor) builddoor.hidden = !(top==="mmo" && sub==="build");
-    subbar2.hidden = (top!=="dummy");
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
     document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="optimization");
-    document.getElementById("p-crender").hidden = !(top==="dummy" && csub==="render");
-    document.getElementById("p-csafe").hidden = !(top==="dummy" && csub==="safe");
-    document.getElementById("p-cload").hidden = !(top==="dummy" && csub==="load");
+    document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="build");   /* 1-1 구조도 아래 */
+    document.getElementById("p-content").hidden = !(top==="mmo" && sub==="content");
+    document.getElementById("p-mo").hidden    = (top!=="mo");
     document.getElementById("p-misc").hidden  = (top!=="misc");
     if(window.__optimizationVisibility)window.__optimizationVisibility(top==="mmo"&&sub==="optimization");
     /* 구조도 화면으로 올 때마다 구역 강조는 전체로 — 켜 둔 구역을 들고 다니지 않는다 */
@@ -100,29 +96,26 @@
        설계 씬이 있던 자리를 넘겨줘야 그 자리에 그대로 겹친 채 시작한다(위에서 숨기기 전에 재 뒀다) */
     if(top==="mmo" && sub==="bneck" && window.playBneckIntro) window.playBneckIntro(fromRect);
     /* 두 실행 녹화는 숨은 동안 멈춰 있다(화면에 없는 그림을 디코딩할 이유가 없다).
-       그래서 다시 들어올 때 여기서 깨워 준다 — 안 깨우면 멈춘 한 장이 남는다. */
-    if(top==="dummy" && csub==="render" && window.__crenderPlay) window.__crenderPlay();
-    /* 2-2 계단도 같다 — 이 화면에 들어올 때마다 처음부터. 첫 로드에서는 이 조각이 client.js 보다
-       먼저라 __safePlay 가 아직 없고, 그때는 client.js 가 스스로 한 번 재생한다. */
-    if(top==="dummy" && csub==="safe" && window.__safePlay) window.__safePlay();
-    /* 2-3 도 같다 — 목차 넷이 차례로 서고 판이 뒤따라 열린다. 이 탭만 애니가 없던 동안
-       다른 넷은 다 움직이는데 여기만 이미 다 서 있는 채로 나타나서 혼자 튀었다
-       (3번 탭에서 같은 진단으로 lkOpen 을 넣은 기록이 common.css 에 있다). */
-    if(top==="dummy" && csub==="load" && window.__loadPlay) window.__loadPlay();
+       1-1 로 들어올 때 장전해 두면, 구조도 아래로 내려와 판이 화면에 걸리는 순간
+       client-render.js 가 재생과 진입 애니를 건다. */
+    if(top==="mmo" && sub==="build" && window.__crenderPlay) window.__crenderPlay();
     syncHash();
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });
   subs.forEach(function(t){ t.addEventListener("click",function(){ top="mmo"; sub=t.getAttribute("data-sub"); paint(); }); });
-  subs2.forEach(function(t){ t.addEventListener("click",function(){ top="dummy"; csub=t.getAttribute("data-csub"); paint(); }); });
   /* 해시 딥링크 — #bneck 은 하위 탭이라 상위까지 같이 열어 준다 */
   const h0=(location.hash||"").replace("#","");
-  if(h0==="bneck"||h0==="build"){ top="mmo"; sub=h0; }
+  let toRender=false;
+  if(h0==="bneck"||h0==="build"||h0==="content"){ top="mmo"; sub=h0; }
   else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="optimization"; }
-  else if(h0==="dummy"||h0==="misc"){ top=h0; }
-  else if(h0==="csafe"||h0==="cload"||h0==="crender"){ top="dummy"; csub=h0.slice(1); }
-  /* #cenv 는 옛 ④ 테스트 환경 탭이었다. 그 내용이 ③ 부하 검증의 첫 띠로 들어갔으니 그쪽으로 보낸다 */
-  else if(h0==="cenv"){ top="dummy"; csub="load"; }
+  else if(h0==="mo"||h0==="misc"){ top=h0; }
+  /* 옛 클라이언트 탭 주소(#dummy · #crender · #csafe · #cload · #cenv)는 노션 등에 걸려 있을 수 있어
+     전부 1-1 로 열고 실행 화면 녹화(구조도 아래)까지 내려 준다. #csafe·#cload·#cenv 는 뺀 자리였다 */
+  else if(h0==="dummy"||h0==="crender"||h0==="csafe"||h0==="cload"||h0==="cenv"){ top="mmo"; sub="build"; toRender=true; }
   paint();
+  /* 글꼴·그림이 다 얹힌 뒤에 내려야 자리가 안 어긋난다 */
+  if(toRender) addEventListener("load", function(){
+    document.getElementById("p-crender").scrollIntoView({block:"start"}); });
   booted=true;   /* 여기서부터는 사람이 탭을 누른 것이므로 주소를 따라가게 한다 */
 
 })();
