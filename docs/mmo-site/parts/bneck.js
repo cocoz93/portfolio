@@ -3,9 +3,9 @@
    지도는 위 코드가 이미 갖고 있다. 여기서 더하는 것은 셋이다 —
      ① 한 장: 판정 · 이름 · 대표 지표 하나(눈금 고리 + 전 → 후) · 두 줄 설명 · 노션 원문
      ② 넘기기: 이전·다음 단추 · 동접 막대 · 번호 1~16 (노션 실측 보고서와 1:1)
-     ③ 지도 핀: 고른 실험의 번호를 그 자리 배지에 넣는다
+     ③ 지도 핀: 고른 실험의 번호를 그 자리 배지에 넣고, 패킷을 그 자리로 흘려 보낸다
    위 코드의 IIFE 안으로 들어가지 않는다. 연결은 실험 배열(window.__EXPS)과
-   위 코드가 만들어 둔 핀 마크업(#bnpins .pin[data-loc]) 둘뿐이다 — 한 방향이라 훅이 없다.
+   위 코드가 만들어 둔 핀 마크업(#bnpins .pin[data-loc] · data-flow) 둘뿐이다 — 한 방향이라 훅이 없다.
    (한때 핀 클릭을 이쪽으로 넘기는 window.__bnPickLoc 이 있었는데, 핀에서 클릭을 걷어내며 같이 지웠다.)
 
    ※ 한때(2026-10-26 까지) ① 이 '카드 열여섯 장 + 계기판 여섯 칸' 이었다. 계기판은 실험마다 같은
@@ -231,7 +231,10 @@ function paintPins(){
   var key=curLoc+"/"+curNo;
   if(lit && key!==lastPop){
     lastPop=key;
-    popPin(lit);
+    /* 진입 애니 중(핀이 막 꽂히는 중)이거나 모션 줄이기면 예전처럼 배지만 튕긴다 */
+    var stage=$("#p-bneck .bn-stage");
+    if(RM || (stage&&stage.classList.contains("bn-enter"))){ stopFlow(); popPin(lit); }
+    else flow(lit);
   }
 }
 /* 클래스는 한 핀에만 남긴다 — 안 지우면 지나온 자리마다 쌓여, 다음에 그 자리를 고를 때
@@ -240,6 +243,88 @@ function popPin(g){
   var prev=document.querySelector("#bnpins .pin.pop"); if(prev) prev.classList.remove("pop");
   g.getBoundingClientRect();   /* 강제 리플로우 — 없으면 같은 핀을 다시 고를 때 애니가 안 돈다 */
   g.classList.add("pop");
+}
+
+/* ═══ 패킷 흐름 — 고른 자리로 패킷이 흘러 들어간다 ═══
+   고를 때 지도가 하던 일은 배지 튕김 하나였다. 그러면 '어디' 는 보여도 '무엇이 어디로 흐르다
+   거기서 막혔나' 는 안 보인다 — 이 지도는 서버 구조도라, 꾸미는 움직임보다 흐름을 보이는 쪽이 내용과 맞다.
+     · 길 = 핀의 data-flow(scene.js 가 RAILS 의 실제 꺾임으로 뽑는다). 송신 큐 → Send 워커 ×3 처럼
+       레인이 셋인 구간은 패킷 셋이 레인을 하나씩 나눠 탄다(uniqueId%3)
+     · 속도는 길이와 상관없이 같다 — 먼 자리는 그만큼 오래 흐른다(0.42~0.95초로 묶는다)
+     · 점 뒤 꼬리 둘 — 멈춘 프레임에서도 흐르는 방향이 읽힌다
+     · 첫 패킷이 닿는 순간 배지 튕김 · 바닥 파문 · 부품 윤곽이 그려진다. 나머지 둘은 부품 안으로 스며든다
+   ❌ 시안 단계에서 핀이 다시 꽂히기 · 앞 자리에서 테가 건너가기 · 부품이 수치만큼 식기 등을 같이 대 봤다.
+     '식기' 는 오른쪽 고리와 같은 말을 한 번 더 하고(붉은 채움에 '병목 자리' 와 '좋아진 정도' 두 뜻이 얹힌다),
+     여럿을 이으면 한 번 누를 때 2초를 넘겨 다음 클릭이 먼저 들어온다 — 흐름 하나만 남겼다(2026-10-26).
+   연달아 누르면 앞 흐름은 그 자리에서 끊는다 — 안 끊으면 떠난 자리에 점과 윤곽이 남는다. */
+var NS="http://www.w3.org/2000/svg", FL=null;
+function stopFlow(){
+  if(!FL) return;
+  cancelAnimationFrame(FL.raf);
+  FL.dots.forEach(function(d){ if(d.parentNode) d.parentNode.removeChild(d); });
+  var s=FL.g.querySelector(".pin-slab");
+  if(s){ s.style.visibility=""; s.style.strokeDasharray="";
+         if(s.getAnimations) s.getAnimations().forEach(function(a){ a.cancel(); }); }
+  FL=null;
+}
+function polyOf(pts){ var c=[0]; for(var i=1;i<pts.length;i++) c.push(c[i-1]+Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1])); return {p:pts,c:c,L:c[c.length-1]}; }
+function pointAt(Q,s){
+  s=Math.max(0,Math.min(Q.L,s));
+  for(var i=1;i<Q.c.length;i++) if(s<=Q.c[i]){ var k=(s-Q.c[i-1])/((Q.c[i]-Q.c[i-1])||1);
+    return [Q.p[i-1][0]+(Q.p[i][0]-Q.p[i-1][0])*k, Q.p[i-1][1]+(Q.p[i][1]-Q.p[i-1][1])*k]; }
+  return Q.p[Q.p.length-1];
+}
+function mk(t,a){ var e=document.createElementNS(NS,t); for(var k in a) e.setAttribute(k,a[k]); return e; }
+/* 바닥 파문 한 번 — 평소 도는 파문(pin-pulse)과 같은 자리(지면 테)에서 한 번 크게 */
+function ripple(g){
+  var b=g.querySelector(".pin-base"); if(!b) return;
+  var r=mk("ellipse",{cx:b.getAttribute("cx"),cy:b.getAttribute("cy"),rx:b.getAttribute("rx"),ry:b.getAttribute("ry"),
+                       fill:"none",stroke:"#ff6b52","stroke-width":1.6});
+  r.style.transformBox="fill-box"; r.style.transformOrigin="center"; r.style.opacity=0;
+  g.insertBefore(r,b);
+  r.animate([{transform:"scale(.6)",opacity:.95},{transform:"scale(2.6)",opacity:0}],{duration:620,easing:"cubic-bezier(.2,.7,.3,1)"})
+    .onfinish=function(){ if(r.parentNode) r.parentNode.removeChild(r); };
+}
+/* 부품 윤곽이 한 바퀴 그려진 뒤 속이 찬다(.pin-slab 의 평소 채움 .16 에서 멈춘다) */
+function outline(s){
+  var L=s.getTotalLength();
+  s.style.strokeDasharray=L; s.style.visibility="";
+  s.animate([{strokeDashoffset:L,fillOpacity:0},{strokeDashoffset:0,fillOpacity:0,offset:.65},{strokeDashoffset:0,fillOpacity:.16}],
+            {duration:620,easing:"ease-in-out"});
+}
+function flow(g){
+  stopFlow();
+  var lanes=[]; try{ lanes=JSON.parse(g.getAttribute("data-flow")||"[]"); }catch(_){ lanes=[]; }
+  if(!lanes.length||typeof g.animate!=="function"){ popPin(g); return; }
+  var slab=g.querySelector(".pin-slab"), par=g.parentNode, SPD=.72, GAP=110;
+  if(slab) slab.style.visibility="hidden";
+  var me=FL={g:g, dots:[], raf:0}, hit=false;
+  var pk=[0,1,2].map(function(k){
+    var Q=polyOf(lanes[k%lanes.length]), dur=Math.max(420,Math.min(950,Q.L/SPD));
+    var els=[[2.4,.22],[3.2,.45],[4.6,1]].map(function(d,j){
+      var c=mk("circle",{r:d[0],fill:"#6cc7ff",opacity:0});
+      if(j===2){ c.setAttribute("stroke","#0a111e"); c.setAttribute("stroke-width","1.4"); }
+      par.appendChild(c); me.dots.push(c); return {c:c,op:d[1]}; });
+    return {Q:Q,dur:dur,d0:k*GAP,els:els};
+  });
+  var t0=performance.now();
+  (function step(now){
+    if(FL!==me) return;
+    var live=0;
+    pk.forEach(function(q){
+      var t=(now-t0-q.d0)/q.dur;
+      if(t<0){ live++; return; }
+      if(t>=1){ q.els.forEach(function(x){ x.c.setAttribute("opacity",0); });
+        if(!hit){ hit=true; popPin(g); ripple(g); if(slab) outline(slab); }
+        return; }
+      live++;
+      var e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, s=e*q.Q.L;
+      q.els.forEach(function(x,j){ var p=pointAt(q.Q,s-(2-j)*7);
+        x.c.setAttribute("cx",p[0]); x.c.setAttribute("cy",p[1]); x.c.setAttribute("opacity",x.op*(t>.9?(1-t)*10:1)); });
+    });
+    if(live) me.raf=requestAnimationFrame(step);
+    else { me.dots.forEach(function(d){ if(d.parentNode) d.parentNode.removeChild(d); }); me.dots=[]; }
+  })(t0);
 }
 
 /* 핀은 병목 탭에 처음 들어올 때(scene.js 의 build) 꽂힌다 — 이 스크립트가 도는 시점에는 아직 없다.

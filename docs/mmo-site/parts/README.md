@@ -36,7 +36,9 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    `#p-csafe`(2-2)·`#p-cload`(2-3)·`#subtabs2`·`client.js`·`safe-scene.js`·`mmo-safe-edit.html` 은 지웠다.)
 4. **마크업 계약** — 병목 탭은 셋이 물려 있다.
    - `scene.js` 가 만들고 `bneck.js` 가 읽는다: `.pin[data-loc]` 과 그 안의 `text.pin-no`
-     (배지 번호는 비어 나오고, 고른 카드의 번호를 bneck.js 가 넣는다).
+     (배지 번호는 비어 나오고, 고른 카드의 번호를 bneck.js 가 넣는다) ·
+     `.pin[data-flow]`(고를 때 패킷이 흐를 길 — 화면 좌표 폴리라인의 JSON 배열, 레인 셋인 구간이 끼면 셋.
+     `PINS[].flow` 의 레일 목록을 `railPath` 로 편 것이라 배선을 고치면 따라온다).
    - `scene.js` 가 붙이고 `bneck.js` 가 쓴다: `EXPS[].no`(카드 번호) · `EXPS[].nt`(노션 주소).
      둘 다 `NOTION_EXP` 표가 정본 — 이 표에 있는 실험만 카드로 선다.
      `EXPS[].km`(대표 지표 · null 이면 고리 없는 카드) · `EXPS[].ms`(두 줄 설명)는 `FACE` 표가 정본이다
