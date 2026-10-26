@@ -6,14 +6,17 @@
    (같은 런을 두 카드가 다른 숫자로 말하거나, 눈금 여섯 칸이 서로 다른 부하점에서 오거나).
    그래서 기준을 사람이 아니라 아래 규칙에 박아 둔다.
 
-   R0  검사기가 보는 자리(계기판 여섯 칸·라벨 문구·눈금 배선)가 그대로인가  ← 검사기가 죽는 것을 막는 자리
-   R1  계기판에 서는 모든 값에 출처(src)가 있는가
+   R0  검사기가 보는 자리(화면이 대표 지표·설명을 읽는 배선 · 카드 수)가 그대로인가  ← 검사기가 죽는 것을 막는 자리
+   R1  실험 데이터의 여섯 지표 값마다 출처(src)가 있는가
    R2  송신 메시지 × 평균 패킷 = 송신량 (오차 ≤ 0.5%)
    R3  같은 출처를 가리키는 값끼리 같은가
-   R4  눈금 여섯 칸이 한 런에서 오는가
-   R5  값이 있으면 값 라벨, 없으면 '이 시기 미수집'
    R6  BNECK_SYNC_SPEC.md(노션 대조 정본)와 값이 같은가
    R7  하드코딩된 개수 문구가 실제 카드 수와 맞는가
+   R8  카드가 크게 세우는 대표 지표(scene.js FACE)가 가리킨 값과 맞는가 — 부호 · 퍼센트 · 판정과 고리 색
+
+   ※ R4(눈금 여섯 칸이 한 런) · R5(값과 라벨의 짝)는 2026-10-26 에 걷었다. 둘 다 화면의 계기판
+     여섯 칸(bneck.js 의 SCALE · paintDash 라벨)을 보던 규칙인데, 오른쪽 판이 '한 장 + 대표 지표 하나' 로
+     바뀌며 계기판이 없어졌다. 여섯 지표 값 자체(bm · am · ld)는 scene.js 에 남아 R1~R3 · R6 이 계속 본다.
 
    ※ 이 검사기는 **값을 고치지 않는다.** 찾아서 보고만 한다. */
 import fs from "node:fs";
@@ -29,7 +32,7 @@ const rd = p => fs.readFileSync(path.join(SITE, p), "utf8");
 /* ── 보고 판 ── */
 const RULES = [
   ["R0", "검사 전제"], ["R1", "출처"], ["R2", "곱셈 정합"], ["R3", "같은 런 같은 값"],
-  ["R4", "눈금 한 지점"], ["R5", "값과 라벨의 짝"], ["R6", "명세 대조"], ["R7", "개수 문구"]
+  ["R6", "명세 대조"], ["R7", "개수 문구"], ["R8", "대표 지표"]
 ];
 const S = {};
 RULES.forEach(([id]) => S[id] = { n: 0, viol: [], warn: [] });
@@ -65,23 +68,21 @@ function loadEXPS(srcText) {
   return w.__EXPS;
 }
 
-/* ═══ 계기판 여섯 칸 (bneck.js 의 MET 사본) ═══
-   ld:1 인 둘은 값이 bm/am 이 아니라 LOAD 표(e.ld)에서 온다. 사본이 원본과 어긋나면
-   R0 이 잡는다 — 검사기가 없는 칸을 검사하거나 있는 칸을 빠뜨리는 것을 막는 자리다. */
+/* ═══ 실험 데이터의 여섯 지표 ═══
+   ld:1 인 둘은 값이 bm/am 이 아니라 LOAD 표(e.ld)에서 온다.
+   ※ 한때 bneck.js 계기판(MET)의 사본이었고 R0 이 둘을 대조했다. 계기판을 걷은 뒤(2026-10-26)로는
+     화면 쪽 원본이 없다 — 이 목록이 곧 scene.js 실험 데이터의 지표 목록이다. */
 const MET = [
   { k: "ccu",  n: "동접" },        { k: "sock", n: "소켓 호출", ld: 1 }, { k: "tick", n: "틱 p99" },
   { k: "pps",  n: "송신 메시지" }, { k: "pkt",  n: "평균 패킷", ld: 1 }, { k: "send", n: "송신량" }
 ];
-/* paintDash 가 왼쪽에 적는 말 — 값의 있고 없음과 짝이 맞아야 한다(R5) */
-const LAB = { none: "이 시기 미수집", norec: "기록 없음", obs: "이 부하에서 관측",
-              now: "지금 값", load: "이 실험의 부하", lent: "당시 미계측" };
 
 const tag = e => e.no ? String.fromCharCode(0x245F + e.no) : `s:${e.s}(${e.n})`;
 const CSVMET = { ccu: "session_count", sock: "wsa_send_rate", tick: "tick_p99_ms",
                  pps: "send_pps", pkt: "avg_pkt_bytes", send: "send_mbytes_rate" };
 
 /* 한 카드의 계기판 열두 자리(여섯 칸 × 끄고·켜고)를 값·출처와 함께 편다.
-   ld 칸의 규칙은 paintDash 와 같다 — 켜고 값이 없으면 켜고 자리에 끄고 값 하나만 세우고,
+   ld 칸의 규칙은 옛 계기판(bneck.js paintDash · 2026-10-26 까지)과 같다 — 켜고 값이 없으면 켜고 자리에 끄고 값 하나만 세우고,
    그때 끄고 자리는 비운다. 그래서 그 칸의 출처도 '끄고' 쪽이다. */
 function cells(e) {
   const out = [];
@@ -115,7 +116,7 @@ function resolveSrc(e, s) {
   return s;
 }
 
-/* ═══ R1 — 계기판에 서는 모든 값에 출처가 있어야 한다 ═══ */
+/* ═══ R1 — 실험 데이터의 여섯 지표 값마다 출처가 있어야 한다 ═══ */
 function ruleR1(cards) {
   const out = [];
   for (const e of cards) {
@@ -204,65 +205,41 @@ function ruleR3(cards) {
   }
   return out;
 }
-/* ═══ R4 — 눈금(bneck.js SCALE) 여섯 칸이 한 런에서 와야 한다 ═══ */
-function ruleR4(cards, bneckSrc) {
-  const out = []; const now = cards.find(e => e.s === 0);
-  if (!now) { out.push(["SCALE", "현황판(s:0)이 없다 — 눈금이 어디서 오는지 알 수 없다"]); out.n = 0; return out; }
-  /* 배선 확인 : 다섯 칸은 현황판(NOWE)에서, 틱만 예산 상수 40 에서 */
-  const wire = { ccu: /ccu\s*:\s*NOWE&&NOWE\.am\s*\?\s*NOWE\.am\.ccu/, pps: /pps\s*:\s*NOWE&&NOWE\.am\s*\?\s*NOWE\.am\.pps/,
-                 send: /send\s*:\s*NOWE&&NOWE\.am\s*\?\s*NOWE\.am\.send/, pkt: /pkt\s*:\s*NOWE&&NOWE\.ld\s*\?\s*NOWE\.ld\.pkt/,
-                 sock: /sock\s*:\s*NOWE&&NOWE\.ld\s*\?\s*NOWE\.ld\.sock/ };
-  for (const k in wire) if (!wire[k].test(bneckSrc))
-    out.push([`SCALE.${k}`, "눈금이 현황판(NOWE)에서 오지 않는다 — bneck.js SCALE 배선이 바뀌었다"]);
-  if (!/tick\s*:\s*40\b/.test(bneckSrc)) out.push(["SCALE.tick", "틱 눈금이 예산 40ms 상수가 아니다"]);
-  /* 출처 확인 : 다섯 칸의 src 가 한 문자열이어야 한다 */
-  const seen = new Map();
-  for (const c of cells(now)) {
-    if (c.arm !== "am" || c.v == null) continue;
-    if (c.M.k === "tick") continue;                 /* 눈금의 틱은 현황판이 아니라 예산이다 */
-    const r = resolveSrc(now, c.src);
-    seen.set(c.M.k, (r && r.err) ? "(출처 오류)" : r);
-  }
-  const uniq = [...new Set(seen.values())];
-  if (uniq.length > 1) for (const [k, v] of seen) if (v !== uniq[0])
-    out.push([`SCALE.${k}`, `눈금 다섯 칸이 한 런이 아니다 — 다른 칸은 ${uniq[0]}, 이 칸은 ${v}`]);
-  out.n = 6;
-  return out;
-}
-/* ═══ R5 — 값이 있으면 값 라벨, 없으면 '이 시기 미수집' ═══
-   paintDash 의 분기 순서를 그대로 옮긴 것이다. legacy=true 면 ⑫ 를 놓치던 옛 순서
-   (av!=null 분기가 없던 때)로 돌린다 — 아래 회귀 시험이 쓴다. */
-function labelOf(e, M, bv, av, legacy) {
-  const num = typeof bv !== "string" && typeof av !== "string";
-  if (!num) return "";
-  if (M.ld && av == null) return LAB.norec;
-  if (bv != null) return "값 →";
-  /* 값은 있는데 이 실험이 잰 것이 아닌 칸(③④ 평균 패킷) — paintDash 와 같은 자리에 둔다 */
-  if (M.ld && e.ldnote && e.ldnote[M.k]) return e.ldnote[M.k];
-  if (e.st === "dg") return LAB.obs;
-  if (e.st === "sum") return av == null ? "" : LAB.now;
-  if (M.ld) return LAB.load;
-  if (!legacy && av != null) return LAB.obs;
-  return LAB.none;
-}
-function ruleR5(cards, legacy) {
+/* ═══ R8 — 카드가 크게 세우는 대표 지표(scene.js FACE)가 가리킨 값과 맞는가 ═══
+   FACE 표는 값을 적지 않고 가리키기만 한다(tick:1 → bm/am.tick · row → ab 표의 그 줄). 그래서 여기서 보는 것은
+   '가리킨 곳을 찾았나' 와 '찾은 값끼리의 관계' 다 —
+     · km 이 undefined  = 표에 없거나 가리킨 줄을 못 찾았다(ab 줄 이름이 바뀌면 조용히 빠진다)
+     · null(고리 없음)은 진단·결론만 — 끄고/켜고가 있는 실험이 고리를 잃으면 숫자 없는 카드가 된다
+     · 퍼센트 표기는 전 → 후로 다시 잰 값과 부호가 같고, 차이가 표기의 마지막 자리 한 칸 안이어야 한다
+       (노션 원문 표기를 그대로 쓰므로 반올림 차는 허용한다 — ⑫ +7.2% 는 다시 재면 7.26%)
+     · 수가 아닌 표기('불변')는 전후가 0.5% 안이어야 한다
+     · 채택이면 고리 색이 '좋아짐'(1), 기각이면 '좋아짐' 이 아니어야 한다 */
+function ruleR8(cards) {
   const out = []; let n = 0;
   for (const e of cards.filter(x => x.no)) {
-    const C = cells(e);
-    for (const M of MET) {
-      const bv = (C.find(c => c.arm === "bm" && c.M.k === M.k) || {}).v;
-      const av = (C.find(c => c.arm === "am" && c.M.k === M.k) || {}).v;
-      n++;
-      const lb = labelOf(e, M, bv, av, legacy);
-      if (av != null && lb === LAB.none)
-        out.push([`${tag(e)} ${M.n}`, `값 ${nf(av)} 이 있는데 왼쪽은 '${LAB.none}'`]);
-      if (av == null && (lb === LAB.obs || lb === LAB.now || lb === LAB.load || lb === LAB.lent || lb === "값 →"))
-        out.push([`${tag(e)} ${M.n}`, `값이 없는데 왼쪽은 '${lb}'`]);
+    n++;
+    if (e.km === undefined) { out.push([tag(e), "대표 지표가 없다 — FACE 표에 없거나 가리킨 줄(row · tick)을 못 찾았다"]); continue; }
+    if (!e.ms) out.push([tag(e), "두 줄 설명(ms)이 없다"]);
+    if (e.km === null) {
+      if (e.st !== "dg" && e.st !== "sum") out.push([tag(e), `판정이 ${e.st} 인데 고리 없는 카드(null)다 — 끄고/켜고가 있는 실험이다`]);
+      continue;
     }
+    const M = e.km;
+    if (!(M.b > 0) || !(M.a >= 0)) { out.push([tag(e), `전 ${nf(M.b)} · 후 ${nf(M.a)} — 고리 비율(후 ÷ 전)을 못 잰다`]); continue; }
+    const m = String(M.d).match(/^([+−-])([\d.]+)%$/);
+    if (m) {
+      const shown = (m[1] === "+" ? 1 : -1) * parseFloat(m[2]), calc = (M.a - M.b) / M.b * 100;
+      const unit = Math.pow(10, -((m[2].split(".")[1] || "").length));
+      if (Math.sign(calc) !== Math.sign(shown)) out.push([tag(e), `부호가 반대다 — ${M.bt} → ${M.at} 는 ${calc > 0 ? "+" : "−"} 인데 표기는 ${M.d}`]);
+      else if (Math.abs(calc - shown) > unit) out.push([tag(e), `표기 ${M.d} 인데 ${M.bt} → ${M.at} 로 다시 재면 ${calc.toFixed(2)}% (허용 ±${unit})`]);
+    } else if (Math.abs(M.a - M.b) / M.b > 0.005) {
+      out.push([tag(e), `'${M.d}' 는 수가 아닌 표기인데 전후가 0.5% 넘게 다르다 (${M.bt} → ${M.at})`]);
+    }
+    if (e.st === "ok" && M.g !== 1) out.push([tag(e), `채택인데 고리 색이 '좋아짐'(1)이 아니다 (g=${M.g})`]);
+    if (e.st === "rj" && M.g === 1) out.push([tag(e), "기각인데 고리 색이 '좋아짐'(1)이다"]);
   }
   out.n = n; return out;
-}
-/* ═══ R6 — 명세(BNECK_SYNC_SPEC.md)의 노션 대조표와 값이 같아야 한다 ═══
+}/* ═══ R6 — 명세(BNECK_SYNC_SPEC.md)의 노션 대조표와 값이 같아야 한다 ═══
    범위는 bm·am 네 값과 LOAD 다섯 값이다(ab 표는 서술이 섞여 있어 여기서 안 본다).
    명세는 2026-08-18 채집분이라, 그 뒤 정정한 값은 여기서 '다르다' 로 뜬다 —
    그건 검사기가 아니라 사람이 판단할 자리다(명세를 갱신할지, 사이트를 되돌릴지). */
@@ -428,24 +405,23 @@ function selftest(cards, spec) {
     const r = ruleR2(cl(cards));
     return !r.some(x => x[0].startsWith("⑧")) && (r.note || []).some(x => x[0].startsWith("⑧"));
   });
-  /* ③④ 평균 패킷은 빌려 온 값이라 '당시 미계측' 이 서야 한다 — ldnote 를 떼면
-     '이 실험의 부하'(이 실험이 쟀다는 뜻)로 되돌아간다. 그 되돌아감을 잡는 자리다. */
-  t("R5 ③ 평균 패킷에서 ldnote 를 떼면 '이 실험의 부하' 로 돌아간다", () => {
-    const c = cl(cards); const e = c.find(x => x.s === 3);
-    const Mpkt = MET.find(m => m.k === "pkt");
-    const before = labelOf(e, Mpkt, null, 19.7, false);
-    delete e.ldnote;
-    return before === "당시 미계측" && labelOf(e, Mpkt, null, 19.7, false) === LAB.load;
+  /* R8 — 대표 지표. 아래 넷은 실제로 났던 결함이 아니라 '나면 이렇게 보인다' 를 넣어 본 것이다
+     (규칙이 2026-10-26 에 새로 생겼다). 0 건 통과가 '결함 없음' 인지 '규칙이 죽음' 인지 가르는 자리다. */
+  t("R8 ⑫ 표기 +7.2% 를 +9% 로 (다시 재면 7.26%)", () => {
+    const c = cl(cards); c.find(x => x.s === 12).km.d = "+9%";
+    return ruleR8(c).some(r => r[0].startsWith("⑫"));
   });
-  t("R4 눈금 셋만 7,200", () => {
-    const c = cl(cards); c.find(x => x.s === 0).ldsrc.off = "RMB_IOCP_D1_CC5600";
-    return ruleR4(c, BNECK).length > 0;
+  t("R8 ⑭ 부호 뒤집힘 +0.7% → −0.7%", () => {
+    const c = cl(cards); c.find(x => x.s === 14).km.d = "−0.7%";
+    return ruleR8(c).some(r => r[0].startsWith("⑭"));
   });
-  /* ⑫ 는 그때 `bm:null` + 부하 행 없음 이었고, 그 조합이 옛 분기 순서의 마지막 칸으로 떨어졌다 */
-  t("R5 ⑫ 값이 있는데 '이 시기 미수집'", () => {
-    const c = cl(cards); const e = c.find(x => x.s === 12);
-    e.bm = null; e.ld = null; e.ldsrc = null;
-    return ruleR5(c, true).some(r => r[0].startsWith("⑫"));
+  t("R8 ⑦ 가리킨 ab 줄을 못 찾음(줄 이름이 바뀌면 km 이 undefined)", () => {
+    const c = cl(cards); delete c.find(x => x.s === 7).km;
+    return ruleR8(c).some(r => r[0].startsWith("⑦"));
+  });
+  t("R8 ② 채택 실험이 고리를 잃음(km null)", () => {
+    const c = cl(cards); c.find(x => x.s === 2).km = null;
+    return ruleR8(c).some(r => r[0].startsWith("②"));
   });
   t("R6 명세와 다른 값", () => {
     const s2 = { cards: new Map([[13, { am: { ccu: 9999 } }]]), load: new Map() };
@@ -460,47 +436,24 @@ function selftest(cards, spec) {
 
 /* ── R0 : 검사기가 보는 자리가 그대로인가 ── */
 {
-  const mm = BNECK.match(/var MET\s*=\s*\[([\s\S]*?)\];/);
-  S.R0.n++;
-  if (!mm) viol("R0", "bneck.js MET", "계기판 정의를 못 찾았다");
-  else {
-    const keys = [...mm[1].matchAll(/\{k:"(\w+)"/g)].map(m => m[1]);
-    const mine = MET.map(m => m.k);
-    if (keys.join(",") !== mine.join(","))
-      viol("R0", "bneck.js MET", `계기판 칸이 바뀌었다 — 화면 ${keys.join("·")} / 검사기 ${mine.join("·")}`);
-    for (const m of MET) {
-      const re = new RegExp(`\\{k:"${m.k}"[^}]*ld:1`);
-      if (re.test(mm[1]) !== !!m.ld) viol("R0", `bneck.js MET.${m.k}`, "부하 표에서 오는 칸(ld) 표시가 검사기와 다르다");
-    }
-  }
-  /* 라벨 문구는 paintDash 에 리터럴로 박혀 있어야 R5 가 같은 것을 검사한다. 딱 하나 예외가
-     `lent`("당시 미계측") 인데, 이 문구는 화면 코드가 아니라 **카드 데이터**(scene.js 의 `ldnote`)
-     에서 온다 — ③④ 평균 패킷처럼 '값은 있으나 이 실험이 잰 것이 아닌' 칸에만 붙기 때문이다.
-     그래서 lent 는 문구가 아니라 **배선**을 본다 : paintDash 가 ldnote 를 읽는가. */
-  for (const [k, v] of Object.entries(LAB)) {
-    if (k === "lent") continue;
-    S.R0.n++; if (!BNECK.includes(`"${v}"`)) viol("R0", "bneck.js paintDash", `라벨 '${v}' 가 화면 코드에 없다 — R5 가 헛돌게 된다`);
-  }
-  S.R0.n++;
-  if (!/it\.ldnote/.test(BNECK)) viol("R0", "bneck.js paintDash", "ldnote 분기가 없다 — 빌려 온 값에 '당시 미계측' 이 안 선다");
-  S.R0.n++;
-  if (!EXPS.some(e => e.ldnote)) viol("R0", "scene.js EXPS", "ldnote 를 단 카드가 하나도 없다 — ③④ 평균 패킷이 '이 실험의 부하' 로 되돌아갔을 수 있다");
-  S.R0.n++;
+  /* 화면(bneck.js)이 대표 지표와 두 줄 설명을 이 이름으로 읽어야 R8 이 같은 것을 검사한다.
+     ※ 한때 여기서 계기판 정의(MET)·라벨 문구·ldnote 배선을 대조했다 — 계기판을 걷으며(2026-10-26) 같이 걷었다. */
+  S.R0.n++; if (!/it\.km\b/.test(BNECK)) viol("R0", "bneck.js paintCard", "대표 지표(it.km)를 읽지 않는다 — R8 이 화면과 다른 것을 보게 된다");
+  S.R0.n++; if (!/it\.ms\b/.test(BNECK)) viol("R0", "bneck.js paintCard", "두 줄 설명(it.ms)을 읽지 않는다");
+  S.R0.n++; if (!/FACE\.forEach/.test(SCENE)) viol("R0", "scene.js FACE", "카드 얼굴 표를 실험에 붙이는 자리가 없다");  S.R0.n++;
   if (!/window\.__EXPS\|\|\[\]\)\.filter\(function\(e\)\{ return e\.no; \}\)/.test(BNECK))
     warn("R0", "bneck.js", "카드로 서는 조건(e.no)이 바뀐 것 같다 — 검사 대상 목록을 다시 볼 것");
   S.R0.n++;
   if (NCARD !== 16) warn("R0", "카드 수", `${NCARD} 장이다(직전 기준 16). 개수 문구 규칙(R7)이 이 수를 쓴다`);
 }
 
-/* ── R1~R7 ── */
+/* ── R1~R3 · R6~R8 ── */
 const r1 = ruleR1(EXPS); S.R1.n = EXPS.reduce((a, e) => a + cells(e).filter(c => c.v != null).length, 0);
 r1.forEach(x => viol("R1", x[0], x[1]));
 const r2 = ruleR2(EXPS); S.R2.n = r2.n; r2.forEach(x => viol("R2", x[0], x[1]));
 (r2.note || []).forEach(x => warn("R2", x[0], x[1]));
 const r3 = ruleR3(EXPS); S.R3.n = r3.n; r3.forEach(x => viol("R3", x[0], x[1]));
 (r3.note || []).forEach(x => warn("R3", x[0], x[1]));
-const r4 = ruleR4(EXPS, BNECK); S.R4.n = r4.n; r4.forEach(x => viol("R4", x[0], x[1]));
-const r5 = ruleR5(EXPS, false); S.R5.n = r5.n; r5.forEach(x => viol("R5", x[0], x[1]));
 let spec = null;
 try { spec = parseSpec(fs.readFileSync(path.join(HERE, "BNECK_SYNC_SPEC.md"), "utf8")); }
 catch { warn("R6", "BNECK_SYNC_SPEC.md", "명세를 못 읽었다"); }
@@ -515,6 +468,7 @@ const BNSET = /^parts\/(bneck|bneck-tail|panel-bneck)\./;
 const r7 = ruleR7(R7FILES.map(p => ({ path: p, text: rd(p), ko: KOSET.test(p) ? 1 : 0, ko2: BNSET.test(p) ? 1 : 0 })), NCARD);
 S.R7.n = r7.n; r7.forEach(x => viol("R7", x[0], x[1]));
 (r7.note || []).forEach(x => warn("R7", x[0], x[1] + " · 시점을 박아 둔 줄이라 옛 숫자가 맞을 수 있다"));
+const r8 = ruleR8(EXPS); S.R8.n = r8.n; r8.forEach(x => viol("R8", x[0], x[1]));
 
 /* ── 실측 CSV 대조 ── */
 const csv = loadCSV(CSV_PATH);
@@ -541,7 +495,7 @@ const tbad = T.filter(x => !x[1]);
 /* ═══ 보고 ═══ */
 const L = [];
 L.push("── 병목 탭 수치 검사기 ─────────────────────────────");
-L.push(`카드 ${NCARD} 장 · 계기판 ${MET.length} 칸 · 값 ${S.R1.n} 개`);
+L.push(`카드 ${NCARD} 장 · 지표 ${MET.length} 종 · 값 ${S.R1.n} 개`);
 L.push("");
 let nv = 0;
 for (const [id, name] of RULES) {
