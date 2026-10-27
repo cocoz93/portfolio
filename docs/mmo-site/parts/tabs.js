@@ -1,8 +1,9 @@
 (function(){
   /* 탭은 2단이다: 상위(mmo·mo·misc) 아래 mmo 만 하위(build·bneck·content)를 갖는다.
-     (옛 하위 optimization(1-3 핵심 최적화)은 2026-10-27 에 1-2 아래로 내렸다 — p-optimization 은 bneck 과 같이 보인다.)
+     1-2(bneck)는 판 셋이 같이 보인다 — 병목 지도(p-bneck) · 핵심 최적화(p-optimization) · 결과(p-crender).
+     (옛 하위 optimization(1-3 핵심 최적화)은 2026-10-27 에 1-2 아래로 내렸다.)
      한때 상위 탭 'dummy'(클라이언트)와 그 아래 2-1~2-3 하위 줄이 따로 있었다. 지금은 2-1 실행 화면
-     녹화(p-crender)만 남아 1-1 구조도 아래에 같이 보인다.
+     녹화(p-crender)만 남아 1-2 맨 아래 결과 판이 됐다(10-23~27 에는 1-1 구조도 아래에 붙어 있었다).
      패널은 전부 그대로 형제로 두고 보이기만 두 값의 조합으로 정한다 —
      패널을 그룹 div 로 감싸면 p-build.hidden 이 false 인 채 부모만 숨어서
      칩 애니(pBuild.hidden 검사)가 안 보이는 화면에서 계속 돈다. */
@@ -76,7 +77,7 @@
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
     document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 아래 */
-    document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="build");   /* 1-1 구조도 아래 */
+    document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 맨 아래 */
     document.getElementById("p-content").hidden = !(top==="mmo" && sub==="content");
     document.getElementById("p-mo").hidden    = (top!=="mo");
     document.getElementById("p-misc").hidden  = (top!=="misc");
@@ -97,23 +98,23 @@
        설계 씬이 있던 자리를 넘겨줘야 그 자리에 그대로 겹친 채 시작한다(위에서 숨기기 전에 재 뒀다) */
     if(top==="mmo" && sub==="bneck" && window.playBneckIntro) window.playBneckIntro(fromRect);
     /* 두 실행 녹화는 숨은 동안 멈춰 있다(화면에 없는 그림을 디코딩할 이유가 없다).
-       1-1 로 들어올 때 장전해 두면, 구조도 아래로 내려와 판이 화면에 걸리는 순간
+       1-2 로 들어올 때 장전해 두면, 맨 아래 결과 판까지 내려와 화면에 걸리는 순간
        client-render.js 가 재생과 진입 애니를 건다. */
-    if(top==="mmo" && sub==="build" && window.__crenderPlay) window.__crenderPlay();
+    if(top==="mmo" && sub==="bneck" && window.__crenderPlay) window.__crenderPlay();
     syncHash();
   }
   tabs.forEach(function(t){ t.addEventListener("click",function(){ top=t.getAttribute("data-tab"); paint(); }); });
   subs.forEach(function(t){ t.addEventListener("click",function(){ top="mmo"; sub=t.getAttribute("data-sub"); paint(); }); });
   /* 해시 딥링크 — #bneck 은 하위 탭이라 상위까지 같이 열어 준다 */
   const h0=(location.hash||"").replace("#","");
-  let toRender=false, toOpt=false;
+  let toOpt=false, toRender=false;
   if(h0==="bneck"||h0==="build"||h0==="content"){ top="mmo"; sub=h0; }
   /* 옛 1-3 주소(#optimization · #optimization-<그림>)는 1-2 를 열고 핵심 최적화 판까지 내려 준다 */
   else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="bneck"; toOpt=true; }
   else if(h0==="mo"||h0==="misc"){ top=h0; }
   /* 옛 클라이언트 탭 주소(#dummy · #crender · #csafe · #cload · #cenv)는 노션 등에 걸려 있을 수 있어
-     전부 1-1 로 열고 실행 화면 녹화(구조도 아래)까지 내려 준다. #csafe·#cload·#cenv 는 뺀 자리였다 */
-  else if(h0==="dummy"||h0==="crender"||h0==="csafe"||h0==="cload"||h0==="cenv"){ top="mmo"; sub="build"; toRender=true; }
+     전부 1-2 로 열고 맨 아래 결과 판(실행 화면 녹화)까지 내려 준다. #csafe·#cload·#cenv 는 뺀 자리였다 */
+  else if(h0==="dummy"||h0==="crender"||h0==="csafe"||h0==="cload"||h0==="cenv"){ top="mmo"; sub="bneck"; toRender=true; }
   paint();
   /* 글꼴·그림이 다 얹힌 뒤에 내려야 자리가 안 어긋난다 */
   if(toRender) addEventListener("load", function(){

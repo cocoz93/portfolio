@@ -1,10 +1,13 @@
 /* 핵심 최적화(1-2 병목 개선 아래) — 목차는 고정 폭, 그림은 기존 가로 구도를 읽을 폭을 먼저 확보한다. */
 /* 본문 시작선은 위 병목 지도보다 조금 안쪽에 두고, 오른쪽에도 완충 여백을 남긴다. */
 #p-optimization{max-width:none;margin-left:44px;margin-right:32px}
-/* 위 병목 지도와 나누는 띠 + 제목 위 파란 막대 — 1-1 아래 실행 화면 판과 같은 값(client.css #p-crender 주석) */
+/* 위 병목 지도와 나누는 띠 + 제목 위 파란 막대(2026-10-27) — 가로선 한 줄로는 두 판이 이어져 보였다.
+   시안 넷(가로선 · 제목이 선을 끈다 · 띠 + 파란 막대 · 선 + 파란 머리) 중 띠를 골랐다. 판 폭은 그대로 두고
+   띠만 그림자로 양옆 끝까지 편다 — 그림자는 스크롤 폭을 안 늘리고, clip-path 로 위아래만 판 높이에 자른다.
+   바로 아래 '결과' 판(실행 화면 녹화 · client.css #p-crender)이 같은 값을 쓴다. */
 #p-optimization{margin-top:44px;padding-bottom:44px;background:#121a2b;box-shadow:0 0 0 100vmax #121a2b;clip-path:inset(0 -100vmax);border-top:1px solid var(--line)}
 .op-sec::before{content:"";display:block;width:44px;height:4px;border-radius:2px;background:var(--net);margin-bottom:18px}
-/* 판 제목 — 1-1 아래 실행 화면 판의 제목(client.css .cr-title)과 같은 크기·무게. 위가 넓고 아래가 좁다(제목은 아래 판에 속한다) */
+/* 판 제목 — 아래 결과 판의 제목(client.css .cr-title)과 같은 크기·무게. 위가 넓고 아래가 좁다(제목은 아래 판에 속한다) */
 .op-sec{margin:0 0 22px; padding-top:56px; font-size:2.42rem; font-weight:800; letter-spacing:-.02em; line-height:1.25; color:var(--ink)}
 @media(max-width:1200px){.op-sec{margin:0 0 14px; padding-top:28px; font-size:1.7rem}}
 @media(max-width:640px){.op-sec{padding-inline:20px}}

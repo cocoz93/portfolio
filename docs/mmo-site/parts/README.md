@@ -8,7 +8,7 @@
 | 갈래 | 조각 |
 |---|---|
 | **서버** — 설계 탭 + 병목 탭 + 핵심 최적화(병목 탭 아래 판) | `common.css` `bneck.css` `bneck-tail.css` `optimization.css` `panel-build.html` `panel-bneck.html` `panel-optimization.html` `scene.js` `wave.js` `bneck.js` `optimization.js` |
-| **클라** — 1-1 구조도 아래 실행 화면 녹화(옛 클라이언트 2-1) | `client.css` `panel-client.html` `client-render.js` |
+| **클라** — 1-2 맨 아래 결과 판 = 실행 화면 녹화(옛 클라이언트 2-1) | `client.css` `panel-client.html` `client-render.js` |
 | **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` |
 
 설계 탭과 병목 탭은 **갈래로 못 나눈다.** 병목 지도를 그리는 코드가 씬 IIFE 안에 중첩돼 바깥 스코프
@@ -32,7 +32,7 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    (`__bnPickLoc` 은 2026-08-04 에 없앴다 — 핀에서 클릭을 걷어내면서 부를 곳이 사라졌다.)
 3. **DOM id** — `#p-build` `#p-bneck` `#p-optimization` `#p-crender` `#p-content` `#p-mo` `#p-misc` `#scene`
    `#subtabs` `#builddoor`. `tabs.js` 가 전부 하드코딩한다.
-   (2026-10-23 옛 상위 탭 '클라이언트'를 없앴다 — `#p-crender` 는 1-1 구조도 아래로 옮겼고,
+   (2026-10-23 옛 상위 탭 '클라이언트'를 없앴다 — `#p-crender` 는 1-1 구조도 아래로 옮겼다가 10-27 에 1-2 맨 아래 결과 판으로 옮겼고,
    `#p-csafe`(2-2)·`#p-cload`(2-3)·`#subtabs2`·`client.js`·`safe-scene.js`·`mmo-safe-edit.html` 은 지웠다.)
 4. **마크업 계약** — 병목 탭은 셋이 물려 있다.
    - `scene.js` 가 만들고 `bneck.js` 가 읽는다: `.pin[data-loc]` 과 그 안의 `text.pin-no`
