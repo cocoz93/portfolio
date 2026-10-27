@@ -185,7 +185,9 @@ function fit(){
   if(sv){
     var S = PHONE.matches ? 112
           : stacked ? Math.min(220, Math.round(P.hero.clientWidth*.42))
-          : Math.max(140, Math.min(300, P.mid.clientHeight-16));
+          : Math.max(140, Math.min(300, P.mid.clientHeight-16, Math.round(P.hero.clientWidth*.46)));
+    /* 판 폭의 46% 로도 묶는다 — 높이로만 정하면 판이 좁은 폭(58 39 · 1440)에서 고리가 295px 로 커져
+       글 칸이 178px 로 눌리고 「SO_SNDBUF=0」 처럼 끊을 수 없는 이름이 넘쳤다(2026-10-27 실측) */
     sv.style.width=sv.style.height=S+"px";
     /* 고리가 글보다 키가 커서 넘치면 고리를 줄인다 — 글 키 아래로는 줄여 봐야 소용없다 */
     var over=P.hero.offsetHeight-P.mid.clientHeight;
