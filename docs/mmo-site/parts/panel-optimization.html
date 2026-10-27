@@ -1,14 +1,16 @@
   <!-- 1-2 병목 개선 아래에 붙는다 — 따로 탭이던 것을 내렸다(2026-10-27). 보이기는 1-2 와 같은 조건(tabs.js).
-       제목은 1-1 아래 실행 화면 판(.cr-title)과 같은 자리·같은 크기 — 한 탭 안 두 번째 판이라는 같은 말을 한다. -->
+       제목 글자는 바로 아래 결과 판(실행 화면 녹화 · .cr-title)과 같은 크기. -->
   <section class="panel" id="p-optimization" role="region" aria-labelledby="op-sec" hidden>
     <h3 class="op-sec" id="op-sec">핵심 최적화 다섯 가지</h3>
     <div class="op-layout">
       <nav class="op-index" aria-label="핵심 최적화 다섯 가지">
-        <button type="button" data-optimization="wsasend" aria-pressed="true" aria-controls="op-detail" title="A WSASend 호출 묶기"><em>A</em><span class="op-nav-text">WSASend 호출 묶기</span></button>
-        <button type="button" data-optimization="msg-bundle" aria-pressed="false" aria-controls="op-detail" title="B 이동 정보 묶기"><em>B</em><span class="op-nav-text">이동 정보 묶기</span></button>
-        <button type="button" data-optimization="msg-sharing" aria-pressed="false" aria-controls="op-detail" title="C 직렬화버퍼 재사용"><em>C</em><span class="op-nav-text">직렬화버퍼 재사용</span></button>
-        <button type="button" data-optimization="digest" aria-pressed="false" aria-controls="op-detail" title="D 수신 섹터별 Digest"><em>D</em><span class="op-nav-text">수신 섹터별 Digest</span></button>
-        <button type="button" data-optimization="quantization" aria-pressed="false" aria-controls="op-detail" title="E 좌표 양자화"><em>E</em><span class="op-nav-text">좌표 양자화</span></button>
+        <!-- 머리 글자는 A~E 가 아니라 위 1-2 카드 번호다(2026-10-27) — 같은 실험을 위아래가 다른 이름으로
+             부르면 고르는 줄이 두 벌로 읽힌다. 번호는 손으로 적지 않고 optimization.js 가 EXPS[].no 에서 채운다. -->
+        <button type="button" data-optimization="wsasend" aria-pressed="true" aria-controls="op-detail" title="WSASend 호출 묶기"><em></em><span class="op-nav-text">WSASend 호출 묶기</span></button>
+        <button type="button" data-optimization="msg-bundle" aria-pressed="false" aria-controls="op-detail" title="이동 정보 묶기"><em></em><span class="op-nav-text">이동 정보 묶기</span></button>
+        <button type="button" data-optimization="msg-sharing" aria-pressed="false" aria-controls="op-detail" title="직렬화버퍼 재사용"><em></em><span class="op-nav-text">직렬화버퍼 재사용</span></button>
+        <button type="button" data-optimization="digest" aria-pressed="false" aria-controls="op-detail" title="수신 섹터별 Digest"><em></em><span class="op-nav-text">수신 섹터별 Digest</span></button>
+        <button type="button" data-optimization="quantization" aria-pressed="false" aria-controls="op-detail" title="좌표 양자화"><em></em><span class="op-nav-text">좌표 양자화</span></button>
       </nav>
       <div class="op-workspace">
       <div class="op-detail" id="op-detail" role="region" aria-labelledby="op-title">

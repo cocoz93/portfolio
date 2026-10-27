@@ -26,6 +26,13 @@
      note:"좌표에 ×512 후 반올림하여 uint16로 기록합니다. 좌표 하나당 4B→2B이며 반올림 오차가 있습니다."}
   ];
   const buttons=Array.from(panel.querySelectorAll("[data-optimization]"));
+  /* 머리 글자 = 위 1-2 카드 번호. scene.js 가 NOTION_EXP 순서로 붙인 EXPS[].no 를 그대로 읽는다 */
+  buttons.forEach(function(button){
+    const figure=figures.find(f=>f.id===button.dataset.optimization);
+    const experiment=figure&&(window.__EXPS||[]).find(e=>e.s===figure.experiment);
+    const mark=button.querySelector("em");if(!mark||!experiment||!experiment.no)return;
+    mark.textContent=String(experiment.no);button.title=experiment.no+" "+figure.title;
+  });
   const title=document.getElementById("op-title"),summary=document.getElementById("op-summary"),note=document.getElementById("op-note");
   const heading=panel.querySelector(".op-heading"),explanation=document.getElementById("op-explanation"),example=document.getElementById("op-example");
   const report=document.getElementById("op-report"),loading=document.getElementById("op-loading"),error=document.getElementById("op-error"),openSource=document.getElementById("op-open-source");
