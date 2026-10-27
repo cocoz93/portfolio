@@ -11,6 +11,7 @@
 #   hover 전용 요소(.halo)만 걷어내고 outerHTML 을 portfolio.html 에 주입한다.
 #   .halo 만 지우는 이유: mmo-site 는 '#scene .hit .halo{opacity:0}' 로 숨겨두고 hover 때만 켜는데,
 #   포폴 홈에는 그 CSS 가 없어 opacity 기본값 1 이 되어 점선 테두리가 항상 보인다.
+#   .go-bneck(BOTTLENECK 아래 '→ 1-2 병목 개선' 글자, 2026-10-27)도 같이 걷는다 — 누르면 탭을 넘기는 글자라 정지 컷에선 뜻이 없다.
 #   반대로 .beacon(게임 루프 큐브 위 안테나)은 stroke/fill 이 인라인 속성이라 CSS 없이도 제대로 그려진다 — 지우면 안 된다.
 #
 # 선행 조건: mmo-site/index.html 이 최신이어야 한다 (mmo-site\build.ps1 먼저 실행).
@@ -38,7 +39,7 @@ window.addEventListener('load', function () {
     out.type = 'text/plain'; out.id = '__scene';
     if (s) {
       var c = s.cloneNode(true);
-      c.querySelectorAll('.halo').forEach(function (e) { e.remove(); });
+      c.querySelectorAll('.halo, .go-bneck').forEach(function (e) { e.remove(); });
       out.textContent = c.outerHTML;
     } else { out.textContent = ''; }
     document.body.appendChild(out);

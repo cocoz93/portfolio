@@ -620,6 +620,31 @@ NODES.forEach(n=>{ const c=center(n), az=n.hit[4]||0, base=LABELS[n.name]||{dx:0
     "data-z":z}, n.card?{"data-node":n.card}:null),
     (off.texts&&off.texts[i]!=null)?off.texts[i]:ln[0]))); }); }
 paintLabels();
+/* 이름표 둘레에 바탕색 테두리(2026-10-27) — 바닥 글씨(DATA BASE 등) 위에 앉은 이름표('DB 워커'·'MySQL')가
+   글자끼리 겹쳐 안 읽혔다. 속성으로 그룹에 걸어 자식 text 가 물려받게 한다 — 1-1 그림(gLbl)에만 걸고
+   병목 지도(plate 의 L[4])에는 안 건다. */
+[["paint-order","stroke"],["stroke","#0b1120"],["stroke-width","3.2"],["stroke-linejoin","round"]]
+  .forEach(function(a){ gLbl.setAttribute(a[0],a[1]); });
+/* BOTTLENECK 아래 1-2 로 건너가는 글자(2026-10-27) — 1-1 에서 병목을 짚어 놓고 '어떻게 풀었나' 로 가는 길이
+   탭줄밖에 없었다. 누르면 하위 탭 1-2 를 누른 것과 같다(설계 → 병목 전환 애니가 그대로 돈다).
+   NODES 의 lab 줄로 넣지 않는 까닭: 같은 줄을 병목 지도도 그려서, 거기서는 갈 곳이 자기 자신이 된다.
+   포폴 홈 정지 컷에는 안 들어간다(sync-scene.ps1 이 .go-bneck 를 걷는다 — 정지 그림에선 못 누르는 글자다). */
+(function(){
+  const bn=[].slice.call(gLbl.querySelectorAll("text")).find(function(t){ return /BOTTLENECK/.test(t.textContent); });
+  if(!bn) return;
+  function go(){ const b=document.querySelector('.subtab[data-sub="bneck"]'); if(b) b.click(); }
+  const t=el("text",{x:(parseFloat(bn.getAttribute("x"))+14).toFixed(1),y:(parseFloat(bn.getAttribute("y"))+17).toFixed(1),
+    "font-size":10,"font-weight":"700",fill:"#46b1ff","font-family":"var(--sans)","data-z":bn.getAttribute("data-z"),
+    class:"go-bneck",tabindex:"0",role:"link"},"어떻게 풀었나 → 1-2 병목 개선");
+  t.addEventListener("click",go); bn.addEventListener("click",go);
+  t.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); go(); } });
+  t.style.cursor=bn.style.cursor="pointer";
+  /* 밑줄은 마우스가 얹혔을 때만 — CSS 규칙을 따로 두지 않고 여기서 끝낸다 */
+  [t,bn].forEach(function(x){
+    x.addEventListener("pointerenter",function(){ t.setAttribute("text-decoration","underline"); });
+    x.addEventListener("pointerleave",function(){ t.removeAttribute("text-decoration"); }); });
+  gLbl.appendChild(t);
+})();
 
 /* ═══ 노드와 그 설계 문서 ═══ */
 /* 이 페이지는 미끼다 — 여기서 다 설명하지 않고 노션 문서로 보낸다. 그래서 노드마다 남기는 것은
