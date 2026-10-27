@@ -1975,11 +1975,7 @@ window.__flowReset=function(){
          판을 벗어나 DB 워커 부제('통째 인출 · 배치 UPSERT') 글자를 가로질렀다. 판 중앙(310,170)
          으로 옮겼다(2026-08-04). DB 워커는 몸통이 히트박스 밖(판 뒤 +v 27)이라 원래 좌표만 보면
          어긋나는 노드다 — 이 자리를 다시 만질 일이 생기면 판 좌표부터 확인할 것. */
-    /* flow = 이 자리를 고르면 패킷이 흘러 들어오는 길 — RAILS 의 [from,to] 를 순서대로 잇는다.
-       받는 자리(1·2)는 클라에서, 내보내는 자리(3·4)와 저장(5)은 게임 루프에서 출발한다.
-       좌표는 아래 flowLanes 가 railPath 로 뽑는다 — 배선을 고치면 흐름도 저절로 따라간다. */
     {n:"1", name:"수신 길목",  u:190, v:50,  h:56, rx:15, side:-1, node:"iocp",
-     flow:[["clients","accept"],["accept","iocp"]],
      why:"완료 통지를 받아 파싱하는 길목 — 워커를 몇으로 둘지가 여기서 정해진다. 많으면 나눠 갖는 게 아니라 서로 밀린다."},
     /* 일곱 장이 여기 선다 — ①②(송신을 게임 스레드가 하던 시절) · ⑥⑨(브로드캐스트 복사) ·
        ⑧⑬(팬아웃·통보) · ⑪(코어 격리). 병목이 가장 오래 머문 자리라 카드도 제일 두껍다.
@@ -1988,14 +1984,12 @@ window.__flowReset=function(){
          송신계로 넘어갔고, 그래서 자리 3·4 에도 카드가 붙었다(⑭⑮). 이 자리의 두께는 이제
          '지금 병목' 이 아니라 '가장 오래 병목이던 곳' 을 말한다. */
     {n:"2", name:"틱 예산",    u:410, v:50,  h:76, rx:20, side:1,  node:"game",
-     flow:[["clients","accept"],["accept","iocp"],["iocp","swapq"],["swapq","game"]],
      why:"한 스레드가 25fps 안에 다 끝내야 하는 자리 — 대상 계산이든 복사든, 송신조차 한때 여기서 예산을 먹었다."},
     /* ❌ 이 자리만 상자 둘(송신 큐 + Send 워커)을 칠해 본 적이 있다 — 그때는 ①② 도 이 자리라
        '큐 실험과 워커 실험이 한 자리에 선다' 를 그림으로 맞추려던 것이었다. 반려(2026-08-04):
        강조는 되지만 톤을 해친다. 두 상자가 화면에서 멀어(사이에 GAME 바닥글자) 경로 하나가 아니라
        '두 군데' 로 읽히는 것도 같이 걸렸다. 되살릴 일이 생기면 node 를 배열로 받게 하면 된다. */
     {n:"3", name:"송신 경로",  u:190, v:-70, h:60, rx:15, side:-1, node:"send",
-     flow:[["game","sector"],["sector","send"]],
      why:"송신을 게임 틱에서 떼어낸 뒤의 자리 — 전용 스레드가 얼마나·몇으로 보낼지가 여기서 정해진다(③ 이후)."},
     /* 회선만 node 가 없다. 서버 부품이 아니라 **구간**(send → clients 복귀 레일)이라 깔 발자국이
        없다 — 클라 상자에 얹으면 '클라이언트가 병목' 으로 읽히고, 송신 워커에 얹으면 이 카드가
@@ -2003,10 +1997,8 @@ window.__flowReset=function(){
        좌표는 그 레일의 수평 구간 위다 — send 중심(190,-70) 에서 clients 중심(-14,50) 으로 갈 때
        v=-70 을 따라 왼쪽으로 흐르는 구간(scene.js 위 RAILS 의 pts u:-14,v:-70). */
     {n:"4", name:"회선 상한",  u:75,  v:-70, h:52, rx:13, side:-1,
-     flow:[["game","sector"],["sector","send"],["send","clients"]],
      why:"서버가 아니라 바깥이 천장이던 자리 — 틱은 예산 안인데 왕복만 1초로 벌어졌다(WAN 상한 474 Mbps)."},
     {n:"5", name:"저장 경로",  u:310, v:170, h:64, rx:13, side:1,  node:"dbw",
-     flow:[["game","dbw"]],
      why:"저장이 게임 스레드를 붙잡으면 틱이 통째로 밀린다 — 주기마다 한 번씩 걸리던 자리."},
   ];
   /* 자리별 부제(채택 n · 기각 n)는 손으로 적지 않고 실험 배열에서 센다 —
@@ -2023,32 +2015,6 @@ window.__flowReset=function(){
           .filter(Boolean).join(" · ");
   });
   pinDefs=PINS; window.__PINS=PINS;
-  /* 핀의 flow 를 평면 좌표 폴리라인으로 편다 — 레인 셋짜리 레일(송신 큐 → Send 워커 ×3)이 끼면
-     줄마다 한 벌씩 셋, 아니면 한 벌. 줄은 레일을 그린 것과 같은 offsetPath·LOFF 로 낸다(패킷이
-     그려진 레인 위를 달리게). 끝은 부품 중심까지 넣는다 — 레일은 부품 테두리에서 끊기므로
-     중심까지 이어야 '부품 안으로 들어간다' 가 된다. 부품이 없는 자리(4 회선)는 핀 지점에서 자른다.
-     표에 없는 레일을 적으면 빈 배열 — 그 자리는 흐름 없이 배지만 튕긴다(bneck.js). */
-  function flowLanes(p){
-    const rails=p.flow.map(function(f){ return RAILS.filter(function(r){ return r.from===f[0]&&r.to===f[1]; })[0]; });
-    if(rails.some(function(r){ return !r; })) return [];
-    const multi=rails.some(function(r){ return (r.lanes||1)>1; });
-    return (multi?[-1,0,1]:[0]).map(function(o){
-      let pts=[];
-      rails.forEach(function(r){ const c=railPath(r); pts=pts.concat((r.lanes||1)>1 ? offsetPath(c,o*LOFF,r.cross) : c); });
-      if(p.node && byName[p.node]) pts.push(center(byName[p.node]));
-      else pts=cutAt(pts,[p.u,p.v]);
-      return pts;
-    });
-  }
-  /* 폴리라인을 점 P 에 가장 가까운 자리에서 자른다(P 를 지나는 레일 위의 핀 = 4 회선) */
-  function cutAt(pts,P){
-    let best=null;
-    for(let i=1;i<pts.length;i++){ const a=pts[i-1], b=pts[i], du=b[0]-a[0], dv=b[1]-a[1], l2=du*du+dv*dv;
-      const t=l2?Math.max(0,Math.min(1,((P[0]-a[0])*du+(P[1]-a[1])*dv)/l2)):0, q=[a[0]+du*t, a[1]+dv*t],
-            d=Math.hypot(q[0]-P[0],q[1]-P[1]);
-      if(!best||d<best.d) best={d:d,i:i,q:q}; }
-    return best ? pts.slice(0,best.i).concat([best.q]) : pts;
-  }
   /* 톤이 화면 전체에서 '한 번에' 바뀌면 두 그림을 겹쳐 놓고 밝기만 만진 것으로 보인다.
      좌하(클라) → 우상(MySQL) 대각선으로 번지게 한다 — 패킷이 들어오는 자리에서 시작해 흐름을 따라간다.
      설계 탭 등장 웨이브와 같은 축·같은 등속이라 두 화면이 같은 문법으로 읽힌다.
@@ -2068,10 +2034,6 @@ window.__flowReset=function(){
        열려 덜 정확했고, 여섯 중 셋(큐 넘김 · 수신 길목 · 저장 경로)은 실측 카드가 없어 눌러도
        아무 일이 안 났다. 고르는 일은 카드가 혼자 맡는다. */
     const g=el("g",{class:"pin","data-loc":p.n});
-    /* 고를 때 패킷이 흐를 길 — 화면 좌표로 바꿔 핀에 붙여 둔다(bneck.js 가 읽는다. 계약은 parts/README.md) */
-    if(p.flow){ const L=flowLanes(p);
-      if(L.length) g.setAttribute("data-flow", JSON.stringify(L.map(function(l){
-        return l.map(function(q){ return [Math.round(fx(q[0])*10)/10, Math.round(fy(q[1])*10)/10]; }); }))); }
     /* 고른 자리가 앉은 부품의 발자국. 핀보다 먼저(맨 아래) 넣어 지도 위에 깔리게 한다.
        평면 좌표로 한 번 계산해 두면 되는 이유는 핀과 같다 — 이 판이 서는 시점에는 땅이 이미 다 펴져 있다. */
     if(p.node && byName[p.node] && LAYOUT[p.node]){
