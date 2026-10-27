@@ -308,7 +308,7 @@ const NODES=[
      홈 축 = MySQL 로 나가는 축(+u), 쌓이는 칸은 그 반대쪽(-u) = 게임에서 오는 쪽.
      워커 큐브는 홈 '뒤'(+v)에 세운다 — 앞(-v)에 두면 높이가 홈을 덮어 큐가 안 보인다. */
   { name:"dbw", card:"dbw", hit:[37-DBQ_HW,11,2*DBQ_HW,22,4],
-    lab:{anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["통째 인출 · 배치 UPSERT",11,"#9bb0cf","600",15]]},
+    lab:{anch:"middle",lines:[["DB 워커",14,"#eef2fb","800",0],["통째 인출 · 배치 UPSERT",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const CU=u+37, HW=DBQ_HW, GD=5, Z=3.4, cy=v+22;   /* CU,cy = 노드 중심(레일 끝점) */
       const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
       shadow(CU-HW,cy-11,2*HW,22);
@@ -344,7 +344,7 @@ const NODES=[
      홈 3개를 레인 3줄과 같은 간격(SUB_W+SUB_GAP=14)에 파서 파이프와 1:1로 물린다.
      색은 이 구간 레인(응답 send)에 맞춘 주황 계열 — 칸 색 #1d1409/#c98c2e 는 애니가 그대로 쓴다. */
   { name:"sector", card:"send", hit:[-21,-22,42,44,4],
-    lab:{anch:"start",lines:[["송신 큐 ×3",12.5,"#eef2fb","800",0],["워커별 통째 스왑",11,"#9bb0cf","600",15]]},
+    lab:{anch:"start",lines:[["송신 큐 ×3",14,"#eef2fb","800",0],["워커별 통째 스왑",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const HW=21, HD=22, LANE=14, GD=5, Z=3.4; sectorCells=[];
       const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
       shadow(u-HW,v-HD,2*HW,2*HD);
@@ -364,7 +364,7 @@ const NODES=[
      홈은 1개 — 공유 큐(칸막이 왼쪽, IOCP가 쌓음) ↔ 로컬 큐(오른쪽, 게임이 빼감).
      판 중심 v = 노드 v+8 이라 IOCP·게임과 같은 축선에 놓인다(레일이 안 기운다). */
   { name:"swapq", card:"iocp", hit:[-SQ_HW,-3,2*SQ_HW,22,4],
-    lab:{anch:"middle",lines:[["SwapQ",13.5,"#eef5ff","800",0],["락 1회 통째 스왑 ➜",11,"#6cc7ff","700",15]]},
+    lab:{anch:"middle",lines:[["SwapQ",14,"#eef2fb","800",0],["락 1회 통째 스왑 ➜",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const HW=SQ_HW, GD=5, Z=3.4, cy=v+8;
       const PT=a=>a.map(p=>P(p[0],p[1],p[2]||0)).join(" ");
       shadow(u-HW,cy-11,2*HW,22);
@@ -378,7 +378,7 @@ const NODES=[
           points:PT([[cu-SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy-4,Z+0.35],[cu+SLOT/2,cy+4,Z+0.35],[cu-SLOT/2,cy+4,Z+0.35]])});
         g.appendChild(e); swapqLit.push([e,"#16223a"]); } } },
   { name:"iocp", card:"iocp", hit:[-23,-22,46,44,16],
-    lab:{anch:"middle",lines:[["IOCP 워커",14.5,"#eef2fb","800",0],["×4 · 병렬 파싱",11.5,"#6cc7ff","700",16]]},
+    lab:{anch:"middle",lines:[["IOCP 워커",14,"#eef2fb","800",0],["×4 · 병렬 파싱",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ prism(g,u-bw(23),v-bw(22),bw(46),bw(44),-bw(2),bw(3),["#1c2b45","#0e1626","#152238"]);
       const cells=[[-17,-16],[1,-16],[-17,1],[1,1]].map(c=>[u+bw(c[0]), v+bw(c[1])])
         .sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
@@ -387,16 +387,16 @@ const NODES=[
   /* IOCP 워커 큐브(16×15×16)와 같은 급이어야 하는데 혼자 작았다 → 17×11×14.
      높이만 올리면 앞 상자가 뒤를 덮어 한 덩어리로 보이므로 간격도 같이 벌린다(8/22/36 → 6/21/36) */
   { name:"send", card:"send", hit:[0,0,44,44,17],
-    lab:{anch:"middle",lines:[["Send 워커 ×3",14.5,"#eef2fb","800",0],["uniqueId%3 · WSASend",11.5,"#9bb0cf","600",15]]},
+    lab:{anch:"middle",lines:[["Send 워커 ×3",14,"#eef2fb","800",0],["uniqueId%3 · WSASend",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const x=bo(u,44), y=bo(v,44); prism(g,x,y,bw(44),bw(44),-bw(2),bw(3),["#20304e","#101a2c","#16233b"]);
       /* 뒤(v큰 것)부터 — 앞 상자가 가리게 */
       [36,21,6].forEach(dv=>prism(g,x+bw(6),y+bw(dv-3),bw(17),bw(11),bw(3),bw(14),NET,true)); } },
   { name:"accept", card:"accept", hit:[0,0,30,28,20],
-    lab:{anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",11,"#9bb0cf","600",15]]},
+    lab:{anch:"middle",lines:[["Accept",14,"#eef2fb","800",0],["blocking accept",11.5,"#9bb0cf","600",15]]},
     draw(g,u,v){ const x=bo(u,30), y=bo(v,28);
       shadow(x,y,bw(30),bw(28)); prism(g,x,y,bw(30),bw(28),0,bw(20),NET,true); } },
   { name:"clients", card:"client", hit:[0,0,26,58,11],
-    lab:{anch:"middle",lines:[["클라이언트",14.5,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11.5,"#9bb0cf","600",31]]},
+    lab:{anch:"middle",lines:[["클라이언트",14,"#eef2fb","800",0],["×5,000",12,RECV,"700",16],["동시 접속",11.5,"#9bb0cf","600",31]]},
     /* 무리 범위 — 판이 120×320 이던 시절에는 5×5 로는 너무 작아 판이 비어 보여 6×11 로 키웠다.
        지금은 판을 72×320 으로 좁혔으므로(왼쪽 여백 회수) 무리도 3열로 같이 줄인다 —
        판만 좁히면 무리가 넘치고, 무리만 줄이면 판이 다시 빈다.
@@ -425,7 +425,7 @@ const NODES=[
       cubes.sort((a,b)=>DEPTH(a[0],a[1])-DEPTH(b[0],b[1]));
       cubes.forEach(p=>prism(g,p[0],p[1],G.S,G.S,0,bw(11),CROWD)); } },
   { name:"timer", card:"iocp", hit:[-22,-22,44,44,4],
-    lab:{anch:"middle",lines:[["Timing Wheel",13,"#eef2fb","800",0],["×1 · 하트비트",11,"#9bb0cf","600",15]]},
+    lab:{anch:"middle",lines:[["Timing Wheel",14,"#eef2fb","800",0],["×1 · 하트비트",11.5,"#9bb0cf","600",15]]},
     /* 문자판은 바닥에 놓인 원이다. 예전에는 화면 좌표에 축정렬 타원(rx=R·ax, ry=−R·by)으로 그렸는데,
        그 모양은 좌우대칭 아이소에서만 맞다 — 요각이 들어가면 실제로는 기울어진 타원이라
        판은 돌아가는데 문자판만 안 돌아 바닥에서 떠 보인다. 그래서 바닥 변환(floorTf) 안에
@@ -648,41 +648,26 @@ paintLabels();
 
 /* ═══ 노드와 그 설계 문서 ═══ */
 /* 이 페이지는 미끼다 — 여기서 다 설명하지 않고 노션 문서로 보낸다. 그래서 노드마다 남기는 것은
-   sum(한 줄로 '무엇을 하는가') 과 docs(그 노드의 설계 문서) 둘뿐이다. '왜 그렇게 했는가' 를 적던
+   sum(한 줄로 '무엇을 하는가') 하나뿐이다. '왜 그렇게 했는가' 를 적던
    impl 문단은 걷어냈다: 그 내용이 곧 문서의 내용이라, 여기 적으면 미끼를 미리 까먹는 셈이었다.
+   ※ 노드마다 달던 설계 문서 링크(docs, 여덟 편)도 2026-10-27 에 걷었다 — 노션으로 나가는 곳을
+     씬 왼쪽 아래 '다시 재생' 옆 문(.stage-door) 하나로 모은다(도착지 "IOCP 서버 구현(MMO)" 가 그 여덟 편을 품은 상위).
 
-   어느 구역인지는 여기 안 적는다 — ZI[].nodes 가 이미 갖고 있어서, 두 곳에 두면 어긋난다(옛 zone 필드를 지운 이유).
-   docs = [제목, 노션 페이지 id, (선택) 한 줄]. id 는 대시 없는 32자로, NOTION 앞에 붙여 공개 주소가 된다.
-   정본은 노션 DB "네트워크 라이브러리 설계&구현" — 페이지를 옮기거나 이름을 바꾸면 여기도 같이 고칠 것.
-   ※ 'dirty 선별·주기 batch 저장' 은 독립 페이지가 아니라 DB Thread 문서 안의 설계 결정 ②④ 다.
-     두 줄로 두면 같은 페이지로 가는 링크가 둘이 되므로 한 줄로 합치고, 무엇이 들었는지는 꼬리표로 적었다. */
+   어느 구역인지는 여기 안 적는다 — ZI[].nodes 가 이미 갖고 있어서, 두 곳에 두면 어긋난다(옛 zone 필드를 지운 이유). */
 const NOTION="https://feline-vacation-d6d.notion.site/";
 const ND={
-  client:{nm:"클라이언트",x:"×5,000",sum:"인덱스 슬롯 세션 · sessionId 로 ABA 차단",
-    docs:[["세션 관리 방식과 세션 ABA 문제 해결","34116a0b9f59805ca586d7c8c3597545"]]},
-  accept:{nm:"Accept",x:"×1",sum:"수락 전담 1개 · AcceptEx 미사용",
-    docs:[["AcceptThread 분리 (AcceptEx 미사용)","34116a0b9f59802eaf47c3ff8e15e082"]]},
-  iocp:{nm:"IOCP 워커",x:"×4",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */sum:"완료 통지 파싱 → 공유 큐 · 틱마다 swap 1회",
-    docs:[["세션당 Recv/Send 1회 제한","34116a0b9f5980839d4ad67dc23f9996"],
-          ["Timing Wheel (타임아웃)","35816a0b9f59804db9bff9d6679696bc"],
-          ["Worker→Game SwapQ","37316a0b9f5980429473c20365f71778"]]},
-  send:{nm:"Send 워커",x:"×3",sum:"uniqueId%3 고정 배분 → WSASend",
-    docs:[["SendThread 분리 유무와 이슈","34116a0b9f5980cca5f2e65b5122a6fe"]]},
-  loop:{nm:"게임 루프",x:"×1",sum:"단일 코어 · 섹터 격자 AOI · viewlist 미채택",
-    docs:[["섹터/맵 크기 · viewlist 미채택 이유","37b16a0b9f5980b9b4d5d0734909b4a9"]]},
-  dbw:{nm:"DB 워커",x:"×1",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능",
-    /* 꼬리표에 sum 과 겹치는 'dirty 선별' 은 안 적는다 — 바로 윗줄이 이미 하는 말이라 두 줄이 같아 보인다.
-       그 문서에만 있는 것을 고른다(설계 결정 표 ④⑥⑦⑨). */
-    /* 꼬리표는 한 줄까지다 — 카드에서 부제가 달린 문서는 이것 하나뿐이라, 두 줄이 되면
-       그 자리만 문단처럼 보인다. 열 가지를 다 적을 자리가 아니라 맛보기 두 개면 된다. */
-    docs:[["DB Thread 분리 및 저장 설계","39516a0b9f59809fb782d3265404a0fa",
-           "설계 결정 10가지 — 배치 핸드오프 · 백프레셔"]]},
-  mysql:{nm:"MySQL",x:"",sum:"주기적 스냅샷 UPSERT 로 영속화",docs:[]}
+  client:{nm:"클라이언트",x:"×5,000",sum:"인덱스 슬롯 세션 · sessionId 로 ABA 차단"},
+  accept:{nm:"Accept",x:"×1",sum:"수락 전담 1개 · AcceptEx 미사용"},
+  iocp:{nm:"IOCP 워커",x:"×4",   /* 씬 라벨과 같은 값 — 운영 INI WorkerThreads=4 */sum:"완료 통지 파싱 → 공유 큐 · 틱마다 swap 1회"},
+  send:{nm:"Send 워커",x:"×3",sum:"uniqueId%3 고정 배분 → WSASend"},
+  loop:{nm:"게임 루프",x:"×1",sum:"단일 코어 · 섹터 격자 AOI · viewlist 미채택"},
+  dbw:{nm:"DB 워커",x:"×1",sum:"dirty 선별 · 주기 batch · accountId%K 로 확장 가능"},
+  mysql:{nm:"MySQL",x:"",sum:"주기적 스냅샷 UPSERT 로 영속화"}
 };
 /* ═══ 구역 개요 — 구역 버튼을 누르면 오른쪽 열에 뜨는 단 하나의 화면 ═══
    구역 버튼은 원래 '강조만' 하는 버튼이었다. 무엇이 밝아졌는지는 보이는데 그게 무슨 구역인지는
-   안 알려 주고 있었다. 그래서 이미 보이는 버튼(구역)에 개요를 달았고, 지금은 그 개요가 노드와
-   설계 문서 링크까지 한 화면에 담는다 — 씬은 한 번도 안 눌러도 된다.
+   안 알려 주고 있었다. 그래서 이미 보이는 버튼(구역)에 개요를 달았고, 지금은 그 개요가 노드까지
+   한 화면에 담는다 — 씬은 한 번도 안 눌러도 된다(설계 문서 링크는 2026-10-27 에 씬 왼쪽 아래 문 .stage-door 하나로 모았다).
    키는 씬의 구역 키(data-z)와 같은 문자열이라 CSS·강조 코드와 같은 말을 쓴다. */
 /* lead 는 한 줄이다(길어도 두 줄). 원래는 두세 문장이었는데, 뒷문장이 하는 말을 바로 아래
    노드 줄이 다시 하고 있었다 — 문단을 읽고 목록을 또 읽는 셈이라 카드가 길어 보였다.
@@ -717,34 +702,28 @@ function closeCard(){ if(card) card.classList.remove("on"); }
    옛 구조는 여기서 '상세 ▸' 를 한 번 더 눌러야 노드 상세 카드가 떴고, 문서 제목은 그 안에 글자로만
    있었다 — 두 번 눌러도 노션에 못 갔다. 이 페이지는 미끼이므로 그 반대가 맞다: 문서를 첫 화면으로
    끌어올리고, 제목 자체를 노션으로 나가는 링크로 만든다. 클릭 두 번이 한 번이 되고, 도착지가 생긴다.
-   라벨(.k)도 안 붙인다 — '구역 개요' 는 바로 밑 제목('네트워크')과 '이 구역의 노드 3' 이 이미 하는 말이었다. */
+   라벨(.k)도 안 붙인다 — '구역 개요' 는 바로 밑 제목('네트워크')과 '이 구역의 노드 3' 이 이미 하는 말이었다.
+   ※ 그 뒤(2026-10-27) 문서 링크를 카드에서 다시 걷었다 — 링크가 구역마다 흩어져 있으면 나가는 곳이 아홉이
+     된다. 노션으로 가는 길은 씬 왼쪽 아래 '다시 재생' 옆 문(.stage-door) 하나이고, 카드는 노드 이름과 한 줄 요약만 든다. */
 /* brief=true 는 진입 순회가 쓰는 미리보기다 — 제목과 한 줄까지만 짓고 멈춘다.
    순회 중에 카드를 통째로 띄우면 두 가지가 깨진다: 카드 높이가 구역마다 199~437px 이라
    2.5초 사이 240px 씩 늘었다 줄고(실측), 네트워크 칸에서는 문서 링크 다섯 개가 620ms 스쳐 간다.
    못 읽고 못 누르는 링크는 어포던스가 아니라 소음이다. 제목+한 줄이면 네 칸 높이가 같아져
    깜빡임이 없고, 알리려던 것('버튼을 누르면 오른쪽에 이 글이 뜬다')은 그대로 전해진다. */
 function openZone(z,brief){ const Z=ZI[z]; if(!Z||!card) return;
-  /* 라벨에 문서 수까지 적는다 — 같은 한 줄로 '여기서 몇 개가 노션으로 나가는가' 를 먼저 알린다 */
-  const nd=Z.nodes.reduce(function(s,k){ return s+((ND[k]&&ND[k].docs)?ND[k].docs.length:0); },0);
   let h='<h3>'+Z.nm+'<span>'+Z.sub+'</span></h3>'+
         '<p class="cl">'+Z.lead+'</p>';
-  /* 순회본에도 이 라벨은 남긴다 — 목록을 안 펴도 '여기 문서가 다섯' 이 숫자로 먼저 간다.
+  /* '노드 N · 설계 문서 N' 라벨은 문서 링크와 함께 걷었다(2026-10-27) — 문서 수가 빠지면 '노드 3' 만 남는데,
+     그건 바로 아래 노드 줄 셋이 하는 말이다.
      '버튼을 누르면 펼쳐진다' 같은 안내는 붙이지 않는다. 순회가 버튼을 대신 눌러 보이는 것과
      같은 말이라, 씬 위에 있던 안내 한 줄('구역을 고르면 …')을 지웠을 때와 같은 이유다. */
-  h+='<div class="lb">노드 '+Z.nodes.length+(nd?' · 설계 문서 '+nd:'')+'</div>';
   if(brief){ cbd.innerHTML=h;
     card.style.setProperty("--ac", Z.ac); card.classList.add("on"); return; }
   h+=Z.nodes.map(function(k){ const n=ND[k]; if(!n) return "";
     let s='<div class="zn-it"><span class="t">'+n.nm+(n.x?'<em>'+n.x+'</em>':'')+'</span>'+
           '<span class="d">'+n.sum+'</span>';
-    /* 링크는 새 탭으로 — 미끼를 물어도 이 페이지는 뒤에 남아 있어야 다른 구역도 마저 본다 */
-    s+=n.docs.map(function(d){
-      return '<a class="dl" href="'+NOTION+d[1]+'" target="_blank" rel="noopener">'+
-             '<span class="ic">▸</span><span class="t2">'+d[0]+
-             (d[2]?'<span class="sd">'+d[2]+'</span>':'')+'</span><span class="go">↗</span></a>'; }).join("");
-    if(!n.docs.length) s+='<div class="dnone">저장소 자체라 별도 문서가 없다 — 설계는 DB 워커에</div>';
     return s+'</div>'; }).join("");
-  /* 카드는 문서 링크에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목 개선' 을 달았는데,
+  /* 카드는 노드 줄에서 끝난다. 한때 맨 아래에 '이 구역에서 잰 실험 N건 → 1-2 병목 개선' 을 달았는데,
      누를 수 없는 글이면서 화살표로 이동을 흉내 냈다 — 실제 이동은 늘 보이는 1-2 탭이 맡는다. */
   cbd.innerHTML=h;
   card.style.setProperty("--ac", Z.ac);   /* 왼쪽 세로선 색 = 씬에서 살아남은 도형 색 */
@@ -1626,11 +1605,11 @@ window.__flowReset=function(){
   /* ═══ 카드 열여섯 장 = 노션 실측 보고서 열여섯 편 ═══
      이 순서가 곧 카드 번호(①~⑯)이고, 병목이 옮겨간 순서다 — 노션 DB "병목지점 개선" 의
      작성 순서와 같다(동접 200 에서 7,200 까지 부하를 올리며 잰 차례).
-     id 는 대시 없는 32자다. 설계 문서는 이 id 를 NOTION 뒤에 그대로 붙여 그 페이지만 전체창으로
-     열지만, 실측 보고서는 상위 페이지 뒤에 `?p=<id>&pm=c` 로 붙인다(아래 NOTION_HOME) —
-     노션이 상위를 깔고 그 위에 작은 창으로 얹는 주소다. 규칙을 갈라 두는 이유는 그 작은 창이
-     닫혔을 때 나머지 열다섯 편이 있는 목록에 떨어지기 때문이다. 설계 문서는 여덟 편이 이미
-     한 화면(1-1 구역 카드)에 있어 그럴 이유가 없다.
+     id 는 대시 없는 32자다. 실측 보고서는 상위 페이지 뒤에 `?p=<id>&pm=c` 로 붙인다(아래 NOTION_HOME) —
+     노션이 상위를 깔고 그 위에 작은 창으로 얹는 주소다. 그 작은 창이
+     닫혔을 때 나머지 열다섯 편이 있는 목록에 떨어지게 하려는 것이다.
+     (1-1 구역 카드에 있던 설계 문서 링크 여덟 편은 id 를 NOTION 뒤에 그대로 붙여 전체창으로 열었는데,
+      2026-10-27 에 걷고 1-1 의 나가는 문(씬 왼쪽 아래 .stage-door) 하나로 모았다.)
      EXPS 항목에 직접 적지 않고 여기서 붙이는 이유: 이 표가 '카드에 서는 열여섯' 의 정본이라
      한 곳만 보면 무엇이 서고 무엇이 안 서는지 알 수 있다. 여기 없는 항목(현황판 · 동접별 트래픽 ·
      정정 이력 · 미측정 3건)은 노션에 대응 페이지가 없어 카드로 세우지 않는다. */
@@ -1653,7 +1632,7 @@ window.__flowReset=function(){
     [0.2, "3a516a0b9f5981639321d22af4aa2d38"]    /* 결론 — 세트 복제로 */
   ];
   /* 작은 창을 얹을 바닥 = "IOCP 서버 구현(MMO)" — 설계 문서 DB 와 병목 실험 DB 를 함께 품은 상위.
-     1-1 의 나가는 문(소탭 줄 오른쪽 끝 #builddoor)이 가는 곳과 같은 페이지다.
+     1-1 의 나가는 문(씬 왼쪽 아래 .stage-door)이 가는 곳과 같은 페이지다.
      pm=s(오른쪽 패널)로도 열리지만 폭이 좁아 실측 표가 잘린다 — 가운데(pm=c)로 둔다. */
   const NOTION_HOME="33616a0b9f5980e5a220c3e1928c2fe5";
   NOTION_EXP.forEach(function(r,i){
