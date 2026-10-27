@@ -39,8 +39,9 @@
     /* 구역 순회는 웨이브가 끝나고 데이터가 한 박자 흐른 뒤에 돈다 — 구조가 다 서고 흐르는
        '평소 모습' 을 먼저 봐야, 순회가 '그 화면을 구역별로 쪼갠 것' 으로 읽힌다.
        다만 예약은 여기, 웨이브를 켜는 자리에서 한다. 순회 쪽이 예약한 순간부터 사용자 입력을 듣기
-       때문이다 — 웨이브가 도는 동안 누가 노드를 눌렀다면 순회는 아예 시작하지 않는다. */
-    if(window.__zoneTourArm) window.__zoneTourArm(WAVE+800);
+       때문이다 — 웨이브가 도는 동안 누가 노드를 눌렀다면 순회는 아예 시작하지 않는다.
+       한 박자 = 400ms(2026-10-27, 800 에서 줄임) — 들어온 뒤 순회가 1.5초 지나서야 시작해 그 전에 지나칠 수 있었다. */
+    if(window.__zoneTourArm) window.__zoneTourArm(WAVE+400);
     holdTimer=setTimeout(function(){
       body.classList.remove("pop-hold");
       if(window.__flowStart) window.__flowStart();

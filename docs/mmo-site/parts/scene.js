@@ -2311,8 +2311,10 @@ window.__flowReset=function(){
      380 → 620 (전체 1.5초 → 2.5초). 380 일 때는 페이드 220 을 빼고 '다 켜진 화면' 이 160ms 뿐이라,
      씬이 저 혼자 깜빡이는 것으로 보이고 정작 알리려던 것 — 오른쪽 끝 구역 버튼이 같이 옮겨 다닌다는 사실 —
      을 따라갈 틈이 없었다. 620 이면 그 틈이 400ms 로 늘어 눈이 씬에서 버튼으로 한 번 건너갈 수 있다.
-     더 늘리지 않는 이유: 순회는 사용자가 아직 아무것도 안 한 시간이라, 길어질수록 '멈춘 페이지' 가 된다. */
-  const TOUR=["outside","net","game","store"], TOUR_HOLD=620;
+     더 늘리지 않는 이유: 순회는 사용자가 아직 아무것도 안 한 시간이라, 길어질수록 '멈춘 페이지' 가 된다.
+     620 → 500 (2026-10-27, 전체 2.5초 → 2.0초) — 들어왔다가 순회가 끝나기 전에 지나칠 것 같다는 판단.
+     다 켜진 화면은 280ms 로, 380 시절(160ms)보다는 길게 남긴다. 시작 대기도 같이 줄였다(wave.js WAVE+400). */
+  const TOUR=["outside","net","game","store"], TOUR_HOLD=500;
   const TOUR_EV=["pointerdown","keydown","wheel","touchstart"];
   const tourRM=matchMedia("(prefers-reduced-motion:reduce)").matches;
   const pBuild=document.getElementById("p-build");
