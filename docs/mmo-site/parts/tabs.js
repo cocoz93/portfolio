@@ -18,7 +18,6 @@
      1-2 나 다른 상위 탭에서는 눌러도 아무 일이 없는 버튼이 되므로 숨긴다.
      줄 높이는 .subtabs 의 min-height 가 잡아 두어 숨겨도 화면이 튀지 않는다. */
   const zonebar=document.getElementById("zonebar");
-  const builddoor=document.getElementById("builddoor");
   let top="mmo", sub="build";
   /* 하위 줄 글자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)이 그 탭과 같아야 소속이 보인다.
      줄 자체는 화면 폭을 다 쓴다(바닥선이 끝까지 가야 하므로) — 움직이는 건 안쪽 여백뿐이다.
@@ -71,8 +70,7 @@
       t.className = on ? "subtab act" : "subtab"; t.setAttribute("aria-selected", on?"true":"false"); });
     subbar.hidden  = (top!=="mmo");
     if(zonebar) zonebar.hidden = !(top==="mmo" && sub==="build");
-    /* 나가는 문도 구역 필터와 같은 자리·같은 조건이다 — 1-2 는 고른 실험으로 가는 제 문을 쓴다 */
-    if(builddoor) builddoor.hidden = !(top==="mmo" && sub==="build");
+    /* 1-1 의 나가는 문은 2026-10-27 에 씬 왼쪽 아래(#p-build 안)로 내려가 판과 함께 숨는다 — 여기서 따로 끄지 않는다 */
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");

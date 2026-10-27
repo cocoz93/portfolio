@@ -16,7 +16,6 @@
 .op-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px;align-items:start;container-type:inline-size;container-name:op-layout}
 .op-workspace{min-width:0}
 .op-index{position:sticky;top:16px;display:flex;flex-direction:column;gap:7px}
-#builddoor[hidden]{display:none}
 .op-index button{position:relative;display:flex;align-items:center;gap:10px;text-align:left;
   padding:14px 15px;border:1px solid var(--line2);border-radius:11px;background:var(--sunk);
   color:#8f9fb6;font-family:var(--sans);font-size:1rem;font-weight:700;line-height:1.4;cursor:pointer}

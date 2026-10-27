@@ -4,20 +4,8 @@
 /* ═══ 탭 줄 ═══ */
 
 /* ═══ 하위탭 ═══ */
-/* 소탭 줄 오른쪽 끝의 나가는 문(mmo.src.html 의 .subdoor) — 2-1·2-2·2-3 판 아래에 각각 있던
-   문 셋을 합친 자리다. 셋 다 같은 노션 페이지로 갔고, 2-1 은 첫 화면 밖이라 스크롤해야 닿았다.
-   크기·색은 1-1 구역 버튼(.zb: 1.02rem / --dim)과 같은 값으로 둔다 — 같은 줄의 같은 자리에
-   서는 것이라 다른 값을 쓰면 층이 하나 더 있는 것처럼 읽힌다.
-   바닥선도 탭과 같이 쓴다(투명 테두리 2px + 아래 여백 6). */
-.subdoor{margin-left:auto; display:flex; align-items:center; gap:8px; text-decoration:none;
-  font-family:var(--sans); font-size:1.02rem; font-weight:600; color:#8fa3c1;
-  padding:0 1px 6px; border-bottom:2px solid transparent; transition:color .15s}
-.subdoor:hover{color:var(--ink)}
-
-.subdoor em{font-style:normal; font-size:.82rem; font-weight:700; letter-spacing:.04em; color:var(--net)}
-@media(max-width:900px){ .subdoor{font-size:.82rem; gap:6px} }
-/* 760 이하에서는 .subtabs 가 줄을 접는다(common.css) — 문은 접힌 둘째 줄 오른쪽 끝에 선다 */
-@media(max-width:760px){ .subdoor{font-size:.78rem; padding-top:4px} }
+/* 소탭 줄 오른쪽 끝의 나가는 문(.subdoor)은 2026-10-27 에 걷었다 — 1-1 의 문은 씬 왼쪽 아래
+   '다시 재생' 옆(common.css .stage-door)으로 내려갔고, 이 줄 끝을 쓰던 다른 문은 남아 있지 않다. */
 
  .cl-pane.act{display:block}
 

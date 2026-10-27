@@ -17,7 +17,9 @@
   info.forEach(function(o){ o.el.style.animationDelay=Math.round((o.f-fmin)/range*SPAN)+"ms"; });
   const replay=document.createElement("button");
   replay.type="button"; replay.className="stage-replay"; replay.textContent="↻ 다시 재생";
-  stage.appendChild(replay);
+  /* 씬 왼쪽 아래 버튼 줄(panel-build.html .stage-ctl) 맨 앞 — 나가는 문이 그 오른쪽에 선다 */
+  const ctl=stage.querySelector(".stage-ctl");
+  if(ctl) ctl.insertBefore(replay, ctl.firstChild); else stage.appendChild(replay);
   /* 웨이브가 완전히 끝나는 시점 = 맨 뒤 요소의 지연(SPAN) + 요소 하나의 애니 길이(160ms = CSS 의 scenePop).
      +100 은 마지막 칸이 자리를 잡은 걸 눈이 확인하는 짬 — 데이터는 그 뒤에 흐른다.
      이 짬은 속도를 올려도 그대로 둔다: 애니가 아니라 '눈이 따라잡는 시간' 이라 배속 대상이 아니다. */
