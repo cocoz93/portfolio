@@ -1,5 +1,6 @@
 (function(){
-  /* 탭은 2단이다: 상위(mmo·mo·misc) 아래 mmo 만 하위(build·bneck·optimization·content)를 갖는다.
+  /* 탭은 2단이다: 상위(mmo·mo·misc) 아래 mmo 만 하위(build·bneck·content)를 갖는다.
+     (옛 하위 optimization(1-3 핵심 최적화)은 2026-10-27 에 1-2 아래로 내렸다 — p-optimization 은 bneck 과 같이 보인다.)
      한때 상위 탭 'dummy'(클라이언트)와 그 아래 2-1~2-3 하위 줄이 따로 있었다. 지금은 2-1 실행 화면
      녹화(p-crender)만 남아 1-1 구조도 아래에 같이 보인다.
      패널은 전부 그대로 형제로 두고 보이기만 두 값의 조합으로 정한다 —
@@ -48,7 +49,7 @@
   let booted=false;
   function syncHash(){
     if(!booted) return;
-    const h = (top==="mmo")   ? (sub==="build" ? "" : sub==="optimization"&&window.__optimizationHash ? window.__optimizationHash() : sub)
+    const h = (top==="mmo")   ? (sub==="build" ? "" : sub)
             :                   top;
     history.replaceState(null, "", h ? "#"+h : location.pathname+location.search);
   }
@@ -74,12 +75,12 @@
     alignSub();   /* 활성 탭이 방금 바뀌었으니 하위 줄 들여쓰기도 그 탭에 맞춘다 */
     document.getElementById("p-build").hidden = !(top==="mmo" && sub==="build");
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
-    document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="optimization");
+    document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 아래 */
     document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="build");   /* 1-1 구조도 아래 */
     document.getElementById("p-content").hidden = !(top==="mmo" && sub==="content");
     document.getElementById("p-mo").hidden    = (top!=="mo");
     document.getElementById("p-misc").hidden  = (top!=="misc");
-    if(window.__optimizationVisibility)window.__optimizationVisibility(top==="mmo"&&sub==="optimization");
+    if(window.__optimizationVisibility)window.__optimizationVisibility(top==="mmo"&&sub==="bneck");
     /* 구조도 화면으로 올 때마다 구역 강조는 전체로 — 켜 둔 구역을 들고 다니지 않는다 */
     if(top==="mmo" && sub==="build" && window.resetZone) window.resetZone();
     /* 이 화면으로 (다시) 들어올 때는 첫 로드와 똑같이 '구조가 먼저 서고 데이터가 흐른다' 를 다시 보여준다.
@@ -105,9 +106,10 @@
   subs.forEach(function(t){ t.addEventListener("click",function(){ top="mmo"; sub=t.getAttribute("data-sub"); paint(); }); });
   /* 해시 딥링크 — #bneck 은 하위 탭이라 상위까지 같이 열어 준다 */
   const h0=(location.hash||"").replace("#","");
-  let toRender=false;
+  let toRender=false, toOpt=false;
   if(h0==="bneck"||h0==="build"||h0==="content"){ top="mmo"; sub=h0; }
-  else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="optimization"; }
+  /* 옛 1-3 주소(#optimization · #optimization-<그림>)는 1-2 를 열고 핵심 최적화 판까지 내려 준다 */
+  else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="bneck"; toOpt=true; }
   else if(h0==="mo"||h0==="misc"){ top=h0; }
   /* 옛 클라이언트 탭 주소(#dummy · #crender · #csafe · #cload · #cenv)는 노션 등에 걸려 있을 수 있어
      전부 1-1 로 열고 실행 화면 녹화(구조도 아래)까지 내려 준다. #csafe·#cload·#cenv 는 뺀 자리였다 */
@@ -116,6 +118,8 @@
   /* 글꼴·그림이 다 얹힌 뒤에 내려야 자리가 안 어긋난다 */
   if(toRender) addEventListener("load", function(){
     document.getElementById("p-crender").scrollIntoView({block:"start"}); });
+  if(toOpt) addEventListener("load", function(){
+    document.getElementById("p-optimization").scrollIntoView({block:"start"}); });
   booted=true;   /* 여기서부터는 사람이 탭을 누른 것이므로 주소를 따라가게 한다 */
 
 })();

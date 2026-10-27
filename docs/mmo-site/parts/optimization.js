@@ -138,7 +138,8 @@
   window.__optimizationHash=hash;
   window.__optimizationVisibility=function(visible){if(visible){paint();load();}else pause();};
   window.__optimizationForExperiment=function(experiment){return figures.find(f=>f.experiment===experiment);};
-  window.__optimizationShow=function(id){select(id);const tab=document.querySelector('.subtab[data-sub="optimization"]');if(tab)tab.click();window.scrollTo({top:0,behavior:"auto"});};
+  /* 1-2 카드의 「원리 보기」 — 이 판은 1-2 바로 아래라 탭을 바꾸지 않고 내려오기만 한다(2026-10-27 탭에서 내림) */
+  window.__optimizationShow=function(id){select(id);panel.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});};
   document.addEventListener("click",function(event){
     const link=event.target.closest&&event.target.closest("#bn-principle");if(!link||!link.dataset.optimization)return;
     if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
