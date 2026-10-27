@@ -37,16 +37,14 @@
    핵심 최적화 판 다음에 선다. 거쳐 온 자리: 1-1 구조도 아래(첫 화면 밖이라 안 보이고, 보이면 초록 게임
    화면이 구조도보다 먼저 눈에 걸렸다) → 1-3 탭(탭이 늘어 기각) → 컨텐츠 탭(인벤토리·맵 이동 소개와 결이 달라 기각).
    위 핵심 최적화 판과 같은 띠 · 같은 왼쪽 끝 · 같은 제목 자리를 쓴다(optimization.css #p-optimization).
-   액자는 1180 으로 묶는다 — 세 컷의 크기 차이(웹 크게 · 콘솔과 5,000명 작게)는 중요도대로 정한 것이라
-   골격은 그대로 두고 판만 줄인다. 1160 아래로 줄이면 '② 콘솔 클라이언트 더미 1,000명' 이 두 줄로 접힌다(실측).
-   대가는 ② 콘솔 글자다 — 위 1700 주석의 '1400 이 하한' 보다 좁아 문자판이 더 뭉개진다. */
-#p-crender{margin:44px 32px 0 44px; max-width:none; padding-bottom:44px; background:#121a2b;
+   액자는 판 폭을 다 쓴다(2026-10-27) — 한때 1180 으로 묶었는데, 위 지도·핵심 최적화 판은 오른쪽 끝까지
+   차는데 이 판만 1180 에서 끝나 1920 창에서 오른쪽 약 600px 이 비었다. 세 판의 끝선을 지도(30~1890)에 맞췄다.
+   대가는 높이다 — 1920 창에서 액자가 645 → 951px(1440 창 744px). 대신 ② 콘솔 문자판이 넓어져 덜 뭉개진다.
+   (1160 아래로 줄이면 '② 콘솔 클라이언트 더미 1,000명' 이 두 줄로 접힌다 — 좁힐 일이 생기면 이 값이 하한) */
+#p-crender{margin:44px 0 0; max-width:none; padding-bottom:44px; background:#121a2b;
   box-shadow:0 0 0 100vmax #121a2b; clip-path:inset(0 -100vmax); border-top:1px solid var(--line)}
-#p-crender .cr-frame, #p-crender .cr-footclip{max-width:1180px}
 #p-crender .cr-title{margin:0 0 22px; padding-top:56px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
-/* 위 판이 바깥 여백을 걷는 폭(optimization.css 1660)과 같이 걷는다 — 다르면 두 판 제목의 왼쪽 끝이 44px 어긋난다 */
-@media (max-width:1660px){ #p-crender{margin-inline:0} }
 @media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:28px} }
 
 /* ═══ 계기판 ═══ */
