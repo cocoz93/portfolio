@@ -32,6 +32,13 @@
    ※ 위 탭 줄과 왼쪽 끝이 안 맞는 것은 그대로 둔다. 지금도 안 맞고(하위탭이 안쪽으로
       225px 들어와 있다) 어색하지 않았다 — 좁히면 그 간격이 135px 로 오히려 줄어든다. */
 #p-crender{max-width:1700px; margin-inline:auto}
+/* ── 위 구조도와 나누는 자리: 바탕을 한 단 밝게 화면 끝까지 깐다(2026-10-27) ──
+   가로선 한 줄로는 두 판이 이어져 보였다. 시안 넷(가로선 · 제목이 선을 끈다 · 띠 + 파란 막대 ·
+   선 + 파란 머리) 중 띠를 골랐다. 판 폭(1700)은 그대로 두고 띠만 그림자로 양옆 끝까지 편다 —
+   그림자는 스크롤 폭을 안 늘리고, clip-path 로 위아래만 판 높이에 자른다.
+   1-2 아래 핵심 최적화 판(optimization.css #p-optimization)이 같은 값을 쓴다. */
+#p-crender{margin-top:44px; padding-bottom:44px; background:#121a2b; box-shadow:0 0 0 100vmax #121a2b;
+  clip-path:inset(0 -100vmax); border-top:1px solid var(--line)}
 
 /* ═══ 계기판 ═══ */
 .cl-dash{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 10px}
@@ -274,6 +281,8 @@
    카드 안여백도 같아서 성립한다(한때 2-2 만 40.3px 이었다: 제목이 카드 안 그림 위에 얹혀
    무대 폭을 따라 움직였다). */
 .cr-title{margin:0 0 26px 28px; padding-top:36.6px}
+/* 제목 위 짧은 파란 막대 — 띠와 같이 '여기서 새 판' 을 말한다(위 #p-crender 띠 주석) */
+.cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
 /* ═══ 카드 — 세 하위탭이 같은 판을 쓴다 ═══
    한때 2-1 만 '액자'(그라데이션 · 그림자 · 모서리 18 · 안여백 16)였고 2-2·2-3 은 기본 카드
    (단색 · 그림자 없음 · 모서리 12 · 안여백 12/14)였다. 탭을 누르면 판의 생김새가 통째로
