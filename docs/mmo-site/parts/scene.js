@@ -2181,6 +2181,7 @@ window.__flowReset=function(){
       setFlat(1);
       fillCard();
       if(bnCard) bnCard.classList.add("on");   /* 0.35s 페이드는 남긴다 — 없으면 판이 뚝 나타난다 */
+      if(window.bneckRing) bneckRing();         /* 고리도 페이드와 함께 다시 칠한다 — 다른 탭에서 건너와도 같은 움직임 */
       return;
     }
     /* 애니는 걸되 시계는 세워 둔다 — 지금 이 프레임이 패널을 처음 배치하고 그리는 비싼 프레임이다.
@@ -2199,7 +2200,9 @@ window.__flowReset=function(){
          한 박자로 1.34s 에 다 하면 그 프레임이 평면화·핀 드랍과 겹쳐 전환 한복판이 통째로 밀린다.
          반대로 진입 프레임에 몰아넣어도 안 된다 — 거기는 이미 도형 950개를 처음 그리는 프레임이다. */
       bnFill=setTimeout(function(){ fillCard(); }, RMB?0:300);
-      bnOpen=setTimeout(function(){ if(bnCard) bnCard.classList.add("on"); }, RMB?0:1340);
+      /* ※ 2026-10-29 켜는 순간 고리를 다시 칠한다(bneck.js bneckRing) — 투명한 동안 이미 끝나 있어 아무도 못 봤다.
+           판 틀과 동접 막대는 0.30s 짓기 때부터 보인다(bneck.css '들어올 때'). */
+      bnOpen=setTimeout(function(){ if(bnCard) bnCard.classList.add("on"); if(window.bneckRing) bneckRing(); }, RMB?0:1340);
       /* 끝나면 클래스를 뗀다 — 그래야 핀 펄스(무한 반복)가 이 시점부터 처음 주기로 시작한다 */
       bnTimer=setTimeout(function(){ stage.classList.remove("bn-enter"); },BN_TOTAL);
     }); });

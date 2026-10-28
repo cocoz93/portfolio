@@ -56,9 +56,11 @@
    ※ 2026-10-26 판이 '한 장 + 넘기기' 로 바뀐 뒤로는 두 칸일 때 bneck.js(fit)가 판 높이를 지도에
      맞춰 박는다 — 남는 높이는 고리가 먹으므로 위 '빈 상자' 문제가 안 생긴다. 쌓였을 때만 제 내용 높이다.
    안 여백·테두리는 시안 그대로(20 24 16 · --line2). 그림자는 뺐다 — 판이 지도 위에 떠 있지 않고
-   지도 옆에 나란히 서는 칸이라 띄울 이유가 없다. */
+   지도 옆에 나란히 서는 칸이라 띄울 이유가 없다.
+   ※ 2026-10-29 바탕도 페이지 배경(--bg)으로 — 한 단 밝은 --panel 판이 지도 옆에 따로 놓인 상자로 보였다.
+     테두리만 남겨 지도와 한 화면으로 잇는다. */
 .bncard{ position:relative; width:auto; min-width:0; max-width:none; align-self:start;
-  padding:20px 24px 16px; border-color:var(--line2); box-shadow:none; font-family:var(--sans) }
+  padding:20px 24px 16px; background:var(--bg); border-color:var(--line2); box-shadow:none; font-family:var(--sans) }
 /* ── 고른 실험 한 장 ──
    위(.bx-mid)는 남는 높이를 다 먹고, 아래 넘기는 장치(.bx-foot)는 바닥에 붙는다.
    고리 크기는 bneck.js(fit)가 가운데 칸 높이에서 정한다 — 여기서 못 박지 않는다.
@@ -69,6 +71,10 @@
 /* 판 안에서 hidden 은 늘 이긴다 — 아래 규칙들이 display 를 주는 칸(.bx-ba 등)도 숨겨져야 한다 */
 #bnc-b [hidden]{ display:none }
 .bx-mid{ flex:1 1 auto; min-height:0; display:flex; flex-direction:column; justify-content:center }
+/* 글 묶음을 한가운데보다 조금 위(남는 높이 4 : 6)에 — 정가운데면 아래 넘기는 장치와 붙어 보이고
+   위가 비어 보였다(2026-10-28 · 1920 위 145 · 아래 134px). 넘칠 때는 둘 다 0 이 되어 예전과 같다. */
+.bx-mid::before{ content:""; flex:2 1 0 }
+.bx-mid::after{ content:""; flex:3 1 0 }
 .bx-hero{ display:flex; align-items:center; gap:34px }
 .bx-rw{ flex:none }
 .bx-rw svg{ display:block }
@@ -122,23 +128,37 @@
   .bx-nums button{ height:26px; font-size:.68rem }
 }
 
-/* ── 넘기는 장치: 이전·다음 → 동접 막대 → 번호 ── */
+/* ── 넘기는 장치: 이전·다음 → 동접 막대 → 번호 ──
+   ※ 2026-10-28 셋 다 키웠다(단추 48 → 66 · 막대 28 → 56 · 번호 28 → 38px). 1920 에서 판 가운데가
+     글 묶음보다 250px 남게 비어 장치가 바닥에 작게 깔린 것처럼 보였고, 막대는 28px 라 동접 차이가
+     한눈에 안 갈렸다. 늘어난 높이는 고리 칸이 내준다 — 좁은 폭은 그 여유가 36px 뿐이라 아래 분기에서 덜 키운다. */
 .bx-foot{ flex:none; margin-top:10px }
 /* 이전·다음은 화살표만이 아니라 이름을 단다 — 누르기 전에 어디로 가는지 보인다 */
-.bx-pg{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
-.bx-pg button{ all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:center; gap:12px; min-width:0;
-  padding:8px 14px; border:1px solid #2b3648; border-radius:10px; background:#131c2e; transition:border-color .15s, background .15s }
-.bx-pg button:hover{ border-color:var(--net); background:#16223a }
+.bx-pg{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+.bx-pg button{ all:unset; box-sizing:border-box; cursor:pointer; display:flex; align-items:stretch; min-width:0; overflow:hidden;
+  border:1px solid #2b3648; border-radius:12px; background:#131c2e; transition:border-color .15s, background .15s }
+.bx-pg button:not(:disabled):hover{ border-color:var(--net); background:#16223a }
 .bx-pg button:focus-visible{ outline:2px solid var(--net); outline-offset:2px }
 .bx-pg button.n{ justify-content:flex-end; text-align:right }
-.bx-pg .w{ min-width:0 }
-.bx-pg .k{ display:block; font-size:.68rem; font-weight:700; color:#66748c }
-.bx-pg .t{ display:block; margin-top:1px; font-size:.92rem; font-weight:800; color:#e8eefb; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
-.bx-pg svg{ flex:none; color:#8f9fb6 }
-.bx-pg button:hover svg{ color:var(--net) }
+.bx-pg .w{ flex:1 1 auto; min-width:0; align-self:center; padding:13px 18px }
+.bx-pg .k{ display:block; font-size:.76rem; font-weight:700; color:#66748c }
+.bx-pg .t{ display:block; margin-top:2px; font-size:1.05rem; font-weight:800; color:#e8eefb; white-space:nowrap; overflow:hidden; text-overflow:ellipsis }
+/* 화살표 크기는 여기서 — bneck.js 의 width/height 16 은 CSS 가 덮는다
+   ※ 2026-10-28 「< > 가 더 눈에 띄었으면」 — 회색 꺾쇠만으로는 단추가 아니라 글 한 줄처럼 읽혔다.
+     꺾쇠를 파란 동그라미 안에 넣는다(svg 자체에 안 여백 · 바탕 — 마크업은 그대로). 높이는 글 두 줄(37px)
+     안이라 단추 키가 안 는다. 누르면 갈 쪽으로 3px 밀린다.
+   ※ 2026-10-29 동그라미 → 화살표 칸(시안 다섯 중 E). 단추 바깥 끝의 세로 칸 하나를 화살표가 통째로 먹는다
+     — 누를 자리가 칸으로 갈려 보인다. 칸 폭은 svg 폭, 꺾쇠 크기는 좌우 안 여백이 정한다(높이는 단추 키를 따른다).
+     좁은 폭에서 칸·글 여백을 같이 줄인다 — 56px 그대로면 1366 에서 실험 이름이 '…' 로 잘렸다. */
+.bx-pg svg{ flex:none; box-sizing:border-box; width:56px; height:auto; padding:0 18px;
+  background:rgba(108,199,255,.12); color:var(--net); transition:background .15s, color .15s }
+.bx-pg button.p svg{ box-shadow:inset -1px 0 0 #2b3648 }
+.bx-pg button.n svg{ box-shadow:inset 1px 0 0 #2b3648 }
+.bx-pg button:not(:disabled):hover svg{ background:var(--net); color:#0d1220 }
 /* 막대 높이 = 그 실험의 동접(--h 는 가장 높은 실험 대비 비율 · bneck.js). 빈 막대 = 기각.
-   번호 줄과 같은 열여섯 칸 · 같은 틈(4px)이라 막대가 제 번호 바로 위에 선다. */
-.bx-strip{ --sh:28px; position:relative; height:var(--sh); margin-top:24px;
+   번호 줄과 같은 열여섯 칸 · 같은 틈(4px)이라 막대가 제 번호 바로 위에 선다.
+   위 틈(margin-top)은 가장 높은 막대 위에 서는 꼬리표('동접 N') 자리까지 센 값이다. */
+.bx-strip{ --sh:56px; position:relative; height:var(--sh); margin-top:30px;
   display:grid; grid-template-columns:repeat(16,1fr); gap:4px; align-items:end }
 .bx-strip i{ display:block; height:calc(5px + (var(--sh) - 5px) * var(--h,0)); border-radius:2px 2px 0 0;
   background:#2b3648; cursor:pointer; transition:background .15s }
@@ -148,13 +168,61 @@
 .bx-tag{ position:absolute; bottom:calc(10px + (var(--sh) - 5px) * var(--h,0)); white-space:nowrap; pointer-events:none;
   font-size:.74rem; font-weight:700; line-height:1; color:#8f9fb6 }
 .bx-tag b{ font-family:var(--mono); font-weight:700; color:#fff }
-.bx-nums{ margin-top:4px; display:grid; grid-template-columns:repeat(16,1fr); gap:4px }
-.bx-nums button{ all:unset; box-sizing:border-box; cursor:pointer; height:28px; display:grid; place-items:center; border-radius:6px;
-  border:1px solid #2b3648; background:#131c2e; font:700 .78rem var(--mono); color:#8f9fb6;
+.bx-nums{ margin-top:5px; display:grid; grid-template-columns:repeat(16,1fr); gap:4px }
+.bx-nums button{ all:unset; box-sizing:border-box; cursor:pointer; height:38px; display:grid; place-items:center; border-radius:7px;
+  border:1px solid #2b3648; background:#131c2e; font:700 .88rem var(--mono); color:#8f9fb6;
   transition:border-color .15s, color .15s, background .15s }
 .bx-nums button:hover{ border-color:var(--net); color:#fff }
 .bx-nums button.on{ border-color:var(--net); background:#16304d; color:#fff }
 .bx-nums button:focus-visible{ outline:2px solid var(--net); outline-offset:1px }
+/* 처음·끝에서 갈 곳 없는 쪽(bneck.js paintNav) — 머리글 '현재' + 지금 실험 이름. 이름은 그대로 두고
+   화살표 칸·테두리만 흐려 누를 수 없다는 것을 말한다 */
+.bx-pg button:disabled{ cursor:default; border-color:#1f2838; background:transparent }
+.bx-pg button:disabled svg{ background:transparent; color:#3d4b64; box-shadow:none }
+
+/* ── 들어올 때 (1-1 → 1-2 전환 · scene.js 가 붙이는 .bn-enter 동안) ──
+   ※ 2026-10-29 「왼쪽은 움직이는데 오른쪽은 몇 초 비어 있다가 갑자기 생긴다」 — 판이 1.34s 까지 통째로
+     투명했다(common.css .bncard). 시안 넷 중 「틀 먼저」:
+       0.30s 짓기  판 틀이 서고 동접 막대가 왼쪽부터 솟는다 — 지도가 펴지는 동안 오른쪽도 움직인다
+       1.34s 켜기  핀이 꽂힐 때 고리·이름·설명이 차례로 들어오고 단추·번호가 뒤따른다(고리 다시 칠하기 = bneck.js bneckRing)
+     틀을 0.30s 부터 보여도 그리기는 늘지 않는다 — 그때 이미 배치하고 레이어로 굽던 판이다.
+     애니는 전부 투명도·변형(transform)뿐이고, 가장 늦은 것(0.5+0.3s)도 BN_TOTAL(2.26s) 전에 끝난다
+     — .bn-enter 가 떨어지는 순간 걸려 있던 애니가 끊기지 않게. */
+.bn-stage.bn-enter .bncard{ opacity:1; transition:none }
+.bn-stage.bn-enter .bncard:not(.on) :is(.bx-mid,.bx-pg,.bx-nums,.bx-tag){ opacity:0 }
+@keyframes bxRise{ from{ transform:scaleY(0) } }
+@keyframes bxUp{ from{ opacity:0; transform:translateY(18px) } }
+@keyframes bxZoom{ from{ opacity:0; transform:scale(.85) } }
+@keyframes bxFade{ from{ opacity:0 } }
+.bn-stage.bn-enter .bx-strip i{ transform-origin:50% 100%; animation:bxRise .45s calc(150ms + var(--bd,0ms)) cubic-bezier(.2,.8,.3,1) both }
+.bn-stage.bn-enter .bncard.on .bx-rw{ animation:bxZoom .5s cubic-bezier(.2,.7,.3,1) both }
+.bn-stage.bn-enter .bncard.on .bx-tx>*{ animation:bxUp .45s cubic-bezier(.2,.7,.3,1) both }
+.bn-stage.bn-enter .bncard.on .bx-nm{ animation-delay:70ms }
+.bn-stage.bn-enter .bncard.on :is(.bx-kl,.bx-big){ animation-delay:160ms }
+.bn-stage.bn-enter .bncard.on :is(.bx-ba,.bx-sub){ animation-delay:210ms }
+.bn-stage.bn-enter .bncard.on .bx-m{ animation-delay:290ms }
+.bn-stage.bn-enter .bncard.on .bx-out{ animation-delay:350ms }
+.bn-stage.bn-enter .bncard.on :is(.bx-pg,.bx-nums){ animation:bxFade .4s .4s both }
+.bn-stage.bn-enter .bncard.on .bx-tag{ animation:bxFade .3s .5s both }
+/* 좁은 폭은 덜 키운다 — 1366 에서 글 묶음과 가운데 칸 사이 여유가 36px 뿐이다(넘치면 판이 지도보다 길어진다).
+   이 분기는 위 기본 규칙 **뒤**에 있어야 한다 — 특이도가 같아 앞에 두면 기본 규칙이 이긴다
+   (위 560 분기의 .bx-pg .t · .bx-nums 두 줄이 그래서 그동안 안 먹고 있었다 — 여기 휴대폰 분기가 대신 맡는다). */
+@media (max-width:1560px) and (min-width:901px){
+  .bx-pg .w{ padding:10px 12px } .bx-pg .t{ font-size:.98rem } .bx-pg svg{ width:44px; padding:0 13px }
+  .bx-strip{ --sh:42px; margin-top:26px }
+  .bx-nums button{ height:32px; font-size:.8rem }
+}
+/* 1100 아래 두 칸은 이미 글이 지도보다 키가 커서 판이 70~90px 길다 — 장치는 거의 예전 크기로 둔다 */
+@media (max-width:1100px) and (min-width:901px){
+  .bx-pg .w{ padding:8px 10px } .bx-pg .t{ font-size:.92rem } .bx-pg svg{ width:38px; padding:0 11px }
+  .bx-strip{ --sh:34px; margin-top:24px }
+  .bx-nums button{ height:28px; font-size:.78rem }
+}
+@media (max-width:560px){
+  .bx-pg .w{ padding:9px 10px } .bx-pg .t{ font-size:.86rem } .bx-pg svg{ width:36px; padding:0 10px }
+  .bx-strip{ --sh:36px; margin-top:24px }
+  .bx-nums button{ height:30px; font-size:.72rem }
+}
 
 /* ── 노션 원문으로 나가는 문 ──
    한때 카드 열두 장이 저마다 ↗ 를 하나씩 달고 있었다. 같은 기호가 열두 번 반복돼 훑을 때마다

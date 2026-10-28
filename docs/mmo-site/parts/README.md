@@ -27,7 +27,8 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
 1. **조각 순서** — 셸이 들고 있다. `__scenePlay` 가 아직 없을 때 웨이브가 스스로 재생하는 식의
    순서 의존이 있어서, 마커 순서를 바꾸면 첫 로드 애니가 조용히 깨진다.
 2. **window 훅** — `__flowStart` `__flowStop` `__flowReset` `__scenePlay` `__zoneTourArm`
-   `resetZone` `playBneckIntro` `__EXPS` `__PINS` `__crenderPlay`.
+   `resetZone` `playBneckIntro` `__EXPS` `__PINS` `__crenderPlay` `bneckRing`.
+   (`bneckRing` 은 2026-10-29 — bneck.js 가 내놓고 scene.js 가 판을 켤 때 불러 고리를 다시 칠한다.)
    이름·인자를 바꾸려면 단독 작업으로.
    (`__bnPickLoc` 은 2026-08-04 에 없앴다 — 핀에서 클릭을 걷어내면서 부를 곳이 사라졌다.)
 3. **DOM id** — `#p-build` `#p-bneck` `#p-optimization` `#p-crender` `#p-content` `#p-mo` `#p-misc` `#scene`

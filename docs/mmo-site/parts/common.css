@@ -417,6 +417,7 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
        고치기 전 2.00회/전환 (카메라 구간 31 · 핀+패널 구간 49)
        고친 뒤   1.25회/전환 (카메라 구간 25 · 핀+패널 구간 25)
      투명한 동안 클릭을 먹지 않게 pointer-events 도 같이 잠근다 — 지도 오른쪽을 덮고 있어서다. */
+  /* ※ 2026-10-29 병목 판(#bncard)은 진입 동안 틀을 0.30s 부터 보인다 — 글만 1.34s 까지 감춘다(bneck.css '들어올 때') */
   opacity:0; pointer-events:none; transition:opacity .35s ease}
 .bncard.on{opacity:1; pointer-events:auto}
 .bncard[hidden]{display:none}

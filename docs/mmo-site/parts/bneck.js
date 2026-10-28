@@ -122,6 +122,7 @@ EXPS.forEach(function(e,i){
   c.setAttribute("data-i",i); c.className=e.st==="rj"?"rj":"";
   c.title=e.no+" · "+e.n+" · 동접 "+ccuOf(e).toLocaleString("ko-KR");
   c.style.setProperty("--h",(ccuOf(e)/CMAX).toFixed(3));
+  c.style.setProperty("--bd",(i*45)+"ms");   /* 들어올 때 왼쪽부터 차례로 솟는 지연(bneck.css .bn-enter) */
   P.strip.appendChild(c);
 });
 var BARS=P.strip.querySelectorAll("i"), NUMS=P.nums.querySelectorAll("button");
@@ -152,13 +153,16 @@ function paintCard(it,fresh){
   }
 }
 /* 처음과 끝에서는 돌아가지 않는다 — 1번의 '이전' 에 16번이 서면 순서가 있는 목록이 고리처럼 읽힌다.
-   그 쪽 단추는 자리만 남기고 비운다(visibility) — 지우면 남은 단추가 두 칸을 다 먹어 폭이 출렁인다. */
+   그 쪽 단추는 지우지 않고 흐리게 잠근다(disabled) — 지우면 남은 단추가 두 칸을 다 먹어 폭이 출렁인다.
+   ※ 2026-10-29 전에는 자리만 남기고 비웠다(visibility). 1번 장에서 왼쪽 칸이 통째로 비어
+     '이전' 이 있다는 것 자체가 안 보였다. 잠긴 쪽은 머리글을 '현재' 로 바꾸고 지금 실험 이름을 단다
+     — 갈 곳 대신 '지금 여기' 를 말해 처음·끝이 읽힌다. */
 function paintNav(it){
   var i=EXPS.indexOf(it), pv=EXPS[i-1], nx=EXPS[i+1];
   var bp=$(".p",P.pg), bn=$(".n",P.pg);
-  bp.style.visibility=pv?"":"hidden"; bn.style.visibility=nx?"":"hidden";
-  $(".t",bp).textContent=pv?pv.no+". "+pv.n:"";
-  $(".t",bn).textContent=nx?nx.no+". "+nx.n:"";
+  bp.disabled=!pv; bn.disabled=!nx;
+  $(".k",bp).textContent=pv?"이전":"현재"; $(".t",bp).textContent=(pv||it).no+". "+(pv||it).n;
+  $(".k",bn).textContent=nx?"다음":"현재"; $(".t",bn).textContent=(nx||it).no+". "+(nx||it).n;
   [].forEach.call(NUMS,function(b,k){ b.classList.toggle("on",k===i); b.setAttribute("aria-pressed",k===i?"true":"false"); });
   [].forEach.call(BARS,function(c,k){
     var on=k===i, rj=EXPS[k].st==="rj";
@@ -363,6 +367,19 @@ function show(it){
   fit();
 }
 function go(d){ var j=EXPS.indexOf(cur)+d; if(j>=0&&j<EXPS.length) show(EXPS[j]); }
+/* 진입 애니(scene.js)가 판을 켜는 순간 부른다 — 판이 투명한 동안 고리 칠하기·숫자 세기가 이미 끝나 버려서
+   아무도 못 봤다(2026-10-29). 고리를 새로 지어 칠하기 전으로 되돌리고 다시 칠한다.
+   새로 짓는 것은 토막 마흔여 개뿐이라 켜는 프레임에 얹어도 된다 — 짓기를 0.30s 로 미뤄 둔 판 전체(≈950개)와 다르다.
+   (0.30s 에 미리 되돌려 두면 안 된다 — 첫 로드의 400ms 재적용(아래 맨 끝)이 그 사이에 다시 칠해 버린다.)
+   고리 크기는 옛 고리에서 그대로 옮긴다 — fit() 이 svg 에 직접 박는 값이라 새로 지으면 빠져서 고리가 사라진다.
+   fit() 을 다시 부르지 않는 것은 그게 배치를 읽어 켜는 프레임을 무겁게 하기 때문이다(판 크기는 그새 안 바뀐다). */
+window.bneckRing=function(){
+  var M=cur&&cur.km; if(!M) return;
+  var old=$("svg",P.rw), S=old&&old.style.width;
+  P.rw.innerHTML=ring(M);
+  var sv=$("svg",P.rw); if(S) sv.style.width=sv.style.height=S;
+  play(sv,M,!RM);
+};
 
 body.addEventListener("click", function(e){
   var t=e.target.closest&&e.target.closest("button[data-d], .bx-nums button, .bx-strip i");
