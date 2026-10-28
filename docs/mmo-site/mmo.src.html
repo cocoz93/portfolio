@@ -64,6 +64,12 @@
     </div>
     <!-- 이 줄 오른쪽 끝에 있던 나가는 문(#builddoor)은 2026-10-27 에 씬 왼쪽 아래 '다시 재생' 옆으로
          내렸다(panel-build.html .stage-ctl) — 줄 끝 글자는 탭 줄의 일부로 보여 찾기 어려웠다. -->
+    <!-- 맨 위로(2026-10-28) — 1-2 에서 이 줄이 화면 위에 붙어 있을 때만 보인다(common.css .subtop · tabs.js).
+         파란 호 = 페이지를 얼마나 내려왔는지. 둘레 106.8 = 2π×17 — tabs.js 가 같은 값으로 호를 채운다. -->
+    <button type="button" class="subtop" aria-label="맨 위로"><svg viewBox="0 0 40 40" width="40" height="40" aria-hidden="true">
+      <circle cx="20" cy="20" r="17" class="subtop-bg"/>
+      <circle cx="20" cy="20" r="17" class="subtop-arc" stroke-dasharray="106.8" stroke-dashoffset="106.8" transform="rotate(-90 20 20)"/>
+      <path d="M20 26V14M14.5 19.5 20 14l5.5 5.5" class="subtop-ar"/></svg></button>
   </div>
 
 <!--#include panel-build.html -->

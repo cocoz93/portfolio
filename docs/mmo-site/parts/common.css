@@ -157,6 +157,19 @@ body.subdetach .subtabs{padding-left:16px}
   box-shadow:0 0 0 100vmax var(--bg); clip-path:inset(0 -100vmax)}
 .wrap:has(#p-bneck:not([hidden])) .op-index{top:78px}
 html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
+/* 맨 위로 — 붙어 있는 줄의 오른쪽 끝(1-2 에서는 구역 필터가 숨어 그 자리가 빈다).
+   1-2 가 아니면 아예 안 그린다. 1-2 라도 줄이 제자리에 있을 때(맨 위)는 투명 + visibility 로 감춘다 —
+   visibility 를 같이 걸어야 감춘 동안 Tab 키로도 안 잡힌다. .on 은 tabs.js 가 스크롤마다 건다. */
+.subtop{display:none}
+.wrap:has(#p-bneck:not([hidden])) .subtop{display:block; margin-left:auto; align-self:center; padding:0; border:0;
+  background:none; line-height:0; cursor:pointer; opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s}
+.wrap:has(#p-bneck:not([hidden])) .subtop.on{opacity:1; visibility:visible}
+.subtop-bg{fill:rgba(19,26,38,.55); stroke:#26324a; stroke-width:2.5; transition:stroke .15s}
+.subtop-arc{fill:none; stroke:var(--net); stroke-width:2.5; stroke-linecap:round}
+.subtop-ar{fill:none; stroke:#dbe4f2; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+.subtop:hover .subtop-bg{stroke:#3c4a63}
+.subtop:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:50%}
+@media(max-width:680px){ .subtop svg{width:34px; height:34px} }
 
 .panel{margin-top:8px}
 .panel[hidden]{display:none}

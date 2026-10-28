@@ -122,3 +122,28 @@
   booted=true;   /* 여기서부터는 사람이 탭을 누른 것이므로 주소를 따라가게 한다 */
 
 })();
+
+/* 맨 위로(2026-10-28) — 1-2 에서 하위 탭 줄이 화면 위에 붙어 있을 때만 켜고, 파란 호로 내려온 정도를 보인다.
+   '붙어 있다' = 줄의 위끝이 화면 위끝(0)에 닿았고 페이지가 내려가 있다. 1-2 가 아니면 CSS 가 아예 안 그린다.
+   탭을 바꾸면 스크롤 없이 페이지 길이가 바뀌므로 탭 클릭 뒤에도 한 번 다시 잰다. */
+(function(){
+  const btn=document.querySelector(".subtop"), bar=document.getElementById("subtabs");
+  if(!btn||!bar) return;
+  const arc=btn.querySelector(".subtop-arc"), C=106.8;   /* 둘레 = 2π×17 — mmo.src.html 의 dasharray 와 같은 값 */
+  let queued=false;
+  function update(){
+    queued=false;
+    const max=document.documentElement.scrollHeight-innerHeight;
+    const p=max>0 ? Math.min(1, Math.max(0, scrollY/max)) : 0;
+    btn.classList.toggle("on", scrollY>0 && bar.getBoundingClientRect().top<=0.5);
+    if(arc) arc.setAttribute("stroke-dashoffset", (C*(1-p)).toFixed(1));
+  }
+  function req(){ if(!queued){ queued=true; requestAnimationFrame(update); } }
+  addEventListener("scroll", req, {passive:true});
+  addEventListener("resize", req);
+  document.addEventListener("click", function(e){ if(e.target.closest(".tab,.subtab")) setTimeout(req, 0); });
+  btn.addEventListener("click", function(){
+    scrollTo({top:0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+  });
+  update();
+})();
