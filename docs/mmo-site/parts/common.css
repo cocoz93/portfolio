@@ -145,6 +145,19 @@ body.subdetach .subtabs{padding-left:16px}
   .subnav{gap:18px}
   .subtab{font-size:.92rem; gap:7px; padding-bottom:9px; margin-bottom:-10px} }
 
+/* ── 1-2 병목 개선에서만 하위 탭 줄이 화면 위에 붙어 따라온다(2026-10-28) ──
+   1-2 는 병목 지도 → 핵심 최적화 → 결과 판으로 길게 내려가서, 다른 하위 탭으로 가려면 맨 위까지 올라가야 했다.
+   1-1 은 거의 한 화면이라 붙이지 않는다. 상위 탭 줄까지 붙이면 1920 화면의 16% 를 늘 가려서 하위 줄만 붙인다.
+   조건은 tabs.js 가 여닫는 #p-bneck[hidden] 하나로 건다 — 스크립트를 따로 두지 않는다.
+   바탕: 뒤가 비치지 않게 --bg 를 깔고, .wrap 좌우 여백까지 덮도록 그림자로 화면 끝까지 늘린다
+   (#p-optimization 띠와 같은 수법 — 그림자는 가로 스크롤을 만들지 않는다).
+   ※ 핵심 최적화 왼쪽 목차(.op-index)가 원래 top:16px 로 붙어 따라온다 — 이 줄(62px) 밑으로 내린다.
+   ※ scroll-padding — 딥링크·목차가 scrollIntoView 로 판을 화면 위에 세울 때 이 줄 밑으로 세운다. */
+.wrap:has(#p-bneck:not([hidden])) .subtabs{position:sticky; top:0; z-index:40; background:var(--bg);
+  box-shadow:0 0 0 100vmax var(--bg); clip-path:inset(0 -100vmax)}
+.wrap:has(#p-bneck:not([hidden])) .op-index{top:78px}
+html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
+
 .panel{margin-top:8px}
 .panel[hidden]{display:none}
 .panel .lead{color:var(--mut); font-size:.95rem; max-width:74ch; margin:14px 0 14px}
