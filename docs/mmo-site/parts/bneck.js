@@ -187,7 +187,7 @@ function fit(){
           : stacked ? Math.min(220, Math.round(P.hero.clientWidth*.42))
           : Math.max(140, Math.min(240, P.mid.clientHeight-16, Math.round(P.hero.clientWidth*.46)));
     /* 상한 300 → 240 (2026-10-28) — 300 이면 숫자 하나 담는 고리가 이름·수치 글 덩어리(261px)보다 커서
-       눈이 고리에 먼저 갔다. 줄인 만큼 이름·큰 숫자를 한 단계 키워 무게를 글로 옮겼다(bneck.css .bx-nm · .bx-ba b) */
+       눈이 고리에 먼저 갔다. 이름·큰 숫자는 그대로 둔다(같이 키운 판은 어색해 되돌림) */
     /* 판 폭의 46% 로도 묶는다 — 높이로만 정하면 판이 좁은 폭(58 39 · 1440)에서 고리가 295px 로 커져
        글 칸이 178px 로 눌리고 「SO_SNDBUF=0」 처럼 끊을 수 없는 이름이 넘쳤다(2026-10-27 실측) */
     sv.style.width=sv.style.height=S+"px";
