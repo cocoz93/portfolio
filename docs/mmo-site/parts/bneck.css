@@ -75,7 +75,7 @@
 .bx-ring .sg{ transition:stroke .28s ease }
 .bx-tx{ min-width:0 }
 .bx-st{ font-size:.86rem; font-weight:800; margin-bottom:6px }
-.bx-nm{ font-size:2.05rem; font-weight:800; color:#fff; line-height:1.15; letter-spacing:-.01em }
+.bx-nm{ font-size:2.35rem; font-weight:800; color:#fff; line-height:1.15; letter-spacing:-.01em }
 /* 지표 이름은 숫자 위 한 줄 — 「서버 전체 CPU 0.442 → 0.773 코어」 처럼 한 줄에 다 얹으면
    1264 폭에서 오른쪽이 잘렸다(④⑨⑪⑫). 이름을 올리고, 그래도 길면 bneck.js 가 큰 숫자만 줄인다. */
 .bx-kl{ margin-top:14px; font-size:.95rem; font-weight:700; color:#8f9fb6 }
@@ -83,7 +83,7 @@
 .bx-ba s, .bx-ba b{ font-family:var(--sans); font-variant-numeric:tabular-nums; letter-spacing:-.01em }
 .bx-ba s{ font-size:1.3rem; color:#54627d; text-decoration-thickness:1px }
 .bx-ba .ar{ font-size:1.05rem; color:#54627d }
-.bx-ba b{ font-size:3.1rem; font-weight:800; line-height:1; color:#fff }
+.bx-ba b{ font-size:3.5rem; font-weight:800; line-height:1; color:#fff }   /* 이름 2.35 · 숫자 3.5 — 2026-10-28 한 단계씩 키움(고리 상한을 줄인 몫, bneck.js fit) */
 .bx-ba .u{ font-size:1.1rem; font-weight:700; color:#9fb0c8 }
 /* 고리 없는 카드(⑤ 진단 · ⑯ 결론)의 한 줄 결론 — 색은 bneck.js 가 판정에 맞춰 준다 */
 .bx-big{ margin-top:14px; font-size:1.75rem; font-weight:800; line-height:1.25; letter-spacing:-.01em; text-wrap:balance }
