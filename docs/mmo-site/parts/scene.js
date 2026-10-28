@@ -635,7 +635,7 @@ paintLabels();
   function go(){ const b=document.querySelector('.subtab[data-sub="bneck"]'); if(b) b.click(); }
   const t=el("text",{x:(parseFloat(bn.getAttribute("x"))+14).toFixed(1),y:(parseFloat(bn.getAttribute("y"))+17).toFixed(1),
     "font-size":10,"font-weight":"700",fill:"#46b1ff","font-family":"var(--sans)","data-z":bn.getAttribute("data-z"),
-    class:"go-bneck",tabindex:"0",role:"link"},"어떻게 풀었나 → 1-2 병목 개선");
+    class:"go-bneck",tabindex:"0",role:"link"},"어떻게 풀었나 → 병목 개선");   /* 하위 탭 번호를 걷으면서(2026-10-28) '1-2' 도 뺐다 */
   t.addEventListener("click",go); bn.addEventListener("click",go);
   t.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); go(); } });
   t.style.cursor=bn.style.cursor="pointer";
