@@ -71,6 +71,12 @@
       <circle cx="20" cy="20" r="17" class="subtop-arc" stroke-dasharray="106.8" stroke-dashoffset="106.8" transform="rotate(-90 20 20)"/>
       <path d="M20 26V14M14.5 19.5 20 14l5.5 5.5" class="subtop-ar"/></svg></button>
   </div>
+  <!-- 아래로(2026-10-28) — 1-2 첫 화면이 지도·카드로 꽉 차서 아래에 판이 더 있다는 게 안 보였다.
+       화면 아래 가운데에 떠 있다가 맨 밑 결과 판(#p-crender)이 끝까지 보이면 사라진다(common.css .subdown · tabs.js).
+       .subtabs 안에 두지 않는 까닭 — 그 줄의 clip-path 가 fixed 자식까지 잘라 버린다. -->
+  <button type="button" class="subdown" aria-label="아래 판으로"><svg viewBox="0 0 40 40" width="48" height="48" aria-hidden="true">
+    <circle cx="20" cy="20" r="17" class="subdown-bg"/>
+    <path d="M20 13v13M14.5 20.5 20 26l5.5-5.5" class="subtop-ar"/></svg></button>
 
 <!--#include panel-build.html -->
 

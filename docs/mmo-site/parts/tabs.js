@@ -147,3 +147,33 @@
   });
   update();
 })();
+
+/* 아래로(2026-10-28) — 맨 밑 결과 판(#p-crender)의 아래끝이 화면 안에 들어오기 전까지 켜 둔다.
+   누르면 아직 위끝이 화면 위쪽에 안 닿은 다음 판으로 — 핵심 최적화 → 결과 판. 둘 다 지났으면 결과 판 끝으로.
+   1-2 가 아니면 CSS 가 안 그리지만 잴 대상(#p-crender)이 숨어 있으면 높이가 0 이라 끄는 쪽으로 떨어진다. */
+(function(){
+  const btn=document.querySelector(".subdown");
+  if(!btn) return;
+  const last=document.getElementById("p-crender");
+  const stops=["p-optimization","p-crender"].map(function(id){ return document.getElementById(id); }).filter(Boolean);
+  let queued=false;
+  function update(){
+    queued=false;
+    const r=last ? last.getBoundingClientRect() : null;
+    btn.classList.toggle("on", !!r && r.height>0 && r.bottom>innerHeight+2);
+    btn.classList.toggle("idle", scrollY<40);
+  }
+  function req(){ if(!queued){ queued=true; requestAnimationFrame(update); } }
+  addEventListener("scroll", req, {passive:true});
+  addEventListener("resize", req);
+  addEventListener("load", req);
+  document.addEventListener("click", function(e){ if(e.target.closest(".tab,.subtab")) setTimeout(req, 0); });
+  btn.addEventListener("click", function(){
+    const smooth=matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    /* 62 = 위에 붙는 하위 탭 줄 높이(common.css scroll-padding-top) — 그 밑에 선 판은 이미 '도착한' 판이다 */
+    const next=stops.find(function(el){ return el.getBoundingClientRect().top>70; });
+    if(next) next.scrollIntoView({block:"start", behavior:smooth});
+    else if(last) last.scrollIntoView({block:"end", behavior:smooth});
+  });
+  update();
+})();

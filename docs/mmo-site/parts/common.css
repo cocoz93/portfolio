@@ -170,6 +170,21 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
 .subtop:hover .subtop-bg{stroke:#3c4a63}
 .subtop:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:50%}
 @media(max-width:680px){ .subtop svg{width:34px; height:34px} }
+/* 아래로 — 맨 위로와 짝. 화면 아래 가운데에 떠서 맨 밑 결과 판이 끝까지 보일 때까지 남는다(.on 은 tabs.js).
+   살짝 내려앉는 움직임은 맨 위에 있을 때만(.idle) — 읽는 동안 계속 움직이면 거슬린다.
+   가운데 맞춤을 transform 이 아니라 left/right:0 + margin:auto 로 하는 까닭 — transform 은 움직임이 쓴다. */
+.subdown{display:none}
+.wrap:has(#p-bneck:not([hidden])) .subdown{display:block; position:fixed; left:0; right:0; bottom:22px; z-index:45;
+  width:48px; margin:0 auto; padding:0; border:0; background:none; line-height:0; cursor:pointer;
+  opacity:0; visibility:hidden; transition:opacity .2s, visibility .2s}
+.wrap:has(#p-bneck:not([hidden])) .subdown.on{opacity:1; visibility:visible}
+.subdown-bg{fill:rgba(19,26,38,.85); stroke:var(--net); stroke-width:2; transition:fill .15s}
+.subdown:hover .subdown-bg{fill:rgba(36,52,76,.95)}
+.subdown:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:50%}
+.subdown.idle svg{animation:subNudge 2.6s ease-in-out infinite}
+@keyframes subNudge{0%,60%,100%{transform:translateY(0)} 75%{transform:translateY(7px)} 88%{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){ .subdown.idle svg{animation:none} }
+@media(max-width:680px){ .subdown{bottom:14px} .subdown svg{width:40px; height:40px} }
 
 .panel{margin-top:8px}
 .panel[hidden]{display:none}
