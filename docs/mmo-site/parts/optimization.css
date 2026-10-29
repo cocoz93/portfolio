@@ -57,6 +57,15 @@
 /* 좁은 데스크톱·태블릿에서는 기존 가로 비교 배치를 유지한다. */
 @container(min-width:670px) and (max-width:963px){.op-frame{zoom:.9}}
 .op-viewer[data-state="ready"] .op-frame{visibility:visible}
+/* 번호를 바꿀 때 — 옛 그림(.op-old)을 아래에 깔아 두고 새 그림이 그 위로 서서히 덮는다(optimization.js load).
+   오른쪽 설명도 같이 서서히 바뀐다. 움직임 줄이기 설정이면 애니 없이 바로 바뀐다. */
+.op-viewer{position:relative}
+.op-frame{position:relative;z-index:1}
+.op-frame.op-old{visibility:visible;position:absolute;top:0;left:0;z-index:0;pointer-events:none}
+@keyframes opFadeIn{from{opacity:0}}
+.op-frame.op-in{animation:opFadeIn .24s ease-out}
+.op-explanation.op-in .op-heading{animation:opFadeIn .2s ease-out}
+@media(prefers-reduced-motion:reduce){.op-frame.op-in,.op-explanation.op-in .op-heading{animation:none}}
 .op-viewer[data-state="error"] .op-frame{display:none}
 .op-loading,.op-error{margin:0;padding:22px 20px;font-size:.88rem;line-height:1.6;color:var(--mut)}
 .op-error a{color:var(--net)}

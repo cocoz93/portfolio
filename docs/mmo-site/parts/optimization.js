@@ -95,15 +95,23 @@
     if(height>0&&frame.style.height!==height+"px")frame.style.height=height+"px";
   }
   function queueMeasure(){if(!resizeFrame)resizeFrame=requestAnimationFrame(measure);}
-  function fail(){viewer.dataset.state="error";loading.hidden=true;error.hidden=false;}
+  function fail(){viewer.dataset.state="error";loading.hidden=true;error.hidden=false;
+    Array.from(viewer.querySelectorAll(".op-frame.op-old")).forEach(f=>f.remove());viewer.style.minHeight="";}
   function load(){
     if(panel.hidden) return;
     if(frame&&loadedId===selected.id){queueMeasure();return;}
-    pause();disconnect();if(frame)frame.remove();
+    /* 옛 그림은 새 그림이 준비될 때까지 붙잡아 두고, 준비되면 새 그림이 그 위로 서서히 덮는다(2026-10-29).
+       그냥 지우면 새 문서를 읽는 0.1~0.2초 동안 그림 칸이 빈다. 불러오는 중에 또 누르면 처음 붙잡은 그림을 계속 둔다. */
+    const old=viewer.dataset.state==="ready"?frame:viewer.querySelector(".op-frame.op-old");
+    pause();disconnect();
+    Array.from(viewer.querySelectorAll(".op-frame")).forEach(f=>{if(f!==old)f.remove();});
+    if(old){old.classList.remove("op-in");old.classList.add("op-old");if(!viewer.style.minHeight)viewer.style.minHeight=viewer.offsetHeight+"px";}
     const token=++generation,figure=selected;
     viewer.dataset.figure=figure.id;
     frame=document.createElement("iframe");frame.className="op-frame";frame.title=figure.title+" — 변경 전·후 애니메이션";
     frame.setAttribute("scrolling","no");frame.referrerPolicy="no-referrer";
+    /* 제 높이를 재기 전까지는 옛 그림 높이로 선다 — 기본값 640 으로 한 번 들썩였다가 다시 바뀌지 않게 */
+    if(old&&old.style.height)frame.style.height=old.style.height;
     /* 같은 저장소의 인라인 문서만 연다. 부모는 도구 모음·높이·정지만 조정한다. */
     frame.addEventListener("load",function(){
       if(token!==generation) return;
@@ -126,19 +134,30 @@
       const toolbar=root.querySelector(".viz-controls");
       if(toolbar)root.prepend(toolbar);
       if(typeof ResizeObserver==="function"){observer=new ResizeObserver(queueMeasure);observer.observe(root);}
-      const ready=function(){if(token!==generation)return;queueMeasure();viewer.dataset.state="ready";loading.hidden=true;};
+      const ready=function(){if(token!==generation)return;queueMeasure();viewer.dataset.state="ready";loading.hidden=true;
+        const shown=frame,held=viewer.querySelector(".op-frame.op-old");
+        const drop=function(){if(held)held.remove();if(token===generation)viewer.style.minHeight="";};
+        if(!held){viewer.style.minHeight="";return;}
+        /* 덮는 애니가 끝난 뒤 옛 그림을 치운다 — 움직임 줄이기 설정이면 애니가 없으니 바로 */
+        shown.classList.add("op-in");
+        if(shown.getAnimations().length)shown.addEventListener("animationend",drop,{once:true});else drop();};
       if(doc.fonts&&doc.fonts.ready)doc.fonts.ready.then(ready);else ready();
       if(panel.hidden)pause();
     });
     frame.addEventListener("error",function(){if(token===generation)fail();});
-    viewer.dataset.state="loading";loading.hidden=false;error.hidden=true;loadedId=figure.id;
+    /* 옛 그림을 붙잡고 있으면 '불러오는 중' 문구는 띄우지 않는다 — 뜨면 옛 그림을 아래로 밀어낸다 */
+    viewer.dataset.state="loading";loading.hidden=!!old;error.hidden=true;loadedId=figure.id;
     /* 같은 파일명을 다시 빌드해도 상위 문서의 변경 시각으로 그림 캐시를 갱신한다. */
     frame.src=figure.source+"?v="+encodeURIComponent(document.lastModified)+"-"+Date.now();viewer.appendChild(frame);
   }
   function select(id){
     const figure=figures.find(f=>f.id===id);if(!figure) return;
-    if(selected!==figure){pause();selected=figure;}
-    paint();load();
+    const changed=selected!==figure;
+    if(changed){pause();selected=figure;}
+    paint();
+    /* 오른쪽 설명도 그림과 같이 서서히 바뀐다 */
+    if(changed){explanation.classList.remove("op-in");void explanation.offsetWidth;explanation.classList.add("op-in");}
+    load();
     if(!panel.hidden)history.replaceState(null,"","#"+hash());
   }
   buttons.forEach(button=>button.addEventListener("click",function(){select(button.dataset.optimization);}));
