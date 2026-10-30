@@ -151,11 +151,11 @@ body.subdetach .subtabs{padding-left:16px}
    조건은 tabs.js 가 여닫는 #p-bneck[hidden] 하나로 건다 — 스크립트를 따로 두지 않는다.
    바탕: 뒤가 비치지 않게 --bg 를 깔고, .wrap 좌우 여백까지 덮도록 그림자로 화면 끝까지 늘린다
    (#p-optimization 띠와 같은 수법 — 그림자는 가로 스크롤을 만들지 않는다).
-   ※ 핵심 최적화 왼쪽 목차(.op-index)가 원래 top:16px 로 붙어 따라온다 — 이 줄(62px) 밑으로 내린다.
+   ※ 핵심 최적화 왼쪽 목차(.op-index)를 이 줄(62px) 밑으로 내리던 규칙은 2026-10-30 에 뺐다 —
+     목차가 오른쪽 설명 위로 가면서 화면에 따라붙지 않게 됐다.
    ※ scroll-padding — 딥링크·목차가 scrollIntoView 로 판을 화면 위에 세울 때 이 줄 밑으로 세운다. */
 .wrap:has(#p-bneck:not([hidden])) .subtabs{position:sticky; top:0; z-index:40; background:var(--bg);
   box-shadow:0 0 0 100vmax var(--bg); clip-path:inset(0 -100vmax)}
-.wrap:has(#p-bneck:not([hidden])) .op-index{top:78px}
 html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
 /* 맨 위로 — 붙어 있는 줄의 오른쪽 끝(1-2 에서는 구역 필터가 숨어 그 자리가 빈다).
    1-2 가 아니면 아예 안 그린다. 1-2 라도 줄이 제자리에 있을 때(맨 위)는 투명 + visibility 로 감춘다 —
