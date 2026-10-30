@@ -1479,6 +1479,11 @@ body.pop-hold #scene .chips{opacity:0}
 .op-sec{margin:0 0 22px; padding-top:56px; font-size:2.42rem; font-weight:800; letter-spacing:-.02em; line-height:1.25; color:var(--ink)}
 @media(max-width:1200px){.op-sec{margin:0 0 14px; padding-top:28px; font-size:1.7rem}}
 @media(max-width:640px){.op-sec{padding-inline:20px}}
+/* ※ 2026-10-30 넓은 창에서는 제목·그림·설명을 한 덩어리로 가운데에 모은다 — 오른쪽 칸이 1fr 이라 1920 창에서
+     832px 까지 늘어나는데 설명 글은 360px 남짓만 써서, 판이 왼쪽에 붙고 오른쪽이 휑했다.
+     1428 = 그림 1000 + 틈 28 + 설명 칸 400(설명 제목이 12cqi 로 3rem 상한에 닿는 폭). 1440 창 이하는 판이 이보다 좁아 그대로다.
+     아래 결과 판(client.css #p-crender)도 같은 까닭으로 가운데로 모았다 — 그래서 위 지도와 시작선이 달라진다. */
+#p-optimization .op-sec,#p-optimization .op-layout{max-width:1428px;margin-inline:auto}
 .op-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start;container-type:inline-size;container-name:op-layout}
 .op-workspace{min-width:0}
 .op-index{grid-area:nav;display:flex;flex-direction:column;gap:7px}
