@@ -34,7 +34,7 @@
      제목·액자·꼬리줄을 같이 가운데로 모은다(그래서 제목 시작선은 위 핵심 최적화 판과 달라진다).
      하한은 1160 이 아니라 1400 이다 — 1440 창에서 액자 1316 이면 머리줄 '문자로 그린다' 가 이미 접힌다(실측).
      규칙은 아래 제목 여백 줄(#p-crender .cr-title) 뒤에 둔다 — 앞에 두면 그 margin 이 가운데 정렬을 덮는다. */
-#p-crender{margin:44px 0 0; max-width:none; padding-bottom:44px; background:#121a2b;
+#p-crender{margin:120px 0 0; max-width:none; padding-bottom:44px; background:#121a2b;
   box-shadow:0 0 0 100vmax #121a2b; clip-path:inset(0 -100vmax); border-top:1px solid var(--line)}
 #p-crender .cr-title{margin:0 0 22px; padding-top:56px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
