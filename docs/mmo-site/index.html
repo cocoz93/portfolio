@@ -1041,11 +1041,13 @@ body.pop-hold #scene .chips{opacity:0}
      제목·액자·꼬리줄을 같이 가운데로 모은다(그래서 제목 시작선은 위 핵심 최적화 판과 달라진다).
      하한은 1160 이 아니라 1400 이다 — 1440 창에서 액자 1316 이면 머리줄 '문자로 그린다' 가 이미 접힌다(실측).
      규칙은 아래 제목 여백 줄(#p-crender .cr-title) 뒤에 둔다 — 앞에 두면 그 margin 이 가운데 정렬을 덮는다. */
-#p-crender{margin:120px 0 0; max-width:none; padding-bottom:44px; background:#121a2b;
-  box-shadow:0 0 0 100vmax #121a2b; clip-path:inset(0 -100vmax); border-top:1px solid var(--line)}
-#p-crender .cr-title{margin:0 0 22px; padding-top:56px}
+/* 바탕은 띠 없이 페이지 바탕 그대로(2026-10-31) — 지도(어두움) → 핵심 최적화(띠) → 이 판(어두움)으로 번갈아 둔다.
+   위 판과 같은 띠를 깔았을 때는 2·3번 판만 같은 색이라 어색했고, 경계도 판 사이 틈으로만 갈렸다.
+   이제 띠가 끝나는 자리가 경계라 판 위 간격은 없애고 그만큼을 제목 위 여백으로 준다. */
+#p-crender{margin:0; max-width:none; padding-bottom:44px}
+#p-crender .cr-title{margin:0 0 22px; padding-top:120px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
-@media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:28px} }
+@media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:60px} }
 #p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:max(1400px,88%); margin-inline:auto}
 
 /* ═══ 계기판 ═══ */
@@ -1472,7 +1474,7 @@ body.pop-hold #scene .chips{opacity:0}
 /* 위 병목 지도와 나누는 띠 + 제목 위 파란 막대(2026-10-27) — 가로선 한 줄로는 두 판이 이어져 보였다.
    시안 넷(가로선 · 제목이 선을 끈다 · 띠 + 파란 막대 · 선 + 파란 머리) 중 띠를 골랐다. 판 폭은 그대로 두고
    띠만 그림자로 양옆 끝까지 편다 — 그림자는 스크롤 폭을 안 늘리고, clip-path 로 위아래만 판 높이에 자른다.
-   바로 아래 '결과' 판(실행 화면 녹화 · client.css #p-crender)이 같은 값을 쓴다.
+   바로 아래 '결과' 판(실행 화면 녹화 · client.css #p-crender)은 2026-10-31부터 띠 없이 페이지 바탕으로 둔다(번갈아 두기).
    ※ 2026-10-30 판 사이 44 → 120px — 틈 색(--bg #0d1220)이 띠(#121a2b)와 거의 같아 44px 로는 판이 붙어 보였다. */
 #p-optimization{margin-top:120px;padding-bottom:44px;background:#121a2b;box-shadow:0 0 0 100vmax #121a2b;clip-path:inset(0 -100vmax);border-top:1px solid var(--line)}
 .op-sec::before{content:"";display:block;width:44px;height:4px;border-radius:2px;background:var(--net);margin-bottom:18px}
