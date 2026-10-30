@@ -34,11 +34,13 @@
      제목·액자·꼬리줄을 같이 가운데로 모은다(그래서 제목 시작선은 위 핵심 최적화 판과 달라진다).
      하한은 1160 이 아니라 1400 이다 — 1440 창에서 액자 1316 이면 머리줄 '문자로 그린다' 가 이미 접힌다(실측).
      규칙은 아래 제목 여백 줄(#p-crender .cr-title) 뒤에 둔다 — 앞에 두면 그 margin 이 가운데 정렬을 덮는다. */
-#p-crender{margin:120px 0 0; max-width:none; padding-bottom:44px; background:#121a2b;
-  box-shadow:0 0 0 100vmax #121a2b; clip-path:inset(0 -100vmax); border-top:1px solid var(--line)}
-#p-crender .cr-title{margin:0 0 22px; padding-top:56px}
+/* 바탕은 띠 없이 페이지 바탕 그대로(2026-10-31) — 지도(어두움) → 핵심 최적화(띠) → 이 판(어두움)으로 번갈아 둔다.
+   위 판과 같은 띠를 깔았을 때는 2·3번 판만 같은 색이라 어색했고, 경계도 판 사이 틈으로만 갈렸다.
+   이제 띠가 끝나는 자리가 경계라 판 위 간격은 없애고 그만큼을 제목 위 여백으로 준다. */
+#p-crender{margin:0; max-width:none; padding-bottom:44px}
+#p-crender .cr-title{margin:0 0 22px; padding-top:120px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
-@media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:28px} }
+@media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:60px} }
 #p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:max(1400px,88%); margin-inline:auto}
 
 /* ═══ 계기판 ═══ */
