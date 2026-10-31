@@ -28,6 +28,10 @@
      아니라 상속색으로 밝게 떴다. */
   --line2:#1e2739; --ok:#57d694; --panel2:#172032; --sunk:#0f1522;
   --hot:#ff6b52; --rj:#69788f;
+  /* 1-2 세 판(병목 지도 · 핵심 최적화 · 실행 화면 녹화)이 같이 쓰는 폭 상한 — 시작선·끝선을 한 값으로 묶는다(2026-10-31).
+     1920 창에서 1428 · 1536 · 1640 을 렌더해 비교하고 1536 을 골랐다 — 1428 은 지도가 23% 줄고 카드 제목이 두 줄로 접혔다.
+     녹화 쪽 하한(1400)은 client.css */
+  --band-max:1536px;
   --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
   --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Consolas,"D2Coding",monospace;
 }
@@ -786,7 +790,9 @@ body.pop-hold #scene .chips{opacity:0}
    overflow:hidden 에 소리 없이 잘렸다(아래로 300px 넘게 비어 있는데도). 그리드면 줄 높이가
    둘 중 긴 것을 따라가므로 카드가 필요한 만큼 내려간다.
    ※ 짧을 때 지도 높이로 늘어나던 것은 2026-08-14 에 껐다(아래 .bncard 의 align-self). */
-.bn-shift{ max-width:1860px }
+/* ※ 2026-10-31 1860 → 아래 두 판과 같은 폭(common.css --band-max)으로 가운데에 둔다.
+     1920 창에서 지도만 창 끝까지 차고 아래 두 판은 가운데로 모여 있어 판마다 시작선·폭이 달랐다. */
+.bn-shift{ max-width:var(--band-max); margin-inline:auto }
 /* 52fr 9fr 36fr → 52fr 45fr (2026-08-03). 가운데 9fr 은 '병목 지점' 세로 레일 몫이었다.
    레일을 걷어내면서 그 폭은 카드 쪽으로 넘겼다 — 지도는 한 칸도 안 줄었고(52 그대로),
    카드가 684 → 855px 가 되어 열두 장이 네 열로 선다.
@@ -1048,7 +1054,9 @@ body.pop-hold #scene .chips{opacity:0}
 #p-crender .cr-title{margin:0 0 22px; padding-top:120px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
 @media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:60px} }
-#p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:max(1400px,88%); margin-inline:auto}
+/* ※ 2026-10-31 88% → 위 두 판과 같은 1536(common.css --band-max). 세 판의 시작선·끝선을 맞춘다.
+     하한 1400 은 그대로 지켜진다. 1920 창에서 액자가 1637 → 1536 으로 조금 줄어 높이도 같이 준다. */
+#p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:var(--band-max); margin-inline:auto}
 
 /* ═══ 계기판 ═══ */
 .cl-dash{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 10px}
@@ -1486,7 +1494,9 @@ body.pop-hold #scene .chips{opacity:0}
      832px 까지 늘어나는데 설명 글은 360px 남짓만 써서, 판이 왼쪽에 붙고 오른쪽이 휑했다.
      1428 = 그림 1000 + 틈 28 + 설명 칸 400(설명 제목이 12cqi 로 3rem 상한에 닿는 폭). 1440 창 이하는 판이 이보다 좁아 그대로다.
      아래 결과 판(client.css #p-crender)도 같은 까닭으로 가운데로 모았다 — 그래서 위 지도와 시작선이 달라진다. */
-#p-optimization .op-sec,#p-optimization .op-layout{max-width:1428px;margin-inline:auto}
+/* ※ 2026-10-31 아래 결과 판도 같은 폭으로 묶었다(common.css --band-max) — 1428 과 max(1400px,88%) 로 따로 놀아
+     1920 창에서 두 판 제목 시작선이 약 100px 어긋났다. */
+#p-optimization .op-sec,#p-optimization .op-layout{max-width:var(--band-max);margin-inline:auto}
 .op-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start;container-type:inline-size;container-name:op-layout}
 .op-workspace{min-width:0}
 .op-index{grid-area:nav;display:flex;flex-direction:column;gap:7px}
@@ -1536,6 +1546,12 @@ body.pop-hold #scene .chips{opacity:0}
   grid-template-areas:"detail nav" "detail exp";gap:26px 28px;align-items:start}
 .op-detail{grid-area:detail;width:100%;max-width:1000px}
 .op-explanation{grid-area:exp;min-width:0;padding:0 0 12px;container-type:inline-size;container-name:op-explanation}
+/* 판이 1428(그림 1000 + 틈 28 + 설명 400)보다 넓으면 설명 칸은 400 에 두고 남는 폭은 그림 칸이 받는다(2026-10-31).
+   판 폭이 --band-max 1536 으로 늘면서 오른쪽 칸만 커지면 설명 글(360px 남짓) 옆이 다시 비기 때문이다. 1428 이하는 위 규칙 그대로 */
+@container op-layout (min-width:1429px){
+  .op-workspace{grid-template-columns:minmax(0,1fr) 400px}
+  .op-detail{max-width:none}
+}
 /* 오른쪽 칸이 260px 아래로 줄면(1000 + 틈 28 + 260) 단추 → 그림 → 설명 한 줄로 쌓는다 */
 @container op-layout (max-width:1287px){
   .op-workspace{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-template-areas:"nav" "detail" "exp";gap:14px}
@@ -5257,8 +5273,11 @@ document.addEventListener("keydown", function(e){
   go(e.key==="ArrowLeft"?-1:1);
 }, false);
 
-show(EXPS[0]);
-setTimeout(function(){ show(cur||EXPS[0]); paintPins(); }, 400);   /* 진입 애니가 판을 연 뒤 한 번 더 */
+/* 처음 서는 카드는 ② Send Coalescing(2026-10-31) — 번호 순(=실험 순)의 맨 앞 ① 은 기각이라
+   탭을 열자마자 빨간 +7% 가 먼저 섰다. 순서는 그대로 두고 처음 고른 자리만 옮긴다(없으면 맨 앞). */
+var FIRST=EXPS.filter(function(e){ return e.no===2; })[0]||EXPS[0];
+show(FIRST);
+setTimeout(function(){ show(cur||FIRST); paintPins(); }, 400);   /* 진입 애니가 판을 연 뒤 한 번 더 */
 })();
 
 /* ═══════════ ① 클라이언트 — 콘솔 / 웹 실제 실행 녹화 ═══════════
