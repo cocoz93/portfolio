@@ -15,6 +15,10 @@
      아니라 상속색으로 밝게 떴다. */
   --line2:#1e2739; --ok:#57d694; --panel2:#172032; --sunk:#0f1522;
   --hot:#ff6b52; --rj:#69788f;
+  /* 1-2 세 판(병목 지도 · 핵심 최적화 · 실행 화면 녹화)이 같이 쓰는 폭 상한 — 시작선·끝선을 한 값으로 묶는다(2026-10-31).
+     1920 창에서 1428 · 1536 · 1640 을 렌더해 비교하고 1536 을 골랐다 — 1428 은 지도가 23% 줄고 카드 제목이 두 줄로 접혔다.
+     녹화 쪽 하한(1400)은 client.css */
+  --band-max:1536px;
   --sans:'Pretendard',-apple-system,BlinkMacSystemFont,"Malgun Gothic","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
   --mono:'JetBrains Mono',ui-monospace,"Cascadia Code",Consolas,"D2Coding",monospace;
 }

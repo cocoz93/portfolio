@@ -18,7 +18,9 @@
      832px 까지 늘어나는데 설명 글은 360px 남짓만 써서, 판이 왼쪽에 붙고 오른쪽이 휑했다.
      1428 = 그림 1000 + 틈 28 + 설명 칸 400(설명 제목이 12cqi 로 3rem 상한에 닿는 폭). 1440 창 이하는 판이 이보다 좁아 그대로다.
      아래 결과 판(client.css #p-crender)도 같은 까닭으로 가운데로 모았다 — 그래서 위 지도와 시작선이 달라진다. */
-#p-optimization .op-sec,#p-optimization .op-layout{max-width:1428px;margin-inline:auto}
+/* ※ 2026-10-31 아래 결과 판도 같은 폭으로 묶었다(common.css --band-max) — 1428 과 max(1400px,88%) 로 따로 놀아
+     1920 창에서 두 판 제목 시작선이 약 100px 어긋났다. */
+#p-optimization .op-sec,#p-optimization .op-layout{max-width:var(--band-max);margin-inline:auto}
 .op-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start;container-type:inline-size;container-name:op-layout}
 .op-workspace{min-width:0}
 .op-index{grid-area:nav;display:flex;flex-direction:column;gap:7px}
@@ -68,6 +70,12 @@
   grid-template-areas:"detail nav" "detail exp";gap:26px 28px;align-items:start}
 .op-detail{grid-area:detail;width:100%;max-width:1000px}
 .op-explanation{grid-area:exp;min-width:0;padding:0 0 12px;container-type:inline-size;container-name:op-explanation}
+/* 판이 1428(그림 1000 + 틈 28 + 설명 400)보다 넓으면 설명 칸은 400 에 두고 남는 폭은 그림 칸이 받는다(2026-10-31).
+   판 폭이 --band-max 1536 으로 늘면서 오른쪽 칸만 커지면 설명 글(360px 남짓) 옆이 다시 비기 때문이다. 1428 이하는 위 규칙 그대로 */
+@container op-layout (min-width:1429px){
+  .op-workspace{grid-template-columns:minmax(0,1fr) 400px}
+  .op-detail{max-width:none}
+}
 /* 오른쪽 칸이 260px 아래로 줄면(1000 + 틈 28 + 260) 단추 → 그림 → 설명 한 줄로 쌓는다 */
 @container op-layout (max-width:1287px){
   .op-workspace{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-template-areas:"nav" "detail" "exp";gap:14px}
