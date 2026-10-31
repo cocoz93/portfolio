@@ -71,7 +71,7 @@
 .op-detail{grid-area:detail;width:100%;max-width:1000px}
 .op-explanation{grid-area:exp;min-width:0;padding:0 0 12px;container-type:inline-size;container-name:op-explanation}
 /* 판이 1428(그림 1000 + 틈 28 + 설명 400)보다 넓으면 설명 칸은 400 에 두고 남는 폭은 그림 칸이 받는다(2026-10-31).
-   판 폭이 --band-max 1536 으로 늘면서 오른쪽 칸만 커지면 설명 글(360px 남짓) 옆이 다시 비기 때문이다. 1428 이하는 위 규칙 그대로 */
+   판 폭이 --band-max(common.css)로 늘면서 오른쪽 칸만 커지면 설명 글(360px 남짓) 옆이 다시 비기 때문이다. 1428 이하는 위 규칙 그대로 */
 @container op-layout (min-width:1429px){
   .op-workspace{grid-template-columns:minmax(0,1fr) 400px}
   .op-detail{max-width:none}

@@ -41,8 +41,8 @@
 #p-crender .cr-title{margin:0 0 22px; padding-top:120px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
 @media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:60px} }
-/* ※ 2026-10-31 88% → 위 두 판과 같은 1536(common.css --band-max). 세 판의 시작선·끝선을 맞춘다.
-     하한 1400 은 그대로 지켜진다. 1920 창에서 액자가 1637 → 1536 으로 조금 줄어 높이도 같이 준다. */
+/* ※ 2026-10-31 88% → 위 두 판과 같은 1640(common.css --band-max). 세 판의 시작선·끝선을 맞춘다.
+     하한 1400 은 그대로 지켜진다. 1920 창에서 액자는 1637 → 1640 으로 거의 같고 높이 852px. */
 #p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:var(--band-max); margin-inline:auto}
 
 /* ═══ 계기판 ═══ */
