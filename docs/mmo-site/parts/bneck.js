@@ -397,6 +397,9 @@ document.addEventListener("keydown", function(e){
   go(e.key==="ArrowLeft"?-1:1);
 }, false);
 
-show(EXPS[0]);
-setTimeout(function(){ show(cur||EXPS[0]); paintPins(); }, 400);   /* 진입 애니가 판을 연 뒤 한 번 더 */
+/* 처음 서는 카드는 ② Send Coalescing(2026-10-31) — 번호 순(=실험 순)의 맨 앞 ① 은 기각이라
+   탭을 열자마자 빨간 +7% 가 먼저 섰다. 순서는 그대로 두고 처음 고른 자리만 옮긴다(없으면 맨 앞). */
+var FIRST=EXPS.filter(function(e){ return e.no===2; })[0]||EXPS[0];
+show(FIRST);
+setTimeout(function(){ show(cur||FIRST); paintPins(); }, 400);   /* 진입 애니가 판을 연 뒤 한 번 더 */
 })();
