@@ -10,7 +10,7 @@
 | **서버** — 설계 탭 + 병목 탭 + 핵심 최적화(병목 탭 아래 판) | `common.css` `bneck.css` `bneck-tail.css` `optimization.css` `panel-build.html` `panel-bneck.html` `panel-optimization.html` `scene.js` `wave.js` `bneck.js` `optimization.js` |
 | **클라** — 1-2 맨 아래 결과 판 = 실행 화면 녹화(옛 클라이언트 2-1) | `client.css` `panel-client.html` `client-render.js` |
 | **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` |
-| **MO(녹스)** — 상위 탭 MO 서버 | `mo.css` `panel-mo.html` `mo.js` |
+| **MO(녹스)** — 상위 탭 NOX 서버 | `mo.css` `panel-mo.html` `mo.js` |
 
 MO 갈래(2026-11-17)는 위 둘과 스코프를 나누지 않는다 — `mo.js` 는 자기 IIFE 안에서 끝나고,
 하위 탭 버튼은 `data-sub` 가 아니라 `data-mo` 를 써서 `tabs.js` 가 건드리지 않는다.
@@ -37,7 +37,7 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    (`bneckRing` 은 2026-10-29 — bneck.js 가 내놓고 scene.js 가 판을 켤 때 불러 고리를 다시 칠한다.)
    이름·인자를 바꾸려면 단독 작업으로.
    (`__bnPickLoc` 은 2026-08-04 에 없앴다 — 핀에서 클릭을 걷어내면서 부를 곳이 사라졌다.)
-3. **DOM id** — `#p-build` `#p-bneck` `#p-optimization` `#p-crender` `#p-content` `#p-mo` `#p-misc` `#scene`
+3. **DOM id** — `#p-build` `#p-bneck` `#p-optimization` `#p-crender` `#p-content` `#p-mo` `#p-shooter` `#p-misc` `#scene`
    `#subtabs`. `tabs.js` 가 전부 하드코딩한다.
    (`#builddoor` 는 2026-10-27 에 없앴다 — 1-1 의 나가는 문은 `#p-build` 안 `.stage-ctl` 로 내려가 판과 함께 숨는다.
    `wave.js` 가 '다시 재생' 을 그 줄 맨 앞에 끼우므로 `.stage-ctl` 은 panel-build.html ↔ wave.js 의 계약이다.)

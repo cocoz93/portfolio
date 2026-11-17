@@ -1,5 +1,5 @@
 (function(){
-  /* 탭은 2단이다: 상위(mmo·mo·misc) 아래 mmo 만 하위(build·bneck·content)를 갖는다.
+  /* 탭은 2단이다: 상위(mmo·mo·shooter·misc) 아래 mmo 만 하위(build·bneck·content)를 갖는다.
      1-2(bneck)는 판 셋이 같이 보인다 — 병목 지도(p-bneck) · 핵심 최적화(p-optimization) · 결과(p-crender).
      (옛 하위 optimization(1-3 핵심 최적화)은 2026-10-27 에 1-2 아래로 내렸다.)
      한때 상위 탭 'dummy'(클라이언트)와 그 아래 2-1~2-3 하위 줄이 따로 있었다. 지금은 2-1 실행 화면
@@ -78,6 +78,7 @@
     document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 맨 아래 */
     document.getElementById("p-content").hidden = !(top==="mmo" && sub==="content");
     document.getElementById("p-mo").hidden    = (top!=="mo");
+    document.getElementById("p-shooter").hidden = (top!=="shooter");
     document.getElementById("p-misc").hidden  = (top!=="misc");
     if(window.__optimizationVisibility)window.__optimizationVisibility(top==="mmo"&&sub==="bneck");
     /* 구조도 화면으로 올 때마다 구역 강조는 전체로 — 켜 둔 구역을 들고 다니지 않는다 */
@@ -109,7 +110,7 @@
   if(h0==="bneck"||h0==="build"||h0==="content"){ top="mmo"; sub=h0; }
   /* 옛 1-3 주소(#optimization · #optimization-<그림>)는 1-2 를 열고 핵심 최적화 판까지 내려 준다 */
   else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="bneck"; toOpt=true; }
-  else if(h0==="mo"||h0==="misc"){ top=h0; }
+  else if(h0==="mo"||h0==="shooter"||h0==="misc"){ top=h0; }
   /* 옛 클라이언트 탭 주소(#dummy · #crender · #csafe · #cload · #cenv)는 노션 등에 걸려 있을 수 있어
      전부 1-2 로 열고 맨 아래 결과 판(실행 화면 녹화)까지 내려 준다. #csafe·#cload·#cenv 는 뺀 자리였다 */
   else if(h0==="dummy"||h0==="crender"||h0==="csafe"||h0==="cload"||h0==="cenv"){ top="mmo"; sub="bneck"; toRender=true; }

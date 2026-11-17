@@ -1,6 +1,6 @@
 /* ═══ MO 서버(녹스) — 소개 / 전체 구조 / 병목 개선 / 컨텐츠 ═══
    하위 탭 줄(#mosub)은 MMO 쪽 .subtabs 짜임을 그대로 빌려 쓴다(왼쪽 끝 --tabx 도 .wrap 에서 물려받는다).
-   #p-mo 안에 있어서 상위 탭이 MO 서버일 때만 판과 같이 보인다. 여닫기는 mo.js. */
+   #p-mo 안에 있어서 상위 탭이 NOX 서버일 때만 판과 같이 보인다. 여닫기는 mo.js. */
 #p-mo{margin-top:0}
 .mo-band{max-width:var(--band-max);margin:30px auto 0}
 .mo-pane[hidden]{display:none}
