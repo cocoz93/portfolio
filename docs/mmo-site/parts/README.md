@@ -10,6 +10,12 @@
 | **서버** — 설계 탭 + 병목 탭 + 핵심 최적화(병목 탭 아래 판) | `common.css` `bneck.css` `bneck-tail.css` `optimization.css` `panel-build.html` `panel-bneck.html` `panel-optimization.html` `scene.js` `wave.js` `bneck.js` `optimization.js` |
 | **클라** — 1-2 맨 아래 결과 판 = 실행 화면 녹화(옛 클라이언트 2-1) | `client.css` `panel-client.html` `client-render.js` |
 | **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` |
+| **MO(녹스)** — 상위 탭 MO 서버 | `mo.css` `panel-mo.html` `mo.js` |
+
+MO 갈래(2026-11-17)는 위 둘과 스코프를 나누지 않는다 — `mo.js` 는 자기 IIFE 안에서 끝나고,
+하위 탭 버튼은 `data-sub` 가 아니라 `data-mo` 를 써서 `tabs.js` 가 건드리지 않는다.
+클래스 접두어는 `.mo-*` `.mi-*`(소개) `.ms-*`(구조) `.mb-*`(병목) `.mc-*`(컨텐츠) · id 는 `#mosub` `#mo-*` `#ms-*` `#mb-*` `#mc-*`.
+그림은 `media/mo-*.jpg` 외부 파일이다(시험 캡처에서 창 테두리를 잘라 낸 1280×960).
 
 설계 탭과 병목 탭은 **갈래로 못 나눈다.** 병목 지도를 그리는 코드가 씬 IIFE 안에 중첩돼 바깥 스코프
 (`paintZones` `PJ` `wireify` 등)를 그대로 쓰고, `#p-bneck` 안을 열고 닫는 것도 `scene.js` 다.

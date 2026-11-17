@@ -1,0 +1,96 @@
+  <!-- ═══ MO 서버(녹스) — 2000년 정품 클라를 붙이는 서버 ═══
+       하위 탭 넷(소개 · 전체 구조 · 병목 개선 · 컨텐츠). 버튼이 data-sub 가 아니라 data-mo 를 쓰는 까닭 —
+       tabs.js 는 data-sub 버튼을 MMO 하위 탭으로 보고 전부 걷어 간다. 여닫기는 mo.js 가 따로 한다.
+       그림은 media/mo-*.jpg 외부 파일이다(시험 캡처에서 창 테두리를 잘라 낸 1280×960).
+       영상이 생기면 같은 액자에 갈아 끼운다.
+       아직 사람 확인이 안 끝났거나 못 찍은 컨텐츠는 넣지 않았다 — mo.js 의 C 표 주석. -->
+  <section class="panel" id="p-mo" role="tabpanel" hidden>
+    <div class="subtabs" id="mosub">
+      <nav class="subnav" role="tablist" aria-label="MO 서버 하위 섹션">
+        <button class="subtab act" data-mo="intro" role="tab" aria-selected="true">소개</button>
+        <button class="subtab" data-mo="build" role="tab" aria-selected="false">전체 구조</button>
+        <button class="subtab" data-mo="bneck" role="tab" aria-selected="false">병목 개선</button>
+        <button class="subtab" data-mo="content" role="tab" aria-selected="false">컨텐츠</button>
+      </nav>
+    </div>
+
+    <div class="mo-band">
+
+    <!-- 소개 — 무엇을 했나를 한 장으로. 큰 숫자 둘은 병목 개선 탭의 맨 끝 값이다 -->
+    <section class="mo-pane" id="mo-intro">
+      <div class="mi">
+        <div class="mc-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy"></div>
+        <div class="mo-card mi-card">
+          <div class="mo-k">녹스 Nox · 2000 · 웨스트우드 쿼터뷰 액션 RPG</div>
+          <h3 class="mi-h">2000년 정품 클라를<br>내 서버에</h3>
+          <p>방장 PC 한 대가 판 하나를 맡던 멀티를, 서버 한 대가 방 여러 개를 받는 구조로 넓혔다. 그 위에 로그인 · 로비 · 랭크 매칭 · 전적.</p>
+          <div class="mi-num">
+            <div><b>320<i>방+</i></b><span>동시 방 · 부하 도구 상한에서 멈춤</span></div>
+            <div><b>−59<i>%</i></b><span>틱 합 · 병목 7차례</span></div>
+          </div>
+          <div class="mi-links"><a class="mi-go" href="https://github.com/cocoz93/Nox_MatchServer" target="_blank" rel="noopener">GitHub ↗</a></div>
+          <p class="mi-fine">「Nox」는 EA의 상표이고, 게임 저작권은 Westwood Studios(2000)에 있습니다. 이 서버는 EA와 관계없는 팬의 비공식 학습 프로젝트이며, 배포 · 운영하지 않습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 전체 구조 — 상자를 누르면 오른쪽 카드가 바뀐다(mo.js N 표). 선은 직교만 -->
+    <section class="mo-pane" id="mo-build" hidden>
+      <div class="ms">
+        <div class="ms-fig">
+          <svg viewBox="0 0 1180 600" role="img" aria-label="녹스 서버 전체 구조">
+            <path class="ln" d="M250 120 H430 V95 H520"/>
+            <text class="lb" x="330" y="110">HTTPS</text>
+            <path class="ln" d="M150 160 V300"/>
+            <text class="lb" x="160" y="238">실행</text>
+            <path class="ln" d="M250 345 H430 V230 H520"/>
+            <path class="ln" d="M430 345 V355 H520"/>
+            <path class="ln" d="M250 360 H400 V490 H520"/>
+            <text class="lb" x="436" y="222">TCP</text>
+            <text class="lb" x="436" y="346">TCP</text>
+            <text class="lb" x="436" y="482">UDP</text>
+            <!-- MySQL 은 로그인 · 로비 · 채팅만 잇는다 — 게임 서버는 DB 를 직접 안 만진다 -->
+            <path class="ln" d="M800 95 H880 V245 H930"/>
+            <path class="ln" d="M800 230 H930"/>
+            <path class="ln" d="M800 355 H880 V245"/>
+
+            <g class="nd" data-n="launcher"><rect class="box" x="50" y="80" width="200" height="80" rx="12"/><text x="150" y="116" text-anchor="middle" font-size="22">런처</text><text class="s" x="150" y="143" text-anchor="middle" font-size="14">WebView2</text></g>
+            <g class="nd" data-n="client"><rect class="box" x="50" y="300" width="200" height="90" rx="12"/><text x="150" y="338" text-anchor="middle" font-size="22">정품 클라</text><text class="s" x="150" y="366" text-anchor="middle" font-size="14">2000년판 + DLL</text></g>
+
+            <g class="nd" data-n="auth"><rect class="box" x="520" y="55" width="280" height="80" rx="12"/><text x="660" y="91" text-anchor="middle" font-size="21">로그인 서버</text><text class="s" x="660" y="118" text-anchor="middle" font-size="14">HTTPS</text></g>
+            <g class="nd" data-n="lobby"><rect class="box" x="520" y="190" width="280" height="80" rx="12"/><text x="660" y="226" text-anchor="middle" font-size="21">라우터 → 로비</text><text class="s" x="660" y="253" text-anchor="middle" font-size="14">TCP 4005 → 4000</text></g>
+            <g class="nd" data-n="chat"><rect class="box" x="520" y="315" width="280" height="80" rx="12"/><text x="660" y="351" text-anchor="middle" font-size="21">채팅 서버</text><text class="s" x="660" y="378" text-anchor="middle" font-size="14">TCP 4020 · 귓속말</text></g>
+            <g class="nd" data-n="game"><rect class="box" x="520" y="440" width="560" height="130" rx="12"/><text x="550" y="478" font-size="22">게임 서버</text><text class="s" x="550" y="504" font-size="14">UDP 18590 · 30Hz 고정 틱</text>
+              <rect class="room" x="770" y="462" width="44" height="34" rx="5"/><rect class="room" x="822" y="462" width="44" height="34" rx="5"/><rect class="room" x="874" y="462" width="44" height="34" rx="5"/><rect class="room" x="926" y="462" width="44" height="34" rx="5"/><rect class="room" x="978" y="462" width="44" height="34" rx="5"/>
+              <rect class="room" x="770" y="510" width="44" height="34" rx="5"/><rect class="room" x="822" y="510" width="44" height="34" rx="5"/><rect class="room" x="874" y="510" width="44" height="34" rx="5"/><rect class="room" x="926" y="510" width="44" height="34" rx="5"/><text class="s" x="1000" y="533" text-anchor="middle" font-size="14">방 N</text></g>
+            <g class="nd" data-n="db"><rect class="box" x="930" y="200" width="200" height="90" rx="12"/><text x="1030" y="238" text-anchor="middle" font-size="22">MySQL</text><text class="s" x="1030" y="265" text-anchor="middle" font-size="14">계정 · 점수 · 전적</text></g>
+          </svg>
+        </div>
+        <div class="mo-card" id="ms-card"></div>
+      </div>
+    </section>
+
+    <!-- 병목 개선 — 차수 막대를 누르면 카드가 바뀐다(mo.js B 표) -->
+    <section class="mo-pane" id="mo-bneck" hidden>
+      <div class="mb-mile"><span class="mo-k">동시 방</span>
+        <b>192</b><span class="ar">→</span><b>224</b><span class="ar">→</span><b>240</b><span class="ar">→</span><b>272</b><span class="ar">→</span><b class="end">320+</b>
+        <span>· 부하 도구 상한(3,200명)에 닿음</span></div>
+      <div class="mb">
+        <div class="mb-rows" id="mb-rows">
+          <div class="mb-cap"><span>64방 · 5분 · 세 판 중앙값 — 틱 합(ms/초) · 짧을수록 좋음</span><span>누적 288.4 → 117.5 (−59%)</span></div>
+        </div>
+        <div class="mo-card" id="mb-card"></div>
+      </div>
+    </section>
+
+    <!-- 컨텐츠 — 왼쪽 목록을 누르면 그림과 카드가 바뀐다(mo.js C 표) -->
+    <section class="mo-pane" id="mo-content" hidden>
+      <div class="mc">
+        <div class="mc-list" id="mc-list"></div>
+        <div class="mc-fr"><img id="mc-img" alt="" width="1280" height="960" loading="lazy"></div>
+        <div class="mo-card" id="mc-card"></div>
+      </div>
+    </section>
+
+    </div>
+  </section>
