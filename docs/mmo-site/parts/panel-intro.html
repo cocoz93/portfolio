@@ -1,0 +1,54 @@
+  <!-- ═══ MMORPG 소개 — 이 페이지의 첫 화면(11-17 · 그 전엔 전체 구조가 첫 화면이었다) ═══
+       목록 | 그림 | 카드 짜임은 intro.css, 고르기는 intro.js. 버튼 n번째 = 카드 n번째.
+       옛 1-3 「컨텐츠 · 준비 중」 판(#p-content)을 여기로 합쳤다 — 옛 주소 #content 는 이 판을 연다(tabs.js).
+       그림은 media/mmo-*.jpg — 웹 클라 시험 캡처(MyDocs/claude-plans 의 character-tests · look-tests · mail-tests)를 1280×720 으로.
+       우편 캡처는 창만 찍힌 1288×896 이라 높이를 맞춰 어두운 바탕 가운데에 두었다.
+       수치 출처 — 파티 8명 PARTY_MAX_MEMBERS · 첨부 8칸 MAIL_MAX_ITEMS(MMO_Zone Shared/Protocol/Protocol.h) ·
+       서버 넷 = Run/bin 의 AccountServer · CharacterServer · WorldServer · MMOServer(존). 5,000 은 한 PC 부하 시험(README). -->
+  <section class="panel" id="p-intro" role="tabpanel">
+    <div class="gi-band">
+      <div class="gi" style="--gi-ar:16/9">
+        <div class="gi-list">
+          <div class="gi-g"><span class="gi-k">게임</span>
+            <button type="button" class="gi-it act" data-img="media/mmo-town.jpg" data-alt="마을 — 웹 클라가 내 서버에 붙어 도는 화면">게임 소개</button>
+          </div>
+          <div class="gi-g"><span class="gi-k">컨텐츠</span>
+            <button type="button" class="gi-it" data-img="media/mmo-hunt.jpg" data-alt="사냥 — 광역 기술로 둘레 몬스터를 한꺼번에 치는 화면"><i>01</i>사냥</button>
+            <button type="button" class="gi-it" data-img="media/mmo-trade.jpg" data-alt="파티 창과 거래 창"><i>02</i>파티 · 거래</button>
+            <button type="button" class="gi-it" data-img="media/mmo-mail.jpg" data-alt="우편 창 — 첨부를 받는 화면"><i>03</i>우편</button>
+          </div>
+        </div>
+        <div class="gi-fr"><img src="media/mmo-town.jpg" alt="마을 — 웹 클라가 내 서버에 붙어 도는 화면" width="1280" height="720"></div>
+        <div class="gi-cards">
+          <article class="gi-card gi-lead">
+            <div class="gi-k">MMO_Zone · 2D 탑뷰 MMORPG</div>
+            <h3 class="gi-h">서버부터 웹 클라까지<br>직접 만든 MMORPG</h3>
+            <p>존 서버가 맵을 섹터로 나눠 돌리고, 계정 · 캐릭터 · 월드 서버가 그 앞뒤를 맡는다. 판정은 전부 서버가 하고 웹 클라는 그리기만 한다.</p>
+            <div class="gi-num">
+              <div><b>5,000<i>명</i></b><span>동시 접속 · 한 PC 부하 시험</span></div>
+              <div><b>4<i>개</i></b><span>서버 · 계정 · 캐릭터 · 월드 · 존</span></div>
+            </div>
+            <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/MMO_Zone" target="_blank" rel="noopener">GitHub ↗</a></div>
+          </article>
+          <article class="gi-card" hidden>
+            <div class="gi-k">01 · 컨텐츠</div>
+            <h3>사냥</h3>
+            <p>기술 다섯 칸. 광역 기술은 둘레 몬스터를 한꺼번에 친다. 맞았는지와 피해량은 서버가 정하고, 클라는 받은 숫자를 띄운다.</p>
+            <div class="sv"><b>존 서버</b> — 몬스터 · 기술 판정 · 피해</div>
+          </article>
+          <article class="gi-card" hidden>
+            <div class="gi-k">02 · 컨텐츠</div>
+            <h3>파티 · 거래</h3>
+            <p>파티는 8명까지, 채널이 달라도 같은 파티다. 거래는 서로 물건과 돈을 올린 뒤 교환하기 — 한 번 올린 것은 못 뺀다.</p>
+            <div class="sv"><b>월드 서버</b> — 파티 · <b>존 서버</b> — 거래</div>
+          </article>
+          <article class="gi-card" hidden>
+            <div class="gi-k">03 · 컨텐츠</div>
+            <h3>우편</h3>
+            <p>캐릭터 우편과 계정 우편 두 갈래. 물건 8칸과 돈을 붙여 보내고, 첨부를 받으면 우편이 사라진다.</p>
+            <div class="sv"><b>존 서버</b> — 캐릭터 우편 · <b>계정 서버</b> — 계정 우편 · <b>월드 서버</b> — 그 사이 중계</div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>

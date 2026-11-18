@@ -103,12 +103,14 @@
 .bx-out{ margin-top:16px; display:flex; flex-wrap:wrap; align-items:baseline; column-gap:18px; row-gap:4px }
 .bx-out .bn-more, .bx-out .op-principle{ text-align:left; margin-top:0 }
 /* 두 칸이지만 지도가 낮아지는 폭(쌓기 분기 900 위) — 글을 한 단계 줄인다
-   ※ 1320 → 1560 (2026-10-27). 58 39 로 판이 좁아져 1440 에서 판 폭이 557px 다(54 일 때 614). */
-@media (max-width:1560px) and (min-width:901px){
+   ※ 1320 → 1560 (2026-10-27). 58 39 로 판이 좁아져 1440 에서 판 폭이 557px 다(54 일 때 614).
+   ※ 1560 → 1820 (2026-11-18) — 왼쪽 기둥(common.css · 1280 이상)이 본문을 260px 줄여서, 같은 본문 폭이 옛 화면 폭 + 260 에 온다.
+     아래 1100 단계 · 1560 두 번째 벌 · bneck-tail.css 의 열 비율도 같은 까닭으로 같이 옮겼다. */
+@media (max-width:1820px) and (min-width:901px){
   .bx-nm{ font-size:1.7rem } .bx-ba b{ font-size:2.5rem } .bx-ba s{ font-size:1.1rem }
   .bx-m{ margin-top:10px; font-size:.95rem } .bx-kl{ margin-top:10px } .bx-out{ margin-top:10px }
 }
-@media (max-width:1100px) and (min-width:901px){
+@media (max-width:1100px) and (min-width:901px), (min-width:1280px) and (max-width:1360px){
   .bx-hero{ gap:22px } .bx-nm{ font-size:1.45rem } .bx-kl{ margin-top:8px } .bx-ba b{ font-size:2.1rem }
   .bx-m{ font-size:.9rem; line-height:1.5 } .bx-out{ margin-top:8px }
 }
@@ -206,16 +208,16 @@
 .bn-stage.bn-enter .bncard.on .bx-out{ animation-delay:350ms }
 .bn-stage.bn-enter .bncard.on :is(.bx-pg,.bx-nums){ animation:bxFade .4s .4s both }
 .bn-stage.bn-enter .bncard.on .bx-tag{ animation:bxFade .3s .5s both }
-/* 좁은 폭은 덜 키운다 — 1366 에서 글 묶음과 가운데 칸 사이 여유가 36px 뿐이다(넘치면 판이 지도보다 길어진다).
+/* 좁은 폭은 덜 키운다(1820 = 위 글 단계와 같은 까닭으로 1560 에서 옮김) — 1366 에서 글 묶음과 가운데 칸 사이 여유가 36px 뿐이다(넘치면 판이 지도보다 길어진다).
    이 분기는 위 기본 규칙 **뒤**에 있어야 한다 — 특이도가 같아 앞에 두면 기본 규칙이 이긴다
    (위 560 분기의 .bx-pg .t · .bx-nums 두 줄이 그래서 그동안 안 먹고 있었다 — 여기 휴대폰 분기가 대신 맡는다). */
-@media (max-width:1560px) and (min-width:901px){
+@media (max-width:1820px) and (min-width:901px){
   .bx-pg .w{ padding:10px 12px } .bx-pg .t{ font-size:.98rem } .bx-pg svg{ width:44px; padding:0 13px }
   .bx-strip{ --sh:42px; margin-top:26px }
   .bx-nums button{ height:32px; font-size:.8rem }
 }
 /* 1100 아래 두 칸은 이미 글이 지도보다 키가 커서 판이 70~90px 길다 — 장치는 거의 예전 크기로 둔다 */
-@media (max-width:1100px) and (min-width:901px){
+@media (max-width:1100px) and (min-width:901px), (min-width:1280px) and (max-width:1360px){
   .bx-pg .w{ padding:8px 10px } .bx-pg .t{ font-size:.92rem } .bx-pg svg{ width:38px; padding:0 11px }
   .bx-strip{ --sh:34px; margin-top:24px }
   .bx-nums button{ height:28px; font-size:.78rem }

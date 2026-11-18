@@ -12,7 +12,8 @@
 .op-sec::before{content:"";display:block;width:44px;height:4px;border-radius:2px;background:var(--net);margin-bottom:18px}
 /* 판 제목 — 아래 결과 판의 제목(client.css .cr-title)과 같은 크기·무게. 위가 넓고 아래가 좁다(제목은 아래 판에 속한다) */
 .op-sec{margin:0 0 22px; padding-top:56px; font-size:2.42rem; font-weight:800; letter-spacing:-.02em; line-height:1.25; color:var(--ink)}
-@media(max-width:1200px){.op-sec{margin:0 0 14px; padding-top:28px; font-size:1.7rem}}
+/* 두 번째 범위 = 왼쪽 기둥(common.css · 1280 이상)이 본문을 260px 줄여서, 같은 본문 폭이 옛 화면 폭 + 260 에 온다 */
+@media(max-width:1200px), (min-width:1280px) and (max-width:1460px){.op-sec{margin:0 0 14px; padding-top:28px; font-size:1.7rem}}
 @media(max-width:640px){.op-sec{padding-inline:20px}}
 /* ※ 2026-10-30 넓은 창에서는 제목·그림·설명을 한 덩어리로 가운데에 모은다 — 오른쪽 칸이 1fr 이라 1920 창에서
      832px 까지 늘어나는데 설명 글은 360px 남짓만 써서, 판이 왼쪽에 붙고 오른쪽이 휑했다.

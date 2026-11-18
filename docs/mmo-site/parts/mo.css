@@ -1,4 +1,5 @@
-/* ═══ MO 서버(녹스) — 소개 / 전체 구조 / 병목 개선 / 컨텐츠 ═══
+/* ═══ MO 서버(녹스) — 소개 / 전체 구조 / 병목 개선 ═══
+   소개 판(목록 | 그림 | 카드)은 세 상위 탭이 같이 쓰는 intro.css 의 .gi-* 짜임이다(11-17 · 옛 .mi-* · .mc-* 는 그리로 옮겼다).
    하위 탭 줄(#mosub)은 MMO 쪽 .subtabs 짜임을 그대로 빌려 쓴다(왼쪽 끝 --tabx 도 .wrap 에서 물려받는다).
    #p-mo 안에 있어서 상위 탭이 NOX 서버일 때만 판과 같이 보인다. 여닫기는 mo.js. */
 #p-mo{margin-top:0}
@@ -13,25 +14,6 @@
 .mo-card .sv b{color:var(--ink);font-weight:700}
 .mo-card code{font-family:var(--mono);font-size:.84em;color:var(--net)}
 
-/* ── 그림 액자 — 캡처가 4:3(1280×960)이라 액자도 4:3 ── */
-.mc-fr{position:relative;aspect-ratio:4/3;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05080e}
-.mc-fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
-
-/* ── 소개: 판 장면 | 카드 ──
-   액자 폭은 화면 높이로 묶는다 — 1080 창에서 탭줄 아래로 넘치지 않게((100vh − 220) × 4/3) */
-.mi{display:grid;grid-template-columns:auto 420px;gap:22px;align-items:stretch;justify-content:start}
-.mi .mc-fr{width:min(calc((100vh - 220px) * 4 / 3), calc(var(--band-max) - 442px))}
-.mi-card{display:flex;flex-direction:column;padding:30px 30px 26px}
-.mi-h{margin:12px 0 14px!important;font-size:2rem!important;line-height:1.25;letter-spacing:-.03em!important}
-.mi-num{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 4px;padding:20px 0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2)}
-.mi-num b{display:block;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:#fff}
-.mi-num b i{font-style:normal;font-size:1rem;font-weight:700;color:var(--mut);margin-left:4px}
-.mi-num span{display:block;margin-top:9px;font-size:.84rem;color:var(--mut);line-height:1.45}
-.mi-links{display:flex;gap:8px;margin-top:22px}
-.mi-go{font-size:.88rem;font-weight:700;color:var(--net);border:1px solid var(--line);border-radius:999px;padding:7px 14px;text-decoration:none;background:rgba(108,199,255,.07)}
-/* 저작권 줄은 카드 바닥에 붙인다 — 위 내용과 떨어져 꼬리말로 읽히게 */
-.mi-fine{margin:auto 0 0!important;padding-top:22px;font-size:.76rem!important;line-height:1.6!important;color:var(--dim)!important}
-
 /* ── 전체 구조: 그림 | 카드 — 노드를 누르면 카드가 바뀐다 ── */
 .ms{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:22px;align-items:start}
 .ms-fig{border:1px solid var(--line);border-radius:14px;background:var(--sunk);padding:10px}
@@ -41,10 +23,15 @@
 .ms-fig .nd:hover rect{stroke:#4a5a80}
 .ms-fig .nd.act rect.box{stroke:var(--net);fill:#16263a}
 .ms-fig .nd text{fill:var(--ink);font-family:var(--sans);font-weight:700}
-.ms-fig .nd text.s{fill:var(--mut);font-weight:600;font-family:var(--mono)}
+.ms-fig .nd text.s{fill:var(--mut);font-weight:600;font-family:var(--sans)}
 .ms-fig .ln{stroke:#3a4766;stroke-width:2;fill:none}
-.ms-fig .lb{fill:var(--dim);font-family:var(--mono);font-size:15px}
-.ms-fig .room{fill:#1d3550;stroke:var(--net);stroke-width:1}
+/* 작은 라벨(.s · .lb)은 Pretendard. 영문 · 숫자만 있는 라벨(.m — TCP · HTTPS · WebView2 · 포트)만 고정폭으로 둔다.
+   - 왜: --mono 목록에는 한글 글꼴이 없어 한글이 PC마다 다른 고정폭 대체 글꼴로 나와 자간이 벌어졌다(11-18).
+     한글만 Pretendard 로 받는 목록('JetBrains Mono',Pretendard)도 써 봤지만 띄어쓰기 · 가운뎃점이 고정폭 너비로 남아 「접속 · 방 배정」이 여전히 벌어졌다 */
+.ms-fig .lb{fill:var(--dim);font-family:var(--sans);font-size:15px}
+.ms-fig .nd text.s.m,.ms-fig .lb.m{font-family:var(--mono)}
+/* 방 칸 — .ms-fig .nd rect(위)와 특이도가 같으면 칸이 상자 색(회색)으로 눌린다. rect.room 으로 올리고 :hover 규칙보다 뒤에 둔다 */
+.ms-fig .nd rect.room{fill:#1d3550;stroke:var(--net);stroke-width:1}
 
 /* ── 병목 개선: 차수 막대 | 카드 — 막대 길이 = 틱 합 ÷ 처음 값 ── */
 .mb-mile{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:0 0 18px;font-size:1rem;color:var(--mut)}
@@ -73,25 +60,15 @@
 .mb .mo-card dd{margin:0;color:#c3cde0}
 .mb .mo-card dd b{color:#fff}
 
-/* ── 컨텐츠: 목록 | 그림 | 카드 ── */
-.mc{display:grid;grid-template-columns:260px minmax(0,1fr) 340px;gap:22px;align-items:start}
-.mc-list{display:flex;flex-direction:column;gap:16px}
-.mc-g{display:flex;flex-direction:column;gap:6px}
-.mc-g > .mo-k{margin:0 0 2px 2px}
-.mc-it{font:inherit;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;font-size:1rem;font-weight:600;color:var(--mut);background:rgba(19,26,38,.6);transition:border-color .15s,color .15s,background .15s}
-.mc-it i{font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--dim)}
-.mc-it:hover{color:var(--ink);border-color:#3a4766}
-.mc-it.act{color:#fff;border-color:var(--net);background:rgba(108,199,255,.10)}
-.mc-it.act i{color:var(--net)}
-
-/* ── 좁은 화면 — 두세 칸을 한 줄로 내린다 ── */
+/* ── 넓은 화면에 왼쪽 기둥이 서면 본문이 300 줄어든다 — 1460 이하에서 접는다(근거는 intro.css 같은 자리) ── */
+@media (min-width:1280px) and (max-width:1460px){
+  .ms,.mb{grid-template-columns:minmax(0,1fr)}
+}
+/* ── 좁은 화면 — 두 칸을 한 줄로 내린다 ── */
 @media (max-width:1200px){
-  .mi,.ms,.mb,.mc{grid-template-columns:minmax(0,1fr)}
-  .mi .mc-fr{width:100%}
-  .mc-list{flex-direction:row;flex-wrap:wrap}
+  .ms,.mb{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:760px){
   .mb-r{grid-template-columns:120px minmax(0,1fr) 84px;gap:10px}
   .mb-cap{flex-direction:column}
-  .mi-num b{font-size:2.1rem}
 }

@@ -1,5 +1,6 @@
 (function(){
-  /* 탭은 2단이다: 상위(mmo·mo·shooter·misc) 아래 mmo 만 하위(build·bneck·content)를 갖는다.
+  /* 탭은 2단이다: 상위(mmo·mo·shooter·misc) 아래 mmo 만 하위(intro·build·bneck)를 갖는다.
+     (mo·shooter 의 하위 줄은 각자 판 안에 있고 mo.js · intro.js 가 연다 — 여기선 안 건드린다.)
      1-2(bneck)는 판 셋이 같이 보인다 — 병목 지도(p-bneck) · 핵심 최적화(p-optimization) · 결과(p-crender).
      (옛 하위 optimization(1-3 핵심 최적화)은 2026-10-27 에 1-2 아래로 내렸다.)
      한때 상위 탭 'dummy'(클라이언트)와 그 아래 2-1~2-3 하위 줄이 따로 있었다. 지금은 2-1 실행 화면
@@ -18,7 +19,7 @@
      1-2 나 다른 상위 탭에서는 눌러도 아무 일이 없는 버튼이 되므로 숨긴다.
      줄 높이는 .subtabs 의 min-height 가 잡아 두어 숨겨도 화면이 튀지 않는다. */
   const zonebar=document.getElementById("zonebar");
-  let top="mmo", sub="build";
+  let top="mmo", sub="intro";   /* 첫 화면 = 소개(11-17 · 그 전엔 전체 구조였다) */
   /* 하위 줄 글자를 활성 상위 탭에 물린다 — 왼쪽 끝(--tabx)이 그 탭과 같아야 소속이 보인다.
      줄 자체는 화면 폭을 다 쓴다(바닥선이 끝까지 가야 하므로) — 움직이는 건 안쪽 여백뿐이다.
      offsetLeft 는 offsetParent 에 따라 기준이 흔들려서 탭줄과의 상대 좌표로 잰다.
@@ -40,8 +41,8 @@
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(alignSub);
   /* 탭을 옮기면 주소창 끝도 같이 바뀐다 — 새로고침·즐겨찾기·링크 넘기기가 보던 화면으로 돌아온다.
      아래 딥링크(읽기)의 짝이다. 읽기만 있고 쓰기가 없어서, 주소는 늘 첫 화면 하나뿐이었다.
-     첫 화면(1-1)만 표시가 없다 — 기본값을 주소에 적으면 같은 화면에 주소가 둘 생긴다
-     (포폴 홈에서 들어온 사람은 표시 없음, 탭 눌러 되돌아온 사람은 #build).
+     첫 화면(소개)만 표시가 없다 — 기본값을 주소에 적으면 같은 화면에 주소가 둘 생긴다
+     (포폴 홈에서 들어온 사람은 표시 없음, 탭 눌러 되돌아온 사람은 #intro).
      pushState 가 아니라 replaceState 인 까닭: 쌓으면 탭을 누른 횟수만큼 방문기록이 생겨
      들어온 페이지로 나가려면 뒤로가기를 그만큼 눌러야 한다.
      첫 paint() 에서는 부르지 않는다(booted) — 들고 들어온 주소를 그 자리에서 지우면
@@ -49,7 +50,7 @@
   let booted=false;
   function syncHash(){
     if(!booted) return;
-    const h = (top==="mmo")   ? (sub==="build" ? "" : sub)
+    const h = (top==="mmo")   ? (sub==="intro" ? "" : sub)
             :                   top;
     history.replaceState(null, "", h ? "#"+h : location.pathname+location.search);
   }
@@ -76,7 +77,7 @@
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
     document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 아래 */
     document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 맨 아래 */
-    document.getElementById("p-content").hidden = !(top==="mmo" && sub==="content");
+    document.getElementById("p-intro").hidden = !(top==="mmo" && sub==="intro");
     document.getElementById("p-mo").hidden    = (top!=="mo");
     document.getElementById("p-shooter").hidden = (top!=="shooter");
     document.getElementById("p-misc").hidden  = (top!=="misc");
@@ -107,7 +108,9 @@
   /* 해시 딥링크 — #bneck 은 하위 탭이라 상위까지 같이 열어 준다 */
   const h0=(location.hash||"").replace("#","");
   let toOpt=false, toRender=false;
-  if(h0==="bneck"||h0==="build"||h0==="content"){ top="mmo"; sub=h0; }
+  if(h0==="intro"||h0==="build"||h0==="bneck"){ top="mmo"; sub=h0; }
+  /* 옛 1-3 컨텐츠 주소(#content)는 소개 판으로 — 11-17 에 소개와 합쳐졌다 */
+  else if(h0==="content"){ top="mmo"; sub="intro"; }
   /* 옛 1-3 주소(#optimization · #optimization-<그림>)는 1-2 를 열고 핵심 최적화 판까지 내려 준다 */
   else if(h0==="optimization"||h0.indexOf("optimization-")===0){ top="mmo"; sub="bneck"; toOpt=true; }
   else if(h0==="mo"||h0==="shooter"||h0==="misc"){ top=h0; }
@@ -177,4 +180,86 @@
     else if(last) last.scrollIntoView({block:"end", behavior:smooth});
   });
   update();
+})();
+
+/* 왼쪽 기둥(2026-11-18) — 상위 탭 · 하위 탭 · 소개 판 목록을 한 줄기로 그린다(넓은 화면만, common.css .side).
+   단추를 새로 정의하지 않는다: 원래 단추(.tab · .subtab · .gi-it)의 이름을 읽어 오고, 누르면 원래 단추를 대신 누른다.
+   그래서 판 여닫기 · 주소 · 애니는 지금까지처럼 tabs.js · mo.js · intro.js 가 맡고, 좁은 화면의 원래 두 줄과 행동이 같다.
+   켜짐 표시는 원래 단추의 .act 를 지켜보다(MutationObserver) 따라 칠한다 — 딥링크 · 다른 스크립트가 바꿔도 같이 바뀐다.
+   펼침은 켜진 상위 탭 하나만, 목록은 그 탭의 첫 하위(소개)가 켜졌을 때만 — 접힌 것까지 다 펼치면 세 겹이 다시 한 화면에 쌓인다.
+   1-2 는 판 셋이 한 쪽에 이어 붙는다(위 paint) — 쪽을 나누지 않고 기둥에 차례만 단다(2026-11-18).
+   나누면 아래 두 판은 눌러야만 보이지만, 이어 두면 스크롤만으로 셋이 다 지나간다. 차례는 「아래에 뭐가 있나」만 알린다.
+   누르면 그 판으로 내려가고, 스크롤하면 지금 보는 판이 켜진다. 판 이름은 여기 SECT 한 곳에만 적는다. */
+(function(){
+  const side=document.getElementById("side"); if(!side) return;
+  const SUB={mmo:"subtabs", mo:"mosub", shooter:"shsub"};      /* 상위 탭 → 그 하위 줄 */
+  const LIST={mmo:"p-intro", mo:"p-mo", shooter:"p-shooter"};  /* 상위 탭 → 소개 판 목록이 든 판 */
+  const SECT={bneck:[["p-bneck","병목 지도"],["p-optimization","핵심 최적화"],["p-crender","실서버 화면"]]};   /* MMORPG 하위 → 그 쪽의 판 차례 */
+  const pairs=[], grps=[], lists=[], spies=[];
+  function mk(tag, cls, html){ const e=document.createElement(tag); e.className=cls; if(html!=null) e.innerHTML=html; if(tag==="button") e.type="button"; return e; }
+  function link(p, o, lift){
+    pairs.push([p,o]);
+    p.addEventListener("click", function(){
+      o.click();
+      /* 기둥은 화면에 붙어 따라오므로 긴 판(병목 개선) 아래에서도 누를 수 있다 — 판을 바꿨으면 새 판의 맨 위부터 */
+      if(lift && scrollY>0) scrollTo(0,0);
+    });
+  }
+  document.querySelectorAll(".tabrow .tab").forEach(function(t){
+    const k=t.getAttribute("data-tab");
+    const b=mk("button","sd-t"); b.appendChild(mk("b","",t.querySelector("b").innerHTML)); b.appendChild(mk("span","",t.querySelector("span").innerHTML));
+    side.appendChild(b); link(b,t,true);
+    const bar=SUB[k] && document.getElementById(SUB[k]); if(!bar) return;
+    const g=mk("div","sd-grp"); side.appendChild(g); grps.push([g,t]);
+    bar.querySelectorAll(".subtab").forEach(function(s,i){
+      const sb=mk("button","sd-s",s.innerHTML); g.appendChild(sb); link(sb,s,true);
+      const sec=(k==="mmo") && SECT[s.getAttribute("data-sub")];
+      if(sec){
+        const l=mk("div","sd-list"); g.appendChild(l); lists.push([l,s]);
+        sec.forEach(function(x,j){
+          const el=document.getElementById(x[0]); if(!el) return;
+          const lb=mk("button","sd-l"); lb.textContent=x[1]; l.appendChild(lb); spies.push([lb,el]);
+          lb.addEventListener("click", function(){
+            if(!s.classList.contains("act")) s.click();
+            const smooth=matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+            /* 첫 판은 쪽 맨 위 — 판 위끝에 맞추면 그 위 여백만큼 덜 올라간다 */
+            if(j===0) scrollTo({top:0, behavior:smooth}); else el.scrollIntoView({block:"start", behavior:smooth});
+          });
+        });
+      }
+      if(i!==0) return;
+      const gi=document.querySelector("#"+LIST[k]+" .gi"); if(!gi) return;
+      const l=mk("div","sd-list"); g.appendChild(l); lists.push([l,s]);
+      gi.querySelectorAll(".gi-it").forEach(function(it){ const lb=mk("button","sd-l",it.innerHTML); l.appendChild(lb); link(lb,it,false); });
+    });
+  });
+  function sync(){
+    pairs.forEach(function(x){ const on=x[1].classList.contains("act"); x[0].classList.toggle("act",on);
+      if(on) x[0].setAttribute("aria-current","true"); else x[0].removeAttribute("aria-current"); });
+    grps.forEach(function(x){ x[0].hidden=!x[1].classList.contains("act"); });
+    lists.forEach(function(x){ x[0].hidden=!x[1].classList.contains("act"); });
+    spyReq();   /* 하위 탭이 바뀌면 스크롤 없이 쪽 길이가 바뀐다 */
+  }
+  /* 지금 보는 판 = 위끝이 화면 40% 선을 넘어 올라온 판 중 마지막. 쪽 맨 밑에 닿으면 마지막 판
+     (마지막 판이 짧아 위끝이 40% 선까지 못 올라오는 화면에서도 끝 칸이 켜지게). 숨은 판은 세지 않는다. */
+  let sq=false;
+  function spy(){
+    sq=false;
+    const vis=spies.filter(function(x){ return !x[1].hidden; });
+    let cur=null;
+    if(vis.length && side.offsetWidth){
+      const atEnd = scrollY > 0 && scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
+      cur = atEnd ? vis[vis.length-1] : vis[0];
+      if(!atEnd) vis.forEach(function(x){ if(x[1].getBoundingClientRect().top <= innerHeight*0.4) cur=x; });
+    }
+    spies.forEach(function(x){ const on=(x===cur); x[0].classList.toggle("act",on);
+      if(on) x[0].setAttribute("aria-current","true"); else x[0].removeAttribute("aria-current"); });
+  }
+  function spyReq(){ if(!sq){ sq=true; requestAnimationFrame(spy); } }
+  addEventListener("scroll", spyReq, {passive:true});
+  addEventListener("resize", spyReq);
+  addEventListener("load", spyReq);
+  const mo=new MutationObserver(sync);
+  pairs.forEach(function(x){ mo.observe(x[1],{attributes:true, attributeFilter:["class"]}); });
+  sync();
 })();

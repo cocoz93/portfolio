@@ -1,9 +1,9 @@
-/* ═══ MO 서버(녹스) — 하위 탭 넷의 여닫기와 그 안의 고르기(구조 상자 · 병목 차수 · 컨텐츠) ═══
+/* ═══ MO 서버(녹스) — 하위 탭 셋의 여닫기와 그 안의 고르기(구조 상자 · 병목 차수) ═══
+   소개 판(게임 소개 + 컨텐츠 목록)의 고르기는 intro.js 가 한다 — 표도 스크립트가 아니라 panel-mo.html 마크업에 있다(11-17).
    다른 조각과 바깥 스코프를 나누지 않는다 — 이 파일 안에서 끝난다.
    병목 수치 출처 = Nox_MatchServer 최적화 반복 기록(64방 · 5분 · 세 판 중앙값) · 부하 한계 기록(11-15). */
 (function(){
 "use strict";
-const M='media/';
 
 /* 전체 구조 — 상자 이름(data-n) → [제목, 하는 일, 이어지는 곳] */
 const N={
@@ -57,34 +57,9 @@ function step(i){
 }
 step(4);
 
-/* 컨텐츠 — [묶음, 이름, 그림, 설명, 서버 쪽]
-   사람 확인이 안 끝난 것(런처 · 대화방 · 귓속말 · 시간 제한)과 아직 못 찍은 것(웹 가입 · 점수 ±10)은 뺐다.
-   닫히거나 찍히면 이 표에 줄을 더한다 — 묶음이 같은 줄은 붙여 둘 것(묶음 머리글을 줄 순서로 만든다) */
-const C=[
- ['로비','방 목록',M+'mo-rooms.jpg','방을 만들고, 목록에서 골라 들어간다. 방 여러 개가 한 게임 서버에서 같이 돈다.','<b>로비</b> — 방 목록 · <b>게임 서버</b> — 방 N개'],
- ['매칭','랭크 매칭',M+'mo-rank.jpg','버튼 → 줄 서기 → 상대를 찾으면 수락 창 10초 → 둘 다 수락하면 랭크 방.','<b>로비</b> — 줄 · 수락 시간 · 방 만들기'],
- ['기록','전적 검색',M+'mo-record.jpg','이름을 넣으면 요약과 최근 20판.','<b>로비</b> → MySQL 전적']
-];
-const list=document.getElementById('mc-list'),img=document.getElementById('mc-img'),mcc=document.getElementById('mc-card');
-let g0=null,gEl=null;
-C.forEach((c,i)=>{
-  if(c[0]!==g0){gEl=document.createElement('div');gEl.className='mc-g';gEl.innerHTML='<span class="mo-k">'+c[0]+'</span>';list.appendChild(gEl);g0=c[0];}
-  const b=document.createElement('button');
-  b.type='button';b.className='mc-it';b.dataset.i=i;
-  b.innerHTML='<i>'+String(i+1).padStart(2,'0')+'</i>'+c[1];
-  b.addEventListener('click',()=>pick(i));
-  gEl.appendChild(b);
-});
-function pick(i){
-  const c=C[i];
-  list.querySelectorAll('.mc-it').forEach(b=>b.classList.toggle('act',+b.dataset.i===i));
-  img.src=c[2];img.alt=c[1]+' 화면';
-  mcc.innerHTML='<div class="mo-k">'+String(i+1).padStart(2,'0')+' · '+c[0]+'</div><h3>'+c[1]+'</h3><p>'+c[3]+'</p><div class="sv">'+c[4]+'</div>';
-}
-pick(1);
-
-/* 하위 탭 — ?mo=build 처럼 주소로 바로 열 수 있다(상위 탭은 #mo 가 연다 · tabs.js) */
-const KEYS=['intro','build','bneck','content'];
+/* 하위 탭 — ?mo=build 처럼 주소로 바로 열 수 있다(상위 탭은 #mo 가 연다 · tabs.js).
+   옛 ?mo=content 는 소개로 연다 — 11-17 에 컨텐츠가 소개 판 목록으로 합쳐졌다 */
+const KEYS=['intro','build','bneck'];
 const subs=[...document.querySelectorAll('#mosub .subtab')];
 function sub(k){
   subs.forEach(s=>{const on=s.dataset.mo===k;s.classList.toggle('act',on);s.setAttribute('aria-selected',on?'true':'false');});
@@ -92,5 +67,5 @@ function sub(k){
 }
 subs.forEach(s=>s.addEventListener('click',()=>sub(s.dataset.mo)));
 const q=new URLSearchParams(location.search).get('mo');
-sub(KEYS.includes(q)?q:'intro');
+sub(KEYS.includes(q)?q:'intro');   /* content 를 포함한 나머지는 전부 소개 */
 })();

@@ -1,0 +1,68 @@
+/* ═══ 소개 판 — 세 상위 탭(MMORPG · NOX 서버 · 슈팅 서버)의 첫 하위 탭 「소개」가 같이 쓰는 짜임 ═══
+   목록 | 그림 | 카드. 목록 맨 위 「게임 소개」가 기본이고, 아래 컨텐츠를 누르면 그림과 카드가 바뀐다.
+   예전엔 소개와 컨텐츠가 하위 탭 둘이었다 — 11-17 에 합쳐 세 상위 탭의 하위 줄을 소개 · 전체 구조 · 병목 개선 셋으로 맞췄다
+   (MMORPG 의 「컨텐츠 · 준비 중」 빈 탭이 없어지고, 첫 화면에 게임이 먼저 나온다).
+   여닫기는 intro.js. 그림 비율은 판마다 --gi-ar 로 준다(녹스 캡처 4:3 · MMORPG 웹 클라 캡처 16:9). */
+#p-intro{margin-top:0}
+.gi-band{max-width:var(--band-max);margin:30px auto 0}
+.gi{display:grid;grid-template-columns:200px minmax(0,1fr) 400px;gap:22px;align-items:start}
+.gi-k{font-family:var(--sans);font-size:.8rem;font-weight:700;letter-spacing:.04em;color:var(--dim)}
+
+/* ── 목록 — 묶음 머리글 + 버튼. 버튼 n번째 = 카드 n번째(intro.js 가 차례로 짝짓는다) ── */
+.gi-list{display:flex;flex-direction:column;gap:16px}
+.gi-g{display:flex;flex-direction:column;gap:6px}
+.gi-g > .gi-k{margin:0 0 2px 2px}
+.gi-it{font:inherit;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;padding:9px 14px;border:1px solid var(--line);border-radius:10px;font-size:1rem;font-weight:600;color:var(--mut);background:rgba(19,26,38,.6);transition:border-color .15s,color .15s,background .15s}
+.gi-it i{font-style:normal;font-family:var(--mono);font-size:.72rem;color:var(--dim)}
+.gi-it:hover{color:var(--ink);border-color:#3a4766}
+.gi-it.act{color:#fff;border-color:var(--net);background:rgba(108,199,255,.10)}
+.gi-it.act i{color:var(--net)}
+
+/* ── 그림 액자 — 캡처 비율 그대로(--gi-ar) ── */
+.gi-fr{position:relative;aspect-ratio:var(--gi-ar,4/3);border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05080e}
+.gi-fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
+
+/* ── 카드 — 한 번에 하나만 보인다. 게임 소개 카드(.gi-lead)만 칸 높이까지 늘려 저작권 줄을 바닥에 붙인다 ── */
+.gi-cards{align-self:stretch;display:flex;flex-direction:column}
+.gi-card{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:22px 24px}
+.gi-card.gi-lead{flex:1;display:flex;flex-direction:column;padding:30px 30px 26px}
+/* .gi-lead 의 display:flex 와 특이도가 같아 뒤에 두고 한 단계 높인다 — 앞에 두면 숨긴 소개 카드가 그대로 떠서 카드 둘이 쌓인다.
+   이름이 .lead 가 아닌 까닭 — common.css 의 .panel .lead(본문 첫 문단: 여백 14px · 74ch)에 걸려 카드가 위아래로 들어간다 */
+.gi-cards > .gi-card[hidden]{display:none}
+.gi-card h3{margin:6px 0 10px;font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
+.gi-card p{margin:0 0 12px;color:#c3cde0;font-size:.98rem;line-height:1.7}
+.gi-card .sv{margin-top:14px;padding-top:14px;border-top:1px solid var(--line2);font-size:.9rem;color:var(--mut)}
+.gi-card .sv b{color:var(--ink);font-weight:700}
+.gi-h{margin:12px 0 14px!important;font-size:2rem!important;line-height:1.25;letter-spacing:-.03em!important}
+.gi-num{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0 4px;padding:20px 0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2)}
+.gi-num b{display:block;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:#fff}
+.gi-num b i{font-style:normal;font-size:1rem;font-weight:700;color:var(--mut);margin-left:4px}
+.gi-num span{display:block;margin-top:9px;font-size:.84rem;color:var(--mut);line-height:1.45}
+.gi-links{display:flex;gap:8px;margin-top:22px}
+.gi-go{font-size:.88rem;font-weight:700;color:var(--net);border:1px solid var(--line);border-radius:999px;padding:7px 14px;text-decoration:none;background:rgba(108,199,255,.07)}
+/* 저작권 줄은 카드 바닥에 붙인다 — 위 내용과 떨어져 꼬리말로 읽히게 */
+.gi-fine{margin:auto 0 0!important;padding-top:22px;font-size:.76rem!important;line-height:1.6!important;color:var(--dim)!important}
+
+/* ── 슈팅 서버 판 — 자기 조각(css)이 없어 여기 둔다. 하위 탭 줄이 판 맨 위에 붙는 건 #p-mo 와 같다 ── */
+#p-shooter{margin-top:0}
+.sh-pane[hidden]{display:none}
+/* 전체 구조 — 라우터와 게임 스레드를 한 프로세스로 묶는 점선 테두리(누르는 상자가 아니다) */
+#sh-build .grp{fill:none;stroke:var(--line);stroke-width:1.5;stroke-dasharray:5 6}
+
+/* ── 넓은 화면(1280 이상) — 목록은 왼쪽 기둥이 맡는다(common.css .side). 판은 그림 · 카드 두 칸 ──
+   1460 = 옛 접힘(화면 1200 = 본문 1160)에 기둥 몫 300 을 더한 값 — 본문이 1160 이하로 줄면 한 줄로 내린다 */
+@media (min-width:1280px){
+  .gi-list{display:none}
+  .gi{grid-template-columns:minmax(0,1fr) 400px}
+}
+@media (min-width:1280px) and (max-width:1460px){
+  .gi{grid-template-columns:minmax(0,1fr)}
+}
+/* ── 좁은 화면 — 세 칸을 한 줄로 내리고 목록은 가로로 눕힌다 ── */
+@media (max-width:1200px){
+  .gi{grid-template-columns:minmax(0,1fr)}
+  .gi-list{flex-direction:row;flex-wrap:wrap}
+}
+@media (max-width:760px){
+  .gi-num b{font-size:2.1rem}
+}

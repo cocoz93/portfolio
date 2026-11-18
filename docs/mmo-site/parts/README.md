@@ -9,13 +9,31 @@
 |---|---|
 | **서버** — 설계 탭 + 병목 탭 + 핵심 최적화(병목 탭 아래 판) | `common.css` `bneck.css` `bneck-tail.css` `optimization.css` `panel-build.html` `panel-bneck.html` `panel-optimization.html` `scene.js` `wave.js` `bneck.js` `optimization.js` |
 | **클라** — 1-2 맨 아래 결과 판 = 실행 화면 녹화(옛 클라이언트 2-1) | `client.css` `panel-client.html` `client-render.js` |
-| **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` |
+| **공통** — 단독 작업만 | 셸 `mmo.src.html` · `tabs.js` · 왼쪽 기둥(`common.css` 의 1280 블록) |
 | **MO(녹스)** — 상위 탭 NOX 서버 | `mo.css` `panel-mo.html` `mo.js` |
+| **소개 판** — 세 상위 탭의 첫 하위 탭(목록 · 그림 · 카드) + MMORPG 소개 + 슈팅 서버 판 | `intro.css` `intro.js` `panel-intro.html` `panel-shooter.html` |
 
 MO 갈래(2026-11-17)는 위 둘과 스코프를 나누지 않는다 — `mo.js` 는 자기 IIFE 안에서 끝나고,
 하위 탭 버튼은 `data-sub` 가 아니라 `data-mo` 를 써서 `tabs.js` 가 건드리지 않는다.
-클래스 접두어는 `.mo-*` `.mi-*`(소개) `.ms-*`(구조) `.mb-*`(병목) `.mc-*`(컨텐츠) · id 는 `#mosub` `#mo-*` `#ms-*` `#mb-*` `#mc-*`.
+클래스 접두어는 `.mo-*` `.ms-*`(구조) `.mb-*`(병목) · id 는 `#mosub` `#mo-*` `#ms-*` `#mb-*`.
+소개 판은 아래 소개 갈래의 `.gi-*` 를 쓴다(옛 `.mi-*`(소개) · `.mc-*`(컨텐츠)는 11-17 에 그리로 합쳤다).
 그림은 `media/mo-*.jpg` 외부 파일이다(시험 캡처에서 창 테두리를 잘라 낸 1280×960).
+
+소개 갈래(2026-11-17)는 세 상위 탭의 하위 줄을 소개 · 전체 구조 · 병목 개선 셋으로 맞추며 생겼다.
+소개 판의 표는 스크립트가 아니라 **마크업**이 들고 있다 — 버튼 n번째(`.gi-it`) = 카드 n번째(`.gi-card`), 그림은 버튼의 `data-img`.
+짝이 어긋나면 `intro.js` 가 콘솔 오류를 남기고 그 판을 건너뛴다. 슈팅 서버 판은 자기 스크립트가 없어 하위 줄도 `intro.js` 의 `nav[data-panes]` 가 열고,
+전체 구조의 상자 고르기도 `intro.js` 의 `.ms[data-pick]` 이 한다(상자 `.nd[data-n]` = 같은 `data-n` 의 `.mo-card`). 구조도 짜임 `.ms` · `.nd` · `.mo-card` 는 `mo.css` 것을 빌려 쓴다.
+슈팅 서버 그림은 `media/sh-*.jpg`(사람 확인 자동판 캡처에서 위 165px 를 잘라 낸 987×555).
+MMORPG 첫 화면이 소개가 되면서 `#p-build` 는 **숨은 채 로드된다** — `wave.js` 는 등장 지연을 로드 때가 아니라 처음 보일 때(`play`) 잰다.
+포폴 홈 정지 컷을 뽑는 `docs/home/sync-scene.ps1` 도 그래서 `#build` 로 연다.
+
+왼쪽 기둥(2026-11-18)은 넓은 화면(1280 이상)에서 상위 탭 · 하위 탭 · 소개 판 목록 세 겹을 왼쪽 한 줄기(`#side`)로 보인다.
+기둥은 **대리 단추**다 — `tabs.js` 끝 IIFE 가 원래 단추(`.tabrow .tab` · `.subtab` · `.gi-it`)에서 이름을 읽어 만들고,
+누르면 원래 단추를 `.click()` 한다. 판 여닫기 · 주소 · 애니는 지금까지처럼 `tabs.js` · `mo.js` · `intro.js` 가 하고,
+기둥은 원래 단추의 `class` 를 지켜보다(MutationObserver) 켜짐 표시만 따라간다. 원래 줄은 좁은 화면에서 그대로 쓰이므로 지우지 말 것.
+MMORPG 병목 개선 아래 차례 세 칸(병목 지도 · 핵심 최적화 · 실서버 화면)은 원래 단추가 없어 기둥이 직접 판(`#p-bneck` `#p-optimization` `#p-crender`)으로
+내려가고, 스크롤 위치로 켜진다. 이름과 판 id 는 같은 IIFE 의 `SECT` 표에만 있다 — 1-2 에 판을 더하거나 빼면 거기도 고칠 것.
+셸의 `.main` 은 넓은 화면에서 기둥 옆 칸이 되는 감싸개일 뿐 판을 숨기지 않는다.
 
 설계 탭과 병목 탭은 **갈래로 못 나눈다.** 병목 지도를 그리는 코드가 씬 IIFE 안에 중첩돼 바깥 스코프
 (`paintZones` `PJ` `wireify` 등)를 그대로 쓰고, `#p-bneck` 안을 열고 닫는 것도 `scene.js` 다.
@@ -37,8 +55,8 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
    (`bneckRing` 은 2026-10-29 — bneck.js 가 내놓고 scene.js 가 판을 켤 때 불러 고리를 다시 칠한다.)
    이름·인자를 바꾸려면 단독 작업으로.
    (`__bnPickLoc` 은 2026-08-04 에 없앴다 — 핀에서 클릭을 걷어내면서 부를 곳이 사라졌다.)
-3. **DOM id** — `#p-build` `#p-bneck` `#p-optimization` `#p-crender` `#p-content` `#p-mo` `#p-shooter` `#p-misc` `#scene`
-   `#subtabs`. `tabs.js` 가 전부 하드코딩한다.
+3. **DOM id** — `#p-intro` `#p-build` `#p-bneck` `#p-optimization` `#p-crender` `#p-mo` `#p-shooter` `#p-misc` `#scene`
+   `#subtabs` `#side`. `tabs.js` 가 전부 하드코딩한다(`#side` 는 기둥 IIFE 가 `#subtabs` `#mosub` `#shsub` 와 함께 읽는다).
    (`#builddoor` 는 2026-10-27 에 없앴다 — 1-1 의 나가는 문은 `#p-build` 안 `.stage-ctl` 로 내려가 판과 함께 숨는다.
    `wave.js` 가 '다시 재생' 을 그 줄 맨 앞에 끼우므로 `.stage-ctl` 은 panel-build.html ↔ wave.js 의 계약이다.)
    (2026-10-23 옛 상위 탭 '클라이언트'를 없앴다 — `#p-crender` 는 1-1 구조도 아래로 옮겼다가 10-27 에 1-2 맨 아래 결과 판으로 옮겼고,
@@ -60,6 +78,14 @@ bneck-tail.css 는 760px 이하 3열). 위로 올리면 좁은 화면에서 규�
      (핀 지연 간격은 scene.js `animationDelay`, 드롭 길이는 common.css `bnPinDrop`).
      계수 5 는 `PINS` 배열의 마지막 인덱스다 — 자리가 여섯이던 시절엔 2.12s 였고 그때 2140 이 정해졌다.
      작으면 마지막 핀이 공중에서 규칙을 잃고 제자리로 점프한다 — 핀을 더 꽂거나 간격을 늘리면 여기부터 볼 것.
+   - *왼쪽 기둥의 폭 환산* — 1280 이상에서 기둥(220) + 틈(40)이 본문을 **260px** 줄인다(`common.css` 기둥 블록).
+     그래서 화면 폭을 보는 규칙은 「옛 폭 + 260」 범위를 하나 더 가진다: `intro.css` · `mo.css` 1460(옛 1200) ·
+     `client.css` · `optimization.css` 1280~1460(옛 1200) · `bneck.css` 1820(옛 1560) · 1280~1360(옛 1100) ·
+     `bneck-tail.css` 1541~1580 · 1540(옛 1281~1320 · 1280). 기둥 폭이나 틈을 바꾸면 이 숫자들을 같이 옮길 것.
+     폭 규칙을 새로 넣을 때도 1280 이상이면 같은 환산이 필요하다.
+     1-1 구조도는 폭 규칙 대신 `common.css` 의 `#scene{width:min(100%, calc((100% - 356px) / .742))}` 로 카드 자리를 비운다
+     (356 = `.card` 최소 318 + 오른쪽 18 + 틈 20 · .742 = 「게임 루프」 라벨 오른쪽 끝의 그림 폭 비율, viewBox 341~1423 기준).
+     카드 최소 폭이나 viewBox 를 바꾸면 이 둘을 다시 잴 것.
 6. **클래스 접두어** — 병목 `.bn-*` `.bx-*`(오른쪽 판 안 조각은 `.bx-*` — 옛 카드 `.rc` 는 2026-10-26 에 없앴다) / 클라 `.cl-*` `.cr-*`.
    `.card .stage .hit .panel` 은 이미 공유 중이니 새로 만들지 말 것.
 

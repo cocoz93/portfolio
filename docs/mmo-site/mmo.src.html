@@ -19,17 +19,26 @@
 <!--#include bneck-tail.css -->
 <!--#include optimization.css -->
 <!--#include mo.css -->
+<!--#include intro.css -->
 </style>
 </head>
 <body>
 
 <div class="wrap">
 
+<!-- 왼쪽 기둥(2026-11-18) — 넓은 화면(1280 이상)에서 상위 탭 · 하위 탭 · 소개 판 목록 세 겹을 한 줄기로 보인다.
+     안은 비어 있고 tabs.js 가 아래 원래 단추들에서 이름을 읽어 채운다 — 이름을 두 곳에 적지 않는다.
+     좁은 화면에서는 숨고 원래 두 줄(.tabrow · .subtabs) + 목록이 그대로 나온다(common.css). -->
+<nav class="side" id="side" aria-label="섹션"></nav>
+
+<!-- 본문 감싸개 — 넓은 화면에서 기둥 옆 칸이 된다. 판을 숨기지는 않는다(판 여닫기는 각 판의 hidden 그대로) -->
+<div class="main">
+
 <div class="tabrow">
     <nav class="tabs" role="tablist" aria-label="섹션">
-      <button class="tab act" data-tab="mmo" role="tab" aria-selected="true"><b>MMO 서버</b><span>전쟁밀도 동접 5,000</span></button>
+      <button class="tab act" data-tab="mmo" role="tab" aria-selected="true"><b>MMORPG</b><span>2D 탑뷰 · 존 방식</span></button>
       <button class="tab" data-tab="mo" role="tab" aria-selected="false"><b>NOX 서버</b><span>MO · 상용 클라 접속</span></button>
-      <button class="tab" data-tab="shooter" role="tab" aria-selected="false"><b>SHOOTER 서버</b><span>MO · 언리얼 Lyra 클라</span></button>
+      <button class="tab" data-tab="shooter" role="tab" aria-selected="false"><b>슈팅 서버</b><span>MO · 언리얼 Lyra 클라</span></button>
       <button class="tab" data-tab="misc" role="tab" aria-selected="false"><b>링크 모음</b><span>GitHub · Notion</span></button>
     </nav>
     <!-- 스택 한 줄(C++17 · Windows IOCP)이 여기 있었다. 뺀 까닭은 줄이 안 맞아서다 —
@@ -38,21 +47,22 @@
          가장 덜 잃는 쪽을 뺐다. 스택은 GitHub 저장소와 노션 설계 문서가 첫 줄에서 말한다. -->
   </div>
 
-  <!-- MMO 서버 하위 탭 줄. 상위 탭이 MMO 서버일 때만 보인다.
+  <!-- MMORPG 하위 탭 줄. 상위 탭이 MMORPG 일 때만 보인다.
        짜임은 위 .tabrow 와 같다 — 왼쪽은 이동(탭), 오른쪽 끝은 그 줄의 부가물.
        위 줄의 부가물이 스택 메타라면 이 줄의 것은 1-1 화면의 구역 필터다.
        그래서 줄(.subtabs)과 탭 목록(.subnav)을 갈라 둔다 — 바닥선은 줄이 갖고,
        role="tablist" 는 탭만 담은 안쪽이 갖는다(탭 목록 안에 버튼 그룹을 섞으면 안 된다). -->
   <div class="subtabs" id="subtabs">
-    <nav class="subnav" role="tablist" aria-label="MMO 서버 하위 섹션">
-      <button class="subtab act" data-sub="build" role="tab" aria-selected="true">전체 구조</button>
+    <nav class="subnav" role="tablist" aria-label="MMORPG 하위 섹션">
+      <!-- 소개(11-17) — 게임 소개 + 옛 1-3 컨텐츠를 합친 첫 화면(panel-intro.html). 녹스 · 슈팅 탭도 같은 셋이다 -->
+      <button class="subtab act" data-sub="intro" role="tab" aria-selected="true">소개</button>
+      <button class="subtab" data-sub="build" role="tab" aria-selected="false">전체 구조</button>
       <button class="subtab" data-sub="bneck" role="tab" aria-selected="false">병목 개선</button>
       <!-- 옛 1-3 핵심 최적화는 1-2 병목 개선 아래로 내렸다(2026-10-27) — 원리 그림 다섯이 1-2 의
            실험 2·6·8·9·15 와 짝이라 한 화면에서 이어 읽히게. 옛 주소 #optimization-* 는 1-2 로 연다(tabs.js). -->
       <!-- 옛 상위 탭 '클라이언트'(2-1 실행 화면 · 2-2 안전성 검증 · 2-3 부하 검증)는 없앴다.
            2-2·2-3 은 뺐다(자세한 건 노션 쪽에 있다). 실행 화면 녹화는 '5,000명을 버틴다' — 병목 개선의 결과라
            1-2 맨 아래 결과 판으로 둔다(2026-10-27 · 거쳐 온 자리는 client.css #p-crender 주석). -->
-      <button class="subtab" data-sub="content" role="tab" aria-selected="false">컨텐츠</button>
     </nav>
     <!-- 구역 강조 — 누르면 그 구역만 남고 나머지는 죽는다. 같은 버튼을 다시 누르면 전체로 복귀.
          data-z 값은 ZONES[].color(=ZPAL 키)와 같은 문자열이라 스크립트가 그대로 씬에 얹는다.
@@ -80,6 +90,8 @@
     <circle cx="20" cy="20" r="17" class="subdown-bg"/>
     <path d="M20 13v13M14.5 20.5 20 26l5.5-5.5" class="subtop-ar"/></svg></button>
 
+<!--#include panel-intro.html -->
+
 <!--#include panel-build.html -->
 
 
@@ -89,18 +101,9 @@
 
 <!--#include panel-client.html -->
 
-  <!-- 아직 내용이 없는 자리 — 1-3 컨텐츠(2D MMORPG, 같은 MMO 서버 위). 채울 때 이 판을 통째로 갈아 끼운다.
-       상위 탭 MO 서버도 여기 '준비 중' 판이었다가 2026-11-17 에 녹스 판(panel-mo.html)으로 갈아 끼웠다. -->
-  <section class="panel" id="p-content" role="tabpanel" hidden>
-    <div class="soon"><b>2D 탑뷰 MMORPG 컨텐츠</b><span>준비 중</span></div>
-  </section>
 <!--#include panel-mo.html -->
 
-  <!-- 상위 탭 SHOOTER 서버 — 아직 내용이 없는 자리(MyGit/MO_Shooter · 클라는 언리얼 Lyra). 채울 때 녹스 판처럼 통째로 갈아 끼운다.
-       탭 이름이 FPS·TPS 가 아닌 까닭: Lyra 는 3인칭이라 FPS 가 틀리고, TPS 는 서버 쪽에서 초당 처리 건수로 읽힌다. -->
-  <section class="panel" id="p-shooter" role="tabpanel" hidden>
-    <div class="soon"><b>MO 슈팅 서버 — 언리얼 Lyra 클라</b><span>준비 중</span></div>
-  </section>
+<!--#include panel-shooter.html -->
 
   <!-- 링크 모음 — 이 페이지 밖으로 나가는 문. 순서는 '이 프로젝트 것(소스·설계문서) 먼저, 그 밖은 뒤' 다.
        한때 여기 스택 노트와 천장 수치가 같이 있었는데 둘 다 뺐다 — 스택은 탭줄 오른쪽 메타
@@ -167,6 +170,7 @@
     </div>
    </div>
   </section>
+</div><!-- /.main -->
 </div>
 
 <script>
@@ -203,6 +207,8 @@
 <!--#include client-render.js -->
 
 <!--#include mo.js -->
+
+<!--#include intro.js -->
 </script>
 <!-- 옛 2-2 안전성 계단(safe-scene.js · client.js)과 그 편집기 mmo-safe-edit.html 은 지웠다(2026-10-23).
      되살릴 때는 git 이력에서 셋을 같이 꺼내고 이 자리에 include 두 줄을 다시 넣는다. -->

@@ -9,12 +9,21 @@
   const sel="#lyr-plat>*,#lyr-shad>*,#lyr-lane>*,#lyr-build>*,#lyr-lbl>*";
   const els=[].slice.call(scene.querySelectorAll(sel));
   if(!els.length){ if(window.__flowStart) window.__flowStart(); return; }
-  let H=500; try{ H=scene.getBBox().height||500; }catch(e){}
-  /* 흐름축 f = cx + (H - cy) : 좌하일수록 작고(먼저), 우상일수록 큼(나중) → 대각선 스윕 */
-  const info=els.map(function(el){ let cx=0,cy=0; try{ const b=el.getBBox(); cx=b.x+b.width/2; cy=b.y+b.height/2; }catch(e){} return {el:el,f:cx+(H-cy)}; });
-  const fs=info.map(function(o){return o.f;});
-  const fmin=Math.min.apply(null,fs), fmax=Math.max.apply(null,fs), range=(fmax-fmin)||1;
-  info.forEach(function(o){ o.el.style.animationDelay=Math.round((o.f-fmin)/range*SPAN)+"ms"; });
+  /* 지연은 씬이 화면에 그려져 있을 때 잰다. 숨은(display:none) 판에서는 getBBox 가 전부 0 이라
+     모든 칸이 같은 지연을 받아 한꺼번에 튀어나온다(대각선 스윕이 사라진다).
+     첫 화면이 소개 판으로 바뀐 뒤(11-17)로는 첫 로드 때 씬이 숨어 있다 — 그래서 play 마다 아직 못 쟀으면 잰다.
+     한 번 재면 끝이다(씬 좌표는 고정). */
+  let staggered=false;
+  function stagger(){
+    let H=0; try{ H=scene.getBBox().height; }catch(e){}
+    if(!H) return false;
+    /* 흐름축 f = cx + (H - cy) : 좌하일수록 작고(먼저), 우상일수록 큼(나중) → 대각선 스윕 */
+    const info=els.map(function(el){ let cx=0,cy=0; try{ const b=el.getBBox(); cx=b.x+b.width/2; cy=b.y+b.height/2; }catch(e){} return {el:el,f:cx+(H-cy)}; });
+    const fs=info.map(function(o){return o.f;});
+    const fmin=Math.min.apply(null,fs), fmax=Math.max.apply(null,fs), range=(fmax-fmin)||1;
+    info.forEach(function(o){ o.el.style.animationDelay=Math.round((o.f-fmin)/range*SPAN)+"ms"; });
+    return true;
+  }
   const replay=document.createElement("button");
   replay.type="button"; replay.className="stage-replay"; replay.textContent="↻ 다시 재생";
   /* 씬 왼쪽 아래 버튼 줄(panel-build.html .stage-ctl) 맨 앞 — 나가는 문이 그 오른쪽에 선다 */
@@ -27,6 +36,7 @@
   let holdTimer=0;
   function play(){
     if(RMx){ body.classList.remove("pop-armed","pop-run","pop-hold"); return; }
+    if(!staggered) staggered=stagger();
     /* 흐름은 멈추고(Stop) 처음으로 되돌린 뒤(Reset) 감춘다(pop-hold).
        예전엔 Reset 만 하고 멈추지는 않아, 되돌리자마자 루프가 다시 칩을 뿜어
        구조가 아직 팝인하는 중에 데이터가 먼저 떠다녔다. */

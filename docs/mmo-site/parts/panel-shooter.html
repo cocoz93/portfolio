@@ -1,0 +1,124 @@
+  <!-- 상위 탭 슈팅 서버 — MyGit/MO_Shooter(공개 리포) · 클라는 언리얼 Lyra + 다리 플러그인 MOBridge.
+       상위 탭 이름 = MMORPG · NOX 서버 · 슈팅 서버(11-17 사용자 결정). 「SHOOTER 서버」·리포 이름(밑줄)은 길고 들쭉날쭉해 뺐다(렌더 비교).
+       첫 탭만 「서버」가 없는 까닭: 서버·컨텐츠·클라를 다 직접 만든 게임이라서다(나머지 둘은 있는 클라에 붙인 서버).
+       첫 탭 부제의 「전쟁밀도 동접 5,000」은 뺐다 — 구조도 노드(scene.js 「클라이언트 ×5,000 동시 접속」)가 첫 화면에서 이미 말한다.
+       「Lyra 서버」가 아닌 까닭: Lyra 에는 언리얼 데디케이티드 서버가 이미 있어 그걸 돌린 걸로 읽힌다. 판정은 직접 짠 서버가 맡는다.
+       하위 탭은 다른 두 탭과 같은 셋(소개 · 전체 구조 · 병목 개선 · 11-17). 여닫기는 intro.js 의 data-panes 줄,
+       전체 구조의 상자 고르기도 intro.js 의 .ms[data-pick] — 이 판은 자기 스크립트가 없다.
+       11-18 소개 · 전체 구조를 채웠다(사용자 「넣어봐」 · 러프판). 병목 개선은 부하 한계를 아직 안 재서 비워 둔다.
+       그림 = media/sh-*.jpg — 사람 확인 자동판(hauto_ha1) 캡처 1280×720 에서 왼쪽 위 개발용 화면 메시지를 빼려고
+       위 165px 를 잘라 낸 987×555(16:9).
+       수치 출처(MO_Shooter) — 60Hz kTickRate · 방 하나 10명 kMaxPlayersInRoom · 프로토콜 10(Shared/GameProtocol.h) ·
+       되감기 18틱 = 0.3초 kRewindLimitTicks(Server/Room.h) · 근접 350cm · 피해 100 kMeleeDistance · kMeleeDamage ·
+       조준 걸음 × 0.5 kAdsWalkSpeedMultiplier(Shared/Weapon.h) · 포트 7791 · 입출력 IOCP(Server/main.cpp · 서버 시작 줄 실측).
+       구조도의 .ms · .nd · .mo-card 짜임은 녹스 판(mo.css)을 빌려 쓴다. -->
+  <section class="panel" id="p-shooter" role="tabpanel" hidden>
+    <div class="subtabs" id="shsub">
+      <nav class="subnav" role="tablist" aria-label="슈팅 서버 하위 섹션" data-panes="sh">
+        <button class="subtab act" data-pane="intro" role="tab" aria-selected="true">소개</button>
+        <button class="subtab" data-pane="build" role="tab" aria-selected="false">전체 구조</button>
+        <button class="subtab" data-pane="bneck" role="tab" aria-selected="false">병목 개선</button>
+      </nav>
+    </div>
+
+    <div class="gi-band">
+
+    <!-- 소개 — 짜임은 intro.css, 고르기는 intro.js. 버튼 n번째 = 카드 n번째 -->
+    <section class="sh-pane" id="sh-intro">
+      <div class="gi" style="--gi-ar:16/9">
+        <div class="gi-list">
+          <div class="gi-g"><span class="gi-k">게임</span>
+            <button type="button" class="gi-it act" data-img="media/sh-play.jpg" data-alt="Lyra 클라가 이 서버에 붙어 도는 판 — 상대 둘이 쏘는 화면">게임 소개</button>
+          </div>
+          <div class="gi-g"><span class="gi-k">컨텐츠</span>
+            <button type="button" class="gi-it" data-img="media/sh-shot.jpg" data-alt="사격 — 벽에 탄이 튀는 화면"><i>01</i>사격 판정</button>
+            <button type="button" class="gi-it" data-img="media/sh-crouch.jpg" data-alt="앉아서 쏘는 상대"><i>02</i>조준 · 앉기</button>
+            <button type="button" class="gi-it" data-img="media/sh-melee.jpg" data-alt="근접 공격 — 붙어 선 두 사람"><i>03</i>근접 · 부딪힘</button>
+          </div>
+        </div>
+        <div class="gi-fr"><img src="media/sh-play.jpg" alt="Lyra 클라가 이 서버에 붙어 도는 판 — 상대 둘이 쏘는 화면" width="987" height="555" loading="lazy"></div>
+        <div class="gi-cards">
+          <article class="gi-card gi-lead">
+            <div class="gi-k">MO_Shooter · 언리얼 Lyra 클라</div>
+            <h3 class="gi-h">Lyra 는 그리기만,<br>판정은 내 서버가</h3>
+            <p>화면 · 애니 · HUD 는 Lyra 를 그대로 쓰고, 다리 플러그인이 Lyra 의 판정을 막은 뒤 서버 결과를 넣는다. 조준 · 앉기 · 근접 · 부딪힘 · 체력 받침 · 도움 집계까지 Lyra 원본과 대조해 서버로 옮겼다.</p>
+            <div class="gi-num">
+              <div><b>60<i>Hz</i></b><span>서버 고정 틱 · 방마다</span></div>
+              <div><b>0.3<i>초</i></b><span>되감기 한도 · 쏜 사람 기준</span></div>
+            </div>
+            <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/MO_Shooter" target="_blank" rel="noopener">GitHub ↗</a></div>
+            <p class="gi-fine">Lyra 그림 · 애니 © Epic Games · 언리얼 엔진 EULA</p>
+          </article>
+          <article class="gi-card" hidden>
+            <div class="gi-k">01 · 사격</div>
+            <h3>사격 판정</h3>
+            <p>권총 · 소총 · 샷건. 쏜 사람 화면 시점으로 최대 0.3초를 되감아, 그때 상대의 애니 자세로 맞았는지 서버가 정한다. 퍼짐 곡선도 Lyra 무기 값 그대로.</p>
+            <div class="sv"><b>게임 스레드</b> — 되감기 · 맞음 · 피해 · 처치</div>
+          </article>
+          <article class="gi-card" hidden>
+            <div class="gi-k">02 · 조준 · 앉기</div>
+            <h3>조준 · 앉기</h3>
+            <p>우클릭 조준은 퍼짐을 줄이고 걸음을 절반으로. 앉으면 걸음이 느려지고 맞는 몸도 낮아진다. 값은 Lyra 에셋에서 뽑았다.</p>
+            <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
+          </article>
+          <article class="gi-card" hidden>
+            <div class="gi-k">03 · 근접 · 부딪힘</div>
+            <h3>근접 · 부딪힘</h3>
+            <p>근접은 앞 350cm 를 쓸어 맞으면 피해 100 — 한 방. 플레이어끼리는 밀지 않고 막거나 미끄러진다. 둘 다 Lyra 와 같은 방식.</p>
+            <div class="sv"><b>게임 스레드</b> — 근접 판정 · 몸 막기</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 전체 구조 — 상자를 누르면 같은 data-n 의 카드만 보인다(intro.js .ms[data-pick]). 선은 직교만.
+         Shared 선 셋 = 서버 · 다리 · 봇이 같은 파일을 빌드한다(다리는 MOBShared*.cpp 로 감싸 빌드) -->
+    <section class="sh-pane" id="sh-build" hidden>
+      <div class="ms" data-pick>
+        <div class="ms-fig">
+          <svg viewBox="0 0 1180 590" role="img" aria-label="슈팅 서버 전체 구조">
+            <rect class="grp" x="440" y="40" width="480" height="330" rx="16"/>
+            <text class="lb" x="460" y="72">매치 서버 · TCP 7791</text>
+            <path class="ln" d="M170 136 V196"/>
+            <text class="lb" x="182" y="172">판정 막기 · 결과 넣기</text>
+            <path class="ln" d="M290 239 H460"/>
+            <text class="lb m" x="350" y="230">TCP</text>
+            <path class="ln" d="M290 423 H400 V250 H460"/>
+            <text class="lb m" x="408" y="345">TCP</text>
+            <path class="ln" d="M610 210 H640"/>
+            <path class="ln" d="M960 210 H900"/>
+            <text class="lb" x="914" y="200">읽기</text>
+            <path class="ln" d="M770 340 V500"/>
+            <path class="ln" d="M170 466 V500"/>
+            <path class="ln" d="M50 239 H28 V532 H50"/>
+            <text class="lb" x="782" y="430">같은 코드</text>
+
+            <g class="nd" data-n="lyra"><rect class="box" x="50" y="50" width="240" height="86" rx="12"/><text x="170" y="88" text-anchor="middle" font-size="22">Lyra 클라</text><text class="s" x="170" y="115" text-anchor="middle" font-size="14">언리얼 5 · 화면 · 애니</text></g>
+            <g class="nd" data-n="bridge"><rect class="box" x="50" y="196" width="240" height="86" rx="12"/><text x="170" y="234" text-anchor="middle" font-size="22">MOBridge 다리</text><text class="s" x="170" y="261" text-anchor="middle" font-size="14">Lyra 플러그인</text></g>
+            <g class="nd" data-n="bot"><rect class="box" x="50" y="380" width="240" height="86" rx="12"/><text x="170" y="418" text-anchor="middle" font-size="22">봇 클라</text><text class="s" x="170" y="445" text-anchor="middle" font-size="14">콘솔 · 그림 없음</text></g>
+            <g class="nd" data-n="router"><rect class="box" x="460" y="150" width="150" height="120" rx="12"/><text x="535" y="203" text-anchor="middle" font-size="22">라우터</text><text class="s" x="535" y="230" text-anchor="middle" font-size="14">접속 · 방 배정</text></g>
+            <g class="nd act" data-n="game"><rect class="box" x="640" y="90" width="260" height="250" rx="12"/><text x="662" y="128" font-size="22">게임 스레드</text><text class="s" x="662" y="154" font-size="14">60Hz · 방마다 고정 틱</text>
+              <rect class="room" x="662" y="180" width="44" height="34" rx="5"/><rect class="room" x="714" y="180" width="44" height="34" rx="5"/><rect class="room" x="766" y="180" width="44" height="34" rx="5"/><rect class="room" x="818" y="180" width="44" height="34" rx="5"/>
+              <rect class="room" x="662" y="228" width="44" height="34" rx="5"/><rect class="room" x="714" y="228" width="44" height="34" rx="5"/><rect class="room" x="766" y="228" width="44" height="34" rx="5"/><text class="s" x="840" y="251" text-anchor="middle" font-size="14">방 N</text>
+              <text class="s" x="662" y="306" font-size="14">되감기 판정 · 최대 0.3초</text></g>
+            <g class="nd" data-n="data"><rect class="box" x="960" y="150" width="180" height="120" rx="12"/><text x="1050" y="192" text-anchor="middle" font-size="21">뽑은 자료</text><text class="s" x="1050" y="220" text-anchor="middle" font-size="14">맵 충돌</text><text class="s" x="1050" y="244" text-anchor="middle" font-size="14">애니 클립 · 받침</text></g>
+            <g class="nd" data-n="shared"><rect class="box" x="50" y="500" width="850" height="64" rx="12"/><text x="78" y="540" font-size="21">Shared 공용 계산</text><text class="s" x="290" y="539" font-size="14">이동 · 충돌 · 사격 판정 · 애니 자세 · 패킷 형식</text></g>
+          </svg>
+        </div>
+        <div>
+          <div class="mo-card" data-n="lyra" hidden><div class="mo-k">전체 구조</div><h3>Lyra 클라</h3><p>Epic 의 Lyra 샘플 그대로 — 화면 · 애니 · HUD · 소리. 사람이 하는 클라다.</p><div class="sv">스스로 판정하지 않는다 — 다리가 막는다</div></div>
+          <div class="mo-card" data-n="bridge" hidden><div class="mo-k">전체 구조</div><h3>MOBridge 다리</h3><p>Lyra 에 붙인 플러그인. 입력을 서버로 보내고, Lyra 가 스스로 내리던 판정을 막은 뒤 서버 결과를 Lyra 시스템에 넣는다. 내 캐릭터는 공용 계산으로 먼저 움직여 본다(예측).</p><div class="sv">서버와 TCP · 프로토콜 10</div></div>
+          <div class="mo-card" data-n="bot" hidden><div class="mo-k">전체 구조</div><h3>봇 클라</h3><p>그림 없이 같은 프로토콜로 붙어 걷고 쏜다. 판정 대조와 부하 측정에 쓴다.</p><div class="sv">사람 판의 상대로도 들어간다</div></div>
+          <div class="mo-card" data-n="router" hidden><div class="mo-k">전체 구조</div><h3>라우터</h3><p>접속 · 끊김 · 인사를 한 곳에서 받아, 자리가 남은 가장 앞 방에 앉히고 없으면 새 방을 만든다. 로그인 · 로비는 아직 없다.</p><div class="sv">앉은 뒤 입력은 네트워크 워커가 그 방의 게임 스레드로 바로 넣는다 · 네트워크는 직접 만든 <b>ServerCore</b>(IOCP)</div></div>
+          <div class="mo-card" data-n="game" hidden><div class="mo-k">전체 구조</div><h3>게임 스레드 · 방</h3><p>스레드 하나가 고정 배정된 방들을 60Hz 로 돌린다. 방 안 상태는 그 스레드만 만진다. 방 하나에 최대 10명.</p><div class="sv">사격은 쏜 사람 화면 시점으로 최대 0.3초 되감아 판정</div></div>
+          <div class="mo-card" data-n="data" hidden><div class="mo-k">전체 구조</div><h3>뽑은 자료</h3><p>맵 충돌 · 애니 클립 · 체력 받침 자리. Lyra 에셋에서 도구로 뽑아 서버가 읽는다 — 서버는 언리얼 없이 돈다.</p><div class="sv">Epic 에셋이라 뽑은 파일은 리포에 넣지 않는다</div></div>
+          <div class="mo-card" data-n="shared" hidden><div class="mo-k">전체 구조</div><h3>Shared 공용 계산</h3><p>이동 · 충돌 · 사격 판정 · 애니 자세 · 패킷 형식. 서버 · 다리 · 봇이 같은 파일을 빌드한다.</p><div class="sv">그래서 클라 예측과 서버 판정이 같은 식으로 나온다</div></div>
+        </div>
+      </div>
+    </section>
+
+    </div>
+
+    <!-- 병목 개선 — 띠(.gi-band) 밖에 둔다: 안에 두면 띠의 위 여백 30 이 .soon 의 62 에 더해진다 -->
+    <section class="sh-pane" id="sh-bneck" hidden><div class="soon"><b>병목 개선</b><span>부하 한계 측정 전 · 준비 중</span></div></section>
+  </section>

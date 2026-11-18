@@ -40,7 +40,8 @@
 #p-crender{margin:0; max-width:none; padding-bottom:44px}
 #p-crender .cr-title{margin:0 0 22px; padding-top:120px}
 #p-crender .cr-title::before{content:""; display:block; width:44px; height:4px; border-radius:2px; background:var(--net); margin-bottom:18px}
-@media (max-width:1200px){ #p-crender .cr-title{margin:0 0 14px; padding-top:60px} }
+/* 두 번째 범위 = 왼쪽 기둥(common.css · 1280 이상)이 본문을 260px 줄여서, 같은 본문 폭이 옛 화면 폭 + 260 에 온다 (아래 1200 분기 · optimization.css .op-sec 도 같다) */
+@media (max-width:1200px), (min-width:1280px) and (max-width:1460px){ #p-crender .cr-title{margin:0 0 14px; padding-top:60px} }
 /* ※ 2026-10-31 88% → 위 두 판과 같은 1640(common.css --band-max). 세 판의 시작선·끝선을 맞춘다.
      하한 1400 은 그대로 지켜진다. 1920 창에서 액자는 1637 → 1640 으로 거의 같고 높이 852px. */
 #p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:var(--band-max); margin-inline:auto}
@@ -373,7 +374,7 @@
 /* ※ 맨 뒤 요소가 끝나는 시각(.46+.48 = 0.94초)은 client-render.js 의 ENTER 에 숫자로 박혀 있다 */
 @media (prefers-reduced-motion:reduce){ #p-crender.cr-in *{animation:none !important} }
 
-@media (max-width:1200px){
+@media (max-width:1200px), (min-width:1280px) and (max-width:1460px){
   /* 상세의 2단→1단은 여기가 아니라 카드 폭을 보는 @container 가 맡는다(위 .bx-det .cols 옆) */
   /* 히어로가 좁아지면 위계가 아니라 그냥 작은 그림 셋이 된다. 그 폭부터는 히어로를 전폭으로
      내리고 참조컷 둘을 그 아래 가로로 눕힌다 — 콘솔 80칸은 좁으면 글자가 4px 이 되어

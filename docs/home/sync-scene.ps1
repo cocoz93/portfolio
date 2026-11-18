@@ -57,11 +57,12 @@ $html = [IO.File]::ReadAllText($siteBuilt, [Text.Encoding]::UTF8)
 
 $prof = Join-Path $env:TEMP ('scene-prof-' + [Guid]::NewGuid().ToString('N').Substring(0, 8))
 $dom  = Join-Path $render 'dom.txt'
+# 주소 끝 #build — mmo-site 첫 화면이 소개 판이 된 뒤(11-17) 해시 없이 열면 씬이 숨은 채 로드돼 등장 지연을 못 잰다
 $chromeArgs = @(
   '--headless=new', '--disable-gpu', '--allow-file-access-from-files',
   "--user-data-dir=$prof", '--virtual-time-budget=20000', '--dump-dom',
   '--window-size=1400,900',
-  ('file:///' + ($render -replace '\\', '/') + '/probe.html')
+  ('file:///' + ($render -replace '\\', '/') + '/probe.html#build')
 )
 Write-Host '[sync] rendering mmo-site/index.html ...'
 Start-Process -FilePath $chrome -ArgumentList $chromeArgs -NoNewWindow -Wait -RedirectStandardOutput $dom
