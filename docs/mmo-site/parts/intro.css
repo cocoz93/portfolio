@@ -58,6 +58,16 @@
 @media (min-width:1280px) and (max-width:1460px){
   .gi{grid-template-columns:minmax(0,1fr)}
 }
+/* 16:9 판(마크업에 .gi-over — MMORPG · 슈팅)은 그림을 본문 폭 전부로 펴고 카드를 그림 오른쪽 위에 얹는다(2026-11-18).
+   옆에 두면 그림이 1178×663(1920×940 창)에 그쳐 작아 보였다 — 얹으면 1600×900 으로 첫 화면 높이를 다 쓴다(노트북 1536×740 은 814 → 1236 폭).
+   대가 = 카드가 그림의 13%(1920) · 22%(1536)를 덮는다. 카드를 위 띠로 눕혀 그림을 아래에 두는 안은 그림 아래가 첫 화면 밖으로 밀려 기각.
+   녹스(4:3)는 옆에 둬도 그림 높이가 884px 라 옆 그대로다. 1460 이하는 위 규칙대로 카드가 그림 아래로 내려간다 */
+@media (min-width:1461px){
+  .gi-over{display:block;position:relative}
+  .gi-over .gi-cards{position:absolute;top:22px;right:22px;width:400px;z-index:2}
+  .gi-over .gi-card{background:rgba(10,15,25,.88);backdrop-filter:blur(8px);border-color:rgba(150,170,210,.18)}
+  .gi-over .gi-card.gi-lead{flex:none}
+}
 /* ── 좁은 화면 — 세 칸을 한 줄로 내리고 목록은 가로로 눕힌다 ── */
 @media (max-width:1200px){
   .gi{grid-template-columns:minmax(0,1fr)}
