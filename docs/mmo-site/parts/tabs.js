@@ -186,7 +186,11 @@
    단추를 새로 정의하지 않는다: 원래 단추(.tab · .subtab · .gi-it)의 이름을 읽어 오고, 누르면 원래 단추를 대신 누른다.
    그래서 판 여닫기 · 주소 · 애니는 지금까지처럼 tabs.js · mo.js · intro.js 가 맡고, 좁은 화면의 원래 두 줄과 행동이 같다.
    켜짐 표시는 원래 단추의 .act 를 지켜보다(MutationObserver) 따라 칠한다 — 딥링크 · 다른 스크립트가 바꿔도 같이 바뀐다.
-   펼침은 켜진 상위 탭 하나만, 목록은 그 탭의 첫 하위(소개)가 켜졌을 때만 — 접힌 것까지 다 펼치면 세 겹이 다시 한 화면에 쌓인다.
+   펼침은 켜진 상위 탭 하나만 — 접힌 탭까지 다 펼치면 세 겹이 다시 한 화면에 쌓인다.
+   그 탭 안의 목록(소개 판 목록 · 1-2 차례)은 하위 탭과 상관없이 늘 펼친다(2026-11-18). 하위 탭을 바꿀 때마다 목록이 접히고 펴지면
+   누른 단추가 커서 밑에서 147px 튀었다(1920×900 실측). 다 펼쳐도 MMORPG 기둥은 711px 라 높이 720 화면에 든다.
+   대신 안 보는 하위 탭의 목록은 켜짐을 칠하지 않는다(link 의 gate) — 칠하면 「전체 구조」와 「게임 소개」가 같이 켜져 보인다.
+   그 목록 칸을 누르면 하위 탭부터 연다 — 안 열면 숨은 판 안에서만 골라져 화면이 그대로다.
    1-2 는 판 셋이 한 쪽에 이어 붙는다(위 paint) — 쪽을 나누지 않고 기둥에 차례만 단다(2026-11-18).
    나누면 아래 두 판은 눌러야만 보이지만, 이어 두면 스크롤만으로 셋이 다 지나간다. 차례는 「아래에 뭐가 있나」만 알린다.
    누르면 그 판으로 내려가고, 스크롤하면 지금 보는 판이 켜진다. 판 이름은 여기 SECT 한 곳에만 적는다. */
@@ -195,14 +199,16 @@
   const SUB={mmo:"subtabs", mo:"mosub", shooter:"shsub"};      /* 상위 탭 → 그 하위 줄 */
   const LIST={mmo:"p-intro", mo:"p-mo", shooter:"p-shooter"};  /* 상위 탭 → 소개 판 목록이 든 판 */
   const SECT={bneck:[["p-bneck","병목 지도"],["p-optimization","핵심 최적화"],["p-crender","실서버 화면"]]};   /* MMORPG 하위 → 그 쪽의 판 차례 */
-  const pairs=[], grps=[], lists=[], spies=[];
+  const pairs=[], grps=[], spies=[];
   function mk(tag, cls, html){ const e=document.createElement(tag); e.className=cls; if(html!=null) e.innerHTML=html; if(tag==="button") e.type="button"; return e; }
-  function link(p, o, lift){
-    pairs.push([p,o]);
+  function link(p, o, lift, gate){
+    pairs.push([p,o,gate]);
     p.addEventListener("click", function(){
+      const open = !!gate && !gate.classList.contains("act");   /* 목록 칸인데 그 하위 탭이 꺼져 있다 */
+      if(open) gate.click();
       o.click();
       /* 기둥은 화면에 붙어 따라오므로 긴 판(병목 개선) 아래에서도 누를 수 있다 — 판을 바꿨으면 새 판의 맨 위부터 */
-      if(lift && scrollY>0) scrollTo(0,0);
+      if((lift || open) && scrollY>0) scrollTo(0,0);
     });
   }
   document.querySelectorAll(".tabrow .tab").forEach(function(t){
@@ -215,10 +221,10 @@
       const sb=mk("button","sd-s",s.innerHTML); g.appendChild(sb); link(sb,s,true);
       const sec=(k==="mmo") && SECT[s.getAttribute("data-sub")];
       if(sec){
-        const l=mk("div","sd-list"); g.appendChild(l); lists.push([l,s]);
+        const l=mk("div","sd-list"); g.appendChild(l);
         sec.forEach(function(x,j){
           const el=document.getElementById(x[0]); if(!el) return;
-          const lb=mk("button","sd-l"); lb.textContent=x[1]; l.appendChild(lb); spies.push([lb,el]);
+          const lb=mk("button","sd-l"); lb.textContent=x[1]; l.appendChild(lb); spies.push([lb,el,s]);
           lb.addEventListener("click", function(){
             if(!s.classList.contains("act")) s.click();
             const smooth=matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
@@ -229,23 +235,25 @@
       }
       if(i!==0) return;
       const gi=document.querySelector("#"+LIST[k]+" .gi"); if(!gi) return;
-      const l=mk("div","sd-list"); g.appendChild(l); lists.push([l,s]);
-      gi.querySelectorAll(".gi-it").forEach(function(it){ const lb=mk("button","sd-l",it.innerHTML); l.appendChild(lb); link(lb,it,false); });
+      const l=mk("div","sd-list"); g.appendChild(l);
+      gi.querySelectorAll(".gi-it").forEach(function(it){ const lb=mk("button","sd-l",it.innerHTML); l.appendChild(lb); link(lb,it,false,s); });
     });
   });
   function sync(){
-    pairs.forEach(function(x){ const on=x[1].classList.contains("act"); x[0].classList.toggle("act",on);
+    pairs.forEach(function(x){ const on=x[1].classList.contains("act") && (!x[2] || x[2].classList.contains("act")); x[0].classList.toggle("act",on);
       if(on) x[0].setAttribute("aria-current","true"); else x[0].removeAttribute("aria-current"); });
     grps.forEach(function(x){ x[0].hidden=!x[1].classList.contains("act"); });
-    lists.forEach(function(x){ x[0].hidden=!x[1].classList.contains("act"); });
     spyReq();   /* 하위 탭이 바뀌면 스크롤 없이 쪽 길이가 바뀐다 */
   }
   /* 지금 보는 판 = 위끝이 화면 40% 선을 넘어 올라온 판 중 마지막. 쪽 맨 밑에 닿으면 마지막 판
-     (마지막 판이 짧아 위끝이 40% 선까지 못 올라오는 화면에서도 끝 칸이 켜지게). 숨은 판은 세지 않는다. */
+     (마지막 판이 짧아 위끝이 40% 선까지 못 올라오는 화면에서도 끝 칸이 켜지게). 숨은 판은 세지 않는다.
+     하위 탭(병목 개선)이 꺼져 있으면 판이 보여도 세지 않는다 — scene.js prewarm 이 첫 전환을 덜려고 숨은 #p-bneck 을
+     두 프레임 열어 두는데(opacity .01), 그 사이에 여기가 돌면 소개 화면에서 「병목 지도」가 켜진 채 남았다
+     (목록을 늘 펼친 뒤 드러남 · 화면 크기마다 나왔다 안 나왔다 하는 타이밍 문제, 2026-11-18). */
   let sq=false;
   function spy(){
     sq=false;
-    const vis=spies.filter(function(x){ return !x[1].hidden; });
+    const vis=spies.filter(function(x){ return x[2].classList.contains("act") && !x[1].hidden; });
     let cur=null;
     if(vis.length && side.offsetWidth){
       const atEnd = scrollY > 0 && scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
