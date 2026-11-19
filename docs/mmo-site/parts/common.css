@@ -267,7 +267,7 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      (2026-11-18) 글자를 크게 — 상위 19.5 → 30 · 하위 16 → 24 · 목록 16 → 19.5px(시안 L1). 한 단계 더 큰 L2(35 · 27 · 22)는
      1920×940 에서 기둥이 919px 까지 차 여유가 없어 기각. 하위 탭 · 목록 굵기는 보통(상속 · 켜진 하위 탭만 700) — 시안에서 본 그대로다.
      들임 30px = 하위 탭 글자 시작(점 8 + 틈 9 = 17)보다 13px 안쪽 — 17 이면 크기를 갈라도 글자가 같은 세로줄에서 시작한다.
-     원래 단추의 번호(<i>01</i>)는 기둥에서 끈다 — 목록은 차례가 아니고(사냥 · 파티 · 우편) 첫 칸 「게임 소개」엔 번호가 없다 */
+     원래 단추의 번호(<i>01</i>)는 기둥에서 끈다 — 목록은 차례가 아니고(사냥 · 파티 · 우편) 첫 칸 「개요」엔 번호가 없다 */
   .sd-list{display:flex; flex-direction:column; margin:0 0 4px}
   .sd-l{display:flex; align-items:baseline; padding:5px 0 5px 30px; font-size:1.22rem; color:var(--mut); transition:color .15s}
   .sd-l i{display:none}

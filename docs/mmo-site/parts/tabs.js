@@ -189,7 +189,7 @@
    펼침은 켜진 상위 탭 하나만 — 접힌 탭까지 다 펼치면 세 겹이 다시 한 화면에 쌓인다.
    그 탭 안의 목록(소개 판 목록 · 1-2 차례)은 하위 탭과 상관없이 늘 펼친다(2026-11-18). 하위 탭을 바꿀 때마다 목록이 접히고 펴지면
    누른 단추가 커서 밑에서 147px 튀었다(1920×900 실측). 다 펼쳐도 MMORPG 기둥은 711px 라 높이 720 화면에 든다.
-   대신 안 보는 하위 탭의 목록은 켜짐을 칠하지 않는다(link 의 gate) — 칠하면 「전체 구조」와 「게임 소개」가 같이 켜져 보인다.
+   대신 안 보는 하위 탭의 목록은 켜짐을 칠하지 않는다(link 의 gate) — 칠하면 「전체 구조」와 「개요」가 같이 켜져 보인다.
    그 목록 칸을 누르면 하위 탭부터 연다 — 안 열면 숨은 판 안에서만 골라져 화면이 그대로다.
    1-2 는 판 셋이 한 쪽에 이어 붙는다(위 paint) — 쪽을 나누지 않고 기둥에 차례만 단다(2026-11-18).
    나누면 아래 두 판은 눌러야만 보이지만, 이어 두면 스크롤만으로 셋이 다 지나간다. 차례는 「아래에 뭐가 있나」만 알린다.
@@ -270,4 +270,47 @@
   const mo=new MutationObserver(sync);
   pairs.forEach(function(x){ mo.observe(x[1],{attributes:true, attributeFilter:["class"]}); });
   sync();
+})();
+
+/* 탭 전환 페이드(2026-11-20) — 원래 단추(.tabrow .tab · .subtab · .gi-it)를 누르면 새로 보이게 된 판이
+   0.24초 동안 흐릿하게 나타난다. 왼쪽 기둥은 원래 단추를 대신 누르므로 저절로 같이 걸린다.
+   시안 넷(A 페이드 · B 떠오르기 · C 방향 밀기 · D 겹쳐 바꾸기)을 실제 판에 얹어 비교하고 A 를 골랐다(사용자 선택).
+   D 는 섞이는 중간에 구조도와 게임 화면 글자가 겹쳐 보였고, A 가 이 페이지의 차분한 톤에 가장 가깝다.
+   - 병목 개선으로 들어갈 때는 걸지 않는다 — 구조도가 병목 지도로 펴지는 장면(playBneckIntro)이 이미 전환이다.
+     그래서 TGT 에 #p-bneck 줄기(#p-optimization · #p-crender)가 없다. 새 판을 더하면 여기도 넣을 것.
+   - 새로 보이게 된 것 중 가장 바깥 것 하나만 — 상위 탭을 바꾸면 판(#p-mo) · 그 안 하위 판(#mo-intro) · 카드(.gi-card)가
+     한꺼번에 보이게 되는데, 다 흐리게 하면 투명도가 곱해져 끝이 늦게 밝아진다.
+   - 재는 때를 rAF 로 미룬다 — 원래 단추의 처리(판 여닫기)가 끝난 뒤, 새 판이 처음 그려지기 전에 걸어야 번쩍임이 없다.
+   - 기둥의 목록 칸은 원래 단추를 둘(하위 탭 → 목록) 연달아 누른다 — 첫 누름에서 한 번만 재서 두 번 걸리지 않게.
+   - 소개 판 그림은 흐리게 하지 않고 옛 그림을 위에 한 장 남겨 걷어 낸다 — 판 바탕(#05080e)이 비쳐 깜빡여 보이지 않게.
+   - 움직임 줄이기 설정이면 아무것도 안 한다. */
+(function(){
+  const RM=matchMedia("(prefers-reduced-motion: reduce)");
+  const TGT="#p-intro,#p-build,#p-mo,#p-shooter,#p-misc,.mo-pane,.sh-pane,.gi-card";
+  function vis(){ return [].slice.call(document.querySelectorAll(TGT)).filter(function(e){ return e.getClientRects().length>0; }); }
+  let before=null;
+  function run(){
+    const was=before; before=null;
+    const now=vis().filter(function(e){ return was.indexOf(e)<0; });
+    now.forEach(function(e){
+      if(now.some(function(o){ return o!==e && o.contains(e); })) return;
+      e.animate([{opacity:0},{opacity:1}],{duration:240, easing:"ease-out", id:"tabfade"});
+    });
+  }
+  function ghost(b){
+    const img=b.closest(".gi").querySelector(".gi-fr img"); if(!img) return;
+    const g=img.cloneNode(); g.alt=""; g.setAttribute("aria-hidden","true"); g.style.pointerEvents="none";
+    img.parentNode.appendChild(g);
+    requestAnimationFrame(function(){   /* 새 그림이 풀린 뒤에 걷어야 빈 바탕이 안 비친다 */
+      const p=img.decode ? img.decode().catch(function(){}) : Promise.resolve();
+      p.then(function(){ g.animate([{opacity:1},{opacity:0}],{duration:320, easing:"ease", fill:"forwards", id:"tabfade-img"}).onfinish=function(){ g.remove(); }; });
+    });
+  }
+  document.addEventListener("click", function(e){
+    const b=e.target.closest && e.target.closest(".tabrow .tab,.subtab,.gi-it");
+    if(!b || b.classList.contains("act") || RM.matches) return;
+    if(b.dataset.sub==="bneck") return;
+    if(b.classList.contains("gi-it")) ghost(b);
+    if(!before){ before=vis(); requestAnimationFrame(run); }
+  }, true);
 })();
