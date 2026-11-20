@@ -1,7 +1,8 @@
 (function(){
   /* 탭은 2단이다: 상위(mmo·mo·shooter·misc) 아래 mmo 만 하위(intro·build·bneck)를 갖는다.
      (mo·shooter 의 하위 줄은 각자 판 안에 있고 mo.js · intro.js 가 연다 — 여기선 안 건드린다.)
-     1-2(bneck)는 판 셋이 같이 보인다 — 병목 지도(p-bneck) · 핵심 최적화(p-optimization) · 결과(p-crender).
+     1-2(bneck)는 판 셋이 같이 열린다 — 병목 지도(p-bneck) · 핵심 최적화(p-optimization) · 결과(p-crender).
+     (넓은 화면은 2026-11-20 부터 그중 하나만 보인다 — 아래 showBn)
      (옛 하위 optimization(1-3 핵심 최적화)은 2026-10-27 에 1-2 아래로 내렸다.)
      한때 상위 탭 'dummy'(클라이언트)와 그 아래 2-1~2-3 하위 줄이 따로 있었다. 지금은 2-1 실행 화면
      녹화(p-crender)만 남아 1-2 맨 아래 결과 판이 됐다(10-23~27 에는 1-1 구조도 아래에 붙어 있었다).
@@ -54,6 +55,33 @@
             :                   top;
     history.replaceState(null, "", h ? "#"+h : location.pathname+location.search);
   }
+  /* 1-2 판 셋을 한 화면씩(2026-11-20) — 넓은 화면(기둥이 있는 1280 이상)에서는 병목 지도 · 핵심 최적화 · 실서버 화면 중
+     하나만 보인다. 사용자 요청 「스크롤 안 내려도 한 화면에」 — 11-18 에 셋을 한 쪽에 이어 붙였던 것(아래 왼쪽 기둥 주석)을 나눴다.
+     고르는 것은 기둥의 1-2 차례다. 1-2 로 들어오면 늘 병목 지도부터(paint).
+     세 판의 hidden 은 그대로 두고(1-2 면 셋 다 열림) .wrap 의 data-bn 하나로 CSS 가 나머지를 끈다(common.css 같은 날 주석) —
+     hidden 을 만지면 예열(scene.js prewarm) · 녹화 재생(client-render.js) · 핵심 최적화 그림 장전(optimization.js)이
+     「판이 열렸다」로 읽는 값이 같이 흔들린다. 좁은 화면은 그 CSS 가 안 걸려 예전처럼 이어 붙은 채 스크롤한다 —
+     그래서 좁은 화면이면 false 를 돌려주고, 부른 쪽이 예전처럼 그 판까지 내려 준다.
+     quiet = 딥링크로 처음 열 때 — 들고 온 주소를 그대로 두고 움직임도 걸지 않는다. */
+  const SPLIT=matchMedia("(min-width:1280px)");
+  function showBn(id, quiet){
+    if(!SPLIT.matches) return false;
+    const was=wrapEl.dataset.bn;
+    wrapEl.dataset.bn=id;
+    if(quiet) return true;
+    if(scrollY>0) scrollTo(0,0);
+    if(was===id) return true;
+    /* 다른 탭 전환과 같은 0.24초 페이드(아래 탭 전환 페이드 IIFE) — 그쪽은 원래 단추를 누를 때만 걸려 여기서 직접 건다 */
+    const el=document.getElementById(id);
+    if(el && el.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+      el.animate([{opacity:0},{opacity:1}],{duration:240, easing:"ease-out"});
+    const h = id==="p-crender" ? "crender"
+            : id==="p-optimization" ? (window.__optimizationHash ? window.__optimizationHash() : "optimization")
+            : "bneck";
+    if(booted) history.replaceState(null, "", "#"+h);
+    return true;
+  }
+  window.__bnShow=showBn;
   function paint(){
     /* 숨기기 '전에' 설계 씬이 화면 어디에 얼마 크기로 있었는지 잰다 — 숨긴 뒤에는 0 이 나온다.
        병목 지도가 바로 이 자리에 겹쳐 시작해야 '그림이 그대로 있다가 변한다' 가 된다.
@@ -77,6 +105,7 @@
     document.getElementById("p-bneck").hidden = !(top==="mmo" && sub==="bneck");
     document.getElementById("p-optimization").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 아래 */
     document.getElementById("p-crender").hidden = !(top==="mmo" && sub==="bneck");   /* 1-2 맨 아래 */
+    if(top==="mmo" && sub==="bneck") wrapEl.dataset.bn="p-bneck";   /* 넓은 화면은 셋 중 병목 지도부터(위 showBn) */
     document.getElementById("p-intro").hidden = !(top==="mmo" && sub==="intro");
     document.getElementById("p-mo").hidden    = (top!=="mo");
     document.getElementById("p-shooter").hidden = (top!=="shooter");
@@ -118,10 +147,11 @@
      전부 1-2 로 열고 맨 아래 결과 판(실행 화면 녹화)까지 내려 준다. #csafe·#cload·#cenv 는 뺀 자리였다 */
   else if(h0==="dummy"||h0==="crender"||h0==="csafe"||h0==="cload"||h0==="cenv"){ top="mmo"; sub="bneck"; toRender=true; }
   paint();
-  /* 글꼴·그림이 다 얹힌 뒤에 내려야 자리가 안 어긋난다 */
-  if(toRender) addEventListener("load", function(){
+  /* 넓은 화면은 그 판 하나를 바로 연다(showBn). 좁은 화면은 이어 붙은 쪽에서 그 판까지 내린다 —
+     글꼴·그림이 다 얹힌 뒤에 내려야 자리가 안 어긋난다 */
+  if(toRender && !showBn("p-crender", true)) addEventListener("load", function(){
     document.getElementById("p-crender").scrollIntoView({block:"start"}); });
-  if(toOpt) addEventListener("load", function(){
+  if(toOpt && !showBn("p-optimization", true)) addEventListener("load", function(){
     document.getElementById("p-optimization").scrollIntoView({block:"start"}); });
   booted=true;   /* 여기서부터는 사람이 탭을 누른 것이므로 주소를 따라가게 한다 */
 
@@ -193,9 +223,11 @@
    그 목록 칸을 누르면 하위 탭부터 연다 — 안 열면 숨은 판 안에서만 골라져 화면이 그대로다.
    1-2 는 판 셋이 한 쪽에 이어 붙는다(위 paint) — 쪽을 나누지 않고 기둥에 차례만 단다(2026-11-18).
    나누면 아래 두 판은 눌러야만 보이지만, 이어 두면 스크롤만으로 셋이 다 지나간다. 차례는 「아래에 뭐가 있나」만 알린다.
-   누르면 그 판으로 내려가고, 스크롤하면 지금 보는 판이 켜진다. 판 이름은 여기 SECT 한 곳에만 적는다. */
+   → 2026-11-20 나눴다(사용자 요청 「스크롤 안 내려도 한 화면에」 · 위 showBn). 기둥은 넓은 화면에만 서므로 기둥이 보이면 늘 나뉜 상태다 —
+     차례를 누르면 그 판 하나로 바뀌고, 켜짐은 스크롤 위치가 아니라 지금 고른 판(.wrap 의 data-bn)을 따른다. 판 이름은 여기 SECT 한 곳에만 적는다. */
 (function(){
   const side=document.getElementById("side"); if(!side) return;
+  const wrap=document.querySelector(".wrap");
   const SUB={mmo:"subtabs", mo:"mosub", shooter:"shsub"};      /* 상위 탭 → 그 하위 줄 */
   const LIST={mmo:"p-intro", mo:"p-mo", shooter:"p-shooter"};  /* 상위 탭 → 소개 판 목록이 든 판 */
   const SECT={bneck:[["p-bneck","병목 지도"],["p-optimization","핵심 최적화"],["p-crender","실서버 화면"]]};   /* MMORPG 하위 → 그 쪽의 판 차례 */
@@ -227,6 +259,7 @@
           const lb=mk("button","sd-l"); lb.textContent=x[1]; l.appendChild(lb); spies.push([lb,el,s]);
           lb.addEventListener("click", function(){
             if(!s.classList.contains("act")) s.click();
+            if(window.__bnShow && window.__bnShow(x[0])) return;   /* 넓은 화면 = 판을 바꾼다. 아래는 창을 막 줄였을 때의 예전 길 */
             const smooth=matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
             /* 첫 판은 쪽 맨 위 — 판 위끝에 맞추면 그 위 여백만큼 덜 올라간다 */
             if(j===0) scrollTo({top:0, behavior:smooth}); else el.scrollIntoView({block:"start", behavior:smooth});
@@ -245,8 +278,8 @@
     grps.forEach(function(x){ x[0].hidden=!x[1].classList.contains("act"); });
     spyReq();   /* 하위 탭이 바뀌면 스크롤 없이 쪽 길이가 바뀐다 */
   }
-  /* 지금 보는 판 = 위끝이 화면 40% 선을 넘어 올라온 판 중 마지막. 쪽 맨 밑에 닿으면 마지막 판
-     (마지막 판이 짧아 위끝이 40% 선까지 못 올라오는 화면에서도 끝 칸이 켜지게). 숨은 판은 세지 않는다.
+  /* 지금 보는 판 = 고른 판(.wrap 의 data-bn · 위 showBn). 숨은 판은 세지 않는다.
+     (11-18~11-20 판 셋을 이어 붙였을 때는 스크롤 위치로 골랐다 — 위끝이 화면 40% 선을 넘어 올라온 판 중 마지막.)
      하위 탭(병목 개선)이 꺼져 있으면 판이 보여도 세지 않는다 — scene.js prewarm 이 첫 전환을 덜려고 숨은 #p-bneck 을
      두 프레임 열어 두는데(opacity .01), 그 사이에 여기가 돌면 소개 화면에서 「병목 지도」가 켜진 채 남았다
      (목록을 늘 펼친 뒤 드러남 · 화면 크기마다 나왔다 안 나왔다 하는 타이밍 문제, 2026-11-18). */
@@ -256,19 +289,17 @@
     const vis=spies.filter(function(x){ return x[2].classList.contains("act") && !x[1].hidden; });
     let cur=null;
     if(vis.length && side.offsetWidth){
-      const atEnd = scrollY > 0 && scrollY >= document.documentElement.scrollHeight - innerHeight - 2;
-      cur = atEnd ? vis[vis.length-1] : vis[0];
-      if(!atEnd) vis.forEach(function(x){ if(x[1].getBoundingClientRect().top <= innerHeight*0.4) cur=x; });
+      const bn=wrap.dataset.bn;
+      cur = vis.find(function(x){ return x[1].id===bn; }) || vis[0];
     }
     spies.forEach(function(x){ const on=(x===cur); x[0].classList.toggle("act",on);
       if(on) x[0].setAttribute("aria-current","true"); else x[0].removeAttribute("aria-current"); });
   }
   function spyReq(){ if(!sq){ sq=true; requestAnimationFrame(spy); } }
-  addEventListener("scroll", spyReq, {passive:true});
-  addEventListener("resize", spyReq);
-  addEventListener("load", spyReq);
+  addEventListener("resize", spyReq);   /* 창을 넓혀 기둥이 막 섰을 때 */
   const mo=new MutationObserver(sync);
   pairs.forEach(function(x){ mo.observe(x[1],{attributes:true, attributeFilter:["class"]}); });
+  if(wrap) mo.observe(wrap,{attributes:true, attributeFilter:["data-bn"]});   /* 차례를 눌러 판을 바꿨다 */
   sync();
 })();
 

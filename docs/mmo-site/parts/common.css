@@ -223,6 +223,14 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
   /* 아래로 단추(.subdown)는 끈다 — 기둥의 1-2 차례(tabs.js SECT)가 「아래에 판이 더 있다」와 「그리로 가기」를 같이 한다(2026-11-18).
      좁은 화면은 기둥이 없어 단추가 그대로 남는다 */
   .wrap:has(#p-bneck:not([hidden])) .subdown{display:none}
+  /* 1-2 판 셋을 한 화면씩(2026-11-20, 사용자 요청 「스크롤 안 내려도 한 화면에」) — 고른 판(.wrap 의 data-bn · tabs.js showBn)만 남긴다.
+     hidden 이 아니라 여기서 끄는 까닭은 tabs.js 같은 날 주석. 나뉘기 전 쪽 길이는 1920×940 에서 3,021px(화면 3.2장)였다.
+     .wrap 아래 여백(22)도 뺀다 — 병목 지도 판이 첫 화면 높이(100vh − 18)를 꼭 채워서 그 여백만큼 늘 스크롤이 생겼다.
+     판마다 맞춘 값은 각 판의 css(bneck-tail · optimization · client)에 있다 */
+  .wrap[data-bn="p-bneck"] :is(#p-optimization, #p-crender),
+  .wrap[data-bn="p-optimization"] :is(#p-bneck, #p-crender),
+  .wrap[data-bn="p-crender"] :is(#p-bneck, #p-optimization){display:none}
+  .wrap:has(#p-bneck:not([hidden])){padding-bottom:0}
   /* 1-1 구조도 — 기둥이 본문을 300px 줄여서, 카드(.card 최소 318px + 오른쪽 18px)가 「게임 루프 (단일 코어)」
      라벨에 올라탔다(1280~1600 폭에서 1~83px, 2026-11-18 실측. 기둥 전엔 1350 아래에서만 겹쳤다).
      그 구간에서만 그림을 줄여 라벨 오른쪽 끝을 카드 왼쪽 20px 앞에 세운다 —

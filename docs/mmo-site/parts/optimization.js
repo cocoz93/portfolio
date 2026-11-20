@@ -164,8 +164,10 @@
   window.__optimizationHash=hash;
   window.__optimizationVisibility=function(visible){if(visible){paint();load();}else pause();};
   window.__optimizationForExperiment=function(experiment){return figures.find(f=>f.experiment===experiment);};
-  /* 1-2 카드의 「원리 보기」 — 이 판은 1-2 바로 아래라 탭을 바꾸지 않고 내려오기만 한다(2026-10-27 탭에서 내림) */
-  window.__optimizationShow=function(id){select(id);panel.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});};
+  /* 1-2 카드의 「원리 보기」 — 이 판은 1-2 바로 아래라 탭을 바꾸지 않고 내려오기만 한다(2026-10-27 탭에서 내림)
+     2026-11-20 넓은 화면은 1-2 판 셋이 한 화면씩이라 내려가는 대신 이 판으로 바꾼다(tabs.js showBn — 좁은 화면이면 false 라 예전처럼 내려간다).
+     select 를 먼저 해야 주소가 고른 그림(#optimization-<그림>)으로 남는다 — showBn 이 __optimizationHash 로 읽는다. */
+  window.__optimizationShow=function(id){select(id);if(window.__bnShow&&window.__bnShow("p-optimization"))return;panel.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});};
   document.addEventListener("click",function(event){
     const link=event.target.closest&&event.target.closest("#bn-principle");if(!link||!link.dataset.optimization)return;
     if(event.button!==0||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;

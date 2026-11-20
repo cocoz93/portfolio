@@ -45,6 +45,19 @@
 /* ※ 2026-10-31 88% → 위 두 판과 같은 1640(common.css --band-max). 세 판의 시작선·끝선을 맞춘다.
      하한 1400 은 그대로 지켜진다. 1920 창에서 액자는 1637 → 1640 으로 거의 같고 높이 852px. */
 #p-crender>.cr-title, #p-crender .cr-frame, #p-crender .cr-footclip{max-width:var(--band-max); margin-inline:auto}
+/* ※ 2026-11-20 1280 이상에서는 1-2 판 셋이 한 화면씩이다(common.css 같은 날 주석) — 이 판도 스크롤 없이 한 화면에 들게 한다.
+     나뉘기 전 높이는 1920×940 에서 1,119px. 제목 위 여백 120 은 위 핵심 최적화 띠와 가르던 틈이라 이 판 혼자일 때는 필요 없어
+     30 으로(제목 막대가 화면 위끝에서 40), 판 아래 44 → 16.
+     그래도 남는 만큼은 액자를 줄인다 — 영상은 종횡비가 고정이라 액자 높이가 폭을 따른다(실측 액자 높이 = 폭 × .45 + 114,
+     폭 1600 · 1500 · 1400 에서 834 · 789 · 744). 판 높이 = 액자 높이 + 177(위 여백 10 + 제목 30·70·22 + 꼬리줄 29 + 아래 16)이
+     화면 높이를 안 넘는 폭 = (100vh − 177 − 114) ÷ .45 — 1920×940 에서 1,442px(콘솔 글씨도 1할 작아진다).
+     하한 1400 은 위 10-29 주석의 그 값(그 밑은 머리줄 「문자로 그린다」가 접힌다) — 그보다 낮은 화면(노트북 730)은 줄이지 않고 스크롤을 둔다. */
+@media (min-width:1280px){
+  .wrap[data-bn="p-crender"] #p-crender{padding-bottom:16px}
+  .wrap[data-bn="p-crender"] #p-crender .cr-title{padding-top:30px}
+  .wrap[data-bn="p-crender"] #p-crender>.cr-title, .wrap[data-bn="p-crender"] #p-crender .cr-frame, .wrap[data-bn="p-crender"] #p-crender .cr-footclip{
+    max-width:min(var(--band-max), max(1400px, calc((100vh - 291px) / .45)))}
+}
 
 /* ═══ 계기판 ═══ */
 .cl-dash{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 10px}

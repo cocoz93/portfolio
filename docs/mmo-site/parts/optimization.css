@@ -13,6 +13,10 @@
      첫 화면 아래끝에 이 띠가 비친다. 틈을 0 으로 해 화면 바로 아래에서 시작하고, 기둥의 「핵심 최적화」로 건너오면
      이 띠가 화면 한 장을 채우게 최소 높이를 100vh 로 둔다. */
 @media (min-width:1280px){#p-optimization{margin-top:0;min-height:100vh}}
+/* ※ 2026-11-20 1280 이상에서는 판 셋이 한 화면씩이다(common.css 같은 날 주석) — 이 판이 쪽 맨 위에 오면 .wrap 위 여백(10)만큼
+     띠 위에 페이지 바탕 줄이 비치고 쪽이 화면보다 10px 길어진다. 그만큼 끌어올려 띠가 화면 위끝부터 깔리게 한다
+     — 나뉘기 전 기둥으로 이 판까지 내려왔을 때와 같은 모습이다. */
+@media (min-width:1280px){.wrap[data-bn="p-optimization"] #p-optimization{margin-top:-10px}}
 .op-sec::before{content:"";display:block;width:44px;height:4px;border-radius:2px;background:var(--net);margin-bottom:18px}
 /* 판 제목 — 아래 결과 판의 제목(client.css .cr-title)과 같은 크기·무게. 위가 넓고 아래가 좁다(제목은 아래 판에 속한다) */
 .op-sec{margin:0 0 22px; padding-top:56px; font-size:2.42rem; font-weight:800; letter-spacing:-.02em; line-height:1.25; color:var(--ink)}
