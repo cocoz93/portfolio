@@ -210,7 +210,9 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      기둥 폭이나 틈을 바꾸면 그 둘도 같이 고칠 것. */
 .side{display:none}
 @media(min-width:1280px){
-  .wrap{display:flex; align-items:flex-start; gap:40px}
+  /* 아래 여백 22 는 넓은 화면에서 뺀다(2026-11-20, 사용자 요청 「스크롤 안 내려도 한 화면에」) — 첫 화면 높이를 꼭 채우는 판(소개 그림 ·
+     병목 지도)이 그 여백만큼 늘 스크롤을 만들었다(1920×940 에서 MMORPG · 슈팅 소개 22 · NOX 소개 6px). 기둥의 -22 도 같이 뺐다(아래 .side) */
+  .wrap{display:flex; align-items:flex-start; gap:40px; padding-bottom:0}
   .main{flex:1 1 0; min-width:0}
   .tabrow, #mosub, #shsub, #subtabs .subnav{display:none}
   /* MMORPG 하위 줄은 통째로 숨기지 않는다 — 1-1 구역 필터 · 1-2 맨 위로 단추가 이 줄에 산다. 높이만 0 으로 */
@@ -225,12 +227,11 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
   .wrap:has(#p-bneck:not([hidden])) .subdown{display:none}
   /* 1-2 판 셋을 한 화면씩(2026-11-20, 사용자 요청 「스크롤 안 내려도 한 화면에」) — 고른 판(.wrap 의 data-bn · tabs.js showBn)만 남긴다.
      hidden 이 아니라 여기서 끄는 까닭은 tabs.js 같은 날 주석. 나뉘기 전 쪽 길이는 1920×940 에서 3,021px(화면 3.2장)였다.
-     .wrap 아래 여백(22)도 뺀다 — 병목 지도 판이 첫 화면 높이(100vh − 18)를 꼭 채워서 그 여백만큼 늘 스크롤이 생겼다.
+     .wrap 아래 여백(22)은 위 .wrap 에서 모든 판에 걸쳐 뺐다 — 병목 지도 판이 첫 화면 높이(100vh − 18)를 꼭 채워서 그 여백만큼 늘 스크롤이 생겼다.
      판마다 맞춘 값은 각 판의 css(bneck-tail · optimization · client)에 있다 */
   .wrap[data-bn="p-bneck"] :is(#p-optimization, #p-crender),
   .wrap[data-bn="p-optimization"] :is(#p-bneck, #p-crender),
   .wrap[data-bn="p-crender"] :is(#p-bneck, #p-optimization){display:none}
-  .wrap:has(#p-bneck:not([hidden])){padding-bottom:0}
   /* 1-1 구조도 — 기둥이 본문을 300px 줄여서, 카드(.card 최소 318px + 오른쪽 18px)가 「게임 루프 (단일 코어)」
      라벨에 올라탔다(1280~1600 폭에서 1~83px, 2026-11-18 실측. 기둥 전엔 1350 아래에서만 겹쳤다).
      그 구간에서만 그림을 줄여 라벨 오른쪽 끝을 카드 왼쪽 20px 앞에 세운다 —
@@ -240,7 +241,7 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
   #scene{width:min(100%, calc((100% - 356px) / .742))}
   /* 가운데 정렬(2026-11-20) — 판이 위에 붙어 1920×945 에서 그림 위 95 · 아래 225px 이 비었다.
      판(#p-build)을 첫 화면 높이로 늘려 그 안에서 세로 가운데로 둔다. 48 = 판 위끝 18(.wrap 위 여백 10 + .panel 8) + 30 —
-     그림 중심이 화면 중심과 1px 안으로 맞고, 아래 .wrap 여백 22 를 더해도 쪽이 화면을 안 넘는다(1920·1536·1366 실측).
+     그림 중심이 화면 중심과 1px 안으로 맞고, 아래 .wrap 여백 22 를 더해도 쪽이 화면을 안 넘는다(1920·1536·1366 실측 · 11-20 부터 그 여백은 0).
      씬 viewBox 위아래 빈 띠(위 48 · 아래 29 — 폭 1082 의 .0444 · .0268)는 음수 margin 으로 잘라 낸다.
      안 자르면 빈 띠까지 든 상자가 가운데로 와서 그림이 위로 치우친다. --s 는 위 #scene 폭과 같은 식이다(% 가 둘 다 .stage 폭 기준). */
   #p-build:not([hidden]){min-height:calc(100vh - 48px); display:flex; flex-direction:column; justify-content:center}
@@ -257,13 +258,14 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      clip-path 가 쌓임 맥락을 만들어 DOM 상 뒤에 오는 그 띠가 붙어 따라오는 기둥을 덮었다(2026-11-18 렌더) */
   /* 경계선(2026-11-18) — 기둥 오른쪽에 화면 위아래 끝까지 닿는 선(#2e3a56)을 세워 메뉴와 본문을 가른다.
      바탕은 페이지 색 그대로 — 밝은 띠(#1a2234)를 깔아 봤다가 「원래 색에 선만」으로 뺐다. 떠 있는 카드 · 남색 띠는 시안에서 기각.
-     선이 위아래 끝에 닿고 기둥 상자가 화면 왼쪽 끝부터 서도록 .wrap 의 왼쪽 여백(20) · 위 여백(10) · 아래 여백(22)과
+     선이 위아래 끝에 닿고 기둥 상자가 화면 왼쪽 끝부터 서도록 .wrap 의 왼쪽 여백(20) · 위 여백(10)과
      1900 넘는 화면에서 .wrap 이 가운데로 가며 생기는 바깥 여백(--sd-out)만큼 margin 을 음수로 당기고 같은 양을 padding 으로 돌려준다.
      그래서 본문이 차지하는 자리(기둥 220)와 글자 자리는 그대로다. --sd-out 은 100vw(세로 스크롤 막대 포함)로 재서 막대 폭의 반만큼
-     크게 나오는데, 그만큼 상자가 화면 밖으로 더 나갈 뿐이라 둔다. 아래 -22 는 짧은 판(NOX 소개 946px)이 기둥 때문에 길어지지 않게 */
+     크게 나오는데, 그만큼 상자가 화면 밖으로 더 나갈 뿐이라 둔다. 아래는 당기지 않는다 — 옛 -22 는 .wrap 아래 여백(22)을 덮던 값이고(짧은 판이
+     기둥 때문에 길어지지 않게), 그 여백을 2026-11-20 에 뺐다(위 .wrap). 남겨 두면 긴 판 끝에서 기둥이 쪽 아래로 22px 삐져나갈 수 있다 */
   .side{--sd-out:max(0px, (100vw - 1900px) / 2);
     display:flex; flex-direction:column; flex:0 0 calc(240px + var(--sd-out)); box-sizing:border-box; height:100vh;
-    margin:-10px 0 -22px calc(-20px - var(--sd-out)); padding:40px 0 12px calc(34px + var(--sd-out));
+    margin:-10px 0 0 calc(-20px - var(--sd-out)); padding:40px 0 12px calc(34px + var(--sd-out));
     border-right:1px solid #2e3a56;
     position:sticky; top:0; z-index:50; overflow-y:auto; font-family:var(--sans)}
   /* :where 로 특이도를 0 으로 — .side button(0,1,1)이 .sd-s · .sd-l(0,1,0)의 글자 크기 · 굵기를 이겨서
