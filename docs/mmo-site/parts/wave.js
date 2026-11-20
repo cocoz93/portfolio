@@ -24,11 +24,9 @@
     info.forEach(function(o){ o.el.style.animationDelay=Math.round((o.f-fmin)/range*SPAN)+"ms"; });
     return true;
   }
-  const replay=document.createElement("button");
-  replay.type="button"; replay.className="stage-replay"; replay.textContent="↻ 다시 재생";
-  /* 씬 왼쪽 아래 버튼 줄(panel-build.html .stage-ctl) 맨 앞 — 나가는 문이 그 오른쪽에 선다 */
-  const ctl=stage.querySelector(".stage-ctl");
-  if(ctl) ctl.insertBefore(replay, ctl.firstChild); else stage.appendChild(replay);
+  /* '다시 재생' 버튼은 2026-11-20 에 뺐다 — 메뉴(1280 이상은 왼쪽 기둥, 그 아래는 하위 탭 줄)의 '전체 구조' 를 다시 누르면 탭 전환 코드가
+     아래 __scenePlay 를 불러 같은 길(웨이브 → 구역 순회)을 탄다(실측: 두 경우 시각 차 수 ms).
+     같은 일을 하는 곳이 둘이었고, 버튼 자리를 어디에 둬도 화면이 어수선했다. */
   /* 웨이브가 완전히 끝나는 시점 = 맨 뒤 요소의 지연(SPAN) + 요소 하나의 애니 길이(160ms = CSS 의 scenePop).
      +100 은 마지막 칸이 자리를 잡은 걸 눈이 확인하는 짬 — 데이터는 그 뒤에 흐른다.
      이 짬은 속도를 올려도 그대로 둔다: 애니가 아니라 '눈이 따라잡는 시간' 이라 배속 대상이 아니다. */
@@ -59,9 +57,8 @@
       if(window.__flowStart) window.__flowStart();
     }, WAVE);
   }
-  replay.addEventListener("click", play);
-  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '전체 구조' 로 돌아올 때마다 이걸 부른다.
-     '다시 재생' 버튼과 완전히 같은 길을 타야 두 경우의 순서가 어긋나지 않는다. */
+  /* 탭 전환 코드(앞의 IIFE, 다른 스코프)가 '전체 구조' 로 돌아올 때마다(이미 그 탭에서 다시 눌러도) 이걸 부른다.
+     첫 로드와 완전히 같은 길을 타야 두 경우의 순서가 어긋나지 않는다. */
   window.__scenePlay=play;
   play();
 })();

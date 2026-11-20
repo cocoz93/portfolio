@@ -651,7 +651,7 @@ paintLabels();
    sum(한 줄로 '무엇을 하는가') 하나뿐이다. '왜 그렇게 했는가' 를 적던
    impl 문단은 걷어냈다: 그 내용이 곧 문서의 내용이라, 여기 적으면 미끼를 미리 까먹는 셈이었다.
    ※ 노드마다 달던 설계 문서 링크(docs, 여덟 편)도 2026-10-27 에 걷었다 — 노션으로 나가는 곳을
-     씬 왼쪽 아래 '다시 재생' 옆 문(.stage-door) 하나로 모은다(도착지 "IOCP 서버 구현(MMO)" 가 그 여덟 편을 품은 상위).
+     1-1 의 나가는 문(.stage-door) 하나로 모은다(도착지 "IOCP 서버 구현(MMO)" 가 그 여덟 편을 품은 상위).
 
    어느 구역인지는 여기 안 적는다 — ZI[].nodes 가 이미 갖고 있어서, 두 곳에 두면 어긋난다(옛 zone 필드를 지운 이유). */
 const NOTION="https://feline-vacation-d6d.notion.site/";
@@ -667,7 +667,7 @@ const ND={
 /* ═══ 구역 개요 — 구역 버튼을 누르면 오른쪽 열에 뜨는 단 하나의 화면 ═══
    구역 버튼은 원래 '강조만' 하는 버튼이었다. 무엇이 밝아졌는지는 보이는데 그게 무슨 구역인지는
    안 알려 주고 있었다. 그래서 이미 보이는 버튼(구역)에 개요를 달았고, 지금은 그 개요가 노드까지
-   한 화면에 담는다 — 씬은 한 번도 안 눌러도 된다(설계 문서 링크는 2026-10-27 에 씬 왼쪽 아래 문 .stage-door 하나로 모았다).
+   한 화면에 담는다 — 씬은 한 번도 안 눌러도 된다(설계 문서 링크는 2026-10-27 에 나가는 문 .stage-door 하나로 모았다).
    키는 씬의 구역 키(data-z)와 같은 문자열이라 CSS·강조 코드와 같은 말을 쓴다. */
 /* lead 는 한 줄이다(길어도 두 줄). 원래는 두세 문장이었는데, 뒷문장이 하는 말을 바로 아래
    노드 줄이 다시 하고 있었다 — 문단을 읽고 목록을 또 읽는 셈이라 카드가 길어 보였다.
@@ -696,6 +696,16 @@ const ZI={
 };
 const card=document.getElementById("card"), cbd=document.getElementById("cardbd");
 function closeCard(){ if(card) card.classList.remove("on"); }
+/* 나가는 문(.stage-door) 자리 — 1280 이상에서는 카드 맨 끝, 그 아래는 씬 왼쪽 아래 줄(panel-build.html .stage-ctl).
+   (2026-11-20) 넓은 화면에서는 오른쪽 열 카드가 늘 떠 있어 설명을 다 읽은 자리가 곧 나가는 자리다.
+   좁은 화면에서는 옮기지 않는다 — ≤680 은 전체 상태에 카드를 안 띄워(구역 강조 IIFE apply) 문이 같이 사라진다.
+   카드 글은 #cardbd 만 갈아 끼우므로(innerHTML) 그 옆에 붙인 문은 살아남는다. */
+(function(){
+  const door=document.querySelector("#p-build .stage-door"); if(!door||!card) return;
+  const home=door.parentNode, wide=matchMedia("(min-width:1280px)");
+  function place(){ (wide.matches ? card : home).appendChild(door); }
+  wide.addEventListener("change",place); place();
+})();
 
 /* 구역 개요 — 구역 버튼이 여는 단 하나의 화면이다. 씬 강조는 구역 버튼(apply)이 이미 걸어 놨으므로
    여기서는 글만 채운다.
@@ -704,7 +714,8 @@ function closeCard(){ if(card) card.classList.remove("on"); }
    끌어올리고, 제목 자체를 노션으로 나가는 링크로 만든다. 클릭 두 번이 한 번이 되고, 도착지가 생긴다.
    라벨(.k)도 안 붙인다 — '구역 개요' 는 바로 밑 제목('네트워크')과 '이 구역의 노드 3' 이 이미 하는 말이었다.
    ※ 그 뒤(2026-10-27) 문서 링크를 카드에서 다시 걷었다 — 링크가 구역마다 흩어져 있으면 나가는 곳이 아홉이
-     된다. 노션으로 가는 길은 씬 왼쪽 아래 '다시 재생' 옆 문(.stage-door) 하나이고, 카드는 노드 이름과 한 줄 요약만 든다. */
+     된다. 노션으로 가는 길은 나가는 문(.stage-door) 하나이고, 카드는 노드 이름과 한 줄 요약만 든다.
+     (그 문은 2026-11-20 부터 1280 이상에서 이 카드 맨 끝에 붙는다 — 위 closeCard 아래 IIFE) */
 /* brief=true 는 진입 순회가 쓰는 미리보기다 — 제목과 한 줄까지만 짓고 멈춘다.
    순회 중에 카드를 통째로 띄우면 두 가지가 깨진다: 카드 높이가 구역마다 199~437px 이라
    2.5초 사이 240px 씩 늘었다 줄고(실측), 네트워크 칸에서는 문서 링크 다섯 개가 620ms 스쳐 간다.
@@ -1121,13 +1132,13 @@ function frame(now){
   rafId=requestAnimationFrame(frame);
 }
 /* 흐름 시작·정지 훅 — 구조가 먼저 서고 데이터가 흐른다.
-   '언제' 시작할지는 등장 웨이브 쪽(맨 아래 IIFE)이 쥔다. 첫 로드와 '다시 재생' 이 같은 길을 타야
+   '언제' 시작할지는 등장 웨이브 쪽(맨 아래 IIFE)이 쥔다. 첫 로드와 '다시 들어올 때' 가 같은 길을 타야
    두 경우의 순서가 어긋나지 않는다 — 예전엔 첫 로드만 1250ms 타이머로 늦추고 다시 재생은 안 늦춰서,
    구조가 아직 팝인하는 중에 칩이 먼저 떠다녔다. */
 window.__flowStop =function(){ run=false; cancelAnimationFrame(rafId); rafId=0; };
 window.__flowStart=function(){ if(RMOT) return; run=true; prev=performance.now();
   cancelAnimationFrame(rafId); rafId=requestAnimationFrame(frame); };
-/* '다시 재생' 훅: 흐름을 처음부터 — 클라에서 출발하는 인과 순서가 다시 보이게 */
+/* 다시 들어올 때(wave.js __scenePlay) 쓰는 훅: 흐름을 처음부터 — 클라에서 출발하는 인과 순서가 다시 보이게 */
 window.__flowReset=function(){
   [recvChips,drainChips,fanChips,bundChips,outChips,dirtyChips,saveChips,twChips]
     .forEach(p=>p.forEach(c=>{ c.st="wait"; c.e.setAttribute("opacity","0"); }));
@@ -1609,7 +1620,7 @@ window.__flowReset=function(){
      노션이 상위를 깔고 그 위에 작은 창으로 얹는 주소다. 그 작은 창이
      닫혔을 때 나머지 열다섯 편이 있는 목록에 떨어지게 하려는 것이다.
      (1-1 구역 카드에 있던 설계 문서 링크 여덟 편은 id 를 NOTION 뒤에 그대로 붙여 전체창으로 열었는데,
-      2026-10-27 에 걷고 1-1 의 나가는 문(씬 왼쪽 아래 .stage-door) 하나로 모았다.)
+      2026-10-27 에 걷고 1-1 의 나가는 문(.stage-door) 하나로 모았다.)
      EXPS 항목에 직접 적지 않고 여기서 붙이는 이유: 이 표가 '카드에 서는 열여섯' 의 정본이라
      한 곳만 보면 무엇이 서고 무엇이 안 서는지 알 수 있다. 여기 없는 항목(현황판 · 동접별 트래픽 ·
      정정 이력 · 미측정 3건)은 노션에 대응 페이지가 없어 카드로 세우지 않는다. */
@@ -1632,7 +1643,7 @@ window.__flowReset=function(){
     [0.2, "3a516a0b9f5981639321d22af4aa2d38"]    /* 결론 — 세트 복제로 */
   ];
   /* 작은 창을 얹을 바닥 = "IOCP 서버 구현(MMO)" — 설계 문서 DB 와 병목 실험 DB 를 함께 품은 상위.
-     1-1 의 나가는 문(씬 왼쪽 아래 .stage-door)이 가는 곳과 같은 페이지다.
+     1-1 의 나가는 문(.stage-door)이 가는 곳과 같은 페이지다.
      pm=s(오른쪽 패널)로도 열리지만 폭이 좁아 실측 표가 잘린다 — 가운데(pm=c)로 둔다. */
   const NOTION_HOME="33616a0b9f5980e5a220c3e1928c2fe5";
   NOTION_EXP.forEach(function(r,i){

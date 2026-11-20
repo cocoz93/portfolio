@@ -230,6 +230,20 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      카드가 23% 로 넓어지는 폭(약 1383px 이상)에서는 min() 이 100% 를 골라 손대지 않는다.
      병목 전환은 #scene 의 실제 상자(fromRect)에서 출발하므로 따라 고칠 값이 없다(scene.js realIntro). */
   #scene{width:min(100%, calc((100% - 356px) / .742))}
+  /* 가운데 정렬(2026-11-20) — 판이 위에 붙어 1920×945 에서 그림 위 95 · 아래 225px 이 비었다.
+     판(#p-build)을 첫 화면 높이로 늘려 그 안에서 세로 가운데로 둔다. 48 = 판 위끝 18(.wrap 위 여백 10 + .panel 8) + 30 —
+     그림 중심이 화면 중심과 1px 안으로 맞고, 아래 .wrap 여백 22 를 더해도 쪽이 화면을 안 넘는다(1920·1536·1366 실측).
+     씬 viewBox 위아래 빈 띠(위 48 · 아래 29 — 폭 1082 의 .0444 · .0268)는 음수 margin 으로 잘라 낸다.
+     안 자르면 빈 띠까지 든 상자가 가운데로 와서 그림이 위로 치우친다. --s 는 위 #scene 폭과 같은 식이다(% 가 둘 다 .stage 폭 기준). */
+  #p-build:not([hidden]){min-height:calc(100vh - 48px); display:flex; flex-direction:column; justify-content:center}
+  #p-build>.stage{width:100%; --s:min(100%, calc((100% - 356px) / .742))}
+  #scene{margin-top:calc(-.0444 * var(--s)); margin-bottom:calc(-.0268 * var(--s))}
+  /* 카드는 판 위끝에서 20px — 옛 13% 는 빈 띠까지 든 판 높이 기준이라 그림 윗줄보다 14~25px 아래였다(1366~1920). 그 가운데 값.
+     나가는 문이 카드 맨 끝에 붙으므로(scene.js closeCard 아래 IIFE) 높이 상한을 풀어 문이 카드 스크롤 안으로 숨지 않게 한다.
+     문이 빠진 씬 왼쪽 아래 줄은 비므로 숨긴다. */
+  #card{top:20px; max-height:none}
+  #card>.stage-door{align-self:flex-start; margin-top:22px}
+  #p-build .stage-ctl{display:none}
 
   /* z-index — 1-2 핵심 최적화 띠(optimization.css #p-optimization)가 그림자 + clip-path 로 화면 끝까지 칠하는데,
      clip-path 가 쌓임 맥락을 만들어 DOM 상 뒤에 오는 그 띠가 붙어 따라오는 기둥을 덮었다(2026-11-18 렌더) */
@@ -722,14 +736,8 @@ body.pop-run #scene #lyr-build>*, body.pop-run #scene #lyr-lbl>*{
    칩 레이어는 id 가 없어(웨이브 대상 제외) 클래스로 잡는다. 루프도 같이 멈추므로(__flowStop)
    이 규칙은 멈춘 순간 남아 있던 것(쌓인 칸·타이밍 휠 바늘)까지 덮는 몫이다. */
 body.pop-hold #scene .chips{opacity:0}
-/* 글꼴은 sans 다. 한때 mono 였는데 '다시 재생' 네 글자가 mono 에 없어 폴백으로 빠지면서 자간이 벌어져
-   있었다(같은 줄 오른쪽 끝에 나가는 문을 세우고 나서야 눈에 띄었다 — 그쪽은 sans 라 계열이 어긋났다).
-   ↻ 는 sans 에서도 그대로 나온다. 바꾼 대가는 버튼 폭 113 → 96px 하나뿐이다(실측).
-   ※ var(--sans) 를 반드시 적어 줄 것. button 은 글꼴을 상속하지 않아서, 이 줄을 지우면 body 의 sans 가
-     내려오는 게 아니라 브라우저 기본 글꼴로 떨어진다(이 저장소에는 button{font:inherit} 같은 규칙이 없다). */
-/* 씬 왼쪽 아래 버튼 줄(.stage-ctl) — '다시 재생' 과 노션으로 나가는 문(.stage-door)이 나란히 선다.
-   자리는 줄이 쥐고 버튼은 흐름을 따른다: 재생 버튼 폭이 바뀌어도 문이 따라 밀린다(left 를 숫자로 박지 않는다).
-   재생 버튼은 wave.js 가 지어 이 줄 맨 앞에 끼운다.
+/* 씬 왼쪽 아래 버튼 줄(.stage-ctl) — 노션으로 나가는 문(.stage-door) 하나가 선다.
+   2026-11-20 옆에 있던 '다시 재생' 은 뺐다(wave.js 주석). 1280 이상에서는 문이 카드 맨 끝으로 가고 이 줄은 숨는다(위 1280 블록).
    ※ 2026-10-28 이 줄이 1920×947 에서 첫 화면 밖(57px 아래)이었다 — 씬 높이는 창 폭이 정한다.
      absolute → sticky: 씬이 화면보다 길면 화면 아래끝(16px 위)에 붙고, 스크롤해 씬 바닥이 보이면 제자리로 간다.
      흐름 안에 서므로 위 여백 −50(= 높이 34 + 16)으로 씬 바닥 위에 도로 얹고, 아래 여백 16 으로 판 높이를
@@ -738,13 +746,7 @@ body.pop-hold #scene .chips{opacity:0}
      이유와 같다, panel-build.html 머리 주석) · 오른쪽 요약판 위·아래·안 · 씬 위 빈 띠 자르기(여백이 사라진다). */
 .stage-ctl{position:sticky; bottom:16px; z-index:6; display:flex; width:max-content; gap:8px; align-items:center;
   margin:-50px 0 16px 16px}
-.stage-replay{
-  font-family:var(--sans); font-size:.85rem; line-height:1.32;
-  color:#b7c4da; cursor:pointer; background:rgba(19,26,38,.55); border:1px solid rgba(120,140,175,.42);
-  border-radius:9px; padding:7px 14px; backdrop-filter:blur(4px); transition:border-color .15s, color .15s}
-.stage-replay:hover{border-color:var(--net); color:var(--ink)}
-.stage-replay:focus-visible{outline:2px solid var(--net); outline-offset:2px}
-/* 문은 재생 버튼과 같은 틀(크기·모서리·바탕)에 테두리만 파랑이다 — 같은 줄의 조작 버튼과 갈라 '밖으로 나가는 것' 으로 읽힌다 */
+/* 문은 옛 재생 버튼과 같은 틀(크기·모서리·바탕)에 테두리만 파랑이다 — 같은 줄의 조작 버튼과 갈라 '밖으로 나가는 것' 으로 읽혔다 */
 .stage-door{display:inline-flex; align-items:center; gap:7px; text-decoration:none;
   font-family:var(--sans); font-size:.85rem; font-weight:600; line-height:1.32;
   color:#dbe4f2; background:rgba(19,26,38,.55); border:1px solid rgba(70,177,255,.6);
@@ -768,9 +770,9 @@ body.pop-hold #scene .chips{opacity:0}
 @media(max-width:680px){
   .card{bottom:10px; max-height:calc(100% - 22px)}
   .stage-ctl{bottom:16px}
-  /* 이 폭에서는 카드가 씬 위를 통째로 덮는다 — 씬에 붙어 있는 '다시 재생' 이 카드 밑에 깔려
-     보이지도 눌리지도 않는다(카드 z-index 8 · 재생 6). 열려 있는 동안만 감춘다.
-     카드를 닫으면(같은 구역 버튼 다시 누르기) 그대로 돌아온다. 옆의 나가는 문도 같은 줄이라 함께 감춘다. */
+  /* 이 폭에서는 카드가 씬 위를 통째로 덮는다 — 씬에 붙어 있는 나가는 문이 카드 밑에 깔려
+     보이지도 눌리지도 않는다(카드 z-index 8 · 줄 6). 열려 있는 동안만 감춘다.
+     카드를 닫으면(같은 구역 버튼 다시 누르기) 그대로 돌아온다. (2026-11-20 까지는 '다시 재생' 도 같은 줄이었다) */
   .stage:has(#card.on) .stage-ctl{display:none} }
 
 /* ═══ 구역 강조 — 고른 구역만 남기고 나머지를 죽인다 ═══

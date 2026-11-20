@@ -40,3 +40,23 @@
      이 자리를 되살릴 것: 760px 밑에서 칸 하나가 100px 아래로 눌리면 단위가 줄바꿈된다. */
   .bncard{ padding:16px 16px 14px }
 }
+/* 지도 키우기 · 가운데 정렬(2026-11-20, 1280 이상) — 카드 열을 460~500px 로 묶고 남는 폭을 지도에 준다.
+   1920×945 실측: 카드 643 → 500px · 지도 939×583 → 1082×672.
+   판(#p-bneck)은 첫 화면 높이로 늘려 그 안에서 세로 가운데에 둔다 — 18 = 판 위끝(.wrap 위 여백 10 + .panel 8).
+   그래서 첫 화면에는 이 판만 보이고, 아래 핵심 최적화 띠는 화면 바로 아래에서 시작한다(optimization.css 같은 날 주석).
+   좁아진 카드에서는 고리 옆 글 칸이 눌려 제목이 꺾였다 — 휴대폰 분기(bneck.css 560)와 같은 수법으로 고리만 이름 옆에 두고
+   나머지는 카드 폭을 다 쓴다. 이전·다음 이름은 말줄임 대신 고르게 두 줄로 꺾는다(말줄임이면 「1. SendQ Lock-…」처럼 잘렸다). */
+@media (min-width:1280px){
+  #p-bneck:not([hidden]){ min-height:calc(100vh - 18px); display:flex; flex-direction:column; justify-content:center }
+  #p-bneck>.bn-shift{ width:100% }
+  .bn-stage{ grid-template-columns:minmax(0,1fr) clamp(460px,27vw,500px) }
+  .bx-hero{ display:grid; grid-template-columns:auto minmax(0,1fr); gap:0 22px; align-items:center }
+  .bx-tx{ display:contents }
+  .bx-rw{ grid-row:1 / 3 }
+  .bx-st, .bx-nm{ grid-column:2 }
+  .bx-st{ align-self:end; margin-bottom:2px }
+  .bx-nm{ align-self:start }
+  .bx-kl, .bx-ba, .bx-big, .bx-sub, .bx-m, .bx-out{ grid-column:1 / -1 }
+  .bx-rw[hidden] + .bx-tx > .bx-st, .bx-rw[hidden] + .bx-tx > .bx-nm{ grid-column:1 / -1 }   /* 고리 없는 카드(⑤⑯) */
+  .bx-pg .t{ white-space:normal; text-wrap:balance }
+}
