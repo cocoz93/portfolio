@@ -278,21 +278,24 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
   .side button:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:4px}
   /* 상위 — 이름 + 안에 뭐가 있는지 한 줄(옛 .tab 과 같은 두 줄 · 그 까닭은 위 .tab 주석). 켜진 것만 흰 글자 + 왼쪽 파란 막대 */
   .sd-t{position:relative; display:flex; flex-direction:column; gap:3px; padding:10px 0; color:#66768f; transition:color .15s}
-  .sd-t b{font-size:1.9rem; font-weight:700; line-height:1.2}
+  /* 굵기는 켜짐과 상관없이 고정(2026-11-20) — 상위 800 · 하위 탭 700. 전에는 켜지면 굵어졌다(상위 700→800 · 하위 400→700).
+     켜짐은 밝기(흰 글자) + 막대 · 점 · 알약으로 이미 드러나서 굵기는 겹치는 신호였고, 누르는 순간 글자가 확 바뀌어 보였다.
+     값은 시안 1안 — 지금 켜진 칸의 굵기를 처음부터 쓴다. 한 단계 위(둘 다 900)는 한글 획이 뭉쳐 기각 */
+  .sd-t b{font-size:1.9rem; font-weight:800; line-height:1.2}
   .sd-t span{font-size:.9rem; font-weight:600; color:#4b586e; transition:color .15s}
   .sd-t:hover{color:var(--ink)} .sd-t:hover span{color:var(--mut)}
-  .sd-t.act{color:#fff} .sd-t.act b{font-weight:800} .sd-t.act span{color:var(--mut)}
+  .sd-t.act{color:#fff} .sd-t.act span{color:var(--mut)}
   .sd-t.act::before{content:""; position:absolute; left:-14px; top:12px; height:1.9rem; width:3px; border-radius:2px; background:var(--net)}
   /* 하위 — 옛 하위 줄과 같은 점(켜지면 파란 점). 세로 선이 소속을 낸다 */
   .sd-grp{display:flex; flex-direction:column; margin:2px 0 12px 2px; padding:2px 0 2px 16px; border-left:1px solid var(--line)}
   .sd-grp[hidden]{display:none}
-  .sd-s{display:flex; align-items:center; gap:9px; padding:7px 0; font-size:1.5rem; color:var(--mut); transition:color .15s}
+  .sd-s{display:flex; align-items:center; gap:9px; padding:7px 0; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s}
   .sd-s::before{content:""; flex:0 0 auto; width:8px; height:8px; border-radius:50%; background:#2a3850; transition:background .15s}
   .sd-s:hover{color:var(--ink)}
-  .sd-s.act{color:#fff; font-weight:700} .sd-s.act::before{background:var(--net)}
+  .sd-s.act{color:#fff} .sd-s.act::before{background:var(--net)}
   /* 소개 판 목록 — 셋째 겹이라 한 단 더 들이고 글자를 줄인다. 켜진 것은 파란 글자
      (2026-11-18) 글자를 크게 — 상위 19.5 → 30 · 하위 16 → 24 · 목록 16 → 19.5px(시안 L1). 한 단계 더 큰 L2(35 · 27 · 22)는
-     1920×940 에서 기둥이 919px 까지 차 여유가 없어 기각. 하위 탭 · 목록 굵기는 보통(상속 · 켜진 하위 탭만 700) — 시안에서 본 그대로다.
+     1920×940 에서 기둥이 919px 까지 차 여유가 없어 기각. 목록 굵기는 보통(상속) — 시안에서 본 그대로다(하위 탭 굵기는 위 .sd-t b 주석).
      들임 30px = 하위 탭 글자 시작(점 8 + 틈 9 = 17)보다 13px 안쪽 — 17 이면 크기를 갈라도 글자가 같은 세로줄에서 시작한다.
      원래 단추의 번호(<i>01</i>)는 기둥에서 끈다 — 목록은 차례가 아니고(사냥 · 파티 · 우편) 첫 칸 「개요」엔 번호가 없다 */
   .sd-list{display:flex; flex-direction:column; margin:0 0 4px}
