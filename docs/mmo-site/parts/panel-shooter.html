@@ -8,9 +8,24 @@
        11-18 소개 · 전체 구조를 채웠다(사용자 「넣어봐」 · 러프판). 병목 개선은 부하 한계를 아직 안 재서 비워 둔다.
        그림 = media/sh-*.jpg — 사람 확인 자동판(hauto_ha1) 캡처 1280×720 에서 왼쪽 위 개발용 화면 메시지를 빼려고
        위 165px 를 잘라 낸 987×555(16:9).
-       수치 출처(MO_Shooter) — 60Hz kTickRate · 방 하나 10명 kMaxPlayersInRoom · 프로토콜 10(Shared/GameProtocol.h) ·
+       11-23 컨텐츠 = 01 전투 · 02 움직임(사용자 「사격, 근접, 수류탄을 다 묶는게 어때?」). 단추를 고르면 게임 화면 왼쪽 끝에 반투명 세로 띠 메뉴가 뜨고 칸은 띠 가운데 둘레에 묶음 차례대로 — 전투 세부는 가운데 위 · 움직임은 가운데 아래(시안 B · 사용자 「중앙정렬로」 · 「한칸에 다 뒀더라도 순서대로 읽을수있게」)
+       (사용자 「전투를 누르면 게임화면 왼쪽에 회색이나 투명색으로 메뉴바가 하나 더나오는느낌」) — 전투 = 사격 · 근접 · 수류탄(조준 · 앉기는 사격 글),
+       11-23 개요 카드 「게임플레이」 = 받침 · 경기 흐름 · 부활 · 점수판(사용자 「그냥 개요쪽 게임플레이로 넣는게 어때?」 — 컨텐츠 칸으로 따로 두지 않는다).
+       숫자 근거 = Shared/MatchRules.h:16-27(준비 30 · 부활 5 · 끝 10 · 무적 2.75 · 6명 이상 30킬 · 20분) · GameProtocol.h kMaxPlayersInRoom 10 ·
+       받침 = 서버가 읽는 Saved/MOB/pads_expanse.txt(체력 25 · 50 회복 5곳, 권총 2 · 소총 4 · 샷건 4, 다시 켜짐 10 · 25초) · 점수 = KillRecord.h SCORE 줄.
+       움직임 = 걷기 · 대시 · 점프대. 순간이동은 커밋되면 움직임 카드에 .gi-sub 하나 더한다. 짜는 법은 intro.js 머리 주석(.gi-sub · data-vid · data-wip).
+       영상 sh-shoot.mp4 · sh-walk.mp4 = Saved/MOB/sarec.mp4(11-10 서버 애니 판 촬영 · 1280×720 · 봇 왕복 + 화면 흔들림 시험)의
+       15.5~19.5초 · 0.5~7.5초를 잘라 위 개발용 메시지를 빼고 960×540 · 30fps · 소리 없음으로 줄였다.
+       자르기 = 걷기 987×555 · x293 y165 / 사격 880×495 · x340 y225 — 사격 구간은 오류 줄이 늘어 흐린 안내 글이 y221 까지 내려온다(11-23 프레임 확인).
+       sh-shoot.jpg · sh-walk.jpg = 각 영상 첫 장면. 시험 판이라 화면이 흔들린다 — 근접 · 수류탄 · 대시 · 점프대와 같이 다시 찍을 것.
+       sh-jump.jpg = 점프대 다리 판 jpA(MOB/jpA_launch_self_air_2.png 960×540)에서 개발용 메시지를 빼려고
+       (240,135)~(960,540) 을 잘라 낸 720×405(16:9).
+       수치 출처(MO_Shooter) — 60Hz kTickRate · 방 하나 10명 kMaxPlayersInRoom · 프로토콜 18(Shared/GameProtocol.h, 11-18 판은 10) ·
+       수류탄 신관 2초 kGrenadeFuseFrames 120 · 반경 4.5m kGrenadeBlastRadius(Shared/Grenade.h) · 대시 0.25초 kDashForceDuration ·
+       쿨다운 91입력 ≈ 1.5초 kDashCooldownInputs(Shared/Dash.h) · 점프대 8개(다리 판 jpB2 서버 byPad 여덟 칸) · Lyra 대조 도구 10개(Tools/*Check) ·
        되감기 18틱 = 0.3초 kRewindLimitTicks(Server/Room.h) · 근접 350cm · 피해 100 kMeleeDistance · kMeleeDamage ·
-       조준 걸음 × 0.5 kAdsWalkSpeedMultiplier(Shared/Weapon.h) · 포트 7791 · 입출력 IOCP(Server/main.cpp · 서버 시작 줄 실측).
+       조준 걸음 × 0.5 kAdsWalkSpeedMultiplier · 근접 밀기 kMeleePushStrength · 벽 막힘 MELEE_BLOCKED(Shared/Weapon.h · GameProtocol.h) ·
+       대시 막기 32입력 ≈ 0.53초 kDashActiveInputs(Shared/Dash.h) · 포트 7791 · 입출력 IOCP(Server/main.cpp · 서버 시작 줄 실측).
        구조도의 .ms · .nd · .mo-card 짜임은 녹스 판(mo.css)을 빌려 쓴다. -->
   <section class="panel" id="p-shooter" role="tabpanel" hidden>
     <div class="subtabs" id="shsub">
@@ -31,41 +46,65 @@
             <button type="button" class="gi-it act" data-img="media/sh-play.jpg" data-alt="Lyra 클라가 이 서버에 붙어 도는 판 — 상대 둘이 쏘는 화면">개요</button>
           </div>
           <div class="gi-g"><span class="gi-k">컨텐츠</span>
-            <button type="button" class="gi-it" data-img="media/sh-shot.jpg" data-alt="사격 — 벽에 탄이 튀는 화면"><i>01</i>사격 판정</button>
-            <button type="button" class="gi-it" data-img="media/sh-crouch.jpg" data-alt="앉아서 쏘는 상대"><i>02</i>조준 · 앉기</button>
-            <button type="button" class="gi-it" data-img="media/sh-melee.jpg" data-alt="근접 공격 — 붙어 선 두 사람"><i>03</i>근접 · 부딪힘</button>
+            <button type="button" class="gi-it" data-img="media/sh-shoot.jpg" data-alt="사격 — 이 서버에 붙은 판에서 복도 끝 상대를 쏘는 장면"><i>01</i>전투</button>
+            <button type="button" class="gi-it" data-img="media/sh-walk.jpg" data-alt="걷기 — 내 캐릭터가 복도를 옮겨 다니는 장면"><i>02</i>움직임</button>
           </div>
         </div>
         <div class="gi-fr"><img src="media/sh-play.jpg" alt="Lyra 클라가 이 서버에 붙어 도는 판 — 상대 둘이 쏘는 화면" width="987" height="555" loading="lazy"></div>
         <div class="gi-cards">
-          <article class="gi-card gi-lead">
+          <article class="gi-card gi-lead gi-dense">
             <div class="gi-k">MO_Shooter · 언리얼 Lyra 클라</div>
             <h3 class="gi-h">Lyra 는 그리기만,<br>판정은 내 서버가</h3>
-            <p>화면 · 애니 · HUD 는 Lyra 를 그대로 쓰고, 다리 플러그인이 Lyra 의 판정을 막은 뒤 서버 결과를 넣는다. 조준 · 앉기 · 근접 · 부딪힘 · 체력 받침 · 도움 집계까지 Lyra 원본과 대조해 서버로 옮겼다.</p>
+            <p>다리 플러그인이 Lyra 의 판정을 막고 서버 결과를 넣는다. 규칙 · 수치는 Lyra 원본과 하나씩 대조해 옮겼다.</p>
             <div class="gi-num">
               <div><b>60<i>Hz</i></b><span>서버 고정 틱 · 방마다</span></div>
               <div><b>0.3<i>초</i></b><span>되감기 한도 · 쏜 사람 기준</span></div>
             </div>
+            <div class="gi-play"><div class="gi-k">게임플레이</div><dl>
+              <dt>한 판</dt><dd>5대5 · 팀 30킬 또는 20분</dd>
+              <dt>흐름</dt><dd>준비 30초 → 경기 → 끝 10초 → 새 판</dd>
+              <dt>부활</dt><dd>5초 뒤 자동 · 2.75초 무적</dd>
+              <dt>받침</dt><dd>체력 5곳 · 무기 10곳, 10~25초 뒤 다시</dd>
+              <dt>점수판</dt><dd>처치 · 죽음 · 도움</dd>
+            </dl></div>
             <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/MO_Shooter" target="_blank" rel="noopener">GitHub ↗</a></div>
             <p class="gi-fine">Lyra 그림 · 애니 © Epic Games · 언리얼 엔진 EULA</p>
           </article>
           <article class="gi-card" hidden>
-            <div class="gi-k">01 · 사격</div>
-            <h3>사격 판정</h3>
-            <p>권총 · 소총 · 샷건. 쏜 사람 화면 시점으로 최대 0.3초를 되감아, 그때 상대의 애니 자세로 맞았는지 서버가 정한다. 퍼짐 곡선도 Lyra 무기 값 그대로.</p>
-            <div class="sv"><b>게임 스레드</b> — 되감기 · 맞음 · 피해 · 처치</div>
+            <div class="gi-k">01 · 전투</div>
+            <div class="gi-sub" data-label="사격" data-img="media/sh-shoot.jpg" data-vid="media/sh-shoot.mp4" data-alt="사격 — 이 서버에 붙은 판에서 복도 끝 상대를 쏘는 장면">
+              <h3>사격</h3>
+              <p>권총 · 소총 · 샷건. 쏜 사람 화면 시점으로 최대 0.3초를 되감아, 그때 상대의 애니 자세로 맞았는지 서버가 정한다. 조준 · 앉기는 탄 퍼짐을 줄이고, 앉으면 맞는 몸도 낮아진다.</p>
+              <div class="sv"><b>게임 스레드</b> — 되감기 · 맞음 · 피해 · 처치</div>
+            </div>
+            <div class="gi-sub" data-label="근접" data-img="media/sh-melee.jpg" data-wip="영상 준비 중" data-alt="근접 공격 — 붙어 선 두 사람" hidden>
+              <h3>근접</h3>
+              <p>앞 350cm 를 쓸어 맞으면 피해 100 — 한 방. 맞히면 공격자가 앞으로 밀려 나가고, 벽 너머는 닿지 않는다.</p>
+              <div class="sv"><b>게임 스레드</b> — 쓸기 · 피해 · 밀기</div>
+            </div>
+            <div class="gi-sub" data-label="수류탄" data-wip="수류탄 영상 — 촬영 예정" data-alt="수류탄 영상 준비 중" hidden>
+              <h3>수류탄</h3>
+              <p>서버가 직접 굴리는 첫 물체. 던진 뒤 2초에 터지고, 날아가며 벽 · 바닥 · 사람 몸에 튕긴다. 폭발은 반경 4.5m 안을 거리에 따라 깎아 때리고, 벽 뒤는 막힌다. 튕김 궤적까지 Lyra 기록과 대조했다.</p>
+              <div class="sv"><b>게임 스레드</b> — 날아감 · 튕김 · 폭발 피해</div>
+            </div>
           </article>
           <article class="gi-card" hidden>
-            <div class="gi-k">02 · 조준 · 앉기</div>
-            <h3>조준 · 앉기</h3>
-            <p>우클릭 조준은 퍼짐을 줄이고 걸음을 절반으로. 앉으면 걸음이 느려지고 맞는 몸도 낮아진다. 값은 Lyra 에셋에서 뽑았다.</p>
-            <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
-          </article>
-          <article class="gi-card" hidden>
-            <div class="gi-k">03 · 근접 · 부딪힘</div>
-            <h3>근접 · 부딪힘</h3>
-            <p>근접은 앞 350cm 를 쓸어 맞으면 피해 100 — 한 방. 플레이어끼리는 밀지 않고 막거나 미끄러진다. 둘 다 Lyra 와 같은 방식.</p>
-            <div class="sv"><b>게임 스레드</b> — 근접 판정 · 몸 막기</div>
+            <div class="gi-k">02 · 움직임</div>
+            <div class="gi-sub" data-label="걷기" data-img="media/sh-walk.jpg" data-vid="media/sh-walk.mp4" data-alt="걷기 — 내 캐릭터가 복도를 옮겨 다니는 장면">
+              <h3>걷기</h3>
+              <p>걷기 · 점프 · 턱 오르기 · 벽 미끄러짐을 서버가 직접 셈한다. 조준하면 걸음이 절반, 플레이어끼리는 밀지 않고 막거나 미끄러진다.</p>
+              <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
+            </div>
+            <div class="gi-sub" data-label="대시" data-wip="대시 영상 — 촬영 예정" data-alt="대시 영상 준비 중" hidden>
+              <h3>대시</h3>
+              <p>Shift — 누르던 방향으로 0.25초 밀고, 쿨다운 1.5초. 켠 뒤 0.5초 남짓은 새로 누른 근접 · 재장전 · 점프 · 조준이 막힌다.</p>
+              <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
+            </div>
+            <div class="gi-sub" data-label="점프대" data-img="media/sh-jump.jpg" data-wip="영상 준비 중" data-alt="점프대에 쏘여 뜬 내 캐릭터 — 발판에 불꽃" hidden>
+              <h3>점프대</h3>
+              <p>맵에 8개. 올라서면 서버가 쏘아 올리고, 공중 궤적도 서버가 셈한다. 내 화면은 먼저 띄운 뒤 서버 값으로 맞춘다.</p>
+              <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
+            </div>
           </article>
         </div>
       </div>
@@ -101,18 +140,18 @@
               <rect class="room" x="662" y="180" width="44" height="34" rx="5"/><rect class="room" x="714" y="180" width="44" height="34" rx="5"/><rect class="room" x="766" y="180" width="44" height="34" rx="5"/><rect class="room" x="818" y="180" width="44" height="34" rx="5"/>
               <rect class="room" x="662" y="228" width="44" height="34" rx="5"/><rect class="room" x="714" y="228" width="44" height="34" rx="5"/><rect class="room" x="766" y="228" width="44" height="34" rx="5"/><text class="s" x="840" y="251" text-anchor="middle" font-size="14">방 N</text>
               <text class="s" x="662" y="306" font-size="14">되감기 판정 · 최대 0.3초</text></g>
-            <g class="nd" data-n="data"><rect class="box" x="960" y="150" width="180" height="120" rx="12"/><text x="1050" y="192" text-anchor="middle" font-size="21">뽑은 자료</text><text class="s" x="1050" y="220" text-anchor="middle" font-size="14">맵 충돌</text><text class="s" x="1050" y="244" text-anchor="middle" font-size="14">애니 클립 · 받침</text></g>
+            <g class="nd" data-n="data"><rect class="box" x="960" y="150" width="180" height="120" rx="12"/><text x="1050" y="192" text-anchor="middle" font-size="21">뽑은 자료</text><text class="s" x="1050" y="220" text-anchor="middle" font-size="14">맵 충돌 · 애니 클립</text><text class="s" x="1050" y="244" text-anchor="middle" font-size="14">받침 · 점프대</text></g>
             <g class="nd" data-n="shared"><rect class="box" x="50" y="500" width="850" height="64" rx="12"/><text x="78" y="540" font-size="21">Shared 공용 계산</text><text class="s" x="290" y="539" font-size="14">이동 · 충돌 · 사격 판정 · 애니 자세 · 패킷 형식</text></g>
           </svg>
         </div>
         <div>
           <div class="mo-card" data-n="lyra" hidden><div class="mo-k">전체 구조</div><h3>Lyra 클라</h3><p>Epic 의 Lyra 샘플 그대로 — 화면 · 애니 · HUD · 소리. 사람이 하는 클라다.</p><div class="sv">스스로 판정하지 않는다 — 다리가 막는다</div></div>
-          <div class="mo-card" data-n="bridge" hidden><div class="mo-k">전체 구조</div><h3>MOBridge 다리</h3><p>Lyra 에 붙인 플러그인. 입력을 서버로 보내고, Lyra 가 스스로 내리던 판정을 막은 뒤 서버 결과를 Lyra 시스템에 넣는다. 내 캐릭터는 공용 계산으로 먼저 움직여 본다(예측).</p><div class="sv">서버와 TCP · 프로토콜 10</div></div>
+          <div class="mo-card" data-n="bridge" hidden><div class="mo-k">전체 구조</div><h3>MOBridge 다리</h3><p>Lyra 에 붙인 플러그인. 입력을 서버로 보내고, Lyra 가 스스로 내리던 판정을 막은 뒤 서버 결과를 Lyra 시스템에 넣는다. 내 캐릭터는 공용 계산으로 먼저 움직여 본다(예측).</p><div class="sv">서버와 TCP · 프로토콜 18</div></div>
           <div class="mo-card" data-n="bot" hidden><div class="mo-k">전체 구조</div><h3>봇 클라</h3><p>그림 없이 같은 프로토콜로 붙어 걷고 쏜다. 판정 대조와 부하 측정에 쓴다.</p><div class="sv">사람 판의 상대로도 들어간다</div></div>
           <div class="mo-card" data-n="router" hidden><div class="mo-k">전체 구조</div><h3>라우터</h3><p>접속 · 끊김 · 인사를 한 곳에서 받아, 자리가 남은 가장 앞 방에 앉히고 없으면 새 방을 만든다. 로그인 · 로비는 아직 없다.</p><div class="sv">앉은 뒤 입력은 네트워크 워커가 그 방의 게임 스레드로 바로 넣는다 · 네트워크는 직접 만든 <b>ServerCore</b>(IOCP)</div></div>
           <div class="mo-card" data-n="game" hidden><div class="mo-k">전체 구조</div><h3>게임 스레드 · 방</h3><p>스레드 하나가 고정 배정된 방들을 60Hz 로 돌린다. 방 안 상태는 그 스레드만 만진다. 방 하나에 최대 10명.</p><div class="sv">사격은 쏜 사람 화면 시점으로 최대 0.3초 되감아 판정</div></div>
-          <div class="mo-card" data-n="data" hidden><div class="mo-k">전체 구조</div><h3>뽑은 자료</h3><p>맵 충돌 · 애니 클립 · 체력 받침 자리. Lyra 에셋에서 도구로 뽑아 서버가 읽는다 — 서버는 언리얼 없이 돈다.</p><div class="sv">Epic 에셋이라 뽑은 파일은 리포에 넣지 않는다</div></div>
-          <div class="mo-card" data-n="shared" hidden><div class="mo-k">전체 구조</div><h3>Shared 공용 계산</h3><p>이동 · 충돌 · 사격 판정 · 애니 자세 · 패킷 형식. 서버 · 다리 · 봇이 같은 파일을 빌드한다.</p><div class="sv">그래서 클라 예측과 서버 판정이 같은 식으로 나온다</div></div>
+          <div class="mo-card" data-n="data" hidden><div class="mo-k">전체 구조</div><h3>뽑은 자료</h3><p>맵 충돌 · 애니 클립 · 체력 · 무기 받침과 점프대 자리. Lyra 에셋에서 도구로 뽑아 서버가 읽는다 — 서버는 언리얼 없이 돈다.</p><div class="sv">Epic 에셋이라 뽑은 파일은 리포에 넣지 않는다</div></div>
+          <div class="mo-card" data-n="shared" hidden><div class="mo-k">전체 구조</div><h3>Shared 공용 계산</h3><p>이동 · 충돌 · 사격 판정 · 애니 자세 · 패킷 형식. 서버 · 다리 · 봇이 같은 파일을 빌드한다. Lyra 실행 기록과 같은 조건으로 돌려 결과를 견주는 대조 도구 10개로 확인한다.</p><div class="sv">그래서 클라 예측과 서버 판정이 같은 식으로 나온다</div></div>
         </div>
       </div>
     </section>
