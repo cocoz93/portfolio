@@ -8,8 +8,9 @@
        11-18 소개 · 전체 구조를 채웠다(사용자 「넣어봐」 · 러프판). 병목 개선은 부하 한계를 아직 안 재서 비워 둔다.
        그림 = media/sh-*.jpg — 사람 확인 자동판(hauto_ha1) 캡처 1280×720 에서 왼쪽 위 개발용 화면 메시지를 빼려고
        위 165px 를 잘라 낸 987×555(16:9).
-       11-23 컨텐츠 = 01 전투 · 02 움직임(사용자 「사격, 근접, 수류탄을 다 묶는게 어때?」). 단추를 고르면 게임 화면 왼쪽 끝에 반투명 세로 띠 메뉴가 뜨고 칸은 띠 가운데 둘레에 묶음 차례대로 — 전투 세부는 가운데 위 · 움직임은 가운데 아래(시안 B · 사용자 「중앙정렬로」 · 「한칸에 다 뒀더라도 순서대로 읽을수있게」)
-       (사용자 「전투를 누르면 게임화면 왼쪽에 회색이나 투명색으로 메뉴바가 하나 더나오는느낌」) — 전투 = 사격 · 근접 · 수류탄(조준 · 앉기는 사격 글),
+       11-23 컨텐츠 = 01 전투 · 02 움직임(사용자 「사격, 근접, 수류탄을 다 묶는게 어때?」). 단추를 고르면 게임 화면 왼쪽 가운데에 반투명 둥근 판이 떠서 그 묶음 세부를 큰 동그란 아이콘으로 보인다
+       (사용자 「전투를 누르면 게임화면 왼쪽에 회색이나 투명색으로 메뉴바가 하나 더나오는느낌」 → 「아이콘은 크게가고, 메뉴바 관계없이 중앙정렬하게」 · 판은 아이콘 둘레만 — 그림 높이 전체를 덮지 않게).
+       세부 설명 카드는 없다 — 설명은 개요 카드에만(사용자 「꼭 필요한 설명만 넣는게 좋지않을까? 게임소개부분에만 넣는다든지」). 전투 = 사격 · 근접 · 수류탄,
        11-23 개요 카드 「게임플레이」 = 받침 · 경기 흐름 · 부활 · 점수판(사용자 「그냥 개요쪽 게임플레이로 넣는게 어때?」 — 컨텐츠 칸으로 따로 두지 않는다).
        숫자 근거 = Shared/MatchRules.h:16-27(준비 30 · 부활 5 · 끝 10 · 무적 2.75 · 6명 이상 30킬 · 20분) · GameProtocol.h kMaxPlayersInRoom 10 ·
        받침 = 서버가 읽는 Saved/MOB/pads_expanse.txt(체력 25 · 50 회복 5곳, 권총 2 · 소총 4 · 샷건 4, 다시 켜짐 10 · 25초) · 점수 = KillRecord.h SCORE 줄.
@@ -26,6 +27,7 @@
        되감기 18틱 = 0.3초 kRewindLimitTicks(Server/Room.h) · 근접 350cm · 피해 100 kMeleeDistance · kMeleeDamage ·
        조준 걸음 × 0.5 kAdsWalkSpeedMultiplier · 근접 밀기 kMeleePushStrength · 벽 막힘 MELEE_BLOCKED(Shared/Weapon.h · GameProtocol.h) ·
        대시 막기 32입력 ≈ 0.53초 kDashActiveInputs(Shared/Dash.h) · 포트 7791 · 입출력 IOCP(Server/main.cpp · 서버 시작 줄 실측).
+       11-23 세부 글을 빼서 위 수치 중 수류탄 · 대시 · 점프대 · 근접 · 조준 줄은 지금 화면에 없다 — 글을 되살릴 때의 출처로 둔다(옛 글은 커밋 8abdbc9).
        구조도의 .ms · .nd · .mo-card 짜임은 녹스 판(mo.css)을 빌려 쓴다. -->
   <section class="panel" id="p-shooter" role="tabpanel" hidden>
     <div class="subtabs" id="shsub">
@@ -70,41 +72,16 @@
             <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/MO_Shooter" target="_blank" rel="noopener">GitHub ↗</a></div>
             <p class="gi-fine">Lyra 그림 · 애니 © Epic Games · 언리얼 엔진 EULA</p>
           </article>
-          <article class="gi-card" hidden>
-            <div class="gi-k">01 · 전투</div>
-            <div class="gi-sub" data-label="사격" data-img="media/sh-shoot.jpg" data-vid="media/sh-shoot.mp4" data-alt="사격 — 이 서버에 붙은 판에서 복도 끝 상대를 쏘는 장면">
-              <h3>사격</h3>
-              <p>권총 · 소총 · 샷건. 쏜 사람 화면 시점으로 최대 0.3초를 되감아, 그때 상대의 애니 자세로 맞았는지 서버가 정한다. 조준 · 앉기는 탄 퍼짐을 줄이고, 앉으면 맞는 몸도 낮아진다.</p>
-              <div class="sv"><b>게임 스레드</b> — 되감기 · 맞음 · 피해 · 처치</div>
-            </div>
-            <div class="gi-sub" data-label="근접" data-img="media/sh-melee.jpg" data-wip="영상 준비 중" data-alt="근접 공격 — 붙어 선 두 사람" hidden>
-              <h3>근접</h3>
-              <p>앞 350cm 를 쓸어 맞으면 피해 100 — 한 방. 맞히면 공격자가 앞으로 밀려 나가고, 벽 너머는 닿지 않는다.</p>
-              <div class="sv"><b>게임 스레드</b> — 쓸기 · 피해 · 밀기</div>
-            </div>
-            <div class="gi-sub" data-label="수류탄" data-wip="수류탄 영상 — 촬영 예정" data-alt="수류탄 영상 준비 중" hidden>
-              <h3>수류탄</h3>
-              <p>서버가 직접 굴리는 첫 물체. 던진 뒤 2초에 터지고, 날아가며 벽 · 바닥 · 사람 몸에 튕긴다. 폭발은 반경 4.5m 안을 거리에 따라 깎아 때리고, 벽 뒤는 막힌다. 튕김 궤적까지 Lyra 기록과 대조했다.</p>
-              <div class="sv"><b>게임 스레드</b> — 날아감 · 튕김 · 폭발 피해</div>
-            </div>
+          <!-- 세부 카드는 글 없이(.gi-bare — 띄우지 않는다) 세부마다 아이콘 · 그림 · 영상만 든다. 아이콘 = .gi-sub 안의 svg(직접 그린 24칸 선 그림) -->
+          <article class="gi-card gi-bare" hidden>   <!-- 01 전투 -->
+            <div class="gi-sub" data-label="사격" data-img="media/sh-shoot.jpg" data-vid="media/sh-shoot.mp4" data-alt="사격 — 이 서버에 붙은 판에서 복도 끝 상대를 쏘는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18v4H3z"/><path d="M6.5 10.5 5 19h4l1-5h3.5v-3.5"/></svg></div>
+            <div class="gi-sub" data-label="근접" data-img="media/sh-melee.jpg" data-wip="영상 준비 중" data-alt="근접 공격 — 붙어 선 두 사람" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6"/><path d="M4 13 13 4"/><path d="M11 20 20 11"/></svg></div>
+            <div class="gi-sub" data-label="수류탄" data-wip="수류탄 영상 — 촬영 예정" data-alt="수류탄 영상 준비 중" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="11" cy="15" rx="5.5" ry="6"/><path d="M8.5 9.3V6.5h5v2.8"/><path d="M13.5 7.2h2a1.6 1.6 0 0 1 1.6 1.6v4.7"/><circle cx="7.2" cy="4.4" r="1.6"/></svg></div>
           </article>
-          <article class="gi-card" hidden>
-            <div class="gi-k">02 · 움직임</div>
-            <div class="gi-sub" data-label="걷기" data-img="media/sh-walk.jpg" data-vid="media/sh-walk.mp4" data-alt="걷기 — 내 캐릭터가 복도를 옮겨 다니는 장면">
-              <h3>걷기</h3>
-              <p>걷기 · 점프 · 턱 오르기 · 벽 미끄러짐을 서버가 직접 셈한다. 조준하면 걸음이 절반, 플레이어끼리는 밀지 않고 막거나 미끄러진다.</p>
-              <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
-            </div>
-            <div class="gi-sub" data-label="대시" data-wip="대시 영상 — 촬영 예정" data-alt="대시 영상 준비 중" hidden>
-              <h3>대시</h3>
-              <p>Shift — 누르던 방향으로 0.25초 밀고, 쿨다운 1.5초. 켠 뒤 0.5초 남짓은 새로 누른 근접 · 재장전 · 점프 · 조준이 막힌다.</p>
-              <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
-            </div>
-            <div class="gi-sub" data-label="점프대" data-img="media/sh-jump.jpg" data-wip="영상 준비 중" data-alt="점프대에 쏘여 뜬 내 캐릭터 — 발판에 불꽃" hidden>
-              <h3>점프대</h3>
-              <p>맵에 8개. 올라서면 서버가 쏘아 올리고, 공중 궤적도 서버가 셈한다. 내 화면은 먼저 띄운 뒤 서버 값으로 맞춘다.</p>
-              <div class="sv"><b>서버</b>와 <b>내 예측</b>이 같은 공용 계산을 쓴다</div>
-            </div>
+          <article class="gi-card gi-bare" hidden>   <!-- 02 움직임 -->
+            <div class="gi-sub" data-label="걷기" data-img="media/sh-walk.jpg" data-vid="media/sh-walk.mp4" data-alt="걷기 — 내 캐릭터가 복도를 옮겨 다니는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13.5" cy="4" r="2"/><path d="M13 7l-1.8 6.5L8 21M11.2 13.5l3.3 3 .8 4.5M12.8 8.5l3.7 3M12.8 8.5 8.8 10.5l-1 2.8"/></svg></div>
+            <div class="gi-sub" data-label="대시" data-wip="대시 영상 — 촬영 예정" data-alt="대시 영상 준비 중" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7"/><path d="M20 12H9"/><path d="M3 8h5M2 12h3.5M3 16h5"/></svg></div>
+            <div class="gi-sub" data-label="점프대" data-img="media/sh-jump.jpg" data-wip="영상 준비 중" data-alt="점프대에 쏘여 뜬 내 캐릭터 — 발판에 불꽃" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="18.5" rx="8" ry="2.5"/><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/></svg></div>
           </article>
         </div>
       </div>

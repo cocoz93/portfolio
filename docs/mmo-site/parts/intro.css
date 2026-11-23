@@ -22,24 +22,24 @@
 /* ── 그림 액자 — 캡처 비율 그대로(--gi-ar) ── */
 .gi-fr{position:relative;aspect-ratio:var(--gi-ar,4/3);border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#05080e}
 .gi-fr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
-/* 세부 메뉴 · 영상 · 준비 중 딱지(2026-11-23 슈팅 서버, intro.js) — 카드에 .gi-sub 가 있는 단추를 고르면 액자 왼쪽 끝에 세로 띠 메뉴가 뜨고, 칸은 띠 가운데에 모인다(사용자 시안 B + 「맨위에서부터 메뉴하지말고 중앙정렬로」).
-   반투명 회색 판 + 흐림이라 게임 화면이 비친다. 넓은 화면의 카드(오른쪽 위 22px)와 같은 높이에서 시작한다.
-   영상은 그림과 같은 자리 · 같은 맞춤. 딱지는 띠 바로 오른쪽 아래, 그림도 없는 칸(.gi-empty)은 띠를 뺀 나머지의 가운데.
-   띠 폭 --mw = 액자 폭의 10.5%(1600 액자에서 168px — 시안 B 렌더 폭), 좁은 액자에서도 「수류탄」 + 여백이 들어가게 112px 아래로는 안 줄인다
-   칸 자리(사용자 「한칸에 다 뒀더라도 순서대로 읽을수있게 눈이편하게」) — 띠에는 세부 있는 묶음의 칸이 단추 차례대로 다 들어가고(묶음 사이 틈 .gi-gap) 고른 묶음 칸만 보인다.
-   숨은 칸(.gi-off)이 자리만 차지해서 앞 묶음(전투) 세부는 띠 가운데 위, 뒤 묶음(움직임)은 가운데 아래에 온다. 끝까지 밀지 않는다(「너무 아래로하지는말고」).
-   액자가 낮아(폰) 다 안 들어가면 숨은 칸만 줄어든다 — 패딩은 0 까지 안 줄어서 숨은 칸 높이는 패딩 대신 height(--py 두 번 + 한 줄)로 준다 */
+/* 세부 메뉴 · 영상 · 준비 중 딱지(2026-11-23 슈팅 서버, intro.js) — 카드에 .gi-sub 가 있는 단추를 고르면 액자 왼쪽 가운데에 반투명 둥근 판이 떠서
+   그 묶음 세부를 동그란 아이콘 + 이름 칸으로 세운다(사용자 「아이콘은 크게가고, 메뉴바 관계없이 중앙정렬하게」 — 어느 묶음이든 액자 세로 가운데).
+   판은 아이콘 둘레만 감싼다 — 그림 높이 전체를 덮는 띠는 묶음을 위아래로 가를 때 자리였고, 가운데로 모은 뒤엔 캐릭터 · 배경만 가렸다.
+   반투명 회색 판 + 흐림이라 게임 화면이 비친다. 영상은 그림과 같은 자리 · 같은 맞춤.
+   --ml = 판 왼쪽 여백, --mw = 여백 + 판 폭. 딱지는 판 오른쪽 아래(--mw 기준), 그림도 없는 칸(.gi-empty)은 판을 뺀 나머지의 가운데.
+   칸 크기는 액자 높이로 정한다 — 세부 셋이 가장 낮은 액자(1264 의 326px · 폰 197px)에도 들어가야 한다. 넷째 세부(순간이동)를 더하면 그 둘을 다시 잴 것 */
 .gi-fr video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
 .gi-fr img[hidden],.gi-fr video[hidden],.gi-menu[hidden],.gi-wip[hidden],.gi-sub[hidden]{display:none}
-.gi-fr{--mw:clamp(112px,10.5%,168px)}
-.gi-menu{--py:13px;position:absolute;left:0;top:0;bottom:0;z-index:2;width:var(--mw);display:flex;flex-direction:column;justify-content:center;gap:2px;padding:22px 0;background:rgba(16,20,30,.6);backdrop-filter:blur(10px);border-right:1px solid rgba(150,170,210,.18)}
-.gi-mi{position:relative;font:inherit;text-align:left;cursor:pointer;flex-shrink:0;padding:var(--py) 26px;border:0;background:none;color:#d3dcec;font-size:1.05rem;font-weight:600;transition:background .15s,color .15s}
-.gi-mi:hover{background:rgba(255,255,255,.08);color:#fff}
-.gi-mi.act{background:rgba(108,199,255,.14);color:#fff}
-.gi-mi.act::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 2px 2px 0;background:var(--net)}
-.gi-mi:focus-visible{outline:2px solid var(--net);outline-offset:-2px}
-.gi-mi.gi-off{visibility:hidden;flex-shrink:1;min-height:0;overflow:hidden;padding-top:0;padding-bottom:0;height:calc(2 * var(--py) + 1lh)}
-.gi-mi.gi-gap{margin-top:10px}
+.gi-fr{--ml:18px;--mw:110px}
+.gi-menu{position:absolute;left:var(--ml);top:50%;transform:translateY(-50%);z-index:2;width:calc(var(--mw) - var(--ml));display:flex;flex-direction:column;gap:4px;padding:14px 0;border-radius:22px;background:rgba(16,20,30,.6);backdrop-filter:blur(10px);border:1px solid rgba(150,170,210,.18)}
+.gi-mi{--sh:98px;font:inherit;height:var(--sh);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0;border:0;background:none;cursor:pointer;color:#a9b5cc;font-size:.95rem;font-weight:700;transition:color .15s}
+.gi-mo{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;border:1.5px solid rgba(150,170,210,.34);background:rgba(10,14,22,.38);transition:border-color .15s,background .15s}
+.gi-mo svg{width:30px;height:30px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.gi-mi:hover,.gi-mi.act{color:#fff}
+.gi-mi:hover .gi-mo{border-color:rgba(200,215,240,.6)}
+.gi-mi.act .gi-mo{border-color:var(--net);background:rgba(108,199,255,.2);box-shadow:0 0 0 4px rgba(108,199,255,.13)}
+.gi-mi:focus-visible{outline:none}
+.gi-mi:focus-visible .gi-mo{outline:2px solid var(--net);outline-offset:3px}
 .gi-wip{position:absolute;left:calc(var(--mw) + 22px);bottom:22px;z-index:1;padding:6px 12px;border-radius:999px;font-size:.85rem;font-weight:700;color:#ffd27a;background:rgba(10,15,25,.82);border:1px solid rgba(255,210,122,.35)}
 .gi-fr.gi-empty .gi-wip{left:calc(50% + var(--mw) / 2);top:50%;bottom:auto;transform:translate(-50%,-50%);padding:10px 18px;font-size:1rem;white-space:nowrap}
 
@@ -50,6 +50,11 @@
 /* .gi-lead 의 display:flex 와 특이도가 같아 뒤에 두고 한 단계 높인다 — 앞에 두면 숨긴 소개 카드가 그대로 떠서 카드 둘이 쌓인다.
    이름이 .lead 가 아닌 까닭 — common.css 의 .panel .lead(본문 첫 문단: 여백 14px · 74ch)에 걸려 카드가 위아래로 들어간다 */
 .gi-cards > .gi-card[hidden]{display:none}
+/* 글 없는 카드(.gi-bare — 슈팅 서버 세부, 사용자 「꼭 필요한 설명만 넣는게 좋지않을까? 게임소개부분에만」)는 띄우지 않는다.
+   카드가 그림 밖에 따로 서는 폭(1460 이하 · .gi-low)에선 그 자리가 비거나(1264 오른쪽 400px) 판이 들썩이지 않게(폰) 소개 카드를 그대로 둔다 */
+.gi-cards > .gi-card.gi-bare{display:none}
+.gi-over.gi-low .gi-cards:has(> .gi-bare:not([hidden])) > .gi-lead[hidden]{display:flex}
+@media (max-width:1460px){ .gi-cards:has(> .gi-bare:not([hidden])) > .gi-lead[hidden]{display:flex} }
 .gi-card h3{margin:6px 0 10px;font-size:1.35rem;font-weight:800;letter-spacing:-.01em}
 .gi-card p{margin:0 0 12px;color:#c3cde0;font-size:.98rem;line-height:1.7}
 .gi-card .sv{margin-top:14px;padding-top:14px;border-top:1px solid var(--line2);font-size:.9rem;color:var(--mut)}
@@ -110,12 +115,22 @@
   .gi{grid-template-columns:minmax(0,1fr)}
   .gi-list{flex-direction:row;flex-wrap:wrap}
 }
+/* 목록 · 그림 · 카드 세 칸이 나란한 폭 — 액자가 326px 로 가장 낮아 세부 판을 한 단계 줄인다 */
+@media (min-width:1201px) and (max-width:1279px){
+  .gi-fr{--ml:12px;--mw:88px}
+  .gi-menu{padding:8px 0;gap:2px}
+  .gi-mi{--sh:84px;font-size:.84rem;gap:6px}
+  .gi-mo{width:54px;height:54px}
+  .gi-mo svg{width:26px;height:26px}
+}
 @media (max-width:760px){
   .gi-num b{font-size:2.1rem}
-  /* 폰 폭에선 액자가 작아 띠가 화면을 덜 가리게 */
-  .gi-fr{--mw:92px}
-  .gi-menu{--py:8px;padding:10px 0;gap:0}
-  .gi-mi{padding:var(--py) 14px;font-size:.86rem}
+  /* 폰 폭에선 액자가 197px 라 판을 더 줄인다 */
+  .gi-fr{--ml:8px;--mw:68px}
+  .gi-menu{padding:6px 0;gap:0;border-radius:16px}
+  .gi-mi{--sh:56px;font-size:.7rem;gap:3px}
+  .gi-mo{width:34px;height:34px}
+  .gi-mo svg{width:18px;height:18px}
   .gi-wip{left:calc(var(--mw) + 10px);bottom:10px}
   .gi-fr.gi-empty .gi-wip{left:auto;right:10px;transform:translateY(-50%);padding:6px 10px;font-size:.8rem}   /* 남은 칸 가운데는 폰 폭에서 글이 넘친다 — 오른쪽에 붙인다 */
 }

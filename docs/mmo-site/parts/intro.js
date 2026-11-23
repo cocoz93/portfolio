@@ -1,9 +1,9 @@
 /* ═══ 소개 판 — 목록을 누르면 그림과 카드가 바뀐다(세 상위 탭 공통 · 짜임은 intro.css) ═══
    표를 스크립트에 두지 않고 마크업이 다 들고 있다 — 버튼 n번째(.gi-it) = 카드 n번째(.gi-card),
    그림은 버튼의 data-img · data-alt. 판마다 줄을 더할 때 HTML 만 고치면 된다.
-   세부 메뉴(2026-11-23 슈팅 서버) — 카드 안에 .gi-sub 가 있으면 그 단추를 고를 때 액자 왼쪽 끝에 반투명 세로 띠 메뉴(.gi-menu)를 띄운다.
-   다른 묶음의 세부도 숨은 칸(.gi-off)으로 단추 차례대로 띠에 넣어 칸 높이로 묶음 차례가 읽히게 한다(자리 계산은 intro.css).
-   보이는 메뉴 칸(button) n번째 = .gi-sub n번째, 이름은 data-label. 고른 세부의 data-img · data-vid · data-wip 가 액자를, 그 세부 글이 카드를 채운다.
+   세부 메뉴(2026-11-23 슈팅 서버) — 카드 안에 .gi-sub 가 있으면 그 단추를 고를 때 액자 왼쪽 가운데에 반투명 둥근 판(.gi-menu)을 띄우고
+   그 카드의 세부만 동그란 아이콘 칸으로 세운다. 칸 n번째 = .gi-sub n번째, 아이콘 = 그 .gi-sub 안의 svg 사본, 이름 = data-label.
+   고른 세부의 data-img · data-vid · data-wip 가 액자를, 그 세부 글이 카드를 채운다. 글 없는 카드(.gi-bare)는 카드를 안 띄운다(intro.css).
    data-vid = 그림 자리에 소리 없이 반복하는 영상(data-img 는 첫 장면) · data-wip = 「준비 중」 딱지(그림도 없으면 빈 액자 가운데).
    영상 · 메뉴 · 딱지 요소는 그런 카드가 있는 판에만 만든다 — MMORPG · 녹스 판은 예전 그대로다. */
 (function(){
@@ -53,17 +53,13 @@ document.querySelectorAll(".gi").forEach(function(gi){
     if(menu) menu.hidden=!ss.length;
     if(!ss.length){ show(its[i]); return; }
     menu.textContent="";
-    let lead=true;   /* 세부 있는 첫 묶음 — 그 뒤 묶음의 첫 칸 위에 틈(.gi-gap) */
-    subs.forEach(function(gs,g){
-      if(!gs.length) return;
-      gs.forEach(function(s,j){
-        const mine=(g===i), b=document.createElement(mine?"button":"span");
-        b.className="gi-mi"+(mine?"":" gi-off")+(j===0&&!lead?" gi-gap":"");
-        b.textContent=s.dataset.label||("세부 "+(j+1));
-        if(mine){ b.type="button"; b.addEventListener("click", function(){ pickSub(ss,j); }); } else b.setAttribute("aria-hidden","true");
-        menu.appendChild(b);
-      });
-      lead=false;
+    ss.forEach(function(s,j){
+      const b=document.createElement("button"), ic=s.querySelector("svg"), t=document.createElement("span");
+      b.type="button"; b.className="gi-mi";
+      if(ic){ const o=document.createElement("span"); o.className="gi-mo"; o.appendChild(ic.cloneNode(true)); b.appendChild(o); }
+      t.className="gi-mt"; t.textContent=s.dataset.label||("세부 "+(j+1)); b.appendChild(t);
+      b.addEventListener("click", function(){ pickSub(ss,j); });
+      menu.appendChild(b);
     });
     pickSub(ss,0);   /* 단추를 고르면 첫 세부부터 */
   }
