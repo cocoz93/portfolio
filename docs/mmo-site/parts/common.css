@@ -320,12 +320,14 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      안이 그대로 놓여 있어서 접힌 묶음의 칸 자리도 잴 수 있다(파란 바탕이 펼치기 전에 제자리에 선다 · tabs.js place).
      위아래 틈은 padding 이 아니라 margin 에(전 margin 2 · padding 2 → margin 4, 아래도 14 + 2 → 16 · .side 가 flex 라 margin 이 안 겹친다) —
      padding 이 0 → 2px 로 움직이면 그동안 칸만 내려가 처음 잰 파란 바탕이 2px 위에 남았다(렌더 대조).
+     flex-shrink:0 — overflow 를 주면 flex 칸의 최소 높이가 0 이 되어, 기둥(높이 100vh)보다 길 때 기둥이 스크롤되지 않고 묶음이 줄어 아래 칸이 잘렸다
+     (2026-11-24 1536×600 MMORPG 401 중 313 만 보임 · 움직임을 넣은 11-23 판부터. 그 전 판은 스크롤됐다).
      visibility 는 다 접힌 뒤에 꺼서(0.32초 늦게) 접힌 칸에 Tab 이 안 머문다. overflow 가 칸 밖 테두리를 자르므로 묶음 안 포커스 테두리는 안쪽으로 그린다.
      묶음을 왼쪽 10px 넓힌(margin 음수 = padding) 것은 칸의 바탕이 아이콘 줄 10px 앞에서 시작해서다 — 안 넓히면 overflow 에 잘린다.
      칸 상자는 켜짐과 상관없이 바탕 모양 그대로(왼쪽 -10 · 오른쪽 12 · 둥근 9) — 파란 바탕이 칸 상자를 그대로 따라가고 마우스 바탕도 같은 모양이 된다.
      값(0.32초 · 곡선)은 시안 그대로. 움직임 끄기 설정이면 이 파일 맨 아래 prefers-reduced-motion 전역 규칙이 다 끈다 */
   .side{--sd-ease:cubic-bezier(.3,.8,.25,1); interpolate-size:allow-keywords}
-  .sd-grp{position:relative; display:flex; flex-direction:column; overflow:hidden; margin:4px 0 16px -10px; padding:0 0 0 10px;
+  .sd-grp{position:relative; display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; margin:4px 0 16px -10px; padding:0 0 0 10px;
     transition:height .32s var(--sd-ease), margin .32s var(--sd-ease), opacity .25s, visibility 0s}
   .sd-grp[hidden]{display:flex; height:0; margin-top:0; margin-bottom:0; opacity:0; visibility:hidden;
     transition:height .32s var(--sd-ease), margin .32s var(--sd-ease), opacity .2s, visibility 0s .32s}
