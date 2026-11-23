@@ -286,47 +286,79 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      여백을 여기서 0 으로 덮지 않는 것도 같은 까닭이었다 */
   :where(.side) button{font:inherit; text-align:left; background:none; border:0; cursor:pointer}
   .side button:focus-visible{outline:2px solid var(--net); outline-offset:3px; border-radius:4px}
-  /* 상위 — 이름 + 안에 뭐가 있는지 한 줄(옛 .tab 과 같은 두 줄 · 그 까닭은 위 .tab 주석). 켜진 것만 흰 글자 + 왼쪽 파란 막대 */
-  .sd-t{position:relative; display:flex; flex-direction:column; gap:3px; padding:10px 0; color:#66768f; transition:color .15s}
+  /* 상위 — 이름 + 안에 뭐가 있는지 한 줄(옛 .tab 과 같은 두 줄 · 그 까닭은 위 .tab 주석). 켜진 것만 흰 글자.
+     왼쪽 파란 막대는 2026-11-23 뺐다(사용자 「큰 글자(슈팅서버) 옆에 파란색 바 없애는게 어때」) — 켜진 탭은 흰 글자와
+     그 아래 펼쳐진 하위 탭이 이미 보여 줘서 막대는 겹치는 표시였다.
+     안 고른 탭은 어둡게(#4b576d) + 설명 줄을 빼고 이름만(2026-11-23 시안 1 · 사용자가 1 · 2 · 4 를 합쳐 골랐다 「음 좋네 일단 이거 적용해봐」).
+     30px · 800 인 안 고른 탭 셋이 지금 보는 하위 탭(24px · 700)보다 무거워 눈이 지금 위치로 안 갔다. 크기 · 굵기는 그대로 두고 밝기로만 물린다
+     (켜짐 따라 크기 · 굵기가 바뀌면 누를 때 글자가 튄다 — 아래 굵기 주석). 설명 줄이 켜짐 따라 생기고 없어져도 누른 탭이 튀는 경우는 전과 같다 —
+     상위 탭을 바꾸면 펼친 하위 묶음이 접히고 펴져 그 아래 칸은 원래 다 움직이고, 그 위 칸은 둘 다 꺼진 탭이라 그대로다.
+     프로젝트 사이 가는 가로선(같은 날 시안 4) — 어디서 어디까지가 한 프로젝트인지 줄로 보인다. 오른쪽 24px 은 기둥 경계선에 안 닿게.
+     펼침 화살표(같은 날 시안 6 · 사용자 「그래도 붙여주는게 나을듯? 한번 붙여봐」) — 하위 묶음이 있는 탭(:has(+ .sd-grp), 링크 모음 제외)의
+     이름 오른쪽에 접힘 ▸ · 펼침 ▾. 새 단추가 아니라 이름 단추에 붙은 그림이다. 나는 겹치는 표시라 빼자고 했다(펼친 쪽은 아래 목록이,
+     안 고른 쪽은 어두운 색이 이미 말한다). 색은 글자색을 따른다. 오른쪽 끝을 가로선 끝에 맞추려고 24px 을 모든 상위 탭에 준다.
+     ▾ 를 3px 올리는 것은 꺾인 선이 돌린 상자의 아래 반에만 있어서다(▸ 는 오른쪽 반 — 오른쪽 끝은 둘이 같다) */
+  .sd-t{position:relative; display:flex; flex-direction:column; gap:3px; margin-right:24px; padding:10px 0; color:#4b576d; transition:color .15s}
   /* 굵기는 켜짐과 상관없이 고정(2026-11-20) — 상위 800 · 하위 탭 700. 전에는 켜지면 굵어졌다(상위 700→800 · 하위 400→700).
-     켜짐은 밝기(흰 글자) + 막대 · 점 · 알약으로 이미 드러나서 굵기는 겹치는 신호였고, 누르는 순간 글자가 확 바뀌어 보였다.
+     켜짐은 밝기(흰 글자) + 막대 · 점 · 알약(2026-11-23 부터 알약 하나)으로 이미 드러나서 굵기는 겹치는 신호였고, 누르는 순간 글자가 확 바뀌어 보였다.
      값은 시안 1안 — 지금 켜진 칸의 굵기를 처음부터 쓴다. 한 단계 위(둘 다 900)는 한글 획이 뭉쳐 기각 */
   .sd-t b{font-size:1.9rem; font-weight:800; line-height:1.2}
-  .sd-t span{font-size:.9rem; font-weight:600; color:#4b586e; transition:color .15s}
-  .sd-t:hover{color:var(--ink)} .sd-t:hover span{color:var(--mut)}
-  .sd-t.act{color:#fff} .sd-t.act span{color:var(--mut)}
-  .sd-t.act::before{content:""; position:absolute; left:-14px; top:12px; height:1.9rem; width:3px; border-radius:2px; background:var(--net)}
-  /* 하위 — 옛 하위 줄과 같은 점(켜지면 파란 점). 세로 선이 소속을 낸다 */
-  .sd-grp{display:flex; flex-direction:column; margin:2px 0 12px 2px; padding:2px 0 2px 16px; border-left:1px solid var(--line)}
+  .sd-t span{font-size:.9rem; font-weight:600; color:var(--mut)}
+  .sd-t:not(.act) span{display:none}
+  .sd-t ~ .sd-t{border-top:1px solid #1e283b; padding-top:16px}
+  .sd-t:has(+ .sd-grp) b{position:relative; padding-right:22px}
+  .sd-t:has(+ .sd-grp) b::after{content:""; position:absolute; right:4px; top:50%; width:8px; height:8px; border:solid currentColor; border-width:0 2px 2px 0; opacity:.75;
+    transform:translateY(-50%) rotate(-45deg); transition:transform .2s}
+  .sd-t.act b::after{transform:translateY(calc(-50% - 3px)) rotate(45deg)}
+  .sd-t:hover{color:var(--ink)}
+  .sd-t.act{color:#fff}
+  /* 하위 — 앞에 하위 탭마다 선 아이콘(켜지면 흰색)(2026-11-23).
+     옛 점(켜지면 파란 점)은 사용자 「게임소개 옆에 왼쪽에 점있는거 이 디자인 별로같은데」로 뺐다 — 켜짐은 흰 글자가 이미 말했다.
+     시안 다섯(선 칠하기 · 글자만 · 가지선 · 묶음 상자 · 아이콘) 중 사용자가 묶음 상자 + 아이콘을 골랐다(「묶음상자 +아이콘에 …」).
+     묶음 상자(고른 하위 탭 + 그 아래 목록을 연한 바탕 하나로)는 같은 날 넣었다가 뺐다 — 「그 배경칠하는거는 가장아래탭에
+     색칠하는거 말고는 색넣는거는빼줘」. 바탕색은 가장 깊은 켜진 칸의 알약 하나만 진다(아래 알약 주석).
+     묶음 왼쪽 회색 세로선(소속 표시)도 같은 날 뺐다(「왼쪽에 길다란 바 저건뭐야? 저거빼줘」) — 소속은 들여쓰기와 아이콘이 낸다.
+     아이콘은 자리 순서로 붙는다(첫째 게임 소개 · 둘째 전체 구조 · 셋째 병목 개선) — 세 상위 탭의 하위 탭이 이 순서로 같다
+     (mmo.src.html #subtabs · panel-mo.html #mosub · panel-shooter.html #shsub). 하위 탭을 더하거나 순서를 바꾸면 여기도 고칠 것.
+     그림 = 직접 그린 24칸 선 그림(게임패드 · 구조도 · 계기판)을 mask 로 — 색은 background 하나로 바꾼다(꺼짐 --dim · 켜짐 흰색 · 알약 안이면 알약 글자색).
+     파랑은 알약 하나에만(같은 날 시안 1) — 켜짐 표시가 흰 글자 · 파란 아이콘 · 알약 셋으로 갈려 있었다. 처음엔 켜짐 --net 이었다.
+     왼쪽 시작선은 둘(같은 날 시안 2) — 상위 이름 = 아이콘 줄, 하위 탭 글자 = 목록 글자. 묶음 들임(2 + 16)을 빼서 아이콘이 상위 이름 줄에 선다.
+     전에는 상위 글자 44 · 아이콘 62 · 목록 알약 77 · 글자 95 로 넷이었다(1920 창) */
+  .sd-grp{display:flex; flex-direction:column; margin:2px 0 14px; padding:2px 0}
   .sd-grp[hidden]{display:none}
-  .sd-s{display:flex; align-items:center; gap:9px; padding:7px 0; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s}
-  .sd-s::before{content:""; flex:0 0 auto; width:8px; height:8px; border-radius:50%; background:#2a3850; transition:background .15s}
+  .sd-s{display:flex; align-items:center; gap:10px; padding:7px 0; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s}
+  .sd-s::before{content:""; flex:0 0 auto; width:24px; height:24px; background:var(--dim); -webkit-mask:var(--ic) center/contain no-repeat; mask:var(--ic) center/contain no-repeat; transition:background .15s}
+  .sd-grp > .sd-s:nth-of-type(1){--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7.5 7.5h9A4.5 4.5 0 0 1 21 12v1.5a3.5 3.5 0 0 1-6.3 2.1L13.5 14h-3l-1.2 1.6A3.5 3.5 0 0 1 3 13.5V12a4.5 4.5 0 0 1 4.5-4.5z'/%3E%3Cpath d='M7.5 10v3.5M5.75 11.75h3.5'/%3E%3Cpath d='M15.6 10.6h.01M17.6 12.8h.01' stroke-width='2.6'/%3E%3C/svg%3E")}
+  .sd-grp > .sd-s:nth-of-type(2){--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='3' width='6' height='5' rx='1'/%3E%3Crect x='3' y='16' width='6' height='5' rx='1'/%3E%3Crect x='15' y='16' width='6' height='5' rx='1'/%3E%3Cpath d='M12 8v4M6 16v-4h12v4'/%3E%3C/svg%3E")}
+  .sd-grp > .sd-s:nth-of-type(3){--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 18a8.5 8.5 0 0 1 17 0'/%3E%3Cpath d='M6 12.6l1.3 1M12 9.5V11M18 12.6l-1.3 1'/%3E%3Cpath d='M12 18l3.6-4.4'/%3E%3Cpath d='M12 18h.01' stroke-width='3.4'/%3E%3C/svg%3E")}
   .sd-s:hover{color:var(--ink)}
-  .sd-s.act{color:#fff} .sd-s.act::before{background:var(--net)}
+  .sd-s.act{color:#fff} .sd-s.act::before{background:#fff}
   /* 소개 판 목록 — 셋째 겹이라 한 단 더 들이고 글자를 줄인다. 켜진 것은 파란 글자
      (2026-11-18) 글자를 크게 — 상위 19.5 → 30 · 하위 16 → 24 · 목록 16 → 19.5px(시안 L1). 한 단계 더 큰 L2(35 · 27 · 22)는
      1920×940 에서 기둥이 919px 까지 차 여유가 없어 기각. 목록 굵기는 보통(상속) — 시안에서 본 그대로다(하위 탭 굵기는 위 .sd-t b 주석).
-     들임 30px = 하위 탭 글자 시작(점 8 + 틈 9 = 17)보다 13px 안쪽 — 17 이면 크기를 갈라도 글자가 같은 세로줄에서 시작한다.
+     들임 34px = 하위 탭 글자 시작(아이콘 24 + 틈 10)과 같은 세로줄(2026-11-23 · 처음 33 = 24 + 9, 시안 2 에서 틈을 10 으로) — 아이콘이 하위 탭 머리 노릇을 해서 글자 줄을 맞췄다.
+     전에는 30px = 하위 탭 글자 시작(점 8 + 틈 9 = 17)보다 13px 안쪽이었다.
      원래 단추의 번호(<i>01</i>)는 기둥에서 끈다 — 목록은 차례가 아니고(사냥 · 파티 · 우편) 첫 칸 「개요」엔 번호가 없다 */
   .sd-list{display:flex; flex-direction:column; margin:0 0 4px}
-  .sd-l{display:flex; align-items:baseline; padding:5px 0 5px 30px; font-size:1.22rem; color:var(--mut); transition:color .15s}
+  .sd-l{display:flex; align-items:baseline; padding:5px 0 5px 34px; font-size:1.22rem; color:var(--mut); transition:color .15s}
   .sd-l i{display:none}
   .sd-l:hover{color:var(--ink)}
   .sd-l.act{color:var(--net)}
   /* 지금 보는 칸은 채운 알약으로(2026-11-18) — 글자 색만으론 기둥이 글자 목록으로 읽혔다.
      알약은 가장 깊은 켜진 칸 하나에만 — 아래 목록에 켜진 칸이 있으면 하위 탭엔 안 깐다(두 알약이 붙어 한 덩어리로 보였다).
-     margin 음수 = padding 이라 글자 자리는 그대로다 */
+     margin 음수 = padding 이라 글자 자리는 그대로다. 왼쪽 끝은 하위 탭 · 목록 둘 다 아이콘 줄 10px 앞(2026-11-23 시안 2 — 전에는 52 · 77 로 갈렸다) */
   .sd-s.act:not(:has(+ .sd-list .sd-l.act)), .sd-l.act{background:rgba(108,199,255,.16); color:#9fdcff; border-radius:9px}
+  .sd-s.act:not(:has(+ .sd-list .sd-l.act))::before{background:#9fdcff}
   .sd-s.act:not(:has(+ .sd-list .sd-l.act)){margin:0 12px 0 -10px; padding-left:10px}
-  .sd-l.act{margin:0 12px 0 12px; padding-left:18px}
+  .sd-l.act{margin:0 12px 0 -10px; padding-left:44px}
 }
 /* 낮은 창(노트북 1536×740 등) — 위 크기면 MMORPG 기둥이 854px 이라 860 미만에선 한 단계 작게(상위 25.6 · 하위 21 · 목록 17px)
-   + 칸 간격을 줄인다. 740 에서 맨 아래 칸 바닥 ≤ 728(2026-11-18 렌더). 그보다 낮으면 기둥 안에서 스크롤된다 */
+   + 칸 간격을 줄인다. 740 에서 맨 아래 칸 바닥 ≤ 728(2026-11-18 렌더). 그보다 낮으면 기둥 안에서 스크롤된다.
+   2026-11-23 안 고른 상위 탭의 설명 줄을 빼서 662(가로선 포함) — 여유가 66px 생겼지만 크기는 그대로 둔다 */
 @media (min-width:1280px) and (max-height:859px){
   .side{padding-top:26px; padding-bottom:6px}
-  .sd-t{padding:8px 0}
+  .sd-t{padding:8px 0} .sd-t ~ .sd-t{padding-top:10px}
   .sd-t b{font-size:1.6rem} .sd-t span{font-size:.86rem}
-  .sd-t.act::before{top:10px; height:1.6rem}
   .sd-grp{margin-bottom:8px}
   .sd-s{font-size:1.32rem}
   .sd-l{padding-top:4px; padding-bottom:4px; font-size:1.08rem}
