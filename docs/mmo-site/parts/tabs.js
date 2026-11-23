@@ -279,6 +279,31 @@
       gi.querySelectorAll(".gi-it").forEach(function(it){ const lb=mk("button","sd-l",it.innerHTML); l.appendChild(lb); link(lb,it,false,s); });
     });
   });
+  /* 켜진 프로젝트 덮기 그림(2026-11-24 · 모양 · 값 · 고른 경위는 common.css .sd-t · .sd-cover 주석) — 띠 위끝부터 묶음 끝 10px 아래까지
+     그 프로젝트의 게임 화면 한 장을 깐다. 그림은 사용자가 시안 여덟 판에서 골랐다 — 상자(1920 창 191 × 380~549)에 맞춰 세로로 자르고 주인공은 오른쪽 위.
+       mmo     = 마을 장터 · media/mmo-town.jpg 의 (620,0)–(840,632)
+       mo      = 전사 번개 · 불길 · 사용자 녹스 녹화(11-23 13:28 · 22초쯤)의 (600,230)–(820,716)
+       shooter = 실제 맵에서 총 겨눈 뒷모습 · 사용자가 무적 판에서 직접 찍은 사진(11-24)의 (381,180)–(665,745) — 이름표 · 조준점 · 체력 막대는 잘라 냈다
+     열쇠는 원래 단추의 data-tab. 표에 없는 탭(링크 모음)은 그림이 없다(묶음도 없어 띠도 안 된다 — common.css).
+     자리는 place 끝에서 재고, 묶음이 펴지고 접히는 동안은 ResizeObserver 가 매 프레임 다시 잰다 — 묶음 높이가 바뀌면 그 아래 띠도 움직인다.
+     처음 놓을 때는 그대로, 프로젝트를 바꿀 때만 새 그림이 흐릿하게 나타난다(.in). 기둥이 안 서는 폭에서는 끈다. */
+  const COVER={mmo:"media/side-mmo.jpg", mo:"media/side-mo.jpg", shooter:"media/side-shooter.jpg"};
+  const cov=mk("div","sd-cover"); cov.setAttribute("aria-hidden","true"); side.prepend(cov);
+  Object.keys(COVER).forEach(function(k){ new Image().src=COVER[k]; });   /* 처음 바꿀 때 그림 없는 상자가 비치지 않게 미리 받아 둔다 */
+  function cover(){
+    const x=side.offsetWidth ? grps.find(function(x){ return x[1].classList.contains("act"); }) : null;
+    const k=x && x[1].getAttribute("data-tab"), src=k && COVER[k];
+    cov.classList.toggle("on", !!src); if(!src) return;
+    if(cov.dataset.k!==k){
+      const first=!cov.dataset.k; cov.dataset.k=k; cov.style.setProperty("--img", 'url("'+src+'")');
+      if(!first){ cov.classList.remove("in"); void cov.offsetWidth; cov.classList.add("in"); }
+    }
+    /* 기둥은 스크롤되는 상자라 위치는 내용 기준(scrollTop 더함) — 기둥 안에서 스크롤해도 그림이 칸과 같이 움직인다 */
+    const sr=side.getBoundingClientRect(), a=x[2].getBoundingClientRect(), b=x[0].getBoundingClientRect();
+    cov.style.left=(a.left-sr.left-side.clientLeft)+"px"; cov.style.top=(a.top-sr.top-side.clientTop+side.scrollTop)+"px";
+    cov.style.width=a.width+"px"; cov.style.height=(b.bottom-a.top+10)+"px";
+  }
+  if(window.ResizeObserver){ const ro=new ResizeObserver(cover); side.querySelectorAll(".sd-t, .sd-grp").forEach(function(e){ ro.observe(e); }); }
   /* 지금 보는 칸의 파란 바탕(2026-11-23) — 칸마다 칠하지 않고 묶음마다 하나(.sd-ind)를 가장 깊은 켜진 칸 자리로 옮긴다.
      미끄러지는 움직임은 common.css 의 transition(사용자가 움직임 시안 1 · 2 · 4 를 골랐다 — 까닭은 common.css .sd-grp 주석).
      접힌 묶음도 잰다 — 높이만 0 이고 칸은 그대로 놓여 있어서(common.css .sd-grp[hidden]) 펼칠 때 바탕이 이미 제자리에 있다.
@@ -299,6 +324,7 @@
       d.style.left=(r.left-q.left)+"px"; d.style.width=r.width+"px"; d.style.top=(r.top-q.top)+"px"; d.style.height=r.height+"px";
       if(j){ void d.offsetHeight; d.style.transition=""; }
     });
+    cover();
   }
   function sync(){
     pairs.forEach(function(x){ const on=x[1].classList.contains("act") && (!x[2] || x[2].classList.contains("act")); x[0].classList.toggle("act",on);

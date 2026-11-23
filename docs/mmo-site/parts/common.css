@@ -286,7 +286,14 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      안 고른 쪽은 어두운 색이 이미 말한다). 색은 글자색을 따른다. 오른쪽 끝을 가로선 끝에 맞추려고 24px 을 모든 상위 탭에 준다.
      ▾ 를 3px 올리는 것은 꺾인 선이 돌린 상자의 아래 반에만 있어서다(▸ 는 오른쪽 반 — 오른쪽 끝은 둘이 같다).
      ▾ 는 켜짐이 아니라 펼침을 따른다(aria-expanded · tabs.js 기둥 IIFE) — 켜진 탭을 다시 누르면 묶음이 접히고 ▸ 로 돈다
-     (같은 날 사용자 「버튼저거 한번 더누르면 아래 접히는게 나을듯?」. ▾ 가 「접힌다」를 말하는데 눌러도 아무 일이 없었다) */
+     (같은 날 사용자 「버튼저거 한번 더누르면 아래 접히는게 나을듯?」. ▾ 가 「접힌다」를 말하는데 눌러도 아무 일이 없었다).
+     켜진 프로젝트 띠(2026-11-24) — 묶음이 있는 켜진 상위 탭은 높이 78px 띠가 되고 이름 · 설명 줄이 띠 아래쪽에 선다. 띠 위끝부터 묶음 끝까지
+     그 프로젝트의 게임 화면이 옅게 깔린다(아래 .sd-cover). 고른 경위 — 11-23 사용자가 시안 B 를 보고 「지금 유지하면서, 클릭한곳만 니가 저렇게
+     만든 것처럼 활성화되는방시은어때」 → 「그림근데 너무진하다 좀 옅게해줘」 → 「저 애니메이션이.. 아예 다 덮는건어떄? 예를들어 슈팅서버는
+     링크모음 위까지 렌더되는거지 옅게.」. 덮기 두 판(아래 경계 있음 · 아래로 흐려짐) 중 아래로 흐려짐을 내가 권했고 사용자가 「좋아」로 이어 갔다.
+     그림은 여덟 판 시안에서 사용자가 골랐다(tabs.js COVER). 띠 위 빈 자리는 그림이 가장 잘 보이는 곳이다(아래로 갈수록 흐려지므로).
+     띠의 왼쪽 -10 · 오른쪽 안쪽 12 는 그림 상자가 글자보다 10px 밖에서 시작하고 화살표가 상자 끝에 붙지 않게 — margin 음수 = padding 이라
+     이름 자리는 그대로다. 띠 위 가로선은 뺀다(그림 상자 위끝이 경계를 대신한다) */
   .sd-t{position:relative; display:flex; flex-direction:column; gap:3px; margin-right:24px; padding:10px 0; color:#4b576d; transition:color .15s}
   /* 굵기는 켜짐과 상관없이 고정(2026-11-20) — 상위 800 · 하위 탭 700. 전에는 켜지면 굵어졌다(상위 700→800 · 하위 400→700).
      켜짐은 밝기(흰 글자) + 막대 · 점 · 알약(2026-11-23 부터 알약 하나)으로 이미 드러나서 굵기는 겹치는 신호였고, 누르는 순간 글자가 확 바뀌어 보였다.
@@ -301,18 +308,21 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
   .sd-t[aria-expanded="true"] b::after{transform:translateY(calc(-50% - 3px)) rotate(45deg)}
   .sd-t:hover{color:var(--ink)}
   .sd-t.act{color:#fff}
-  /* 하위 — 앞에 하위 탭마다 선 아이콘(켜지면 흰색)(2026-11-23).
+  .sd-t.act:has(+ .sd-grp){justify-content:flex-end; min-height:78px; margin:8px 24px 0 -10px; padding:10px 12px 9px 10px; border-top:0}
+  .sd-t.act:has(+ .sd-grp) b::after{right:0}
+  /* 하위 — 글자만(2026-11-24 아이콘을 뺐다 · 아래). 그 전 차례:
      옛 점(켜지면 파란 점)은 사용자 「게임소개 옆에 왼쪽에 점있는거 이 디자인 별로같은데」로 뺐다 — 켜짐은 흰 글자가 이미 말했다.
      시안 다섯(선 칠하기 · 글자만 · 가지선 · 묶음 상자 · 아이콘) 중 사용자가 묶음 상자 + 아이콘을 골랐다(「묶음상자 +아이콘에 …」).
      묶음 상자(고른 하위 탭 + 그 아래 목록을 연한 바탕 하나로)는 같은 날 넣었다가 뺐다 — 「그 배경칠하는거는 가장아래탭에
      색칠하는거 말고는 색넣는거는빼줘」. 바탕색은 가장 깊은 켜진 칸의 알약 하나만 진다(아래 알약 주석).
-     묶음 왼쪽 회색 세로선(소속 표시)도 같은 날 뺐다(「왼쪽에 길다란 바 저건뭐야? 저거빼줘」) — 소속은 들여쓰기와 아이콘이 낸다.
-     아이콘은 자리 순서로 붙는다(첫째 게임 소개 · 둘째 전체 구조 · 셋째 병목 개선) — 세 상위 탭의 하위 탭이 이 순서로 같다
-     (mmo.src.html #subtabs · panel-mo.html #mosub · panel-shooter.html #shsub). 하위 탭을 더하거나 순서를 바꾸면 여기도 고칠 것.
-     그림 = 직접 그린 24칸 선 그림(게임패드 · 구조도 · 계기판)을 mask 로 — 색은 background 하나로 바꾼다(꺼짐 --dim · 켜짐 흰색 · 알약 안이면 알약 글자색).
+     묶음 왼쪽 회색 세로선(소속 표시)도 같은 날 뺐다(「왼쪽에 길다란 바 저건뭐야? 저거빼줘」) — 소속은 들여쓰기가 낸다.
+     하위 탭 앞 선 아이콘(게임패드 · 구조도 · 계기판 — 직접 그린 24칸 선 그림을 mask 로, 자리 순서로 붙였다)은 2026-11-24 뺐다.
+     11-23 사용자 「아이콘은 그냥뺄까? 니생각은어때」 → 「모양도 마음에안들고.. 옅게하는건 시안줘봐」로 옅게 한 넷과 뺀 판을 나란히 찍었고 내가 뺀 판을 권했다 —
+     옅게 해도 마음에 안 드는 모양이 남고, 들임을 두면 층은 들여쓰기와 글자 크기로 갈리고, 켜진 칸은 흰 글자와 파란 바탕이 이미 보인다.
+     덮기 그림(.sd-cover)과 같이 넣었다.
      파랑은 알약 하나에만(같은 날 시안 1) — 켜짐 표시가 흰 글자 · 파란 아이콘 · 알약 셋으로 갈려 있었다. 처음엔 켜짐 --net 이었다.
-     왼쪽 시작선은 둘(같은 날 시안 2) — 상위 이름 = 아이콘 줄, 하위 탭 글자 = 목록 글자. 묶음 들임(2 + 16)을 빼서 아이콘이 상위 이름 줄에 선다.
-     전에는 상위 글자 44 · 아이콘 62 · 목록 알약 77 · 글자 95 로 넷이었다(1920 창).
+     왼쪽 시작선은 둘 — 상위 이름 줄과 하위 탭 · 목록 글자 줄(34px 들임). 11-23 시안 2 에서 아이콘을 상위 이름 줄에 세워 맞춘 줄을 아이콘을 뺀 뒤에도
+     그대로 둔다. 그 전에는 상위 글자 44 · 아이콘 62 · 목록 알약 77 · 글자 95 로 넷이었다(1920 창).
      움직임 셋(2026-11-23 · 사용자 「좋아 1,2,4적용해봐」) — ① 묶음 펼침 · 접힘(여기) ② 파란 바탕 미끄러짐(아래 .sd-ind) ③ 마우스 올린 칸의 옅은 바탕(아래).
      시안 여섯(지금 · 미끄러짐 · 펼침 · 차례로 나타남 · 마우스 올림 · 다 합침)을 같은 각본 영상으로 찍어 골랐다. 「차례로 나타남」(칸이 하나씩 떠오름)은
      열 때마다 칸이 다 나오기까지 0.4초를 기다리게 해서 뺐다 — 11-20 탭 전환도 차분한 흐림 하나를 골랐다(tabs.js 탭 전환 페이드 주석).
@@ -323,47 +333,71 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      flex-shrink:0 — overflow 를 주면 flex 칸의 최소 높이가 0 이 되어, 기둥(높이 100vh)보다 길 때 기둥이 스크롤되지 않고 묶음이 줄어 아래 칸이 잘렸다
      (2026-11-24 1536×600 MMORPG 401 중 313 만 보임 · 움직임을 넣은 11-23 판부터. 그 전 판은 스크롤됐다).
      visibility 는 다 접힌 뒤에 꺼서(0.32초 늦게) 접힌 칸에 Tab 이 안 머문다. overflow 가 칸 밖 테두리를 자르므로 묶음 안 포커스 테두리는 안쪽으로 그린다.
-     묶음을 왼쪽 10px 넓힌(margin 음수 = padding) 것은 칸의 바탕이 아이콘 줄 10px 앞에서 시작해서다 — 안 넓히면 overflow 에 잘린다.
-     칸 상자는 켜짐과 상관없이 바탕 모양 그대로(왼쪽 -10 · 오른쪽 12 · 둥근 9) — 파란 바탕이 칸 상자를 그대로 따라가고 마우스 바탕도 같은 모양이 된다.
+     묶음을 왼쪽 10px 넓히던 것(margin 음수 = padding)은 칸 바탕이 아이콘 줄 10px 앞에서 시작해 overflow 에 잘려서였다 — 아이콘을 뺀 뒤(11-24)
+     바탕이 들임 안에서 시작해 넓힘을 뺐다(글자 자리는 그대로).
+     칸 상자는 켜짐과 상관없이 바탕 모양 그대로(글자 10px 앞부터 · 오른쪽 12 · 둥근 9) — 파란 바탕이 칸 상자를 그대로 따라가고 마우스 바탕도 같은 모양이 된다.
      값(0.32초 · 곡선)은 시안 그대로. 움직임 끄기 설정이면 이 파일 맨 아래 prefers-reduced-motion 전역 규칙이 다 끈다 */
   .side{--sd-ease:cubic-bezier(.3,.8,.25,1); interpolate-size:allow-keywords}
-  .sd-grp{position:relative; display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; margin:4px 0 16px -10px; padding:0 0 0 10px;
+  .sd-grp{position:relative; display:flex; flex-direction:column; flex-shrink:0; overflow:hidden; margin:4px 0 16px;
     transition:height .32s var(--sd-ease), margin .32s var(--sd-ease), opacity .25s, visibility 0s}
   .sd-grp[hidden]{display:flex; height:0; margin-top:0; margin-bottom:0; opacity:0; visibility:hidden;
     transition:height .32s var(--sd-ease), margin .32s var(--sd-ease), opacity .2s, visibility 0s .32s}
   .sd-grp button:focus-visible{outline-offset:-2px; border-radius:9px}
-  .sd-s{position:relative; display:flex; align-items:center; gap:10px; margin:0 12px 0 -10px; padding:7px 0 7px 10px; border-radius:9px; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s, background-color .15s}
-  .sd-s::before{content:""; flex:0 0 auto; width:24px; height:24px; background:var(--dim); -webkit-mask:var(--ic) center/contain no-repeat; mask:var(--ic) center/contain no-repeat; transition:background .15s}
-  .sd-grp > .sd-s:nth-of-type(1){--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7.5 7.5h9A4.5 4.5 0 0 1 21 12v1.5a3.5 3.5 0 0 1-6.3 2.1L13.5 14h-3l-1.2 1.6A3.5 3.5 0 0 1 3 13.5V12a4.5 4.5 0 0 1 4.5-4.5z'/%3E%3Cpath d='M7.5 10v3.5M5.75 11.75h3.5'/%3E%3Cpath d='M15.6 10.6h.01M17.6 12.8h.01' stroke-width='2.6'/%3E%3C/svg%3E")}
-  .sd-grp > .sd-s:nth-of-type(2){--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='3' width='6' height='5' rx='1'/%3E%3Crect x='3' y='16' width='6' height='5' rx='1'/%3E%3Crect x='15' y='16' width='6' height='5' rx='1'/%3E%3Cpath d='M12 8v4M6 16v-4h12v4'/%3E%3C/svg%3E")}
-  .sd-grp > .sd-s:nth-of-type(3){--ic:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 18a8.5 8.5 0 0 1 17 0'/%3E%3Cpath d='M6 12.6l1.3 1M12 9.5V11M18 12.6l-1.3 1'/%3E%3Cpath d='M12 18l3.6-4.4'/%3E%3Cpath d='M12 18h.01' stroke-width='3.4'/%3E%3C/svg%3E")}
+  .sd-s{position:relative; display:flex; align-items:center; margin:0 12px 0 24px; padding:7px 0 7px 10px; border-radius:9px; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s, background-color .15s}
   .sd-s:hover{color:var(--ink)}
-  .sd-s.act{color:#fff} .sd-s.act::before{background:#fff}
+  .sd-s.act{color:#fff}
   /* 소개 판 목록 — 셋째 겹이라 한 단 더 들이고 글자를 줄인다. 켜진 것은 파란 글자
      (2026-11-18) 글자를 크게 — 상위 19.5 → 30 · 하위 16 → 24 · 목록 16 → 19.5px(시안 L1). 한 단계 더 큰 L2(35 · 27 · 22)는
      1920×940 에서 기둥이 919px 까지 차 여유가 없어 기각. 목록 굵기는 보통(상속) — 시안에서 본 그대로다(하위 탭 굵기는 위 .sd-t b 주석).
-     들임 34px = 하위 탭 글자 시작(아이콘 24 + 틈 10)과 같은 세로줄(2026-11-23 · 처음 33 = 24 + 9, 시안 2 에서 틈을 10 으로) — 아이콘이 하위 탭 머리 노릇을 해서 글자 줄을 맞췄다.
+     들임 34px = 하위 탭 글자 시작과 같은 세로줄(2026-11-23 아이콘 24 + 틈 10 으로 맞춘 줄 · 처음 33 = 24 + 9). 아이콘을 뺀 뒤(11-24)에도 그대로 둬서
+     하위 탭과 목록이 한 글자 줄에 서고, 두 층은 글자 크기 · 굵기로 갈린다. 바탕은 둘 다 글자 10px 앞부터(margin 24 + padding 10).
      전에는 30px = 하위 탭 글자 시작(점 8 + 틈 9 = 17)보다 13px 안쪽이었다.
      원래 단추의 번호(<i>01</i>)는 기둥에서 끈다 — 목록은 차례가 아니고(사냥 · 파티 · 우편) 첫 칸 「개요」엔 번호가 없다 */
   .sd-list{display:flex; flex-direction:column; margin:0 0 4px}
-  .sd-l{position:relative; display:flex; align-items:baseline; margin:0 12px 0 -10px; padding:5px 0 5px 44px; border-radius:9px; font-size:1.22rem; color:var(--mut); transition:color .15s, background-color .15s}
+  .sd-l{position:relative; display:flex; align-items:baseline; margin:0 12px 0 24px; padding:5px 0 5px 10px; border-radius:9px; font-size:1.22rem; color:var(--mut); transition:color .15s, background-color .15s}
   .sd-l i{display:none}
   .sd-l:hover{color:var(--ink)}
   .sd-l.act{color:var(--net)}
   /* 지금 보는 칸은 채운 알약으로(2026-11-18) — 글자 색만으론 기둥이 글자 목록으로 읽혔다.
      알약은 가장 깊은 켜진 칸 하나에만 — 아래 목록에 켜진 칸이 있으면 하위 탭엔 안 깐다(두 알약이 붙어 한 덩어리로 보였다).
-     margin 음수 = padding 이라 글자 자리는 그대로다. 왼쪽 끝은 하위 탭 · 목록 둘 다 아이콘 줄 10px 앞(2026-11-23 시안 2 — 전에는 52 · 77 로 갈렸다).
+     margin 음수 = padding 이라 글자 자리는 그대로다. 왼쪽 끝은 하위 탭 · 목록 둘 다 글자 10px 앞(2026-11-24).
+     사용자 「근데 5번.. 저 색깔 칠한디자인이 아쉬운데.. 그 자기앞단 선에 맞춰야하지않을까?」 — 아이콘을 빼자 아이콘 자리까지 덮던 바탕이
+     글자 앞에 빈 파란 띠로 남아 글자가 바탕 안에서 오른쪽으로 쏠려 보였다. 11-23 시안 2 는 아이콘 줄 10px 앞, 그 전에는 52 · 77 로 갈렸다.
      2026-11-23 부터 바탕은 칸이 아니라 묶음마다 하나인 .sd-ind 가 진다 — tabs.js place 가 켜진 칸 자리로 옮기고 top · height transition 이 미끄러뜨린다
      (앞 칸에서 새 칸으로 가는 길이 보인다). .sd-ind 는 묶음의 첫 자식이고, 칸은 position:relative 라 문서 순서대로 바탕 위에 칠해진다.
      처음 놓을 때는 opacity 0 → 1(.on). 마우스 바탕은 켜지지 않은 칸에만 — 켜진 칸은 파란 바탕이 이미 깔려 있다 */
   .sd-s.act:not(:has(+ .sd-list .sd-l.act)), .sd-l.act{color:#9fdcff}
-  .sd-s.act:not(:has(+ .sd-list .sd-l.act))::before{background:#9fdcff}
   .sd-ind{position:absolute; left:0; top:0; border-radius:9px; background:rgba(108,199,255,.16); pointer-events:none; opacity:0;
     transition:top .32s var(--sd-ease), height .32s var(--sd-ease), opacity .15s}
   .sd-ind.on{opacity:1}
   .sd-grp > .sd-s:not(.act):hover, .sd-l:not(.act):hover{background-color:rgba(255,255,255,.05)}
+  /* 켜진 프로젝트 덮기 그림(2026-11-24) — 띠(위 .sd-t 주석) 위끝부터 묶음 끝 10px 아래까지 그 프로젝트의 게임 화면 한 장을 옅게 깐다.
+     상자는 기둥의 첫 자식 하나(.sd-cover)이고 tabs.js cover 가 켜진 띠 · 묶음 자리를 재서 옮긴다 — 묶음이 펴지고 접히는 동안에는
+     ResizeObserver 가 매 프레임 다시 잰다(묶음 높이가 바뀌는 동안 그 아래 띠도 따라 움직인다). 그림 파일과 고른 경위는 tabs.js COVER 표.
+     그림 25% — 시안 40% 로 넣은 뒤 11-24 사용자 「좀만더 낮춰줄래? 배경 그림을. 더옅게. 지금은 너무 가독성 해치는거같아」로 내렸다
+     (40 → 25 는 왼쪽 글자 자리에 비치는 양이 막을 거쳐 11% → 7% 가 되는 한 단계).
+     채도 .8(그 전 「그림근데 너무진하다 좀 옅게해줘」), 어두운 막은 왼쪽 .86 → 70% 자리 .7 → 오른쪽 끝 .18(글자가 왼쪽에 있어
+     그림 주인공은 오른쪽에 둔다). 막은 시안 .72 → 60% .42 → .18 이었는데, 25% 로 내린 뒤 사용자 「더낮추는건 별로야? 니생각은어떄?」에
+     내가 전체를 더 낮추기보다 글자 쪽만 어둡게 하자고 권했고 「니권장대로해서 전후비교」로 넣었다 — 글자는 칸 폭의 5~78% 에 있어
+     70% 까지를 어둡게 두고 그 오른쪽만 그림이 살아난다(오른쪽 끝 비침 20% 는 그대로). 위 45% 까지 그대로 보이다 아래로 흐려져 끝난다(목록이 몰린 아래쪽이 가장 깨끗해 글자가 편하다).
+     진하게(그림 65%) 판도 찍었지만 밝은 바닥 그림에서 글자 대비가 2.5 까지 떨어져 뺐다.
+     그림 위 흐린 글씨(--mut)는 띠 · 묶음 안에서만 #8496b3 → #b4c2d8 — 글자 뒤 배경 밝기로 잰 대비가 NOX 그림에서 3.5 까지 내려갔다(읽기 기준 4.5).
+     밝힌 뒤 최저 MMORPG 7.1 · NOX 5.7 · 슈팅 8.1(그림 40% 때 · 1920×1080 게임 소개 화면 · 그림 없는 그 전 사이트 6.2),
+     25% 로 내린 뒤 7.8 · 7.0 · 8.5, 글자 쪽 막을 진하게 한 뒤 8.5 · 8.1 · 8.8(같은 셈).
+     띠 아래 틈은 10(전 4) — 띠 이름과 첫 하위 탭이 붙어 보이지 않게. 접히면 다른 묶음처럼 0 으로 간다.
+     프로젝트를 바꾸면 새 그림이 0.35초 흐릿하게 나타난다(움직임 끄기면 이 파일 맨 아래 전역 규칙이 끈다) */
+  .sd-cover{position:absolute; z-index:0; display:none; border-radius:12px 12px 0 0; overflow:hidden; pointer-events:none; isolation:isolate;
+    -webkit-mask:linear-gradient(#000 45%, transparent); mask:linear-gradient(#000 45%, transparent)}
+  .sd-cover.on{display:block}
+  .sd-cover.in{animation:sd-cover-in .35s ease}
+  @keyframes sd-cover-in{from{opacity:0}}
+  .sd-cover::after{content:""; position:absolute; inset:0; z-index:-2; background:var(--img) center top/cover; opacity:.25; filter:saturate(.8)}
+  .sd-cover::before{content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg, rgba(13,18,32,.86) 0%, rgba(13,18,32,.7) 70%, rgba(13,18,32,.18) 100%)}
+  .side > .sd-t, .side > .sd-grp{z-index:1}
+  .sd-t.act + .sd-grp:not([hidden]){margin-top:10px}
+  .sd-t.act:has(+ .sd-grp), .sd-t.act + .sd-grp{--mut:#b4c2d8}
   /* 움직임 끄기 설정 — 맨 아래 전역 규칙(*)은 ::before · ::after 에 안 닿아 펼침 화살표가 계속 돌았다(2026-11-23 헤드리스 시험) */
-  @media (prefers-reduced-motion:reduce){ .sd-t:has(+ .sd-grp) b::after, .sd-s::before{transition:none} }
+  @media (prefers-reduced-motion:reduce){ .sd-t:has(+ .sd-grp) b::after{transition:none} }
 }
 /* 낮은 창(노트북 1536×740 등) — 위 크기면 MMORPG 기둥이 854px 이라 860 미만에선 한 단계 작게(상위 25.6 · 하위 21 · 목록 17px)
    + 칸 간격을 줄인다. 740 에서 맨 아래 칸 바닥 ≤ 728(2026-11-18 렌더). 그보다 낮으면 기둥 안에서 스크롤된다.
