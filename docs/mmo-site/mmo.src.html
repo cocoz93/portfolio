@@ -110,58 +110,60 @@
        (C++17 · Windows IOCP)와, 천장 5,000은 첫 탭 부제와 같은 말을 두 번 하고 있었다.
        미리보기 그림은 media/link-*.jpg 로 외부 파일이다(2-1 실행 화면과 같은 방식). index.html 은
        폰트를 base64 로 안고 있어 이미 690KB 라 여기에 그림까지 넣지 않는다.
-       그림은 노션 커버·GitHub 화면을 그대로 찍은 것이라 그쪽이 바뀌면 낡는다 — 다시 찍어 갈아끼우면 된다. -->
+       그림은 노션 커버·GitHub 화면을 그대로 찍은 것이라 그쪽이 바뀌면 낡는다 — 다시 찍어 갈아끼우면 된다.
+       찍는 법(2026-11-24) — 헤드리스 크롬 1600×900 · 어두운 테마(prefers-color-scheme:dark) → 폭 1280 으로 줄여 저장.
+       노션은 맨 위 검은 머리띠(44px)를 잘라 낸다(그래서 iocp 만 1280×685). 카드 바탕으로 어둡게 깔리므로 이 이상 클 필요는 없다. -->
   <section class="panel" id="p-misc" role="tabpanel" hidden>
-   <!-- 판에 담는 이유 — 이 사이트는 내용을 늘 액자 안에 둔다(2-1 .cr-frame · 1-2 오른쪽 칸).
-        판 없이 목록만 두면 탭줄 바로 아래에 글이 붙어 시작하는데, 다른 탭은 전부 한 겹 안에서 시작한다.
+   <!-- 카드 하나하나가 액자다 — 이 사이트는 내용을 늘 한 겹 안에 둔다(2-1 .cr-frame · 소개 판 .gi-card).
+        전에는 바깥 판 하나에 줄 넷을 담았는데, 카드 넷으로 바뀌며 바깥 판은 자리만 잡고 겉모양이 없다(.lk-box).
         ※ 한때 여기 머리줄('나가는 문 — 소스 · 설계 문서 · 프로필')이 있었다. 1-2 의 '실험 N건 …' 을
           따온 것이었는데 그쪽은 카드가 여러 장이라 무엇이 담겼는지 한 줄이 필요했고, 여기는 줄이 셋이라
           제목 셋이 이미 그 말을 하고 있었다. 같은 말을 두 번 해서 뺐다. -->
    <div class="lk-box">
     <div class="lk-list">
       <a class="lk-row" href="https://github.com/cocoz93/MMO_Zone" target="_blank" rel="noopener">
-        <span class="lk-sh"><img src="media/link-github.jpg" alt="" width="560" height="316" loading="lazy"></span>
-        <span class="lk-tt">
-          <span class="lk-k">CODE</span>
-          <span class="lk-t">GitHub</span>
-        </span>
-        <span class="lk-dd">
-          <span class="lk-d">MMO Server GitHub page</span>
+        <span class="lk-sh"><img src="media/link-github.jpg" alt="" width="1280" height="720" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-tt">
+            <span class="lk-k">CODE</span>
+            <span class="lk-t">GitHub</span>
+            <span class="lk-d">MMO Server GitHub page</span>
+          </span>
           <span class="lk-u">github.com/cocoz93/MMO_Zone ↗</span>
         </span>
       </a>
       <a class="lk-row" href="https://feline-vacation-d6d.notion.site/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">
-        <span class="lk-sh"><img src="media/link-iocp.jpg" alt="" width="560" height="316" loading="lazy"></span>
-        <span class="lk-tt">
-          <span class="lk-k">NOTION</span>
-          <span class="lk-t">IOCP MMO</span>
-        </span>
-        <span class="lk-dd">
-          <span class="lk-d">IOCP MMO 설계 문서</span>
+        <span class="lk-sh"><img src="media/link-iocp.jpg" alt="" width="1280" height="685" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-tt">
+            <span class="lk-k">NOTION</span>
+            <span class="lk-t">IOCP MMO</span>
+            <span class="lk-d">IOCP MMO 설계 문서</span>
+          </span>
           <span class="lk-u">notion.site ↗</span>
         </span>
       </a>
       <!-- 노션 주소는 공개본(notion.site)으로만 쓴다 — app.notion.com 은 로그인한 본인에게만 열린다.
            복사할 때 붙는 ?source=copy_link 는 통계용 꼬리표라 떼고 넣는다. -->
       <a class="lk-row" href="https://feline-vacation-d6d.notion.site/DEV-LOG-26-2db16a0b9f598196a471d53775ab4223" target="_blank" rel="noopener">
-        <span class="lk-sh"><img src="media/link-devlog.jpg" alt="" width="560" height="316" loading="lazy"></span>
-        <span class="lk-tt">
-          <span class="lk-k">NOTION</span>
-          <span class="lk-t">DEV LOG 26</span>
-        </span>
-        <span class="lk-dd">
-          <span class="lk-d">개발 일지와 학습 기록 전체. (Notion)</span>
+        <span class="lk-sh"><img src="media/link-devlog.jpg" alt="" width="1280" height="720" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-tt">
+            <span class="lk-k">NOTION</span>
+            <span class="lk-t">DEV LOG 26</span>
+            <span class="lk-d">개발 일지와 학습 기록 전체. (Notion)</span>
+          </span>
           <span class="lk-u">notion.site ↗</span>
         </span>
       </a>
       <a class="lk-row" href="https://cocoz93.github.io/portfolio/" target="_blank" rel="noopener">
-        <span class="lk-sh"><img src="media/link-profile.jpg" alt="" width="560" height="316" loading="lazy"></span>
-        <span class="lk-tt">
-          <span class="lk-k">WEB</span>
-          <span class="lk-t">WEB PROFILE</span>
-        </span>
-        <span class="lk-dd">
-          <span class="lk-d">포트폴리오 홈</span>
+        <span class="lk-sh"><img src="media/link-profile.jpg" alt="" width="1280" height="720" loading="lazy"></span>
+        <span class="lk-tx">
+          <span class="lk-tt">
+            <span class="lk-k">WEB</span>
+            <span class="lk-t">WEB PROFILE</span>
+            <span class="lk-d">포트폴리오 홈</span>
+          </span>
           <span class="lk-u">cocoz93.github.io/portfolio ↗</span>
         </span>
       </a>

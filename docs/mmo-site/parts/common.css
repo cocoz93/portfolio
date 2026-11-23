@@ -641,99 +641,126 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
    여기 두면 .bn-stage 의 grid 선언보다 먼저 와서 못 이기는 짝이 생긴다 —
    좁은 폭에서 두 칸을 한 칸으로 접는 규칙(@media max-width:1600px)도 같은 이유로 그쪽이다. */
 
-/* ═══ 링크 모음 (#p-misc) — 미리보기 그림 + 큰 제목 + 한두 줄 설명 ═══
+/* ═══ 링크 모음 (#p-misc) — 그림을 어둡게 깐 카드 넷(2×2) ═══
    접두어를 lk- 로 두는 것은 parts/README 규칙이다(병목 bn-/bx- · 클라 cl-/cr-).
-   여기서 줄을 끄는 것은 그림이 아니라 제목이다. 한때 썸네일을 키우고 제목을 줄여 봤는데,
-   이 탭에서 사람이 찾는 것은 '어디로 가는 문인가' 라서 이름이 먼저 읽혀야 했다.
-   그래서 그림은 199×112 로 고정하고 제목을 1.46rem 에 둔다 — 그림보다 제목이 먼저 읽히는 관계는
-   그대로 두고 한 벌을 통째로 0.70배 줄인 값이다(옛 280×158 · 2.15rem).
-   ── 줄인 이유 ──
-   넷을 다 담은 판이 816px 이라 1080 화면(브라우저 창 ~900px)에서 마지막 줄이 잘렸다. 지금은 537px 이다.
-   ── 199px 이 하한이 아니라 하한 한 칸 위인 근거 ──
-   여기 그림은 장식이 아니라 '어떤 화면인가' 를 미리 보여 주는 것이라 판독이 하한선이다.
-   그래서 썸네일만 따로 222·210·199·188·176 다섯 폭으로 나란히 찍어 봤다. 노션 커버의 큰 제목
-   ('IOCP 서버 설계')은 176 까지도 남지만, 그 아래 줄('IOCP 서버 구현(MMO)')은 188 에서 흐려지고
-   176 에서 무너진다. 199 는 그 바로 위가 아니라 한 칸 위다.
-   (줄 사이 여백만 9px 로 좁혀 그림을 지키는 안도 재 봤는데, 버는 높이가 절반(−54px)인데다
-    구분선이 그림 가장자리에서 9px 까지 붙어 답답해져 기각했다.)
-   주소(.lk-u)를 오른쪽 끝이 아니라 설명 바로 아래 두는 이유도 같다 — 오른쪽에 붙이면
-   눈이 제목 → 설명 → 화면 반대편으로 한 번 꺾인다.
+   ── 짜임을 바꾼 까닭 (2026-11-24) ──
+   전에는 왼쪽 위 740px 판에 줄 넷(그림 199×112 · 제목 · 설명)이었다. 다른 탭이 기둥 옆 본문을 액자 하나로
+   꽉 채우게 되면서 이 탭만 작은 판으로 남아 화면 절반 넘게 비었고, 위도 다른 탭보다 40px 낮게 시작했다.
+   시안 넷(그림 위 카드 · 그림 바탕 카드 · 큰 둘+작은 둘 · 옆 탭 짜임) 가운데 사용자가 그림 바탕 카드를 골랐다.
+   ── 줄을 끄는 것은 그림이 아니라 제목이다 (옛 짜임에서 이어 온 원칙) ──
+   이 탭에서 사람이 찾는 것은 '어디로 가는 문인가' 라서 이름이 먼저 읽혀야 한다. 그래서 그림은 바탕으로 눌러
+   '어떤 사이트인가' 만 알아보게 하고, 제목(2.4rem)을 화면에서 가장 큰 글자로 둔다.
+   그림을 위에 또렷하게 두는 시안은 GitHub 파일 목록 같은 남의 화면 잔글씨가 제목보다 먼저 눈에 걸렸다.
    ※ 옛 .note-list / .note / .links 는 이 패널 전용이었고 여기 들어오며 쓸 곳이 없어져 걷어냈다. */
-/* 판 — 2-1 액자(.cr-frame)와 같은 말을 쓴다. 이 사이트는 내용을 늘 한 겹 안에 둔다.
-   ── 위 여백 62px 의 근거 ──
+/* 판 자리 — 여기 적힌 위 여백 70 은 좁은 화면(기둥이 없는 1280 미만) 값이다. 넓은 화면은 아래 @media.
+   ── 70 의 근거 ──
    이 탭만 하위 탭 줄이 없다. 다른 탭은 탭줄과 본문 사이에 그 줄이 한 겹 들어가는데(.subtabs
    min-height 62px), 그래서 탭줄 아래선에서 본문 첫 요소까지가 1-1 은 94px · 2-3 은 70px 이다.
-   여기는 그 줄이 없어 18px 이었고, 탭을 오갈 때 본문 시작 높이가 그만큼 튀었다.
-   가장 낮은 값(2-3 의 70px)에 맞춘다.
+   여기는 그 줄이 없어 18px 이었고, 탭을 오갈 때 본문 시작 높이가 그만큼 튀었다. 가장 낮은 값(2-3 의 70px)에 맞춘다.
    ※ 여기에 62 를 적고 '.panel 의 margin-top 8 과 더해 70' 을 기대하면 안 된다 — 더해지지 않는다.
      .panel 은 테두리도 안쪽 여백도 없어서 이 판의 위 마진이 부모 마진과 상쇄(margin collapsing)되고,
-     둘 중 큰 값 하나만 남는다. 실제로 62 를 적었더니 화면에서도 62 였다. 그래서 여기 값이 곧 총 여백이다. */
-/* 판 폭 740 — 안에 든 것에 맞춘 값이지 화면에 맞춘 값이 아니다.
-   ── 재는 법 ──
-   한 줄이 쓰는 폭 = 그림 199 + 24 + 제목칸 196 + 24 + 설명칸 안쪽여백 24 + 가장 긴 설명 211 = 678.
-   여기에 좌우 안쪽 여백 24(판 padding 22 + 줄 padding 2)를 더하면 726 이고, 740 은 그 위 여유 14px.
-   설명이나 제목 문구를 고치면 이 계산을 다시 할 것 — 남는 여유가 14px 뿐이라 조금만 길어져도 접힌다.
-   ── 넓게 두면 안 되는 이유 (두 번 겪었다) ──
-   1120 일 때는 안쪽 여백이 왼쪽 24 : 오른쪽 198, 960 으로 줄인 뒤 설명을 문장에서 짧은 이름으로
-   바꾸자 다시 왼쪽 25 : 오른쪽 256 이 됐다. 눈에 걸리는 것은 여백보다 **줄 사이 구분선**이다 —
-   글이 끝난 자리에서 계속 뻗어 나가 빈 곳을 가리킨다. 그게 '판이 넓다' 는 판정 신호다.
-   ※ 다른 탭(설계·병목·클라)은 오른쪽 끝이 1549 로 같은데 여기만 짧다 — 신경 쓸 것 없다.
-     그 셋은 폭 상한이 없거나(.stage · .cr-frame) 1860(.bn-shift)이라 화면 폭에 눌려 우연히
-     같아진 것이지, 맞춘 규칙이 아니다. 이 탭은 목록이라 화면을 다 쓸 이유가 없다. */
-.lk-box{max-width:740px; margin:70px 0 0; padding:6px 22px 8px;
-  background:linear-gradient(180deg,#151d2d 0%,#101725 100%);
-  border:1px solid #2a3550; border-radius:16px;
-  box-shadow:0 26px 60px -30px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.045)}
-.lk-list{max-width:none}
-.lk-row{display:flex; align-items:center; gap:24px; text-decoration:none;
-  padding:9px 2px; border-bottom:1px solid var(--line2)}
-/* 판이 이미 위아래를 닫으므로 첫 줄 위·끝 줄 아래 선은 두지 않는다 — 두면 선이 겹쳐 두 줄로 보인다 */
-.lk-row:last-child{border-bottom:0}
-.lk-sh{flex:0 0 auto; width:199px; height:112px; border-radius:9px; overflow:hidden;
-  border:1px solid #3f4d6b; background:#0b111d; transition:border-color .15s;
-  box-shadow:0 18px 38px -22px rgba(0,0,0,.95)}
-.lk-row:hover .lk-sh{border-color:var(--net)}
-.lk-sh img{display:block; width:100%; height:100%; object-fit:cover; object-position:top left}
-/* 제목 칸과 설명 칸을 가른다 — 한 열에 쌓으면 제목 바로 밑에 설명이 붙어 둘이 한 덩어리로 읽혔다.
-   제목 칸을 고정폭으로 두는 것이 요점이다: 줄이 여럿이어도 설명 시작점이 한 기둥으로 맞아떨어진다.
-   196px 은 가장 긴 제목이 오른쪽에 여유를 남기는 값이다. 실측(1.46rem·w800):
-   GitHub 76 · IOCP MMO 116 · DEV LOG 26 131 · WEB PROFILE 145(가장 긺, 여유 51px).
-   ※ 제목을 새로 지을 때 196 을 넘기면 두 줄로 접힌다. 칸을 넓히는 쪽은 그만한 대가가 있다:
-     짧은 제목 셋이 넓은 칸에서 길을 잃고, 설명 칸까지 밀려 판이 같이 커진다. 두 줄을 허용하려면
-     셸에서 끊는 자리를 손으로 잡을 것 — 자동으로 두면 마지막 낱말만 홀로 떨어진다
-     ('MMO Server GitHub page'(272px)로 확인했다).
+     둘 중 큰 값 하나만 남는다. 그래서 여기 값이 곧 총 여백이다.
+   바깥 판은 이제 겉모양이 없다 — 카드마다 테두리가 있어 판까지 두르면 겹이 둘이 된다. */
+.lk-box{margin:70px 0 0}
+.lk-list{display:grid; grid-template-columns:1fr 1fr; gap:22px}
+/* 카드 — 테두리 · 모서리(14px) · 틈(22px)은 소개 판(intro.css .gi · .gi-card)과 같은 값이다. 카드 전체가 링크다.
+   글 칸은 흐름 안에 두고(아래로 붙임) 그림만 절대 위치로 깐다 — 카드 높이가 글보다 작아져 글이 잘리는 일이 없다.
+   min-height 300 은 좁은 화면에서 그림이 글 위로 한 뼘은 보이는 높이다(글 칸이 넓은 폭에서 약 160px). */
+.lk-row{position:relative; display:flex; flex-direction:column; justify-content:flex-end; min-height:300px;
+  border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#05080e;
+  text-decoration:none; transition:border-color .15s; container-type:inline-size}
+.lk-row:hover{border-color:var(--net)}
+.lk-row:focus-visible{outline:2px solid var(--net); outline-offset:3px}
+/* 그림 — 위 가운데를 남긴다. 찍은 화면의 머리(사이트 이름 · 노션 표지)가 위에 있고, GitHub 는 본문이 가운데 정렬이다.
+   ── 밝기 .42 · 채도 .5 ──
+   시안 값은 .62 · .75 였고 사용자가 「뒷배경 좀더 연하게」라 해서 내렸다(2026-11-24). 마우스를 올리면 시안 값으로
+   돌아와 그 카드만 밝아진다 — 누를 수 있다는 신호를 테두리 하나에만 맡기지 않는다.
+   ── 덮개 두 겹 ──
+   ① 카드 전체(.lk-sh::after) — 아래에서 위로 옅어지는 바탕색(--bg #0d1220) 띠. 그림을 위쪽 12% 만 거의 그대로 두고
+      나머지를 단계로 눌러 바탕을 옅게 만드는 몫이다(위 밝기 .42 와 같이 「연하게」를 맡는다).
+   ② 글 칸 뒤(.lk-tx::before) — 글이 걸친 자리만 완전히 막는 몫. 아래 .lk-tx 주석. */
+.lk-sh{position:absolute; inset:0}
+.lk-sh img{display:block; width:100%; height:100%; object-fit:cover; object-position:top center;
+  filter:brightness(.42) saturate(.5); transition:filter .25s, transform .4s}
+.lk-row:hover .lk-sh img{filter:brightness(.62) saturate(.75); transform:scale(1.02)}
+.lk-sh::after{content:""; position:absolute; inset:0;
+  background:linear-gradient(0deg, rgba(13,18,32,.98) 0%, rgba(13,18,32,.96) 38%, rgba(13,18,32,.55) 60%, rgba(13,18,32,.08) 88%)}
+/* 글 칸 — 왼쪽에 라벨 · 제목 · 설명, 오른쪽 아래에 주소 단추. 폭이 모자라면 단추가 설명 밑으로 내려간다(flex-wrap).
+   ※ 옛 짜임은 주소를 설명 바로 아래 뒀다(오른쪽에 붙이면 눈이 제목 → 설명 → 화면 반대편으로 꺾였다).
+     지금 주소는 읽을 글이 아니라 카드 안의 단추이고 같은 카드 오른쪽 아래라 꺾이는 거리가 짧다 — 사용자가 이 배치로 골랐다. */
+.lk-tx{position:relative; z-index:1; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+  gap:14px 20px; padding:26px 32px 30px}
+/* 글 칸 뒤 덮개 — 글 칸 전체를 바탕색으로 완전히 막고, 그 위 40px 동안 옅어지게 둔다(경계가 칼로 자른 듯 보이지 않게).
+   그림 속 글자가 라벨 · 제목 뒤에 비치지 않게 하려는 것이다(시안 1차에서 '네트워크 라이브러리…' 가 NOTION 라벨에 겹쳤다).
+   ── 카드 덮개(①)만으로 안 되는 까닭 ──
+   ①은 카드 높이 비율(아래 38% 거의 불투명)이다. 넓은 화면은 글 칸(160)이 카드(431)의 37% 라 맞지만, 단추가 내려가
+   글 칸이 212 가 되는 폭(1280 · 884)과 폰(390)에서는 글 칸이 그 구간 위로 올라가 「대형 라이브 경험…」 · 'SERVER' 글자가
+   라벨 뒤로 비쳤다. 글 칸에 붙이면 카드 높이와 상관없이 늘 글 뒤만 막힌다.
+   ※ ①을 빼고 이것만 두지 않는 것은 넓은 화면의 옅어지는 모양을 사용자가 고른 그대로 두려는 것이다 — 두 겹인 지금,
+     넓은 화면 그림 구역 밝기는 이 덮개를 넣기 전과 같다(1920×940 카드 넷 평균 차 0.2 이내).
+   ※ 불투명도는 1 이다 — .95 로 두었을 때는 남은 5% 로 흰 글자(포트폴리오 첫 화면 제목)가 확대하면 읽혔다(1280 폭). */
+.lk-tx::before{content:""; position:absolute; left:0; right:0; bottom:0; top:-40px; z-index:-1; pointer-events:none;
+  background:linear-gradient(0deg, #0d1220 0%, #0d1220 calc(100% - 40px), rgba(13,18,32,0) 100%)}
+.lk-tt{min-width:0}
+/* 라벨 — 다른 탭 라벨(.gi-k)과 같은 글꼴 · 크기 · 굵기다. 색만 한 단 밝다(--dim 대신 #7d8ba3):
+   바탕이 판색이 아니라 그림 위 덮개(#0d1220)라 --dim 은 대비가 3.5 에 그친다. #7d8ba3 은 5.4.
+   옛 고정폭 글꼴(--mono) 라벨 · 주소는 다른 탭 어디에도 없는 말투였고, 색 #46536b 는 대비 2.25 로 거의 안 읽혔다. */
+.lk-k{display:block; font-size:.8rem; font-weight:700; letter-spacing:.04em; color:#7d8ba3}
+/* 제목 2.4rem — 소개 판 머리 제목(.gi-h 2rem)보다 한 단 크다. 여기는 카드마다 글이 세 줄뿐이라 제목이 곧 내용이다.
    ※ 넷째 제목을 WEB PORTFOLIO 로 바꿨다가 되돌렸다. 그 사이트는 성과·경력·장애·R&D·기술·소개로
      짜인 이력 사이트지 프로젝트 갤러리가 아니다(프로젝트는 이 MMO 하나뿐이고 그게 이 페이지다).
      주소가 /portfolio 인 것만 보고 정하지 말 것. 노션 DEV LOG 26 의 INDEX 도 WEB PROFILE 이다. */
-.lk-tt{flex:0 0 196px; min-width:0}
-.lk-dd{flex:1 1 auto; min-width:0; padding-left:24px; border-left:1px solid var(--line2)}
-.lk-k{display:block; font-family:var(--mono); font-size:.62rem; letter-spacing:.15em;
-  color:#46536b; margin-bottom:3px}
-.lk-t{display:block; font-size:1.46rem; font-weight:800; letter-spacing:-.025em;
-  color:var(--ink); line-height:1.1}
+.lk-t{display:block; margin:6px 0; font-size:2.4rem; font-weight:800; letter-spacing:-.03em; color:var(--ink); line-height:1.2}
 /* 설명은 문장이 아니라 '이게 무엇인가' 를 짧게 적는 자리다(2026-08-04 에 문장에서 바꿨다).
-   한 줄 폭 실측(.9rem): 166 · 128 · 211 · 78 — 넷 다 한 줄이다.
-   글 폭을 여기서 따로 막지 않는다. 판을 내용에 맞춰 좁혔으므로(740) 설명 칸이 225px 이고,
-   그 칸이 곧 글 폭이다. 옛 max-width:50ch(=429px)는 판이 넓던 시절의 안전장치라 지금은
-   걸릴 일이 없어 걷어냈다 — 판을 다시 넓히면 그때 이 자리를 다시 볼 것.
    ── 두 줄이 되면 끊는 자리를 손으로 잡을 것 (셸의 <br>) ──
    브라우저에 맡기면 낱말이 갈린다. 실제로 그랬다: 기본값은 '부하 테스트 / 도구까지' 로 끊었고,
    text-wrap:balance 를 걸었더니 줄 길이는 고르게(257/299) 맞췄지만 이번엔 'IOCP / 코어부터' 로
    끊었다. balance 는 길이만 보지 뜻을 안 본다 — 한국어 짧은 문구에는 쓰지 말 것.
    답은 **마침표에서 끊기** 다. 두 줄이 각각 완결된 문장이 되고 낱말도 안 갈린다. */
-.lk-d{display:block; font-size:.9rem; color:#b7c4da}
-.lk-u{display:block; font-family:var(--mono); font-size:.68rem; color:#46536b; margin-top:8px;
-  transition:color .15s}
-.lk-row:hover .lk-u{color:var(--net)}
+.lk-d{display:block; font-size:.98rem; color:#c3cde0; line-height:1.6}
+/* 주소 단추 — 다른 탭의 GitHub 단추(.gi-go)와 같은 알약이다 */
+.lk-u{flex:0 0 auto; font-size:.88rem; font-weight:700; color:var(--net); white-space:nowrap;
+  border:1px solid var(--line); border-radius:999px; padding:7px 14px; background:rgba(108,199,255,.07);
+  transition:border-color .15s, background .15s}
+.lk-row:hover .lk-u{border-color:var(--net); background:rgba(108,199,255,.14)}
+/* 단추를 내리는 것은 카드마다가 아니라 카드 폭으로 한꺼번에 — flex-wrap 에만 맡기면 글 길이에 따라 어떤 카드는
+   오른쪽, 어떤 카드는 아래가 돼 한 화면에서 섞였다(1280 · 884 · 390 폭 실측). 네 카드는 폭이 늘 같으니
+   카드 폭(컨테이너 쿼리)으로 정하면 넷이 같이 움직인다.
+   580 = 가장 긴 카드(WEB PROFILE)가 한 줄에 필요한 폭 552(좌우 안쪽 64 + 글 묶음 238 + 틈 20 + 단추 230) + 여유 28.
+   여유는 글꼴이 늦게 붙거나 다른 글꼴로 바뀔 때 한 카드만 넘어가는 것을 막는 몫이다.
+   ※ 컨테이너 쿼리를 모르는 옛 브라우저는 위 flex-wrap 대로 섞여 보일 뿐 깨지지는 않는다. */
+@container (max-width:579px){ .lk-tx{flex-direction:column; align-items:flex-start} }
 
-/* ── 진입 애니 — 줄이 제자리에서 열린다 ──
+/* 넓은 화면(기둥이 서는 1280 이상) — 다른 탭처럼 본문 칸을 화면 높이까지 채운다.
+   위 30 = 소개 판 첫 요소(.gi-band margin-top 30)와 같은 값이다. .panel 마진과 상쇄돼 .main 위(10)에 더해져
+   화면 위에서 40 — 다른 탭 액자 윗변과 같은 줄이다(1920×940 실측 290,40 – 1890,924 · NOX 소개 액자와 같음).
+   높이 100vh − 56 = 위 40 + 아래 16. 아래를 화면 끝에 붙이지 않는 것은 카드 아랫변 테두리 · 둥근 모서리가
+   잘려 보이지 않게 하려는 것이다. min 520 은 낮은 창에서 카드 한 장(249)이 글 칸(160 · 단추가 내려가는 폭은 212)을 담는 값이다.
+   max 884 = 본문 폭 상한(1600)에서 NOX 소개 액자(4:3, 폭 1178) 높이 — 그보다 높은 창에서 다른 탭 액자는 더 자라지 않는다. */
+@media(min-width:1280px){
+  .lk-box{margin-top:30px; height:calc(100vh - 56px); min-height:520px; max-height:884px}
+  .lk-list{height:100%; grid-template-rows:1fr 1fr}
+  .lk-row{min-height:0}
+}
+
+/* 좁은 화면(860 이하) — 한 줄에 카드 하나. 하위 탭 줄도 54px 로 줄어들어(.subtabs @680px) 여백을 같이 내린다.
+   제목은 넓은 화면보다 한 단 작게(2.4 → 1.9rem) — 폭 390 에서 'WEB PROFILE' 이 한 줄에 서는 크기다. */
+@media(max-width:860px){
+  .lk-box{margin-top:46px}
+  .lk-list{grid-template-columns:1fr; gap:16px}
+  .lk-row{min-height:240px}
+  .lk-tx{padding:22px 22px 24px}
+  .lk-t{font-size:1.9rem}
+}
+
+/* ── 진입 애니 — 카드가 제자리에서 열린다 ──
    이 탭만 이미 다 서 있는 채로 나타나서 탭을 오갈 때 혼자 튀었다(1-1 은 구조가 서고, 2-1 은 창이 열리고,
    1-2 는 지도가 눕는다). 몸짓은 2-1 의 말을 그대로 가져온다 — 제자리에서 0.94배로 열리고 18px 떠오름.
    그쪽 주석에 왜 그 값인지가 남아 있다(0.52배는 확대 구간에 잔글씨가 흐려져 기각 · 10px 는 '떠올랐다'가
    안 읽혀 18 로 키움). 새 몸짓을 만들지 않는 이유가 그것이다 — 보이는 결과가 같으면 어휘를 늘리지 않는다.
    ── 2-1 보다 짧게 (0.91초 → 0.52초) ──
    그 탭은 '볼 것' 이 목적이라 그 길이가 맞지만, 여기는 나가는 문이다. 링크를 누르러 온 사람을
-   그만큼 붙잡으면 안 된다. 줄 간격 60ms · 마지막 줄이 .20s 에 시작해 .54s 에 끝난다.
+   그만큼 붙잡으면 안 된다. 카드 간격 60ms · 마지막 카드가 .20s 에 시작해 .54s 에 끝난다.
    ── 되감기는 CSS 가 알아서 한다 ──
    .panel[hidden] 이 display:none 이라, 탭에 들어올 때마다 display 가 none→flow 로 바뀌며 애니가
    처음부터 다시 돈다. 그래서 tabs.js 에 훅을 하나도 안 붙였다(공통 조각이라 안 건드리는 편이 낫다).
@@ -744,22 +771,6 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
 .lk-row:nth-child(2){animation-delay:.08s}
 .lk-row:nth-child(3){animation-delay:.14s}
 .lk-row:nth-child(4){animation-delay:.20s}
-
-/* 좁은 화면 — 그림을 폭 전체로 눕히고 제목을 줄인다. 280px 고정을 두면 글이 설 자리가 없다 */
-@media(max-width:860px){
-  /* 좁은 화면에서는 하위 탭 줄도 54px 로 줄어든다(.subtabs @680px) — 여백도 같이 내린다 */
-  .lk-box{margin-top:46px; padding:4px 16px 10px; border-radius:14px}
-  .lk-row{flex-direction:column; align-items:flex-start; gap:14px; padding:18px 2px}
-  .lk-sh{width:100%; height:auto; aspect-ratio:16/9}
-  /* 세로로 쌓이면 두 칸을 가르던 세로선이 뜻을 잃는다 — 선을 떼고 들여쓰기도 푼다 */
-  .lk-tt{flex:0 0 auto; width:100%}
-  .lk-dd{width:100%; padding-left:0; border-left:0; margin-top:-4px}
-  /* 넓은 화면 값을 0.70배로 내리면서 이 두 줄도 같이 내렸다 — 옛 값(1.6rem/.95rem)은 새 기본값과
-     거의 같아져 규칙이 있으나 마나 했다. 좁은 화면에서 한 단 더 작아지는 관계를 되살린 값이다.
-     넓은 화면 값을 또 건드리면 여기도 같이 봐야 한다(간격이 좁아지면 이 규칙이 다시 죽는다). */
-  .lk-t{font-size:1.3rem}
-  .lk-d{font-size:.86rem; max-width:none}
-}
 
 /* 구역 개요 카드 — 상자가 없다 */
 /* 판을 깔지 않는 이유: 씬 쪽에서 이미 고른 구역만 남기고 나머지를 죽이므로(#scene[data-zone]),
