@@ -217,6 +217,8 @@
    그래서 판 여닫기 · 주소 · 애니는 지금까지처럼 tabs.js · mo.js · intro.js 가 맡고, 좁은 화면의 원래 두 줄과 행동이 같다.
    켜짐 표시는 원래 단추의 .act 를 지켜보다(MutationObserver) 따라 칠한다 — 딥링크 · 다른 스크립트가 바꿔도 같이 바뀐다.
    펼침은 켜진 상위 탭 하나만 — 접힌 탭까지 다 펼치면 세 겹이 다시 한 화면에 쌓인다.
+   켜진 상위 탭을 다시 누르면 그 묶음을 접고, 또 누르면 편다(2026-11-23 · folded) — 사용자 「버튼저거 한번 더누르면 아래 접히는게 나을듯?」.
+   이름 옆 ▾ 가 「접힌다」를 말하는데 눌러도 아무 일이 없었다. 원래 탭은 이미 켜져 있어 누르지 않는다. 다른 상위 탭으로 가면 접어 둔 것은 잊는다.
    그 탭 안의 목록(소개 판 목록 · 1-2 차례)은 하위 탭과 상관없이 늘 펼친다(2026-11-18). 하위 탭을 바꿀 때마다 목록이 접히고 펴지면
    누른 단추가 커서 밑에서 147px 튀었다(1920×900 실측). 다 펼쳐도 MMORPG 기둥은 711px 라 높이 720 화면에 든다.
    대신 안 보는 하위 탭의 목록은 켜짐을 칠하지 않는다(link 의 gate) — 칠하면 「전체 구조」와 「개요」가 같이 켜져 보인다.
@@ -232,10 +234,13 @@
   const LIST={mmo:"p-intro", mo:"p-mo", shooter:"p-shooter"};  /* 상위 탭 → 소개 판 목록이 든 판 */
   const SECT={bneck:[["p-bneck","병목 지도"],["p-optimization","핵심 최적화"],["p-crender","실서버 화면"]]};   /* MMORPG 하위 → 그 쪽의 판 차례 */
   const pairs=[], grps=[], spies=[];
+  let folded=null;   /* 접어 둔 상위 탭(원래 단추) — 켜진 탭에서만 뜻이 있다(sync) */
   function mk(tag, cls, html){ const e=document.createElement(tag); e.className=cls; if(html!=null) e.innerHTML=html; if(tag==="button") e.type="button"; return e; }
   function link(p, o, lift, gate){
     pairs.push([p,o,gate]);
     p.addEventListener("click", function(){
+      /* 켜진 상위 탭을 다시 누름 = 그 묶음 접기 · 펴기(위 머리 주석). 묶음이 없는 탭(링크 모음)은 지금처럼 원래 탭을 누른다 */
+      if(o.classList.contains("act") && grps.some(function(x){ return x[2]===p; })){ folded=(folded===o) ? null : o; sync(); return; }
       const open = !!gate && !gate.classList.contains("act");   /* 목록 칸인데 그 하위 탭이 꺼져 있다 */
       if(open) gate.click();
       o.click();
@@ -248,7 +253,9 @@
     const b=mk("button","sd-t"); b.appendChild(mk("b","",t.querySelector("b").innerHTML)); b.appendChild(mk("span","",t.querySelector("span").innerHTML));
     side.appendChild(b); link(b,t,true);
     const bar=SUB[k] && document.getElementById(SUB[k]); if(!bar) return;
-    const g=mk("div","sd-grp"); side.appendChild(g); grps.push([g,t]);
+    const g=mk("div","sd-grp"); side.appendChild(g);
+    const ind=mk("div","sd-ind"); ind.setAttribute("aria-hidden","true"); g.appendChild(ind);   /* 파란 바탕(아래 place) — 칸보다 먼저 넣어야 칸 글자 밑에 칠해진다 */
+    grps.push([g,t,b,ind]);
     bar.querySelectorAll(".subtab").forEach(function(s,i){
       const sb=mk("button","sd-s",s.innerHTML); g.appendChild(sb); link(sb,s,true);
       const sec=(k==="mmo") && SECT[s.getAttribute("data-sub")];
@@ -272,10 +279,33 @@
       gi.querySelectorAll(".gi-it").forEach(function(it){ const lb=mk("button","sd-l",it.innerHTML); l.appendChild(lb); link(lb,it,false,s); });
     });
   });
+  /* 지금 보는 칸의 파란 바탕(2026-11-23) — 칸마다 칠하지 않고 묶음마다 하나(.sd-ind)를 가장 깊은 켜진 칸 자리로 옮긴다.
+     미끄러지는 움직임은 common.css 의 transition(사용자가 움직임 시안 1 · 2 · 4 를 골랐다 — 까닭은 common.css .sd-grp 주석).
+     접힌 묶음도 잰다 — 높이만 0 이고 칸은 그대로 놓여 있어서(common.css .sd-grp[hidden]) 펼칠 때 바탕이 이미 제자리에 있다.
+     jump = 미끄러지지 않고 바로 놓기 — 처음 놓을 때 · 창 크기가 바뀌었을 때(낮은 창 규칙이 글자를 줄인다) · 글꼴이 늦게 와서 칸 높이가 바뀌었을 때.
+     기둥이 안 서는 폭(display:none)에서는 잴 수 없어 건너뛴다 — 창을 넓히면 resize 가 다시 부른다.
+     MMORPG 병목 개선을 누르면 sync 에서 한 번(차례 칸이 아직 안 켜져 하위 탭 자리) · 다음 프레임 spy 에서 한 번(병목 지도 자리) 옮긴다 —
+     첫 목표는 16ms 만에 바뀌어 눈에는 병목 지도로 곧장 가는 한 번으로 보인다 */
+  const PILL=".sd-s.act:not(:has(+ .sd-list .sd-l.act)), .sd-l.act";
+  function place(jump){
+    if(!side.offsetWidth) return;
+    grps.forEach(function(x){
+      const d=x[3], it=x[0].querySelector(PILL);
+      d.classList.toggle("on", !!it); if(!it) return;
+      const j=jump || !d.style.height;
+      if(j) d.style.transition="none";
+      /* offsetTop 은 정수로 반올림돼 칸 위치가 소수점이면 바탕이 1px 어긋났다(낮은 창 · 1920 에서 렌더 대조) — 소수점째 잰다 */
+      const r=it.getBoundingClientRect(), q=x[0].getBoundingClientRect();
+      d.style.left=(r.left-q.left)+"px"; d.style.width=r.width+"px"; d.style.top=(r.top-q.top)+"px"; d.style.height=r.height+"px";
+      if(j){ void d.offsetHeight; d.style.transition=""; }
+    });
+  }
   function sync(){
     pairs.forEach(function(x){ const on=x[1].classList.contains("act") && (!x[2] || x[2].classList.contains("act")); x[0].classList.toggle("act",on);
       if(on) x[0].setAttribute("aria-current","true"); else x[0].removeAttribute("aria-current"); });
-    grps.forEach(function(x){ x[0].hidden=!x[1].classList.contains("act"); });
+    if(folded && !folded.classList.contains("act")) folded=null;
+    grps.forEach(function(x){ const open=x[1].classList.contains("act") && folded!==x[1]; x[0].hidden=!open; x[2].setAttribute("aria-expanded", String(open)); });
+    place();
     spyReq();   /* 하위 탭이 바뀌면 스크롤 없이 쪽 길이가 바뀐다 */
   }
   /* 지금 보는 판 = 고른 판(.wrap 의 data-bn · 위 showBn). 숨은 판은 세지 않는다.
@@ -294,9 +324,12 @@
     }
     spies.forEach(function(x){ const on=(x===cur); x[0].classList.toggle("act",on);
       if(on) x[0].setAttribute("aria-current","true"); else x[0].removeAttribute("aria-current"); });
+    place();
   }
   function spyReq(){ if(!sq){ sq=true; requestAnimationFrame(spy); } }
   addEventListener("resize", spyReq);   /* 창을 넓혀 기둥이 막 섰을 때 */
+  addEventListener("resize", function(){ place(true); });
+  if(document.fonts) document.fonts.ready.then(function(){ place(true); });
   const mo=new MutationObserver(sync);
   pairs.forEach(function(x){ mo.observe(x[1],{attributes:true, attributeFilter:["class"]}); });
   if(wrap) mo.observe(wrap,{attributes:true, attributeFilter:["data-bn"]});   /* 차례를 눌러 판을 바꿨다 */
