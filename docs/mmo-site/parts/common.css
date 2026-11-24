@@ -314,8 +314,9 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
      옅게 해도 마음에 안 드는 모양이 남고, 들임을 두면 층은 들여쓰기와 글자 크기로 갈리고, 켜진 칸은 흰 글자와 파란 바탕이 이미 보인다.
      덮기 그림(.sd-cover)과 같이 넣었다.
      파랑은 알약 하나에만(같은 날 시안 1) — 켜짐 표시가 흰 글자 · 파란 아이콘 · 알약 셋으로 갈려 있었다. 처음엔 켜짐 --net 이었다.
-     왼쪽 시작선은 둘 — 상위 이름 줄과 하위 탭 · 목록 글자 줄(34px 들임). 11-23 시안 2 에서 아이콘을 상위 이름 줄에 세워 맞춘 줄을 아이콘을 뺀 뒤에도
-     그대로 둔다. 그 전에는 상위 글자 44 · 아이콘 62 · 목록 알약 77 · 글자 95 로 넷이었다(1920 창).
+     왼쪽 시작선은 셋 — 상위 이름 줄 · 하위 탭 글자(18px 들임) · 목록 글자(34px 들임). 1920 창 44 · 60 · 78.
+     11-23 시안 2 에서 아이콘을 상위 이름 줄에 세워 맞춘 줄(하위 탭 · 목록 둘 다 78)을 아이콘을 뺀 뒤에도 그대로 뒀다가 11-24 하위 탭만 당겼다(아래 목록 주석).
+     그 전에는 상위 글자 44 · 아이콘 62 · 목록 알약 77 · 글자 95 로 넷이었다(1920 창).
      움직임 셋(2026-11-23 · 사용자 「좋아 1,2,4적용해봐」) — ① 묶음 펼침 · 접힘(여기) ② 파란 바탕 미끄러짐(아래 .sd-ind) ③ 마우스 올린 칸의 옅은 바탕(아래).
      시안 여섯(지금 · 미끄러짐 · 펼침 · 차례로 나타남 · 마우스 올림 · 다 합침)을 같은 각본 영상으로 찍어 골랐다. 「차례로 나타남」(칸이 하나씩 떠오름)은
      열 때마다 칸이 다 나오기까지 0.4초를 기다리게 해서 뺐다 — 11-20 탭 전환도 차분한 흐림 하나를 골랐다(tabs.js 탭 전환 페이드 주석).
@@ -336,14 +337,19 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
   .sd-grp[hidden]{display:flex; height:0; margin-top:0; margin-bottom:0; opacity:0; visibility:hidden;
     transition:height .32s var(--sd-ease), margin .32s var(--sd-ease), opacity .2s, visibility 0s .32s}
   .sd-grp button:focus-visible{outline-offset:-2px; border-radius:9px}
-  .sd-s{position:relative; display:flex; align-items:center; margin:0 12px 0 24px; padding:7px 0 7px 10px; border-radius:9px; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s, background-color .15s}
+  .sd-s{position:relative; display:flex; align-items:center; margin:0 12px 0 6px; padding:7px 0 7px 10px; border-radius:9px; font-size:1.5rem; font-weight:700; color:var(--mut); transition:color .15s, background-color .15s}
   .sd-s:hover{color:var(--ink)}
   .sd-s.act{color:#fff}
   /* 소개 판 목록 — 셋째 겹이라 한 단 더 들이고 글자를 줄인다. 켜진 것은 파란 글자
      (2026-11-18) 글자를 크게 — 상위 19.5 → 30 · 하위 16 → 24 · 목록 16 → 19.5px(시안 L1). 한 단계 더 큰 L2(35 · 27 · 22)는
      1920×940 에서 기둥이 919px 까지 차 여유가 없어 기각. 목록 굵기는 보통(상속) — 시안에서 본 그대로다(하위 탭 굵기는 위 .sd-t b 주석).
-     들임 34px = 하위 탭 글자 시작과 같은 세로줄(2026-11-23 아이콘 24 + 틈 10 으로 맞춘 줄 · 처음 33 = 24 + 9). 아이콘을 뺀 뒤(11-24)에도 그대로 둬서
-     하위 탭과 목록이 한 글자 줄에 서고, 두 층은 글자 크기 · 굵기로 갈린다. 바탕은 둘 다 글자 10px 앞부터(margin 24 + padding 10).
+     들임 34px = 상위 이름 줄에서 목록 글자까지(2026-11-23 아이콘 24 + 틈 10 으로 맞춘 줄 · 처음 33 = 24 + 9). 아이콘을 뺀 뒤(11-24)에도 그대로 둬서
+     하위 탭과 목록이 한 글자 줄에 섰는데, 같은 날 하위 탭만 18px 당겼다(margin 24 → 6 · 1920 창 글자 78 → 60).
+     사용자 「게임소개, 전체구조, 병목개선 저건 약간 왼쪽으로 땡기는게 가독성이 더좋지않겠나」 — 층은 셋인데 시작선이 둘이라
+     「개요」가 「게임 소개」 아래 칸이라는 것이 글자 크기로만 보였다. 시안 일곱(하위 탭 60 · 52 · 44 · 56, 목록 78 · 84 · 66 · 90 · 100 · 112) 중
+     사용자가 이 판(하위 탭 60 · 목록 78 그대로)을 골랐다. 내 추천은 목록을 더 들인 판(56 · 100)이었다.
+     하위 탭은 54 보다 더 당기지 못한다 — 바탕이 글자 10px 앞부터라 묶음 왼쪽 끝(1920 창 44)을 넘으면 overflow 에 잘린다.
+     바탕은 둘 다 글자 10px 앞부터(하위 탭 margin 6 · 목록 margin 24, 둘 다 + padding 10).
      전에는 30px = 하위 탭 글자 시작(점 8 + 틈 9 = 17)보다 13px 안쪽이었다.
      원래 단추의 번호(<i>01</i>)는 기둥에서 끈다 — 목록은 차례가 아니고(사냥 · 파티 · 우편) 첫 칸 「개요」엔 번호가 없다 */
   .sd-list{display:flex; flex-direction:column; margin:0 0 4px}
