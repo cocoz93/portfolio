@@ -641,16 +641,20 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
    여기 두면 .bn-stage 의 grid 선언보다 먼저 와서 못 이기는 짝이 생긴다 —
    좁은 폭에서 두 칸을 한 칸으로 접는 규칙(@media max-width:1600px)도 같은 이유로 그쪽이다. */
 
-/* ═══ 링크 모음 (#p-misc) — 그림을 어둡게 깐 카드 넷(2×2) ═══
+/* ═══ 링크 모음 (#p-misc) — 작은 브라우저 창 카드 넷(2×2) ═══
    접두어를 lk- 로 두는 것은 parts/README 규칙이다(병목 bn-/bx- · 클라 cl-/cr-).
    ── 짜임을 바꾼 까닭 (2026-11-24) ──
    전에는 왼쪽 위 740px 판에 줄 넷(그림 199×112 · 제목 · 설명)이었다. 다른 탭이 기둥 옆 본문을 액자 하나로
    꽉 채우게 되면서 이 탭만 작은 판으로 남아 화면 절반 넘게 비었고, 위도 다른 탭보다 40px 낮게 시작했다.
-   시안 넷(그림 위 카드 · 그림 바탕 카드 · 큰 둘+작은 둘 · 옆 탭 짜임) 가운데 사용자가 그림 바탕 카드를 골랐다.
-   ── 줄을 끄는 것은 그림이 아니라 제목이다 (옛 짜임에서 이어 온 원칙) ──
-   이 탭에서 사람이 찾는 것은 '어디로 가는 문인가' 라서 이름이 먼저 읽혀야 한다. 그래서 그림은 바탕으로 눌러
-   '어떤 사이트인가' 만 알아보게 하고, 제목(2.4rem)을 화면에서 가장 큰 글자로 둔다.
-   그림을 위에 또렷하게 두는 시안은 GitHub 파일 목록 같은 남의 화면 잔글씨가 제목보다 먼저 눈에 걸렸다.
+   1차 시안 넷에서 그림을 어둡게 깐 카드를 골라 적용했다가, 적용본을 본 사용자가 다른 시안을 청했고
+   2차 시안 셋(가로 줄 · 브라우저 창 · 글자만 카드)에서 브라우저 창을 골랐다.
+   ── 왜 브라우저 창인가 ──
+   이 탭은 바깥 사이트로 나가는 문이다. 창틀과 주소창이 그 말을 모양으로 하고, 주소가 주소창 자리에 앉으니
+   주소 단추를 따로 둘 필요가 없다. 제목은 그림과 겹치지 않는 아래 띠에 있어 그림을 어둡게 누르거나 글 뒤에
+   덮개를 깔지 않아도 읽힌다 — 그래서 그림을 거의 그대로 보여 어떤 사이트인지 먼저 알아보게 한다.
+   ※ 옛 짜임의 원칙은 '줄을 끄는 것은 그림이 아니라 제목' 이었다(남의 화면 잔글씨가 제목보다 먼저 눈에 걸린다).
+     버린 것이 아니라 지키는 방법을 바꿨다 — 제목은 카드 안에서 가장 큰 글자로 그림과 떨어진 띠에 두고,
+     그림은 한 단 눌러(밝기 .8) 띠보다 먼저 눈을 끌지 않게 한다.
    ※ 옛 .note-list / .note / .links 는 이 패널 전용이었고 여기 들어오며 쓸 곳이 없어져 걷어냈다. */
 /* 판 자리 — 여기 적힌 위 여백 70 은 좁은 화면(기둥이 없는 1280 미만) 값이다. 넓은 화면은 아래 @media.
    ── 70 의 근거 ──
@@ -664,53 +668,43 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
 .lk-box{margin:70px 0 0}
 .lk-list{display:grid; grid-template-columns:1fr 1fr; gap:22px}
 /* 카드 — 테두리 · 모서리(14px) · 틈(22px)은 소개 판(intro.css .gi · .gi-card)과 같은 값이다. 카드 전체가 링크다.
-   글 칸은 흐름 안에 두고(아래로 붙임) 그림만 절대 위치로 깐다 — 카드 높이가 글보다 작아져 글이 잘리는 일이 없다.
-   min-height 300 은 좁은 화면에서 그림이 글 위로 한 뼘은 보이는 높이다(글 칸이 넓은 폭에서 약 160px). */
-.lk-row{position:relative; display:flex; flex-direction:column; justify-content:flex-end; min-height:300px;
-  border:1px solid var(--line); border-radius:14px; overflow:hidden; background:#05080e;
-  text-decoration:none; transition:border-color .15s; container-type:inline-size}
+   위에서 아래로 주소창 · 그림 · 글 띠. 좁은 화면은 그림이 16:9 로 제 높이를 갖고(페이지가 아래로 길어진다),
+   넓은 화면은 카드 높이가 액자에 묶여 남는 높이를 그림이 채운다(아래 @media). */
+.lk-row{display:flex; flex-direction:column; border:1px solid var(--line); border-radius:14px; overflow:hidden;
+  background:var(--panel); text-decoration:none; transition:border-color .15s}
 .lk-row:hover{border-color:var(--net)}
 .lk-row:focus-visible{outline:2px solid var(--net); outline-offset:3px}
+/* 주소창 — 창틀 점 셋은 회색 한 가지다. 흔한 빨강 · 노랑 · 초록은 이 사이트에 없는 색을 셋이나 들여 제목보다 먼저 눈에 띈다.
+   주소 글자는 --mut(주소창 바탕 위 대비 6.4)로 두고, 마우스를 올리면 다른 탭 단추(.gi-go)와 같은 파랑이 된다.
+   주소가 칸보다 길면 끝을 … 로 줄인다(지금 가장 긴 github 주소도 폭 390 까지 안 잘린다 — 실측). */
+.lk-bar{flex:0 0 auto; display:flex; align-items:center; gap:14px; height:42px; padding:0 16px;
+  background:#0f1521; border-bottom:1px solid var(--line)}
+.lk-dots{flex:0 0 auto; display:flex; gap:7px}
+.lk-dots i{display:block; width:10px; height:10px; border-radius:50%; background:#2a3448}
+.lk-u{flex:1; min-width:0; padding:0 14px; border:1px solid var(--line); border-radius:999px; background:#0a0f18;
+  font-size:.82rem; font-weight:600; line-height:24px; color:var(--mut);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color .15s, border-color .15s}
+.lk-row:hover .lk-u{color:var(--net); border-color:rgba(108,199,255,.45)}
 /* 그림 — 위 가운데를 남긴다. 찍은 화면의 머리(사이트 이름 · 노션 표지)가 위에 있고, GitHub 는 본문이 가운데 정렬이다.
-   ── 밝기 .42 · 채도 .5 ──
-   시안 값은 .62 · .75 였고 사용자가 「뒷배경 좀더 연하게」라 해서 내렸다(2026-11-24). 마우스를 올리면 시안 값으로
-   돌아와 그 카드만 밝아진다 — 누를 수 있다는 신호를 테두리 하나에만 맡기지 않는다.
-   ── 덮개 두 겹 ──
-   ① 카드 전체(.lk-sh::after) — 아래에서 위로 옅어지는 바탕색(--bg #0d1220) 띠. 그림을 위쪽 12% 만 거의 그대로 두고
-      나머지를 단계로 눌러 바탕을 옅게 만드는 몫이다(위 밝기 .42 와 같이 「연하게」를 맡는다).
-   ② 글 칸 뒤(.lk-tx::before) — 글이 걸친 자리만 완전히 막는 몫. 아래 .lk-tx 주석. */
-.lk-sh{position:absolute; inset:0}
+   밝기 .8 은 시안 값 그대로다(사용자가 이 밝기로 보고 골랐다). 마우스를 올리면 원래 밝기로 돌아와 그 카드만 밝아진다
+   — 누를 수 있다는 신호를 테두리 하나에만 맡기지 않는다. */
+.lk-sh{display:block; aspect-ratio:16/9; overflow:hidden; background:#05080e}
 .lk-sh img{display:block; width:100%; height:100%; object-fit:cover; object-position:top center;
-  filter:brightness(.42) saturate(.5); transition:filter .25s, transform .4s}
-.lk-row:hover .lk-sh img{filter:brightness(.62) saturate(.75); transform:scale(1.02)}
-.lk-sh::after{content:""; position:absolute; inset:0;
-  background:linear-gradient(0deg, rgba(13,18,32,.98) 0%, rgba(13,18,32,.96) 38%, rgba(13,18,32,.55) 60%, rgba(13,18,32,.08) 88%)}
-/* 글 칸 — 왼쪽에 라벨 · 제목 · 설명, 오른쪽 아래에 주소 단추. 폭이 모자라면 단추가 설명 밑으로 내려간다(flex-wrap).
-   ※ 옛 짜임은 주소를 설명 바로 아래 뒀다(오른쪽에 붙이면 눈이 제목 → 설명 → 화면 반대편으로 꺾였다).
-     지금 주소는 읽을 글이 아니라 카드 안의 단추이고 같은 카드 오른쪽 아래라 꺾이는 거리가 짧다 — 사용자가 이 배치로 골랐다. */
-.lk-tx{position:relative; z-index:1; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
-  gap:14px 20px; padding:26px 32px 30px}
-/* 글 칸 뒤 덮개 — 글 칸 전체를 바탕색으로 완전히 막고, 그 위 40px 동안 옅어지게 둔다(경계가 칼로 자른 듯 보이지 않게).
-   그림 속 글자가 라벨 · 제목 뒤에 비치지 않게 하려는 것이다(시안 1차에서 '네트워크 라이브러리…' 가 NOTION 라벨에 겹쳤다).
-   ── 카드 덮개(①)만으로 안 되는 까닭 ──
-   ①은 카드 높이 비율(아래 38% 거의 불투명)이다. 넓은 화면은 글 칸(160)이 카드(431)의 37% 라 맞지만, 단추가 내려가
-   글 칸이 212 가 되는 폭(1280 · 884)과 폰(390)에서는 글 칸이 그 구간 위로 올라가 「대형 라이브 경험…」 · 'SERVER' 글자가
-   라벨 뒤로 비쳤다. 글 칸에 붙이면 카드 높이와 상관없이 늘 글 뒤만 막힌다.
-   ※ ①을 빼고 이것만 두지 않는 것은 넓은 화면의 옅어지는 모양을 사용자가 고른 그대로 두려는 것이다 — 두 겹인 지금,
-     넓은 화면 그림 구역 밝기는 이 덮개를 넣기 전과 같다(1920×940 카드 넷 평균 차 0.2 이내).
-   ※ 불투명도는 1 이다 — .95 로 두었을 때는 남은 5% 로 흰 글자(포트폴리오 첫 화면 제목)가 확대하면 읽혔다(1280 폭). */
-.lk-tx::before{content:""; position:absolute; left:0; right:0; bottom:0; top:-40px; z-index:-1; pointer-events:none;
-  background:linear-gradient(0deg, #0d1220 0%, #0d1220 calc(100% - 40px), rgba(13,18,32,0) 100%)}
+  filter:brightness(.8); transition:filter .25s}
+.lk-row:hover .lk-sh img{filter:none}
+/* 글 띠 — 왼쪽에 라벨 · 제목 · 설명, 오른쪽에 둥근 화살표. 주소는 위 주소창이 맡아 여기 다시 적지 않는다. */
+.lk-tx{flex:0 0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:18px 28px 22px; border-top:1px solid var(--line)}
 .lk-tt{min-width:0}
 /* 라벨 — 다른 탭 라벨(.gi-k)과 같은 글꼴 · 크기 · 굵기다. 색만 한 단 밝다(--dim 대신 #7d8ba3):
-   바탕이 판색이 아니라 그림 위 덮개(#0d1220)라 --dim 은 대비가 3.5 에 그친다. #7d8ba3 은 5.4.
+   카드 바탕(--panel) 위에서 --dim 은 대비 3.3, #7d8ba3 은 5.1 이다.
    옛 고정폭 글꼴(--mono) 라벨 · 주소는 다른 탭 어디에도 없는 말투였고, 색 #46536b 는 대비 2.25 로 거의 안 읽혔다. */
 .lk-k{display:block; font-size:.8rem; font-weight:700; letter-spacing:.04em; color:#7d8ba3}
-/* 제목 2.4rem — 소개 판 머리 제목(.gi-h 2rem)보다 한 단 크다. 여기는 카드마다 글이 세 줄뿐이라 제목이 곧 내용이다.
+/* 제목 2rem — 소개 판 머리 제목(.gi-h)과 같은 크기다. 카드 안에서는 가장 큰 글자다.
    ※ 넷째 제목을 WEB PORTFOLIO 로 바꿨다가 되돌렸다. 그 사이트는 성과·경력·장애·R&D·기술·소개로
      짜인 이력 사이트지 프로젝트 갤러리가 아니다(프로젝트는 이 MMO 하나뿐이고 그게 이 페이지다).
      주소가 /portfolio 인 것만 보고 정하지 말 것. 노션 DEV LOG 26 의 INDEX 도 WEB PROFILE 이다. */
-.lk-t{display:block; margin:6px 0; font-size:2.4rem; font-weight:800; letter-spacing:-.03em; color:var(--ink); line-height:1.2}
+.lk-t{display:block; margin:6px 0; font-size:2rem; font-weight:800; letter-spacing:-.03em; color:var(--ink); line-height:1.2}
 /* 설명은 문장이 아니라 '이게 무엇인가' 를 짧게 적는 자리다(2026-08-04 에 문장에서 바꿨다).
    ── 두 줄이 되면 끊는 자리를 손으로 잡을 것 (셸의 <br>) ──
    브라우저에 맡기면 낱말이 갈린다. 실제로 그랬다: 기본값은 '부하 테스트 / 도구까지' 로 끊었고,
@@ -718,39 +712,32 @@ html:has(#p-bneck:not([hidden])){scroll-padding-top:62px}
    끊었다. balance 는 길이만 보지 뜻을 안 본다 — 한국어 짧은 문구에는 쓰지 말 것.
    답은 **마침표에서 끊기** 다. 두 줄이 각각 완결된 문장이 되고 낱말도 안 갈린다. */
 .lk-d{display:block; font-size:.98rem; color:#c3cde0; line-height:1.6}
-/* 주소 단추 — 다른 탭의 GitHub 단추(.gi-go)와 같은 알약이다 */
-.lk-u{flex:0 0 auto; font-size:.88rem; font-weight:700; color:var(--net); white-space:nowrap;
-  border:1px solid var(--line); border-radius:999px; padding:7px 14px; background:rgba(108,199,255,.07);
-  transition:border-color .15s, background .15s}
-.lk-row:hover .lk-u{border-color:var(--net); background:rgba(108,199,255,.14)}
-/* 단추를 내리는 것은 카드마다가 아니라 카드 폭으로 한꺼번에 — flex-wrap 에만 맡기면 글 길이에 따라 어떤 카드는
-   오른쪽, 어떤 카드는 아래가 돼 한 화면에서 섞였다(1280 · 884 · 390 폭 실측). 네 카드는 폭이 늘 같으니
-   카드 폭(컨테이너 쿼리)으로 정하면 넷이 같이 움직인다.
-   580 = 가장 긴 카드(WEB PROFILE)가 한 줄에 필요한 폭 552(좌우 안쪽 64 + 글 묶음 238 + 틈 20 + 단추 230) + 여유 28.
-   여유는 글꼴이 늦게 붙거나 다른 글꼴로 바뀔 때 한 카드만 넘어가는 것을 막는 몫이다.
-   ※ 컨테이너 쿼리를 모르는 옛 브라우저는 위 flex-wrap 대로 섞여 보일 뿐 깨지지는 않는다. */
-@container (max-width:579px){ .lk-tx{flex-direction:column; align-items:flex-start} }
+/* 화살표 — 다른 탭 단추(.gi-go)와 같은 테두리 · 파랑 · 옅은 바탕을 둥근 칸 하나에 담았다.
+   글자가 없는 장식이라 읽는 기계에는 숨긴다(셸에서 aria-hidden). */
+.lk-go{flex:0 0 auto; display:grid; place-items:center; width:44px; height:44px; border:1px solid var(--line); border-radius:50%;
+  background:rgba(108,199,255,.07); font-size:1.1rem; font-weight:700; color:var(--net); transition:border-color .15s, background .15s}
+.lk-row:hover .lk-go{border-color:var(--net); background:rgba(108,199,255,.14)}
 
 /* 넓은 화면(기둥이 서는 1280 이상) — 다른 탭처럼 본문 칸을 화면 높이까지 채운다.
    위 30 = 소개 판 첫 요소(.gi-band margin-top 30)와 같은 값이다. .panel 마진과 상쇄돼 .main 위(10)에 더해져
    화면 위에서 40 — 다른 탭 액자 윗변과 같은 줄이다(1920×940 실측 290,40 – 1890,924 · NOX 소개 액자와 같음).
    높이 100vh − 56 = 위 40 + 아래 16. 아래를 화면 끝에 붙이지 않는 것은 카드 아랫변 테두리 · 둥근 모서리가
-   잘려 보이지 않게 하려는 것이다. min 520 은 낮은 창에서 카드 한 장(249)이 글 칸(160 · 단추가 내려가는 폭은 212)을 담는 값이다.
+   잘려 보이지 않게 하려는 것이다.
+   min 600 은 낮은 창에서 카드 한 장(289)이 주소창(42) · 글 띠(137)를 담고도 그림이 108 남는 값이다(1920×600 실측).
+   그보다 낮은 창은 페이지가 조금 내려간다 — 그림이 띠처럼 얇아지는 것보다 낫다고 봤다.
    max 884 = 본문 폭 상한(1600)에서 NOX 소개 액자(4:3, 폭 1178) 높이 — 그보다 높은 창에서 다른 탭 액자는 더 자라지 않는다. */
 @media(min-width:1280px){
-  .lk-box{margin-top:30px; height:calc(100vh - 56px); min-height:520px; max-height:884px}
-  .lk-list{height:100%; grid-template-rows:1fr 1fr}
-  .lk-row{min-height:0}
+  .lk-box{margin-top:30px; height:calc(100vh - 56px); min-height:600px; max-height:884px}
+  .lk-list{height:100%; grid-template-rows:minmax(0,1fr) minmax(0,1fr)}
+  .lk-sh{flex:1; min-height:0; aspect-ratio:auto}
 }
 
 /* 좁은 화면(860 이하) — 한 줄에 카드 하나. 하위 탭 줄도 54px 로 줄어들어(.subtabs @680px) 여백을 같이 내린다.
-   제목은 넓은 화면보다 한 단 작게(2.4 → 1.9rem) — 폭 390 에서 'WEB PROFILE' 이 한 줄에 서는 크기다. */
+   제목은 줄이지 않는다 — 2rem 그대로 폭 390 에서도 넷 다 한 줄이다(실측). */
 @media(max-width:860px){
   .lk-box{margin-top:46px}
   .lk-list{grid-template-columns:1fr; gap:16px}
-  .lk-row{min-height:240px}
-  .lk-tx{padding:22px 22px 24px}
-  .lk-t{font-size:1.9rem}
+  .lk-tx{padding:16px 20px 18px}
 }
 
 /* ── 진입 애니 — 카드가 제자리에서 열린다 ──

@@ -112,7 +112,8 @@
        폰트를 base64 로 안고 있어 이미 690KB 라 여기에 그림까지 넣지 않는다.
        그림은 노션 커버·GitHub 화면을 그대로 찍은 것이라 그쪽이 바뀌면 낡는다 — 다시 찍어 갈아끼우면 된다.
        찍는 법(2026-11-24) — 헤드리스 크롬 1600×900 · 어두운 테마(prefers-color-scheme:dark) → 폭 1280 으로 줄여 저장.
-       노션은 맨 위 검은 머리띠(44px)를 잘라 낸다(그래서 iocp 만 1280×685). 카드 바탕으로 어둡게 깔리므로 이 이상 클 필요는 없다. -->
+       노션은 맨 위 검은 머리띠(44px)를 잘라 낸다(그래서 iocp 만 1280×685). 폭 1280 = 카드 그림 칸이 가장 넓을 때(787px, 1920×940)
+       화면 배율 1.6 까지 원본을 늘이지 않는 폭이다. -->
   <section class="panel" id="p-misc" role="tabpanel" hidden>
    <!-- 카드 하나하나가 액자다 — 이 사이트는 내용을 늘 한 겹 안에 둔다(2-1 .cr-frame · 소개 판 .gi-card).
         전에는 바깥 판 하나에 줄 넷을 담았는데, 카드 넷으로 바뀌며 바깥 판은 자리만 잡고 겉모양이 없다(.lk-box).
@@ -122,6 +123,7 @@
    <div class="lk-box">
     <div class="lk-list">
       <a class="lk-row" href="https://github.com/cocoz93/MMO_Zone" target="_blank" rel="noopener">
+        <span class="lk-bar"><span class="lk-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="lk-u">github.com/cocoz93/MMO_Zone</span></span>
         <span class="lk-sh"><img src="media/link-github.jpg" alt="" width="1280" height="720" loading="lazy"></span>
         <span class="lk-tx">
           <span class="lk-tt">
@@ -129,10 +131,11 @@
             <span class="lk-t">GitHub</span>
             <span class="lk-d">MMO Server GitHub page</span>
           </span>
-          <span class="lk-u">github.com/cocoz93/MMO_Zone ↗</span>
+          <span class="lk-go" aria-hidden="true">↗</span>
         </span>
       </a>
       <a class="lk-row" href="https://feline-vacation-d6d.notion.site/IOCP-MMO-33616a0b9f5980e5a220c3e1928c2fe5" target="_blank" rel="noopener">
+        <span class="lk-bar"><span class="lk-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="lk-u">notion.site</span></span>
         <span class="lk-sh"><img src="media/link-iocp.jpg" alt="" width="1280" height="685" loading="lazy"></span>
         <span class="lk-tx">
           <span class="lk-tt">
@@ -140,12 +143,13 @@
             <span class="lk-t">IOCP MMO</span>
             <span class="lk-d">IOCP MMO 설계 문서</span>
           </span>
-          <span class="lk-u">notion.site ↗</span>
+          <span class="lk-go" aria-hidden="true">↗</span>
         </span>
       </a>
       <!-- 노션 주소는 공개본(notion.site)으로만 쓴다 — app.notion.com 은 로그인한 본인에게만 열린다.
            복사할 때 붙는 ?source=copy_link 는 통계용 꼬리표라 떼고 넣는다. -->
       <a class="lk-row" href="https://feline-vacation-d6d.notion.site/DEV-LOG-26-2db16a0b9f598196a471d53775ab4223" target="_blank" rel="noopener">
+        <span class="lk-bar"><span class="lk-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="lk-u">notion.site</span></span>
         <span class="lk-sh"><img src="media/link-devlog.jpg" alt="" width="1280" height="720" loading="lazy"></span>
         <span class="lk-tx">
           <span class="lk-tt">
@@ -153,10 +157,11 @@
             <span class="lk-t">DEV LOG 26</span>
             <span class="lk-d">개발 일지와 학습 기록 전체. (Notion)</span>
           </span>
-          <span class="lk-u">notion.site ↗</span>
+          <span class="lk-go" aria-hidden="true">↗</span>
         </span>
       </a>
       <a class="lk-row" href="https://cocoz93.github.io/portfolio/" target="_blank" rel="noopener">
+        <span class="lk-bar"><span class="lk-dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="lk-u">cocoz93.github.io/portfolio</span></span>
         <span class="lk-sh"><img src="media/link-profile.jpg" alt="" width="1280" height="720" loading="lazy"></span>
         <span class="lk-tx">
           <span class="lk-tt">
@@ -164,7 +169,7 @@
             <span class="lk-t">WEB PROFILE</span>
             <span class="lk-d">포트폴리오 홈</span>
           </span>
-          <span class="lk-u">cocoz93.github.io/portfolio ↗</span>
+          <span class="lk-go" aria-hidden="true">↗</span>
         </span>
       </a>
       <!-- 메일 줄은 뺐다 — 찍을 화면이 없어 이 줄만 그림 자리가 이모지였고, 넷 중 하나만 다른 모양이었다.
