@@ -1,52 +1,84 @@
   <!-- ═══ MMORPG 소개 — 이 페이지의 첫 화면(11-17 · 그 전엔 전체 구조가 첫 화면이었다) ═══
        목록 | 그림 | 카드 짜임은 intro.css, 고르기는 intro.js. 버튼 n번째 = 카드 n번째.
        옛 1-3 「컨텐츠 · 준비 중」 판(#p-content)을 여기로 합쳤다 — 옛 주소 #content 는 이 판을 연다(tabs.js).
-       그림은 media/mmo-*.jpg — 웹 클라 시험 캡처(MyDocs/claude-plans 의 character-tests · look-tests · mail-tests)를 1280×720 으로.
-       우편 캡처는 창만 찍힌 1288×896 이라 높이를 맞춰 어두운 바탕 가운데에 두었다.
-       수치 출처 — 파티 8명 PARTY_MAX_MEMBERS · 첨부 8칸 MAIL_MAX_ITEMS(MMO_Zone Shared/Protocol/Protocol.h) ·
-       서버 넷 = Run/bin 의 AccountServer · CharacterServer · WorldServer · MMOServer(존). 5,000 은 한 PC 부하 시험(README). -->
+       11-25 목록을 개요 · 01 전투 · 02 컨텐츠 셋으로 — 전투 · 컨텐츠는 슈팅 서버 판처럼 세부 아이콘 넷(.gi-sub)이 사진과 카드 글을 바꾼다.
+         세부 넷이면 좁은 폭 셋에서 판이 액자보다 길어져 슈팅 서버 판의 칸 줄이기 규칙을 같이 쓴다(intro.css).
+       그림은 media/mmo-*.jpg 아홉 장 — 새 전사 · 살수 그림으로 다시 찍은 1920×1080(시험 서버 넷 + 웹 클라 창 넷 · 레벨 · 장면은 개발용 명령)을 1280×720 으로.
+         찍은 판 · 고른 장은 MyDocs/claude-plans/pf-menu-work(cap2.js · pick/). 필드 보스 사진은 폐허 3층 망령 장군(덩굴 반달곰은 나무숲에 몸이 가린다).
+         직업 고르기 창은 직업 없는 캐릭터에게만 뜨는 게임 안 창이다(실제로는 캐릭터 만들기 화면에서 고른다 — 그 화면 미리보기는 아직 옛 그림).
+       개요 카드 숫자 출처 — 5,000 은 한 PC 부하 시험(README) · 서버 넷 = Run/bin 의 AccountServer · CharacterServer · WorldServer · MMOServer(존) ·
+         초당 25번 = FRAME_PER_SEC(MMOServer BuildConfig.h) · 3×3 섹터 = 주변 9섹터에만 보냄(BuildConfig.h USE_SECTOR_AGGREGATION) · 20칸 = MMOServerConfig.ini SectorSize.
+       카드 글 출처 — 파티 8명 PARTY_MAX_MEMBERS · 첨부 8칸 MAIL_MAX_ITEMS(MMO_Zone Shared/Protocol/Protocol.h). -->
   <section class="panel" id="p-intro" role="tabpanel">
     <div class="gi-band">
       <div class="gi gi-over" style="--gi-ar:16/9">
         <div class="gi-list">
           <div class="gi-g"><span class="gi-k">게임</span>
-            <button type="button" class="gi-it act" data-img="media/mmo-town.jpg" data-alt="마을 — 웹 클라가 내 서버에 붙어 도는 화면">개요</button>
-          </div>
-          <div class="gi-g"><span class="gi-k">컨텐츠</span>
-            <button type="button" class="gi-it" data-img="media/mmo-hunt.jpg" data-alt="사냥 — 광역 기술로 둘레 몬스터를 한꺼번에 치는 화면"><i>01</i>사냥</button>
-            <button type="button" class="gi-it" data-img="media/mmo-trade.jpg" data-alt="파티 창과 거래 창"><i>02</i>파티 · 거래</button>
-            <button type="button" class="gi-it" data-img="media/mmo-mail.jpg" data-alt="우편 창 — 첨부를 받는 화면"><i>03</i>우편</button>
+            <button type="button" class="gi-it act" data-img="media/mmo-town.jpg" data-alt="마을 — 전사 둘과 살수가 말풍선으로 이야기하는 화면">개요</button>
+            <button type="button" class="gi-it" data-img="media/mmo-hunt.jpg" data-alt="필드 사냥"><i>01</i>전투</button>
+            <button type="button" class="gi-it" data-img="media/mmo-party.jpg" data-alt="파티 창"><i>02</i>컨텐츠</button>
           </div>
         </div>
-        <div class="gi-fr"><img src="media/mmo-town.jpg" alt="마을 — 웹 클라가 내 서버에 붙어 도는 화면" width="1280" height="720"></div>
+        <div class="gi-fr"><img src="media/mmo-town.jpg" alt="마을 — 전사 둘과 살수가 말풍선으로 이야기하는 화면" width="1280" height="720"></div>
         <div class="gi-cards">
-          <article class="gi-card gi-lead">
-            <div class="gi-k">MMO_Zone · 2D 탑뷰 MMORPG</div>
+          <article class="gi-card gi-lead gi-dense">
+            <div class="gi-k">MMO_Zone · 2D 탑뷰 · 존 · 채널 방식</div>
             <h3 class="gi-h">서버부터 웹 클라까지<br>직접 만든 MMORPG</h3>
-            <p>존 서버가 맵을 섹터로 나눠 돌리고, 계정 · 캐릭터 · 월드 서버가 그 앞뒤를 맡는다. 판정은 전부 서버가 하고 웹 클라는 그리기만 한다.</p>
-            <div class="gi-num">
+            <p>마을에서 직업을 고르고 사냥터에서 레벨을 올린 뒤, 파티를 짜 보스방에 들어간다. 판정은 전부 서버가 하고 웹 클라는 그리기만 한다.</p>
+            <div class="gi-num gi-num4">
               <div><b>5,000<i>명</i></b><span>동시 접속 · 한 PC 부하 시험</span></div>
               <div><b>4<i>개</i></b><span>서버 · 계정 · 캐릭터 · 월드 · 존</span></div>
+              <div><b>25<i>번/초</i></b><span>서버 판정 · 프레임</span></div>
+              <div><b>3×3<i>섹터</i></b><span>맵을 20칸씩 나눠 주변만 받음</span></div>
             </div>
+            <p class="gi-tech">C++ · IOCP / epoll · MySQL · 웹소켓 · Prometheus · Grafana</p>
             <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/MMO_Zone" target="_blank" rel="noopener">GitHub ↗</a></div>
           </article>
           <article class="gi-card" hidden>
-            <div class="gi-k">01 · 컨텐츠</div>
-            <h3>사냥</h3>
-            <p>기술 다섯 칸. 광역 기술은 둘레 몬스터를 한꺼번에 친다. 맞았는지와 피해량은 서버가 정하고, 클라는 받은 숫자를 띄운다.</p>
-            <div class="sv"><b>존 서버</b> — 몬스터 · 기술 판정 · 피해</div>
+            <div class="gi-k">01 · 전투</div>
+            <div class="gi-sub" data-label="필드 사냥" data-img="media/mmo-hunt.jpg" data-alt="필드 사냥 — 숲 2층에서 전사 둘과 살수가 반달곰 · 여우 요괴를 치는 화면"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4v4L10 18l-4-4L16 4z"/><path d="M4.5 12.5l7 7"/><path d="M7.5 16.5l-4 4"/></svg>
+              <h3>필드 사냥</h3>
+              <p>사냥터 다섯 곳(뱀굴 · 들판 · 숲 · 동굴 · 폐허)에 층이 셋씩, 모두 15층. 몬스터 31종은 생김새마다 걷는 속도와 평타 간격이 다르다. 맞았는지와 피해량은 서버가 정하고, 클라는 받은 숫자를 띄운다.</p>
+              <div class="sv"><b>존 서버</b> — 몬스터 AI · 기술 판정 · 피해</div>
+            </div>
+            <div class="gi-sub" data-label="필드 보스" data-img="media/mmo-boss.jpg" data-alt="필드 보스 — 폐허 3층 망령 장군이 둘레 치기 범위를 그리는 화면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 18h17"/><path d="M4.5 18 3.5 8l5 4 3.5-6.5L15.5 12l5-4-1 10"/></svg>
+              <h3>필드 보스</h3>
+              <p>필드 보스 셋이 사냥터 3층에 산다. 체력이 반 아래로 내려가면 격노하고, 둘레를 한꺼번에 친다.</p>
+              <div class="sv"><b>존 서버</b> — 보스 기술 · 격노</div>
+            </div>
+            <div class="gi-sub" data-label="보스방" data-img="media/mmo-room.jpg" data-alt="파티 보스방 — 뱀왕과 가짜 뱀왕 사이에서 파티가 싸우는 화면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 20.5V10a6 6 0 0 1 12 0v10.5"/><path d="M9.5 20.5V12a2.5 2.5 0 0 1 5 0v8.5"/><path d="M3.5 20.5h17"/></svg>
+              <h3>파티 보스방</h3>
+              <p>파티장이 포털을 쓰면 그 파티만의 방이 새로 열린다. 진짜 뱀왕이 가짜 셋 사이에서 쓰러진 가짜를 되살린다. 보상은 파티원마다 따로 굴리고, 받은 뒤 30분은 다시 못 들어간다.</p>
+              <div class="sv"><b>존 서버</b> — 방 열고 닫기 · 보상 · <b>월드 서버</b> — 파티</div>
+            </div>
+            <div class="gi-sub" data-label="직업" data-img="media/mmo-job.jpg" data-alt="직업 고르기 창 — 전사 · 도적 · 주술사 · 도사" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7.5" r="3.5"/><path d="M5 20.5c0-4.2 3-7 7-7s7 2.8 7 7"/></svg>
+              <h3>직업</h3>
+              <p>처음 들어올 때 전사 · 도적 · 주술사 · 도사 중 하나를 고르고, 그 뒤엔 못 바꾼다. 직업마다 기술 다섯 칸, 도적만 멀리서 친다. 직업이 가르는 값은 전부 표에 있어 직업을 더할 때 코드를 안 고친다.</p>
+              <div class="sv"><b>존 서버</b> — 고르기 판정 · 기술 목록 · 스탯</div>
+            </div>
           </article>
           <article class="gi-card" hidden>
             <div class="gi-k">02 · 컨텐츠</div>
-            <h3>파티 · 거래</h3>
-            <p>파티는 8명까지, 채널이 달라도 같은 파티다. 거래는 서로 물건과 돈을 올린 뒤 교환하기 — 한 번 올린 것은 못 뺀다.</p>
-            <div class="sv"><b>월드 서버</b> — 파티 · <b>존 서버</b> — 거래</div>
-          </article>
-          <article class="gi-card" hidden>
-            <div class="gi-k">03 · 컨텐츠</div>
-            <h3>우편</h3>
-            <p>캐릭터 우편과 계정 우편 두 갈래. 물건 8칸과 돈을 붙여 보내고, 첨부를 받으면 우편이 사라진다.</p>
-            <div class="sv"><b>존 서버</b> — 캐릭터 우편 · <b>계정 서버</b> — 계정 우편 · <b>월드 서버</b> — 그 사이 중계</div>
+            <div class="gi-sub" data-label="파티" data-img="media/mmo-party.jpg" data-alt="파티 창 — 전사 둘 · 살수 하나가 한 파티"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3.5 19.5c0-3.5 2.4-5.8 5.5-5.8s5.5 2.3 5.5 5.8"/><circle cx="16.5" cy="9" r="2.5"/><path d="M15.2 14.1c.4-.1.9-.1 1.3-.1 2.6 0 4.3 1.9 4.3 4.9"/></svg>
+              <h3>파티</h3>
+              <p>파티는 8명까지, 채널이 달라도 같은 파티다. 파티장 넘기기 · 내보내기 · 해산.</p>
+              <div class="sv"><b>월드 서버</b> — 파티</div>
+            </div>
+            <div class="gi-sub" data-label="거래" data-img="media/mmo-trade.jpg" data-alt="거래 창 — 물건과 돈을 올린 화면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h15M15 4l4 4-4 4"/><path d="M20 16H5M9 12l-4 4 4 4"/></svg>
+              <h3>거래</h3>
+              <p>서로 물건과 돈을 올린 뒤 교환하기 — 한 번 올린 것은 못 뺀다.</p>
+              <div class="sv"><b>존 서버</b> — 거래</div>
+            </div>
+            <div class="gi-sub" data-label="우편" data-img="media/mmo-mail.jpg" data-alt="우편 창 — 물건과 돈이 붙은 캐릭터 우편" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="1.5"/><path d="M3.5 6.5 12 13l8.5-6.5"/></svg>
+              <h3>우편</h3>
+              <p>캐릭터 우편과 계정 우편 두 갈래. 물건 8칸과 돈을 붙여 보내고, 첨부를 받으면 우편이 사라진다.</p>
+              <div class="sv"><b>존 서버</b> — 캐릭터 우편 · <b>계정 서버</b> — 계정 우편 · <b>월드 서버</b> — 그 사이 중계</div>
+            </div>
+            <div class="gi-sub" data-label="퀘스트" data-img="media/mmo-quest.jpg" data-alt="퀘스트 창 — 받은 퀘스트 둘" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3.5" width="14" height="17" rx="1.5"/><path d="M8 9l1.5 1.5L12 8M8 15l1.5 1.5L12 14M14.5 9.5h2M14.5 15.5h2"/></svg>
+              <h3>퀘스트</h3>
+              <p>NPC 에게 받아 잡기 · 모으기 · 말 전하기. 반복 퀘스트와 앞 퀘스트를 끝내야 열리는 퀘스트가 있다. 완료하면 모은 물건을 먼저 빼고 보상을 넣고, 가방에 안 들어간 보상은 그 사람 몫으로 땅에 떨어진다.</p>
+              <div class="sv"><b>존 서버</b> — 퀘스트 판정 · 진행 · 보상</div>
+            </div>
           </article>
         </div>
       </div>
