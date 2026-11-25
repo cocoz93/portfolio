@@ -27,7 +27,9 @@
    판은 아이콘 둘레만 감싼다 — 그림 높이 전체를 덮는 띠는 묶음을 위아래로 가를 때 자리였고, 가운데로 모은 뒤엔 캐릭터 · 배경만 가렸다.
    반투명 회색 판 + 흐림이라 게임 화면이 비친다. 영상은 그림과 같은 자리 · 같은 맞춤.
    --ml = 판 왼쪽 여백, --mw = 여백 + 판 폭. 딱지는 판 오른쪽 아래(--mw 기준), 그림도 없는 칸(.gi-empty)은 판을 뺀 나머지의 가운데.
-   칸 크기는 액자 높이로 정한다 — 세부 셋이 가장 낮은 액자(1264 의 326px · 폰 197px)에도 들어가야 한다. 넷째 세부(순간이동)를 더하면 그 둘을 다시 잴 것 */
+   칸 크기는 액자 높이로 정한다 — 세부 셋이 가장 낮은 액자(1264 의 326px · 폰 197px)에도 들어가야 한다. 넷째 세부(순간이동)를 더하면 그 둘을 다시 잴 것
+   (11-25 넷째를 넣으며 다시 쟀다 — 이제 기준은 세부 넷. 넷이면 액자보다 판이 길어지는 세 폭(1201~1279 · 761~860 · 500 이하)에 칸을 줄이는 규칙이 맨 아래 있다(슈팅 서버 판만).
+    재는 법 = 폭마다 액자 높이 · 판 높이 · 이름 아래와 다음 아이콘 위 사이를 getBoundingClientRect 로, 판 위아래 여유 6px 이상 · 칸 밖 넘침 0) */
 .gi-fr video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
 .gi-fr img[hidden],.gi-fr video[hidden],.gi-menu[hidden],.gi-wip[hidden],.gi-sub[hidden]{display:none}
 /* 세부 아이콘은 둥근 판에만 그린다 — 글이 있는 카드(녹스 랭크 매칭 · 11-25)에 세부를 두면 이 규칙 없이는 그 svg 가 카드 안에도 그려진다 */
@@ -135,4 +137,30 @@
   .gi-mo svg{width:18px;height:18px}
   .gi-wip{left:calc(var(--mw) + 10px);bottom:10px}
   .gi-fr.gi-empty .gi-wip{left:auto;right:10px;transform:translateY(-50%);padding:6px 10px;font-size:.8rem}   /* 남은 칸 가운데는 폰 폭에서 글이 넘친다 — 오른쪽에 붙인다 */
+}
+/* ── 슈팅 서버 세부 넷(11-25 순간이동을 넷째로) — 넷이면 판이 액자보다 길어지는 세 폭만 칸을 줄인다.
+   녹스 랭크 매칭(세부 둘)은 위 값 그대로 들어가므로 #sh-intro 로만 묶었다(id 라 위 블록보다 늘 이긴다).
+   ① 1201~1279 — 액자가 291px 까지 낮아져 칸 84 면 판 360px 가 위아래로 35px 씩 넘쳤다 → 칸 66 · 아이콘 42 · 판 278px
+   ② 761~860 — 한 줄로 내린 폭인데 액자 406~460px 라 기본 칸(판 434px)이 안 들어간다 → ① 의 옛 값(칸 84 · 판 360px)
+   ③ 500 이하 폰 — 액자 180~259px 라 폰 칸(판 238px)이 넘친다 → 칸 40 · 아이콘 26 · 이름 .62rem · 판 168px ── */
+@media (min-width:1201px) and (max-width:1279px){
+  #sh-intro .gi-menu{padding:6px 0;gap:0}
+  #sh-intro .gi-mi{--sh:66px;font-size:.8rem;line-height:1.2;gap:4px}
+  #sh-intro .gi-mo{width:42px;height:42px}
+  #sh-intro .gi-mo svg{width:21px;height:21px}
+}
+@media (min-width:761px) and (max-width:860px){
+  #sh-intro .gi-fr{--ml:12px;--mw:88px}
+  #sh-intro .gi-menu{padding:8px 0;gap:2px}
+  #sh-intro .gi-mi{--sh:84px;font-size:.84rem;gap:6px}
+  #sh-intro .gi-mo{width:54px;height:54px}
+  #sh-intro .gi-mo svg{width:26px;height:26px}
+}
+@media (max-width:500px){
+  #sh-intro .gi-fr{--ml:6px;--mw:58px}
+  #sh-intro .gi-menu{padding:3px 0;border-radius:14px}
+  #sh-intro .gi-mi{--sh:40px;font-size:.62rem;line-height:1.1;gap:2px}
+  #sh-intro .gi-mo{width:26px;height:26px}
+  #sh-intro .gi-mo svg{width:15px;height:15px}
+  #sh-intro .gi-wip{left:calc(var(--mw) + 8px);bottom:8px}
 }
