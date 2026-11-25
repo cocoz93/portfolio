@@ -57,6 +57,49 @@ function step(i){
 }
 step(4);
 
+/* 직업 소개(11-25) — 세 직업 영상을 차례로 이어 튼다(마지막 편 뒤엔 처음으로). 판 여닫기(카드 #mo-job-card 의 hidden)는 intro.js 가 하고,
+   여기는 그 카드가 보이는지만 지켜본다. 보이는 동안 액자를 16:9(영상 비율)로 바꾸고 영상 · 막대를 띄운다.
+   막대 칸이나 카드 줄을 누르면 그 편으로 간다. 소리는 브라우저 자동 재생 규칙(소리 있으면 안 틀어 줌) 때문에 꺼진 채 시작하고 단추로 켠다.
+   판이 숨거나(다른 탭 · 다른 칸) 화면 밖이면 멈춘다. 영상은 이 칸을 처음 열 때 받기 시작한다(preload none) */
+(function(){
+  const card=document.getElementById('mo-job-card'); if(!card) return;
+  const gi=card.closest('.gi'), fr=gi.querySelector('.gi-fr'), box=fr.querySelector('.mo-job');
+  const v=box.querySelector('video'), snd=box.querySelector('.mo-snd'), reel=gi.querySelector('.mo-reel');
+  const segs=[...reel.querySelectorAll('.mo-bars button')], rows=[...card.querySelectorAll('.mo-row')];
+  if(segs.length!==rows.length){ console.error('직업 소개 짝 어긋남', segs.length, rows.length); return; }
+  v.muted=true;
+  let cur=0, on=false, seen=true, raf=0;
+  function fill(){ segs[cur].querySelector('i').style.width=(v.duration?Math.min(100,v.currentTime/v.duration*100):0)+'%'; }
+  function tick(){ fill(); raf=v.paused?0:requestAnimationFrame(tick); }
+  function play(){ if(!on||!seen) return; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
+  function load(i){
+    cur=i;
+    segs.forEach((s,k)=>{ s.classList.toggle('on',k===i); s.setAttribute('aria-pressed',k===i?'true':'false'); s.querySelector('i').style.width=(k<i?100:0)+'%'; });
+    rows.forEach((r,k)=>{ r.classList.toggle('on',k===i); r.setAttribute('aria-pressed',k===i?'true':'false'); });
+    v.poster=segs[i].dataset.img; v.src=segs[i].dataset.vid; v.setAttribute('aria-label',segs[i].dataset.alt);
+    play();
+  }
+  function show(x){
+    on=x; box.hidden=reel.hidden=!x;
+    if(x){ fr.style.setProperty('--gi-ar','16/9'); if(!v.getAttribute('src')) load(0); else play(); }
+    else { fr.style.removeProperty('--gi-ar'); v.pause(); }
+  }
+  v.addEventListener('play',()=>{ if(!raf) raf=requestAnimationFrame(tick); });
+  v.addEventListener('ended',()=>load((cur+1)%segs.length));
+  segs.forEach((s,k)=>s.addEventListener('click',()=>load(k)));
+  rows.forEach((r,k)=>r.addEventListener('click',()=>load(k)));
+  snd.addEventListener('click',()=>{
+    v.muted=!v.muted; snd.setAttribute('aria-pressed',v.muted?'false':'true'); snd.textContent=v.muted?'소리 켜기':'소리 끄기';
+    if(v.paused) play();
+  });
+  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
+    seen=e.isIntersecting; if(!on) return;
+    if(seen) play(); else v.pause();
+  })).observe(fr);
+  new MutationObserver(()=>show(!card.hidden)).observe(card,{attributes:true,attributeFilter:['hidden']});
+  show(!card.hidden);
+})();
+
 /* 하위 탭 — ?mo=build 처럼 주소로 바로 열 수 있다(상위 탭은 #mo 가 연다 · tabs.js).
    옛 ?mo=content 는 소개로 연다 — 11-17 에 컨텐츠가 소개 판 목록으로 합쳐졌다 */
 const KEYS=['intro','build','bneck'];

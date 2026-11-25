@@ -2,9 +2,9 @@
        하위 탭 셋(소개 · 전체 구조 · 병목 개선). 버튼이 data-sub 가 아니라 data-mo 를 쓰는 까닭 —
        tabs.js 는 data-sub 버튼을 MMO 하위 탭으로 보고 전부 걷어 간다. 여닫기는 mo.js 가 따로 한다.
        그림은 media/mo-*.jpg 외부 파일이다(시험 캡처에서 창 테두리를 잘라 낸 1280×960).
-       영상이 생기면 같은 액자에 갈아 끼운다.
+       영상이 생기면 같은 액자에 갈아 끼운다. 직업 소개 영상(media/mo-job-*.mp4)은 1280×720 웹용으로 다시 뽑은 것이다.
        아직 사람 확인이 안 끝났거나 못 찍은 컨텐츠는 넣지 않았다 — 사람 확인이 안 끝난 것(런처 · 대화방 · 귓속말 · 시간 제한)과
-       아직 못 찍은 것(웹 가입 · 점수 ±10). 닫히거나 찍히면 소개 판 목록에 버튼과 카드를 같은 차례로 더한다. -->
+       아직 못 찍은 것(웹 가입 · 점수 ±10). 일반 대전 · 랭크 매칭은 그 흐름을 영상으로 찍으면 지금 캡처를 갈아 끼운다. -->
   <section class="panel" id="p-mo" role="tabpanel" hidden>
     <div class="subtabs" id="mosub">
       <nav class="subnav" role="tablist" aria-label="NOX 서버 하위 섹션">
@@ -17,24 +17,35 @@
     <div class="mo-band">
 
     <!-- 소개 — 게임 소개 + 컨텐츠(11-17 · 옛 하위 탭 「컨텐츠」를 합쳤다). 짜임은 intro.css, 고르기는 intro.js.
-         게임 소개 카드의 큰 숫자 둘은 병목 개선 탭의 맨 끝 값이다 -->
+         게임 소개 카드의 큰 숫자 둘은 병목 개선 탭의 맨 끝 값이다.
+         11-25 목록을 개요 · 직업 소개 · 일반 대전 · 랭크 매칭으로 바꿨다(옛 방 목록 → 일반 대전, 전적 검색 → 랭크 매칭의 세부).
+         직업 소개는 세 직업 영상을 이어 트는 판이다(시안 셋 중 사용자가 고른 「이어 보기」) — 액자 안 영상(.mo-job) · 아래 세 칸 막대(.mo-reel) ·
+         카드 줄(.mo-row)은 mo.js 가 다룬다. 그 카드가 보이는 동안만 액자를 16:9 로 바꾼다(영상 비율 · 나머지 캡처는 4:3) -->
     <section class="mo-pane" id="mo-intro">
       <div class="gi" style="--gi-ar:4/3">
         <div class="gi-list">
           <div class="gi-g"><span class="gi-k">게임</span>
             <button type="button" class="gi-it act" data-img="media/mo-match.jpg" data-alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면">개요</button>
+            <button type="button" class="gi-it" data-img="media/mo-job-warrior.jpg" data-alt="세 직업 소개 영상"><i>01</i>직업 소개</button>
           </div>
-          <div class="gi-g"><span class="gi-k">로비</span>
-            <button type="button" class="gi-it" data-img="media/mo-rooms.jpg" data-alt="방 목록 화면"><i>01</i>방 목록</button>
-          </div>
-          <div class="gi-g"><span class="gi-k">매칭</span>
-            <button type="button" class="gi-it" data-img="media/mo-rank.jpg" data-alt="랭크 매칭 화면"><i>02</i>랭크 매칭</button>
-          </div>
-          <div class="gi-g"><span class="gi-k">기록</span>
-            <button type="button" class="gi-it" data-img="media/mo-record.jpg" data-alt="전적 검색 화면"><i>03</i>전적 검색</button>
+          <div class="gi-g"><span class="gi-k">대전</span>
+            <button type="button" class="gi-it" data-img="media/mo-rooms.jpg" data-alt="방 목록 화면"><i>02</i>일반 대전</button>
+            <button type="button" class="gi-it" data-img="media/mo-rank.jpg" data-alt="랭크 매칭 화면"><i>03</i>랭크 매칭</button>
           </div>
         </div>
-        <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy"></div>
+        <div class="mo-col">
+          <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy">
+            <div class="mo-job" hidden><video muted playsinline preload="none"></video><button type="button" class="mo-snd" aria-pressed="false">소리 켜기</button></div>
+          </div>
+          <div class="mo-reel" hidden>
+            <div class="mo-bars">
+              <button type="button" data-vid="media/mo-job-warrior.mp4" data-img="media/mo-job-warrior.jpg" data-alt="전사 소개 영상" style="flex:34.4"><span class="bar"><i></i></span><span class="nm">전사<span>0:34</span></span></button>
+              <button type="button" data-vid="media/mo-job-wizard.mp4" data-img="media/mo-job-wizard.jpg" data-alt="위저드 소개 영상" style="flex:53.1"><span class="bar"><i></i></span><span class="nm">위저드<span>0:53</span></span></button>
+              <button type="button" data-vid="media/mo-job-conjurer.mp4" data-img="media/mo-job-conjurer.jpg" data-alt="소환술사 소개 영상" style="flex:52.0"><span class="bar"><i></i></span><span class="nm">소환술사<span>0:52</span></span></button>
+            </div>
+            <p class="mo-note">세 편이 차례로 이어서 재생 · 칸을 누르면 그 직업으로</p>
+          </div>
+        </div>
         <div class="gi-cards">
           <article class="gi-card gi-lead">
             <div class="gi-k">녹스 Nox · 2000 · 웨스트우드 쿼터뷰 액션 RPG</div>
@@ -47,23 +58,35 @@
             <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/Nox_MatchServer" target="_blank" rel="noopener">GitHub ↗</a></div>
             <p class="gi-fine">「Nox」는 EA의 상표이고, 게임 저작권은 Westwood Studios(2000)에 있습니다. 이 서버는 EA와 관계없는 팬의 비공식 학습 프로젝트이며, 배포 · 운영하지 않습니다.</p>
           </article>
+          <article class="gi-card" id="mo-job-card" hidden>
+            <div class="gi-k">01 · 직업 소개</div>
+            <h3>세 직업</h3>
+            <p>이 서버에 붙은 정품 클라 화면 그대로 — 글자 · 음악 없이 게임 소리만.</p>
+            <div class="mo-rows">
+              <button type="button" class="mo-row" aria-pressed="false"><img src="media/mo-job-warrior.jpg" alt="" loading="lazy" style="object-position:46% 50%"><span><b>전사</b><span>방패로&nbsp;화염구&nbsp;되튕기기 · 외침으로&nbsp;무리&nbsp;기절 · 워해머</span></span></button>
+              <button type="button" class="mo-row" aria-pressed="false"><img src="media/mo-job-wizard.jpg" alt="" loading="lazy"><span><b>위저드</b><span>불&nbsp;고리 · 얼음&nbsp;벽으로&nbsp;길목&nbsp;막고&nbsp;번개 · 반사&nbsp;방어막</span></span></button>
+              <button type="button" class="mo-row" aria-pressed="false"><img src="media/mo-job-conjurer.jpg" alt="" loading="lazy"><span><b>소환술사</b><span>늑대&nbsp;무리&nbsp;진영&nbsp;싸움 · 돌&nbsp;골렘&nbsp;매혹 · 자연의&nbsp;힘</span></span></button>
+            </div>
+            <div class="sv"><b>게임 서버</b> — 주문 판정 · 몬스터 움직임 · 피해 계산</div>
+          </article>
           <article class="gi-card" hidden>
-            <div class="gi-k">01 · 로비</div>
-            <h3>방 목록</h3>
+            <div class="gi-k">02 · 대전</div>
+            <h3>일반 대전</h3>
             <p>방을 만들고, 목록에서 골라 들어간다. 방 여러 개가 한 게임 서버에서 같이 돈다.</p>
             <div class="sv"><b>로비</b> — 방 목록 · <b>게임 서버</b> — 방 N개</div>
           </article>
+          <!-- 랭크 매칭은 세부 둘(매칭 · 전적 검색) — 액자 왼쪽 둥근 판에서 고른다(intro.js .gi-sub). 아이콘 = 세부 안 svg(카드에는 안 그린다 · intro.css) -->
           <article class="gi-card" hidden>
-            <div class="gi-k">02 · 매칭</div>
+            <div class="gi-k">03 · 대전</div>
             <h3>랭크 매칭</h3>
-            <p>버튼 → 줄 서기 → 상대를 찾으면 수락 창 10초 → 둘 다 수락하면 랭크 방.</p>
-            <div class="sv"><b>로비</b> — 줄 · 수락 시간 · 방 만들기</div>
-          </article>
-          <article class="gi-card" hidden>
-            <div class="gi-k">03 · 기록</div>
-            <h3>전적 검색</h3>
-            <p>이름을 넣으면 요약과 최근 20판.</p>
-            <div class="sv"><b>로비</b> → MySQL 전적</div>
+            <div class="gi-sub" data-label="매칭" data-img="media/mo-rank.jpg" data-alt="랭크 매칭 화면 — 수락 창"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4"/><path d="M16 6h3a3 3 0 0 1-3 4"/><path d="M12 13v4"/><path d="M8.5 20h7"/></svg>
+              <p>버튼 → 줄 서기 → 상대를 찾으면 수락 창 10초 → 둘 다 수락하면 랭크 방.</p>
+              <div class="sv"><b>로비</b> — 줄 · 수락 시간 · 방 만들기</div>
+            </div>
+            <div class="gi-sub" data-label="전적 검색" data-img="media/mo-record.jpg" data-alt="전적 검색 화면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
+              <p>이름을 넣으면 요약과 최근 20판.</p>
+              <div class="sv"><b>로비</b> → MySQL 전적</div>
+            </div>
           </article>
         </div>
       </div>

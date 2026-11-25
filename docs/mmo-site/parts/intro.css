@@ -30,6 +30,8 @@
    칸 크기는 액자 높이로 정한다 — 세부 셋이 가장 낮은 액자(1264 의 326px · 폰 197px)에도 들어가야 한다. 넷째 세부(순간이동)를 더하면 그 둘을 다시 잴 것 */
 .gi-fr video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
 .gi-fr img[hidden],.gi-fr video[hidden],.gi-menu[hidden],.gi-wip[hidden],.gi-sub[hidden]{display:none}
+/* 세부 아이콘은 둥근 판에만 그린다 — 글이 있는 카드(녹스 랭크 매칭 · 11-25)에 세부를 두면 이 규칙 없이는 그 svg 가 카드 안에도 그려진다 */
+.gi-card .gi-sub > svg{display:none}
 .gi-fr{--ml:18px;--mw:110px}
 .gi-menu{position:absolute;left:var(--ml);top:50%;transform:translateY(-50%);z-index:2;width:calc(var(--mw) - var(--ml));display:flex;flex-direction:column;gap:4px;padding:14px 0;border-radius:22px;background:rgba(16,20,30,.6);backdrop-filter:blur(10px);border:1px solid rgba(150,170,210,.18)}
 .gi-mi{--sh:98px;font:inherit;height:var(--sh);flex-shrink:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0;border:0;background:none;cursor:pointer;color:#a9b5cc;font-size:.95rem;font-weight:700;transition:color .15s}
