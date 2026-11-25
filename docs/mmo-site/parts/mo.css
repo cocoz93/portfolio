@@ -35,6 +35,18 @@
 .mo-row span span{display:block;margin-top:2px;font-size:.88rem;line-height:1.5;color:#c3cde0;word-break:keep-all}   /* 낱말 안에서 안 끊기게. 항목 안 띄어쓰기는 마크업이 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다(「자연의 / 힘」 막기) */
 .mo-row:hover{opacity:.85}
 .mo-row.on{opacity:1;border-color:var(--net);background:rgba(108,199,255,.07)}
+/* 일반 대전 · 랭크 매칭(11-25) — 흐름 영상의 차례 줄. 영상 시각이 그 줄에 오면 켜진다(.on · mo.js) · 누르면 그 장면으로.
+   줄 = 시각 | 화면 한 줄 + 서버가 하는 일 한 줄(small). 켜진 줄 표시는 직업 소개 카드 줄(.mo-row.on)과 같은 파란 테두리 */
+.mo-steps{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.mo-steps button{font:inherit;width:100%;text-align:left;cursor:pointer;display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:baseline;padding:8px 10px;border:1px solid transparent;border-radius:10px;background:none;color:inherit;opacity:.6;transition:opacity .15s,border-color .15s,background .15s}
+.mo-steps button:hover{opacity:.85}
+.mo-steps i{font-style:normal;font-family:var(--mono);font-size:.78rem;color:var(--dim)}
+.mo-steps button > span{font-size:.92rem;line-height:1.45;color:#e3e9f5;word-break:keep-all}
+.mo-steps small{display:block;margin-top:3px;font-size:.8rem;line-height:1.45;color:var(--mut)}
+.mo-steps small b{color:var(--ink);font-weight:700}
+.mo-steps .on{opacity:1;border-color:var(--net);background:rgba(108,199,255,.07)}
+.mo-steps .on i{color:var(--net)}
+.gi-card .mo-fine{margin:12px 0 0;font-size:.8rem;line-height:1.55;color:var(--dim)}   /* .gi-card p(intro.css)보다 한 단계 높게 */
 @media (max-width:760px){
   .mo-snd{right:8px;bottom:8px;padding:4px 9px;font-size:.72rem}   /* 폰 액자(197px 높이)에서 영상을 덜 가리게 */
   .mo-bars .nm{gap:5px;font-size:.84rem}

@@ -3,8 +3,9 @@
        tabs.js 는 data-sub 버튼을 MMO 하위 탭으로 보고 전부 걷어 간다. 여닫기는 mo.js 가 따로 한다.
        그림은 media/mo-*.jpg 외부 파일이다(시험 캡처에서 창 테두리를 잘라 낸 1280×960).
        영상이 생기면 같은 액자에 갈아 끼운다. 직업 소개 영상(media/mo-job-*.mp4)은 1280×720 웹용으로 다시 뽑은 것이다.
-       아직 사람 확인이 안 끝났거나 못 찍은 컨텐츠는 넣지 않았다 — 사람 확인이 안 끝난 것(런처 · 대화방 · 귓속말 · 시간 제한)과
-       아직 못 찍은 것(웹 가입 · 점수 ±10). 일반 대전 · 랭크 매칭은 그 흐름을 영상으로 찍으면 지금 캡처를 갈아 끼운다. -->
+       아직 사람 확인이 안 끝났거나 못 찍은 컨텐츠는 넣지 않았다 — 사람 확인이 안 끝난 것(귓속말 · 시간 제한)과 아직 못 찍은 것(웹 가입).
+       11-25 일반 대전 · 랭크 매칭을 정품 클라 두 대로 찍은 흐름 영상(media/mo-normal.mp4 · mo-ranked.mp4 · 1280×720)으로 갈아 끼웠다 —
+       런처 · 대화방 · 점수 증감도 그 영상에 나온다. 옛 캡처 mo-rooms · mo-rank · mo-record.jpg 는 이 판에서 안 쓴다(_lab_* 사본이 아직 가리켜 파일은 둠). -->
   <section class="panel" id="p-mo" role="tabpanel" hidden>
     <div class="subtabs" id="mosub">
       <nav class="subnav" role="tablist" aria-label="NOX 서버 하위 섹션">
@@ -31,8 +32,8 @@
             <button type="button" class="gi-it" data-img="media/mo-job-logo.jpg" data-alt="세 직업 소개 영상"><i>01</i>직업 소개</button>
           </div>
           <div class="gi-g"><span class="gi-k">대전</span>
-            <button type="button" class="gi-it" data-img="media/mo-rooms.jpg" data-alt="방 목록 화면"><i>02</i>일반 대전</button>
-            <button type="button" class="gi-it" data-img="media/mo-rank.jpg" data-alt="랭크 매칭 화면"><i>03</i>랭크 매칭</button>
+            <button type="button" class="gi-it" data-img="media/mo-normal.jpg" data-vid="media/mo-normal.mp4" data-alt="일반 대전 영상 — 런처 로그인부터 두 클라가 같은 방에 들어가기까지"><i>02</i>일반 대전</button>
+            <button type="button" class="gi-it" data-img="media/mo-ranked.jpg" data-vid="media/mo-ranked.mp4" data-alt="랭크 매칭 영상 — 두 화면 수락 창 · 1:1 · 점수 증감 · 전적 검색"><i>03</i>랭크 매칭</button>
           </div>
         </div>
         <div class="mo-col">
@@ -71,24 +72,36 @@
             </div>
             <div class="sv"><b>게임 서버</b> — 주문 판정 · 몬스터 움직임 · 피해 계산</div>
           </article>
-          <article class="gi-card" hidden>
+          <!-- 일반 대전 · 랭크 매칭(11-25) — 정품 클라 두 대로 찍은 흐름 영상. 영상은 목록 단추의 data-vid 를 intro.js 가 액자에 반복해 튼다.
+               차례 줄(.mo-steps · data-t = 영상 초)은 mo.js 가 영상 시각에 맞춰 켜고, 누르면 그 장면으로 보낸다. 줄마다 화면 한 줄 + 그때 서버가 하는 일 한 줄.
+               옛 랭크 매칭 카드의 세부 둘(매칭 · 전적 검색 — .gi-sub)은 영상의 차례 줄로 합쳤다(전적 검색 = 마지막 줄) -->
+          <article class="gi-card mo-flow" hidden>
             <div class="gi-k">02 · 대전</div>
             <h3>일반 대전</h3>
             <p>방을 만들고, 목록에서 골라 들어간다. 방 여러 개가 한 게임 서버에서 같이 돈다.</p>
-            <div class="sv"><b>로비</b> — 방 목록 · <b>게임 서버</b> — 방 N개</div>
+            <ol class="mo-steps">
+              <li><button type="button" data-t="0"><i>0:00</i><span>런처 로그인 → 「게임 시작」<small><b>로그인 서버</b> — HTTPS로 계정 확인 · 서명한 로그인 토큰</small></span></button></li>
+              <li><button type="button" data-t="7.8"><i>0:07</i><span>대화방 · 메뉴가 넘어가는 기다림은 자름<small><b>라우터 → 로비</b> — 토큰으로 자동 로그인</small></span></button></li>
+              <li><button type="button" data-t="12.5"><i>0:12</i><span>방 목록 — 스크롤 여러 번<small><b>로비</b> — 게임 서버들이 알린 방을 모아 보여 줌</small></span></button></li>
+              <li><button type="button" data-t="32.3"><i>0:32</i><span>클라2 「게임 호스트하기」 → 대기실<small><b>로비</b> — 방이 가장 적은 게임 서버에 방을 만듦</small></span></button></li>
+              <li><button type="button" data-t="46"><i>0:46</i><span>클라1 목록 맨 위에 새 방 — 누르지 않아도 뜸<small><b>로비</b> — 목록이 바뀌면 알림(1초에 한 번까지) · 접속용 DLL이 「리스트 갱신」</small></span></button></li>
+              <li><button type="button" data-t="51"><i>0:51</i><span>클라1 그 방에 입장 → 게임 화면<small><b>게임 서버</b> — UDP 18590 한 대가 방 여럿</small></span></button></li>
+            </ol>
+            <p class="mo-fine">목록의 ld001~ld100 은 촬영용 더미 방이다 — 게임 서버처럼 로비에 붙어 방만 알리는 스크립트로 채웠고, 들어갈 수는 없다.</p>
           </article>
-          <!-- 랭크 매칭은 세부 둘(매칭 · 전적 검색) — 액자 왼쪽 둥근 판에서 고른다(intro.js .gi-sub). 아이콘 = 세부 안 svg(카드에는 안 그린다 · intro.css) -->
-          <article class="gi-card" hidden>
+          <article class="gi-card mo-flow" hidden>
             <div class="gi-k">03 · 대전</div>
             <h3>랭크 매칭</h3>
-            <div class="gi-sub" data-label="매칭" data-img="media/mo-rank.jpg" data-alt="랭크 매칭 화면 — 수락 창"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H5a3 3 0 0 0 3 4"/><path d="M16 6h3a3 3 0 0 1-3 4"/><path d="M12 13v4"/><path d="M8.5 20h7"/></svg>
-              <p>버튼 → 줄 서기 → 상대를 찾으면 수락 창 10초 → 둘 다 수락하면 랭크 방.</p>
-              <div class="sv"><b>로비</b> — 줄 · 수락 시간 · 방 만들기</div>
-            </div>
-            <div class="gi-sub" data-label="전적 검색" data-img="media/mo-record.jpg" data-alt="전적 검색 화면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
-              <p>이름을 넣으면 요약과 최근 20판.</p>
-              <div class="sv"><b>로비</b> → MySQL 전적</div>
-            </div>
+            <p>버튼 → 줄 서기 → 상대를 찾으면 수락 창 10초 → 둘 다 수락하면 랭크 방. 판이 끝나면 점수와 전적이 두 계정에 같이 남는다.</p>
+            <ol class="mo-steps">
+              <li><button type="button" data-t="0"><i>0:00</i><span>두 사람 「랭크 매칭」 → 상대 찾는 중<small><b>로비</b> — 줄에 세움</small></span></button></li>
+              <li><button type="button" data-t="22"><i>0:22</i><span>두 화면에 「매칭 성공! 수락하시겠습니까?」 → 둘&nbsp;다&nbsp;예<small><b>로비</b> — 두 사람을 묶고 수락 10초를 잼</small></span></button></li>
+              <li><button type="button" data-t="29.5"><i>0:29</i><span>랭크 방 → 1:1<small><b>로비 → 게임 서버</b> — 랭크 방을 만들고 맵은 후보 중 무작위</small></span></button></li>
+              <li><button type="button" data-t="39"><i>0:39</i><span>판 끝 — 진&nbsp;쪽&nbsp;「랭크&nbsp;하락」 · 이긴&nbsp;쪽&nbsp;「랭크&nbsp;상승」<small><b>게임 서버 → 로비 → MySQL</b> — 점수 · 전적을 한 트랜잭션으로</small></span></button></li>
+              <li><button type="button" data-t="46"><i>0:46</i><span>대화방 「대전 기록」 — 진&nbsp;쪽&nbsp;−11 · 이긴&nbsp;쪽&nbsp;+11<small><b>MySQL</b> — 한 판이 두 계정에 같이 기록</small></span></button></li>
+              <li><button type="button" data-t="67"><i>1:07</i><span>「전적 검색」 → 상대 이름 → 맨 위에 방금 판<small><b>로비 읽기 일꾼</b> — 판 저장과 따로 도는 스레드 · DB 연결</small></span></button></li>
+            </ol>
+            <p class="mo-fine">촬영 설정 — 대전 맵 하나(MiniMine) · 한 번 쓰러지면 판 끝 · 전사의 이동과 공격은 서버 쪽 촬영 대본.</p>
           </article>
         </div>
       </div>

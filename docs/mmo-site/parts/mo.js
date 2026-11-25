@@ -112,6 +112,39 @@ step(4);
   show(!card.hidden);
 })();
 
+/* 일반 대전 · 랭크 매칭(11-25) — 흐름 영상과 카드 차례 줄 맞추기. 영상은 목록 단추의 data-vid 로 intro.js 가 액자에 바로 붙인 video 하나를 같이 쓴다
+   (직업 소개의 .mo-job 안 video 와 다른 것). 여기는 그 영상 시각으로 보이는 카드(.mo-flow)의 줄(data-t = 영상 초)을 켜고, 줄을 누르면 그 시각으로 보낸다.
+   이 파일이 intro.js 보다 먼저 실려 그 video 가 아직 없다 — 그래서 쓸 때마다 찾고, 시각 변화는 액자에서 붙잡기 단계로 받는다(미디어 이벤트는 거품이 안 올라온다).
+   액자 비율 — 두 영상도 16:9 라 이 카드나 직업 소개 카드가 보이면 16:9, 아니면 마크업 값(4:3). 직업 소개(위)도 같은 값을 만지므로
+   어느 카드가 보이든 여기서 마지막에 다시 정한다(관찰자는 만든 차례대로 불려 이쪽이 늦다) */
+(function(){
+  const flows=[...document.querySelectorAll('#mo-intro .mo-flow')]; if(!flows.length) return;
+  const fr=flows[0].closest('.gi').querySelector('.gi-fr'), job=document.getElementById('mo-job-card');
+  const vid=()=>[...fr.children].find(e=>e.tagName==='VIDEO');   // 액자 바로 아래 video(.mo-job 안 것은 한 겹 더 안)
+  const steps=c=>[...c.querySelectorAll('.mo-steps button')];
+  let cur=null;
+  function mark(){
+    const v=vid(); if(!cur) return;
+    const t=v?v.currentTime:0, bs=steps(cur); let k=0;
+    bs.forEach((b,i)=>{ if(t>=+b.dataset.t) k=i; });
+    bs.forEach((b,i)=>{ b.classList.toggle('on',i===k); if(i===k) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); });
+  }
+  function sync(){
+    cur=flows.find(c=>!c.hidden)||null;
+    if(cur||(job&&!job.hidden)) fr.style.setProperty('--gi-ar','16/9'); else fr.style.removeProperty('--gi-ar');
+    mark();
+  }
+  ['timeupdate','seeked','emptied'].forEach(n=>fr.addEventListener(n,e=>{ if(e.target===vid()) mark(); },true));
+  flows.forEach(c=>steps(c).forEach(b=>b.addEventListener('click',()=>{
+    const v=vid(); if(!v||c.hidden) return;
+    v.currentTime=+b.dataset.t; const p=v.play(); if(p&&p.catch) p.catch(()=>{});
+    mark();
+  })));
+  const mo=new MutationObserver(sync);
+  flows.concat(job?[job]:[]).forEach(c=>mo.observe(c,{attributes:true,attributeFilter:['hidden']}));
+  sync();
+})();
+
 /* 하위 탭 — ?mo=build 처럼 주소로 바로 열 수 있다(상위 탭은 #mo 가 연다 · tabs.js).
    옛 ?mo=content 는 소개로 연다 — 11-17 에 컨텐츠가 소개 판 목록으로 합쳐졌다 */
 const KEYS=['intro','build','bneck'];
