@@ -39,6 +39,7 @@
         <div class="mo-col">
           <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy">
             <div class="mo-job" hidden><video muted playsinline preload="none"></video><img class="mo-cover" src="media/mo-job-logo.jpg" alt="" loading="lazy"><button type="button" class="mo-snd" aria-pressed="false">소리 켜기</button></div>
+            <button type="button" class="mo-snd mo-flow-snd" aria-pressed="false" hidden>소리 켜기</button>
           </div>
           <div class="mo-reel" hidden>
             <div class="mo-bars">
@@ -72,7 +73,7 @@
             </div>
             <div class="sv"><b>게임 서버</b> — 주문 판정 · 몬스터 움직임 · 피해 계산</div>
           </article>
-          <!-- 일반 대전 · 랭크 매칭(11-25) — 정품 클라 두 대로 찍은 흐름 영상. 영상은 목록 단추의 data-vid 를 intro.js 가 액자에 반복해 튼다.
+          <!-- 일반 대전 · 랭크 매칭(11-25) — 정품 클라 두 대로 찍은 흐름 영상. 영상은 목록 단추의 data-vid 를 intro.js 가 액자에 반복해 튼다(소리 없이 시작 — 액자의 .mo-flow-snd 단추로 켬).
                차례 줄(.mo-steps · data-t = 영상 초)은 mo.js 가 영상 시각에 맞춰 켜고, 누르면 그 장면으로 보낸다. 줄마다 화면 한 줄 + 그때 서버가 하는 일 한 줄.
                옛 랭크 매칭 카드의 세부 둘(매칭 · 전적 검색 — .gi-sub)은 영상의 차례 줄로 합쳤다(전적 검색 = 마지막 줄) -->
           <article class="gi-card mo-flow" hidden>
