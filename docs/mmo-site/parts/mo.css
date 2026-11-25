@@ -5,38 +5,23 @@
 #p-mo{margin-top:0}
 .mo-band{max-width:var(--band-max);margin:30px auto 0}
 .mo-pane[hidden]{display:none}
-/* 직업 소개(11-25) — 액자 + 아래 세 칸 막대를 한 칸(.mo-col)에 세운다. 영상은 액자의 .gi-fr video 규칙(꽉 채움)을 그대로 받는다.
-   막대 칸 폭 = 영상 길이(마크업 flex) · 켜진 칸만 파랗게 차오른다. 여닫기 · 진행 · 고르기는 mo.js */
-.mo-col{display:flex;flex-direction:column;gap:14px;min-width:0}
-.mo-job{position:absolute;inset:0;z-index:1}
-.mo-job[hidden],.mo-reel[hidden]{display:none}
+/* 액자 소리 단추(11-25) — 영상 카드(직업 소개 · 일반 대전 · 랭크 매칭)가 보일 때만 뜬다(mo.js). 영상은 액자의 .gi-fr video 규칙(꽉 채움)을 그대로 받는다 */
 .mo-snd{position:absolute;right:14px;bottom:14px;z-index:2;font:inherit;font-size:.82rem;font-weight:700;color:#dfe7f5;padding:6px 12px;border-radius:999px;border:1px solid rgba(150,170,210,.3);background:rgba(10,15,25,.72);cursor:pointer}
 .mo-snd:hover{border-color:rgba(200,215,240,.6)}
-/* 로고 표지 — 영상 위 · 소리 단추 아래. 걷힐 때(.out) 흐려지고 mo.js 가 지운다 */
-.mo-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;pointer-events:none;transition:opacity .6s}
-.mo-cover.out{opacity:0}
-@media (prefers-reduced-motion:reduce){ .mo-cover{transition:none} }
 .mo-snd[aria-pressed="true"]{color:var(--net);border-color:var(--net)}
-.mo-bars{display:flex;gap:6px}
-.mo-bars button{font:inherit;min-width:0;padding:0;border:0;background:none;cursor:pointer;text-align:left}
-.mo-bars .bar{display:block;height:8px;border-radius:4px;background:#243049;overflow:hidden}
-.mo-bars .bar i{display:block;height:100%;width:0;background:var(--net)}
-/* 길이는 이름 바로 뒤에 — 칸 오른쪽 끝에 두면 다음 칸 이름과 붙어 「0:34 위저드」로 읽혔다 */
-.mo-bars .nm{margin-top:8px;display:flex;align-items:baseline;gap:8px;font-size:.95rem;font-weight:700;color:var(--mut);transition:color .15s}
-.mo-bars .nm span{font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--dim)}
-.mo-bars button:hover .nm{color:var(--ink)}
-.mo-bars .on .nm{color:#fff}
-.mo-bars .on .nm span{color:var(--net)}
-.mo-note{margin:-4px 0 0;font-size:.82rem;color:var(--dim)}
-.mo-rows{display:flex;flex-direction:column;gap:10px;margin-top:6px}
-.mo-row{font:inherit;text-align:left;cursor:pointer;display:grid;grid-template-columns:76px 1fr;gap:14px;align-items:center;padding:10px;border:1px solid var(--line2);border-radius:10px;background:none;color:inherit;opacity:.6;transition:opacity .15s,border-color .15s,background .15s}
-.mo-row img{width:76px;height:76px;object-fit:cover;border-radius:8px;display:block}
-.mo-row b{display:block;font-size:1.1rem;font-weight:800;color:#fff}
-.mo-row span span{display:block;margin-top:2px;font-size:.88rem;line-height:1.5;color:#c3cde0;word-break:keep-all}   /* 낱말 안에서 안 끊기게. 항목 안 띄어쓰기는 마크업이 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다(「자연의 / 힘」 막기) */
-.mo-row:hover{opacity:.85}
-.mo-row.on{opacity:1;border-color:var(--net);background:rgba(108,199,255,.07)}
+/* 직업 소개(11-25 5판) — 카드는 글 없는 카드(.gi-bare)라 띄우지 않고, 직업 설명을 옮겨 받은 개요 카드를 모든 폭에서 옆에 세운다.
+   intro.css 는 이걸 좁은 폭(1460 이하)에서만 한다 — 녹스는 카드가 늘 그림 옆에 서는 판이라 넓은 폭에서 그 칸이 비지 않게 */
+#mo-intro .gi-cards:has(> .gi-bare:not([hidden])) > .gi-lead[hidden]{display:flex}
+/* 개요 카드의 직업 줄 — 직업 소개에서 그 편을 트는 동안 그 줄만 켜진다(.on · mo.js). 켜짐 표시는 차례 줄(.mo-steps .on)과 같은 파란 테두리 */
+.gi-lead .mo-k{margin-top:4px}
+.mo-jobs{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
+.mo-jobs li{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:baseline;padding:7px 10px;border:1px solid transparent;border-radius:10px;transition:border-color .15s,background .15s}
+.mo-jobs b{font-size:.95rem;font-weight:800;color:#fff}
+.mo-jobs span{font-size:.88rem;line-height:1.5;color:#c3cde0;word-break:keep-all}   /* 낱말 안에서 안 끊기게. 항목 안 띄어쓰기는 마크업이 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다(옛 카드 줄의 「자연의 / 힘」 같은 끊김 막기) */
+.mo-jobs .on{border-color:var(--net);background:rgba(108,199,255,.07)}
+#mo-intro .gi-lead .sv{margin-top:10px}   /* intro.css(.gi-card .sv · 뒤에 실림)보다 한 단계 높게 */
 /* 일반 대전 · 랭크 매칭(11-25) — 흐름 영상의 차례 줄. 영상 시각이 그 줄에 오면 켜진다(.on · mo.js) · 누르면 그 장면으로.
-   줄 = 시각 | 화면 한 줄 + 서버가 하는 일 한 줄(small). 켜진 줄 표시는 직업 소개 카드 줄(.mo-row.on)과 같은 파란 테두리 */
+   줄 = 시각 | 화면 한 줄 + 서버가 하는 일 한 줄(small). 켜진 줄 표시는 개요 카드 직업 줄(.mo-jobs .on)과 같은 파란 테두리 */
 .mo-steps{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
 .mo-steps button{font:inherit;width:100%;text-align:left;cursor:pointer;display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:baseline;padding:8px 10px;border:1px solid transparent;border-radius:10px;background:none;color:inherit;opacity:.6;transition:opacity .15s,border-color .15s,background .15s}
 .mo-steps button:hover{opacity:.85}
@@ -49,7 +34,6 @@
 .gi-card .mo-fine{margin:12px 0 0;font-size:.8rem;line-height:1.55;color:var(--dim)}   /* .gi-card p(intro.css)보다 한 단계 높게 */
 @media (max-width:760px){
   .mo-snd{right:8px;bottom:8px;padding:4px 9px;font-size:.72rem}   /* 폰 액자(197px 높이)에서 영상을 덜 가리게 */
-  .mo-bars .nm{gap:5px;font-size:.84rem}
 }
 /* 작은 머리글 — 한글이라 --mono 를 쓰면 자간이 벌어져 Pretendard 로 둔다 */
 .mo-k{font-family:var(--sans);font-size:.8rem;font-weight:700;letter-spacing:.04em;color:var(--dim)}

@@ -5,7 +5,8 @@
        영상이 생기면 같은 액자에 갈아 끼운다. 직업 소개 영상(media/mo-job-*.mp4)은 1280×720 웹용으로 다시 뽑은 것이다.
        아직 사람 확인이 안 끝났거나 못 찍은 컨텐츠는 넣지 않았다 — 사람 확인이 안 끝난 것(귓속말 · 시간 제한)과 아직 못 찍은 것(웹 가입).
        11-25 일반 대전 · 랭크 매칭을 정품 클라 두 대로 찍은 흐름 영상(media/mo-normal.mp4 · mo-ranked.mp4 · 1280×720)으로 갈아 끼웠다 —
-       런처 · 대화방 · 점수 증감도 그 영상에 나온다. 옛 캡처 mo-rooms · mo-rank · mo-record.jpg 는 이 판에서 안 쓴다(_lab_* 사본이 아직 가리켜 파일은 둠). -->
+       런처 · 대화방 · 점수 증감도 그 영상에 나온다. 옛 캡처 mo-rooms · mo-rank · mo-record.jpg 는 이 판에서 안 쓴다(_lab_* 사본이 아직 가리켜 파일은 둠).
+       11-25 저녁 랭크 매칭은 두 사람 다 장비를 입은 판으로 다시 찍어 갈아 끼웠다(옛 판은 전사가 맨손) — 차례 시각 · 점수(±9)를 새 영상에 맞췄다. -->
   <section class="panel" id="p-mo" role="tabpanel" hidden>
     <div class="subtabs" id="mosub">
       <nav class="subnav" role="tablist" aria-label="NOX 서버 하위 섹션">
@@ -20,10 +21,10 @@
     <!-- 소개 — 게임 소개 + 컨텐츠(11-17 · 옛 하위 탭 「컨텐츠」를 합쳤다). 짜임은 intro.css, 고르기는 intro.js.
          게임 소개 카드의 큰 숫자 둘은 병목 개선 탭의 맨 끝 값이다.
          11-25 목록을 개요 · 직업 소개 · 일반 대전 · 랭크 매칭으로 바꿨다(옛 방 목록 → 일반 대전, 전적 검색 → 랭크 매칭의 세부).
-         직업 소개는 세 직업 영상을 이어 트는 판이다(시안 셋 중 사용자가 고른 「이어 보기」) — 액자 안 영상(.mo-job) · 아래 세 칸 막대(.mo-reel) ·
-         카드 줄(.mo-row)은 mo.js 가 다룬다. 그 카드가 보이는 동안만 액자를 16:9 로 바꾼다(영상 비율 · 나머지 캡처는 4:3)
-         녹스 로고 표지(.mo-cover)는 이 칸을 처음 열 때만 영상 위에 덮였다가 영상이 틀 준비가 되면 1초 뒤 흐려지며 걷힌다(영상 안 끝 화면과 같은 로고).
-         목록 칸의 data-img 도 같은 로고라 누르는 순간 액자가 로고로 바뀌고 표지가 그 위에 그대로 이어진다 -->
+         직업 소개(11-25 5판)는 슈팅 서버 판의 세부 아이콘과 같은 짜임이다 — 카드는 글 없는 카드(.gi-bare)이고 세부(.gi-sub) 셋이 직업마다
+         아이콘 · 첫 장면 · 영상을 든다. 둥근 판 · 고르기 · 영상 틀기는 intro.js, 액자 16:9 · 끝나면 되풀지 않기 · 소리 · 개요 직업 줄 켜기는 mo.js.
+         직업 설명 · 서버 한 줄은 개요 카드(.mo-jobs · .sv)로 옮겼다 — 직업 소개 칸에서도 그 카드가 옆에 선다(mo.css).
+         옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 사용자 「버튼 눌러서 한번씩 눌러볼수있는거면 어때?」 · 로고 1초는 영상 앞에 붙였다 -->
     <section class="mo-pane" id="mo-intro">
       <div class="gi" style="--gi-ar:4/3">
         <div class="gi-list">
@@ -36,25 +37,22 @@
             <button type="button" class="gi-it" data-img="media/mo-ranked.jpg" data-vid="media/mo-ranked.mp4" data-alt="랭크 매칭 영상 — 두 화면 수락 창 · 1:1 · 점수 증감 · 전적 검색"><i>03</i>랭크 매칭</button>
           </div>
         </div>
-        <div class="mo-col">
-          <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy">
-            <div class="mo-job" hidden><video muted playsinline preload="none"></video><img class="mo-cover" src="media/mo-job-logo.jpg" alt="" loading="lazy"><button type="button" class="mo-snd" aria-pressed="false">소리 켜기</button></div>
-            <button type="button" class="mo-snd mo-flow-snd" aria-pressed="false" hidden>소리 켜기</button>
-          </div>
-          <div class="mo-reel" hidden>
-            <div class="mo-bars">
-              <button type="button" data-vid="media/mo-job-warrior.mp4" data-img="media/mo-job-warrior.jpg" data-alt="전사 소개 영상" style="flex:34.4"><span class="bar"><i></i></span><span class="nm">전사<span>0:34</span></span></button>
-              <button type="button" data-vid="media/mo-job-wizard.mp4" data-img="media/mo-job-wizard.jpg" data-alt="위저드 소개 영상" style="flex:53.1"><span class="bar"><i></i></span><span class="nm">위저드<span>0:53</span></span></button>
-              <button type="button" data-vid="media/mo-job-conjurer.mp4" data-img="media/mo-job-conjurer.jpg" data-alt="소환술사 소개 영상" style="flex:52.0"><span class="bar"><i></i></span><span class="nm">소환술사<span>0:52</span></span></button>
-            </div>
-            <p class="mo-note">세 편이 차례로 이어서 재생 · 칸을 누르면 그 직업으로</p>
-          </div>
+        <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy">
+          <button type="button" class="mo-snd" aria-pressed="false" hidden>소리 켜기</button>
         </div>
         <div class="gi-cards">
           <article class="gi-card gi-lead">
             <div class="gi-k">녹스 Nox · 2000 · 웨스트우드 쿼터뷰 액션 RPG</div>
             <h3 class="gi-h">2000년 정품 클라를<br>내 서버에</h3>
             <p>방장 PC 한 대가 판 하나를 맡던 멀티를, 서버 한 대가 방 여러 개를 받는 구조로 넓혔다. 그 위에 로그인 · 로비 · 랭크 매칭 · 전적.</p>
+            <!-- 직업 줄 n번째 = 직업 소개 카드의 .gi-sub n번째(그 편을 트는 동안 .on · mo.js). 항목 안 띄어쓰기는 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다 -->
+            <div class="mo-k">세 직업</div>
+            <ul class="mo-jobs">
+              <li><b>전사</b><span>방패로&nbsp;화염구&nbsp;되튕기기 · 외침으로&nbsp;무리&nbsp;기절 · 워해머</span></li>
+              <li><b>위저드</b><span>불&nbsp;고리 · 얼음&nbsp;벽으로&nbsp;길목&nbsp;막고&nbsp;번개 · 반사&nbsp;방어막</span></li>
+              <li><b>소환술사</b><span>늑대&nbsp;무리&nbsp;진영&nbsp;싸움 · 녹색&nbsp;마법사&nbsp;매혹 · 복수의&nbsp;주먹</span></li>
+            </ul>
+            <div class="sv"><b>게임 서버</b> — 주문 판정 · 몬스터 움직임 · 피해 계산</div>
             <div class="gi-num">
               <div><b>320<i>방+</i></b><span>동시 방 · 부하 도구 상한에서 멈춤</span></div>
               <div><b>−59<i>%</i></b><span>틱 합 · 병목 7차례</span></div>
@@ -62,18 +60,13 @@
             <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/Nox_MatchServer" target="_blank" rel="noopener">GitHub ↗</a></div>
             <p class="gi-fine">「Nox」는 EA의 상표이고, 게임 저작권은 Westwood Studios(2000)에 있습니다. 이 서버는 EA와 관계없는 팬의 비공식 학습 프로젝트이며, 배포 · 운영하지 않습니다.</p>
           </article>
-          <article class="gi-card" id="mo-job-card" hidden>
-            <div class="gi-k">01 · 직업 소개</div>
-            <h3>세 직업</h3>
-            <p>이 서버에 붙은 정품 클라 화면 그대로 — 글자 · 음악 없이 게임 소리만.</p>
-            <div class="mo-rows">
-              <button type="button" class="mo-row" aria-pressed="false"><img src="media/mo-job-warrior.jpg" alt="" loading="lazy" style="object-position:46% 50%"><span><b>전사</b><span>방패로&nbsp;화염구&nbsp;되튕기기 · 외침으로&nbsp;무리&nbsp;기절 · 워해머</span></span></button>
-              <button type="button" class="mo-row" aria-pressed="false"><img src="media/mo-job-wizard.jpg" alt="" loading="lazy"><span><b>위저드</b><span>불&nbsp;고리 · 얼음&nbsp;벽으로&nbsp;길목&nbsp;막고&nbsp;번개 · 반사&nbsp;방어막</span></span></button>
-              <button type="button" class="mo-row" aria-pressed="false"><img src="media/mo-job-conjurer.jpg" alt="" loading="lazy"><span><b>소환술사</b><span>늑대&nbsp;무리&nbsp;진영&nbsp;싸움 · 돌&nbsp;골렘&nbsp;매혹 · 자연의&nbsp;힘</span></span></button>
-            </div>
-            <div class="sv"><b>게임 서버</b> — 주문 판정 · 몬스터 움직임 · 피해 계산</div>
+          <!-- 01 직업 소개 — 글 없는 카드. 세부 n번째 = 개요 카드 직업 줄 n번째 · 아이콘은 직접 그린 24칸 선 그림(방패 · 번개 · 발자국) -->
+          <article class="gi-card gi-bare" id="mo-job-card" hidden>
+            <div class="gi-sub" data-label="전사" data-img="media/mo-job-warrior.jpg" data-vid="media/mo-job-warrior.mp4" data-alt="전사 소개 영상 — 정품 클라 화면 그대로 · 게임 소리만"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-3 7.9-7 9.5-4-1.6-7-5.1-7-9.5V6z"/><path d="M12 7.5v9M8.5 11h7"/></svg></div>
+            <div class="gi-sub" data-label="위저드" data-img="media/mo-job-wizard.jpg" data-vid="media/mo-job-wizard.mp4" data-alt="위저드 소개 영상 — 정품 클라 화면 그대로 · 게임 소리만" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2.5 5.5 13.5h6l-1 8 8-11h-6z"/></svg></div>
+            <div class="gi-sub" data-label="소환술사" data-img="media/mo-job-conjurer.jpg" data-vid="media/mo-job-conjurer.mp4" data-alt="소환술사 소개 영상 — 정품 클라 화면 그대로 · 게임 소리만" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16.2" rx="4.4" ry="3.6"/><circle cx="5.6" cy="10.6" r="1.9"/><circle cx="9.4" cy="6.4" r="1.9"/><circle cx="14.6" cy="6.4" r="1.9"/><circle cx="18.4" cy="10.6" r="1.9"/></svg></div>
           </article>
-          <!-- 일반 대전 · 랭크 매칭(11-25) — 정품 클라 두 대로 찍은 흐름 영상. 영상은 목록 단추의 data-vid 를 intro.js 가 액자에 반복해 튼다(소리 없이 시작 — 액자의 .mo-flow-snd 단추로 켬).
+          <!-- 일반 대전 · 랭크 매칭(11-25) — 정품 클라 두 대로 찍은 흐름 영상. 영상은 목록 단추의 data-vid 를 intro.js 가 액자에 반복해 튼다(소리 없이 시작 — 액자의 .mo-snd 단추로 켬).
                차례 줄(.mo-steps · data-t = 영상 초)은 mo.js 가 영상 시각에 맞춰 켜고, 누르면 그 장면으로 보낸다. 줄마다 화면 한 줄 + 그때 서버가 하는 일 한 줄.
                옛 랭크 매칭 카드의 세부 둘(매칭 · 전적 검색 — .gi-sub)은 영상의 차례 줄로 합쳤다(전적 검색 = 마지막 줄) -->
           <article class="gi-card mo-flow" hidden>
@@ -96,13 +89,13 @@
             <p>버튼 → 줄 서기 → 상대를 찾으면 수락 창 10초 → 둘 다 수락하면 랭크 방. 판이 끝나면 점수와 전적이 두 계정에 같이 남는다.</p>
             <ol class="mo-steps">
               <li><button type="button" data-t="0"><i>0:00</i><span>두 사람 「랭크 매칭」 → 상대 찾는 중<small><b>로비</b> — 줄에 세움</small></span></button></li>
-              <li><button type="button" data-t="22"><i>0:22</i><span>두 화면에 「매칭 성공! 수락하시겠습니까?」 → 둘&nbsp;다&nbsp;예<small><b>로비</b> — 두 사람을 묶고 수락 10초를 잼</small></span></button></li>
+              <li><button type="button" data-t="23"><i>0:23</i><span>두 화면에 「매칭 성공! 수락하시겠습니까?」 → 둘&nbsp;다&nbsp;예<small><b>로비</b> — 두 사람을 묶고 수락 10초를 잼</small></span></button></li>
               <li><button type="button" data-t="29.5"><i>0:29</i><span>랭크 방 → 1:1<small><b>로비 → 게임 서버</b> — 랭크 방을 만들고 맵은 후보 중 무작위</small></span></button></li>
-              <li><button type="button" data-t="39"><i>0:39</i><span>판 끝 — 진&nbsp;쪽&nbsp;「랭크&nbsp;하락」 · 이긴&nbsp;쪽&nbsp;「랭크&nbsp;상승」<small><b>게임 서버 → 로비 → MySQL</b> — 점수 · 전적을 한 트랜잭션으로</small></span></button></li>
-              <li><button type="button" data-t="46"><i>0:46</i><span>대화방 「대전 기록」 — 진&nbsp;쪽&nbsp;−11 · 이긴&nbsp;쪽&nbsp;+11<small><b>MySQL</b> — 한 판이 두 계정에 같이 기록</small></span></button></li>
-              <li><button type="button" data-t="67"><i>1:07</i><span>「전적 검색」 → 상대 이름 → 맨 위에 방금 판<small><b>로비 읽기 일꾼</b> — 판 저장과 따로 도는 스레드 · DB 연결</small></span></button></li>
+              <li><button type="button" data-t="40"><i>0:40</i><span>판 끝 — 진&nbsp;쪽&nbsp;「랭크&nbsp;하락」 · 이긴&nbsp;쪽&nbsp;「랭크&nbsp;상승」<small><b>게임 서버 → 로비 → MySQL</b> — 점수 · 전적을 한 트랜잭션으로</small></span></button></li>
+              <li><button type="button" data-t="52"><i>0:52</i><span>대화방 「대전 기록」 — 진&nbsp;쪽&nbsp;−9 · 이긴&nbsp;쪽&nbsp;+9<small><b>MySQL</b> — 한 판이 두 계정에 같이 기록</small></span></button></li>
+              <li><button type="button" data-t="68"><i>1:08</i><span>「전적 검색」 → 상대 이름 → 맨 위에 방금 판<small><b>로비 읽기 일꾼</b> — 판 저장과 따로 도는 스레드 · DB 연결</small></span></button></li>
             </ol>
-            <p class="mo-fine">촬영 설정 — 대전 맵 하나(MiniMine) · 한 번 쓰러지면 판 끝 · 전사의 이동과 공격은 서버 쪽 촬영 대본.</p>
+            <p class="mo-fine">촬영 설정 — 대전 맵 하나(MiniMine) · 한 번 쓰러지면 판 끝 · 두 사람의 장비 입히기와 전사의 이동 · 공격은 서버 쪽 촬영 대본.</p>
           </article>
         </div>
       </div>

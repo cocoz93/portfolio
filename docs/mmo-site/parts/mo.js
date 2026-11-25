@@ -57,75 +57,26 @@ function step(i){
 }
 step(4);
 
-/* 직업 소개(11-25) — 세 직업 영상을 차례로 이어 튼다(마지막 편 뒤엔 처음으로). 판 여닫기(카드 #mo-job-card 의 hidden)는 intro.js 가 하고,
-   여기는 그 카드가 보이는지만 지켜본다. 보이는 동안 액자를 16:9(영상 비율)로 바꾸고 영상 · 막대를 띄운다.
-   막대 칸이나 카드 줄을 누르면 그 편으로 간다. 소리는 브라우저 자동 재생 규칙(소리 있으면 안 틀어 줌) 때문에 꺼진 채 시작하고 단추로 켠다.
-   판이 숨거나(다른 탭 · 다른 칸) 화면 밖이면 멈춘다. 영상은 이 칸을 처음 열 때 받기 시작한다(preload none)
-   로고 표지(.mo-cover)는 처음 한 번만 — 영상이 틀 준비가 되면(canplay) 1초 더 두었다가 틀기 시작과 함께 흐려 지운다.
-   영상을 표지 밑에서 미리 틀지 않는 까닭 — 첫 편 앞 1초 남짓이 표지에 가려 안 보이게 된다 */
-(function(){
-  const card=document.getElementById('mo-job-card'); if(!card) return;
-  const gi=card.closest('.gi'), fr=gi.querySelector('.gi-fr'), box=fr.querySelector('.mo-job');
-  const v=box.querySelector('video'), snd=box.querySelector('.mo-snd'), reel=gi.querySelector('.mo-reel'), cover=box.querySelector('.mo-cover');
-  const segs=[...reel.querySelectorAll('.mo-bars button')], rows=[...card.querySelectorAll('.mo-row')];
-  if(segs.length!==rows.length){ console.error('직업 소개 짝 어긋남', segs.length, rows.length); return; }
-  v.muted=true;
-  let cur=0, on=false, seen=true, raf=0;
-  let held=!!cover, holdT=0, waiting=false;   // 표지가 아직 덮여 있나 · 걷기까지 1초 시계 · 틀 준비를 기다리는 중인가
-  function fill(){ segs[cur].querySelector('i').style.width=(v.duration?Math.min(100,v.currentTime/v.duration*100):0)+'%'; }
-  function tick(){ fill(); raf=v.paused?0:requestAnimationFrame(tick); }
-  function play(){ if(!on||!seen) return; if(held){ hold(); return; } const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
-  // 표지 — preload none 이면 틀기 전엔 받지를 않아 canplay 가 안 온다. 표지 동안만 받기를 켠다
-  function hold(){
-    if(holdT||waiting) return;
-    if(v.readyState>=3){ holdT=setTimeout(lift,1000); return; }
-    waiting=true; v.preload='auto';
-    v.addEventListener('canplay',()=>{ waiting=false; if(on&&seen&&held&&!holdT) holdT=setTimeout(lift,1000); },{once:true});
-  }
-  function unhold(){ clearTimeout(holdT); holdT=0; }   // 1초 사이에 판이 숨거나 화면 밖으로 가면 다음에 다시 1초
-  function lift(){ holdT=0; held=false; cover.classList.add('out'); setTimeout(()=>cover.remove(),700); play(); }
-  function load(i){
-    cur=i;
-    segs.forEach((s,k)=>{ s.classList.toggle('on',k===i); s.setAttribute('aria-pressed',k===i?'true':'false'); s.querySelector('i').style.width=(k<i?100:0)+'%'; });
-    rows.forEach((r,k)=>{ r.classList.toggle('on',k===i); r.setAttribute('aria-pressed',k===i?'true':'false'); });
-    v.poster=segs[i].dataset.img; v.src=segs[i].dataset.vid; v.setAttribute('aria-label',segs[i].dataset.alt);
-    play();
-  }
-  function show(x){
-    on=x; box.hidden=reel.hidden=!x;
-    if(x){ fr.style.setProperty('--gi-ar','16/9'); if(!v.getAttribute('src')) load(0); else play(); }
-    else { fr.style.removeProperty('--gi-ar'); v.pause(); unhold(); }
-  }
-  v.addEventListener('play',()=>{ if(!raf) raf=requestAnimationFrame(tick); });
-  v.addEventListener('ended',()=>load((cur+1)%segs.length));
-  segs.forEach((s,k)=>s.addEventListener('click',()=>load(k)));
-  rows.forEach((r,k)=>r.addEventListener('click',()=>load(k)));
-  snd.addEventListener('click',()=>{
-    v.muted=!v.muted; snd.setAttribute('aria-pressed',v.muted?'false':'true'); snd.textContent=v.muted?'소리 켜기':'소리 끄기';
-    if(v.paused) play();
-  });
-  if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
-    seen=e.isIntersecting; if(!on) return;
-    if(seen) play(); else { v.pause(); unhold(); }
-  })).observe(fr);
-  new MutationObserver(()=>show(!card.hidden)).observe(card,{attributes:true,attributeFilter:['hidden']});
-  show(!card.hidden);
-})();
-
-/* 일반 대전 · 랭크 매칭(11-25) — 흐름 영상과 카드 차례 줄 맞추기. 영상은 목록 단추의 data-vid 로 intro.js 가 액자에 바로 붙인 video 하나를 같이 쓴다
-   (직업 소개의 .mo-job 안 video 와 다른 것). 여기는 그 영상 시각으로 보이는 카드(.mo-flow)의 줄(data-t = 영상 초)을 켜고, 줄을 누르면 그 시각으로 보낸다.
+/* 액자 영상(11-25) — 직업 소개 · 일반 대전 · 랭크 매칭. 영상은 목록 단추나 세부(.gi-sub)의 data-vid 로 intro.js 가 액자에 바로 붙인 video 하나를 같이 쓴다.
    이 파일이 intro.js 보다 먼저 실려 그 video 가 아직 없다 — 그래서 쓸 때마다 찾고, 시각 변화는 액자에서 붙잡기 단계로 받는다(미디어 이벤트는 거품이 안 올라온다).
-   액자 비율 — 두 영상도 16:9 라 이 카드나 직업 소개 카드가 보이면 16:9, 아니면 마크업 값(4:3). 직업 소개(위)도 같은 값을 만지므로
-   어느 카드가 보이든 여기서 마지막에 다시 정한다(관찰자는 만든 차례대로 불려 이쪽이 늦다)
-   소리(11-25 16:10) — intro.js 영상은 소리 없이 튼다(자동 재생 규칙). 흐름 카드가 보일 때만 액자에 .mo-flow-snd 단추를 띄워 켜고 끄며,
-   흐름 카드를 떠나면 다시 끈다(직업 소개 · 개요로 갔다 와도 갑자기 소리가 나지 않게). 일반 대전 ↔ 랭크 매칭 사이는 켠 상태를 이어 간다 */
+   직업 소개(11-25 5판) — 슈팅 서버 판처럼 세부 아이콘으로 한 편씩 고른다(둥근 판 · 고르기 · 틀기는 intro.js). 여기는 그 카드가 보이는 동안
+   영상을 되풀지 않게 하고(영상은 검게 끝나고, 아이콘을 다시 누르면 처음부터 — 끝난 영상에 play 하면 처음으로 간다) 지금 편의 개요 직업 줄(.mo-jobs li)을 켠다.
+   옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 로고 1초는 영상 앞에 붙였다.
+   흐름 카드(.mo-flow) — 그 영상 시각으로 카드의 차례 줄(data-t = 영상 초)을 켜고, 줄을 누르면 그 시각으로 보낸다.
+   액자 비율 — 세 영상 다 16:9 라 영상 카드가 보이면 16:9, 아니면 마크업 값(4:3).
+   소리(11-25 16:10) — intro.js 영상은 소리 없이 튼다(자동 재생 규칙). 영상 카드가 보일 때만 액자에 .mo-snd 단추를 띄워 켜고 끄며,
+   영상 카드를 떠나면 다시 끈다(개요로 갔다 와도 갑자기 소리가 나지 않게). 영상 카드끼리 옮길 때는 켠 상태를 이어 간다 */
 (function(){
-  const flows=[...document.querySelectorAll('#mo-intro .mo-flow')]; if(!flows.length) return;
-  const fr=flows[0].closest('.gi').querySelector('.gi-fr'), job=document.getElementById('mo-job-card');
-  const vid=()=>[...fr.children].find(e=>e.tagName==='VIDEO');   // 액자 바로 아래 video(.mo-job 안 것은 한 겹 더 안)
+  const flows=[...document.querySelectorAll('#mo-intro .mo-flow')], job=document.getElementById('mo-job-card');
+  const cards=flows.concat(job?[job]:[]); if(!cards.length) return;
+  const fr=cards[0].closest('.gi').querySelector('.gi-fr');
+  const vid=()=>[...fr.children].find(e=>e.tagName==='VIDEO');   // 액자 바로 아래 video(intro.js 가 만든 것)
   const steps=c=>[...c.querySelectorAll('.mo-steps button')];
-  const snd=fr.querySelector('.mo-flow-snd');
-  let cur=null;
+  const snd=fr.querySelector('.mo-snd');
+  const subs=job?[...job.querySelectorAll('.gi-sub')]:[], lines=[...fr.closest('.gi').querySelectorAll('.mo-jobs li')];
+  /* 짝이 어긋나면 엉뚱한 줄이 켜진다 — 조용히 넘기지 말고 콘솔에 남긴다(줄 켜기만 손을 뗀다) */
+  const paired=subs.length===lines.length; if(!paired) console.error('직업 소개 짝 어긋남', subs.length, lines.length);
+  let cur=null, vcard=null;   // 보이는 흐름 카드 · 보이는 영상 카드(흐름 또는 직업)
   function setSnd(on){
     const v=vid(); if(v) v.muted=!on;
     if(snd){ snd.setAttribute('aria-pressed',on?'true':'false'); snd.textContent=on?'소리 끄기':'소리 켜기'; }
@@ -136,14 +87,22 @@ step(4);
     bs.forEach((b,i)=>{ if(t>=+b.dataset.t) k=i; });
     bs.forEach((b,i)=>{ b.classList.toggle('on',i===k); if(i===k) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); });
   }
+  function jobLine(){
+    if(!paired) return;
+    const k=(job&&!job.hidden)?subs.findIndex(s=>!s.hidden):-1;
+    lines.forEach((l,i)=>l.classList.toggle('on',i===k));
+  }
   function sync(){
     cur=flows.find(c=>!c.hidden)||null;
-    if(cur||(job&&!job.hidden)) fr.style.setProperty('--gi-ar','16/9'); else fr.style.removeProperty('--gi-ar');
-    if(snd){ snd.hidden=!cur; if(!cur) setSnd(false); }
-    mark();
+    const onJob=!!(job&&!job.hidden);
+    vcard=cur||(onJob?job:null);
+    if(vcard) fr.style.setProperty('--gi-ar','16/9'); else fr.style.removeProperty('--gi-ar');
+    const v=vid(); if(v) v.loop=!onJob;   // intro.js 는 늘 되풀게 만든다 — 직업 편만 끝에서 멈춘다
+    if(snd){ snd.hidden=!vcard; if(!vcard) setSnd(false); }
+    mark(); jobLine();
   }
   if(snd) snd.addEventListener('click',()=>{
-    const v=vid(); if(!v||!cur) return;
+    const v=vid(); if(!v||!vcard) return;
     setSnd(v.muted);
     if(v.paused){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
   });
@@ -154,7 +113,7 @@ step(4);
     mark();
   })));
   const mo=new MutationObserver(sync);
-  flows.concat(job?[job]:[]).forEach(c=>mo.observe(c,{attributes:true,attributeFilter:['hidden']}));
+  cards.concat(subs).forEach(c=>mo.observe(c,{attributes:true,attributeFilter:['hidden']}));
   sync();
 })();
 
