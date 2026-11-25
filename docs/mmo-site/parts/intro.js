@@ -58,6 +58,7 @@ document.querySelectorAll(".gi").forEach(function(gi){
       b.type="button"; b.className="gi-mi";
       if(ic){ const o=document.createElement("span"); o.className="gi-mo"; o.appendChild(ic.cloneNode(true)); b.appendChild(o); }
       t.className="gi-mt"; t.textContent=s.dataset.label||("세부 "+(j+1)); b.appendChild(t);
+      if(t.textContent.indexOf("\n")>=0) b.classList.add("gi-2l");   /* 이름 두 줄(data-label 의 &#10;) — 칸을 한 줄만큼 늘린다(intro.css .gi-2l) */
       b.addEventListener("click", function(){ pickSub(ss,j); });
       menu.appendChild(b);
     });

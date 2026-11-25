@@ -143,6 +143,11 @@
    ① 1201~1279 — 액자가 291px 까지 낮아져 칸 84 면 판 360px 가 위아래로 35px 씩 넘쳤다 → 칸 66 · 아이콘 42 · 판 278px
    ② 761~860 — 한 줄로 내린 폭인데 액자 406~460px 라 기본 칸(판 434px)이 안 들어간다 → ① 의 옛 값(칸 84 · 판 360px)
    ③ 500 이하 폰 — 액자 180~259px 라 폰 칸(판 238px)이 넘친다 → 칸 40 · 아이콘 26 · 이름 .62rem · 판 168px ── */
+/* 11-25 이동 묶음으로 세부가 많아야 셋(전투)이 됐다 — 아래 세 폭 값은 넷 기준 그대로 둔다(셋이면 더 여유).
+   이동 세부 이름은 두 줄(「걷기 / 대시」 · 「점프대 / 순간이동」, data-label 의 &#10; → intro.js 가 .gi-2l)이라 그 칸만 한 줄(1lh)만큼 늘린다 —
+   한 줄 칸과 같은 여유가 남는다(높이를 내용에 맞추면 이름 아래가 다음 아이콘에 붙었다: 간격 0~4px). 이동은 세부 둘이라 늘어도 세부 셋인 전투 판보다 짧다 */
+#sh-intro .gi-mi.gi-2l{height:calc(var(--sh) + 1lh)}
+#sh-intro .gi-mt{white-space:pre-line;text-align:center}
 @media (min-width:1201px) and (max-width:1279px){
   #sh-intro .gi-menu{padding:6px 0;gap:0}
   #sh-intro .gi-mi{--sh:66px;font-size:.8rem;line-height:1.2;gap:4px}

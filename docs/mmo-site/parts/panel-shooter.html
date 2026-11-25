@@ -17,6 +17,10 @@
        받침 = 서버가 읽는 Saved/MOB/pads_expanse.txt(체력 25 · 50 회복 5곳, 권총 2 · 소총 4 · 샷건 4, 다시 켜짐 10 · 25초) · 점수 = KillRecord.h SCORE 줄.
        움직임 = 걷기 · 대시 · 점프대. 순간이동은 커밋되면 움직임 카드에 .gi-sub 하나 더한다. 짜는 법은 intro.js 머리 주석(.gi-sub · data-vid · data-wip).
        11-25 순간이동을 넷째로 더했다(MO_Shooter bd5571c 커밋됨 · 아이콘 = 세로 고리 + 들어가는 화살표). 넷이 낮은 액자에 들어가게 칸 크기는 intro.css 에서 다시 쟀다.
+       11-25 이동 묶음 — 이동 세부 넷을 둘로: 「걷기 · 대시」 · 「점프대 · 순간이동」(사용자 「걷기/대시 묶고 점프/순간이동 이렇게 묶는건어때 아이콘도」 →
+       시안 셋 _lab_mvgrp 중 「아이콘은 그냥 하나로가자」). 앞은 내 입력을 서버가 같이 돌려 맞추는 이동, 뒤는 맵 장치를 서버가 판정해 옮기는 이동.
+       아이콘 = 묶음마다 하나(대시 · 점프대 것 그대로) · 이름 두 줄(data-label 의 &#10; — intro.css #sh-intro .gi-mt) · 영상도 묶음마다 하나로 이어 찍는다.
+       사진 = 대시 · 점프대 것. 걷기 그림(sh-walk.jpg)은 이동 단추 data-img 로 남고, 순간이동 사진(sh-teleport.jpg)은 판에서 빠졌다(파일은 media 에 남김).
        11-25 개요 카드 줄임(web-intro-plan §1) — 문단 뺌(다리가 판정을 막는다 = 전체 구조 「MOBridge 다리」 · Lyra 대조 = 「Shared 공용 계산」에 있다) · 흐름 줄 · 받침 다시 켜짐 시간 뺌. 위 숫자 근거 줄은 남긴다.
        11-25 영상은 자르지 않고 게임 화면 전체를 넣는다(사용자 시안 A 「겹침 유지」 — 아이콘 판은 지금처럼 왼쪽 가운데). 걷기 · 사격 영상은 화면 메시지를 끄고 다시 찍어 바꿀 차례.
        11-25 사진만(사용자 「일단그럼 급한대로 사진으로만 포폴에 올려줄수있나」) — 영상은 사람이 직접 하는 판으로 따로 찍는다. 그때까지 세부 일곱 다 「영상 준비 중」 딱지.
@@ -78,10 +82,8 @@
           </article>
           <!-- 세부 카드는 글 없이(.gi-bare — 띄우지 않는다) 세부마다 아이콘 · 그림 · 영상만 든다. 아이콘 = .gi-sub 안의 svg(직접 그린 24칸 선 그림) -->
           <article class="gi-card gi-bare" hidden>   <!-- 01 이동 -->
-            <div class="gi-sub" data-label="걷기" data-img="media/sh-walk.jpg" data-wip="영상 준비 중" data-alt="걷기 — 내 캐릭터가 계단 앞을 달리는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="13.5" cy="4" r="2"/><path d="M13 7l-1.8 6.5L8 21M11.2 13.5l3.3 3 .8 4.5M12.8 8.5l3.7 3M12.8 8.5 8.8 10.5l-1 2.8"/></svg></div>
-            <div class="gi-sub" data-label="대시" data-img="media/sh-dash.jpg" data-wip="영상 준비 중" data-alt="대시 — 붉은 잔상을 남기며 앞으로 튀어 나가는 장면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7"/><path d="M20 12H9"/><path d="M3 8h5M2 12h3.5M3 16h5"/></svg></div>
-            <div class="gi-sub" data-label="점프대" data-img="media/sh-jump.jpg" data-wip="영상 준비 중" data-alt="점프대 — 불꽃 이는 발판이 내 캐릭터를 쏘아 올리는 순간" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="18.5" rx="8" ry="2.5"/><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/></svg></div>
-            <div class="gi-sub" data-label="순간이동" data-img="media/sh-teleport.jpg" data-wip="영상 준비 중" data-alt="순간이동 — 내 캐릭터가 조각으로 흩어지며 옮겨 가는 장면" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="16" cy="12" rx="4.5" ry="8.5"/><path d="M2.5 12h10M9 8.5l3.5 3.5L9 15.5"/></svg></div>
+            <div class="gi-sub" data-label="걷기&#10;대시" data-img="media/sh-dash.jpg" data-wip="영상 준비 중" data-alt="대시 — 붉은 잔상을 남기며 앞으로 튀어 나가는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7"/><path d="M20 12H9"/><path d="M3 8h5M2 12h3.5M3 16h5"/></svg></div>
+            <div class="gi-sub" data-label="점프대&#10;순간이동" data-img="media/sh-jump.jpg" data-wip="영상 준비 중" data-alt="점프대 — 불꽃 이는 발판이 내 캐릭터를 쏘아 올리는 순간" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="18.5" rx="8" ry="2.5"/><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/></svg></div>
           </article>
           <article class="gi-card gi-bare" hidden>   <!-- 02 전투 -->
             <div class="gi-sub" data-label="사격" data-img="media/sh-shoot.jpg" data-wip="영상 준비 중" data-alt="사격 — 계단 위 상대를 쏘아 맞히는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18v4H3z"/><path d="M6.5 10.5 5 19h4l1-5h3.5v-3.5"/></svg></div>
