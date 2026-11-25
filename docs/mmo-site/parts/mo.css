@@ -12,6 +12,10 @@
 .mo-job[hidden],.mo-reel[hidden]{display:none}
 .mo-snd{position:absolute;right:14px;bottom:14px;z-index:2;font:inherit;font-size:.82rem;font-weight:700;color:#dfe7f5;padding:6px 12px;border-radius:999px;border:1px solid rgba(150,170,210,.3);background:rgba(10,15,25,.72);cursor:pointer}
 .mo-snd:hover{border-color:rgba(200,215,240,.6)}
+/* 로고 표지 — 영상 위 · 소리 단추 아래. 걷힐 때(.out) 흐려지고 mo.js 가 지운다 */
+.mo-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;pointer-events:none;transition:opacity .6s}
+.mo-cover.out{opacity:0}
+@media (prefers-reduced-motion:reduce){ .mo-cover{transition:none} }
 .mo-snd[aria-pressed="true"]{color:var(--net);border-color:var(--net)}
 .mo-bars{display:flex;gap:6px}
 .mo-bars button{font:inherit;min-width:0;padding:0;border:0;background:none;cursor:pointer;text-align:left}

@@ -60,18 +60,30 @@ step(4);
 /* 직업 소개(11-25) — 세 직업 영상을 차례로 이어 튼다(마지막 편 뒤엔 처음으로). 판 여닫기(카드 #mo-job-card 의 hidden)는 intro.js 가 하고,
    여기는 그 카드가 보이는지만 지켜본다. 보이는 동안 액자를 16:9(영상 비율)로 바꾸고 영상 · 막대를 띄운다.
    막대 칸이나 카드 줄을 누르면 그 편으로 간다. 소리는 브라우저 자동 재생 규칙(소리 있으면 안 틀어 줌) 때문에 꺼진 채 시작하고 단추로 켠다.
-   판이 숨거나(다른 탭 · 다른 칸) 화면 밖이면 멈춘다. 영상은 이 칸을 처음 열 때 받기 시작한다(preload none) */
+   판이 숨거나(다른 탭 · 다른 칸) 화면 밖이면 멈춘다. 영상은 이 칸을 처음 열 때 받기 시작한다(preload none)
+   로고 표지(.mo-cover)는 처음 한 번만 — 영상이 틀 준비가 되면(canplay) 1초 더 두었다가 틀기 시작과 함께 흐려 지운다.
+   영상을 표지 밑에서 미리 틀지 않는 까닭 — 첫 편 앞 1초 남짓이 표지에 가려 안 보이게 된다 */
 (function(){
   const card=document.getElementById('mo-job-card'); if(!card) return;
   const gi=card.closest('.gi'), fr=gi.querySelector('.gi-fr'), box=fr.querySelector('.mo-job');
-  const v=box.querySelector('video'), snd=box.querySelector('.mo-snd'), reel=gi.querySelector('.mo-reel');
+  const v=box.querySelector('video'), snd=box.querySelector('.mo-snd'), reel=gi.querySelector('.mo-reel'), cover=box.querySelector('.mo-cover');
   const segs=[...reel.querySelectorAll('.mo-bars button')], rows=[...card.querySelectorAll('.mo-row')];
   if(segs.length!==rows.length){ console.error('직업 소개 짝 어긋남', segs.length, rows.length); return; }
   v.muted=true;
   let cur=0, on=false, seen=true, raf=0;
+  let held=!!cover, holdT=0, waiting=false;   // 표지가 아직 덮여 있나 · 걷기까지 1초 시계 · 틀 준비를 기다리는 중인가
   function fill(){ segs[cur].querySelector('i').style.width=(v.duration?Math.min(100,v.currentTime/v.duration*100):0)+'%'; }
   function tick(){ fill(); raf=v.paused?0:requestAnimationFrame(tick); }
-  function play(){ if(!on||!seen) return; const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
+  function play(){ if(!on||!seen) return; if(held){ hold(); return; } const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
+  // 표지 — preload none 이면 틀기 전엔 받지를 않아 canplay 가 안 온다. 표지 동안만 받기를 켠다
+  function hold(){
+    if(holdT||waiting) return;
+    if(v.readyState>=3){ holdT=setTimeout(lift,1000); return; }
+    waiting=true; v.preload='auto';
+    v.addEventListener('canplay',()=>{ waiting=false; if(on&&seen&&held&&!holdT) holdT=setTimeout(lift,1000); },{once:true});
+  }
+  function unhold(){ clearTimeout(holdT); holdT=0; }   // 1초 사이에 판이 숨거나 화면 밖으로 가면 다음에 다시 1초
+  function lift(){ holdT=0; held=false; cover.classList.add('out'); setTimeout(()=>cover.remove(),700); play(); }
   function load(i){
     cur=i;
     segs.forEach((s,k)=>{ s.classList.toggle('on',k===i); s.setAttribute('aria-pressed',k===i?'true':'false'); s.querySelector('i').style.width=(k<i?100:0)+'%'; });
@@ -82,7 +94,7 @@ step(4);
   function show(x){
     on=x; box.hidden=reel.hidden=!x;
     if(x){ fr.style.setProperty('--gi-ar','16/9'); if(!v.getAttribute('src')) load(0); else play(); }
-    else { fr.style.removeProperty('--gi-ar'); v.pause(); }
+    else { fr.style.removeProperty('--gi-ar'); v.pause(); unhold(); }
   }
   v.addEventListener('play',()=>{ if(!raf) raf=requestAnimationFrame(tick); });
   v.addEventListener('ended',()=>load((cur+1)%segs.length));
@@ -94,7 +106,7 @@ step(4);
   });
   if('IntersectionObserver' in window) new IntersectionObserver(es=>es.forEach(e=>{
     seen=e.isIntersecting; if(!on) return;
-    if(seen) play(); else v.pause();
+    if(seen) play(); else { v.pause(); unhold(); }
   })).observe(fr);
   new MutationObserver(()=>show(!card.hidden)).observe(card,{attributes:true,attributeFilter:['hidden']});
   show(!card.hidden);

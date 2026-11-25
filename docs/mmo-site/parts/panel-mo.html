@@ -20,13 +20,15 @@
          게임 소개 카드의 큰 숫자 둘은 병목 개선 탭의 맨 끝 값이다.
          11-25 목록을 개요 · 직업 소개 · 일반 대전 · 랭크 매칭으로 바꿨다(옛 방 목록 → 일반 대전, 전적 검색 → 랭크 매칭의 세부).
          직업 소개는 세 직업 영상을 이어 트는 판이다(시안 셋 중 사용자가 고른 「이어 보기」) — 액자 안 영상(.mo-job) · 아래 세 칸 막대(.mo-reel) ·
-         카드 줄(.mo-row)은 mo.js 가 다룬다. 그 카드가 보이는 동안만 액자를 16:9 로 바꾼다(영상 비율 · 나머지 캡처는 4:3) -->
+         카드 줄(.mo-row)은 mo.js 가 다룬다. 그 카드가 보이는 동안만 액자를 16:9 로 바꾼다(영상 비율 · 나머지 캡처는 4:3)
+         녹스 로고 표지(.mo-cover)는 이 칸을 처음 열 때만 영상 위에 덮였다가 영상이 틀 준비가 되면 1초 뒤 흐려지며 걷힌다(영상 안 끝 화면과 같은 로고).
+         목록 칸의 data-img 도 같은 로고라 누르는 순간 액자가 로고로 바뀌고 표지가 그 위에 그대로 이어진다 -->
     <section class="mo-pane" id="mo-intro">
       <div class="gi" style="--gi-ar:4/3">
         <div class="gi-list">
           <div class="gi-g"><span class="gi-k">게임</span>
             <button type="button" class="gi-it act" data-img="media/mo-match.jpg" data-alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면">개요</button>
-            <button type="button" class="gi-it" data-img="media/mo-job-warrior.jpg" data-alt="세 직업 소개 영상"><i>01</i>직업 소개</button>
+            <button type="button" class="gi-it" data-img="media/mo-job-logo.jpg" data-alt="세 직업 소개 영상"><i>01</i>직업 소개</button>
           </div>
           <div class="gi-g"><span class="gi-k">대전</span>
             <button type="button" class="gi-it" data-img="media/mo-rooms.jpg" data-alt="방 목록 화면"><i>02</i>일반 대전</button>
@@ -35,7 +37,7 @@
         </div>
         <div class="mo-col">
           <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy">
-            <div class="mo-job" hidden><video muted playsinline preload="none"></video><button type="button" class="mo-snd" aria-pressed="false">소리 켜기</button></div>
+            <div class="mo-job" hidden><video muted playsinline preload="none"></video><img class="mo-cover" src="media/mo-job-logo.jpg" alt="" loading="lazy"><button type="button" class="mo-snd" aria-pressed="false">소리 켜기</button></div>
           </div>
           <div class="mo-reel" hidden>
             <div class="mo-bars">
