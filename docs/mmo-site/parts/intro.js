@@ -36,7 +36,9 @@ document.querySelectorAll(".gi").forEach(function(gi){
     img.alt=e.dataset.alt||""; img.hidden=!src||!!v;
     fr.classList.toggle("gi-empty", !src && !v);
     if(vid){
-      if(v){ vid.poster=src; if(vid.getAttribute("src")!==v) vid.src=v; vid.setAttribute("aria-label", img.alt); vid.hidden=false; play(); }
+      /* 판이 숨어 있으면(다른 탭 — 로드 때 첫 단추 pick(0)) 틀지 않는다: preload none 이라 play 를 부르기 전엔 받지 않고, 판이 보이면 위 관찰자가 튼다.
+         2026-11-26 슈팅 서버 개요(첫 단추)에 영상이 붙으며 — 안 그러면 그 탭을 안 여는 손님도 로드 때 영상을 받는다 */
+      if(v){ vid.poster=src; if(vid.getAttribute("src")!==v) vid.src=v; vid.setAttribute("aria-label", img.alt); vid.hidden=false; if(fr.offsetParent!==null) play(); }
       else { vid.pause(); vid.hidden=true; }
     }
     if(wip){ const t=e.dataset.wip; wip.hidden=(t==null); if(t!=null) wip.textContent=t||"영상 준비 중"; }

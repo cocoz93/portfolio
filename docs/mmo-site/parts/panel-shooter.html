@@ -24,7 +24,11 @@
        11-25 개요 카드 줄임(web-intro-plan §1) — 문단 뺌(다리가 판정을 막는다 = 전체 구조 「MOBridge 다리」 · Lyra 대조 = 「Shared 공용 계산」에 있다) · 흐름 줄 · 받침 다시 켜짐 시간 뺌. 위 숫자 근거 줄은 남긴다.
        11-25 영상은 자르지 않고 게임 화면 전체를 넣는다(사용자 시안 A 「겹침 유지」 — 아이콘 판은 지금처럼 왼쪽 가운데). 걷기 · 사격 영상은 화면 메시지를 끄고 다시 찍어 바꿀 차례.
        11-25 사진만(사용자 「일단그럼 급한대로 사진으로만 포폴에 올려줄수있나」) — 영상은 사람이 직접 하는 판으로 따로 찍는다. 그때까지 세부 일곱 다 「영상 준비 중」 딱지.
-       옛 영상 sh-walk.mp4 · sh-shoot.mp4(11-10 시험 판을 잘라 낸 것 — 화면 흔들림 · 노란 경고 줄)는 이 판에서 안 쓴다. 파일은 media 에 남아 있다.
+       옛 영상 sh-walk.mp4(11-10 시험 판을 잘라 낸 것 — 화면 흔들림 · 노란 경고 줄)는 이 판에서 안 쓴다. 파일은 media 에 남아 있다. 같은 때의 옛 sh-shoot.mp4 는 11-26 새 사격 영상이 덮었다(옛 것은 커밋 8abdbc9).
+       11-26 영상 다섯 = 개요 · 걷기 대시 · 점프대 순간이동 · 사격 · 근접(media/sh-*.mp4 · 1280×720 30fps · 소리 없음 · 4Mbps 상한 — 2.5Mbps 에선 효과 터지는 장면의 HUD 글자가 뭉갰다).
+       사람 손 없이 다리 촬영 각본 모드(-MOBTake)로 찍었다(MO_Shooter Saved/MOB/vt_take.sh · vt_web.sh, 계획 web-video-takes-plan). 같은 이름 jpg 는 영상 첫 장면으로 바꿨다(영상이 시작될 때 그림이 안 튀게) —
+       그래서 아래 사진 출처 줄(pf_*)은 걷기(이동 단추) · 순간이동 · 수류탄 사진에만 맞는다. 개요 · 사격 · 점프대는 두 판을 잘라 이었다(전환 효과 없음).
+       수류탄은 세 판 다 폭발과 상대가 한 화면에 안 잡혀 사진 · 「영상 준비 중」 그대로다.
        사진 = 다리 판 자동 촬영 1920×1080(화면 메시지 끔 DisableAllScreenMessages · 움직임 흐림 끔 r.MotionBlurQuality 0)을 자르지 않고 1280×720 으로 줄였다.
        판 = MO_Shooter Client/Lyra/Saved/MOB/pf_shots.ps1(서버 --debug + 다리 하나, 전투 판만 봇 9).
        개요 pf_cb2_36(봇 9 · 자동 조준 판 36초) · 걷기 pf_cb2_48 · 사격 pf_cb2_hit_1(맞힌 순간 사진) · 대시 pf_ds_15(대시 직후 · 붉은 잔상) ·
@@ -55,14 +59,14 @@
       <div class="gi gi-over" style="--gi-ar:16/9">
         <div class="gi-list">
           <div class="gi-g"><span class="gi-k">게임</span>
-            <button type="button" class="gi-it act" data-img="media/sh-play.jpg" data-alt="Lyra 클라가 이 서버에 붙어 도는 판 — 열 명이 한 방에서 맞붙는 화면">개요</button>
+            <button type="button" class="gi-it act" data-img="media/sh-play.jpg" data-vid="media/sh-play.mp4" data-alt="Lyra 클라가 이 서버에 붙어 도는 판 — 열 명이 한 방에서 맞붙어 홀 · 계단에서 상대를 쓰러뜨리고 대시로 빠져나가는 영상">개요</button>
           </div>
           <div class="gi-g"><span class="gi-k">컨텐츠</span>
             <button type="button" class="gi-it" data-img="media/sh-walk.jpg" data-alt="걷기 — 내 캐릭터가 계단 앞을 달리는 장면"><i>01</i>이동</button>
             <button type="button" class="gi-it" data-img="media/sh-shoot.jpg" data-alt="사격 — 계단 위 상대를 쏘아 맞히는 장면"><i>02</i>전투</button>
           </div>
         </div>
-        <div class="gi-fr"><img src="media/sh-play.jpg" alt="Lyra 클라가 이 서버에 붙어 도는 판 — 열 명이 한 방에서 맞붙는 화면" width="1280" height="720" loading="lazy"></div>
+        <div class="gi-fr"><img src="media/sh-play.jpg" alt="Lyra 클라가 이 서버에 붙어 도는 판 — 열 명이 한 방에서 맞붙어 홀 · 계단에서 상대를 쓰러뜨리고 대시로 빠져나가는 영상" width="1280" height="720" loading="lazy"></div>
         <div class="gi-cards">
           <article class="gi-card gi-lead gi-dense">
             <div class="gi-k">MO_Shooter · 언리얼 Lyra 클라</div>
@@ -82,12 +86,12 @@
           </article>
           <!-- 세부 카드는 글 없이(.gi-bare — 띄우지 않는다) 세부마다 아이콘 · 그림 · 영상만 든다. 아이콘 = .gi-sub 안의 svg(직접 그린 24칸 선 그림) -->
           <article class="gi-card gi-bare" hidden>   <!-- 01 이동 -->
-            <div class="gi-sub" data-label="걷기&#10;대시" data-img="media/sh-dash.jpg" data-wip="영상 준비 중" data-alt="대시 — 붉은 잔상을 남기며 앞으로 튀어 나가는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7"/><path d="M20 12H9"/><path d="M3 8h5M2 12h3.5M3 16h5"/></svg></div>
-            <div class="gi-sub" data-label="점프대&#10;순간이동" data-img="media/sh-jump.jpg" data-wip="영상 준비 중" data-alt="점프대 — 불꽃 이는 발판이 내 캐릭터를 쏘아 올리는 순간" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="18.5" rx="8" ry="2.5"/><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/></svg></div>
+            <div class="gi-sub" data-label="걷기&#10;대시" data-img="media/sh-dash.jpg" data-vid="media/sh-dash.mp4" data-alt="걷기 · 대시 — 홀을 걷다가 붉은 잔상을 남기며 두 번 대시로 튀어 나가는 영상"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5l7 7-7 7"/><path d="M20 12H9"/><path d="M3 8h5M2 12h3.5M3 16h5"/></svg></div>
+            <div class="gi-sub" data-label="점프대&#10;순간이동" data-img="media/sh-jump.jpg" data-vid="media/sh-jump.mp4" data-alt="점프대 · 순간이동 — 발판이 내 캐릭터를 위층 통로로 쏘아 올리고, 이어 파란 문으로 걸어 들어가 출구로 옮겨지는 영상" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="18.5" rx="8" ry="2.5"/><path d="M12 15V3.5M7.5 8 12 3.5 16.5 8"/></svg></div>
           </article>
           <article class="gi-card gi-bare" hidden>   <!-- 02 전투 -->
-            <div class="gi-sub" data-label="사격" data-img="media/sh-shoot.jpg" data-wip="영상 준비 중" data-alt="사격 — 계단 위 상대를 쏘아 맞히는 장면"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18v4H3z"/><path d="M6.5 10.5 5 19h4l1-5h3.5v-3.5"/></svg></div>
-            <div class="gi-sub" data-label="근접" data-img="media/sh-melee.jpg" data-wip="영상 준비 중" data-alt="근접 — 붙어 선 상대가 맞고 몸을 꺾는 순간" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6"/><path d="M4 13 13 4"/><path d="M11 20 20 11"/></svg></div>
+            <div class="gi-sub" data-label="사격" data-img="media/sh-shoot.jpg" data-vid="media/sh-shoot.mp4" data-alt="사격 — 계단과 홀에서 상대를 쏘아 맞히고 쓰러뜨리는 영상"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h18v4H3z"/><path d="M6.5 10.5 5 19h4l1-5h3.5v-3.5"/></svg></div>
+            <div class="gi-sub" data-label="근접" data-img="media/sh-melee.jpg" data-vid="media/sh-melee.mp4" data-alt="근접 — 계단을 내려와 붙은 상대를 근접 공격 한 번에 쓰러뜨리는 영상" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6"/><path d="M4 13 13 4"/><path d="M11 20 20 11"/></svg></div>
             <div class="gi-sub" data-label="수류탄" data-img="media/sh-grenade.jpg" data-wip="영상 준비 중" data-alt="수류탄 — 홀 바닥에서 터진 수류탄 연기" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="15.4" rx="6.05" ry="6.6"/><path d="M9.25 9.14V6.06h5.5v3.08"/><path d="M14.75 6.83h2.2a1.76 1.76 0 0 1 1.76 1.76v5.17"/><circle cx="7.82" cy="3.75" r="1.76"/></svg></div>
           </article>
         </div>
