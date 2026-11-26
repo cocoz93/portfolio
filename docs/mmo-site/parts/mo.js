@@ -61,8 +61,9 @@ step(4);
    이 파일이 intro.js 보다 먼저 실려 그 video 가 아직 없다 — 그래서 쓸 때마다 찾고, 시각 변화는 액자에서 붙잡기 단계로 받는다(미디어 이벤트는 거품이 안 올라온다).
    직업 소개(11-25 5판) — 슈팅 서버 판처럼 세부 아이콘으로 한 편씩 고른다(둥근 판 · 고르기 · 틀기는 intro.js). 여기는 그 카드가 보이는 동안
    영상을 되풀지 않게 하고(영상은 검게 끝나고, 아이콘을 다시 누르면 처음부터 — 끝난 영상에 play 하면 처음으로 간다) 지금 편의 개요 직업 줄(.mo-jobs li)을 켠다.
-   옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 로고 1초는 영상 앞에 붙였다.
+   옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 로고는 영상 앞에 붙였다(5판 1초 · 11-26 6판 「나」 1.3초).
    흐름 카드(.mo-flow) — 그 영상 시각으로 카드의 차례 줄(data-t = 영상 초)을 켜고, 줄을 누르면 그 시각으로 보낸다.
+   11-26 펼침 띠 — 흐름 카드가 보이면 판이 한 칸으로 내려가는 건 mo.css(:has)가 한다. 여기는 칸 막대(.done · --p)만 더 채운다.
    액자 비율 — 세 영상 다 16:9 라 영상 카드가 보이면 16:9, 아니면 마크업 값(4:3).
    소리(11-25 16:10) — intro.js 영상은 소리 없이 튼다(자동 재생 규칙). 영상 카드가 보일 때만 액자에 .mo-snd 단추를 띄워 켜고 끄며,
    영상 카드를 떠나면 다시 끈다(개요로 갔다 와도 갑자기 소리가 나지 않게). 영상 카드끼리 옮길 때는 켠 상태를 이어 간다 */
@@ -81,11 +82,14 @@ step(4);
     const v=vid(); if(v) v.muted=!on;
     if(snd){ snd.setAttribute('aria-pressed',on?'true':'false'); snd.textContent=on?'소리 끄기':'소리 켜기'; }
   }
+  /* 11-26 펼침 띠 — 지난 칸 .done(막대 다 참) · 지금 칸 .on + --p(그 칸 시작 ~ 다음 칸 시작 사이 진행, 마지막 칸은 영상 끝까지) */
   function mark(){
     const v=vid(); if(!cur) return;
     const t=v?v.currentTime:0, bs=steps(cur); let k=0;
     bs.forEach((b,i)=>{ if(t>=+b.dataset.t) k=i; });
-    bs.forEach((b,i)=>{ b.classList.toggle('on',i===k); if(i===k) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); });
+    bs.forEach((b,i)=>{ b.classList.toggle('on',i===k); b.classList.toggle('done',i<k); if(i===k) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); });
+    const a=+bs[k].dataset.t, e=k+1<bs.length?+bs[k+1].dataset.t:((v&&v.duration)||a);
+    bs[k].style.setProperty('--p',(e>a?Math.max(0,Math.min(1,(t-a)/(e-a)))*100:0).toFixed(1)+'%');
   }
   function jobLine(){
     if(!paired) return;

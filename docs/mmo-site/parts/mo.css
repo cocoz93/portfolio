@@ -12,7 +12,7 @@
 /* 직업 소개(11-25 5판) — 카드는 글 없는 카드(.gi-bare)라 띄우지 않고, 직업 설명을 옮겨 받은 개요 카드를 모든 폭에서 옆에 세운다.
    intro.css 는 이걸 좁은 폭(1460 이하)에서만 한다 — 녹스는 카드가 늘 그림 옆에 서는 판이라 넓은 폭에서 그 칸이 비지 않게 */
 #mo-intro .gi-cards:has(> .gi-bare:not([hidden])) > .gi-lead[hidden]{display:flex}
-/* 개요 카드의 직업 줄 — 직업 소개에서 그 편을 트는 동안 그 줄만 켜진다(.on · mo.js). 켜짐 표시는 차례 줄(.mo-steps .on)과 같은 파란 테두리 */
+/* 개요 카드의 직업 줄 — 직업 소개에서 그 편을 트는 동안 그 줄만 켜진다(.on · mo.js). 켜짐 표시는 파란 테두리(11-25 차례 줄과 같았다 — 차례 줄은 11-26 펼침 띠로 바뀜) */
 .gi-lead .mo-k{margin-top:4px}
 .mo-jobs{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
 .mo-jobs li{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:baseline;padding:7px 10px;border:1px solid transparent;border-radius:10px;transition:border-color .15s,background .15s}
@@ -21,19 +21,54 @@
 .mo-jobs .on{border-color:var(--net);background:rgba(108,199,255,.07)}
 #mo-intro .gi-lead .sv{margin-top:10px}   /* intro.css(.gi-card .sv · 뒤에 실림)보다 한 단계 높게 */
 /* 일반 대전 · 랭크 매칭(11-25) — 흐름 영상의 차례 줄. 영상 시각이 그 줄에 오면 켜진다(.on · mo.js) · 누르면 그 장면으로.
-   줄 = 시각 | 화면 한 줄 + 서버가 하는 일 한 줄(small). 켜진 줄 표시는 개요 카드 직업 줄(.mo-jobs .on)과 같은 파란 테두리 */
-.mo-steps{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
-.mo-steps button{font:inherit;width:100%;text-align:left;cursor:pointer;display:grid;grid-template-columns:36px 1fr;gap:10px;align-items:baseline;padding:8px 10px;border:1px solid transparent;border-radius:10px;background:none;color:inherit;opacity:.6;transition:opacity .15s,border-color .15s,background .15s}
-.mo-steps button:hover{opacity:.85}
-.mo-steps i{font-style:normal;font-family:var(--mono);font-size:.78rem;color:var(--dim)}
-.mo-steps button > span{font-size:.92rem;line-height:1.45;color:#e3e9f5;word-break:keep-all}
-.mo-steps small{display:block;margin-top:3px;font-size:.8rem;line-height:1.45;color:var(--mut)}
+   줄 = 시각 | 화면 한 줄 + 서버가 하는 일 한 줄(small).
+   11-26 펼침 띠(시안 G · 사용자 고름) — 흐름 카드가 보이면 판을 한 칸으로 내려 영상이 본문 폭 전부를 쓰고, 카드는 상자 없이 영상 아래 띠가 된다.
+   머리(.mo-hd) = 번호 · 제목 · 한 줄을 한 줄로. 차례는 가로 여섯 칸 — 칸 위 막대가 지나간 칸은 다 차고(.done) 지금 칸은 그 칸 안 진행만큼(--p · mo.js),
+   지금 칸만 넓어져(flex-grow 3.4) 큰 글씨와 서버 한 줄을 보인다. 옆 카드 칸에 여섯 줄을 세로로 두던 11-25 판은 영상이 4:3 액자 폭에 갇혀 작았다.
+   꺼진 칸 글은 두 줄에서 자른다(말줄임) — 860 이하는 세로 줄로 되돌린다(막대는 왼쪽 세로). 그 폭에선 꺼진 칸이 79~92px 라
+   761 에서 「클라1 목록에 새 방이 저절로」가 두 줄을 넘었다(11-26 헤드리스 · 800 부터는 안 넘음). 860 = intro.css 「한 줄로 내린 좁은 폭」 묶음(761~860)과 같은 끝 */
+#mo-intro .gi:has(.mo-flow:not([hidden])){grid-template-columns:minmax(0,1fr)}   /* intro.css .gi 폭 규칙(id 없음)보다 늘 이긴다 */
+#mo-intro .gi-card.mo-flow{background:none;border:0;border-radius:0;padding:18px 2px 0}
+.mo-hd{display:flex;align-items:baseline;gap:6px 14px;flex-wrap:wrap}
+.mo-hd .gi-k{color:var(--net)}
+.mo-flow .mo-hd h3{margin:0;font-size:1.3rem}   /* .gi-card h3 · p(intro.css · 뒤에 실림)보다 한 단계 높게 */
+.mo-flow .mo-hd p{margin:0;font-size:.92rem;line-height:1.5;color:var(--mut);flex:1 1 320px}
+.mo-steps{list-style:none;margin:16px 0 0;padding:0;display:flex;gap:10px;align-items:stretch;counter-reset:st}
+.mo-steps li{flex:1 1 0;min-width:0;display:flex;counter-increment:st;transition:flex-grow .35s ease}
+.mo-steps li:has(> .on){flex-grow:3.4}
+.mo-steps button{position:relative;flex:1;min-width:0;font:inherit;text-align:left;display:flex;flex-direction:column;justify-content:flex-start;cursor:pointer;padding:14px 4px 4px 0;border:0;background:none;color:var(--mut);transition:color .15s}
+.mo-steps button::before,.mo-steps button::after{content:'';position:absolute;left:0;top:0;height:3px;border-radius:2px}
+.mo-steps button::before{right:0;background:var(--line)}
+.mo-steps button::after{width:0;background:var(--net)}
+.mo-steps button.done::after{width:100%;background:rgba(108,199,255,.5)}
+.mo-steps button.on{color:var(--ink)}
+.mo-steps button.on::after{width:var(--p,0%)}
+.mo-steps button:hover{color:#c3cde0}
+.mo-steps button.on:hover{color:var(--ink)}
+.mo-steps i{display:block;font:normal 700 .68rem var(--mono);color:var(--dim)}
+.mo-steps i::before{content:counter(st,decimal-leading-zero) " · "}
+.mo-steps .done i{color:rgba(108,199,255,.6)}
+.mo-steps .on i{color:var(--net);font-size:.78rem}
+.mo-steps button > span{margin-top:4px;font-size:.84rem;line-height:1.4;word-break:keep-all;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.mo-steps .on > span{font-size:1.04rem;font-weight:700;line-height:1.45;-webkit-line-clamp:3}
+.mo-steps small{display:none;margin-top:6px;font-size:.86rem;line-height:1.5;color:var(--mut);word-break:keep-all}
 .mo-steps small b{color:var(--ink);font-weight:700}
-.mo-steps .on{opacity:1;border-color:var(--net);background:rgba(108,199,255,.07)}
-.mo-steps .on i{color:var(--net)}
-.gi-card .mo-fine{margin:12px 0 0;font-size:.8rem;line-height:1.55;color:var(--dim)}   /* .gi-card p(intro.css)보다 한 단계 높게 */
+.mo-steps .on small{display:block}
+.gi-card .mo-fine{margin:14px 0 0;font-size:.8rem;line-height:1.55;color:var(--dim)}   /* .gi-card p(intro.css)보다 한 단계 높게 */
 @media (max-width:760px){
   .mo-snd{right:8px;bottom:8px;padding:4px 9px;font-size:.72rem}   /* 폰 액자(197px 높이)에서 영상을 덜 가리게 */
+}
+@media (max-width:860px){
+  /* 세로 줄 — 막대는 칸 왼쪽에 세로로, 지금 칸은 넓히는 대신 서버 한 줄만 더 보인다 */
+  .mo-steps{flex-direction:column;gap:2px;margin-top:12px}
+  .mo-steps li,.mo-steps li:has(> .on){flex:none}
+  .mo-steps button{padding:7px 0 7px 14px}
+  .mo-steps button::before,.mo-steps button::after{top:0;bottom:0;width:3px;height:auto}
+  .mo-steps button::before{right:auto}
+  .mo-steps button::after{bottom:auto;height:0}
+  .mo-steps button.done::after{width:3px;height:100%}
+  .mo-steps button.on::after{width:3px;height:var(--p,0%)}
+  .mo-steps button > span,.mo-steps .on > span{-webkit-line-clamp:unset;font-size:.92rem}
 }
 /* 작은 머리글 — 한글이라 --mono 를 쓰면 자간이 벌어져 Pretendard 로 둔다 */
 .mo-k{font-family:var(--sans);font-size:.8rem;font-weight:700;letter-spacing:.04em;color:var(--dim)}
