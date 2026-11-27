@@ -72,7 +72,9 @@ step(4);
    여기는 대전 카드가 보일 때 그 안에서 보이는 세부를 흐름 카드로 본다.
    칸 막대 — 영상 timeupdate(크롬은 1초에 4~5번)로만 고치니 뚝뚝 끊겨 보였다(사용자 「늘어나는것도 뚝뚝끊기는거같고」).
    영상이 도는 동안은 화면 그릴 때마다(requestAnimationFrame · 11-27 헤드리스 세 번 1초에 51~62번 — 옛 timeupdate 는 4~5번) 고치고, 멈추거나 대전 칸을 떠나면 그 고리도 멈춘다.
-   서버 한 줄 — 861 이상에선 칸이 장면 사진 · 시각 · 화면 한 줄만 들고, 지금 칸의 small 을 칸 밖 한 줄(.mo-dt)에 옮겨 적는다(바뀔 때 살짝 떠오름 · mo.css) */
+   서버 한 줄 — 861 이상에선 칸이 장면 사진 · 시각 · 화면 한 줄만 들고, 지금 칸의 small 을 칸 밖 한 줄(.mo-dt)에 옮겨 적는다(바뀔 때 살짝 떠오름 · mo.css)
+   11-28 개요 영상 — 개요 단추에 data-vid 가 붙어 개요 액자도 영상(녹스 소리만 넣은 4:3)이 됐다. 비율은 마크업 값(4:3) 그대로 두고 소리 단추만 띄운다.
+   영상은 뒤에 실리는 intro.js 가 만들어 로드 때 첫 sync 엔 아직 없다 — 그래서 「video 가 있나」가 아니라 개요 칸 단추의 data-vid 로 본다 */
 (function(){
   const vs=document.getElementById('mo-vs-card'), job=document.getElementById('mo-job-card');
   const flows=vs?[...vs.querySelectorAll('.mo-flow')]:[];
@@ -82,7 +84,10 @@ step(4);
   const steps=c=>[...c.querySelectorAll('.mo-steps button')];
   const snd=fr.querySelector('.mo-snd');
   const subs=(job?[...job.querySelectorAll('.gi-sub')]:[]).concat(flows);   // 세부가 바뀌어도(편 · 대전 종류 고르기) 영상 카드 상태를 다시 본다
-  let cur=null, vcard=null, last=null, raf=0;   // 보이는 흐름(대전 세부) · 보이는 영상 카드(대전 또는 직업) · 서버 한 줄을 적은 칸 · 그리기 고리
+  const gi=fr.closest('.gi'), lead=gi.querySelector('.gi-cards > .gi-lead');   // 개요 카드 — 짝 단추는 같은 차례의 .gi-it(intro.js 의 짝 규칙)
+  const leadBtn=lead?gi.querySelectorAll('.gi-it')[[...gi.querySelectorAll('.gi-cards > .gi-card')].indexOf(lead)]:null;
+  const leadVid=!!(leadBtn&&leadBtn.dataset.vid);
+  let cur=null, vcard=null, last=null, raf=0, sndOn=false;   // 보이는 흐름(대전 세부) · 보이는 영상 카드(대전 또는 직업) · 서버 한 줄을 적은 칸 · 그리기 고리
   function setSnd(on){
     const v=vid(); if(v) v.muted=!on;
     if(snd){ snd.setAttribute('aria-pressed',on?'true':'false'); snd.textContent=on?'소리 끄기':'소리 켜기'; }
@@ -110,11 +115,12 @@ step(4);
     vcard=cur?vs:(onJob?job:null);
     if(vcard) fr.style.setProperty('--gi-ar','16/9'); else fr.style.removeProperty('--gi-ar');
     const v=vid(); if(v) v.loop=!onJob;   // intro.js 는 늘 되풀게 만든다 — 직업 편만 끝에서 멈춘다
-    if(snd){ snd.hidden=!vcard; if(!vcard) setSnd(false); }
+    sndOn=!!vcard||(leadVid&&!lead.hidden);   // 개요 영상도 소리 단추를 띄운다(비율은 위 vcard 만)
+    if(snd){ snd.hidden=!sndOn; if(!sndOn) setSnd(false); }
     mark(); run();
   }
   if(snd) snd.addEventListener('click',()=>{
-    const v=vid(); if(!v||!vcard) return;
+    const v=vid(); if(!v||!sndOn) return;
     setSnd(v.muted);
     if(v.paused){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
   });
@@ -126,7 +132,7 @@ step(4);
     mark();
   })));
   const mo=new MutationObserver(sync);
-  cards.concat(subs).forEach(c=>mo.observe(c,{attributes:true,attributeFilter:['hidden']}));
+  cards.concat(subs).concat(leadVid?[lead]:[]).forEach(c=>mo.observe(c,{attributes:true,attributeFilter:['hidden']}));
   sync();
 })();
 

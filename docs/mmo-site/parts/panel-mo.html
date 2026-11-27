@@ -29,17 +29,20 @@
          11-26 사용자 「오른쪽 카드 없애고 그냥 화면만 크게」로 그 칸은 영상만 크게 보인다(mo.css · 직업 줄 켜기도 걷음).
          옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 사용자 「버튼 눌러서 한번씩 눌러볼수있는거면 어때?」 · 로고는 영상 앞에 붙였다(5판 1초 · 6판 1.3초)
          11-27 목록을 개요 · 직업 · 대전 셋으로 — 일반 대전 · 랭크 매칭을 「대전」 한 칸에 넣고 액자 왼쪽 아이콘으로 가른다(직업 칸과 같은 세부 짜임).
-         사용자 「그냥 대전으로 합치고 내부에 아이콘으로 일반대전 랭크매칭 넣는거어때? 통일성을위해 직업소개도 직업으로 바꾸고」 · 묶음 이름 「대전」은 칸 이름과 겹쳐 한 묶음(게임)으로 -->
+         사용자 「그냥 대전으로 합치고 내부에 아이콘으로 일반대전 랭크매칭 넣는거어때? 통일성을위해 직업소개도 직업으로 바꾸고」 · 묶음 이름 「대전」은 칸 이름과 겹쳐 한 묶음(게임)으로
+         11-28 개요 정지 그림 → 영상(mo-match.mp4 · 36초 되풀이) — 장면 다섯 = 오우거 전쟁 → 깃발 뺏기 → 전사 Orb → 한 방 난전 → 로비(사용자 11-27 「좋아 그렇게하자」).
+         정품 클라 화면 그대로 4:3 이라 액자 비율 · 짜임은 그대로 · data-img(mo-match.jpg)는 오우거 장면 한 컷(포스터). 영상 속 다른 플레이어 · 로비 방은 패킷 더미라 카드에 밝힌다 —
+         자리는 GitHub 단추 옆(.mo-dm · mo.css) — 맨 아래 작은 글(.gi-fine)에 이으면 셋째 줄이 생겨 1536×740 에서 카드가 창 밖으로 8px 나갔다 -->
     <section class="mo-pane" id="mo-intro">
       <div class="gi" style="--gi-ar:4/3">
         <div class="gi-list">
           <div class="gi-g"><span class="gi-k">게임</span>
-            <button type="button" class="gi-it act" data-img="media/mo-match.jpg" data-alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면">개요</button>
+            <button type="button" class="gi-it act" data-img="media/mo-match.jpg" data-vid="media/mo-match.mp4" data-alt="녹스 개요 영상 — 오우거 전쟁 · 깃발 뺏기 · 전사 Orb · 한 방 난전 · 로비 방 250 · 정품 클라 화면 그대로 · 게임 소리만">개요</button>
             <button type="button" class="gi-it" data-img="media/mo-job-logo.jpg" data-alt="세 직업 소개 영상"><i>01</i>직업</button>
             <button type="button" class="gi-it" data-img="media/mo-normal.jpg" data-alt="일반 대전 · 랭크 매칭 영상"><i>02</i>대전</button>
           </div>
         </div>
-        <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 아레나 판 — 정품 클라가 이 서버에 붙어 도는 화면" width="1280" height="960" loading="lazy">
+        <div class="gi-fr"><img src="media/mo-match.jpg" alt="녹스 개요 영상 — 오우거 전쟁 · 깃발 뺏기 · 전사 Orb · 한 방 난전 · 로비 방 250 · 정품 클라 화면 그대로 · 게임 소리만" width="1280" height="960" loading="lazy">
           <button type="button" class="mo-snd" aria-pressed="false" hidden>소리 켜기</button>
         </div>
         <div class="gi-cards">
@@ -62,7 +65,7 @@
               <div><b>320<i>방+</i></b><span>동시 방 · 부하 도구 상한에서 멈춤</span></div>
               <div><b>−59<i>%</i></b><span>틱 합 · 병목 7차례</span></div>
             </div>
-            <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/Nox_MatchServer" target="_blank" rel="noopener">GitHub ↗</a></div>
+            <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/Nox_MatchServer" target="_blank" rel="noopener">GitHub ↗</a><span class="mo-dm">영상 속 다른 플레이어 · 로비 방 = 촬영용 더미</span></div>
             <p class="gi-fine">「Nox」는 EA 상표 · 저작권 Westwood Studios(2000). EA와 관계없는 비공식 학습 프로젝트로, 배포 · 운영하지 않습니다.</p>
           </article>
           <!-- 01 직업 소개 — 글 없는 카드(11-26 부터 카드 칸째 감춤 · mo.css). 세부 차례 = 개요 카드 직업 줄 차례 · 아이콘은 직접 그린 24칸 선 그림(방패 · 번개 · 발자국) -->

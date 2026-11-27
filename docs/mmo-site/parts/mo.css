@@ -60,6 +60,8 @@
 .mo-steps small b{color:var(--ink);font-weight:700}
 .mo-steps .on small{display:block}
 .gi-card .mo-fine{margin:14px 0 0;font-size:.8rem;line-height:1.55;color:var(--dim)}   /* .gi-card p(intro.css)보다 한 단계 높게 */
+/* 11-28 개요 영상의 더미 밝힘 — GitHub 단추 옆 빈 가로 자리. 카드 폭 338 에선 두 줄로 접혀도 단추 높이(39) 안이라 카드가 안 길어진다 */
+#mo-intro .gi-links .mo-dm{align-self:center;font-size:.76rem;line-height:1.6;color:var(--dim)}
 .mo-th,.gi-card .mo-dt{display:none}   /* 860 이하(세로 줄)는 사진 없이 · 서버 한 줄은 지금 칸 안(small) */
 @keyframes moIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 @media (min-width:861px){
