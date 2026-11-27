@@ -9,16 +9,18 @@
 .mo-snd{position:absolute;right:14px;bottom:14px;z-index:2;font:inherit;font-size:.82rem;font-weight:700;color:#dfe7f5;padding:6px 12px;border-radius:999px;border:1px solid rgba(150,170,210,.3);background:rgba(10,15,25,.72);cursor:pointer}
 .mo-snd:hover{border-color:rgba(200,215,240,.6)}
 .mo-snd[aria-pressed="true"]{color:var(--net);border-color:var(--net)}
-/* 직업 소개(11-25 5판) — 카드는 글 없는 카드(.gi-bare)라 띄우지 않고, 직업 설명을 옮겨 받은 개요 카드를 모든 폭에서 옆에 세운다.
-   intro.css 는 이걸 좁은 폭(1460 이하)에서만 한다 — 녹스는 카드가 늘 그림 옆에 서는 판이라 넓은 폭에서 그 칸이 비지 않게 */
-#mo-intro .gi-cards:has(> .gi-bare:not([hidden])) > .gi-lead[hidden]{display:flex}
-/* 개요 카드의 직업 줄 — 직업 소개에서 그 편을 트는 동안 그 줄만 켜진다(.on · mo.js). 켜짐 표시는 파란 테두리(11-25 차례 줄과 같았다 — 차례 줄은 11-26 펼침 띠로 바뀜) */
-.gi-lead .mo-k{margin-top:4px}
+/* 직업 소개(11-25 5판) — 카드는 글 없는 카드(.gi-bare)라 띄우지 않는다.
+   11-25 판은 직업 설명을 옮겨 받은 개요 카드를 모든 폭에서 옆에 세웠다(그 편을 트는 동안 직업 줄을 켬).
+   11-26 사용자 「저 오른쪽 카드 없애고 그냥 화면만 크게 보여주는게 좋을듯? 굳이 직업소개에 있을필요 없을것같아」 —
+   이 칸에선 판을 한 칸으로 내리고 카드 칸을 통째로 감춘다(1460 이하에서 소개 카드를 다시 세우는 intro.css 규칙도 이 칸에선 안 보임). 높이 상한은 아래 「한 화면」 */
+#mo-intro .gi:has(#mo-job-card:not([hidden])){grid-template-columns:minmax(0,1fr)}
+#mo-intro .gi:has(#mo-job-card:not([hidden])) > .gi-cards{display:none}
+/* 개요 카드의 직업 줄 — 직업 세 줄(직업 이름 | 한 줄). 11-25 판의 켜짐 표시(.on)는 직업 소개에서 카드가 빠지며 걷었다(11-26) */
+.gi-lead .mo-k{margin-top:12px}   /* 11-27 카드에 .gi-dense(문단 아래 여백 0)를 붙여 4 → 12 — 옛 판은 문단 아래 12 + 4 */
 .mo-jobs{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:4px}
-.mo-jobs li{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:baseline;padding:7px 10px;border:1px solid transparent;border-radius:10px;transition:border-color .15s,background .15s}
+.mo-jobs li{display:grid;grid-template-columns:68px 1fr;gap:10px;align-items:baseline;padding:7px 10px;border:1px solid transparent;border-radius:10px}
 .mo-jobs b{font-size:.95rem;font-weight:800;color:#fff}
 .mo-jobs span{font-size:.88rem;line-height:1.5;color:#c3cde0;word-break:keep-all}   /* 낱말 안에서 안 끊기게. 항목 안 띄어쓰기는 마크업이 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다(옛 카드 줄의 「자연의 / 힘」 같은 끊김 막기) */
-.mo-jobs .on{border-color:var(--net);background:rgba(108,199,255,.07)}
 #mo-intro .gi-lead .sv{margin-top:10px}   /* intro.css(.gi-card .sv · 뒤에 실림)보다 한 단계 높게 */
 /* 일반 대전 · 랭크 매칭(11-25) — 흐름 영상의 차례 줄. 영상 시각이 그 줄에 오면 켜진다(.on · mo.js) · 누르면 그 장면으로.
    줄 = 시각 | 화면 한 줄 + 서버가 하는 일 한 줄(small).
@@ -55,6 +57,17 @@
 .mo-steps small b{color:var(--ink);font-weight:700}
 .mo-steps .on small{display:block}
 .gi-card .mo-fine{margin:14px 0 0;font-size:.8rem;line-height:1.55;color:var(--dim)}   /* .gi-card p(intro.css)보다 한 단계 높게 */
+/* 한 화면(11-26 사용자 「개요~랭크매칭까지.. 다 지금 한화면에 나오도록」) — 왼쪽 기둥이 서는 폭(1280 이상)에서 영상 칸은 창 높이로 판 폭을 묶고 가운데에 둔다.
+   판 위 여백 40 · 아래 여유 16 을 빼면: 직업 소개(영상만) = 액자 높이 ≤ 창 − 56 / 일반 대전 · 랭크 매칭 = 액자 + 사이 22 + 띠(≤ 212) → 액자 높이 ≤ 창 − 290.
+   띠 212 = 여섯 칸을 하나씩 켜 본 가장 큰 높이(켜진 칸 글이 두 줄일 때 · 나머지 191 · 11-26 헤드리스 여섯 창 크기).
+   묶기 전엔 1920×940 창에서 띠가 213px · 1536×740 에서 208px 창 밖이었다. 흐름 판은 760px 아래로 안 줄인다 — 그때 꺼진 칸이 84px 이고 거기선 「클라1 목록에 새 방이 저절로」가 두 줄에 든다(79px 에선 넘쳤다).
+   그래서 1366×657 처럼 낮은 창에선 흐름 판이 23~44px 창 밖에 남는다(기준 창 둘 밖).
+   개요는 묶지 않는다 — 짜임은 그대로(그림 + 오른쪽 카드 · 11-27 사용자 「개요는그냥 두고, 저 옆에 카드쪽 글자좀 줄이자」) 두고 카드 글을 줄여 1536×740 에 넣었다(844 → 688px · 11-27 헤드리스 · panel-mo.html).
+   1460 이하 폭은 intro.css 가 카드를 그림 아래로 내려 개요만 창 밖에 남는다 */
+@media (min-width:1280px){
+  #mo-intro .gi:has(#mo-job-card:not([hidden])){max-width:calc((100vh - 56px) * 16 / 9);margin-inline:auto}
+  #mo-intro .gi:has(.mo-flow:not([hidden])){max-width:max(760px, calc((100vh - 290px) * 16 / 9));margin-inline:auto}
+}
 @media (max-width:760px){
   .mo-snd{right:8px;bottom:8px;padding:4px 9px;font-size:.72rem}   /* 폰 액자(197px 높이)에서 영상을 덜 가리게 */
 }

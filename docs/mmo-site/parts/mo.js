@@ -60,7 +60,8 @@ step(4);
 /* 액자 영상(11-25) — 직업 소개 · 일반 대전 · 랭크 매칭. 영상은 목록 단추나 세부(.gi-sub)의 data-vid 로 intro.js 가 액자에 바로 붙인 video 하나를 같이 쓴다.
    이 파일이 intro.js 보다 먼저 실려 그 video 가 아직 없다 — 그래서 쓸 때마다 찾고, 시각 변화는 액자에서 붙잡기 단계로 받는다(미디어 이벤트는 거품이 안 올라온다).
    직업 소개(11-25 5판) — 슈팅 서버 판처럼 세부 아이콘으로 한 편씩 고른다(둥근 판 · 고르기 · 틀기는 intro.js). 여기는 그 카드가 보이는 동안
-   영상을 되풀지 않게 하고(영상은 검게 끝나고, 아이콘을 다시 누르면 처음부터 — 끝난 영상에 play 하면 처음으로 간다) 지금 편의 개요 직업 줄(.mo-jobs li)을 켠다.
+   영상을 되풀지 않게 한다(영상은 검게 끝나고, 아이콘을 다시 누르면 처음부터 — 끝난 영상에 play 하면 처음으로 간다).
+   11-25 판은 지금 편의 개요 직업 줄(.mo-jobs li)도 켰다 — 11-26 직업 소개에서 개요 카드가 빠져(mo.css) 그 줄 켜기 · 짝 검사는 걷었다.
    옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 로고는 영상 앞에 붙였다(5판 1초 · 11-26 6판 「나」 1.3초).
    흐름 카드(.mo-flow) — 그 영상 시각으로 카드의 차례 줄(data-t = 영상 초)을 켜고, 줄을 누르면 그 시각으로 보낸다.
    11-26 펼침 띠 — 흐름 카드가 보이면 판이 한 칸으로 내려가는 건 mo.css(:has)가 한다. 여기는 칸 막대(.done · --p)만 더 채운다.
@@ -74,9 +75,7 @@ step(4);
   const vid=()=>[...fr.children].find(e=>e.tagName==='VIDEO');   // 액자 바로 아래 video(intro.js 가 만든 것)
   const steps=c=>[...c.querySelectorAll('.mo-steps button')];
   const snd=fr.querySelector('.mo-snd');
-  const subs=job?[...job.querySelectorAll('.gi-sub')]:[], lines=[...fr.closest('.gi').querySelectorAll('.mo-jobs li')];
-  /* 짝이 어긋나면 엉뚱한 줄이 켜진다 — 조용히 넘기지 말고 콘솔에 남긴다(줄 켜기만 손을 뗀다) */
-  const paired=subs.length===lines.length; if(!paired) console.error('직업 소개 짝 어긋남', subs.length, lines.length);
+  const subs=job?[...job.querySelectorAll('.gi-sub')]:[];   // 세부가 바뀌어도(편 고르기) 영상 카드 상태를 다시 본다
   let cur=null, vcard=null;   // 보이는 흐름 카드 · 보이는 영상 카드(흐름 또는 직업)
   function setSnd(on){
     const v=vid(); if(v) v.muted=!on;
@@ -91,11 +90,6 @@ step(4);
     const a=+bs[k].dataset.t, e=k+1<bs.length?+bs[k+1].dataset.t:((v&&v.duration)||a);
     bs[k].style.setProperty('--p',(e>a?Math.max(0,Math.min(1,(t-a)/(e-a)))*100:0).toFixed(1)+'%');
   }
-  function jobLine(){
-    if(!paired) return;
-    const k=(job&&!job.hidden)?subs.findIndex(s=>!s.hidden):-1;
-    lines.forEach((l,i)=>l.classList.toggle('on',i===k));
-  }
   function sync(){
     cur=flows.find(c=>!c.hidden)||null;
     const onJob=!!(job&&!job.hidden);
@@ -103,7 +97,7 @@ step(4);
     if(vcard) fr.style.setProperty('--gi-ar','16/9'); else fr.style.removeProperty('--gi-ar');
     const v=vid(); if(v) v.loop=!onJob;   // intro.js 는 늘 되풀게 만든다 — 직업 편만 끝에서 멈춘다
     if(snd){ snd.hidden=!vcard; if(!vcard) setSnd(false); }
-    mark(); jobLine();
+    mark();
   }
   if(snd) snd.addEventListener('click',()=>{
     const v=vid(); if(!v||!vcard) return;

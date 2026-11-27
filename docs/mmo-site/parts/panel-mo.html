@@ -24,8 +24,9 @@
          게임 소개 카드의 큰 숫자 둘은 병목 개선 탭의 맨 끝 값이다.
          11-25 목록을 개요 · 직업 소개 · 일반 대전 · 랭크 매칭으로 바꿨다(옛 방 목록 → 일반 대전, 전적 검색 → 랭크 매칭의 세부).
          직업 소개(11-25 5판)는 슈팅 서버 판의 세부 아이콘과 같은 짜임이다 — 카드는 글 없는 카드(.gi-bare)이고 세부(.gi-sub) 셋이 직업마다
-         아이콘 · 첫 장면 · 영상을 든다. 둥근 판 · 고르기 · 영상 틀기는 intro.js, 액자 16:9 · 끝나면 되풀지 않기 · 소리 · 개요 직업 줄 켜기는 mo.js.
-         직업 설명 · 서버 한 줄은 개요 카드(.mo-jobs · .sv)로 옮겼다 — 직업 소개 칸에서도 그 카드가 옆에 선다(mo.css).
+         아이콘 · 첫 장면 · 영상을 든다. 둥근 판 · 고르기 · 영상 틀기는 intro.js, 액자 16:9 · 끝나면 되풀지 않기 · 소리는 mo.js.
+         직업 설명 · 서버 한 줄은 개요 카드(.mo-jobs · .sv)로 옮겼다 — 11-25 판은 직업 소개 칸에서도 그 카드를 옆에 세웠으나
+         11-26 사용자 「오른쪽 카드 없애고 그냥 화면만 크게」로 그 칸은 영상만 크게 보인다(mo.css · 직업 줄 켜기도 걷음).
          옛 「이어 보기」(아래 세 칸 막대 · 카드 줄 · 로고 표지)는 걷었다 — 사용자 「버튼 눌러서 한번씩 눌러볼수있는거면 어때?」 · 로고는 영상 앞에 붙였다(5판 1초 · 6판 1.3초) -->
     <section class="mo-pane" id="mo-intro">
       <div class="gi" style="--gi-ar:4/3">
@@ -43,16 +44,19 @@
           <button type="button" class="mo-snd" aria-pressed="false" hidden>소리 켜기</button>
         </div>
         <div class="gi-cards">
-          <article class="gi-card gi-lead">
+          <!-- 11-27 사용자 「개요는그냥 두고, 저 옆에 카드쪽 글자좀 줄이자」 — 1536×740 에서 카드가 844px 로 창 밖이었다.
+               글: 문단의 「그 위에 로그인 · 로비 · 랭크 매칭 · 전적」(02 · 03 칸이 영상으로 보임) · 직업 줄을 한 줄씩 · 저작권 줄 압축.
+               줄 사이: 슈팅 · MMORPG 개요 카드와 같은 .gi-dense(intro.css) -->
+          <article class="gi-card gi-lead gi-dense">
             <div class="gi-k">녹스 Nox · 2000 · 웨스트우드 쿼터뷰 액션 RPG</div>
             <h3 class="gi-h">2000년 정품 클라를<br>내 서버에</h3>
-            <p>방장 PC 한 대가 판 하나를 맡던 멀티를, 서버 한 대가 방 여러 개를 받는 구조로 넓혔다. 그 위에 로그인 · 로비 · 랭크 매칭 · 전적.</p>
-            <!-- 직업 줄 n번째 = 직업 소개 카드의 .gi-sub n번째(그 편을 트는 동안 .on · mo.js). 항목 안 띄어쓰기는 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다 -->
+            <p>방장 PC 한 대가 판 하나를 맡던 멀티를, 서버 한 대가 방 여러 개를 받게 넓혔다.</p>
+            <!-- 직업 줄 — 직업 소개 세부(.gi-sub)와 같은 차례(11-25 판은 그 편을 트는 동안 .on · 11-26 걷음). 항목 안 띄어쓰기는 &nbsp; 로 묶어 「 · 」 자리에서만 줄이 바뀐다 -->
             <div class="mo-k">세 직업</div>
             <ul class="mo-jobs">
-              <li><b>전사</b><span>방패로&nbsp;화염구&nbsp;되튕기기 · 외침으로&nbsp;무리&nbsp;기절 · 워해머</span></li>
-              <li><b>위저드</b><span>불&nbsp;고리 · 얼음&nbsp;벽으로&nbsp;길목&nbsp;막고&nbsp;번개 · 반사&nbsp;방어막</span></li>
-              <li><b>소환술사</b><span>늑대&nbsp;무리&nbsp;진영&nbsp;싸움 · 녹색&nbsp;마법사&nbsp;매혹 · 복수의&nbsp;주먹</span></li>
+              <li><b>전사</b><span>방패로&nbsp;되튕기기 · 외침&nbsp;기절 · 워해머</span></li>
+              <li><b>위저드</b><span>불&nbsp;고리 · 얼음&nbsp;벽 · 번개 · 반사&nbsp;방어막</span></li>
+              <li><b>소환술사</b><span>늑대&nbsp;무리 · 매혹 · 복수의&nbsp;주먹</span></li>
             </ul>
             <div class="sv"><b>게임 서버</b> — 주문 판정 · 몬스터 움직임 · 피해 계산</div>
             <div class="gi-num">
@@ -60,9 +64,9 @@
               <div><b>−59<i>%</i></b><span>틱 합 · 병목 7차례</span></div>
             </div>
             <div class="gi-links"><a class="gi-go" href="https://github.com/cocoz93/Nox_MatchServer" target="_blank" rel="noopener">GitHub ↗</a></div>
-            <p class="gi-fine">「Nox」는 EA의 상표이고, 게임 저작권은 Westwood Studios(2000)에 있습니다. 이 서버는 EA와 관계없는 팬의 비공식 학습 프로젝트이며, 배포 · 운영하지 않습니다.</p>
+            <p class="gi-fine">「Nox」는 EA 상표 · 저작권 Westwood Studios(2000). EA와 관계없는 비공식 학습 프로젝트로, 배포 · 운영하지 않습니다.</p>
           </article>
-          <!-- 01 직업 소개 — 글 없는 카드. 세부 n번째 = 개요 카드 직업 줄 n번째 · 아이콘은 직접 그린 24칸 선 그림(방패 · 번개 · 발자국) -->
+          <!-- 01 직업 소개 — 글 없는 카드(11-26 부터 카드 칸째 감춤 · mo.css). 세부 차례 = 개요 카드 직업 줄 차례 · 아이콘은 직접 그린 24칸 선 그림(방패 · 번개 · 발자국) -->
           <article class="gi-card gi-bare" id="mo-job-card" hidden>
             <div class="gi-sub" data-label="전사" data-img="media/mo-job-warrior.jpg" data-vid="media/mo-job-warrior.mp4" data-alt="전사 소개 영상 — 정품 클라 화면 그대로 · 게임 소리만"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.4-3 7.9-7 9.5-4-1.6-7-5.1-7-9.5V6z"/><path d="M12 7.5v9M8.5 11h7"/></svg></div>
             <div class="gi-sub" data-label="위저드" data-img="media/mo-job-wizard.jpg" data-vid="media/mo-job-wizard.mp4" data-alt="위저드 소개 영상 — 정품 클라 화면 그대로 · 게임 소리만" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2.5 5.5 13.5h6l-1 8 8-11h-6z"/></svg></div>
