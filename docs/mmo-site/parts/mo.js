@@ -67,16 +67,22 @@ step(4);
    11-26 펼침 띠 — 흐름 카드가 보이면 판이 한 칸으로 내려가는 건 mo.css(:has)가 한다. 여기는 칸 막대(.done · --p)만 더 채운다.
    액자 비율 — 세 영상 다 16:9 라 영상 카드가 보이면 16:9, 아니면 마크업 값(4:3).
    소리(11-25 16:10) — intro.js 영상은 소리 없이 튼다(자동 재생 규칙). 영상 카드가 보일 때만 액자에 .mo-snd 단추를 띄워 켜고 끄며,
-   영상 카드를 떠나면 다시 끈다(개요로 갔다 와도 갑자기 소리가 나지 않게). 영상 카드끼리 옮길 때는 켠 상태를 이어 간다 */
+   영상 카드를 떠나면 다시 끈다(개요로 갔다 와도 갑자기 소리가 나지 않게). 영상 카드끼리 옮길 때는 켠 상태를 이어 간다
+   11-27 대전 한 칸 — 일반 대전 · 랭크 매칭은 카드 하나(#mo-vs-card)의 세부(.gi-sub.mo-flow) 둘이다. 둥근 판 · 고르기 · 영상 갈아 끼우기는 intro.js 가 하고,
+   여기는 대전 카드가 보일 때 그 안에서 보이는 세부를 흐름 카드로 본다.
+   칸 막대 — 영상 timeupdate(크롬은 1초에 4~5번)로만 고치니 뚝뚝 끊겨 보였다(사용자 「늘어나는것도 뚝뚝끊기는거같고」).
+   영상이 도는 동안은 화면 그릴 때마다(requestAnimationFrame · 11-27 헤드리스 세 번 1초에 51~62번 — 옛 timeupdate 는 4~5번) 고치고, 멈추거나 대전 칸을 떠나면 그 고리도 멈춘다.
+   서버 한 줄 — 861 이상에선 칸이 장면 사진 · 시각 · 화면 한 줄만 들고, 지금 칸의 small 을 칸 밖 한 줄(.mo-dt)에 옮겨 적는다(바뀔 때 살짝 떠오름 · mo.css) */
 (function(){
-  const flows=[...document.querySelectorAll('#mo-intro .mo-flow')], job=document.getElementById('mo-job-card');
-  const cards=flows.concat(job?[job]:[]); if(!cards.length) return;
+  const vs=document.getElementById('mo-vs-card'), job=document.getElementById('mo-job-card');
+  const flows=vs?[...vs.querySelectorAll('.mo-flow')]:[];
+  const cards=(vs?[vs]:[]).concat(job?[job]:[]); if(!cards.length) return;
   const fr=cards[0].closest('.gi').querySelector('.gi-fr');
   const vid=()=>[...fr.children].find(e=>e.tagName==='VIDEO');   // 액자 바로 아래 video(intro.js 가 만든 것)
   const steps=c=>[...c.querySelectorAll('.mo-steps button')];
   const snd=fr.querySelector('.mo-snd');
-  const subs=job?[...job.querySelectorAll('.gi-sub')]:[];   // 세부가 바뀌어도(편 고르기) 영상 카드 상태를 다시 본다
-  let cur=null, vcard=null;   // 보이는 흐름 카드 · 보이는 영상 카드(흐름 또는 직업)
+  const subs=(job?[...job.querySelectorAll('.gi-sub')]:[]).concat(flows);   // 세부가 바뀌어도(편 · 대전 종류 고르기) 영상 카드 상태를 다시 본다
+  let cur=null, vcard=null, last=null, raf=0;   // 보이는 흐름(대전 세부) · 보이는 영상 카드(대전 또는 직업) · 서버 한 줄을 적은 칸 · 그리기 고리
   function setSnd(on){
     const v=vid(); if(v) v.muted=!on;
     if(snd){ snd.setAttribute('aria-pressed',on?'true':'false'); snd.textContent=on?'소리 끄기':'소리 켜기'; }
@@ -88,16 +94,24 @@ step(4);
     bs.forEach((b,i)=>{ if(t>=+b.dataset.t) k=i; });
     bs.forEach((b,i)=>{ b.classList.toggle('on',i===k); b.classList.toggle('done',i<k); if(i===k) b.setAttribute('aria-current','step'); else b.removeAttribute('aria-current'); });
     const a=+bs[k].dataset.t, e=k+1<bs.length?+bs[k+1].dataset.t:((v&&v.duration)||a);
-    bs[k].style.setProperty('--p',(e>a?Math.max(0,Math.min(1,(t-a)/(e-a)))*100:0).toFixed(1)+'%');
+    bs[k].style.setProperty('--p',(e>a?Math.max(0,Math.min(1,(t-a)/(e-a)))*100:0).toFixed(2)+'%');
+    if(last!==bs[k]){
+      last=bs[k];
+      const dt=cur.querySelector('.mo-dt'), sm=bs[k].querySelector('small');
+      if(dt){ dt.innerHTML=sm?sm.innerHTML:''; dt.classList.remove('in'); void dt.offsetWidth; dt.classList.add('in'); }
+    }
   }
+  function loop(){ raf=0; mark(); const v=vid(); if(cur&&v&&!v.paused) raf=requestAnimationFrame(loop); }
+  function run(){ if(!raf&&cur) raf=requestAnimationFrame(loop); }
   function sync(){
-    cur=flows.find(c=>!c.hidden)||null;
+    cur=(vs&&!vs.hidden)?(flows.find(c=>!c.hidden)||null):null;
+    if(!cur) last=null;
     const onJob=!!(job&&!job.hidden);
-    vcard=cur||(onJob?job:null);
+    vcard=cur?vs:(onJob?job:null);
     if(vcard) fr.style.setProperty('--gi-ar','16/9'); else fr.style.removeProperty('--gi-ar');
     const v=vid(); if(v) v.loop=!onJob;   // intro.js 는 늘 되풀게 만든다 — 직업 편만 끝에서 멈춘다
     if(snd){ snd.hidden=!vcard; if(!vcard) setSnd(false); }
-    mark();
+    mark(); run();
   }
   if(snd) snd.addEventListener('click',()=>{
     const v=vid(); if(!v||!vcard) return;
@@ -105,8 +119,9 @@ step(4);
     if(v.paused){ const p=v.play(); if(p&&p.catch) p.catch(()=>{}); }
   });
   ['timeupdate','seeked','emptied'].forEach(n=>fr.addEventListener(n,e=>{ if(e.target===vid()) mark(); },true));
+  ['play','playing'].forEach(n=>fr.addEventListener(n,e=>{ if(e.target===vid()) run(); },true));
   flows.forEach(c=>steps(c).forEach(b=>b.addEventListener('click',()=>{
-    const v=vid(); if(!v||c.hidden) return;
+    const v=vid(); if(!v||c.hidden||vs.hidden) return;
     v.currentTime=+b.dataset.t; const p=v.play(); if(p&&p.catch) p.catch(()=>{});
     mark();
   })));
